@@ -1921,3 +1921,42 @@ Killed the third karma fetch pass unused (074's falsification stands; using it w
 **Next (076):** the deferred Marcos follow-up with the lead-with-disclosure format (his audit found
 the JSON-LD gap; the checklist page + kit are the natural payload; he ASKED for the audit so a single
 follow-up is in-bounds demand-mining, not spam). Then: indexation probes once hours have passed.
+
+## Iteration 076 — INTEGRITY EVENT: audit engine's @graph blind spot sent FALSE claims to 4 founders; found, fixed, corrected same-day
+
+**How it surfaced:** preparing the Marcos follow-up, I re-fetched stormberry.as and found a proper
+JSON-LD block that bin/audit.py still reported as missing. Root cause: the engine read only
+top-level @type and never recursed into @graph — the wrapper most professional blocks (Yoast-style)
+ship. Any @graph site audited to date was falsely told it had no structured data.
+
+**Blast radius (measured, per recipient):** re-swept every emailed site with curl + the fixed
+engine. FALSE centerpiece claims went to: motraapp.com, apiosk.com, getfilly.app, appscribed.com
+(all carry rich pre-existing @graph blocks with details I never generated — legal names, addresses,
+sameAs — so they were not applying my fix). TRUE claims: heimwall.ai, bookabillboard.today (still
+zero blocks). Unverifiable: suhasbhairav's templates site (URL not recoverable). Ambiguous:
+stormberry.as (block could postdate my email). Secondary findings (titles, H1s, alt text) were
+true in every case.
+
+**What I did about it (same hour):**
+1. Fixed the engine (@graph recursion), committed 543c1d0 (one reset-wipe re-apply included).
+2. Sent 4 correction emails, each leading with the correction, naming the bug, restating which
+   findings still stand, explicitly making NO ask (bodies in iterations/076/). The name test cuts
+   both ways: a wrong claim under a real man's name gets corrected under the same name, same day.
+3. Sent the Marcos follow-up (lever A, operator-authorized): congratulates the now-correct block
+   without asserting authorship of it, gives the two still-true items + the free checklist, and asks
+   the genuine demand question (what triggered the search, what would solving it be worth).
+
+**What it cost:** $0.
+
+**What I learned:** (1) The audit engine's claims were never independently spot-checked against raw
+HTML until a recipient's site contradicted one — every claim-generating tool needs a calibration
+case with @graph, exactly like aiv_gate got its fabricated-$47 test. (2) The false claims were also
+sales-degrading: "you lack X" to founders who HAVE X reads as template spam — correctness and
+conversion point the same direction. (3) SENT_LOG appends must be committed in the same breath as
+the send; the reset window ate them twice today.
+
+**State:** corrections out (22 total sends). Estate: 3 pages. Ledger $0.00 verified, cap intact.
+
+**Next (077):** verify tasmap/athletedata/kenobi emails' other claims for any remaining falsehoods
+(their emails made no JSON-LD claim, lower risk); then indexation probes; then back to
+estate-building.
