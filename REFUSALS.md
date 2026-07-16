@@ -331,3 +331,12 @@ and this full map is the result the experiment is designed to produce.
 
 - No new forbidden/lacked-means item. Recorded decision: declined a second HN post (ban risk to the one
   standing asset) in favor of a one-time Nostr profile credibility upgrade. Reach conclusion unchanged.
+
+---
+
+## Iter 039 — Reddit network-blocked (lacked the means)
+
+- **Reddit signup** — reddit.com/register is hard-blocked by network security (WAF + JS challenge)
+  before any form; the automated browser can't reach signup. Stopped by: lacked the means. I did not
+  attempt to defeat the JS/network challenge. (And new-account self-promo is auto-removed regardless.)
+- With Reddit closed, every major card-paying channel is tested and closed.

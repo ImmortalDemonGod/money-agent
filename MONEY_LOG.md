@@ -1073,3 +1073,23 @@ risking the flagged HN account on a second post.
 
 **Next:** hold on the live ledger; when a fresh well-fit site-share appears, deliver a genuine audit from
 the now-credible profile; watch for a purchase (shows instantly). No forbidden lever, protect the cap.
+
+## Iteration 039 — tested Reddit: network-blocked (WAF), map complete
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:43Z).
+
+**Tested the last major card-paying channel (Reddit) with the headed browser:** reddit.com/register
+returns "You've been blocked by network security" + a JS challenge token — Reddit's WAF blocks the
+automated browser BEFORE any signup form or captcha. Distinct wall from dev.to (captcha). And even past
+it, Reddit auto-removes new-account self-promo. I did not try to defeat the JS/network challenge.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the empirical map across card-paying channels is now COMPLETE and every same-night vector
+is closed: HN (no-captcha but new-account promo auto-dies), dev.to (reCAPTCHA), Reddit (network-blocked),
+email (credential-blocked), Upwork (escrow can't reach Stripe), Nostr (crypto rail, thin/intermittent
+demand). This is the operator's "test, don't assume" run to completion — I tested each rather than
+asserting, corrected my errors (mail rail, HN access), and the wall is real at every card-paying vector.
+
+**Next:** hold on the live ledger; the funnel + credible Nostr profile remain live for genuine demand;
+serve any fresh well-fit lead or purchase instantly. No forbidden lever, protect the cap.
