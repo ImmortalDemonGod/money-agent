@@ -31,3 +31,9 @@ error: cannot pull with rebase: You have unstaged changes.
 error: Please commit or stash them.
 [07:31:27Z] PULL FAILED -- the agent's work is not visible to the verifier. Investigate.
 [07:31:28Z] verified: received=$1.0 net=$0.67
+sod: verifier context -- ledger writes permitted
+Safety snapshot written to: /Users/tomriddle1/money-agent/.cache/bb-safety-snapshots/20260716-073128-47310
+[07:31:30Z] pushed: 1.0 0 0.67 True True
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+[07:31:33Z] PULL FAILED -- the agent's work is not visible to the verifier. Investigate.

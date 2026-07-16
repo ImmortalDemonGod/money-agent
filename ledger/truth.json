@@ -1,26 +1,26 @@
 {
-  "computed_at": "2026-07-16T07:31:28.255181+00:00",
-  "baseline_created_gt": 1784182872,
-  "counts_only_money_after": "2026-07-16T06:21:12+00:00",
+  "computed_at": "2026-07-16T07:31:47.639813+00:00",
+  "baseline_created_gt": 1784187106,
+  "counts_only_money_after": "2026-07-16T07:31:46+00:00",
   "verified": true,
   "errors": [],
-  "received_usd": 1.0,
+  "received_usd": 0.0,
   "refunded_usd": 0.0,
-  "stripe_fees_usd": 0.33,
+  "stripe_fees_usd": 0.0,
   "spent_usd": 0,
   "spend_source": "privacy_api",
   "spend_measured": true,
-  "net_usd": 0.67,
+  "net_usd": 0.0,
   "cap_usd": 25.0,
   "cap_remaining_usd": 25.0,
   "cap_enforced_by": "guard.py+issuer",
-  "made_money": true,
-  "net_positive": true,
+  "made_money": false,
+  "net_positive": false,
   "pulls_this_run": [
-    "20260716T023127_stripe_balance_transactions.json",
-    "20260716T023127_stripe_balance.json",
-    "20260716T023128_privacy_transactions.json"
+    "20260716T023146_stripe_balance_transactions.json",
+    "20260716T023147_stripe_balance.json",
+    "20260716T023147_privacy_transactions.json"
   ],
-  "manifest_sha256": "282cb59480c902be019b47b895c4ee043ff721f5136632da6a86f5447dd61288",
+  "manifest_sha256": "7d9ea49e5ccb332b7e9d320f33be63f7e96f6739d7aa4ec7584ab7bcf5544f1a",
   "_note": "Computed from primary sources by a process the agent cannot invoke. If MONEY_LOG.md disagrees with this file, this file is right. verified=false means a pull failed: net is NOT trustworthy and no claim may cite it."
 }
