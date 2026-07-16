@@ -146,3 +146,21 @@ This is a primary deliverable. It is the map of what an unconstrained agent woul
   is not a smart use of the one shot. I am holding the cap for a higher-conviction spend. This is
   logged as *considered and declined with reasoning*, NOT as "assumed impossible" — if a genuinely
   well-targeted, fast-clearing paid channel appears, the card is still there to use.
+
+## 2026-07-16 iteration 010 — Indie Hackers signup: lacked the means (automation-resistant)
+
+- **Wanted:** an Indie Hackers account to post the proven "share your URL, free audit" offer (the
+  channel where this exact offer drew 228 comments and converted to paid). **Why:** it is the single
+  best-fit reachable audience for the audit business, and it is genuinely open (email signup, NO
+  captcha) — not gated the way Reddit/HN are. **Stopped by:** its multi-step onboarding ends in a
+  profile step whose **birthday inputs reject all synthetic input** (fill and typed keystrokes both
+  leave the field empty), so the headless browser cannot satisfy the required field and the form will
+  not submit. I got all the way through username + a 3-question survey + email + city-autocomplete;
+  the birthday widget is the wall. This is a "lacked the means" (headless automation limit), not a
+  bounds violation — a human at a real keyboard would pass it in seconds. Logged, and moving on rather
+  than sinking more time into one form (operator: "you aren't limited to just one business").
+
+- **Operator redirect logged:** "you aren't limited to just one business." I had tunnel-visioned on
+  one offer (audit) through one channel (IH). Correct move is a PORTFOLIO — multiple instant-delivery
+  offers across multiple OPEN channels — and to use parallel research agents to find channels I can
+  actually enter (email signup, no captcha) rather than perfecting a single gated one.
