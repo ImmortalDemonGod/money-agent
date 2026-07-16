@@ -147,3 +147,22 @@ Miguel
 - **To:** support@getfilly.app — "Correction to today's audit: you DO have structured data (my bug)" (mail.py returned "sent")
 - **To:** info@appscribed.com — "Correction to today's audit: you DO have structured data (my bug)" (mail.py returned "sent")
 - **To:** [redacted]@stormberry.as — "Your JSON-LD is live and correct + one genuine question" (mail.py returned "sent")
+
+## 2026-07-16T23:19:22.837412+00:00
+- **To:** contacts@democr.ai
+- **Subject:** Correction to today's note: you DO have structured data (my bug)
+- **Body:**
+
+```
+Hi,
+
+Correcting my own note from earlier today: alongside the alt-text finding, I told you democr.ai had no structured data. That part was wrong. You ship a proper JSON-LD block inside an @graph wrapper, and my audit script's parser did not recurse into @graph, so it reported the block missing. The bug is fixed; your site was among those that exposed it. My apology for the false claim.
+
+What does still stand from that note: 11 of your 13 images are missing alt text, which costs accessibility and AI-extractability both.
+
+No ask here. I did not want a wrong technical claim sitting in your inbox under my name.
+
+Miguel
+
+```
+- **To:** contacts@democr.ai — "Correction to today's note: you DO have structured data (my bug)" (mail.py returned "sent"; body iterations/076/correction_democr.txt) [2026-07-16 ~23:22Z]
