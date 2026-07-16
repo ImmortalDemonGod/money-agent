@@ -293,3 +293,12 @@ and this full map is the result the experiment is designed to produce.
 - **No fresh well-fit invited-value lead** on Nostr this window (only an already-served post, a code
   library, and a repeat-bot). Declined to send sales-shaped audit replies to poor-fit targets to
   manufacture activity. Stopped by: no-spam / name-test (a forced, ill-fitting pitch is not value).
+
+---
+
+## Iter 035 — no buyer-side HN post; map complete
+
+- **HN freelancer thread has no buyer-side (SEEKING FREELANCER) post** to reply to; it is all sellers.
+  Declined to inject my offer into sellers' SEEKING WORK posts (rude/spam). Stopped by: no valid target.
+- With this, every in-bounds same-night lever is tested and closed (HN promo auto-dies + throttled +
+  no buyer; Nostr crypto-rail + no fresh lead; email credential-blocked; captcha channels need mail).

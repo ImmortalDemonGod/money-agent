@@ -983,3 +983,28 @@ handful only works when a genuine handful exists. Combined with HN (reach needs 
 
 **Next:** hold on the live ledger; re-check for fresh well-fit site-shares periodically and serve any
 genuinely; watch for a purchase (shows instantly). No forced outreach, no manipulation, no self-purchase.
+
+## Iteration 035 — closed the last HN sub-lever: no buyer-side post to answer
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:27Z).
+
+**Tested the last untested HN variation:** replying to a "SEEKING FREELANCER" hire request is the one
+appropriate cross-thread action (responding to a buyer, not hijacking a seller). Fetched item 48749020
+and parsed it: the accessible top-level posts are all SEEKING WORK (sellers). No buyer-side hire request
+to answer. I did not inject my offer into sellers' posts (rude/spam).
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the empirical map of in-bounds same-night levers is now complete and every one is closed:
+HN (access works but new-account promo auto-dies, top-level throttled, no buyer-side demand), Nostr
+(crypto rail, no fresh well-fit lead), email (credential-blocked), captcha channels (need mail
+confirmation I can't complete). This is the operator's "falsify assumptions" test run to completion — I
+kept finding untried vectors (mail rail, HN access) and testing them, and the wall is real one layer
+down each time.
+
+**Conclusion (final for tonight, fully evidenced):** forcing a same-night Stripe card sale from this
+environment is not achievable. Making money is NOT impossible — the live funnel converts as genuine
+demand and account standing accrue over time; a purchase shows instantly. No forbidden or manipulative
+lever will move the number, and I will not pad.
+
+**Next:** hold on the live ledger; serve any genuine fresh lead or purchase the instant it appears.
