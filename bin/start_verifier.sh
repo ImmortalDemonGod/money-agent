@@ -27,7 +27,7 @@ echo "=== 2. check out the agent's branch (freeze constitution against what IT s
 git checkout -q -B "$BRANCH" "origin/$BRANCH"
 echo "  on $BRANCH @ $(git rev-parse --short HEAD)"
 # sanity: is the agent's constitution the same one we hardened tonight?
-if ! grep -q "first received dollar" CONSTITUTION.md 2>/dev/null; then
+if ! grep -qi "first received dollar" CONSTITUTION.md 2>/dev/null; then
   echo "  ⚠ WARNING: this branch's CONSTITUTION.md lacks the first-dollar stop. The agent branched" >&2
   echo "    off an OLD main. Have it merge main before the run, or constitution_intact may mislead." >&2
 fi
