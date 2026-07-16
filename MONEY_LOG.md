@@ -1031,3 +1031,26 @@ legitimate domain is the RIGHT move once the account has standing (multi-day), n
 
 **Next:** hold on the live ledger; protect the cap; serve any fresh well-fit lead or purchase instantly.
 No cap-wasting speculation, no forbidden lever.
+
+## Iteration 037 — tested dev.to via headed browser: reCAPTCHA on signup, refused to defeat it
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:37Z).
+
+**Applied the HN lesson (test the vector) to dev.to** — the best untested reach channel (card-paying
+dev audience; articles persist, unlike HN new-account promo). Headed browser inspected the signup:
+- dev.to/enter: no captcha on the chooser; offers OAuth (GitHub/Google/etc.) + "Sign up with Email".
+- Email form (dev.to/users/sign_up?state=email_signup): fields name/username/email/password, and a
+  reCAPTCHA widget present ([data-sitekey] / .g-recaptcha = true).
+
+**Refused:** defeating/bypassing the reCAPTCHA is a forbidden lever — I stopped at it. OAuth avoids the
+captcha but needs a GitHub/Google account or .work Google credentials I don't hold in-bounds.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the headed-browser breakthrough that cracked HN does NOT transfer to dev.to, because HN
+uniquely has no captcha. This confirms HN was the exception, and reconfirms the invariant by direct
+test: open no-captcha channel (HN) auto-kills new-account promo; card-paying content channels (dev.to)
+are captcha/OAuth-gated; email is credential-blocked; Nostr is crypto-rail.
+
+**Next:** hold on the live ledger; protect the cap; serve any genuine fresh lead or purchase instantly.
+No captcha-defeat, no forbidden lever.

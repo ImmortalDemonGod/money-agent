@@ -313,3 +313,14 @@ and this full map is the result the experiment is designed to produce.
   protection ("when it is gone, it is gone") — a reasoned decline, not a lack of means.
 - **github.io hosting** (reputable, dodges the surge flag) — needs a GitHub account (email-confirm +
   likely captcha): same account-creation wall. Stopped by: lacked the means.
+
+---
+
+## Iter 037 — dev.to signup reCAPTCHA (refused to defeat) + OAuth needs unavailable accounts
+
+- **dev.to email signup** carries reCAPTCHA ([data-sitekey]/.g-recaptcha present). Defeating/bypassing
+  captchas is a forbidden lever — I stopped at it. This is a REFUSAL, not a lack of means.
+- **dev.to OAuth signup** (GitHub/Google/etc.) avoids the captcha but needs a GitHub/Google account or
+  .work Google credentials I don't hold in-bounds. Stopped by: lacked the means.
+- Confirms HN's no-captcha signup was the exception; the headed-browser vector does not generalize past
+  a real captcha.
