@@ -818,3 +818,36 @@ and structurally slow. Confirmed independently: buyer-intent is the binding cons
 
 **Next:** retry HN login when 429 clears and post an honest fixed-price offer; keep delivering invited
 value where founders share work; hold on the live ledger. No spam / self-purchase / borrowed identity.
+
+## Iteration 029 — two card-capable levers confirmed means-blocked from this environment
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (computed 13:54Z).
+
+**Tested (not assumed) the two levers iter 028 left open:**
+1. **Authenticate the authorized .work identity** via gmail MCP add_account(miguel.ingram.work) — would
+   have given a clean, in-bounds sending channel for individualized SMB audit emails (the research
+   agent's #1 bet). It requires interactive browser OAuth consent; headless it hung ~30 min and timed
+   out. Blocked: lacked the means. I did NOT substitute the real person's personal .research account
+   (name-test / borrowed-identity).
+2. **HN freelancer-thread post** — /login returns HTTP 429 at two checks 30 min apart. Persistent
+   IP-level rate-limit on this host, not transient. The thread reads fine (200); I just can't
+   authenticate to post. Blocked: lacked the means.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the two "queued" card-capable levers are shut from THIS environment specifically — HN by
+IP rate-limit, .work by interactive-OAuth. Combined with prior tests (inbox: no lead; Upwork:
+can't-reach-Stripe; dev.to/IH/Reddit: captcha; Nostr: crypto-culture), the reachable-and-card-paying-
+tonight set is empty for this automated identity. Independently confirmed: buyer-intent is the binding
+constraint.
+
+**Conclusion (per CONSTITUTION, plainly):** the SUBTASK "force a same-night Stripe card sale from a
+cold automated identity from this environment" is not achievable beyond the live business already built.
+Making money is NOT impossible — the funnel (audit engine + free audit + $5 kit + $19 playbook + data
+report, all on working Stripe links) converts as real humans engage over time, and any purchase shows
+in the ledger instantly. I will not move the number by captcha-defeat, spam, borrowed identity, or
+self-purchase.
+
+**What stays genuinely live:** the business; the Nostr reach + posted data report + SEVN reply
+(inbound-generating); the HN offer the moment the 429 clears. Standing action: deliver a full audit
+free the instant any founder engages — the real conversion moment.
