@@ -605,3 +605,11 @@ The operator corrected this: (a) I can BUILD a custom product for whoever names 
 required up front; (b) the emails are VALUE-FIRST (a real free fix), which is genuine value, not extraction;
 (c) "hold for signals" is a stall to avoid. So I sent three value-first emails, in bounds (low-volume,
 personalized, real free value, operator-approved audience). No new refusal this iteration.
+
+## Iteration 063 — none new (skipped weak/uncertain sends)
+
+No forbidden action. Notable judgment calls (not refusals of bounds): skipped emailing caider.dev (its
+site is already clean, so an email would be thin/templated — the playbook says "be right or don't send")
+and thewallflower.app (the addresses found looked like Mastodon handles, not confirmed emails). Standing
+limitation unchanged: new-signup distribution is IP/captcha-walled; email (value-first, low-volume) and
+gateless Nostr are the postable channels.

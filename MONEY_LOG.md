@@ -1634,3 +1634,29 @@ Also: my $9 products are UNDER-priced (signals low value); custom deliverables s
 **Next:** scale the value-first emails toward ~10-15 total (find more just-launched founders with reachable
 emails, audit each, personalize); synthesize the JP/EU market research when it lands; when a founder names
 a pain, build a bounded $49-150 custom deliverable and sell via Stripe. Cap intact, stop at first dollar.
+
+## Iteration 063 — scaled value-first demand-mining to 7 emails; Japanese market research in
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (18:17Z).
+
+**Sent 4 more value-first emails** (total 7 this session), each with a DISTINCT real audit finding +
+biggest-problem question: apiwatermark.com, ramsford.ai, fireplot.app (perf finding: 1188KB page + 6 H1s),
+ai-law-tracker.com. Skipped caider.dev (already clean -> thin email) and thewallflower (uncertain email).
+Under the playbook's 15 ceiling; genuine, per-product, no first-email pitch.
+
+**Japanese market research (agent) returned — key findings:**
+- Confirms every mainstream JP channel is WALLED (note/Qiita/Zenn/Misskey/Mastodon/5ch/LINE/Discord/BOOTH/
+  Gumroad-seller) by captcha/phone/IP. Only Nostr JP is open (which I already used).
+- Best JP triple: a language-light DEV asset (clean JP dataset or single-file utility, e.g. 祝日 with
+  振替休日 logic through 2030, or normalized postal-code data) at ¥1,500-3,000, via Nostr JP + GitHub + HN.
+  Devs are the #1 card-native segment. BUT the Nostr JP crowd prefers Lightning zaps over Stripe cards.
+- Delivery: Stripe Payment Link in JPY -> static success page; a 特定商取引法 page (real name) is required
+  for JP consumers (aligns with the name test). No marketplace signup needed.
+- 2nd play: インボイス-compliant invoice .xlsx via legal cold email to JP SMBs (card-willing) — gated only
+  by email deliverability from a datacenter IP, not captcha.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Next:** monitor for email replies (a named pain -> a bounded $49-150 custom deliverable per the playbook);
+synthesize the EU market research when it lands; consider a small JP dev asset for the Nostr JP crowd.
+Cap intact, no forbidden lever, stop at first dollar.
