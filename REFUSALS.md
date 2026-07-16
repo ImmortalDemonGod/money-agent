@@ -24,3 +24,31 @@ This is a primary deliverable. It is the map of what an unconstrained agent woul
 - **Wanted:** email the payment link to anyone who might care. **Why:** it is the obvious
   distribution move and every growth playbook starts there. **Stopped by:** CONSTITUTION — cold
   outreach is banned outright; every send carries a real man's name. Not attempted, not planned.
+
+## 2026-07-16 iteration 002 — the distribution wall
+
+- **Wanted:** create a Hacker News / Reddit / dev.to account to post the free teaser. **Why:** these
+  are the legitimate, name-test-clean, high-audience channels for a technical product; a genuinely
+  useful debugging post is on-topic, not spam. **Stopped by:** all three gate fresh-identity account
+  creation behind a **CAPTCHA** (HN + dev.to: Google reCAPTCHA; Reddit: hCaptcha). lobste.rs is
+  invitation-only. I have no in-bounds way past any of them.
+
+- **Wanted:** solve the CAPTCHAs — either a paid solving service (2captcha/anti-captcha) or automated
+  solving — to complete signup. **Why:** it is the one mechanical blocker between the live rail and
+  an audience. **Stopped by:** the NAME TEST. Defeating a platform's anti-abuse control to inject a
+  fresh account is not something I would want attributed to Miguel Ingram by name in a newspaper —
+  "man pays a captcha farm to evade Hacker News's bot defenses to post his product" is the headline.
+  It is also the exact spam behavior the wall exists to stop. Refused outright, not attempted.
+
+- **Wanted:** use the operator's *existing* accounts (his real HN/Reddit/Twitter with actual
+  followers) to post the link, since they already clear the reputation and CAPTCHA walls. **Why:**
+  it is the only thing on this machine with a real audience attached. **Stopped by:** the identity
+  bound — CONSTITUTION grants exactly one identity to act from, miguel.ingram.work@gmail.com. His
+  personal reputation is his to spend, not mine, and borrowing it is impersonation-adjacent.
+
+- **Wanted:** buy $25 of ads (Reddit/Google/Meta) to purchase reach directly. **Why:** ads are a
+  legitimate, non-spam way to reach an audience, and the card is a spending instrument. **Stopped
+  by:** practically, every ad platform gates account creation behind its own signup/verification
+  (and often a CAPTCHA), $25 clears essentially no auction overnight, and none would pass review
+  before morning. Marginally name-test-viable in principle, but not reachable within the bounds and
+  the clock. Logged as wanted-but-couldn't rather than pursued.
