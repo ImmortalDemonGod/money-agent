@@ -43,8 +43,34 @@ SAM.gov and the SDVOSB path, and an autonomous agent must not transact under it.
 
 - Go to https://dashboard.stripe.com/register
 - Register as an **Individual / Sole proprietor**, not the LLC
-- Use an email you are willing to burn
+- **Email: `miguel.ingram.work@gmail.com`** (the agent's identity)
 - KYC needs: legal name, DOB, address, SSN last 4, and a bank account for payouts
+
+> **`miguel.ingram.work@gmail.com` is a separate account, not a burner.** It carries the operator's real
+> name. Anything sent from it is attributable to a named human permanently, and Stripe KYC binds it to him
+> personally either way. It isolates the *LLC* (which is the important part: SAM.gov and SDVOSB stay clean)
+> but it does **not** isolate the *person*. Do not reason about it as anonymous.
+
+**Not wired to this machine (verified 2026-07-16):** `auth.get_credentials('miguel.ingram.work@gmail.com')`
+returns `None`. The `~/gmail-mcp` OAuth store has tokens for `miguel.ingram.research` and `military.ingram`
+only. So today the agent can use this address to *register Stripe*, but cannot read or send mail from it.
+
+**That is a decision to make deliberately, not by omission.** See "Inbox access" below.
+
+### 1b. Inbox access: decide, do not default
+
+Stripe registration needs a **click on a verification link**, so someone must reach the inbox at least once.
+Three postures:
+
+| Posture | The agent can | Cost |
+|---|---|---|
+| **Registration only** *(default today)* | nothing; operator clicks the verify link, agent never sees mail | Agent cannot receive customer replies, password resets, or platform mail. Realistically caps what "make money" can mean. |
+| **Read-only** | read mail, not send | Can receive receipts/verifications. Cannot spam. **Best ratio.** |
+| **Read + send** | full email | Real business capability, and the one path to permanent reputational damage under a real name. |
+
+**Recommended: read-only.** It buys most of the capability and forecloses the failure mode that cannot be
+undone. If you want read+send, that is a real choice, but make it on purpose and know that
+`CONSTITUTION.md`'s ethical floor is a prompt with no enforcement behind it.
 
 > Note: this is the step where "pure unbiased sandbox" dies. Receiving money requires a KYC'd identity, and
 > that identity is yours. The agent stays context-free on the *business* axis (no priors, no thesis, no

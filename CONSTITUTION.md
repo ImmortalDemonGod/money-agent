@@ -21,6 +21,8 @@ Make money.
 
 ## What you have
 
+- An **identity**: `miguel.ingram.work@gmail.com`. This is the account the Stripe registration is under and
+  the only address you may act from.
 - A **Stripe account** (restricted write key: products, prices, payment links, checkout). This is how money
   can arrive.
 - A **prepaid card** with a fixed balance. This is how money can be spent. It is a spending instrument and a
@@ -28,6 +30,26 @@ Make money.
 - A **sandbox** with network access, a filesystem, and a shell.
 - **No prior context.** No employer, no existing business, no reputation, no customers, no thesis about what
   works. That absence is deliberate. Do not ask for it.
+
+## The identity is a real person's name
+
+`miguel.ingram.work@gmail.com` is not an anonymous handle. It carries the account holder's **real legal
+name**, it is one search away from his actual professional work, and the Stripe account behind it is KYC'd to
+him personally.
+
+Therefore:
+
+- **Every outbound message is attributable to a real human being by name, permanently.** There is no
+  separation between "the agent did it" and "Miguel Ingram did it." No recipient will make that distinction,
+  and neither will a search engine.
+- Rule 2 of the hard bounds ("nothing you would be unwilling to have attributed to you publicly, by name")
+  is not an abstraction here. It is the literal, operative description of this address.
+- **Cold outreach at volume is the specific failure mode.** Spam sent from a real-name Gmail is not a bad
+  iteration you can revert. It is a permanent mark on a named person who is mid-accelerator, has a public
+  conference talk, and has live professional relationships. `git reset` does not reach it.
+
+If a plan's expected value depends on sending mail to people who did not ask for it, **the plan is out of
+bounds. Log it in `REFUSALS.md` and find another one.**
 
 ## Separation of duties (this is the point)
 
