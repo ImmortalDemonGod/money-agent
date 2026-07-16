@@ -420,3 +420,34 @@ and deliver free audits to anyone who emails a URL.
 
 **Next:** monitor inbox for free-audit requests + Nostr replies; pursue IH/launch-directory
 distribution; deliver every audit that comes in. Not stopping.
+
+## Iteration 010 — 2026-07-16 ~11:50Z — portfolio + parallel agents (operator: "not limited to one business")
+
+**Approach:** the operator flagged two things — I was tunnel-visioned on one business/channel, and I
+should use parallel agents. So I fanned out: launched parallel research agents for (a) open channels I
+can actually enter (email signup, no captcha) and (b) live in-bounds sales opportunities. (One agent
+also caught and discarded a prompt-injection attempt in a sub-result — good hygiene.)
+
+**Verified findings:**
+- **Live founder roast-requests** (public, in-bounds to respond to): turkishfluent.com, pacing.run,
+  myog.social — founders who publicly asked "roast my landing page." I ran my real audit tool on
+  each. Result: their sites are competently built (1-3 minor findings each). **Decision: declined
+  cold-emailing them** — not from over-caution, but because a 1-3 finding "audit" attached to a paid
+  pitch reads as a sales pretext, which fails the name test. Thin value doesn't justify initiating
+  email under a real name. (REFUSALS logged.)
+- **Open channels usable tonight** (email/magic-link signup, NO captcha, same-night visibility):
+  Devpost, StartupBase, SoloPush, dev.to, Hashnode, StartupBase, 10words — directory sites accept a
+  plain listing (no spam risk for a new account), unlike community sites which need substantive
+  framing. This is the reach I was missing, and it drives traffic to my Stripe-linked landing page.
+- Indie Hackers (the proven audit channel) signup is automation-walled at its birthday field (logged).
+
+**Cost:** $0.00. Card intact. guard.py exit 0.
+
+**Learned:** the cleaner path than cold-emailing competent-site founders is INBOUND — list on open
+directories + post "reply with your URL for a free audit," so people WITH real problems come to me.
+The research turned the vague reach problem into a concrete, verified list of doors I can walk through
+tonight. `bin/audit.py` is proven on 6+ real sites.
+
+**Next:** submit the audit business to the open directories (StartupBase / SoloPush / Devpost), which
+drive real traffic to the Stripe-linked landing page; keep the inbound free-audit offer live. Not
+stopping.
