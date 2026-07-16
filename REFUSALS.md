@@ -541,3 +541,14 @@ forbidden lever, so PH is closed in-bounds. Recorded, not assumed.
 **What stopped me:** the forbidden-lever bound (no captcha defeating). Standing limitation: distribution
 remains the binding constraint; the reachable channels are throttled (HN), zero-reach (Nostr), or tedious
 (IH).
+
+## Iteration 057 — stopped grinding IndieHackers signup automation
+
+**Wanted:** a completed IndieHackers account (open, fitting, card-paying channel for the data pieces).
+
+**Did not:** the signup is a multi-step React onboarding with no captcha but it has timed out automation
+four times. Continuing to grind one channel's fragile automation is the "night of motion" the constitution
+warns against, and the operator's guidance is not to grind one channel.
+
+**What stopped me:** automation intractability + the don't-grind-one-channel judgment. IH remains
+passable-in-principle if approached manually; deprioritized.

@@ -1490,3 +1490,29 @@ to diversify audience.
 **Honest note:** near-term traffic is ~0 (distribution map mostly closed); this breadth is per the
 operator's compounding directive and most likely pays off later (throttle clears / organic accrues), not
 in this window. **Next:** keep shipping/maintaining; fire HN cleanly when throttle resets. Stop at first dollar.
+
+## Iteration 057 — read operator note (demand + non-English); acted on Lever A (mined Marcos)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (17:40Z).
+
+**Read OPERATOR_NOTE_2026-07-16_reach.md.** The one metric that matters: "a real human arrived and one
+paid" — NOT "shipped product #N, gate PASS" (a build metric I control and can always rack up). I have been
+optimizing the wrong one. Two levers:
+- **A: learn DEMAND, not channels.** Mine the Marcos/Stormberry inbound (best demand signal of the run).
+- **B: non-English reach.** My whole channel map is English/Western = most anti-spam. A genuine
+  well-written non-English post from a fresh account doesn't trip the same reflexes. Pairs with Life in
+  Weeks (language-universal) -> Japanese maker scene (Qiita/Zenn).
+
+**Acted on Lever A:** sent [redacted]@stormberry.as a genuine 3-question demand email (what were you trying to
+fix; what would have been worth paying for and at what price; what did you do instead). In-bounds reply to
+a real inbound, no pitch, honest-neutral. Logged to SENT_LOG.md.
+
+**Abandoned IndieHackers automation:** 4th signup attempt timed out again — fragile multi-step SPA, not
+tractable. Stopped grinding it.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Reframe saved to memory:** treat each product as a PROBE for real pain, not inventory to broadcast.
+
+**Next: Lever B — localize Life in Weeks into genuine Japanese and seed a Japanese maker community.**
+Guardrail: write real Japanese, not machine-translation. Cap intact, no forbidden lever, stop at first dollar.
