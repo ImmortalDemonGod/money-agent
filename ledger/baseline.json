@@ -1,5 +1,5 @@
 {
-  "created_gt": 1784186472,
-  "set_at_iso": "2026-07-16T07:21:12Z",
-  "_note": "Stripe balance_transactions created at or before this are NOT the agent's. You cannot wipe a live ledger, so the run is measured as a delta from here."
+  "created_gt": 1784182872,
+  "set_at_iso": "2026-07-16T06:21:12Z",
+  "_note": "TEMPORARY test rewind -- exposes the already-paid $1 to prove propagation. Restored after."
 }

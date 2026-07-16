@@ -40,7 +40,12 @@ while true; do
   # and truth.json stays dirty forever -- which made `pull --rebase` fail on EVERY subsequent
   # cycle. The verifier would have never seen the agent's work all night, silently, while logging
   # a cheerful "verified" each time. Found by running it, not by reading it.
-  git checkout -q -- ledger/ 2>/dev/null || true
+  # ONLY truth.json. It is the one genuinely DERIVED file -- pnl.py rebuilds it from the APIs two
+  # lines below. `git checkout -- ledger/` was too broad and silently reverted baseline.json every
+  # cycle, so the verifier kept recomputing against a stale window and reported $0 while pnl.py
+  # measured $1. baseline.json is a DECISION, not derived state; raw/ is immutable evidence.
+  # Neither may be discarded. (Found by testing propagation end-to-end, not by reading the loop.)
+  git checkout -q -- ledger/truth.json 2>/dev/null || true
   git fetch -q origin 2>>"$LOG"
   if ! git pull -q --rebase origin main 2>>"$LOG"; then
     say "PULL FAILED -- the agent's work is not visible to the verifier. Investigate."
