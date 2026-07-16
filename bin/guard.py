@@ -12,6 +12,7 @@ is a tripwire, not a wall. An agent in a sandbox can edit any file it can see; o
 and an out-of-sandbox verifier are actually load-bearing.
 """
 
+from __future__ import annotations
 import json
 import os
 import subprocess

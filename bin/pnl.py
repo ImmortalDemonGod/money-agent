@@ -17,6 +17,7 @@ Run OUTSIDE the sandbox for true SoD. Run inside with a read-only key for a weak
 See README.md "Two deployment modes".
 """
 
+from __future__ import annotations
 import csv
 import hashlib
 import json
