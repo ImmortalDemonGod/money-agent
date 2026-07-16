@@ -22,7 +22,9 @@ fail() { echo "GATE FAIL: $*" >&2; fails=$((fails+1)); }
 
 [[ -f "$PACKET" ]] || { fail "no packet at $PACKET"; echo "RESULT: FAIL"; exit 1; }
 
-# 2. every class addressed, and N/A must carry a reason
+# 2. every class addressed, and N/A must carry a reason.
+# R3 tier (payments + audit logs, unsupervised, real identity) requires ALL of A-F. No negotiation.
+# Canonical AIV taxonomy: A=Execution B=Referential C=Negative D=Differential E=Intent F=Provenance.
 for c in A B C D E F; do
   # allow "| A |", "- A)", "A:", "Class A -" ... i.e. optional whitespace before the delimiter.
   # (First cut required the delimiter flush against the letter and false-failed every table row.)

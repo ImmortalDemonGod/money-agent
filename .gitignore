@@ -3,3 +3,5 @@
 ledger/truth.json.tmp
 __pycache__/
 .DS_Store
+.cache/
+*.bak

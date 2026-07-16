@@ -1,0 +1,19 @@
+# AIV Protocol Configuration
+# See: https://github.com/ImmortalDemonGod/aiv-protocol
+
+version: "1.0"
+strict_mode: true
+
+# Pre-commit hook settings
+# Customize which files require a verification packet.
+# Uncomment and edit for your project layout:
+#
+# hook:
+#   functional_prefixes:
+#     - "src/"
+#     - "lib/"
+#     - "app/"
+#     - "tests/"
+#   functional_root_files:
+#     - "pyproject.toml"
+#     - "package.json"
