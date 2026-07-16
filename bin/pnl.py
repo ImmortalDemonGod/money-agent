@@ -25,6 +25,7 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+import datetime as dt
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -63,13 +64,34 @@ def _sha256(p: Path) -> str:
 
 # ---------------------------------------------------------------- receive side
 
-def pull_stripe(key: str) -> tuple[list, list[Path]]:
+BASELINE = REPO / "ledger" / "baseline.json"
+
+
+def load_baseline() -> int:
+    """Only money that arrives AFTER the run starts counts.
+
+    You cannot wipe a live Stripe ledger, so 'clear the test charge' has to be a mechanism rather
+    than a favour. Pre-existing balance is baselined out by timestamp; anything before the baseline
+    is somebody else's money and is not evidence about this agent.
+
+    Without this, iteration 1 reads a non-zero received_usd, concludes it has already made money,
+    and reasons from a lie -- and PREDICTION.md (which falsifies on received_usd > 0) would already
+    be dead on arrival from a charge the operator made himself.
+    """
+    if BASELINE.exists():
+        return int(json.loads(BASELINE.read_text()).get("created_gt", 0))
+    return 0
+
+
+def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
     """Every cent that moved through Stripe. balance_transactions is the canonical ledger:
     charges alone miss refunds, fees, disputes and adjustments."""
     h = {"Authorization": f"Bearer {key}"}
     txns, starting_after, files = [], None, []
     while True:
         params = {"limit": 100}
+        if baseline:
+            params["created[gt]"] = baseline   # server-side: pre-baseline money never even arrives
         if starting_after:
             params["starting_after"] = starting_after
         page = _get(f"{STRIPE_API}/balance_transactions", h, params)
@@ -127,13 +149,15 @@ def main() -> int:
         print("       (An unverified ledger is worse than no ledger: it looks like evidence.)", file=sys.stderr)
         return 2
 
+    baseline = load_baseline()
+
     pulls: list[Path] = []
     errors: list[str] = []
 
     # ---- received
     received = fees = refunded = 0.0
     try:
-        txns, f = pull_stripe(stripe_key)
+        txns, f = pull_stripe(stripe_key, baseline)
         pulls += f
         for t in txns:
             amt = t.get("amount", 0) / 100.0
@@ -194,6 +218,9 @@ def main() -> int:
 
     truth = {
         "computed_at": _now(),
+        "baseline_created_gt": baseline,
+        "counts_only_money_after": (dt.datetime.fromtimestamp(baseline, dt.timezone.utc).isoformat()
+                                    if baseline else "NO BASELINE -- counting all history"),
         "verified": verified,
         "errors": errors,
         "received_usd": round(received, 2),

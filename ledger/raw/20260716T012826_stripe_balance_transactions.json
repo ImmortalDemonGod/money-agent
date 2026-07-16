@@ -1,0 +1,28 @@
+[
+  {
+    "amount": 500,
+    "available_on": 1784764800,
+    "balance_type": "payments",
+    "created": 1784183129,
+    "currency": "usd",
+    "description": null,
+    "exchange_rate": null,
+    "fee": 45,
+    "fee_details": [
+      {
+        "amount": 45,
+        "application": null,
+        "currency": "usd",
+        "description": "Stripe processing fees",
+        "type": "stripe_fee"
+      }
+    ],
+    "id": "txn_3Ttijc4D1wxxFLMk1Tr61q1Z",
+    "net": 455,
+    "object": "balance_transaction",
+    "reporting_category": "charge",
+    "source": "ch_3Ttijc4D1wxxFLMk1db85VwS",
+    "status": "pending",
+    "type": "charge"
+  }
+]
