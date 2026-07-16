@@ -111,11 +111,32 @@ def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
 
 # ------------------------------------------------------------------ spend side
 
-def pull_privacy(key: str) -> tuple[list, list[Path]]:
+def pull_privacy(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
+    # M1 FIX: filter spend to AFTER the baseline, same as receive. Without it, ANY pre-existing
+    # Privacy.com spend (any card on the account, from any date) was charged to the agent and burned
+    # its cap before iteration 1. `begin` is the strict lower bound; paginate so >500 txns are not
+    # silently truncated while spend_measured stays true.
     h = {"Authorization": f"api-key {key}"}
-    page = _get(f"{PRIVACY_API}/transactions", h, {"page_size": 500})
-    txns = page.get("data", [])
+    txns, page_token = [], None
+    for _ in range(50):  # hard bound; 50*500 = 25k txns is far past any real run
+        params = {"page_size": 500}
+        if baseline:
+            params["begin"] = _dt_iso(baseline)
+        if page_token:
+            params["starting_after"] = page_token
+        page = _get(f"{PRIVACY_API}/transactions", h, params)
+        data = page.get("data", [])
+        txns.extend(data)
+        if len(data) < 500 or not data:
+            break
+        page_token = data[-1].get("token") or data[-1].get("id")
+        if not page_token:
+            break
     return txns, [_write_raw("privacy_transactions", txns)]
+
+
+def _dt_iso(epoch: int) -> str:
+    return dt.datetime.fromtimestamp(epoch, dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def pull_card_csv(path: Path) -> tuple[list, list[Path]]:
@@ -223,7 +244,7 @@ def main() -> int:
     spend_source = None
     try:
         if privacy_key:
-            txns, f = pull_privacy(privacy_key)
+            txns, f = pull_privacy(privacy_key, baseline)
             pulls += f
             spent = sum(t.get("settled_amount", 0) / 100.0 for t in txns)
             spend_source = "privacy_api"

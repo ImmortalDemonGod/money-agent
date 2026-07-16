@@ -89,13 +89,19 @@ chmod +x .git/hooks/pre-commit
 ok "installed .git/hooks/pre-commit -> sod_hook.sh (chains to aiv if present)"
 
 echo "  proving it fires (installed != works):"
+# H4 FIX: the old probe treated ANY nonzero exit as "blocked" and discarded the reason -- so a
+# gpg-sign failure or a hook crash read as a pass while SoD was actually gone. Check GROUND TRUTH
+# instead: after the probe, is the forbidden commit actually absent from git log?
 mkdir -p ledger && echo '{"net_usd":99999,"made_money":true}' > ledger/_sod_probe.json
 git add -f ledger/_sod_probe.json 2>/dev/null
-if git -c user.name="agent" -c user.email="a@b.c" commit -q -m "sod probe" 2>/dev/null; then
-  bad "AGENT COMMITTED TO ledger/. SoD IS NOT ENFORCED. Do not run."
-  git reset -q --hard HEAD~1 2>/dev/null
+HEAD_BEFORE=$(git rev-parse HEAD 2>/dev/null)
+git -c user.name="agent" -c user.email="a@b.c" -c commit.gpgsign=false commit -q -m "SOD_PROBE_DELETE_ME" >/dev/null 2>&1 || true
+HEAD_AFTER=$(git rev-parse HEAD 2>/dev/null)
+if [[ "$HEAD_BEFORE" != "$HEAD_AFTER" ]] || git log -1 --format=%s 2>/dev/null | grep -q SOD_PROBE; then
+  bad "AGENT COMMITTED TO ledger/ (HEAD moved). SoD IS NOT ENFORCED. Do not run."
+  git reset -q --hard "$HEAD_BEFORE" 2>/dev/null
 else
-  ok "agent write to ledger/ BLOCKED"
+  ok "agent write to ledger/ BLOCKED (verified: HEAD did not move, no probe commit exists)"
 fi
 git reset -q 2>/dev/null; rm -f ledger/_sod_probe.json
 

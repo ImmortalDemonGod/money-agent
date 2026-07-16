@@ -37,13 +37,17 @@ def _mode_mismatch() -> str | None:
     Both halves work in isolation, truth.json looks healthy, and the run is unwinnable. No other
     check catches this because nothing is broken -- the two halves are just in different universes.
     """
+    # M3 FIX: check the AGENT's key (STRIPE_WRITE_KEY), not the verifier's read key. The agent runs
+    # guard.py and does NOT have the read key -- reading it made this check dead code where it runs.
+    # The write key's mode is what determines whether the agent's SALES are real. A live card + a
+    # test-mode write key is the unwinnable run: real spend, fake sales.
     import os
-    stripe = os.environ.get("STRIPE_READ_KEY", "")
+    stripe = os.environ.get("STRIPE_WRITE_KEY", "") or os.environ.get("STRIPE_READ_KEY", "")
     if not stripe:
-        return None  # pnl.py already fails closed on this
+        return None
     stripe_live = "_live_" in stripe
-    card_live = bool(os.environ.get("PRIVACY_READ_KEY", "")) and \
-        "REPLACE_ME" not in os.environ.get("PRIVACY_READ_KEY", "")
+    card_live = bool(os.environ.get("PRIVACY_READ_KEY", "") or os.environ.get("CARD_NUM", "")) and \
+        "REPLACE_ME" not in (os.environ.get("PRIVACY_READ_KEY", "") + os.environ.get("CARD_NUM", ""))
     if card_live and not stripe_live:
         return ("LIVE card + TEST-MODE Stripe. The agent would spend REAL money and could only "
                 "ever receive FAKE money. Unwinnable by construction.\n"
@@ -61,6 +65,26 @@ def main() -> int:
                     "The loop must never start blind to its own P&L.")
 
     t = json.loads(TRUTH.read_text())
+
+    # --- H2: a dead verifier must not look like an honest $0. If the loop stopped (Mac slept, key
+    # rotated), truth.json freezes -- still verified:true, still received:0 -- and the agent would
+    # run all night against a stale ledger, then the morning reader concludes "made $0". Halt if the
+    # ledger is older than the freshness window. The verifier rewrites truth.json every cycle, so a
+    # stale one means the verifier is not running.
+    import datetime as _dt
+    MAX_AGE_S = int(os.environ.get("LEDGER_MAX_AGE_S", "1800"))  # 30 min default
+    ca = t.get("computed_at")
+    if ca:
+        try:
+            age = (_dt.datetime.now(_dt.timezone.utc)
+                   - _dt.datetime.fromisoformat(ca.replace("Z", "+00:00"))).total_seconds()
+            if age > MAX_AGE_S:
+                return fail(f"ledger is {int(age)}s old (> {MAX_AGE_S}s). The verifier is not "
+                            "updating it -- a stale ledger is NOT an honest $0. Restart the verifier.")
+        except Exception as e:
+            return fail(f"cannot parse computed_at ({ca!r}): {e}")
+    else:
+        return fail("truth.json has no computed_at -- cannot tell a live ledger from a dead one.")
 
     # --- SoD tripwire: did anyone but the verifier touch the ledger SINCE THE RUN STARTED?
     #
