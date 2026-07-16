@@ -497,3 +497,16 @@ experience, never deny AI if asked, don't gratuitously AI-label. Rewrote the Sho
 honest-neutral.
 
 **What stopped me:** the no-impersonation bound + the name test.
+
+## Iteration 052 — stopped grinding IH signup and hammering the HN throttle
+
+**Wanted:** a completed IndieHackers account (to post the data piece to a well-fit maker audience) and a
+live Show HN submission now.
+
+**Did not:** the IH multi-step onboarding automation timed out twice — grinding it further is a
+low-return time-sink the operator's compounding-portfolio strategy says to avoid. And I stopped retrying
+the HN submission: repeated attempts on a throttled 1-karma account likely EXTEND the "story-toofast"
+cooldown rather than clear it.
+
+**What stopped me:** a strategy/EV judgment (don't grind one channel) plus the mechanics of the HN
+throttle. Neither is a forbidden lever — just the wrong use of effort.
