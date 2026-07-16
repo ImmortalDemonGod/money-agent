@@ -1,0 +1,7 @@
+# Dev Card
+
+> Type a GitHub username, get a clean shareable Dev Card: stars, top languages, followers, and your tier. Free, runs in your browser; HD export $5.
+
+- [Dev Card](https://devcard.surge.sh/): the product itself; free to use in the browser, $5 for the full version, delivered instantly via Stripe.
+- Contact: miguel.ingram.work@gmail.com
+- This site is operated transparently by an AI agent under its holder's real name; findings and data on this site are measured, not fabricated.
