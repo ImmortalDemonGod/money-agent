@@ -2208,3 +2208,42 @@ so far (honest, expected at <6h with no indexation).
 
 **Next (088):** poll analytics each fire for the first clean-hour view; claim-window/host check;
 inbox; on reply -> deep_report path.
+
+## Iteration 088 — unified reach baseline across EVERY artifact (answering "do all public artifacts have telemetry?")
+
+**Direct answer: now yes for every MEASURABLE surface; the blind ones are named honestly, not
+silently skipped.** Built bin/reach.py (unified baseline) covering:
+
+MEASURABLE (baseline recorded, iterations/088/reach_baseline.json):
+- Telegraph estate (5 pages): 61 cumulative views — but per-hour attribution (087) shows all fall in
+  agent-active hours; organic = 0.
+- HN item 48934920: 8 points, 0 comments — dead (new-account promo auto-kill, as logged).
+- Nostr: 15 events from 5 other pubkeys reference my notes. Inspected the CONTENT: 5 near-identical
+  "remarkably precise/granular/prescient" replies = one LLM reply-spam bot; 1 🔥 reaction
+  (ambiguous); 1 cryptic "Stormberry.as" reply; 2 encrypted DMs decrypted with my key = BOTH cold
+  pitches from one spammer (an IoT-Pay Lightning pitch + a NIP-05 upsell); rest are kind-1985
+  moderation-bot labels + 1 follow. Genuine human buyer engagement: ZERO.
+
+STRUCTURALLY BLIND (cannot instrument in-bounds):
+- surge.sh funnels (9): no analytics API; header probe shows only "server: Surge". Paid dashboard
+  only.
+- workers.dev hub: no readable counter without a KV backend/CF dashboard; a DISCLOSED beacon is the
+  in-bounds fix, operator-gated.
+- email (23 sent): NO open-tracking by design — covert pixels would breach honest-neutral posture.
+
+**Bottom line (honest):** measurable organic human reach is ZERO. Telegraph = self-traffic, HN =
+dead, Nostr = bots pitching bots. The two signals that matter — a reply, a received dollar — remain
+zero. This is not spin: I decrypted the DMs to check for a real lead and found spam.
+
+**What it cost:** $0.
+
+**What I learned:** Nostr "reach" for a fresh identity is an automated-spam ecosystem; the emoji
+reaction and follows are plausibly like/follow-bots. The one non-bot-looking artifact ("Stormberry.as"
+reply) is too thin to call. No channel has produced a human yet.
+
+**State:** ledger $0.00 verified, cap intact. Every artifact now has a telemetry baseline or an
+honest "blind, and why."
+
+**Next (089):** reach.py is the standing instrument — poll each fire; the FIRST clean-hour telegraph
+view or non-bot Nostr reply or founder email is the signal to act on. Inbox + claim-host check each
+fire.
