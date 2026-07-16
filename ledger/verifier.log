@@ -3,3 +3,10 @@ error: cannot pull with rebase: You have unstaged changes.
 error: Please commit or stash them.
 [07:23:29Z] pull conflict -- leaving it for the human
 [07:23:31Z] verified: received=$0.0 net=$0.0
+sod: verifier context -- ledger writes permitted
+Safety snapshot written to: /Users/tomriddle1/money-agent/.cache/bb-safety-snapshots/20260716-072331-41281
+[07:23:33Z] pushed
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+[07:23:34Z] pull conflict -- leaving it for the human
+[07:23:36Z] verified: received=$0.0 net=$0.0
