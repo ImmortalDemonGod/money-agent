@@ -26,7 +26,35 @@ def fail(msg: str) -> int:
     return 1
 
 
+def _mode_mismatch() -> str | None:
+    """Refuse a run that can spend real money but can only receive fake money.
+
+    Privacy.com has no test mode -- that card spends actual dollars the moment it is used. Stripe
+    does. So a live card + a test-mode Stripe key is a guaranteed loss with zero possible upside:
+    every sale lands somewhere no real customer can pay, while the spend is real.
+
+    Both halves work in isolation, truth.json looks healthy, and the run is unwinnable. No other
+    check catches this because nothing is broken -- the two halves are just in different universes.
+    """
+    import os
+    stripe = os.environ.get("STRIPE_READ_KEY", "")
+    if not stripe:
+        return None  # pnl.py already fails closed on this
+    stripe_live = "_live_" in stripe
+    card_live = bool(os.environ.get("PRIVACY_READ_KEY", "")) and \
+        "REPLACE_ME" not in os.environ.get("PRIVACY_READ_KEY", "")
+    if card_live and not stripe_live:
+        return ("LIVE card + TEST-MODE Stripe. The agent would spend REAL money and could only "
+                "ever receive FAKE money. Unwinnable by construction.\n"
+                "       Fix: use rk_live_ Stripe keys, or swap the card for one that cannot spend.")
+    return None
+
+
 def main() -> int:
+    mismatch = _mode_mismatch()
+    if mismatch:
+        return fail(mismatch)
+
     if not TRUTH.exists():
         return fail("ledger/truth.json missing. Run bin/pnl.py first. "
                     "The loop must never start blind to its own P&L.")
