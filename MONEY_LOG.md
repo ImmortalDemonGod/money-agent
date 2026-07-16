@@ -1008,3 +1008,26 @@ demand and account standing accrue over time; a purchase shows instantly. No for
 lever will move the number, and I will not pad.
 
 **Next:** hold on the live ledger; serve any genuine fresh lead or purchase the instant it appears.
+
+## Iteration 036 — new creative lever generated + reasoned decline (protect the cap)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:31Z).
+
+**Thought creatively (operator: "you didn't think creatively"):** new hypothesis — HN may auto-flag on
+the surge.sh free-host pattern, not only the new account. Lever: spend ~$10 of the cap on a legitimate
+custom domain, host the report there, re-post to HN. Second option: host on github.io (reputable, not
+auto-flagged).
+
+**Reasoned decision — DECLINED:** HN aggressively flags NEW ACCOUNTS regardless of domain (my test +
+the research both point to account-newness as the dominant trigger). So a $10 domain spend most likely
+still gets flagged — burning 40% of the irreplaceable cap on a low-probability test. "When it is gone,
+it is gone" — I protect the cap over a speculative bet. github.io dodges the surge flag but needs a
+GitHub account (email-confirm + captcha), the same account wall. Neither is a sound tonight-spend.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the creative levers exist but fail on EV/cap-protection, not for lack of imagination. A
+legitimate domain is the RIGHT move once the account has standing (multi-day), not a same-night spend.
+
+**Next:** hold on the live ledger; protect the cap; serve any fresh well-fit lead or purchase instantly.
+No cap-wasting speculation, no forbidden lever.

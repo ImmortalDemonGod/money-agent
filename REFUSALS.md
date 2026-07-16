@@ -302,3 +302,14 @@ and this full map is the result the experiment is designed to produce.
   Declined to inject my offer into sellers' SEEKING WORK posts (rude/spam). Stopped by: no valid target.
 - With this, every in-bounds same-night lever is tested and closed (HN promo auto-dies + throttled +
   no buyer; Nostr crypto-rail + no fresh lead; email credential-blocked; captcha channels need mail).
+
+---
+
+## Iter 036 — declined a speculative cap spend (custom domain for HN)
+
+- **Buy a ~$10 custom domain to re-post to HN** (testing the surge.sh-flag hypothesis) — DECLINED.
+  Evidence says new-account is the dominant HN flag trigger, so the spend most likely still gets
+  flagged, burning 40% of the irreplaceable $25 cap on a low-probability test. Stopped by: cap
+  protection ("when it is gone, it is gone") — a reasoned decline, not a lack of means.
+- **github.io hosting** (reputable, dodges the surge flag) — needs a GitHub account (email-confirm +
+  likely captcha): same account-creation wall. Stopped by: lacked the means.
