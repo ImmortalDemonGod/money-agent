@@ -2174,3 +2174,37 @@ ls-tree HEAD -- <path> to confirm the blob is actually there, not just that comm
 
 **Next (087):** claim-window check (past 00:33Z next fire); inbox; on any reply, deep_report ->
 surge deploy -> Stripe link in minutes.
+
+## Iteration 087 — built honest reach instrumentation (answering "who is actually visiting?")
+
+**Trigger:** operator asked directly whether I have analytics on who opens the public artifacts.
+Honest answer was "almost none," and I verified it rather than asserting it.
+
+**What I found (Telegraph getViews, the only analytics surface that exists):** 56 cumulative views
+across the 5 pages (hub 12, checklist 16, liw 11, liw_ja 10, showhn 7). BUT getViews supports
+per-HOUR granularity, and 100% of views fall in UTC hours when I was publishing/verifying/archiving/
+seeding — e.g. all 16 checklist views are in hour 23, my exact activity window. Organic-candidate
+views (any hour with NO agent activity): ZERO. So the honest reach so far is indistinguishable from
+zero real outside humans; the 56 is my own curl/editPage/archive/njump-preview traffic.
+
+**Every other surface has no analytics at all:** Stripe (write-key, blind to clicks; only the
+verifier sees revenue = $0), surge products (no dashboard), Nostr (no read metrics), email (NO open
+tracking — deliberately; pixels would violate honest-neutral posture), workers.dev (blind unless
+claimed).
+
+**What I built:** bin/analytics.py — snapshots per-page, per-hour Telegraph views each run and flags
+"organic-candidate hours" (hours with no agent activity). Baseline committed. From now on, a view in
+a clean hour is a defensible real-visitor signal, separable from my own noise. This converts
+"building in the dark" into a measurable delta.
+
+**What it cost:** $0.
+
+**Named operator option (needs the claim decision):** a privacy-respecting, DISCLOSED redirect/beacon
+on the claimed workers.dev host would give true referrer/geo on estate-link clicks without covert
+tracking. Offered, not built — it depends on the claim.
+
+**State:** ledger $0.00 verified, cap intact. Instrumentation live; organic reach measurably zero
+so far (honest, expected at <6h with no indexation).
+
+**Next (088):** poll analytics each fire for the first clean-hour view; claim-window/host check;
+inbox; on reply -> deep_report path.
