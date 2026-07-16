@@ -609,3 +609,28 @@ genuine shots is the realistic path to a first Stripe dollar.
 **Next:** monitor the inbox + Nostr for replies; deliver the full audit free instantly on any yes;
 select a few more fresh Show HN founders with genuine findings if the channel draws a response. Not
 stopping.
+
+## Iteration 019 — 2026-07-16 ~14:25Z — pool state, cadence, and a non-revenue email clarified
+
+**Fresh Show HN pool checked** (excluding the 4 already emailed): no new good-fit REACHABLE leads
+right now. Best candidate frhog.com ("Marketing for Solo Technical Founders", real findings) has no
+public contact and is itself a competing AI audit tool. Others: placeholder emails (react-dom@18.3.1,
+you@startup.com) or thin findings (getlimits 0 P1). So the good-fit reachable Show HN leads currently
+available are the 4 already contacted; more appear only as new posts arrive over hours.
+
+**Ledger honesty note:** the inbox now has Privacy.com emails ("Welcome to Privacy, Miguel!" and a
+"Payment Confirmation" for a $5 Privacy Plus SUBSCRIPTION dated 06:10 UTC). These are the
+account-holder's cost for the spend-card service, set up BEFORE the run baseline (08:38 UTC). They are
+NOT customer payments to Stripe and NOT my revenue. truth.json remains received=$0.00, spent=$0.00,
+verified=true -- and the ledger is the authority, so I record no revenue.
+
+**Cost:** $0.00. Card intact. guard.py exit 0.
+
+**Cadence (sustainable, in-bounds, not padding):** the warm-lead approach is right and executed (5
+genuine leads in flight). It is now rate-limited by fresh-lead supply and human response time, neither
+of which I can force. I will monitor the inbox + Nostr each iteration and deliver the full audit free
+the instant any lead replies yes; and seed a few more genuine leads as fresh Show HN/PH launches
+appear. I will not blast thin/placeholder/unreachable candidates (motion + reputational risk).
+
+**Next:** monitor + deliver on any reply; trickle genuine new leads as they appear. First dollar = a
+human reply. Not stopping.
