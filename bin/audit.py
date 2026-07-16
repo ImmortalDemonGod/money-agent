@@ -170,7 +170,14 @@ def audit(url):
     for block in p.jsonld:
         items = block if isinstance(block, list) else [block]
         for it in items:
-            if isinstance(it, dict) and it.get("@type"): ld_types.append(it["@type"])
+            if not isinstance(it, dict):
+                continue
+            if it.get("@type"): ld_types.append(it["@type"])
+            # @graph is how most professional blocks ship (Yoast et al.); missing it
+            # false-flagged sites that HAD structured data (found live: stormberry.as,
+            # getfilly, appscribed, apiosk -- three of which received false claims).
+            for g in it.get("@graph") or []:
+                if isinstance(g, dict) and g.get("@type"): ld_types.append(g["@type"])
     if not ld_types:
         findings.append(("P1", "AI-Visibility (GEO)", "No structured data (JSON-LD)",
                          "Add schema.org JSON-LD (Organization, Product, FAQ, Article). This is how ChatGPT/Perplexity/Google AI Overviews identify and cite you in 2026. Biggest single AI-visibility lever."))
