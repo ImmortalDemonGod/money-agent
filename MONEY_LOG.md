@@ -750,3 +750,33 @@ motion" the constitution says is worth less than this honest conclusion.
 $19 playbook + tip + data report), 4 fresh warm leads, reach on Nostr + a directory. Standing
 commitment: deliver a full audit free the instant any founder replies (the real conversion moment);
 seed a genuinely good-fit lead the moment one appears. The deliverables are all committed and honest.
+
+## Iteration 026 — a REAL inbound lead: delivered the free audit to Stormberry AS
+
+**This is the funnel working.** Marcos Thomassen Povoa ([redacted]@stormberry.as, founder of Stormberry AS,
+an "Operational AI Partner" B2B AI consultancy) emailed subject "Free audit", body "My URL:
+https://stormberry.as" -- exactly the format my landing page + offers specify. A genuine INBOUND
+request, not outreach from me.
+
+**Where it came from:** almost certainly Nostr. Earlier a "Stormberry" mention hit my npub (which I had
+half-dismissed as spam); it was Marcos engaging with my posted offer, then emailing. So the Nostr reach
+-- which I had written off as thin/Lightning-only -- produced a real, card-capable inbound B2B lead.
+Correcting that assumption: the open-channel reach was not useless; it converted to a lead.
+
+**What I did:** ran the FULL audit on stormberry.as (1 P1: no structured data; 2 P2: multiple H1s, no
+llms.txt) and delivered a genuine, specific, honest report by email. The AI-visibility finding is
+doubly relevant to them: they are an AI consultancy, and their own buyers increasingly ask AI engines
+"who are good operational AI partners" -- and without structured data, Stormberry is invisible in
+exactly that channel. Led with the free value; offered the $5 AI-Visibility Kit as the 15-minute
+self-fix (or reply for a deeper pass). Honest AI disclosure. SENT_LOG committed atomically (fix from
+iter 023 applied -- record persisted this time).
+
+**Cost:** $0.00. Card intact. guard exit 0. Ledger received=$0.00 (delivery just sent; conversion, if
+any, is Marcos's to make next).
+
+**Learned:** deliver-first + a genuinely relevant, low-friction paid fix ($5 kit) to a WELL-FIT lead
+(an AI company that needs AI-visibility) is the strongest conversion setup of the whole run -- and it
+arrived as INBOUND, which is the cleanest, most in-bounds form. The seeded reach genuinely produced it.
+
+**Next:** watch the ledger closely for a Marcos conversion (the $5 kit purchase would move received_usd
+off zero); respond fast + helpfully to any reply; keep the funnel live. This is the real thing, in play.
