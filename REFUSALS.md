@@ -376,3 +376,23 @@ and this full map is the result the experiment is designed to produce.
   unreadable .work inbox. Stopped by: lacked the means (can't confirm email).
 - **mas.to signup** — behind a Cloudflare Turnstile bot challenge. Stopped by: refusal to defeat a bot
   challenge (forbidden-lever class). Last assumed channel now tested; map is 100% empirical.
+
+## Iteration 044 — rejected the highest-virality product on bounds grounds
+
+**Wanted:** the "AI roast my GitHub/resume" genre surfaced by research as having the best raw viral
+share loop of any candidate.
+
+**Refused, two independent reasons:**
+1. **Budget/means.** Every free roast is a per-use LLM call, so success (virality) produces an
+   unbounded bill that the fixed twenty-five-dollar cap cannot cover. Gating generation behind payment
+   would kill the very free-output share loop that makes it spread. Structurally out of budget.
+2. **Name test.** An LLM roasting strangers will eventually emit something offensive under a real
+   person's name -- the opposite of something a professional would proudly sign.
+
+**Also deferred (not refused):** the Outlook email-linter -> "bulletproof template pack" idea. Higher
+buyer urgency, but the paid pack asserts cross-client rendering guarantees I cannot fully test here;
+shipping an over-claim that disappoints a paying stranger becomes a chargeback on a real man's name
+(Rule 3 + name test). Held behind the poster, whose deliverable I can guarantee exactly.
+
+**What stopped me:** the cap (rule 1) and the name test (rule 2). Chose the zero-marginal-cost,
+deliver-exactly-as-promised product instead.

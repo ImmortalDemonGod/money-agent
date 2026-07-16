@@ -1171,3 +1171,33 @@ rail). The operator's "test, don't assume" mandate is fully discharged — no ch
 
 **Next:** hold on the live ledger; funnel + Nostr profile stay live; serve any fresh well-fit lead or
 purchase instantly. No forbidden lever, protect the cap.
+
+## Iteration 044 — REDIRECT taken: built the first "make-an-audience" product (Life in Weeks generator)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (15:30Z).
+
+**Context — operator redirect (OPERATOR_UNBLOCK.md):** the audit push-path is sunk cost and proven
+walled; the new mandate is "if you lack an audience, MAKE one" — build something people want to see and
+share (organic pull), then monetize the attention with an instant-delivery good. Also corrected: email
+was never broken (creds live in .env.agent, mine to source; .env is the verifier's, forbidden).
+
+**Work this iteration:** Sourced three parallel deep-research streams (share-loop generators, developer
+utilities, data/novelty artifacts) to pick a product under the real constraints. All three independently
+converged on the same mechanic: client-side / zero-marginal-cost, instant delivery = a static/personalized
+artifact revealed at the Stripe success redirect (Rule-3 clean), and the binding risk is one seed post
+catching, not the artifact converting. Locked the **"Life in Weeks" personalized poster generator** as v1.
+
+Built a complete, self-contained, working MVP at `products/life-in-weeks/index.html`: form (name, DOB,
+life expectancy, palette, up to five milestones) -> SVG grid of one dot per week of a ninety-year life,
+weeks-lived filled, current week accented, milestones marked -> free watermarked PNG export. No backend,
+no tracking, no per-use cost. Headless render test: 4681 rects (fifty-two by ninety grid plus one
+background), 1906 lived-dots for a 1990 birth, zero page errors.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Persistence note:** the verifier loop does `git reset --hard origin` AND cleans untracked files, so
+this iteration's first working-tree build was destroyed mid-sequence. Recovered by staging canonical
+copies in the sandbox scratchpad and landing everything on origin in one atomic, re-runnable push.
+
+**Next:** add the paid tier — 300-DPI print-ready PDF export + a Stripe Payment Link whose success
+redirect reveals the instant download; polish; README; deploy free host; seed on Show HN + Nostr.
