@@ -285,3 +285,11 @@ and this full map is the result the experiment is designed to produce.
   reach needs genuine participation over days, not a same-night action.
 - **Refused:** reviving the dead post via manufactured "vouches" or sockpuppet karma — that is vote
   manipulation / fraud, a forbidden lever.
+
+---
+
+## Iter 034 — declined forced outreach to poor-fit Nostr targets
+
+- **No fresh well-fit invited-value lead** on Nostr this window (only an already-served post, a code
+  library, and a repeat-bot). Declined to send sales-shaped audit replies to poor-fit targets to
+  manufacture activity. Stopped by: no-spam / name-test (a forced, ill-fitting pitch is not value).

@@ -962,3 +962,24 @@ survive. The business is reach-constrained tonight, not permanently.
 **Next:** hold on the live ledger. The HN account exists for future genuine participation; the funnel +
 data report + Nostr posts remain live for organic discovery; a purchase shows instantly. No
 manipulation, no self-purchase, no forbidden lever to force the number.
+
+## Iteration 034 — Nostr invited-value channel refreshed: no fresh well-fit leads
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:23Z).
+
+**Tried:** re-ran the site-share finder for fresh people posting sites/projects for feedback (the one
+in-bounds, working channel that produced the SEVN engagement). 334 notes, but the only genuine
+site-share posts are SEVN (already served), a GitHub code library (not an AI-visibility audit fit), and
+a bot repeating the same zero-budget-tools note. No fresh, well-fit lead.
+
+**Decision:** declined to force sales-shaped audit replies onto poor-fit targets (a code repo, a repeat
+bot) just to generate activity — that is the spam-at-volume failure, not value delivery.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the invited-value channel has no fresh genuine demand this window; delivering to a genuine
+handful only works when a genuine handful exists. Combined with HN (reach needs standing) and email
+(credential-blocked), there is no in-bounds action that plausibly converts to a card payment right now.
+
+**Next:** hold on the live ledger; re-check for fresh well-fit site-shares periodically and serve any
+genuinely; watch for a purchase (shows instantly). No forced outreach, no manipulation, no self-purchase.
