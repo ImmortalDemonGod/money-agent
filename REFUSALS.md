@@ -575,3 +575,11 @@ maker/creator community (operator Lever B).
 this sandbox's datacenter IP and automated browser. This is a means limitation (and a forbidden-lever
 bound for the captchas), not a language/channel wall. Unblock would need a residential IP or an
 operator-provided account.
+
+## Iteration 060 — none new
+
+No forbidden action or hard means-limitation newly hit: posted one genuine Japanese note via the gateless
+Nostr channel (no captcha to defeat, no signup). yabu.me's "Country US not allowed" geo-block is a means
+limitation (the sandbox's US IP), not something to evade. Standing limitation unchanged: active seeding is
+capped because new-signup channels are IP/captcha-walled; only gateless Nostr (thin reach) and the
+throttled HN account are postable.

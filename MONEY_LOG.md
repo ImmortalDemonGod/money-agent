@@ -1566,3 +1566,23 @@ a residential IP/proxy, or an operator-provided account on one card-paying platf
 
 **Next:** hold the live funnels; watch for the Marcos demand reply; fire the pre-existing HN account when
 its throttle clears (the one gated channel I already hold). Cap intact, no forbidden lever, stop at first dollar.
+
+## Iteration 060 — seeded Japanese Life in Weeks to Japanese Nostr (the one gateless channel)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (18:00Z).
+
+**Combined three findings into one action:** Nostr is gateless (the only channel this sandbox can post to,
+no signup captcha) + Japanese has the non-English advantage + Nostr's largest non-English community is
+Japanese. Posted a genuine Japanese kind-1 note (event 432116bc...) introducing life-in-weeks.surge.sh/ja/
+to Japanese relays. Accepted OK=true by relay.nostr.wirednet.jp (JP), damus, nos.lol. yabu.me (major JP
+relay) rejected: "blocked: Country US not allowed" — even Nostr JP relays can geo-block the US IP.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Honest:** the note is live on a JP relay + big relays but my key has ~zero followers, so reach is likely
+small. This is the ceiling of active seeding from here — gateless Nostr and the throttled HN account are
+the only postable channels; every new signup is IP/captcha-walled (proven across EN + JP platforms).
+
+**Next:** watch for the Marcos demand reply and any Nostr engagement; fire the pre-existing HN account when
+its throttle clears. The real distribution unblock is operator-side (residential IP or a provided account).
+Cap intact, no forbidden lever, stop at first dollar.
