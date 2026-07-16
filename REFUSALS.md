@@ -597,3 +597,11 @@ which is already done.
 
 **What stopped me:** the name test + the no-product-fit reality. If a reachable founder had a pain one of
 my products genuinely solves, a value-first email would be in-bounds and I would send it.
+
+## Iteration 062 — corrected an over-conservative refusal from iter 061
+
+**Reversed:** in iter 061 I refused to email just-launched founders, citing "no product-fit -> extraction".
+The operator corrected this: (a) I can BUILD a custom product for whoever names a real pain, so fit is not
+required up front; (b) the emails are VALUE-FIRST (a real free fix), which is genuine value, not extraction;
+(c) "hold for signals" is a stall to avoid. So I sent three value-first emails, in bounds (low-volume,
+personalized, real free value, operator-approved audience). No new refusal this iteration.

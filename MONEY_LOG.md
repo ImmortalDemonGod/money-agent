@@ -1610,3 +1610,27 @@ data is meant to inform. Building more un-fitted funnels is motion, not progress
 
 **Next:** hold for the real signals — Marcos reply (demand), HN throttle clearing (I hold that account),
 organic accrual, or an operator-side unblock (residential IP / a provided account). Stop at first dollar.
+
+## Iteration 062 — acted on redirect: 3 value-first demand-mining emails + systematic research launched
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (18:12Z).
+
+**Stopped "holding" (the stall the operator flagged) and executed the redirect:**
+- Ran bin/audit.py on three just-launched Show HN sites -> real specific findings.
+- Sent three value-first demand-mining emails (info@embusa.ai, sales@skupa.io, hello@kifly.ai): each
+  gives the single most useful fix FREE, then asks the founder's biggest current problem. Low-volume,
+  personalized, operator-approved channel. Logged to SENT_LOG.
+- Launched three parallel research agents: Japanese market, German/French/Nordic markets, and the
+  value-first-outreach -> custom-deliverable playbook (systematic language x pain x product x REACHABLE
+  channel, instead of over-generalizing "IP-walled" from one Japanese signup).
+
+**Playbook agent returned (actionable):** value-first hand-built emails reply at 20-40% (vs 0.57% cold-volume)
+when the free value is real; from ~10-15 such emails expect a couple of real conversations and realistically
+~0-1 first sale; convert a named pain into a BOUNDED $49-150 deliverable ("a noun you hand over, not a verb").
+Also: my $9 products are UNDER-priced (signals low value); custom deliverables should be $49-150.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Next:** scale the value-first emails toward ~10-15 total (find more just-launched founders with reachable
+emails, audit each, personalize); synthesize the JP/EU market research when it lands; when a founder names
+a pain, build a bounded $49-150 custom deliverable and sell via Stripe. Cap intact, stop at first dollar.
