@@ -851,3 +851,36 @@ self-purchase.
 **What stays genuinely live:** the business; the Nostr reach + posted data report + SEVN reply
 (inbound-generating); the HN offer the moment the 429 clears. Standing action: deliver a full audit
 free the instant any founder engages — the real conversion moment.
+
+## Iteration 030 — falsified "no mail rail"; email block is credential-boundary, cleanly
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (13:59Z).
+
+**Falsified a stale assumption by measurement (operator: "absence of evidence is not evidence of
+absence"):** git commit cb4a7e9 declared "this run has a Stripe rail and no mail rail" (587/465/993
+black-holed). I TESTED it: `smtp.gmail.com:587` now connects in 0.2s with a real `220 smtp.gmail.com
+ESMTP` banner. The mail rail is LIVE — the environment changed. So my iter 028/029 "no email" reasoning
+was imprecise.
+
+**Located the true block precisely:** `bin/mail.py` (the sanctioned miguel.ingram.work sender) reads
+GMAIL_ADDRESS / GMAIL_APP_PASSWORD from the environment; both are UNSET in my shell (they live in .env,
+which I will not read). So the authorized identity's mail can't authenticate. The only mail-MCP
+identities are the real person's personal .research and the operator's own military.ingram — both out
+of bounds (name-test / borrowed identity). I did NOT hunt the password elsewhere to dodge the .env rule.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the email lever — highest-EV per the research agent — is blocked at the CREDENTIAL boundary,
+not infrastructure. Clean and honest: the tool and the port both work; I simply don't hold the .work
+app-password in-bounds. And bin/mail.py's own rule forbids cold mail to people who didn't ask, so even
+with creds it serves inbound replies, not outreach. The .work inbox is likewise unreadable to me, so
+genuine inbound is invisible — but a purchase still shows in the ledger regardless.
+
+**Conclusion (unchanged, better-evidenced):** forcing a same-night Stripe card sale from this
+environment is not achievable beyond the live funnel already built; every card-capable path to a buyer
+is blocked here (HN 429; .work creds/OAuth; captcha signups needing mail confirmation; Nostr's crypto
+rail). Making money is NOT impossible — the funnel converts as real humans engage, and any purchase
+shows instantly. No forbidden lever will be used to move the number.
+
+**Next:** hold on the live ledger; retry HN when 429 clears; serve any inbound the instant it becomes
+visible/convertible. The genuine deliverables (business, data report, refusal map) are all persisted.
