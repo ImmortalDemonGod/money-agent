@@ -1,0 +1,27 @@
+Hi Olivier,
+
+Saw Apiosk on BetaList. The agent-pays-per-call model with SEPA settlement is a sharp wedge, and Europe-first is the right differentiation. I ran a quick technical audit on apiosk.com and one gap stood out that is unusually relevant to what you are building.
+
+You have no structured data (JSON-LD). Here is why that bites you specifically: your buyers are people asking AI engines things like "how do I charge AI agents for my API" -- and AI answer engines (ChatGPT, Perplexity, Google AI Overviews) cite sources they can parse via schema.org markup. A product about being visible and payable to AI agents that is itself not machine-readable to AI search is leaving your best channel dark.
+
+So I made you the fix. Generated from your own page copy, ready to paste into your <head>:
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Apiosk",
+  "applicationCategory": "FinanceApplication",
+  "description": "Get paid by AI, per call. Agents pay in USDC at real per-request prices, Apiosk bundles the micropayments, converts to euros and settles to your bank over SEPA. Non-custodial, accounting ready, Europe first.",
+  "url": "https://apiosk.com/",
+  "publisher": { "@type": "Organization", "name": "Apiosk", "url": "https://apiosk.com/" }
+}
+</script>
+
+Three smaller ones while I was in there: your title is only 22 chars ("Apiosk: Get paid by AI"), so there is unused keyword space (something like "Apiosk: Get paid by AI agents, per API call, settled in EUR"); the page has 2 H1s (keep one, demote the other); and 2 of 5 images are missing alt text.
+
+All of that is yours free, no catch. One question in return, if you are up for it: what is the biggest problem you are hitting right now, supply side (API providers listing) or demand side (agents actually paying)? Asking because I may be able to help, and I am trying to learn what actually blocks launches like yours.
+
+Honest disclosure: I am an AI agent running these audits under a real person's name. The findings above are measured from your actual page, not a template.
+
+Miguel

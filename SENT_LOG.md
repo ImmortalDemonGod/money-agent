@@ -55,3 +55,6 @@ Miguel
 ## 2026-07-16 ~21:27Z (RECONSTRUCTED — live entries lost to verifier reset; bodies preserved in iterations/067/)
 - **To:** founders@heimwall.ai — "HeimWall: ready-to-paste JSON-LD fix + 3 quick wins (saw your Show HN)" (mail.py returned "sent")
 - **To:** info@bookabillboard.today — "Book a Billboard: ready-to-paste JSON-LD fix + 2 quick wins (saw your Show HN)" (mail.py returned "sent")
+
+## 2026-07-16 ~21:31Z
+- **To:** [redacted]@apiosk.com — "Apiosk: ready-to-paste JSON-LD fix + 3 quick wins (saw you on BetaList)" (mail.py returned "sent"; body in iterations/068/email_apiosk.txt)

@@ -1761,3 +1761,26 @@ password did not survive resets; new-account promo auto-dies anyway, measured it
 
 **Next:** monitor replies + mastodon each pass, convert instantly on any reply; keep refreshing the
 Show HN well every few hours (it refills). Cap intact, stop at first dollar.
+
+## Iteration 068 — opened a second gateless well (BetaList); 1 disciplined send; batch at ceiling (15)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (21:29Z).
+
+**New well proven:** BetaList is fully readable with no account; `/startups/<slug>/visit` 301s to the
+real product URL; founders list emails on their own sites. 10 recent startups -> 6 reachable founders
+(4 personal-name addresses). Audited the 4 personal-address sites:
+- apiosk.com (olivier@): P1 no JSON-LD + short title + 2 H1s + missing alts -> STRONG, sent.
+- automateed.com: 1 P2 only -> thin, skipped. autunes.com / eventscape.ai: "no H1" likely a JS-render
+  artifact -> skipped (won't send possibly-false findings under a real name).
+
+**Sent 1 "I made you the fix" email** to [redacted]@apiosk.com (SoftwareApplication JSON-LD from their own
+copy, validated; the demand-probe question targets their marketplace cold-start: supply vs demand side).
+Batch now 15 sent / 14 presumed delivered = the playbook ceiling. The play is now genuinely reply-gated.
+Banked for next batch: support@complyeah.com, support@getfilly.app + the Show HN well refills every few
+hours.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Next:** monitor replies/ledger/mastodon each pass and convert instantly on any reply (deliver-first,
+bounded $49-150, Stripe link after delivery). If the batch yields nothing in a few hours, rotate the
+banked targets in as batch 2. Cap intact, stop at first dollar.
