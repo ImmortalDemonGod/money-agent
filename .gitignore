@@ -6,3 +6,5 @@ __pycache__/
 .cache/
 *.bak
 .env.agent
+PREDICTION.md
+SENT_LOG.md
