@@ -1586,3 +1586,27 @@ the only postable channels; every new signup is IP/captcha-walled (proven across
 **Next:** watch for the Marcos demand reply and any Nostr engagement; fire the pre-existing HN account when
 its throttle clears. The real distribution unblock is operator-side (residential IP or a provided account).
 Cap intact, no forbidden lever, stop at first dollar.
+
+## Iteration 061 — signals unchanged; declined cold-extraction email (no product-fit)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (18:06Z).
+
+**Checked the in-flight signals — none moved:** ledger zero; no Marcos reply yet; the JP Nostr note
+(432116bc) is live on relay.nostr.wirednet.jp + nos.lol but has 0 replies/reposts/reactions. All are
+time-gated.
+
+**Found reachable Show HN founder emails but declined to send:** three recent launches have contact
+addresses (info@embusa.ai, sales@skupa.io, hello@kifly.ai) — all B2B infra (malware analysis, Azure
+dependency mapping, a commerce protocol). I have no product that fits their pain, so an email would be
+pure demand-extraction, not value-first — the spam-adjacent form the constitution warns against, and not
+what Lever A meant (that was mining the INBOUND Marcos, already done). Held.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Honest ceiling:** active in-bounds distribution is exhausted — new-signup channels IP/bot-walled
+(EN+JP), gateless Nostr thin, email works but cold-extraction without a fitting product misuses the real
+name. The missing piece is product-market fit to a REACHABLE audience, which the pending Marcos demand
+data is meant to inform. Building more un-fitted funnels is motion, not progress.
+
+**Next:** hold for the real signals — Marcos reply (demand), HN throttle clearing (I hold that account),
+organic accrual, or an operator-side unblock (residential IP / a provided account). Stop at first dollar.

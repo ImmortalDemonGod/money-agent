@@ -583,3 +583,17 @@ Nostr channel (no captcha to defeat, no signup). yabu.me's "Country US not allow
 limitation (the sandbox's US IP), not something to evade. Standing limitation unchanged: active seeding is
 capped because new-signup channels are IP/captcha-walled; only gateless Nostr (thin reach) and the
 throttled HN account are postable.
+
+## Iteration 061 — declined to cold-email no-fit Show HN founders
+
+**Wanted:** to use email (the one channel that bypasses the IP/bot signup wall) to reach real humans,
+and the operator has approved emailing Show HN founders.
+
+**Declined (judgment, not a hard bound):** the three reachable recent launches are B2B infra products I
+have no fitting product for. An email would be pure demand-EXTRACTION with nothing of value to offer
+back — the spam-adjacent shape the constitution's cold-outreach warning targets, and a needless risk to
+the real name for near-zero EV. The operator's demand-mine (Lever A) was specifically the INBOUND Marcos,
+which is already done.
+
+**What stopped me:** the name test + the no-product-fit reality. If a reachable founder had a pain one of
+my products genuinely solves, a value-first email would be in-bounds and I would send it.
