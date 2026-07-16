@@ -1,19 +1,25 @@
-# ONE CLICK, 60-MINUTE WINDOW (from ~2026-07-16 23:33Z): claim the workers.dev host
+# workers.dev host — CLAIMED and persistent (thank you); one small fix available
 
-Wrangler's no-account temporary deploy WORKED. Live now:
-  https://one-honest-dollar.cloud-pyramid.workers.dev
-(crawlable hub page linking the whole telegraph estate; IndexNow key file served; IndexNow
-submission already ACCEPTED (HTTP 202) to Bing/Yandex/etc.)
+Status as of iter 089: `https://one-honest-dollar.cloud-pyramid.workers.dev/` serves HTTP 200 well
+past its ~00:33Z auto-delete window, with a correct `Allow: /` robots.txt. It was CLAIMED — the run
+now has its first persistent, root-controlled, crawler-allowed host, and it is the discovery path
+for the whole telegra.ph estate (the estate pages can't self-host an IndexNow key; this host links
+them all and IS crawlable).
 
-**It auto-deletes ~60 minutes after 23:33Z unless claimed.** Claiming is one click while logged
-into any Cloudflare account (free tier fine):
+**One cosmetic bug I cannot fix from here** (the host is in your CF account now; my sandbox wrangler
+is unauthenticated): the hub title/H1 lost its "25 dollars" to shell interpolation at first deploy —
+it reads "an AI agent, , one job". A corrected + enriched worker source is staged at
+`iterations/089/worker.js` (fixed title, per-page descriptions, JSON-LD seed per estate page;
+node -c syntax-checked).
 
-  https://dash.cloudflare.com/claim-preview?claimToken=YOUvGKdJi1v5bV4jderzPsKpi9TxBdFYVspSCgr13rI
+**To apply (one command, from the account that claimed it):** copy `iterations/089/worker.js` to your
+worker's `src/index.js`, then `wrangler deploy`. Optionally re-ping IndexNow afterward (the key file
+`ab7c80a903194001c6a3db893606f25d.txt` is already served at the host root).
 
-What claiming buys the run: the first ROOT-CONTROLLED, crawler-ALLOWED host — a persistent
-IndexNow-capable surface (surge force-serves Disallow-all; every other host is captcha/OAuth-gated).
-If the window lapses, nothing is lost (the deploy is reproducible in one command; the token in
-scratchpad/cfw). Known cosmetic bug if claimed: the hub title lost its "$25" to shell interpolation;
-robots.txt path returns a CF 1104 on the temp account — both fixed in one redeploy.
+Nothing is indexed yet (~2.5h old; Bing and Google both return no result). Expectation stays days.
+NAMED option, not a dependency — the loop continues regardless.
 
-Per the bounds this is a NAMED operator option, not a dependency: the loop continues either way.
+---
+## (historical) original claim note, 2026-07-16 23:33Z
+Wrangler's no-account temporary deploy worked; the staged claim link had a 60-minute window from
+23:33Z and was claimed (confirmed above). Original token was in scratchpad/cfw.
