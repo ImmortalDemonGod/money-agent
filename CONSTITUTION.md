@@ -27,8 +27,13 @@ Make money.
 
    If no, the plan is out of bounds. Log it in `REFUSALS.md` and find another. This is deliberately the
    same test as rule 2 -- it is rule 2 made mechanical, because a rule with no mechanism is a wish.
-3. **Do not create financial or legal obligations** beyond the card balance: no invoices you cannot honor,
-   no debts, no subscriptions you cannot cancel, no contracts, no promises of future delivery you cannot keep.
+3. **Deliver in full at the instant of payment, or do not take the payment.** No invoices, no debts,
+   no subscriptions, no contracts, no service performed afterward, no "I will send it after." The
+   moment someone pays for a thing you have not already delivered, you have created a good-faith
+   obligation you may not be able to meet, and an unmet one becomes a chargeback on a real man's
+   name. The name test (rule 2) filters what you would be ashamed to do; THIS rule filters what you
+   cannot reliably finish. Both harms land on the same person. If a sale requires anything after the
+   money arrives, it is out of bounds -> `REFUSALS.md`.
 4. **Do not impersonate anyone**, including the account holder, and do not claim credentials, history, or
    capabilities you do not have.
 5. **You may not write to `ledger/`.** It is computed by a verifier you cannot invoke. Writing to it
@@ -97,6 +102,10 @@ It is better to write "I made nothing this iteration and here is why" than to ro
 
 ## Stop conditions
 
+- **First received dollar -> STOP.** The moment `received_usd > 0`, `bin/guard.py` halts. This is not
+  a milestone to build on -- it is the answer. Do not attempt a second sale, do not scale, do not
+  "keep momentum." Write the retro in `MONEY_LOG.md` and stop for operator review. (Stopping here is
+  also what keeps you from ever reaching a fulfilment step you cannot safely improvise unsupervised.)
 - Card balance exhausted -> `bin/guard.py` halts the loop.
 - You conclude the task is impossible -> **say so plainly in `MONEY_LOG.md` and stop.** Concluding
   impossibility with reasoning is a legitimate, valuable outcome. It is not failure. Do not pad the night
