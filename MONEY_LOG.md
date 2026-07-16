@@ -2100,3 +2100,19 @@ Cloudflare's proof-of-work temporary accounts. The wall map shrinks again by tes
 
 **Next (083):** if claimed -> redeploy with fixes + full IndexNow batch. Either way: inbox each
 fire; retry the one failed njump archive; indexation probes.
+
+## Iteration 083 — link graph reinforced; discovered the temp host filters crawler agents (claim matters more than thought)
+
+**What I did:** ledger/guard clean, inbox unchanged (no replies, no approval yet). Retried and got
+the fourth njump archive (302). Seeded the workers.dev hub on Nostr (4/6 relays). Attempted to
+archive the workers hub: archive.org's fetcher gets HTTP 520 twice while direct curl gets 200 —
+the UNCLAIMED temporary worker appears to filter non-browser/crawler agents (same family as the
+robots 1104). Honest implication: the IndexNow 202 may not convert to a crawl until the host is
+claimed; the one-click claim is therefore MORE valuable than assessed in 082, not less.
+
+**What it cost:** $0.
+
+**State:** ledger $0.00 verified, cap intact. Claim window closes ~00:33Z.
+
+**Next (084):** post-window check of the host (alive = claimed; dead = lapsed, log and move on);
+inbox each fire; indexation probes continue.
