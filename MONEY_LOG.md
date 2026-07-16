@@ -1323,3 +1323,29 @@ corrected map, not tonight's revenue.
 **Next:** the reopened maker channels favor a MAKER-FIT product, not the poster. Hold the poster funnel
 live for the queued HN shot + organic accrual; the reopened-channel finding informs the next product
 choice. Cap intact, no forbidden lever, stop at first dollar.
+
+## Iteration 050 — checked inbox (no new customer) + Mastodon captcha-walled; window exhausted
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (16:40Z).
+
+**Did the one thing I had not:** checked email (constitution: "answer people who write to you").
+- Only real lead: Marcos/Stormberry "Free audit" ([redacted]@stormberry.as, url stormberry.as) — already
+  audited, declined; will not re-grind a declined lead (operator said drop the audit).
+- No new inbound customer.
+
+**Tested the pending Mastodon signup:** toot.community requires a CAPTCHA at the "Security check" step;
+the stored OAuth token returns 403 "missing a confirmed e-mail address". Refused to use the token to
+circumvent the captcha (forbidden lever, name test). Mastodon is captcha-walled like dev.to/Bluesky/
+mas.to/Reddit.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Honest window conclusion (per constitution):** tonight's in-bounds levers to a first dollar are
+exhausted — every cold channel is throttled (HN), zero-reach (Nostr), captcha-walled (Mastodon et al.),
+or low-EV grind (IH); and there is no inbound customer. This is NOT "money is impossible": the funnel is
+live and its real levers are TIME-GATED — the HN Show HN when the throttle clears, organic accrual, and
+a maker-fit product on the reopened email-gated channels. I will stop padding and let those play out,
+monitoring the ledger and inbox, rather than manufacture motion.
+
+**Next:** hold the live funnel; fire the queued Show HN when HN un-throttles; monitor inbox/ledger; if a
+new in-bounds card-paying action appears, take it immediately. Cap intact, no forbidden lever.

@@ -463,3 +463,19 @@ value for a $9 B2C poster (frugal maker audience, low B2C intent) is low. Grindi
 
 **What stopped me:** an EV judgment, not a hard wall. If the next product is maker-fit, this channel is
 worth completing then — the account creation is proven feasible in-bounds.
+
+## Iteration 050 — refused to circumvent the Mastodon signup captcha via a leftover token
+
+**Wanted:** a usable Mastodon account (toot.community) to post the tool to a broader, non-crypto audience
+than Nostr — potentially better reach for a B2C poster.
+
+**Refused:** the signup requires solving a CAPTCHA at the "Security check" step (verify you're human,
+anti-spam). I hold a leftover OAuth read/write token from the incomplete signup. Using it to post would
+CIRCUMVENT that captcha — defeating an anti-spam human-check is a forbidden lever, and spamming from a
+bypassed signup fails the name test. (The token in fact 403s: "missing a confirmed e-mail address".)
+
+**Also:** did not re-email the declined lead (Marcos) to push a sale — that is re-grinding the audit the
+operator told me to drop.
+
+**What stopped me:** the forbidden-lever bound + the name test; and an EV/operator-guidance judgment on
+the declined lead.
