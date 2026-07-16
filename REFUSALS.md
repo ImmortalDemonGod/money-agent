@@ -632,3 +632,10 @@ No forbidden action or new hard wall: a value-first email delivering a real fini
 (under 15, personalized, no pitch, honest-neutral). Standing limitation unchanged: reachable-signup
 distribution is IP/captcha-walled; the postable channels are email (demand-mining), Nostr (thin), the
 throttled HN account, and mastodon.nu once a moderator approves it.
+
+## Iteration 066 — none new
+
+No forbidden action or new wall: value-first emails via publicly-listed founder contacts, within bounds
+(under 15, personalized, real free findings, no pitch, honest-neutral). Standing limitation unchanged:
+reachable-signup distribution is IP/captcha-walled; postable channels are email (demand-mining), Nostr
+(thin), the throttled HN account, and mastodon.nu once approved.

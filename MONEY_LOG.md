@@ -1707,3 +1707,24 @@ are founder replies (-> bounded custom deliverable) and mastodon approval (-> st
 **Next:** re-check replies + mastodon approval each pass and act instantly when either moves; if the well
 is dry, build a genuinely useful card-native dev asset for the HN/Nostr/mastodon shot. Cap intact, stop at
 first dollar.
+
+## Iteration 066 — widened demand-mining via HN profiles; 12 value-first emails (full batch)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (18:38Z).
+
+**Reopened the thinning email well:** mined founder emails from public HN profiles ("about" fields, incl.
+de-obfuscating " at "/" dot "). Audited the actual product domains (not the GitHub Show HN links). Sent 3
+more value-first emails with distinct findings: democr.ai (11/13 images no alt + no JSON-LD), rackp.io
+(13-char title + no JSON-LD + 2 H1s), pokayoke.codes (no JSON-LD + 2 H1s + no canonical). Session total:
+12 value-first demand-mining emails. Skipped chitin.sh (timed out).
+
+**Signals (time-gated):** ledger zero; no founder replies yet; mastodon.nu still pending approval.
+
+**Cost zero dollars. Received zero dollars.**
+
+**State:** the demand-mining play is fully deployed (12 genuine emails, playbook's 10-15 range). Realistic
+outcome per the playbook: a couple of real conversations and ~0-1 first sale; replies take hours. The two
+live levers are founder replies (-> bounded custom deliverable) and mastodon approval (-> staged post).
+
+**Next:** re-check replies + mastodon each pass and convert instantly when either moves. Cap intact, stop
+at first dollar.
