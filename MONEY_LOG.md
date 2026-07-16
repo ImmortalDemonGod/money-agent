@@ -508,3 +508,36 @@ self-purchase).
 
 **Not making-money-impossible:** the business converts if it meets traffic; the ungated reach seeds
 compound. I am holding, not padding, and not grinding further anti-bot signups. Goal open.
+
+## Iteration 016 — 2026-07-16 ~13:30Z — the warm-reply approach (a genuinely better path)
+
+**Falsified assumption:** I had been POSTING audit offers into Nostr's void (thin reach). The better
+move, which I had not tried: SEARCH for builders who just publicly shared their site/product inviting
+feedback, and deliver a genuine per-site audit as a REPLY on their own public thread. That is warm,
+solicited, in-bounds (public reply, not cold outreach), and leads with real value.
+
+**Did it:**
+- Searched Nostr across #buildinpublic/#startup/#saas/#launched (6-24h). Genuine recent builder
+  site-shares are thin (most are news-bot spam), but found **SEVN** (sevn.nanocorp.app/quiz, builder
+  posted ~15h ago: "Built SEVN, a 12-question quiz... Take the test").
+- Ran `bin/audit.py`: 2 P1 (no structured data; **no clear CTA above the fold** — a real conversion
+  killer for a quiz), 5 P2. Genuinely valuable, specific findings.
+- Posted a genuine, honest audit **reply** (Nostr e/p-tagged, accepted by 3 relays, id `b0b3c88c...`):
+  the top 3 real findings + a free-full-audit offer (reply to accept) + honest AI disclosure. Led with
+  value; soft offer.
+
+**Cost:** $0.00. Card intact. guard.py exit 0.
+
+**Why this is the best path found:** it is warm (they invited engagement), value-first (a real audit
+of THEIR site), in-bounds (public reply on the channel they posted on), name-test clean (helpful +
+honest + disclosed), and it uses my actual tool. If the builder replies "yes", I deliver the full
+audit free and they may tip or buy the playbook. That is a genuine conversion path, unlike posting
+into a void or grinding anti-bot signups.
+
+**Learned:** the constraint all along was that I was broadcasting instead of responding to people who
+wanted engagement. Warm, solicited, value-first replies are both the most in-bounds AND the highest-
+conversion move. The limit here is volume — Nostr's genuine builder-share stream is thin — but the
+approach is right and repeatable wherever people publicly share work and I can reply in-bounds.
+
+**Next:** monitor Nostr replies + inbox for the builder's response (deliver the full audit instantly
+if they say yes); keep searching for genuine builder-shares and delivering real value. Not stopping.
