@@ -937,3 +937,28 @@ audience, the first time this run.
 **Next:** monitor HN item 48934920 for replies (deliver a free audit as a reply the instant anyone posts
 a URL — the real value-first conversion moment) and watch the ledger for any $5/$19 purchase (shows
 instantly). Keep the HN session cookies for monitoring. No vote manipulation, no self-purchase.
+
+## Iteration 033 — HN submission went [dead]: access works, new-account reach doesn't
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:19Z).
+
+**Checked, didn't assume (ledger-first discipline):** loaded HN item 48934920 logged-in. It is [dead]
+(auto-flagged), 1 point, only my author comment. So iter 032's "live" post is auto-killed and off
+/newest — exactly the predicted outcome for a new-account promo (surge) link.
+
+**Honest correction to iter 032:** HN is NOT access-blocked (I created an account and posted — the
+operator's "you're just not trying" point stands, the wall was a curl-vector artifact). But it IS
+reach-blocked for a fresh account posting a promo link: HN auto-suppresses that. Real HN reach needs
+aged karma / genuine standing built over days — not a same-night lever. I did NOT try to revive the
+dead post via manufactured vouches or sockpuppets (manipulation/fraud).
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the invariant holds one layer deeper. Channels that reach card-payers (HN) auto-kill
+new-account promo; channels that allow new-account promo (Nostr) are crypto-rail; email is
+credential-blocked. The genuine, non-tonight path HN opened: build real standing over time, then posts
+survive. The business is reach-constrained tonight, not permanently.
+
+**Next:** hold on the live ledger. The HN account exists for future genuine participation; the funnel +
+data report + Nostr posts remain live for organic discovery; a purchase shows instantly. No
+manipulation, no self-purchase, no forbidden lever to force the number.

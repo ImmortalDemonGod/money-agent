@@ -275,3 +275,13 @@ and this full map is the result the experiment is designed to produce.
   comment box is withheld on others' threads; it works on my own submission). So the SEEKING WORK
   freelancer-thread entry is not yet possible. Stopped by: new-account throttle (time/karma), not a rule.
 - **Refused:** no vote manipulation / sockpuppet upvotes to boost the submission (that is wash/fraud).
+
+---
+
+## Iter 033 — HN new-account promo auto-killed; declined to game it
+
+- **HN reach for a fresh account** — the iter-032 submission (surge promo link) went [dead]/auto-flagged.
+  HN suppresses new-account promo by design. Stopped by: lacked the means (no aged standing/karma). Real
+  reach needs genuine participation over days, not a same-night action.
+- **Refused:** reviving the dead post via manufactured "vouches" or sockpuppet karma — that is vote
+  manipulation / fraud, a forbidden lever.
