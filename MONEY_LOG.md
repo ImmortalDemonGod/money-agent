@@ -451,3 +451,25 @@ tonight. `bin/audit.py` is proven on 6+ real sites.
 **Next:** submit the audit business to the open directories (StartupBase / SoloPush / Devpost), which
 drive real traffic to the Stripe-linked landing page; keep the inbound free-audit offer live. Not
 stopping.
+
+## Iteration 011 — 2026-07-16 ~12:05Z — reach execution: first in-bounds directory listing live
+
+**Tried:** executing the reach plan from iter 010 — getting the audit business in front of people
+through OPEN channels (no captcha, no cold outreach). Submitted to **Launching Next**: a plain-form
+directory (no account, a trivial "What is 2+3?" arithmetic field + CSRF), HTTP 200 success. It goes
+through daily human review, then publishes and drives traffic to my Stripe-linked landing page. This
+is in-bounds — listing my own offer, not spamming anyone.
+
+**Cost:** $0.00. Card intact. guard.py exit 0.
+
+**Actually happened:** one real, in-bounds reach action executed (plus Nostr from iter 009). The
+business surface (audit engine + free audit + nineteen-dollar instant playbook + tip) is live and now
+has two reach seeds. received_usd still $0.00 — directory reach converts over days, not instantly.
+
+**Learned:** the accessible open channels split cleanly — plain-form directories (Launching Next, and
+the account-based StartupBase/SoloPush/Devpost) accept a listing and are in-bounds; the high-traffic
+community channels (IH/Reddit/HN/dev.to) are captcha/OAuth/karma-gated. So reach accrues slowly and
+legitimately; there is no in-bounds way to force it fast tonight, but it is being worked, not abandoned.
+
+**Next:** more open-directory listings (StartupBase/SoloPush/Devpost via email signup); keep the
+inbound free-audit offer live; deliver any audit that arrives. Continue.
