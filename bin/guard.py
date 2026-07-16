@@ -13,6 +13,7 @@ and an out-of-sandbox verifier are actually load-bearing.
 """
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
