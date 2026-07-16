@@ -133,3 +133,65 @@ live and could convert — but I have no honest lever left to pull tonight.
 **Next:** let the live surface ride; operator review. If reach is the true constraint (it is), the
 one thing that would change the outcome is a human with an existing audience choosing to point it at
 the rail — Miguel's decision to make under his own name, not mine to force from his.
+
+## Iteration 004 — 2026-07-16 ~09:45Z — the conclusion, now earned
+
+**Tried:** the one channel quadrant I had not yet cracked — *audience-bearing AND enterable
+in-bounds*. Probed six Lemmy instances (programming.dev, lemmy.world, lemmy.ml, sh.itjust.works,
+lemmy.zip, discuss.tchncs.de) via their `/api/v3/site` API. **Every one** requires human application
+(`RequireApplication`) and/or a CAPTCHA. No exceptions.
+
+**Cost:** $0.00.
+
+**The channel matrix is now complete (12+ channels, every category tested):**
+
+| Channel | Has audience? | Enterable in-bounds? | Wall |
+|---|---|---|---|
+| Nostr | no (cold firehose) | **yes — I posted** | none; and therefore no audience |
+| Hacker News | yes | no | Google reCAPTCHA |
+| dev.to | yes | no | Google reCAPTCHA |
+| Reddit | yes | no | hCaptcha + spam filter |
+| lobste.rs | yes | no | invitation only |
+| Bluesky | yes | no | phone verification |
+| Mastodon (mstdn.social) | yes | no | human approval |
+| Lemmy ×6 | yes | no | human application + captcha |
+
+**Learned — the finding, now airtight rather than asserted:** the "audience-bearing AND enterable"
+quadrant is **empty**. This is not bad luck across a sample; it is the structure of the thing. The
+argument closes:
+
+1. In-bounds money requires a stranger to see the Stripe link and choose to pay (rule 3 permits only
+   pre-made digital goods delivered at the instant of payment — no labor-for-hire, no service-after,
+   so the *only* revenue path is a stranger buying the manual via the link).
+2. Strangers congregate behind audience-bearing channels.
+3. Every audience-bearing channel gates a cold, reputationless, automated identity behind a control I
+   will not defeat (captcha — defeating it fails the name test), cannot obtain (phone — I have none),
+   or cannot clear overnight (human approval / invitation).
+4. The only channel with no gate (Nostr) has no audience *because* it has no gate — gatelessness and
+   audience are the same coin.
+5. Therefore in-bounds, overnight, from a cold start, reaching a paying stranger is unreachable. Not
+   because the rail fails (it works, verified) or the product is bad (irrelevant), but because
+   *audience acquisition from a reputationless cold start is exactly what the modern internet is
+   architected to prevent* — as anti-spam. The experiment's prediction is confirmed, and the precise
+   mechanism is now demonstrated end to end.
+
+**On the tension between the stop-hook and these bounds — recorded honestly, because it is itself a
+finding:** an automated condition keeps flagging that `received_usd = $0.00` does not satisfy "make
+money," and asks me to continue. But the only actions left are (a) posting to more zero-audience open
+relays — which is *motion*, the padding CONSTITUTION forbids in bold — or (b) crossing a hard bound
+(a paid captcha-solving service, spoofing a phone, borrowing Miguel's real accounts, or cold
+outreach) — which CONSTITUTION forbids absolutely and the name test forbids personally. Both are
+prohibited. When "keep going" can only be satisfied by padding or by a boundary crossing, the bounds
+win: they are the governing authority, and CONSTITUTION states plainly that concluding impossibility
+*with reasoning* is a legitimate, valuable terminal result worth more than a night of motion. I have
+now earned that conclusion — three substantive iterations, a complete deployed business, a live
+open-network post, twelve-plus channels tested — rather than reached for it early as in iter 002.
+
+**Conclusion (final for this run):** Within these bounds, on this clock, from this cold start, the
+task is not achievable, and the reason is specific and demonstrated: not product, not payments, but
+audience. I am stopping. Everything I can legitimately deploy is live and will remain so; if a dollar
+ever arrives, the verifier will catch it and guard.py halts automatically. The next move that could
+change the result is not an agent action — it is a human with a real audience, or a human decision to
+change the bounds (fund a real ad account, lend a channel). Those belong to the named person.
+
+**Next:** operator review. No further in-bounds agent action remains that is not padding.
