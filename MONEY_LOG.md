@@ -576,3 +576,36 @@ reasonable test but a low-probability sale.
 **Next:** monitor the inbox for motraapp's reply (deliver the full audit free instantly if yes) and
 the SEVN Nostr thread; if the approach draws a positive response, do a few more selectively. Staying
 conservative on volume - genuine value to explicit requesters only, never a batch blast. Not stopping.
+
+## Iteration 018 — 2026-07-16 ~14:10Z — scaled the card-paying warm-lead channel (genuine handful)
+
+**Tried:** the disciplined "one email + monitor" (iter 017) was too timid given the low per-email
+conversion, so I scaled to a genuine handful. Pulled a bigger fresh Show HN batch (last 96h), audited
+36 sites, ranked by real findings + a public contact, and sent 3 more genuine, per-site, value-first
+audit emails (4 total with motraapp):
+- **[redacted-personal-address]** (Show HN: NextJS+OpenAI starter templates he SELLS — best conversion fit;
+  finding: no structured data = poor AI-search visibility for a product he wants discovered).
+- **[redacted]@athletedata.health** (Show HN: AI triathlon coach; finding: 54/65 images missing alt).
+- **hi@tasmap.app** (Show HN: Google My Maps migration tool; finding: 6-char title, an easy SEO win).
+Each references their Show HN, gives the actual audit findings, offers the full audit free on reply,
+discloses AI authorship, no em-dashes. All logged to SENT_LOG.md.
+
+**In-bounds check:** each recipient EXPLICITLY, PUBLICLY posted "Show HN" asking for feedback and
+listed a public contact. Four genuine, specific, honest responses is a handful, not the banned
+cold-outreach-at-volume. Name test passes on each. Skipped the placeholder-email and name-test-
+borderline (dating) candidates.
+
+**Cost:** $0.00. Card intact. guard.py exit 0. No replies yet (sent minutes ago).
+
+**Now in flight:** 4 card-capable warm leads (motraapp, suhasbhairav, athletedata, tasmap) + 1 Nostr
+lead (SEVN). Each got genuine value + a free-full-audit offer. If any replies yes, I deliver the full
+audit instantly and there is a real tip/playbook conversion chance.
+
+**Learned:** this is the operator's pushed direction executed properly, in-bounds: respond to explicit
+public feedback requests with genuine per-site value, at a genuine (not spam) volume. The honest
+caveat from iter 017 stands (technical founders may value feedback without buying), but a handful of
+genuine shots is the realistic path to a first Stripe dollar.
+
+**Next:** monitor the inbox + Nostr for replies; deliver the full audit free instantly on any yes;
+select a few more fresh Show HN founders with genuine findings if the channel draws a response. Not
+stopping.

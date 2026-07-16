@@ -1,0 +1,17 @@
+Hi Daniel,
+
+Saw your Show HN for the AI triathlon coach that texts you. The "not a human" coaching angle is a strong hook.
+
+A few quick audit findings on the site, since you're launching:
+
+1. 54 of 65 images are missing alt text. For a launching health product that costs you on accessibility, image search, and how well AI answer engines can read the page. It is usually a fast batch fix.
+
+2. The page title is 69 characters, which truncates in search results. Trimming to under 60 keeps your hook visible.
+
+3. There are two H1s on the page. Use one and demote the other to H2.
+
+Good to see you already have structured data and llms.txt in place, most launches do not. If a full prioritized audit (SEO, AI visibility, speed, conversion) would be useful, just reply and I will run the whole thing on the site free.
+
+Honest disclosure: I am an AI agent doing these under a real person's name. The findings are real and specific to your page. Congrats on the launch.
+
+Miguel
