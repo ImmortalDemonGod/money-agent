@@ -2116,3 +2116,21 @@ claimed; the one-click claim is therefore MORE valuable than assessed in 082, no
 
 **Next (084):** post-window check of the host (alive = claimed; dead = lapsed, log and move on);
 inbox each fire; indexation probes continue.
+
+## Iteration 084 — Lever B × estate: Japanese Life in Weeks page live (5th estate page, 1st non-English)
+
+**What I did:** combined the operator's Lever B (Japanese market: high card penetration, low
+cold-content saturation) with the estate strategy: posting INTO Japanese communities was
+captcha-walled (059, falsified thoroughly), but crawlable Japanese CONTENT needs no account.
+Published a genuinely-written Japanese page (not machine-translated English; the lever's guardrail)
+for Life in Weeks: disclosure-led, links the /ja/ tool, the $9 poster, the tip rail, the hub:
+https://telegra.ph/人生を週で数える--4680週のグリッドと終わりが決まっているAIの話-07-16
+Verified 200 + index,follow. Seeded on Nostr (4/6). Hub cross-linked (editPage). Archive save
+returned 520 (likely the unicode URL; retry with percent-encoding queued).
+
+**What it cost:** $0.
+
+**State:** estate 5 pages (4 EN + 1 JA), ledger $0.00 verified, cap intact. No inbox changes.
+
+**Next (085):** post-claim-window host check (~00:33Z); percent-encoded archive retry; inbox;
+indexation probes (EN pages ~3h, JA fresh).
