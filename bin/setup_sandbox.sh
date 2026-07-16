@@ -1,21 +1,74 @@
 #!/usr/bin/env bash
-# RUN THIS FIRST IN ANY FRESH CLONE. Nothing below survives `git clone`.
-#
-# Why this file exists: an independent analysis of a sandbox clone found that the SoD enforcement
-# was entirely dormant there. Git never copies .git/hooks on clone, so sod_hook.sh -- the thing
-# that blocks the agent from writing its own P&L -- simply did not exist in the sandbox. The repo
-# looked identical and enforced nothing.
-#
-# "The hook is in the repo" != "the hook is installed". Same family as every other defect in this
-# project's history: the artifact was never checked, only the source.
+# RUN THIS FIRST IN ANY FRESH CLONE. Nothing it installs survives `git clone`.
 #
 #   bash bin/setup_sandbox.sh
+#
+# Two things git does not clone, both of which this repo depends on:
+#   1. .git/hooks/*        -> the SoD tripwire simply does not exist in a fresh clone
+#   2. the aiv CLI         -> a python package, not a repo file
+#
+# An independent analysis of a sandbox clone found the harness was enforcing NOTHING there: the
+# repo looked identical and every guard was dormant. "The hook is in the repo" != "the hook is
+# installed." This script installs them and then PROVES each one fires.
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$R"
 fails=0
+ok()   { echo "  ✓ $*"; }
+bad()  { echo "  ✗ $*"; fails=$((fails+1)); }
 
-echo "=== installing hooks (git does not clone these) ==="
+# ---------------------------------------------------------------- 1. the aiv CLI
+echo "=== aiv CLI ==="
+if command -v aiv >/dev/null 2>&1; then
+  ok "aiv present: $(command -v aiv)"
+else
+  echo "  installing aiv-protocol..."
+  pip install -q "git+https://github.com/ImmortalDemonGod/aiv-protocol.git" 2>/dev/null \
+    || pip3 install -q "git+https://github.com/ImmortalDemonGod/aiv-protocol.git" 2>/dev/null \
+    || bad "pip install failed. Install manually: pip install git+https://github.com/ImmortalDemonGod/aiv-protocol.git"
+  command -v aiv >/dev/null 2>&1 && ok "aiv installed: $(command -v aiv)"
+fi
+
+# ---------------------------------------------------- 2. aiv init + THE SHEBANG BUG
+#
+# `aiv init` writes .git/hooks/pre-commit with `#!/usr/bin/env python3`. That resolves to whatever
+# python3 is first on PATH, which is NOT necessarily the interpreter aiv was installed into. When
+# they differ, EVERY commit dies with `ModuleNotFoundError: No module named 'aiv'` -- including
+# `aiv commit` itself. aiv init prints "Installed" and exits 0 while installing a hook that cannot
+# run. Filed upstream: Black-Box-Research-Labs/aiv-protocol#29.
+#
+# Fix: repoint the shebang at the interpreter that actually owns the `aiv` entrypoint.
+echo
+echo "=== aiv init + shebang repair ==="
+if command -v aiv >/dev/null 2>&1; then
+  [[ -f .aiv.yml ]] || aiv init . >/dev/null 2>&1
+  AIV_BIN="$(command -v aiv)"
+  AIV_PY="$(head -1 "$AIV_BIN" | sed 's|^#!||')"
+  if [[ -x "$AIV_PY" ]] && "$AIV_PY" -c "import aiv" 2>/dev/null; then
+    for h in pre-commit pre-push; do
+      if [[ -f ".git/hooks/$h" ]] && head -1 ".git/hooks/$h" | grep -q "env python3"; then
+        sed -i.bak "1s|.*|#!${AIV_PY}|" ".git/hooks/$h"
+        ok "repointed .git/hooks/$h -> $AIV_PY"
+      fi
+    done
+    # move aiv's hook aside; ours chains to it
+    [[ -f .git/hooks/pre-commit ]] && ! grep -q sod_hook .git/hooks/pre-commit 2>/dev/null \
+      && mv .git/hooks/pre-commit .git/hooks/aiv-pre-commit.orig
+    if [[ -x .git/hooks/aiv-pre-commit.orig ]]; then
+      "$AIV_PY" .git/hooks/aiv-pre-commit.orig </dev/null >/dev/null 2>&1
+      [[ $? -eq 1 ]] && bad "aiv hook still crashes" || ok "aiv hook runs (no ModuleNotFoundError)"
+    fi
+  else
+    bad "cannot resolve the interpreter owning aiv ($AIV_PY)"
+  fi
+else
+  echo "  (skipping -- aiv not installed; the loop does not require it, only the atomic-commit"
+  echo "   rule goes unenforced. bin/aiv_gate.sh still gates packets.)"
+fi
+
+# ------------------------------------------------------------- 3. the SoD hook
+echo
+echo "=== SoD hook (git never clones .git/hooks) ==="
 cat > .git/hooks/pre-commit <<'EOF'
 #!/usr/bin/env bash
 set -uo pipefail
@@ -25,56 +78,37 @@ R="$(git rev-parse --show-toplevel)"
 exit 0
 EOF
 chmod +x .git/hooks/pre-commit
-echo "  installed .git/hooks/pre-commit -> sod_hook.sh"
+ok "installed .git/hooks/pre-commit -> sod_hook.sh (chains to aiv if present)"
 
-echo
-echo "=== proving it actually fires (installed != works) ==="
-mkdir -p ledger
-echo '{"net_usd": 99999, "made_money": true}' > ledger/_sod_probe.json
+echo "  proving it fires (installed != works):"
+mkdir -p ledger && echo '{"net_usd":99999,"made_money":true}' > ledger/_sod_probe.json
 git add -f ledger/_sod_probe.json 2>/dev/null
 if git -c user.name="agent" -c user.email="a@b.c" commit -q -m "sod probe" 2>/dev/null; then
-  echo "  ✗ FAIL: the agent was able to commit to ledger/. SoD IS NOT ENFORCED."
-  git reset -q --hard HEAD~1
-  fails=$((fails+1))
+  bad "AGENT COMMITTED TO ledger/. SoD IS NOT ENFORCED. Do not run."
+  git reset -q --hard HEAD~1 2>/dev/null
 else
-  echo "  ✓ agent write to ledger/ BLOCKED"
+  ok "agent write to ledger/ BLOCKED"
 fi
 git reset -q 2>/dev/null; rm -f ledger/_sod_probe.json
 
+# ------------------------------------------------------- 4. run-readiness assertions
 echo
-echo "=== verifier identity ==="
-echo "  The verifier MUST commit as user.name='verifier' or guard.py will halt."
-echo "  Use:  AIV_VERIFIER=1 git -c user.name='verifier' -c user.email='verifier@local' commit ..."
+echo "=== preflight ==="
+[[ -f PREDICTION.md ]] && bad "PREDICTION.md is readable -- the agent can read the answer key" \
+                       || ok "PREDICTION.md absent from the working tree"
+git rev-parse -q --verify prediction-frozen >/dev/null 2>&1 \
+  && ok "tag prediction-frozen -> $(git rev-list -n1 --abbrev-commit prediction-frozen)" \
+  || echo "  ⚠ tag prediction-frozen missing. Run: git fetch --tags"
 
-echo
-echo "=== frozen prediction present? (must NOT be readable by the agent) ==="
-if [[ -f PREDICTION.md ]]; then
-  echo "  ✗ PREDICTION.md is in the working tree. The agent can read the answer key."
-  fails=$((fails+1))
-else
-  echo "  ✓ PREDICTION.md absent from the working tree"
-fi
-if git rev-parse -q --verify prediction-frozen >/dev/null 2>&1; then
-  echo "  ✓ tag prediction-frozen present -> $(git rev-list -n1 --abbrev-commit prediction-frozen)"
-else
-  echo "  ⚠ tag prediction-frozen MISSING in this clone. The prediction is not provable here."
-  echo "    Fetch it:  git fetch --tags"
-fi
-
-echo
-echo "=== is any verifier credential leaking into the sandbox? ==="
-for bad in STRIPE_READ_KEY PRIVACY_READ_KEY; do
-  if [[ -f .env ]] && grep -q "^${bad}=" .env 2>/dev/null; then
-    echo "  ✗ FATAL: .env is present and contains $bad. The agent can compute its own P&L."
-    echo "    .env must NEVER be copied to the sandbox. Only .env.agent."
-    fails=$((fails+1))
-  fi
+for v in STRIPE_READ_KEY PRIVACY_READ_KEY; do
+  [[ -f .env ]] && grep -q "^${v}=" .env 2>/dev/null \
+    && bad "FATAL: .env present and contains $v -- the agent can compute (and forge) its own P&L. Only .env.agent belongs here."
 done
-[[ ! -f .env ]] && echo "  ✓ .env absent (correct -- verifier creds stay off the sandbox)"
+[[ ! -f .env ]] && ok ".env absent (verifier creds stay off the sandbox)"
+[[ -f .env.agent ]] && ok ".env.agent present" || bad ".env.agent missing -- the agent has no keys"
 
 echo
 if [[ $fails -gt 0 ]]; then
-  echo "RESULT: $fails PROBLEM(S). Do not start the loop."
-  exit 1
+  echo "RESULT: $fails PROBLEM(S). Do not start the loop."; exit 1
 fi
-echo "RESULT: sandbox ready."
+echo "RESULT: sandbox ready. Start with:  /loop  + the block in PROMPT.md"
