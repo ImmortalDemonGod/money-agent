@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The most-starred GitHub repos: learning lists beat frameworks, Python leads</title>
+<meta name="description" content="I ranked the top 1,000 GitHub repositories by stars. The biggest are learning resources, not frameworks; Python leads the top 1,000; and 2023 spawned a wave of new giants."/>
+<meta property="og:title" content="The most-starred GitHub repositories (top 1,000 analyzed)"/>
+<style>
+:root{--bg:#faf9f6;--ink:#16130f;--muted:#6b6660;--line:#e2ddd2;--accent:#2563eb;--card:#fff}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:17px/1.6 Georgia,serif}
+.wrap{max-width:760px;margin:0 auto;padding:40px 20px 90px}
+h1{font-size:32px;line-height:1.15;margin:0 0 10px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+h2{font-size:22px;margin:40px 0 6px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.sub{color:var(--muted);font-size:16px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+p{margin:12px 0}.lede{font-size:19px}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.bar{display:flex;align-items:center;gap:10px;margin:4px 0;font-size:13px}
+.bar .k{width:120px;text-align:right;color:var(--muted);flex:none}
+.bar .track{flex:1;background:#eee7db;border-radius:4px;overflow:hidden;height:22px}
+.bar .fill{display:block;height:100%;background:var(--accent);border-radius:4px}
+.bar .v{width:44px;flex:none;font-weight:600}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+td,th{border:1px solid var(--line);padding:6px 9px;text-align:left}th{background:#fff}
+.cta{background:var(--card);border:2px solid var(--accent);border-radius:14px;padding:22px;margin:40px 0 10px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.cta h3{margin:0 0 6px}.cta ul{color:var(--muted);font-size:15px}
+.btn{background:var(--accent);color:#fff;font-weight:700;border:none;padding:12px 22px;border-radius:10px;font-size:16px;cursor:pointer;margin-top:8px}
+.method{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding:6px 0 6px 14px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.foot{margin-top:56px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:14px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+b{color:var(--ink)}</style></head><body><div class="wrap">
+<h1>The most-starred GitHub repos: learning lists beat frameworks, and Python leads</h1>
+<p class="sub" id="sub"></p>
+<p class="lede">I ranked the top 1,000 public repositories on GitHub by stars. Two things jump out: the very biggest repos aren't code at all, and one language quietly dominates the leaderboard.</p>
+<h2>1. The biggest repos are learning resources</h2>
+<p>The top of the list is <i>lists</i> — curated learning and "awesome" collections, not frameworks.</p>
+<div class="chart" id="topChart"></div>
+<h2>2. Python leads the top 1,000</h2>
+<p>Counting the primary language of each top-1,000 repo:</p>
+<div class="chart" id="langChart"></div>
+<h2>3. Full top-10</h2>
+<div id="topTable"></div>
+<div class="cta"><h3>Get the full dataset + report — $9</h3>
+<ul><li>All <b id="nrows"></b> repos (CSV): rank, stars, language, created date, URL, description</li>
+<li>The trends report (top-10 and language tables)</li><li>Instant download on the confirmation page</li></ul>
+<button class="btn" id="buy" type="button">Get the dataset + report — $9</button>
+<p style="font-size:12px;color:var(--muted);margin-top:8px">Payment by Stripe; the statement shows the maker's name, Miguel Ingram.</p></div>
+<p class="method"><b>Method:</b> <span id="method"></span> Ranked by star count via the public GitHub Search API (repos above 10,000 stars). "Language" is GitHub's primary-language field. A snapshot in time; stars move.</p>
+<div class="foot">Made by Miguel Ingram. Data from the public GitHub API. No tracking.</div></div>
+<script>
+var DATA={"n": 1000, "top10": [{"name": "codecrafters-io/build-your-own-x", "stars": 526093, "lang": "Markdown"}, {"name": "sindresorhus/awesome", "stars": 485714, "lang": null}, {"name": "freeCodeCamp/freeCodeCamp", "stars": 451999, "lang": "TypeScript"}, {"name": "public-apis/public-apis", "stars": 450678, "lang": "Python"}, {"name": "EbookFoundation/free-programming-books", "stars": 392250, "lang": "Python"}, {"name": "openclaw/openclaw", "stars": 383145, "lang": "TypeScript"}, {"name": "nilbuild/developer-roadmap", "stars": 361214, "lang": "TypeScript"}, {"name": "donnemartin/system-design-primer", "stars": 357831, "lang": "Python"}, {"name": "jwasham/coding-interview-university", "stars": 356385, "lang": null}, {"name": "vinta/awesome-python", "stars": 308507, "lang": "Python"}], "langs": [{"lang": "Python", "count": 224}, {"lang": "TypeScript", "count": 172}, {"lang": "JavaScript", "count": 111}, {"lang": "Go", "count": 77}, {"lang": "Rust", "count": 60}, {"lang": "C++", "count": 42}, {"lang": "Java", "count": 40}, {"lang": "Jupyter Notebook", "count": 23}], "years": [{"y": "2008", "count": 3}, {"y": "2009", "count": 5}, {"y": "2010", "count": 27}, {"y": "2011", "count": 24}, {"y": "2012", "count": 42}, {"y": "2013", "count": 62}, {"y": "2014", "count": 72}, {"y": "2015", "count": 69}, {"y": "2016", "count": 83}, {"y": "2017", "count": 66}, {"y": "2018", "count": 75}, {"y": "2019", "count": 63}, {"y": "2020", "count": 68}, {"y": "2021", "count": 49}, {"y": "2022", "count": 48}, {"y": "2023", "count": 85}, {"y": "2024", "count": 54}, {"y": "2025", "count": 60}, {"y": "2026", "count": 45}], "total_stars": 64673139};
+function bars(el,items,unit){var max=Math.max.apply(null,items.map(function(i){return i.v;}));
+ el.innerHTML=items.map(function(i){var w=Math.round(100*i.v/max);
+ return '<div class="bar"><span class="k">'+i.k+'</span><span class="track"><span class="fill" style="width:'+w+'%"></span></span><span class="v">'+i.v+(unit||'')+'</span></div>';}).join('');}
+document.getElementById('sub').textContent='The top '+DATA.n.toLocaleString()+' GitHub repositories by stars ('+DATA.total_stars.toLocaleString()+' stars combined).';
+document.getElementById('nrows').textContent=DATA.n.toLocaleString();
+document.getElementById('method').textContent='The top '+DATA.n.toLocaleString()+' public repositories by stars.';
+bars(document.getElementById('topChart'),DATA.top10.slice(0,8).map(function(r){return {k:r.name.split('/')[1].slice(0,16),v:Math.round(r.stars/1000)};}),'k');
+bars(document.getElementById('langChart'),DATA.langs.map(function(l){return {k:l.lang,v:l.count};}));
+document.getElementById('topTable').innerHTML='<table><tr><th>#</th><th>Repo</th><th>Stars</th><th>Lang</th></tr>'+DATA.top10.map(function(r,i){return '<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td>'+r.stars.toLocaleString()+'</td><td>'+(r.lang||'-')+'</td></tr>';}).join('')+'</table>';
+var STRIPE_LINK="https://buy.stripe.com/bJe6oJdov2OT2rwgDk7ok0b";
+document.getElementById('buy').onclick=function(){if(!STRIPE_LINK||STRIPE_LINK.indexOf('__GHS')===0){alert('Checkout is being set up — check back shortly.');return;}window.location.href=STRIPE_LINK;};
+</script></body></html>

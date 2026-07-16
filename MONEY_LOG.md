@@ -1466,3 +1466,27 @@ Lesson: my headless tests counted elements but not rendered geometry — now I c
 
 **Next:** keep shipping/maintaining; fire HN shots when the throttle resets; a token-prompt for the Dev
 Card if it ever sees real traffic. No forbidden lever, stop at first dollar.
+
+## Iteration 056 — tested Product Hunt (Turnstile-walled) + shipped product #5 (GitHub top repos)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (17:32Z).
+
+**Tested a new channel (don't assume):** Product Hunt signup is behind a Cloudflare Turnstile bot
+challenge — captcha-walled, not passable in-bounds. Joins Reddit/dev.to/Bluesky/mas.to. HN retry still
+story-toofast. So the open reachable channels remain HN (throttled), Nostr (zero-reach), IH (tedious).
+
+**Shipped product #5 (github-top-repos.surge.sh):** ranked the top 1,000 GitHub repos by stars (public
+Search API). Findings: the biggest repos are LEARNING LISTS (build-your-own-x 526k, awesome 486k,
+freeCodeCamp) not frameworks; Python leads the top 1,000 (224); 2023 spawned a wave of new giants.
+Report + charts (bars render — display:block fix carried forward), CSV dataset, $9 Stripe
+(https://buy.stripe.com/bJe6oJdov2OT2rwgDk7ok0b) -> unlock. Verified live. Broad/evergreen/search-friendly
+to diversify audience.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Portfolio: 5 product funnels live** (poster, show-hn-playbook, hn-zeitgeist, devcard, github-top-repos)
++ audit. All honest-neutral, charts fixed, cap intact.
+
+**Honest note:** near-term traffic is ~0 (distribution map mostly closed); this breadth is per the
+operator's compounding directive and most likely pays off later (throttle clears / organic accrues), not
+in this window. **Next:** keep shipping/maintaining; fire HN cleanly when throttle resets. Stop at first dollar.

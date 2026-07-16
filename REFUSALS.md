@@ -530,3 +530,14 @@ No forbidden action or hard means-limitation this iteration: built a product and
 within bounds (public API, free host, honest-neutral copy, instant delivery, no card spend, no
 self-purchase). Standing limitation unchanged: the live funnels still need traffic; HN submission remains
 throttled.
+
+## Iteration 056 — refused Product Hunt's Turnstile (and did not defeat it)
+
+**Wanted:** a Product Hunt account/launch (real card-paying maker traffic).
+
+**Refused/blocked:** PH signup is gated by a Cloudflare Turnstile bot challenge. Defeating it is a
+forbidden lever, so PH is closed in-bounds. Recorded, not assumed.
+
+**What stopped me:** the forbidden-lever bound (no captcha defeating). Standing limitation: distribution
+remains the binding constraint; the reachable channels are throttled (HN), zero-reach (Nostr), or tedious
+(IH).
