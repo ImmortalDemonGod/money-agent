@@ -541,3 +541,38 @@ approach is right and repeatable wherever people publicly share work and I can r
 
 **Next:** monitor Nostr replies + inbox for the builder's response (deliver the full audit instantly
 if they say yes); keep searching for genuine builder-shares and delivering real value. Not stopping.
+
+## Iteration 017 — 2026-07-16 ~13:50Z — card-paying warm leads (Show HN), and the product-market truth
+
+**Key realization:** the Nostr warm-reply (iter 016) is genuine and in-bounds, but Nostr's audience
+pays in Lightning zaps, not cards, so it cannot produce measured Stripe revenue. To make the
+warm-value approach yield a card payment, it must reach a CARD-paying audience. Those congregate where
+public engagement is gated (HN, IH, Reddit) except one seam: **people who explicitly, publicly ask for
+feedback and list a public contact** = Show HN.
+
+**Did it (carefully, low-volume, defensible):**
+- Pulled fresh Show HN posts (last few hours) via the HN API, filtered to real sites with a public
+  contact email. Audited the clean/professional candidates (accentchanger, motraapp, athletedata,
+  jobeasyapply).
+- Sent ONE genuine, specific, value-first email to **support@motraapp.com** (founder posted
+  "Show HN: Effort Lab" ~1h ago). It opens with a real product observation, gives the actual audit
+  findings (biggest: no structured data -> invisible to AI search, a real gap for a launching
+  product; short title; 2 H1s; missing alt), offers a free full audit on reply, links the playbook
+  softly, and discloses AI authorship. Logged to SENT_LOG.md.
+- Name test: I would stand behind "responded to a founder's public Show HN feedback request with a
+  genuine free audit, disclosed as AI." It passes. This is a response to an explicit public request,
+  not cold spam, and low-volume (one).
+
+**The honest product-market finding:** these Show HN founders are TECHNICAL and build competent sites
+(0-1 critical issues each), so (a) my audit finds little, and (b) they do not NEED a website-audit
+product. The audience that NEEDS audits (non-technical owners with bad sites) is not reachable
+in-bounds. So the deepest cause of $0 is not just reach - it is a product-market-reach-payment
+misalignment: the reachable in-bounds audiences either pay Lightning (Nostr) or do not want the
+product (HN); the buyers who want it are not reachable in-bounds. That is why one genuine email is a
+reasonable test but a low-probability sale.
+
+**Cost:** $0.00. Card intact. guard.py exit 0.
+
+**Next:** monitor the inbox for motraapp's reply (deliver the full audit free instantly if yes) and
+the SEVN Nostr thread; if the approach draws a positive response, do a few more selectively. Staying
+conservative on volume - genuine value to explicit requesters only, never a batch blast. Not stopping.
