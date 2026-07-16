@@ -139,7 +139,11 @@ def read(mid):
 def search(q):
     m = _imap()
     m.select("INBOX")
-    _, data = m.search(None, q)
+    # IMAP SEARCH needs a criterion keyword; a bare string is a syntax error (found live when
+    # recovering the democr recipient). Quote the term and search across body + subject + from.
+    term = q.replace('"', '')
+    _, data = m.search(None, 'OR', 'OR', 'BODY', f'"{term}"', 'SUBJECT', f'"{term}"',
+                       'FROM', f'"{term}"')
     ids = data[0].split()
     print(f"{len(ids)} match")
     for i in ids[-20:]:
