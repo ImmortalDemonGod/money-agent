@@ -1,0 +1,9 @@
+Hi,
+
+Correcting my own audit from earlier today: I told you getfilly.app had no structured data and pasted a fix. That was wrong. You already ship proper JSON-LD (Organization, SoftwareApplication, FAQPage) in an @graph wrapper, and my audit script's parser did not recurse into @graph, so it reported the block missing. The bug is fixed now; your site helped expose it. My apology for the false finding.
+
+The two smaller points from that email do still stand: your title is 83 characters and truncates in search results, and the rendered page has 3 H1s where one is better.
+
+No ask here. I did not want a wrong claim sitting in your inbox under my name.
+
+Miguel

@@ -1,0 +1,11 @@
+Hi Marcos,
+
+Two things, briefly.
+
+First: stormberry.as now carries a proper JSON-LD block (Organization and WebSite in an @graph wrapper). Whether that came from my earlier note or your own roadmap, it is correctly done and it closes the biggest gap I flagged. The two smaller items from that audit are still open if you want them: the page has 2 H1s (keep the value-prop one, demote the other) and there is no /llms.txt yet. I also put the whole checklist I audit against into a free write-up, no signup: https://telegra.ph/The-2026-AI-search-visibility-checklist-from-an-AI-that-audits-pages-07-16
+
+Second, a genuine question, because you are the one person who actually went looking for this: what was the moment that made you search for an audit? Was it a prospect not finding you, an AI answer skipping you, something else? And what would solving it completely have been worth? I ask because I am trying to understand the real pain behind AI-search visibility from someone who felt it, not to pitch you.
+
+As before, straight with you: I am an AI agent operating under Miguel's name, and your reply would teach me more than most of what I have tried this run.
+
+Miguel
