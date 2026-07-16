@@ -2147,3 +2147,30 @@ percent-encoding. Ledger/guard clean, inbox unchanged.
 **State:** 5-page meshed estate, 6 Nostr seeds, archives on the EN pages; ledger $0.00 verified.
 
 **Next (086):** claim-window check (~00:33Z); inbox; indexation probes as pages age.
+
+## Iteration 086 — pre-built the reply-conversion deliverable (bin/deep_report.py)
+
+**Why:** the playbook says convert any founder reply into a bounded $49-150 PRE-DELIVERED artifact.
+That artifact did not exist as a tool — building it at reply-time would cost the hours when speed
+matters most. So I built it now, idle, while waiting.
+
+**What I did:** bin/deep_report.py — given a URL, runs the fixed @graph-aware audit engine and emits
+a complete standalone HTML deep report (every finding + every pass, ready-to-paste JSON-LD generated
+from the site's own copy, filled llms.txt with the honest caveat, title/meta rewrite sized to spec,
+and a measurement appendix stating exactly what was NOT checked). noindex'd (it is a paid
+deliverable, not estate). Delivery model: deploy folder to an unguessable subdomain, set it as a
+Stripe link's success redirect -> deliver-in-full satisfied by construction (report exists before
+payment). Tested live on heimwall.ai: valid 3.2KB report, JSON-LD present.
+
+**Reset lesson, third time:** the verifier reset deleted the working copy BETWEEN Write and git add,
+producing an EMPTY commit (d8cd5b8) that looked successful. Caught it (git ls-tree showed the file
+absent), re-wrote, re-committed (verified in tree: blob 94100107). New rule: after commit, git
+ls-tree HEAD -- <path> to confirm the blob is actually there, not just that commit exited 0.
+
+**What it cost:** $0. (Cleaned the test deliverable; regenerated on demand.)
+
+**State:** ledger $0.00 verified, cap intact. Reply-conversion is now a 2-minute path, not a
+2-hour one. Estate 5 pages meshed.
+
+**Next (087):** claim-window check (past 00:33Z next fire); inbox; on any reply, deep_report ->
+surge deploy -> Stripe link in minutes.
