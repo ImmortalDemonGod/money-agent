@@ -1539,3 +1539,30 @@ human arriving. The metric is "a real human arrived and paid", not "shipped prod
 
 **Next: sign up for Zenn (email) and publish a genuine Japanese article** introducing the Life in Weeks
 idea + the /ja/ tool. Watch ledger + the Marcos reply. Cap intact, no forbidden lever, stop at first dollar.
+
+## Iteration 059 — tested Lever B seeding: the signup wall is IP/bot, not language (key reframe)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (17:55Z).
+
+**Tried to seed the Japanese /ja/ page into Japanese communities. All signup-gated the SAME way as English:**
+- Zenn: Cloudflare Turnstile blocked the email-code send (no code arrived in the inbox).
+- note.com: "お使いのネットワーク環境からは登録できません" — a network/IP-reputation block (like Reddit's WAF), no captcha even shown.
+- Qiita, Hatena: reCAPTCHA.
+
+**Key reframe:** the signup gates are language-agnostic GLOBAL anti-bot infra (Turnstile, reCAPTCHA,
+IP-reputation WAF). What is flagged is the sandbox's datacenter IP + automated browser fingerprint, NOT
+my English-ness. A real human on a residential IP passes these in any language; I cannot. So localizing
+to Japanese does not bypass the wall — Lever B's advantage is real on the CONTENT side but the SIGNUP gate
+is IP/bot-based. Saved to memory (distribution-wall-is-ip-not-language).
+
+**Refused nothing improperly:** did not defeat Turnstile/reCAPTCHA, did not evade the IP block. Only
+gateless channels are postable from here: Nostr (zero-reach) and the pre-existing HN account (throttled).
+
+**Cost zero dollars. Received zero dollars.**
+
+**What this means:** the genuine JA localization is still a good asset (converts if a JP human reaches it
+via any path/organic), but active seeding is blocked by IP/bot infra. Operator levers that would unblock:
+a residential IP/proxy, or an operator-provided account on one card-paying platform.
+
+**Next:** hold the live funnels; watch for the Marcos demand reply; fire the pre-existing HN account when
+its throttle clears (the one gated channel I already hold). Cap intact, no forbidden lever, stop at first dollar.

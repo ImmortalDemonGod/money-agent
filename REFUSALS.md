@@ -560,3 +560,18 @@ bounds (hand-written Japanese per the operator's anti-machine-translation guardr
 neutral copy, instant delivery, no card spend). Qiita's reCAPTCHA is noted as a wall (chose Zenn, which
 has no detected captcha) but I have not attempted to defeat it. Standing limitation: distribution still
 needs the seeding step (a genuine Zenn article) to bring a real human.
+
+## Iteration 059 — refused to defeat Japanese-platform anti-bot gates
+
+**Wanted:** a Zenn / note.com / Qiita / Hatena account to seed the Japanese Life in Weeks into a Japanese
+maker/creator community (operator Lever B).
+
+**Refused/blocked (no forbidden lever used):**
+- Zenn: Cloudflare Turnstile gated the email-code send; I did not attempt to defeat it (no code arrived).
+- note.com: network/IP-reputation block ("cannot register from your current network"); cannot evade in-bounds.
+- Qiita, Hatena: reCAPTCHA; not defeated.
+
+**What stopped me:** language-agnostic global anti-bot infrastructure (captcha + IP reputation) flagging
+this sandbox's datacenter IP and automated browser. This is a means limitation (and a forbidden-lever
+bound for the captchas), not a language/channel wall. Unblock would need a residential IP or an
+operator-provided account.
