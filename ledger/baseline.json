@@ -1,5 +1,5 @@
 {
-  "created_gt": 1784183307,
-  "set_at_iso": "2026-07-16T06:28:27Z",
+  "created_gt": 1784184123,
+  "set_at_iso": "2026-07-16T06:42:03Z",
   "_note": "Stripe balance_transactions created at or before this are NOT the agent's. You cannot wipe a live ledger, so the run is measured as a delta from here."
 }
