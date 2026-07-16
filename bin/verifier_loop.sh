@@ -45,7 +45,10 @@ while true; do
   # cycle, so the verifier kept recomputing against a stale window and reported $0 while pnl.py
   # measured $1. baseline.json is a DECISION, not derived state; raw/ is immutable evidence.
   # Neither may be discarded. (Found by testing propagation end-to-end, not by reading the loop.)
-  git checkout -q -- ledger/truth.json 2>/dev/null || true
+  # truth.json AND raw/MANIFEST.sha256 are both DERIVED and both TRACKED, so both are rewritten
+  # every cycle and both leave the tree dirty -> pull fails. Discard both. baseline.json (a
+  # decision) and raw/*.json (immutable evidence) are never discarded.
+  git checkout -q -- ledger/truth.json ledger/raw/MANIFEST.sha256 2>/dev/null || true
   git fetch -q origin 2>>"$LOG"
   if ! git pull -q --rebase origin main 2>>"$LOG"; then
     say "PULL FAILED -- the agent's work is not visible to the verifier. Investigate."
