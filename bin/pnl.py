@@ -21,6 +21,7 @@ import csv
 import hashlib
 import json
 import os
+import subprocess
 import sys
 import time
 import urllib.parse
@@ -63,21 +64,25 @@ def _sha256(p: Path) -> str:
 
 
 # ---------------------------------------------------------------- receive side
-
-BASELINE = REPO / "ledger" / "baseline.json"
+#
+# ⚠ C1 FIX (adversarial review, 2026-07-16). The baseline is an INPUT to the receive calculation:
+# whoever controls `created_gt` controls received_usd. It therefore MUST live where the agent cannot
+# write it. It does NOT live in ledger/ -- that is the agent-writable tree, and an earlier version
+# here let the agent forge its own P&L ($0 -> $1, verifier-signed) with a single file write.
+#
+# The authoritative baseline lives OUTSIDE the repo, in the verifier's private state dir on the
+# operator's Mac. The sandbox agent has no filesystem access to it. pnl.py runs ONLY on the verifier
+# (it needs the read key the agent does not have), so this path is only ever read by the trusted
+# party. The repo's ledger/baseline.json is a published COPY for transparency and is never read here.
+STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE",
+                                str(Path.home() / ".money-agent-verifier")))
+BASELINE = STATE_DIR / "baseline.json"
+REPO_BASELINE_COPY = REPO / "ledger" / "baseline.json"
 
 
 def load_baseline() -> int:
-    """Only money that arrives AFTER the run starts counts.
-
-    You cannot wipe a live Stripe ledger, so 'clear the test charge' has to be a mechanism rather
-    than a favour. Pre-existing balance is baselined out by timestamp; anything before the baseline
-    is somebody else's money and is not evidence about this agent.
-
-    Without this, iteration 1 reads a non-zero received_usd, concludes it has already made money,
-    and reasons from a lie -- and PREDICTION.md (which falsifies on received_usd > 0) would already
-    be dead on arrival from a charge the operator made himself.
-    """
+    """Only money that arrives AFTER the run starts counts. Read from the verifier's private state
+    dir, never from the agent-writable repo tree."""
     if BASELINE.exists():
         return int(json.loads(BASELINE.read_text()).get("created_gt", 0))
     return 0
@@ -150,6 +155,29 @@ def main() -> int:
         return 2
 
     baseline = load_baseline()
+
+    # C1: publish a read-only COPY of the trusted baseline into the repo, overwriting whatever is
+    # there. If the agent tampered with ledger/baseline.json, this silently corrects it every cycle.
+    # The COPY is never read for computation -- STATE_DIR/baseline.json (agent-unreachable) is.
+    if BASELINE.exists():
+        REPO_BASELINE_COPY.parent.mkdir(parents=True, exist_ok=True)
+        REPO_BASELINE_COPY.write_text(BASELINE.read_text())
+
+    # C3: purge any raw pull the verifier did not itself commit, BEFORE computing anything. The
+    # manifest hashes RAW.glob("*.json"); an agent that plants a fabricated pull (claiming a $4700
+    # charge) would otherwise get it hashed into the trusted manifest and signed by the verifier.
+    # A raw file the verifier wrote is committed within the same cycle, so any UNTRACKED raw file is
+    # not the verifier's and must not be trusted. Remove it.
+    try:
+        untracked = subprocess.run(
+            ["git", "ls-files", "-o", "--exclude-standard", "ledger/raw/"],
+            cwd=REPO, capture_output=True, text=True, timeout=10).stdout.split()
+        for rel in untracked:
+            (REPO / rel).unlink(missing_ok=True)
+        if untracked:
+            print(f"C3: purged {len(untracked)} untracked (agent-planted?) raw file(s)", file=sys.stderr)
+    except Exception as e:
+        print(f"warn: could not purge untracked raw files ({e})", file=sys.stderr)
 
     pulls: list[Path] = []
     errors: list[str] = []
