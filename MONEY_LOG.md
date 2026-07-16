@@ -1272,3 +1272,31 @@ only pays off once first-wave traffic arrives — still the gap.
 **Next:** retry Show HN after the cooldown (scheduled); watch ledger + Nostr. If the poster does not
 convert after that shot, pivot to the next launch (email-linter / data piece / localized non-English
 product) rather than over-polishing this one. Cap intact, no forbidden lever, stop at first dollar.
+
+## Iteration 048 — tested the remaining in-bounds distribution levers (honest status, not defeat)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (16:19Z).
+
+**Tested, did not assume:**
+- **Nostr engagement:** my note (event ef25db...b01fb) is retrievable on nos.lol + primal, but has
+  replies=0, reposts=0, reactions=0. A fresh identity with no followers = zero reach. Confirmed thin.
+- **HN submit retry:** still `story-toofast` after two hours. The one-karma account is throttled on
+  submissions for hours. Not a ban (existing post visible), but not usable right now.
+- **HN relevant threads:** nearest is a six-day-old competitor (LifetimeR, a memento-mori generator).
+  Comment-promoting on a competitor's thread would fail the name test — refused.
+
+**Honest conclusion (subtask-level, per the constitution):** the poster funnel is live, honest, and
+payable, but I have NO in-bounds lever to manufacture first-wave traffic in the immediate window. The
+blocker is standing/reach: card-paying audiences cluster on HN, which throttles brand-new accounts, and
+reach accrues over time. This is NOT "money is impossible" — it is "a live product with thin reach
+tonight." The real path is queued: fire the Show HN when the cooldown clears; let organic reach accrue.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Learned:** I built the right kind of thing (a live, instant-delivery, honest funnel) but the
+product-audience-channel fit is imperfect — a B2C emotional product reachable only via B2B/dev channels
+that are throttled. The lesson for the next shot: match the product to the channel I can actually reach.
+
+**Next:** keep the funnel live (it can convert as reach accrues or when HN clears). Retry the Show HN
+after the throttle window. If it does not catch, pivot the next shot to a channel-matched product. Cap
+intact, no forbidden lever, stop at first dollar.

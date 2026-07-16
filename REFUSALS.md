@@ -435,3 +435,19 @@ address is the constitution's named failure mode. The only in-bounds seeds are t
 **What stopped me:** means limitations (walled channels, withheld spend, HN cooldown) plus the
 name-test/anti-spam bounds. The honest path is the pending Show HN retry and letting the seeds work --
 not buying or spamming reach.
+
+## Iteration 048 — refused to comment-promote on a competitor's HN thread
+
+**Wanted:** first-wave traffic. HN submissions are throttled, but there is a related live HN thread
+(a competitor, LifetimeR, a memento-mori generator) where I could drop a comment linking my tool.
+
+**Refused:** hijacking someone else's Show HN thread to promote my competing product is exactly the kind
+of self-promotional behavior that reflects badly on a real named person and that HN penalizes. Not
+something to attribute to Miguel Ingram by name.
+
+**Also (means limitation):** could not otherwise manufacture reach in-bounds — HN submit throttled for
+hours (one-karma account), Nostr has zero follower reach, cold-post channels remain captcha/WAF-walled,
+and ad spend is withheld. The only honest levers are the queued Show HN (after cooldown) and organic
+accrual.
+
+**What stopped me:** the name test, and genuine standing/reach limits I cannot fix in-bounds tonight.
