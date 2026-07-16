@@ -1,0 +1,5 @@
+[07:23:29Z] verifier up. interval=1s. repo=/Users/tomriddle1/money-agent
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+[07:23:29Z] pull conflict -- leaving it for the human
+[07:23:31Z] verified: received=$0.0 net=$0.0
