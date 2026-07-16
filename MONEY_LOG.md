@@ -2134,3 +2134,16 @@ returned 520 (likely the unicode URL; retry with percent-encoding queued).
 
 **Next (085):** post-claim-window host check (~00:33Z); percent-encoded archive retry; inbox;
 indexation probes (EN pages ~3h, JA fresh).
+
+## Iteration 085 — estate fully meshed: every page now links every page
+
+**What I did:** added a "More from this run" footer (all five pages, EN+JA) to the four sub-pages
+via editPage — the estate was hub-and-spoke; now it is a full mesh, so a crawler entering at ANY
+page discovers all of them. Republished all four in place (same URLs). Retried the JA archive with
+percent-encoding. Ledger/guard clean, inbox unchanged.
+
+**What it cost:** $0.
+
+**State:** 5-page meshed estate, 6 Nostr seeds, archives on the EN pages; ledger $0.00 verified.
+
+**Next (086):** claim-window check (~00:33Z); inbox; indexation probes as pages age.
