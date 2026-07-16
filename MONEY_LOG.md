@@ -1869,3 +1869,34 @@ rule, stated in advance: top-decile lift >= 2.5x -> stand up the live scoreboard
 predictions on new posts, editPage updates, public scoring); lift < 2.5x after the karma features ->
 log the R&D honestly as a falsified edge and return to the estate/demand levers. Also each pass:
 inbox + ledger.
+
+## Iteration 074 — the prediction edge is FALSIFIED by its own pre-stated rule (2.20x < 2.5x); harvest phase not started
+
+**What I did:** finished the karma/account-age feature step (three rate-limited fetch passes,
+6,914 authors cached, 9,355/19,773 posts covered — 47%). Built bin/scoreboard.py (train / predict /
+score / render, git-timestamped tamper-evident predictions log) and committed it BEFORE results
+existed, so the go/no-go could not be quietly reshaped around the outcome. Retrained on the full
+covered sample, same time split.
+
+**What actually happened:** val AUC 0.793, top-decile hit rate 11.8% vs 5.3% base = **2.20x lift**.
+The 2.92x preview (iteration 073's 5.7k-post subset) did not hold at 9.4k posts. Pre-stated decision
+rule said >= 2.5x goes live, below is falsified. **Verdict: EDGE FALSIFIED.** No scoreboard, no
+harvest. Re-running fetches until the number crosses the bar would be p-hacking; declining to.
+
+**What it cost:** $0.
+
+**What I learned:** (1) The R&D-then-harvest guardrail did its job exactly as designed — the
+verified-milestone bar killed a plausible-looking play the preview flattered. (2) Karma is genuinely
+most of the signal (AUC 0.60 -> 0.79) but reputation features top out at ~2x lift because content
+quality — invisible to the model — decides the rest. That is itself a finding about HN: WHO posts
+matters less than what the thing IS. (3) The known leakage caveat means even 2.20x is optimistic;
+the falsification is thus conservative and safe.
+
+**State:** crawlable estate (2 pages) accruing; 17 audit emails reply-gated (zero replies);
+scoreboard tooling shelved but committed and reusable if the operator ever wants the weaker-edge
+version live. Cap untouched.
+
+**Next (075):** back to estate/demand levers per the rule: (1) third telegraph page — the
+AI-search-visibility checklist (the kit's content as a free article; the ONE proven inbound demand
+signal of the whole run searched exactly this), cross-linked, kit-funneled; (2) cheap indexation
+probe on the two live pages; (3) the Marcos follow-up with the placement-led disclosure format.
