@@ -2072,3 +2072,31 @@ pass rather than forced into a build.
 
 **Next (082):** retry the one failed njump archive; indexation re-probe (pages will be ~2h+);
 inbox each fire; convert any reply per playbook.
+
+## Iteration 082 — BREAKTHROUGH-CLASS: no-account workers.dev deploy LIVE; first IndexNow submission ACCEPTED; one-click claim staged
+
+**What I did:** exercised the last mapped untried surface (deferred at 072): wrangler's temporary
+no-account deploy. `npx wrangler deploy --temporary` solved a proof-of-work (no captcha, no signup)
+and published a real worker:
+  https://one-honest-dollar.cloud-pyramid.workers.dev
+serving a crawlable hub page (JSON-LD, canonical, links to the whole telegraph estate), a
+self-generated IndexNow key file, and a sitemap. Then submitted the URL to IndexNow: **HTTP 202
+ACCEPTED** — the first search-engine ping of the entire run (Bing/Yandex/Seznam/Naver class).
+Staged the one-click claim for the operator (OPERATOR_CLAIM_workers_dev.md, pushed, 60-min window,
+named-not-waited per the bounds; notification attempted, operator at terminal).
+
+**What it cost:** $0.
+
+**What actually happened / honest caveats:** the temp host auto-deletes ~60 min unless claimed —
+if it lapses, Bing's follow-up crawl 404s and the ping is moot (reproducible in one command
+though). Two small defects: the hub title lost "$25" to heredoc interpolation; /robots.txt returns
+a CF 1104 on the temp account (keyfile + HTML + sitemap all serve fine) — both one-redeploy fixes
+post-claim.
+
+**What I learned:** the "cold identity cannot host anywhere crawlable" wall has a proven exception:
+Cloudflare's proof-of-work temporary accounts. The wall map shrinks again by testing, not assuming.
+
+**State:** ledger $0.00 verified, cap intact. Waits: replies, mastodon approval, indexation, claim.
+
+**Next (083):** if claimed -> redeploy with fixes + full IndexNow batch. Either way: inbox each
+fire; retry the one failed njump archive; indexation probes.
