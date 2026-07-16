@@ -1,0 +1,6 @@
+product: prod_UtYIP46aYkfkep
+price: price_1TtlBUQP1DE35R1lFi2pLiTZ
+payment_link: https://buy.stripe.com/4gMaEZ2JR7594zE2Mu7ok03
+teaser: https://debugging-field-manual.surge.sh/
+delivery: https://debugging-field-manual.surge.sh/19982b3352083143b131c7853e3b19f3/
+hosting: surge.sh account under agent email

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Debugging Field Manual — the procedure, free</title>
+<meta name="description" content="A 7-step decision procedure for finding any bug, free — plus 50 field heuristics in the full manual ($4, delivered instantly).">
+<style>
+  :root { --bg:#ffffff; --fg:#1a1a1a; --muted:#666; --accent:#0b6e4f; --card:#f6f6f4; --border:#e2e2de; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#141416; --fg:#e8e8e6; --muted:#9a9a97; --accent:#5fd3a5; --card:#1e1e21; --border:#2c2c30; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:17px/1.65 Georgia, 'Times New Roman', serif; }
+  main { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 6rem; }
+  h1 { font-size: 2.1rem; line-height:1.2; margin: 0 0 .4rem; }
+  h2 { font-size: 1.35rem; margin: 3rem 0 1rem; border-bottom: 2px solid var(--accent); padding-bottom:.3rem; }
+  .sub { color: var(--muted); font-style: italic; margin-bottom: 2.5rem; }
+  .proc { counter-reset: step; padding-left:0; list-style:none; }
+  .proc li { counter-increment: step; margin: 1.1rem 0; padding-left: 2.6rem; position: relative; }
+  .proc li::before { content: counter(step); position:absolute; left:0; top:.1rem; width:1.8rem; height:1.8rem;
+    background:var(--accent); color:var(--bg); border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font: bold .95rem/1 -apple-system, sans-serif; }
+  .rule { background: var(--card); border:1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  .rule b { display:block; font-family: -apple-system, 'Segoe UI', sans-serif; font-size:.95rem; margin-bottom:.35rem; }
+  .rule b .n { color: var(--accent); margin-right:.5em; }
+  .buy { display:block; text-align:center; background:var(--accent); color:var(--bg); font: bold 1.1rem/1 -apple-system, sans-serif;
+    padding: 1.1rem 1.5rem; border-radius: 10px; text-decoration:none; margin: 2.5rem 0 .6rem; }
+  .buy:hover { filter: brightness(1.08); }
+  .fine { text-align:center; color:var(--muted); font-size:.88rem; }
+  code { font: .88em/1.4 ui-monospace, Menlo, monospace; background: var(--card); border:1px solid var(--border); border-radius:4px; padding:.08em .35em; }
+  .foot { margin-top:4rem; padding-top:1.5rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem; }
+</style>
+</head>
+<body>
+<main>
+<h1>The Debugging Field Manual</h1>
+<p class="sub">The 7-step procedure below is free, complete, and yours. The full manual adds the fifty field heuristics that make each step fast. $4, delivered on the spot.</p>
+
+<h2>The procedure (free, complete)</h2>
+<p>Every effective debugging session is the same loop, run honestly. When you are lost, you have silently skipped one of these steps. Go back to the one you skipped.</p>
+<ol class="proc">
+<li><strong>Reproduce it.</strong> Reliably, in the smallest environment that still shows it. A bug you cannot reproduce is a bug you cannot verify you fixed.</li>
+<li><strong>State the symptom precisely.</strong> One sentence: what you observed, what you expected, the exact conditions. Vague symptom, vague search.</li>
+<li><strong>Find the last point where the world was correct.</strong> Everything between there and the symptom is the search space. Everything else is not.</li>
+<li><strong>Bisect the search space.</strong> By time (<code>git bisect</code>), by data, by code path, by layer. Halving beats staring.</li>
+<li><strong>Form ONE hypothesis and design the cheapest test that could prove it false.</strong> Not confirm it — kill it.</li>
+<li><strong>Run the test. Believe the result.</strong> If the hypothesis dies, good: the search space shrank. Go to 5.</li>
+<li><strong>Fix it, then re-run the ORIGINAL reproduction.</strong> Then ask: where else does this exact mistake live?</li>
+</ol>
+
+<h2>Three of the fifty heuristics</h2>
+<div class="rule"><b><span class="n">5</span>A bug that vanishes when you look at it is telling you the mechanism</b>Adding a print changed timing or memory layout: suspect races and undefined behavior. Attaching a debugger changed scheduling: same. The disappearance is data.</div>
+<div class="rule"><b><span class="n">16</span>"That can't be it" is where it is</b>The bug survives precisely because it lives behind an assumption you refuse to test. List what you are certain of, then verify the cheapest three. Certainty is not evidence; it is untested confidence.</div>
+<div class="rule"><b><span class="n">28</span>Cache bugs: bypass every cache once</b>Hard-refresh, purge CDN, clear memoization, restart the process, <code>SELECT</code> straight from the database. If the symptom changes at any layer, you found which cache is stale.</div>
+
+<h2>The full manual</h2>
+<p>Fifty heuristics across seven sections — Reproduction, Localization, Hypotheses, Instrumentation, The nasty classes (races, memory corruption, caches, time, encodings, floats, deadlocks), When you are stuck, and After the fix. One self-contained page: no signup, no PDF viewer, no drip emails. Save it, print it, keep it.</p>
+
+<a class="buy" href="https://buy.stripe.com/4gMaEZ2JR7594zE2Mu7ok03">Get the full manual — $4</a>
+<p class="fine">Stripe checkout. The complete manual appears the instant payment succeeds — the confirmation page IS the manual. No account, no email capture.</p>
+
+<div class="foot">
+<p><strong>Honesty note:</strong> this manual was written and assembled by an AI agent (Claude), operating with human oversight, and it is sold under a real person's name. If you buy it and it disappoints you, reply to your Stripe receipt or write to <b>miguel.ingram.work@gmail.com</b> and you will be refunded without argument.</p>
+</div>
+</main>
+</body>
+</html>
