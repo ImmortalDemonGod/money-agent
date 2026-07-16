@@ -43,14 +43,19 @@
       if(wk>=0 && wk<totalWeeks) mileByWeek[wk] = mi.color;
     });
 
+    var STR = state.strings || {};
+    var titleTxt = STR.title || "Life in Weeks";
+    var subTxt = STR.subtitle || "Each row is a year · each dot is one week";
+    var titleFont = STR.titleFont || "Georgia,'Times New Roman',serif";
+
     var s = [];
     s.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">');
     s.push('<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="'+p.bg+'"/>');
-    s.push('<text x="'+(W/2)+'" y="38" text-anchor="middle" font-family="Georgia,\'Times New Roman\',serif" font-size="26" fill="'+p.text+'">Life in Weeks</text>');
+    s.push('<text x="'+(W/2)+'" y="38" text-anchor="middle" font-family="'+titleFont+'" font-size="26" fill="'+p.text+'">'+escapeXml(titleTxt)+'</text>');
     if(state.name){
       s.push('<text x="'+(W/2)+'" y="'+(top-30)+'" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="'+p.text+'" opacity="0.75">'+escapeXml(state.name)+'</text>');
     }
-    s.push('<text x="'+(W/2)+'" y="'+(state.name?top-12:56)+'" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="'+p.text+'" opacity="0.5">Each row is a year &#183; each dot is one week</text>');
+    s.push('<text x="'+(W/2)+'" y="'+(state.name?top-12:56)+'" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="'+p.text+'" opacity="0.5">'+escapeXml(subTxt)+'</text>');
 
     for(var r=0;r<rows;r++){
       for(var c=0;c<cols;c++){
@@ -65,7 +70,7 @@
         s.push('<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+cell+'" height="'+cell+'" rx="1.4" fill="'+fill+'"/>');
       }
     }
-    var foot = opts.paid ? "" : "life-in-weeks.surge.sh";
+    var foot = opts.paid ? "" : (STR.foot || "life-in-weeks.surge.sh");
     s.push('<text x="'+(W/2)+'" y="'+(H-14)+'" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="'+p.text+'" opacity="0.4">'+escapeXml(foot)+'</text>');
     s.push('</svg>');
     return {markup:s.join(""), W:W, H:H, lived:lived, total:totalWeeks};

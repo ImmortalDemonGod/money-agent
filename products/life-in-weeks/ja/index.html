@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>人生の週マップ — あなたの一生を1枚の週グリッドに</title>
+<meta name="description" content="生年月日を入れるだけで、人生を1週間=1つの点として1枚に描きます。すべてブラウザ内で完結し、データは送信されません。印刷用ポスターもあります。" />
+<meta property="og:title" content="人生の週マップ" />
+<meta property="og:description" content="あなたの一生を、週のグリッドで。無料・プライバシー保護・ブラウザ内で完結。" />
+<style>
+  :root{--bg:#f4f1ea;--ink:#1c1c1c;--muted:#6b6660;--line:#d8d2c6;--accent:#c2410c;--card:#fbfaf6}
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent)}
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+  header h1{font-size:30px;letter-spacing:.01em;margin:0 0 6px}
+  header p{color:var(--muted);margin:0 0 4px;max-width:60ch}
+  .layout{display:grid;grid-template-columns:340px 1fr;gap:28px;margin-top:28px}
+  @media(max-width:820px){.layout{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  label{display:block;font-weight:600;font-size:13px;margin:14px 0 5px}
+  input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:15px;color:var(--ink)}
+  input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+  .milestone{display:grid;grid-template-columns:130px 1fr auto;gap:8px;align-items:center;margin-top:8px}
+  .milestone input{font-size:13px;padding:7px 9px}
+  .mini{font-size:12px;color:var(--muted);margin-top:4px}
+  button{font:inherit;font-weight:600;cursor:pointer;border-radius:10px;border:1px solid transparent;padding:11px 16px;transition:transform .04s ease}
+  button:active{transform:translateY(1px)}
+  .btn-primary{background:var(--accent);color:#fff;width:100%;margin-top:18px;font-size:15px}
+  .btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+  .btn-add{background:#fff;border-color:var(--line);color:var(--muted);padding:6px 10px;font-size:13px;margin-top:10px}
+  .btn-x{background:transparent;border:none;color:var(--muted);font-size:18px;line-height:1;padding:0 4px;cursor:pointer}
+  .stage{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .poster-frame{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;box-shadow:0 6px 24px rgba(0,0,0,.06);width:100%;max-width:640px}
+  #poster{display:block;width:100%;height:auto}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;max-width:640px}
+  .actions button{flex:1;min-width:150px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);justify-content:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+  .sell{margin-top:14px;background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px 18px;max-width:640px;width:100%}
+  .sell h3{margin:0 0 6px;font-size:16px}
+  .sell ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:14px}
+  .price{font-weight:700;color:var(--ink)}
+  footer{margin-top:56px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+  .tag{display:inline-block;background:#efeee8;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="tag">無料・データは送信されません・すべてブラウザ内で完結</span>
+    <h1>人生を、週で見る</h1>
+    <p>生まれた日から今日まで、そしてこれから先までを、1週間=1つの点として1枚に描きます。約90年ぶん、4,700個ほどの点のうち、すでに過ごした週が塗りつぶされていきます。ときどき眺めるだけで、時間の重さが少し違って見えてきます。</p>
+    <p class="mini">入力した内容はこのページの外に出ません。サーバーもトラッキングもありません。制作: Miguel Ingram</p>
+  </header>
+
+  <div class="layout">
+    <div class="panel">
+      <label for="name">ポスターに載せる名前（任意）</label>
+      <input id="name" type="text" maxlength="40" placeholder="例：田中 太郎" />
+      <label for="dob">生年月日</label>
+      <input id="dob" type="date" />
+      <label for="life">想定寿命（年）</label>
+      <select id="life"><option value="80">80</option><option value="90" selected>90</option><option value="100">100</option></select>
+      <label for="palette">配色</label>
+      <select id="palette"><option value="ink">インク（生成り）</option><option value="dusk">夜明けのインディゴ</option><option value="ember">残り火</option></select>
+      <label>マイルストーン（任意）</label>
+      <div id="milestones"></div>
+      <button class="btn-add" id="addMilestone" type="button">＋ マイルストーンを追加</button>
+      <p class="mini">就職、引っ越し、結婚、子どもの誕生など。その出来事があった週に印がつきます。</p>
+      <button class="btn-primary" id="render" type="button">人生を描く</button>
+    </div>
+
+    <div class="stage">
+      <div class="poster-frame">
+        <svg id="poster" viewBox="0 0 660 1000" role="img" aria-label="人生の週マップ"></svg>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div class="actions">
+        <button class="btn-ghost" id="dlPng" type="button">PNGをダウンロード（無料）</button>
+        <button class="btn-ghost" id="share" type="button">共有</button>
+        <button class="btn-primary" id="buy" type="button" style="margin-top:0">印刷用ポスターを入手 — 9ドル</button>
+      </div>
+      <div class="sell">
+        <h3>印刷用ポスター — <span class="price">9ドル</span></h3>
+        <p class="mini" style="margin-top:0">無料のPNGは画面で見るのに十分です。ポスター版は壁に飾るために作られています：</p>
+        <ul>
+          <li>18×24インチ / A2サイズ・約300dpiの印刷用PDF。配色に合わせた余白つき</li>
+          <li>名前とマイルストーンを埋め込み。透かしなし</li>
+          <li>お支払い直後にその場でダウンロード。待ち時間はありません</li>
+        </ul>
+        <p class="mini">決済はStripe。カード明細には制作者 Miguel Ingram の名前が表示されます。</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    人生の週マップ・小さな個人プロジェクト。アカウント不要・トラッキングなし・データは送信されません。<br/>
+    Tim Urban / Wait But Why の「Your Life in Weeks」に着想を得ています。<br/>
+    <a href="../">English version</a>
+  </footer>
+</div>
+
+<script src="../liw.js"></script>
+<script>
+(function(){
+  "use strict";
+  var STRINGS = {title:"人生の週", subtitle:"横1行が1年、点1つが1週間", titleFont:"'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Hiragino Sans',serif", foot:"life-in-weeks.surge.sh/ja"};
+  var STRIPE_LINK="https://buy.stripe.com/5kQdRb1FNgFJ8PUevc7ok0c";
+  var $=function(id){return document.getElementById(id);};
+  var milestonesEl=$("milestones");
+  function addMilestoneRow(date,label){
+    var row=document.createElement("div");row.className="milestone";
+    row.innerHTML='<input type="date" class="m-date" /><input type="text" class="m-label" maxlength="20" placeholder="ラベル" /><button class="btn-x" title="削除" type="button">&#215;</button>';
+    if(date) row.querySelector(".m-date").value=date;
+    if(label) row.querySelector(".m-label").value=label;
+    row.querySelector(".btn-x").onclick=function(){row.remove();};
+    milestonesEl.appendChild(row);
+  }
+  $("addMilestone").onclick=function(){ if(milestonesEl.children.length<5) addMilestoneRow(); };
+  function readMilestones(){
+    var out=[],rows=milestonesEl.querySelectorAll(".milestone");
+    for(var i=0;i<rows.length;i++){var d=rows[i].querySelector(".m-date").value;var l=rows[i].querySelector(".m-label").value.trim();
+      if(d) out.push({date:d,label:l,color:LIW.MILE_COLORS[i%LIW.MILE_COLORS.length]});}
+    return out;
+  }
+  function readState(){
+    var dob=$("dob").value; if(!dob) return null;
+    return {name:$("name").value.trim(),dob:dob,lifeYears:parseInt($("life").value,10),palette:$("palette").value,milestones:readMilestones(),strings:STRINGS};
+  }
+  var lastState=null;
+  function draw(){
+    var state=readState(); if(!state){ alert("生年月日を入力してください。"); return; }
+    lastState=state;
+    var built=LIW.buildSVG(state,{paid:false});
+    var host=$("poster"); host.setAttribute("viewBox","0 0 "+built.W+" "+built.H);
+    host.innerHTML=new DOMParser().parseFromString(built.markup,"image/svg+xml").documentElement.innerHTML;
+    var p=LIW.PALETTES[state.palette]||LIW.PALETTES.ink;
+    var h='<span><i class="dot" style="background:'+p.past+'"></i>過ごした週</span>'
+        +'<span><i class="dot" style="background:'+p.now+'"></i>今週</span>'
+        +'<span><i class="dot" style="background:'+p.future+'"></i>これからの週</span>';
+    state.milestones.forEach(function(m){ if(m.label) h+='<span><i class="dot" style="background:'+m.color+'"></i>'+LIW.escapeXml(m.label)+'</span>'; });
+    $("legend").innerHTML=h;
+    try{ localStorage.setItem("liw_state_ja", JSON.stringify(state)); }catch(e){}
+  }
+  $("render").onclick=draw;
+  $("dlPng").onclick=function(){ if(!lastState){ draw(); if(!lastState) return; } LIW.downloadPng(lastState); };
+  $("share").onclick=function(){
+    var url="https://life-in-weeks.surge.sh/ja/";
+    var text="人生を、週で見る。あなたの一生を1枚の週グリッドに（ブラウザ内で完結・無料）";
+    if(navigator.share){ navigator.share({title:"人生の週マップ",text:text,url:url}).catch(function(){}); return; }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){var b=$("share"),o=b.textContent;b.textContent="リンクをコピーしました";setTimeout(function(){b.textContent=o;},1500);}); return; }
+    window.prompt("このリンクをコピー:",url);
+  };
+  $("buy").onclick=function(){
+    var state=readState(); if(!state){ alert("先に生年月日を入れて「人生を描く」を押してください。ポスターはその内容で作られます。"); return; }
+    try{ localStorage.setItem("liw_paid_state", JSON.stringify(state)); }catch(e){}
+    if(!STRIPE_LINK||STRIPE_LINK.indexOf("__STRIPE")===0){ alert("購入ページは準備中です。少し後にもう一度お試しください。デザインは保存されています。"); return; }
+    window.location.href=STRIPE_LINK;
+  };
+  (function init(){
+    var saved=null; try{ saved=JSON.parse(localStorage.getItem("liw_state_ja")||"null"); }catch(e){}
+    if(saved&&saved.dob){ $("name").value=saved.name||""; $("dob").value=saved.dob; $("life").value=String(saved.lifeYears||90); $("palette").value=saved.palette||"ink"; (saved.milestones||[]).forEach(function(m){addMilestoneRow(m.date,m.label);}); draw(); }
+  })();
+})();
+</script>
+</body>
+</html>
