@@ -17,6 +17,22 @@ set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$R"
 INTERVAL="${INTERVAL:-120}"
+
+# The AGENT owns the branch. A Claude Code cloud sandbox works on a claude/<name> branch it creates
+# and cannot be moved off. If the verifier synced `main` while the agent worked on claude/xxx, they
+# would never meet: the agent reads a frozen ledger all night, the verifier never sees its work, and
+# nothing looks broken. So the verifier syncs the AGENT'S branch. Pass it explicitly.
+#   BRANCH=claude/project-analysis-ew7b92 bash bin/verifier_loop.sh
+BRANCH="${BRANCH:-}"
+if [[ -z "$BRANCH" ]]; then
+  echo "FATAL: BRANCH unset. The verifier must sync the same branch the sandbox agent is on." >&2
+  echo "  Find it: in the sandbox run 'git branch --show-current', then:" >&2
+  echo "  BRANCH=<that> bash bin/verifier_loop.sh" >&2
+  exit 2
+fi
+# Track the agent's branch locally so pull/push target it.
+git fetch -q origin "$BRANCH" 2>/dev/null || { echo "FATAL: origin has no branch '$BRANCH' yet. The sandbox must push it once first." >&2; exit 2; }
+git checkout -q -B "$BRANCH" "origin/$BRANCH" 2>/dev/null || git checkout -q "$BRANCH"
 # NOT in ledger/. The loop wrote its own log there, `git add ledger/` tracked it, and it was
 # therefore dirty on every cycle -> pull failed forever. The loop's own logging broke the loop's
 # own pull. ledger/ is verifier-owned EVIDENCE; a log is not evidence.
@@ -53,7 +69,7 @@ while true; do
   # decision) and raw/*.json (immutable evidence) are never discarded.
   git checkout -q -- ledger/truth.json ledger/raw/MANIFEST.sha256 2>/dev/null || true
   git fetch -q origin 2>>"$LOG"
-  if ! git pull -q --rebase origin main 2>>"$LOG"; then
+  if ! git pull -q --rebase origin "$BRANCH" 2>>"$LOG"; then
     say "PULL FAILED -- the agent's work is not visible to the verifier. Investigate."
     git rebase --abort 2>/dev/null || true
   fi
@@ -91,7 +107,7 @@ print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_mo
     # failure stranded the one number that mattered forever while every later cycle logged healthy.
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then
-      if git push -q origin main 2>>"$LOG"; then
+      if git push -q origin "$BRANCH" 2>>"$LOG"; then
         say "pushed: $SIG"; LAST_SIG="$SIG"
       else
         say "PUSH FAILED for $SIG -- will retry next cycle (LAST_SIG NOT advanced)"
