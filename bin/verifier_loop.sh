@@ -67,7 +67,7 @@ while true; do
   # truth.json AND raw/MANIFEST.sha256 are both DERIVED and both TRACKED, so both are rewritten
   # every cycle and both leave the tree dirty -> pull fails. Discard both. baseline.json (a
   # decision) and raw/*.json (immutable evidence) are never discarded.
-  git checkout -q -- ledger/truth.json ledger/raw/MANIFEST.sha256 2>/dev/null || true
+  git checkout -q -- ledger/ 2>/dev/null || true
   git fetch -q origin 2>>"$LOG"
   if ! git pull -q --rebase origin "$BRANCH" 2>>"$LOG"; then
     say "PULL FAILED -- the agent's work is not visible to the verifier. Investigate."
