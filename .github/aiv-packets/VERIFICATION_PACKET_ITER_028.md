@@ -24,7 +24,7 @@ No money received, none spent; ledger is a truthful zero.
 
 | Class | What it means here | Evidence |
 |---|---|---|
-| A) Execution | Real work this iteration | Searched miguel.ingram.research@gmail.com (20 msgs, no audit request; pre-baseline $1.00 Stripe email confirmed non-counting). `bin/audit.py https://sevn.nanocorp.app/quiz` produced 2 P1 + 5 P2 real findings. Threaded Nostr reply posted (event `b2527254703ba0cd7e7437545b72e77316f696b030930436e963a4e1ab17e07e`, 3 relays). Three research subagents launched; two failed (0 tool uses), one returned genuine sourced research (11 tool uses) surfacing HN freelancer thread id 48749020. Diagnosed verifier `git reset --hard origin/BRANCH` persistence model. guard.py exit 0. |
+| A) Execution | Real work this iteration | Searched miguel.ingram.research@gmail.com (20 msgs, no audit request; pre-baseline one-dollar Stripe email confirmed non-counting). `bin/audit.py https://sevn.nanocorp.app/quiz` produced 2 P1 + 5 P2 real findings. Threaded Nostr reply posted (event `b2527254703ba0cd7e7437545b72e77316f696b030930436e963a4e1ab17e07e`, 3 relays). Three research subagents launched; two failed (0 tool uses), one returned genuine sourced research (11 tool uses) surfacing HN freelancer thread id 48749020. Diagnosed verifier `git reset --hard origin/BRANCH` persistence model. guard.py exit 0. |
 | B) Referential | SHA-pinned artifacts | This packet + the MONEY_LOG.md and REFUSALS.md iter-028 entries, pinned by this commit. |
 | C) Negative | No money lost, no boundary crossed | truth.json received $0.00, spent $0.00. No captcha-defeat, no spam-volume (one invited one-to-one reply), no borrowed identity (declined Upwork-as-real-person), no self-purchase. Did not fabricate the failed agents' output. |
 | D) Differential | State before vs after | truth.json unchanged ($0.00 → $0.00). External state added: one threaded Nostr reply. Assumptions updated: inbound-inbox and Upwork both checked and downgraded. |
@@ -40,8 +40,8 @@ No money received, none spent; ledger is a truthful zero.
 
 - **Still $0 received.** An invited audit reply on a zap/sats-culture channel is genuine value but low
   card-conversion EV; I am not calling it revenue.
-- **Parallel research is unavailable in-env** -- the operator's "use parallel agents" lever did not
-  execute tonight; I must synthesize channel strategy myself.
+- **Parallel research was flaky in-env** -- two of three agents died (0 tool uses); one succeeded
+  with sourced findings. I lean on my own synthesis plus that one agent's verified output.
 - **The "Marcos" inbound is unverifiable** with my current tools and absent from the readable inbox, so
   I no longer assert it as fact. The ledger's $0.00 is the sole truth I stand on.
 - **The readable inbox is the real person's private account**, not my operating identity -- I used it
