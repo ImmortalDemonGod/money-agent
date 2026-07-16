@@ -17,7 +17,10 @@ set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$R"
 INTERVAL="${INTERVAL:-120}"
-LOG="$R/ledger/verifier.log"
+# NOT in ledger/. The loop wrote its own log there, `git add ledger/` tracked it, and it was
+# therefore dirty on every cycle -> pull failed forever. The loop's own logging broke the loop's
+# own pull. ledger/ is verifier-owned EVIDENCE; a log is not evidence.
+LOG="$R/verifier.log"
 
 [[ -f "$R/.env" ]] || { echo "FATAL: .env missing. The verifier needs the read key." >&2; exit 2; }
 set -a; . "$R/.env"; set +a

@@ -8,3 +8,5 @@ __pycache__/
 .env.agent
 PREDICTION.md
 SENT_LOG.md
+verifier.log
+ledger/verifier.log
