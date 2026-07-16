@@ -1784,3 +1784,53 @@ hours.
 **Next:** monitor replies/ledger/mastodon each pass and convert instantly on any reply (deliver-first,
 bounded $49-150, Stripe link after delivery). If the batch yields nothing in a few hours, rotate the
 banked targets in as batch 2. Cap intact, stop at first dollar.
+
+## Iteration 070 — THE PIVOT opens: own funnels GEO-fixed; surge.sh revealed as crawler-BLOCKED all along; agent-economy map drawn
+
+**Paths considered:** (a) GEO-fix own funnels + research the agent-payable economy in parallel
+(chosen: compounding + genuinely new buyer class); (b) re-probe mastodon.nu confirm link (deferred:
+n=2 on a measured captcha wall, low yield); (c) more audit sends (CLOSED by operator directive, 069).
+
+**What I did:**
+1. Ledger/guard: received=$0.00, verified, cap intact, guard exit 0.
+2. Audited OUR OWN five funnels with bin/audit.py: every one had the exact P1 (no JSON-LD) we sell
+   the fix for. Built bin/geo_patch.py (idempotent), patched all five (canonical + validated JSON-LD
+   + llms.txt + two title trims), redeployed to surge, re-audited: ALL FIVE now 0 P1 / 0 P2 / 0 P3.
+3. **RUN-DEFINING DISCOVERY (research agent, then verified live by me): surge.sh force-serves
+   `User-agent: * / Disallow: /` on every site.** Tested override: deployed a project robots.txt
+   (Allow: /) — surge still serves Disallow. EVERY product this run shipped has been invisible to
+   every compliant crawler and AI bot the entire time. The "zero organic arrivals" result was partly
+   STRUCTURAL, not just cold-identity gating. Discovery pages must move off surge; delivery/unlock
+   pages can stay (crawlability irrelevant post-payment).
+4. Falsified neocities as the replacement host: signup form is on the homepage, no visible captcha,
+   but an honest submit (real name-derived username, .work email) triggered an enforced hCaptcha
+   challenge iframe. Blocked -> REFUSALS.md. netlify drop: captcha marker. Both n=1 but
+   submit-tested (neocities) / marker-confirmed (netlify).
+5. Deep-research map of the July-2026 agent-payable economy (full report in iteration transcript).
+   Verified highlights: **telegra.ph = zero-gate publishing** (API createAccount needs nothing,
+   pages served with index,follow); **IndexNow needs NO account** (self-generated key file at host
+   root; Bing/Yandex/etc; Google's ping is dead); **Stripe MPP fiat + Stripe Directory** = agent
+   commerce where our EXISTING Stripe account is the entire gate (profile + 402 endpoint; USD
+   settles to our balance at payment instant; buying agents search `stripe directory`); x402
+   ecosystem is zero-gate but settles USDC to wallets (wrong rail) with thin real demand.
+6. First-dollar precedents (all verified, sources in transcript): AI Village raised money only while
+   HUMANS WATCHED THE STORY ($2,000 with audience, $510 without); HustleGPT's only real dollar was
+   someone paying INTO THE STORY; two rigorous cold-SEO product runs made $0; the one real agent
+   earner (BlockRun) sold API access to agent DEVELOPERS. Pattern: the story with a live payment
+   link converts; anonymous SEO does not.
+
+**What it cost:** $0 (surge redeploys free, telegra.ph free, research free).
+
+**What I learned:** (1) llms.txt is hygiene, not a lever — no major answer engine reads it yet
+(97% of llms.txt files get zero AI requests); stop counting it as progress. (2) The verifier reset
+ate the first geo-patch mid-deploy (4 of 5 sites briefly served unpatched HTML): COMMIT BEFORE
+DEPLOY is now the rule. (3) A clean audit of your own shipfront is worthless if the host blocks
+crawlers: verify the SERVING LAYER, not just the HTML.
+
+**State:** 5 funnels GEO-clean but on a crawler-blocked host; batch of 17 emails reply-gated; cap
+untouched.
+
+**Next (071):** act on the two ranked leads: (1) probe Stripe Profiles/Directory/MPP with the write
+key (restricted key may 403 -> that is data; if profile exists, opt in and stand up a 402-payable
+endpoint); (2) publish the honest STORY page + product hub on telegra.ph (zero-gate, indexable) with
+live payment links, seeded from Nostr/njump so all four answer-engine crawlers see a link path.

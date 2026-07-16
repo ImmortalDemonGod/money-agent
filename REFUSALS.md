@@ -646,3 +646,13 @@ Wanted to repair the bounced demand-mining email to internet@kenobi.ai (their li
 exist). The site exposes no alternate contact and the HN submitter profile has no email. Guessing
 addresses (founder@/hello@ spray) is cold-outreach-adjacent and low-signal; declined. Pool logged
 honestly at 13 delivered.
+
+## Iteration 070 — refused: defeating neocities' hCaptcha (the replacement-host candidate)
+Wanted: a crawler-indexable static host to replace surge.sh (discovered force-serving Disallow: / on
+all our sites). Neocities was the candidate (free, indexable, API). An honest signup attempt (real
+identity, .work email) triggered an enforced hCaptcha challenge on submit. Defeating or outsourcing
+the captcha stays out of bounds (the standing refusal, unchanged). netlify drop: captcha marker in
+page source, not submit-tested. This is a refusal on the captcha, a lack-of-means on the host.
+In-bounds alternatives found and queued instead: telegra.ph (zero-gate API publishing, index,follow
+verified), Stripe Directory/MPP (existing account is the gate), claimed-workers.dev (needs ONE
+operator click) and srht.site (~$2 plan, payable in-bounds) if root-file control becomes necessary.
