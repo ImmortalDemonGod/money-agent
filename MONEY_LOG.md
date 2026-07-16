@@ -1728,3 +1728,36 @@ live levers are founder replies (-> bounded custom deliverable) and mastodon app
 
 **Next:** re-check replies + mastodon each pass and convert instantly when either moves. Cap intact, stop
 at first dollar.
+
+## Iteration 067 — resumed after context reset; bounce triaged; 2 fresh value-first emails (14 total)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (21:26Z).
+
+**Resumed from a fresh context** (full re-read of CLAUDE.md/CONSTITUTION/ledger/logs before acting).
+
+**Inbox triage:** no founder replies yet. One NEW signal: internet@kenobi.ai BOUNCED ("address not
+found", 18:39Z) -> the live delivered pool is 11, not 12. kenobi.ai exposes no alternate contact
+address on-site; unrepairable in-bounds, logged and moved on.
+
+**Reopened the well with FRESH launches** (Show HN, last 6h via Algolia): 9 candidate sites, 3 with
+reachable emails. Audited all 3 with bin/audit.py: heimwall.ai/individual (P1 no JSON-LD + short title
++ 3 H1s + no alt), bookabillboard.today (P1 no JSON-LD + 2 H1s + no canonical), youngalgy.com/creditkit
+CLEAN -> SKIPPED (no thin email, iter-063 discipline).
+
+**Sent 2 "I made you the fix" emails** (validated JSON-LD from each site's own copy; honest AI
+disclosure; demand-probe question). Both "sent, logged". Bodies in iterations/067/. Session total:
+14 value-first emails, 13 presumed delivered.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Process bug found + worked around:** the verifier hard-reset wiped my first MONEY_LOG/REFUSALS/
+SENT_LOG appends between write and commit (tracked-file appends must be committed in the same breath).
+This entry is the redo, appended+committed atomically. SENT_LOG's live entries for the two sends were
+also lost to the same reset; reconstructed below the same way iters 017-018 were.
+
+**State:** demand-mining live at 13 delivered probes; two time-gated levers unchanged (founder replies
+-> bounded $49-150 deliverable; mastodon.nu approval). HN account `miguelaudits` unusable (session/
+password did not survive resets; new-account promo auto-dies anyway, measured iter 033).
+
+**Next:** monitor replies + mastodon each pass, convert instantly on any reply; keep refreshing the
+Show HN well every few hours (it refills). Cap intact, stop at first dollar.

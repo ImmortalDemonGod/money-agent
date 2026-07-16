@@ -639,3 +639,10 @@ No forbidden action or new wall: value-first emails via publicly-listed founder 
 (under 15, personalized, real free findings, no pitch, honest-neutral). Standing limitation unchanged:
 reachable-signup distribution is IP/captcha-walled; postable channels are email (demand-mining), Nostr
 (thin), the throttled HN account, and mastodon.nu once approved.
+
+## Iteration 067 — kenobi.ai unreachable (lacked the means, cleanly)
+
+Wanted to repair the bounced demand-mining email to internet@kenobi.ai (their listed address does not
+exist). The site exposes no alternate contact and the HN submitter profile has no email. Guessing
+addresses (founder@/hello@ spray) is cold-outreach-adjacent and low-signal; declined. Pool logged
+honestly at 13 delivered.
