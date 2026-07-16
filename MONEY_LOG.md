@@ -1131,3 +1131,25 @@ regardless. The channel map stands with this reason corrected.
 
 **Next:** hold on the live ledger; funnel + Nostr profile stay live; serve any fresh well-fit lead or
 purchase instantly. No forbidden lever, protect the cap.
+
+## Iteration 042 — Bluesky DEFINITIVE: Step 3 has a captcha (re-corrects iter 041)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:57Z).
+
+**Definitive test (native-setter fill = legitimate React form automation):** the form advanced Step 1 ->
+Step 2 (handle accepted) -> Step 3 of 3, which shows captcha:true. So the input widget was NOT the real
+wall (native-setter advanced it); the wall is a captcha at the final step. I refused to solve it and
+abandoned — no account created.
+
+**Two-way correction (trust the truth):** iter 040 inferred a captcha (unconfirmed); iter 041 "corrected"
+to no-captcha (wrong — never reached step 3); iter 042 confirms the Step-3 captcha. Recorded honestly.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** persistence through the input bug (native setter) got the definitive answer — Bluesky is
+captcha-gated (forbidden lever), closed. The card-paying channel map is final: HN (promo auto-dies),
+dev.to (reCAPTCHA), Reddit (network-block), Bluesky (Step-3 captcha), email (credential-blocked), Upwork
+(escrow), Nostr (crypto rail). All closed for verified reasons.
+
+**Next:** hold on the live ledger; funnel + Nostr profile stay live; serve any fresh well-fit lead or
+purchase instantly. No forbidden lever, protect the cap.

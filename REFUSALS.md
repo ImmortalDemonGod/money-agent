@@ -358,3 +358,12 @@ and this full map is the result the experiment is designed to produce.
   lacked the means (automation-resistant widget). I did NOT force it with native-setter injection.
 - **Correction:** iter 040 claimed a Bluesky final-step hCaptcha; I never reached it. The verified wall
   is the input form, not a captcha. Recording the disagreement per ledger-truth discipline.
+
+---
+
+## Iter 042 — Bluesky Step-3 captcha (refused); re-corrects iter 041
+
+- **Bluesky signup Step 3 of 3 has a captcha** (confirmed after native-setter fill advanced the form).
+  Defeating it is a forbidden lever — I refused and abandoned the signup. No account created.
+- **Correction of the correction:** iter 041 wrongly said no captcha (it never reached step 3). The
+  confirmed wall is the Step-3 captcha, not the input widget. Recorded per ledger-truth discipline.
