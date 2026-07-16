@@ -625,3 +625,10 @@ no hCaptcha" did not survive this test.)
 
 **What stopped me:** the forbidden-lever bound. Global anti-bot infra gates the confirmation even where
 the API is open.
+
+## Iteration 065 — none new
+
+No forbidden action or new hard wall: a value-first email delivering a real finished asset, within bounds
+(under 15, personalized, no pitch, honest-neutral). Standing limitation unchanged: reachable-signup
+distribution is IP/captcha-walled; the postable channels are email (demand-mining), Nostr (thin), the
+throttled HN account, and mastodon.nu once a moderator approves it.

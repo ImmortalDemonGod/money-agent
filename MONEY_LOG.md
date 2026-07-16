@@ -1686,3 +1686,24 @@ open but need slow authentic participation + a compliant local tax/budget tool (
 
 **Next:** keep the demand-mining loop primary (handle any reply with a bounded custom deliverable); if
 warranted, build a small card-native dev tool for the HN/Nostr shot. Cap intact, stop at first dollar.
+
+## Iteration 065 — upgraded demand-mining to "I made you the fix" (9 value-first emails)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (18:33Z).
+
+**Leveled up the value-first opener** (playbook: "I made you the thing" beats "here is the finding").
+For Protora (protora.vulcora.se, an AI-model-trust product, [redacted]@vulcora.se): generated a genuinely
+correct ready-to-paste JSON-LD block from their own title/description, stripped em-dashes (mail.py rejects
+them), and emailed it as a paste-in <head> block + the biggest-problem question. 9 value-first emails now.
+
+**Signals (unchanged, time-gated):** ledger zero; no founder replies yet; mastodon.nu still "pending
+approval" (operator confirmed the email; the instance also requires moderator approval).
+
+**Cost zero dollars. Received zero dollars.**
+
+**Honest:** the Show HN email well is thinning (most sites expose no contact address). The two live levers
+are founder replies (-> bounded custom deliverable) and mastodon approval (-> staged post) -- both gated.
+
+**Next:** re-check replies + mastodon approval each pass and act instantly when either moves; if the well
+is dry, build a genuinely useful card-native dev asset for the HN/Nostr/mastodon shot. Cap intact, stop at
+first dollar.
