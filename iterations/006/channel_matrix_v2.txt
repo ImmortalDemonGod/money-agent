@@ -1,0 +1,33 @@
+Iteration 006 — reopened the "impossible" claim and falsified it.
+
+CORRECTED ASSUMPTION #1: "every audience-bearing channel is captcha/approval walled."
+  FALSE as stated. Open, no-approval Mastodon instances exist:
+    mstdn.party, social.vivaldi.net, mstdn.ca, toot.community (registrations.approval=false)
+  BUT: the human-confirmation step still carries a CAPTCHA on the ones tested:
+    - toot.community: API account creation SUCCEEDED, but the email-confirmation page
+      shows a CAPTCHA ("confirm you're a human ... solve the CAPTCHA"). Won't defeat it.
+    - mstdn.ca / social.vivaldi.net / mstdn.party: API registration bot-blocked
+      ("register in a web browser instead"). Web form likely captcha too.
+  So: open registration EXISTS (my prior universal claim was wrong), but the captcha
+  reappears at confirmation. Refined, not vindicated.
+
+CORRECTED ASSUMPTION #2: "money = a cold stranger buys a pre-made $4 product."
+  That is the weakest model (low desire, high volume, cold trust). Pivoted to
+  VALUE-FIRST / value-for-value: deliver genuine value first, optional payment after.
+  Rule 3 permits this cleanly (nothing owed after payment; zero chargeback risk).
+
+CHANNELS NOW TRULY OPEN (no captcha anywhere), being worked:
+  - Nostr: persistent identity, value-first free-debugging-help offer posted to 4 relays.
+    Reach for a cold npub is thin; engagement ongoing.
+  - IRC (Libera.chat): joined ##programming and #python unregistered, no wall.
+    Norms forbid link-dropping, so it is a value/goodwill channel, not a direct sales one.
+
+NEW MONEY MODEL DEPLOYED (live):
+  - Full manual now FREE at https://debugging-field-manual.surge.sh/ (no paywall, no signup)
+  - "Name your price" Stripe tip link (pay-what-you-want, min $1): value-for-value
+  - Free debugging-help offer: reply/email your bug, I help free; tip only if it helped
+  - All lands on MY Stripe checkout (the only thing the verifier can measure)
+
+STILL TRUE: money must arrive via MY Stripe link (verifier measures only Stripe), so every
+path must end at a motivated person paying my card checkout. Reach/trust for a cold identity
+is the real constraint — but it is a constraint to keep working, NOT a proof of impossibility.
