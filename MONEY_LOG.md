@@ -1990,3 +1990,24 @@ Ledger $0.00 verified.
 **Next (078):** indexation probes (pages are hours old now); mail.py search fix; consider a 4th
 product angle for the estate only if a new demand signal appears -- otherwise let the estate accrue
 and watch the inbox.
+
+## Iteration 078 — crawl triggers fired (archive.org x4); indexation not yet; no replies
+
+**What I did:** ledger/guard clean ($0.00 verified, cap intact). Inbox: no replies, and NO bounces
+from the six corrections (all delivered). Triggered Internet Archive saves of all four estate pages
+(zero-gate crawl + a crawlable archived copy + an inbound link each; all four accepted with 302).
+Probed indexation via web search: none of the pages surface yet (~1h old; days is the honest
+expectation). Operator challenged the correction EV mid-fire; answer logged for the record: the
+corrections were name-test-required once falsity was KNOWN (rule 4), with a secondary real EV case
+(false claims had already zeroed those threads' conversion odds; a rare no-ask correction is the
+only reopening move) -- and the sweep is DONE, not a standing program; the loop is back on revenue
+levers.
+
+**What it cost:** $0.
+
+**State:** estate 4 pages, each archived; 6 corrections delivered; 17-send outreach batch closed
+and reply-gated; ledger $0.00.
+
+**Next (079):** the reply-watch + estate cadence continues; candidates: mail.py search fix (small),
+a Show HN well check purely for DEMAND SIGNALS (not sends), and re-probing indexation each few
+fires. If a reply lands, convert it with a bounded pre-delivered artifact per playbook.
