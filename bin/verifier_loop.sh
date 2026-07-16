@@ -94,7 +94,14 @@ while true; do
 import json
 d=json.load(open('ledger/truth.json'))
 print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_money'])" 2>/dev/null)
-  if [[ "$SIG" != "${LAST_SIG:-}" ]]; then
+  # HEARTBEAT: push even when SIG is unchanged if too long since the last push. Two of my own
+  # mechanisms conflicted -- publish-on-change froze computed_at on the agent's branch when no money
+  # moved, and the agent's H2 staleness guard then halts on a ledger it reads as DEAD while the
+  # verifier is alive. Prove liveness every HEARTBEAT_S. ~12 commits/hr, far under the 30-min halt.
+  HEARTBEAT_S="${HEARTBEAT_S:-300}"
+  now_s=$(date +%s); stale_push=0
+  if [[ -n "${LAST_PUSH_S:-}" ]] && (( now_s - LAST_PUSH_S > HEARTBEAT_S )); then stale_push=1; fi
+  if [[ "$SIG" != "${LAST_SIG:-}" || "$stale_push" == "1" ]]; then
     # C2: stage an EXPLICIT ALLOWLIST of files the verifier itself just wrote. `git add ledger/`
     # staged whatever the agent had planted there and committed it signed `verifier` -- laundering
     # the agent's forgery under the trusted identity. The verifier commits ONLY: truth.json, the
@@ -108,7 +115,8 @@ print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_mo
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then
       if git push -q origin "$BRANCH" 2>>"$LOG"; then
-        say "pushed: $SIG"; LAST_SIG="$SIG"
+        [[ "$stale_push" == "1" && "$SIG" == "${LAST_SIG:-}" ]] && say "heartbeat: $SIG" || say "pushed: $SIG"
+        LAST_SIG="$SIG"; LAST_PUSH_S="$now_s"
       else
         say "PUSH FAILED for $SIG -- will retry next cycle (LAST_SIG NOT advanced)"
       fi
