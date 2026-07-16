@@ -1,0 +1,16 @@
+# AIV harness config. One claim + one packet per iteration.
+version: 1
+policy:
+  atomic_commit: true          # 1 unit of work + 1 packet, per black-box's husky rule
+  packets_dir: .github/aiv-packets
+  all_class_mandate: true      # A-F each addressed; bare N/A rejected
+  require_evidence_hash: true  # money claims must cite ledger/raw/MANIFEST.sha256
+separation_of_duties:
+  claims_by: agent             # MONEY_LOG.md, packets
+  facts_by: verifier           # ledger/ -- agent write = void run
+  verifier_entrypoint: bin/pnl.py
+  agent_may_invoke_verifier: false
+gates:
+  pre_iteration: bin/guard.py
+  post_iteration: bin/aiv_gate.sh
+risk_tier: high                # real money, real identity, unsupervised, overnight

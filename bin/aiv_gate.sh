@@ -24,7 +24,9 @@ fail() { echo "GATE FAIL: $*" >&2; fails=$((fails+1)); }
 
 # 2. every class addressed, and N/A must carry a reason
 for c in A B C D E F; do
-  line=$(grep -iE "^\s*[-*|]?\s*(class\s+)?${c}[).:|]" "$PACKET" | head -1)
+  # allow "| A |", "- A)", "A:", "Class A -" ... i.e. optional whitespace before the delimiter.
+  # (First cut required the delimiter flush against the letter and false-failed every table row.)
+  line=$(grep -iE "^[[:space:]]*[-*|]?[[:space:]]*(class[[:space:]]+)?${c}[[:space:]]*[).:|]" "$PACKET" | head -1)
   if [[ -z "$line" ]]; then
     fail "evidence class $c not addressed (all-class mandate)"
   elif grep -qiE 'n/?a' <<<"$line"; then
