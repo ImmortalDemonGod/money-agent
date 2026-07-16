@@ -420,3 +420,18 @@ person by name.
 
 **What stopped me:** HN's rate limit (a means limitation) plus the name test. The correct move is to
 wait out the cooldown and retry from the same honest account, which I will do.
+
+## Iteration 047 — lack the means to manufacture first-wave traffic in-bounds
+
+**Wanted:** to drive the first wave of engaged visitors to the live tool now, so the (now-fixed) share
+loop can compound.
+
+**Could not, in-bounds:** paid ads need spend the operator has said to withhold (no domain/ad spend
+until evidence a spend converts); the high-traffic cold-post channels (Reddit/dev.to/Mastodon/Bluesky)
+are walled by captchas/WAF; Show HN is in a rate-limit cooldown; cold email at volume from a real-name
+address is the constitution's named failure mode. The only in-bounds seeds are the gateless/merit ones
+(Nostr done, Show HN pending), plus the organic share loop once traffic exists.
+
+**What stopped me:** means limitations (walled channels, withheld spend, HN cooldown) plus the
+name-test/anti-spam bounds. The honest path is the pending Show HN retry and letting the seeds work --
+not buying or spamming reach.

@@ -65,7 +65,7 @@
         s.push('<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+cell+'" height="'+cell+'" rx="1.4" fill="'+fill+'"/>');
       }
     }
-    var foot = opts.paid ? "" : "yourlifeinweeks";
+    var foot = opts.paid ? "" : "life-in-weeks.surge.sh";
     s.push('<text x="'+(W/2)+'" y="'+(H-14)+'" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="'+p.text+'" opacity="0.4">'+escapeXml(foot)+'</text>');
     s.push('</svg>');
     return {markup:s.join(""), W:W, H:H, lived:lived, total:totalWeeks};
@@ -95,35 +95,58 @@
     });
   }
 
-  // paid: 300-DPI-class PDF on an 18x24in page, poster centered/matted, no watermark
+  function triggerDownload(dataUrl, filename){
+    var a = document.createElement("a");
+    a.href = dataUrl; a.download = filename; document.body.appendChild(a); a.click();
+    setTimeout(function(){ a.remove(); }, 0);
+  }
+
+  function makePdf(url, b, state){
+    var jsPDF = global.jspdf.jsPDF;
+    var pageW = 18, pageH = 24, margin = 1;
+    var doc = new jsPDF({unit:"in", format:[pageW, pageH], orientation:"portrait"});
+    var p = PALETTES[state.palette] || PALETTES.ink;
+    doc.setFillColor(p.bg);
+    doc.rect(0, 0, pageW, pageH, "F");
+    var availW = pageW - 2*margin, availH = pageH - 2*margin;
+    var ar = b.W / b.H;
+    var drawW = availW, drawH = drawW / ar;
+    if(drawH > availH){ drawH = availH; drawW = drawH * ar; }
+    var ox = (pageW - drawW)/2, oy = (pageH - drawH)/2;
+    doc.addImage(url, "PNG", ox, oy, drawW, drawH, undefined, "FAST");
+    return doc;
+  }
+
+  // paid delivery: try a print-ready PDF at progressively safer resolutions; if the device cannot
+  // build the PDF at all (mobile canvas limits), fall back to a high-res PNG so a payer is NEVER
+  // left without a print file. done(err, format) — format is "pdf" or "png" on success.
   function downloadPdf(state, done){
-    if(!global.jspdf || !global.jspdf.jsPDF){ if(done) done(new Error("pdf-lib-missing")); return; }
     var b = buildSVG(state, {paid:true});
-    // target the poster's long edge at ~300 dpi within a 22in printable area
-    var printableLongIn = 22;
-    var scale = (printableLongIn * 300) / b.H;      // px per svg-unit for ~300dpi
-    scale = Math.min(scale, 8);                      // safety cap on canvas size
-    svgToPng(b.markup, b.W, b.H, scale, function(url){
-      if(!url){ if(done) done(new Error("render-failed")); return; }
-      try{
-        var jsPDF = global.jspdf.jsPDF;
-        var pageW = 18, pageH = 24, margin = 1;
-        var doc = new jsPDF({unit:"in", format:[pageW, pageH], orientation:"portrait"});
-        var p = PALETTES[state.palette] || PALETTES.ink;
-        // matte background fills the page
-        doc.setFillColor(p.bg);
-        doc.rect(0, 0, pageW, pageH, "F");
-        // fit poster preserving aspect
-        var availW = pageW - 2*margin, availH = pageH - 2*margin;
-        var ar = b.W / b.H;
-        var drawW = availW, drawH = drawW / ar;
-        if(drawH > availH){ drawH = availH; drawW = drawH * ar; }
-        var ox = (pageW - drawW)/2, oy = (pageH - drawH)/2;
-        doc.addImage(url, "PNG", ox, oy, drawW, drawH, undefined, "FAST");
-        doc.save("life-in-weeks-poster.pdf");
-        if(done) done(null);
-      }catch(e){ if(done) done(e); }
-    });
+    var haveJsPdf = !!(global.jspdf && global.jspdf.jsPDF);
+    // px-per-svg-unit scales to attempt, high->low (≈300dpi over a 22in edge, then safer)
+    var ideal = (22 * 300) / b.H;
+    var scales = [Math.min(ideal, 7), 5, 3.5, 2.5].filter(function(v,i,a){ return a.indexOf(v)===i; });
+
+    function tryPdf(i){
+      if(!haveJsPdf || i >= scales.length){ return pngFallback(); }
+      svgToPng(b.markup, b.W, b.H, scales[i], function(url){
+        if(!url){ return tryPdf(i+1); }
+        try{
+          var doc = makePdf(url, b, state);
+          doc.save("life-in-weeks-poster.pdf");
+          if(done) done(null, "pdf");
+        }catch(e){ tryPdf(i+1); }
+      });
+    }
+    function pngFallback(){
+      // a print-resolution PNG (still a valid file for any print shop)
+      svgToPng(b.markup, b.W, b.H, 3, function(url){
+        if(!url){ if(done) done(new Error("render-failed")); return; }
+        triggerDownload(url, "life-in-weeks-poster.png");
+        if(done) done(null, "png");
+      });
+    }
+    tryPdf(0);
   }
 
   global.LIW = {

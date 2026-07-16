@@ -79,6 +79,7 @@
       <div class="legend" id="legend"></div>
       <div class="actions">
         <button class="btn-ghost" id="dlPng" type="button">Download PNG (free)</button>
+        <button class="btn-ghost" id="share" type="button">Share</button>
         <button class="btn-primary" id="buy" type="button" style="margin-top:0">Get the print poster — $9</button>
       </div>
       <div class="sell">
@@ -158,6 +159,20 @@
   $("render").onclick = draw;
 
   $("dlPng").onclick = function(){ if(!lastState){ draw(); if(!lastState) return; } LIW.downloadPng(lastState); };
+
+  $("share").onclick = function(){
+    var url = "https://life-in-weeks.surge.sh";
+    var text = "Your Life in Weeks — every week of your life on one page, made privately in your browser.";
+    if(navigator.share){ navigator.share({title:"Your Life in Weeks", text:text, url:url}).catch(function(){}); return; }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){
+        var btn=$("share"), old=btn.textContent; btn.textContent="Link copied!";
+        setTimeout(function(){ btn.textContent=old; }, 1500);
+      }, function(){ window.prompt("Copy this link:", url); });
+      return;
+    }
+    window.prompt("Copy this link:", url);
+  };
 
   $("buy").onclick = function(){
     var state = readState();

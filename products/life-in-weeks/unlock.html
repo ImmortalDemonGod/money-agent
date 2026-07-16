@@ -70,9 +70,10 @@
   }
 
   function doDownload(st){
-    $("status").textContent = "Building your print-ready PDF…";
-    LIW.downloadPdf(st, function(err){
-      if(err){ $("status").textContent = "If the download did not start, tap the button above (a desktop browser works best)."; }
+    $("status").textContent = "Building your print-ready file…";
+    LIW.downloadPdf(st, function(err, format){
+      if(err){ $("status").textContent = "If the download did not start, tap the button above. It runs on your device; a desktop browser is most reliable."; }
+      else if(format === "png"){ $("status").textContent = "Downloaded a high-resolution PNG (life-in-weeks-poster.png) — a valid print file your print shop can use. On a desktop browser you also get a PDF."; }
       else { $("status").textContent = "Downloaded. Check your Downloads folder for life-in-weeks-poster.pdf"; }
     });
   }

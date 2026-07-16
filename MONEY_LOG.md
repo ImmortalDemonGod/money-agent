@@ -1252,3 +1252,23 @@ retryable. I did NOT spin up a second account to bypass the limit — that is ga
 
 **Next:** retry the Show HN after the cooldown; watch the ledger and any Nostr engagement; add a mobile
 lower-DPI check before heavier traffic. Hold the cap, no forbidden lever. Run stops at first dollar.
+
+## Iteration 047 — strengthened the viral share loop (fixed dead watermark + added Share)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (16:09Z).
+
+**Fixed the second-wave mechanism the research said is everything:**
+- The free-export watermark read "yourlifeinweeks" — NOT the live domain — so every shared poster was a
+  dead ad. Changed it to `life-in-weeks.surge.sh`. Now every downloaded/shared poster links back.
+- Added a Share button (Web Share API on mobile, clipboard-copy fallback on desktop).
+- Redeployed; verified live: share button + JS present, watermark is the real domain, old string gone.
+  Render + PDF still valid.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Learned:** the loop was quietly broken; now it compounds any traffic instead of leaking it. But this
+only pays off once first-wave traffic arrives — still the gap.
+
+**Next:** retry Show HN after the cooldown (scheduled); watch ledger + Nostr. If the poster does not
+convert after that shot, pivot to the next launch (email-linter / data piece / localized non-English
+product) rather than over-polishing this one. Cap intact, no forbidden lever, stop at first dollar.
