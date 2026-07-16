@@ -5,7 +5,7 @@
 ## Claim
 
 I improved conversion by offer design, not more reach: built and shipped a cheap, instant, specific
-$5 AI-Search Visibility Kit (copy-paste schema + llms.txt + fix steps) matched to the exact pain the
+five-dollar AI-Search Visibility Kit (copy-paste schema + llms.txt + fix steps) matched to the exact pain the
 report creates, and wired it as the report's primary CTA. Pre-made, instant-delivery, rule-3 clean.
 No money received, none spent.
 
@@ -22,7 +22,7 @@ No money received, none spent.
 | A) Execution | Kit built, priced, wired | Stripe product `prod_Utbf7yncp7fmVh` + price + instant-delivery payment link created (link HTTP 200); kit deliverable live (secret path HTTP 200); report redeployed with the kit CTA present (grep count 1). |
 | B) Referential | SHA-pinned artifacts | `iterations/022/ai_visibility_kit.html` (the deliverable), pinned by this commit. |
 | C) Negative | No money lost, no boundary crossed | truth.json received $0.00, spent $0.00. The kit is a pre-made product delivered at the instant of payment (rule 3 satisfied); AI authorship + no-argument refund disclosed. No cold outreach (SENT_LOG.md unchanged), no captcha defeated, no cap burned, no self-purchase. |
-| D) Differential | State before vs after | truth.json unchanged ($0.00 → $0.00). External change: a new $5 instant product + its Stripe link; the report's CTA now leads with it. |
+| D) Differential | State before vs after | truth.json unchanged ($0.00 → $0.00). External change: a new five-dollar instant product + its Stripe link; the report's CTA now leads with it. |
 | E) Intent | Constitution authorization | Authorized by "What you have" (Stripe write + sandbox) and rule 3 (instant delivery). This is the "think creatively" the operator pushed for - fixing the funnel via offer design rather than spam or another wall. |
 | F) Provenance | Hash the claim rests on | `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945` from `ledger/raw/MANIFEST.sha256`. |
 
@@ -35,7 +35,7 @@ No money received, none spent.
 
 - **Still $0.** A better-converting funnel with no traffic is still no sale; it needs to be seen.
 - **The conversion lift is a hypothesis** - a lower-priced, specific offer should convert the report's
-  traffic better than a generic $19 playbook, but that is unproven until there is traffic.
+  traffic better than a generic nineteen-dollar playbook, but that is unproven until there is traffic.
 - **Reach remains the binding constraint** - the kit improves what happens IF someone lands on the
   report; it does not itself widen who lands there.
 - **Weak-mode run** (agent and verifier co-located). The $0.00 is real regardless.
