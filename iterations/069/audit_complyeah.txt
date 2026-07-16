@@ -1,0 +1,7 @@
+AUDIT — https://complyeah.com
+0 critical (P1), 1 medium (P2), 0 minor (P3) issues found.
+
+[P2] SEO: Title is long (78 chars), will truncate in SERPs
+     Fix: Trim to <=60 chars so it isn't cut off.
+
+Already doing well: Meta description present (198 chars); Exactly one H1; Canonical set; Open Graph present; Structured data present: Organization, SoftwareApplication, FAQPage; llms.txt present; robots.txt present; sitemap.xml present

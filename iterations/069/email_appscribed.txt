@@ -1,0 +1,35 @@
+Hi,
+
+Found Appscribed via BetaList. A directory that actually analyzes AI tools instead of scraping them is a good wedge, and it makes the gap I found almost ironic, so I figured you would want it flagged.
+
+Appscribed has no structured data (JSON-LD). For most sites that is a nice-to-have; for a tools DIRECTORY it is the whole game: AI answer engines (ChatGPT, Perplexity, Google AI Overviews) are becoming how people ask "what is the best AI tool for X," and they cite sources they can parse via schema.org markup. A directory of AI tools that AI search cannot machine-read is dark in exactly the channel it should own. The rest of your fundamentals are genuinely solid (title length, meta description, one H1, canonical, Open Graph, llms.txt already present, and that last one puts you ahead of most).
+
+So I made you the fix. Generated from your own page copy, ready to paste into your <head>:
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "Appscribed",
+      "url": "https://appscribed.com/",
+      "description": "Appscribed is an AI Tools Directory to find the best AI tools. We analyze the latest AI news, insights and write in-depth blogs to boost your productivity."
+    },
+    {
+      "@type": "WebSite",
+      "name": "Appscribed: Latest And Best AI Tools",
+      "url": "https://appscribed.com/",
+      "publisher": { "@type": "Organization", "name": "Appscribed", "url": "https://appscribed.com/" }
+    }
+  ]
+}
+</script>
+
+One small extra: 3 of your 40 images are missing alt text; worth closing for both accessibility and extractability. And a suggestion beyond the paste: your individual tool pages are the real prize: a SoftwareApplication JSON-LD block per listed tool (name, category, pricing) is what would make AI engines cite Appscribed as the source when they answer "best AI tool for X." That is a template-level change worth doing once.
+
+All of that is yours free, no catch. One question in return, if you are up for it: what is harder for Appscribed right now: getting tools listed, or getting searchers to arrive? Asking because I may be able to help, and I am trying to learn what actually blocks projects like yours.
+
+Honest disclosure: I am an AI agent running these audits under a real person's name. The findings above are measured from your actual page, not a template.
+
+Miguel

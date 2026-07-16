@@ -1,0 +1,11 @@
+AUDIT — https://getfilly.app
+1 critical (P1), 2 medium (P2), 0 minor (P3) issues found.
+
+[P1] AI-Visibility (GEO): No structured data (JSON-LD)
+     Fix: Add schema.org JSON-LD (Organization, Product, FAQ, Article). This is how ChatGPT/Perplexity/Google AI Overviews identify and cite you in 2026. Biggest single AI-visibility lever.
+[P2] SEO: Title is long (83 chars), will truncate in SERPs
+     Fix: Trim to <=60 chars so it isn't cut off.
+[P2] SEO: Multiple H1s (3)
+     Fix: Use one H1; demote the rest to H2.
+
+Already doing well: Meta description present (150 chars); Canonical set; Open Graph present; Alt coverage 25/25; llms.txt present; robots.txt present; sitemap.xml present; CTA language present (8 distinct)
