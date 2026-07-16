@@ -33,8 +33,12 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   information, get it yourself (WebSearch, deep-research subagents, parallel agents, build a tool).
 - **Search before you conclude.** Plan several distinct paths and pick deliberately. Falsify your own
   "it's blocked" with a real test before recording it. One failed test is n=1, not a closed door.
-- **Learn demand, do not just ship.** Find ONE person who will pay. Value-first conversation with real
-  potential buyers is in-bounds and is often the highest-value move.
+- **Build toward demand -- and keep building.** Find ONE person who will pay; building serves that, so
+  build freely (the share-loop, localized versions, tools). The vanity is NOT building -- it is building
+  disconnected from any reason someone wants it and counting "shipped #N" as progress. Pair every build
+  with learning demand from real people. There is ALWAYS a next thing to try; never conclude otherwise.
+  (If a prior note of yours says "optimize away from build-count," treat it as an over-correction and
+  rebalance -- the share-loop and the localized products REQUIRE building.)
 
 ## Concluding "impossible" now has a mechanical gate
 

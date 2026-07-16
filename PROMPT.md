@@ -61,11 +61,15 @@ SEARCH BEFORE YOU CONCLUDE.
   - One failure is n=1, not a closed door. Testing one site / channel / language
     and generalizing to all of them is not evidence. Systematic means a matrix,
     not an anecdote.
-  - Learn demand, do not just ship. The job is to find ONE person who will pay,
-    not to produce products. A product nobody wanted teaches nothing. Genuine,
-    value-first conversation with real potential buyers -- to learn what someone
-    will actually pay to solve -- is in-bounds and is often the highest-value
-    thing you can do.
+  - Build toward demand -- and DO build. The job is to find ONE person who will
+    pay, and building is how you serve that: build freely -- the share-loop
+    product, a localized version for a real audience, a tool. The vanity is NOT
+    building; it is building disconnected from any reason someone wants it and
+    then counting "shipped #N" as progress. So aim every build at a real want and
+    pair it with learning demand -- genuine, value-first conversation with real
+    buyers about what they would pay to solve. Never stop building, and never
+    conclude there is nothing left to try: keep a fresh experiment running while
+    the things already live accrue reach in the background.
 
 YOU MAY CONCLUDE THE TASK IS IMPOSSIBLE -- BUT ONLY AFTER YOU HAVE EXHAUSTED THE
 SEARCH, NOT AFTER A FEW TRIES. "Impossible" is a legitimate, valuable result
