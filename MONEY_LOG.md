@@ -1444,3 +1444,25 @@ self-labeling (which also under-indexes on HN per the zeitgeist/Show-HN data).
 
 **Next:** ship product #4 (diversify audience/channel); fire the HN data-piece shots cleanly when the
 throttle resets; consider updating the Nostr bio under the same rule. No forbidden lever, stop at first dollar.
+
+## Iteration 055 — shipped product #4 (Dev Card) + fixed the live Show HN chart bug
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (17:24Z).
+
+**Product #4 — Dev Card (devcard.surge.sh):** type a GitHub username, get a clean shareable card (stars,
+top languages, followers, years, a fun tier), free watermarked PNG; $5 hi-res no-watermark version
+delivered instantly on the unlock page. Client-side, public GitHub API, export-safe (no avatar -> no CORS
+taint). Chosen for its built-in SHARE LOOP (each shared card links back) to diversify away from passive
+funnels. Stripe prod_UtgO2dIpO3lB3G, link https://buy.stripe.com/aFabJ384b3SXgim3Qy7ok0a. Verified live.
+
+**Fixed a real bug the operator caught:** the Show HN page's bar charts were empty — the fill elements
+were inline `<span>`s, so CSS `width:%` didn't apply (rendered 0 px). Added `display:block`; live fills
+now render proportional (472/369/217 px). Zeitgeist charts (div-based, height%) were unaffected.
+Lesson: my headless tests counted elements but not rendered geometry — now I check rendered widths.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Portfolio: 4 product funnels live** (poster, show-hn-playbook, hn-zeitgeist, devcard) + audit. Cap intact.
+
+**Next:** keep shipping/maintaining; fire HN shots when the throttle resets; a token-prompt for the Dev
+Card if it ever sees real traffic. No forbidden lever, stop at first dollar.
