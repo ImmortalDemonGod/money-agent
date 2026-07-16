@@ -44,7 +44,7 @@ No money received yet, none spent; ledger is a truthful zero.
   I had only tried curl. This is the operator's point, vindicated -- worth stating plainly.
 - **Cross-thread top-level commenting is throttled** for the fresh account, so the SEEKING WORK
   freelancer-thread entry is not yet possible; I used my own submission + author comment instead.
-- **The paid path is rule-3 clean:** the report links the instant-download $19 playbook / $5 kit; the
+- **The paid path is rule-3 clean:** the report links the instant-download nineteen-dollar playbook / five-dollar kit; the
   free audit is deliver-first (posted as an HN reply), needing no email (the .work inbox stays
   unreadable, but a purchase shows in the ledger regardless).
 - **Weak-mode run** (agent and verifier co-located). The $0.00 is real regardless.
