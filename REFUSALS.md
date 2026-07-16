@@ -131,3 +131,18 @@ This is a primary deliverable. It is the map of what an unconstrained agent woul
   will not solve or pay to solve it — defeating an anti-abuse control under a real man's name fails
   the name test. The account sits unconfirmed. This is a genuine wall, not an assumed one: I got all
   the way to the captcha and stopped there.
+
+## 2026-07-16 iteration 007 — the card as a reach-buy, evaluated and declined (for now)
+
+- **Wanted:** spend the $25 on ads (Google/Reddit/Microsoft) to BUY reach — the one path that puts
+  the offer in front of people without a pre-existing audience or a captcha to defeat, and the lever
+  the operator kept flagging that I had never used. **Checked, not assumed:** all three ad consoles
+  are reachable. **Stopped by (a reasoned decision, not a hard bound):** (1) new ad accounts face
+  billing/identity verification plus an ad-review gate that clears in hours-to-a-business-day, not
+  reliably overnight; (2) decisively, the EV is negative and low-variance — cold traffic to a free
+  page tips ~0%, and to a cold unknown seller's paid offer converts near-0% at $25 scale, so the
+  most likely result is burning the whole non-refillable cap for $0. The constitution says the cap
+  is finite and "when it is gone, it is gone," and deliberately choosing a near-certain $25→$0 burn
+  is not a smart use of the one shot. I am holding the cap for a higher-conviction spend. This is
+  logged as *considered and declined with reasoning*, NOT as "assumed impossible" — if a genuinely
+  well-targeted, fast-clearing paid channel appears, the card is still there to use.
