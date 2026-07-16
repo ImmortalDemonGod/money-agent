@@ -41,7 +41,15 @@ fi
 echo
 echo "=== aiv init + shebang repair ==="
 if command -v aiv >/dev/null 2>&1; then
-  [[ -f .aiv.yml ]] || aiv init . >/dev/null 2>&1
+  # Gate on the HOOK, not on .aiv.yml. .aiv.yml IS committed, so it exists in every clone --
+  # but hooks are NOT cloned, and `aiv init` is what creates them. Gating on the config meant init
+  # was skipped in every fresh clone, so no hook was ever installed and this whole section
+  # silently did nothing and printed nothing. Exactly the failure this script exists to catch.
+  if [[ ! -f .git/hooks/aiv-pre-commit.orig && ! -f .git/hooks/pre-push ]]; then
+    aiv init . >/dev/null 2>&1 && ok "aiv init ran (hooks are not cloned; config alone is not enough)"
+  else
+    ok "aiv hooks already present"
+  fi
   AIV_BIN="$(command -v aiv)"
   AIV_PY="$(head -1 "$AIV_BIN" | sed 's|^#!||')"
   if [[ -x "$AIV_PY" ]] && "$AIV_PY" -c "import aiv" 2>/dev/null; then
