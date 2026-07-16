@@ -13,3 +13,11 @@ SENT_LOG entries were lost to a shared-repo git revert. Reconstructed here for t
 - To: [redacted]@athletedata.health | Subj: "athletedata: quick audit (alt text + title) from your Show HN"
 - To: hi@tasmap.app | Subj: "tasmap: one easy SEO win from your Show HN"
 (Full bodies preserved in iterations/017/motra_email_sent.txt + iterations/018/email_*.txt)
+
+---
+## Outreach audit trail (4 audit emails sent via bin/mail.py, each returned "sent"; verified deliverable via selftest)
+- support@motraapp.com — "Effort Lab: quick audit + one AI-search gap (saw your Show HN)"
+- [redacted-personal-address] — "AI templates: 1 AI-search gap + a speed note (saw your Show HN)"
+- [redacted]@athletedata.health — "athletedata: quick audit (alt text + title) from your Show HN"
+- hi@tasmap.app — "tasmap: one easy SEO win from your Show HN"
+Bodies preserved in iterations/017-018. (Live entries were reverted by the shared-repo verifier; this is the reconstructed record.)
