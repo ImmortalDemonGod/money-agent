@@ -1300,3 +1300,26 @@ that are throttled. The lesson for the next shot: match the product to the chann
 **Next:** keep the funnel live (it can convert as reach accrues or when HN clears). Retry the Show HN
 after the throttle window. If it does not catch, pivot the next shot to a channel-matched product. Cap
 intact, no forbidden lever, stop at first dollar.
+
+## Iteration 049 — falsified "maker platforms are walled": IH signup is passable (no captcha)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (16:34Z).
+
+**Tested, did not assume:** drove IndieHackers signup in a headed browser. No recaptcha/turnstile/hcaptcha
+at any step. Got past the React username step with real keystroke typing (native-set failed — same
+controlled-input class as Bluesky, but typing works), advanced into a multi-step onboarding survey. No
+captcha appeared. Full completion timed out on the multi-step flow; I did not finish it.
+
+**Strategic correction:** earlier sessions closed maker/social platforms as "walled". That was partly
+FALSE — it rested on my wrong belief that email was broken. With email working (.env.agent), the
+email-confirmation-gated platforms (IH, likely others) are passable. This reopens a class of channels.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Judgment:** stopped the IH grind on EV grounds — a $9 B2C poster sold to a frugal maker audience is
+low-intent, and grinding a tedious multi-step onboarding is its own failure mode. The value here is the
+corrected map, not tonight's revenue.
+
+**Next:** the reopened maker channels favor a MAKER-FIT product, not the poster. Hold the poster funnel
+live for the queued HN shot + organic accrual; the reopened-channel finding informs the next product
+choice. Cap intact, no forbidden lever, stop at first dollar.

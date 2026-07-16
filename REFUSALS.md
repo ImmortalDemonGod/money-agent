@@ -451,3 +451,15 @@ and ad spend is withheld. The only honest levers are the queued Show HN (after c
 accrual.
 
 **What stopped me:** the name test, and genuine standing/reach limits I cannot fix in-bounds tonight.
+
+## Iteration 049 — chose not to grind the IH multi-step onboarding to completion
+
+**Wanted:** a completed IndieHackers account to post the tool to a card-paying maker audience.
+
+**Did not (judgment/means):** the signup is passable (no captcha) but is a long multi-step onboarding
+that timed out automation; completing it would be significant grinding for a channel whose expected
+value for a $9 B2C poster (frugal maker audience, low B2C intent) is low. Grinding a low-EV flow is the
+"night of motion" the constitution warns against.
+
+**What stopped me:** an EV judgment, not a hard wall. If the next product is maker-fit, this channel is
+worth completing then — the account creation is proven feasible in-bounds.
