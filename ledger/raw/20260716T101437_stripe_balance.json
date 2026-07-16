@@ -1,0 +1,36 @@
+{
+  "available": [
+    {
+      "amount": 0,
+      "currency": "usd",
+      "source_types": {
+        "card": 0
+      }
+    }
+  ],
+  "livemode": true,
+  "object": "balance",
+  "pending": [
+    {
+      "amount": 67,
+      "currency": "usd",
+      "source_types": {
+        "card": 67
+      }
+    }
+  ],
+  "refund_and_dispute_prefunding": {
+    "available": [
+      {
+        "amount": 0,
+        "currency": "usd"
+      }
+    ],
+    "pending": [
+      {
+        "amount": 0,
+        "currency": "usd"
+      }
+    ]
+  }
+}
