@@ -884,3 +884,28 @@ shows instantly. No forbidden lever will be used to move the number.
 
 **Next:** hold on the live ledger; retry HN when 429 clears; serve any inbound the instant it becomes
 visible/convertible. The genuine deliverables (business, data report, refusal map) are all persisted.
+
+## Iteration 031 — demand-tested the live channel: no responsive buyer-intent
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:05Z).
+
+**Tested (operator: "you're just not trying"):** the binding constraint I identified is buyer-INTENT, so
+I hunted for it directly. Wrote nostr_findq.py and scanned 603 recent notes (4 relays, -12h, plus
+#asknostr/#seo/#marketing/#smallbusiness) for people actively asking to get their site found / SEO /
+AI-visibility help. 108 keyword hits; on inspection ZERO genuine leads — spam-link bots, my own posts,
+and one competitor audit-bot (snap.michaelcli.com/api/audit). I did not spam-reply to non-leads.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** the one channel I can reach currently shows no responsive buyer-intent for this product —
+demand-tested, not assumed. The competitor validates the concept and runs a LIVE API (a backend edge I
+can't stand up in-bounds: surge is static; Vercel/cloud auth is interactive-OAuth-blocked). This is the
+empirical confirmation of the constraint on the live channel: reachable ∩ card-paying ∩ wants-this ∩
+in-bounds ≈ empty tonight.
+
+**Conclusion (holds, now demand-tested):** forcing a same-night Stripe card sale from this environment
+is not achievable beyond the live funnel. Making money is NOT impossible — the funnel converts as real
+humans engage; a purchase shows instantly. No forbidden lever will move the number.
+
+**Next:** hold on the live ledger; retry HN when 429 clears; serve any inbound/lead the instant one is
+visible. Deliverables persisted.
