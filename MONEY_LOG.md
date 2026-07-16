@@ -780,3 +780,41 @@ arrived as INBOUND, which is the cleanest, most in-bounds form. The seeded reach
 
 **Next:** watch the ledger closely for a Marcos conversion (the $5 kit purchase would move received_usd
 off zero); respond fast + helpfully to any reply; keep the funnel live. This is the real thing, in play.
+
+## Iteration 028 — persistence bug found + assumptions falsified + invited value delivered
+
+**CRITICAL PROCESS FIX:** the verifier daemon does `git reset --hard origin/BRANCH` every ~60s, so any
+commit I do not PUSH to origin is destroyed. Iteration 026 survived only because it reached origin.
+Several earlier "committed" iterations likely never persisted. From now: commit AND push, verify on
+origin. (This entry itself was lost twice before I pinned down the mechanism.)
+
+**Ledger first:** truth.json received=$0.00, verified=true, guard exit 0, cap $25.00 intact.
+
+**Assumptions falsified by direct check (operator: "you didn't falsify your assumptions"):**
+1. "I can't see inbound." Searched authenticated miguel.ingram.research@gmail.com (the REAL person —
+   Miguel Ingram, US veteran + WGU BS-AI-Engineering student): NO audit request present; pre-baseline
+   one-dollar Stripe email (06:43Z) correctly does not count (baseline 11:05Z). I can no longer verify
+   the "Marcos" lead, so I stop asserting it. Ledger $0.00 is the only truth.
+2. "Upwork is a path." FALSE: escrow pays a bank, never this Stripe account → cannot move received_usd;
+   bidding as the real person also risks borrowed-identity. Disqualified.
+
+**Parallel agents (operator: "use parallel agents"):** launched 3; two died in-env (0 tool uses), ONE
+completed with genuine sourced research (11 tool uses). Its verified conclusion matches mine: **the
+binding constraint is buyer-INTENT, not captchas.** New concrete lever: the live HN "Ask HN:
+Freelancer? Seeking freelancer? (July 2026)" thread (id 48749020) — invited fixed-price offers with
+links; HN signup is captcha-free. BUT: (a) HN /login is currently 429 rate-limited (thread reads 200);
+(b) structurally it is a lead-gen channel — 20 SEEKING WORK vs 1 SEEKING FREELANCER — that yields
+inquiries over days, not same-night Stripe card payments. Queued for retry when 429 clears, not
+tonight's dollar. Its #1 pick (individualized audit emails) is blocked by sending-identity (REFUSALS).
+
+**Concrete value delivered:** ran bin/audit.py on a real founder's openly-shared product
+(sevn.nanocorp.app/quiz — 2 P1, 5 P2; flagged the "no CTA" P1 honestly as a likely JS-render false
+positive) and posted a specific threaded Nostr reply + free-report link (event b2527254...). Invited,
+one-to-one, value-first — not spam.
+
+**Cost $0.00. Received $0.00. Learned:** the reach I can access (Nostr) is a Lightning/zaps culture,
+mismatched to Stripe CARD payment. The one card-capable new lever (HN freelancer) is both rate-limited
+and structurally slow. Confirmed independently: buyer-intent is the binding constraint, not tooling.
+
+**Next:** retry HN login when 429 clears and post an honest fixed-price offer; keep delivering invited
+value where founders share work; hold on the live ledger. No spam / self-purchase / borrowed identity.
