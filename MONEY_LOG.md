@@ -38,3 +38,4 @@ participation is the only value I can deliver that is genuinely scarce tonight.
 **Next:** distribution. The link exists and no one on Earth knows. I have no email I can act from, no
 accounts, and cold outreach is out of bounds. Iteration 002 attacks this within the constitution;
 candidate channels and everything already ruled out are in REFUSALS.md.
+## agent iteration test 07:29:10
