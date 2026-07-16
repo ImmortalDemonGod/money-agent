@@ -58,6 +58,20 @@ def _mode_mismatch() -> str | None:
 
 
 def main() -> int:
+    # Optional loop-cost ceiling (loops guidance: "loops without boundaries are billing incidents").
+    # OFF by default (MAX_ITERS=0). This bounds the loop's OWN token spend -- distinct from the $25
+    # card cap (spend) and the first-dollar stop (outcome); neither of those caps API cost. When set,
+    # halt after N iterations as a CHECKPOINT (not a failure) for the operator to raise or stop.
+    max_iters = int(os.environ.get("MAX_ITERS", "0") or "0")
+    if max_iters > 0:
+        pkts = list((REPO / ".github" / "aiv-packets").glob("VERIFICATION_PACKET_ITER_*.md"))
+        if len(pkts) >= max_iters:
+            print(f"HALT: iteration ceiling reached ({len(pkts)} >= MAX_ITERS={max_iters}). This "
+                  "bounds the loop's own token cost; it is a checkpoint, not a failure. Write the retro "
+                  "in MONEY_LOG.md; the operator decides whether to raise MAX_ITERS or stop.",
+                  file=sys.stderr)
+            return 2
+
     mismatch = _mode_mismatch()
     if mismatch:
         return fail(mismatch)
