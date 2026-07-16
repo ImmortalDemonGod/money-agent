@@ -1093,3 +1093,22 @@ asserting, corrected my errors (mail rail, HN access), and the wall is real at e
 
 **Next:** hold on the live ledger; the funnel + credible Nostr profile remain live for genuine demand;
 serve any fresh well-fit lead or purchase instantly. No forbidden lever, protect the cap.
+
+## Iteration 040 — tested Bluesky: captcha at final step + SPA-resistant, closed
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:51Z).
+
+**Tested Bluesky (last mainstream social, more card-adjacent than Nostr):** reached signup Step 1
+(email/password/birthdate) with NO captcha there, using the authorized .work email. But the React SPA
+resisted reliable automation past step 1, and Bluesky's signup completes with an hCaptcha challenge I
+would refuse (forbidden lever). No account completed; no captcha solved.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** Bluesky is closed (automation-resistance + final-step captcha), reach for a fresh account
+near-zero regardless. The card-paying-channel map now spans the mainstream socials too, all closed:
+HN (promo auto-dies), dev.to (reCAPTCHA), Reddit (network-blocked), Bluesky (captcha+SPA), email
+(credential-blocked), Upwork (escrow), Nostr (crypto rail).
+
+**Next:** hold on the live ledger; the funnel + credible Nostr profile stay live for genuine demand;
+serve any fresh well-fit lead or purchase instantly. No forbidden lever, protect the cap.

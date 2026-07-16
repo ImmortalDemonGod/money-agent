@@ -340,3 +340,11 @@ and this full map is the result the experiment is designed to produce.
   before any form; the automated browser can't reach signup. Stopped by: lacked the means. I did not
   attempt to defeat the JS/network challenge. (And new-account self-promo is auto-removed regardless.)
 - With Reddit closed, every major card-paying channel is tested and closed.
+
+---
+
+## Iter 040 — Bluesky signup: automation-resistant + final-step captcha
+
+- **Bluesky signup** — reached Step 1 (no captcha), authorized .work email, but the React SPA resisted
+  reliable automation past step 1, and the flow completes with an hCaptcha. Stopped by: lacked the means
+  (SPA) + refusal to defeat the captcha. No account completed, no captcha solved.
