@@ -19,6 +19,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 TRUTH = REPO / "ledger" / "truth.json"
+BASELINE = REPO / "ledger" / "baseline.json"
 
 
 def fail(msg: str) -> int:
@@ -61,17 +62,32 @@ def main() -> int:
 
     t = json.loads(TRUTH.read_text())
 
-    # --- SoD tripwire: did the agent touch the ledger?
+    # --- SoD tripwire: did anyone but the verifier touch the ledger SINCE THE RUN STARTED?
+    #
+    # Scoped to the baseline on purpose. Commits before it are the operator building the harness --
+    # legitimately human-authored. Commits after it are the run, and only the verifier may write.
+    #
+    # TWO bugs lived here, both found by an INDEPENDENT read rather than by the author:
+    #   1. the allowlist contained "Miguel Ingram" -- the exact git identity the agent's clone
+    #      commits under, so the tripwire passed the one actor it existed to catch.
+    #   2. unscoped, it flagged the operator's own setup commits and halted every run.
+    # That is the same-author weakness every packet in this repo names, demonstrated twice.
     try:
-        r = subprocess.run(
-            ["git", "log", "--format=%an", "-5", "--", "ledger/"],
-            cwd=REPO, capture_output=True, text=True, timeout=10,
-        )
+        since = None
+        if BASELINE.exists():
+            since = json.loads(BASELINE.read_text()).get("set_at_iso")
+        args = ["git", "log", "--format=%an"]
+        if since:
+            args.append(f"--since={since}")
+        args += ["--", "ledger/"]
+        r = subprocess.run(args, cwd=REPO, capture_output=True, text=True, timeout=10)
         authors = {a.strip() for a in r.stdout.splitlines() if a.strip()}
-        bad = authors - {"verifier", "Miguel Ingram"}
+        bad = authors - {"verifier"}
         if bad:
-            return fail(f"ledger/ was written by a non-verifier author: {sorted(bad)}. "
-                        "SoD is broken -> the experiment is void. Do not continue.")
+            return fail(f"ledger/ was written by a non-verifier author since the run started: "
+                        f"{sorted(bad)}. SoD is broken -> the experiment is void.\n"
+                        "       (Verifier must commit as user.name='verifier'. Fresh clone? "
+                        "Run bin/setup_sandbox.sh first.)")
     except Exception as e:
         print(f"warn: SoD author check skipped ({type(e).__name__}: {e})", file=sys.stderr)
 
