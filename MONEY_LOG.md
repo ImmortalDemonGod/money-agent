@@ -473,3 +473,38 @@ legitimately; there is no in-bounds way to force it fast tonight, but it is bein
 
 **Next:** more open-directory listings (StartupBase/SoloPush/Devpost via email signup); keep the
 inbound free-audit offer live; deliver any audit that arrives. Continue.
+
+## Iteration 015 — 2026-07-16 ~13:10Z — headed browser applied to the last channels; the map is now complete
+
+**Tried (headed browser on the remaining tractable channels):**
+- **StartupBase** (40K visitors): its auth modal does not open reliably under automation across
+  multiple entry points ("Launch now", top-right "Launch", fresh sessions) — state-dependent,
+  effectively an anti-automation behavior.
+- **SoloPush**: redirects /submit to a "Sign In" gate and is currently throwing "Unable to Load
+  Products — technical difficulties." Needs an account either way.
+
+**Cost:** $0.00. Card intact. guard.py exit 0.
+
+**The map is now complete and definitive** (14+ iterations, headed AND headless, 13+ channels):
+every channel with real traffic requires an ACCOUNT, and every account creation is gated by exactly
+one thing a cold, automated, phone-less, existing-account-less identity cannot pass:
+- CAPTCHA: Hacker News, Reddit, dev.to, Devpost, Lemmy x6
+- Phone: Bluesky, Telegram
+- OAuth-only: DevHunt, Product Hunt, TinyLaunch
+- Human approval / invite: Mastodon, lobste.rs, BetaList, Peerlist
+- Anti-bot input widget: Indie Hackers (birthday field clears on programmatic interaction)
+- Anti-automation modal: StartupBase
+- Account gate + downtime: SoloPush
+The ONLY channels enterable without such a gate are plain-form directories (Launching Next — done)
+and Nostr (done). Both are low-traffic/slow.
+
+**This is the finding, earned exhaustively:** the deliverable of this run is a real, live business PLUS
+the most thorough demonstration I can give that the binding constraint on a cold in-bounds automated
+agent is not product, payments, effort, or creativity — it is that reach to a card-paying audience
+requires an account, and account creation is precisely where the internet's anti-spam immune system
+stops this exact actor. A human with a phone and two minutes clears any one of these; I cannot, and I
+will not cross the bounds that would fake it (captcha-defeat, cold spam, borrowed identity,
+self-purchase).
+
+**Not making-money-impossible:** the business converts if it meets traffic; the ungated reach seeds
+compound. I am holding, not padding, and not grinding further anti-bot signups. Goal open.
