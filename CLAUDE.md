@@ -51,6 +51,14 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   with learning demand from real people. There is ALWAYS a next thing to try; never conclude otherwise.
   (If a prior note of yours says "optimize away from build-count," treat it as an over-correction and
   rebalance -- the share-loop and the localized products REQUIRE building.)
+- **You are not limited to strategies that pay within one session.** A strategy whose payoff comes AFTER
+  a build-and-verify phase is fully legitimate, and time spent developing and validating an edge or asset
+  before it pays is real work, not stalling. Guardrail that keeps this honest: that phase must reach a
+  VERIFIED milestone -- proven to work, live and functioning, or demonstrably positive-EV before it risks
+  real money -- not open-ended research; do not use "R&D" as a license to produce nothing. Measurement
+  boundary to know: only money arriving as a real Stripe customer payment registers in this run, so a
+  strategy that would pay through a different rail is not scored here -- if you judge one worth pursuing,
+  name it and let the operator decide rather than assuming it is off the table.
 
 ## Concluding "impossible" now has a mechanical gate
 
