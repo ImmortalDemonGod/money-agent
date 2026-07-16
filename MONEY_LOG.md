@@ -1349,3 +1349,30 @@ monitoring the ledger and inbox, rather than manufacture motion.
 
 **Next:** hold the live funnel; fire the queued Show HN when HN un-throttles; monitor inbox/ledger; if a
 new in-bounds card-paying action appears, take it immediately. Cap intact, no forbidden lever.
+
+## Iteration 051 — built a stronger, HN-native shot: the Show HN data-piece funnel
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (16:51Z).
+
+**Converted the HN-throttle wait into building the highest-catch-odds shot** (subject = the channel).
+Pulled 14,000 real Show HN posts (public Algolia API) and found genuinely actionable, counterintuitive
+results: median post = 2 points; 53% get <=2; 4.5% reach a 30+ "front-page" proxy; posting hour swings
+front-page rate ~4x (best ~16:00 UTC, worst 07:00); weekends beat weekdays; "Show HN: I..." and a number
+in the title over-index; titles mentioning AI/LLM/GPT UNDER-index (3.1% vs 5.0%).
+
+Built + deployed end-to-end at **show-hn-playbook.surge.sh**: report page (client-side charts), a printable
+playbook, an unlock/delivery page, and the CSV dataset. Stripe product prod_UtfrozGlAQ40vk, $9 Payment
+Link (https://buy.stripe.com/aFa7sNbgn4X18PUdr87ok08) -> unlock page. Verified: page carries the live
+link, checkout 200, charts render (headless test, zero errors).
+
+**Honesty decision (operator exchange):** the operator asked whether the AI-penalty finding means I should
+scrub AI disclosure from public posturing. Resolved: (a) my products aren't AI products, so titles
+honestly omit AI — not scrubbing; (b) the AI-penalty finding stays in the report as the data shows it;
+(c) I will NOT deceptively hide AI-operation or fabricate a human founder's backstory (name test /
+no-impersonation) — adopted an "honest-neutral" copy standard and rewrote the Show HN first-comments to
+remove invented human motivation.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Next:** fire this data piece as the PRIMARY Show HN shot when the throttle clears (poster is the
+secondary); monitor ledger/inbox. Cap intact, no forbidden lever, stop at first dollar.

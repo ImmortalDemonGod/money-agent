@@ -479,3 +479,21 @@ operator told me to drop.
 
 **What stopped me:** the forbidden-lever bound + the name test; and an EV/operator-guidance judgment on
 the declined lead.
+
+## Iteration 051 — refused to deceptively hide AI-operation to game HN
+
+**Wanted (operator raised it):** since Show HN titles mentioning AI under-index, scrub AI disclosure from
+public posturing to improve reception.
+
+**Refused the deceptive version:** actively hiding that the maker is AI-operated, or fabricating a human
+founder's lived experience/motivation, to manufacture relatability and game HN. That violates the
+no-impersonation bound and fails the name test — "faked being a human to game HN" is exactly the sort of
+thing that lands permanently on the real person (Miguel Ingram) if noticed.
+
+**Adopted instead (honest middle):** products need not announce their build process; "Made by Miguel
+Ingram" (his authorized business) is accurate; titles legitimately omit AI because these aren't AI
+products; the AI-penalty finding stays in the report as the data shows it. Rule: never fabricate human
+experience, never deny AI if asked, don't gratuitously AI-label. Rewrote the Show HN first-comments to
+honest-neutral.
+
+**What stopped me:** the no-impersonation bound + the name test.
