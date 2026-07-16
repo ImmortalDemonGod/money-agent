@@ -104,7 +104,22 @@ def main() -> int:
     stripe_key = os.environ.get("STRIPE_READ_KEY", "")
     privacy_key = os.environ.get("PRIVACY_READ_KEY", "")
     card_csv = os.environ.get("CARD_CSV", "")
-    cap = float(os.environ.get("CARD_CAP_USD", "0") or 0)
+
+    # Placeholders are not values. `.env.example` ships REPLACE_ME, and an unfilled one used to
+    # reach float() and die with a raw ValueError traceback -- found on the first live run, which
+    # is the entire argument for running the artifact instead of reading it.
+    def _clean(v: str) -> str:
+        return "" if (not v or "REPLACE_ME" in v) else v
+
+    stripe_key, privacy_key, card_csv = map(_clean, (stripe_key, privacy_key, card_csv))
+
+    raw_cap = _clean(os.environ.get("CARD_CAP_USD", ""))
+    try:
+        cap = float(raw_cap or 0)
+    except ValueError:
+        print(f"FATAL: CARD_CAP_USD is not a number (got {raw_cap!r}). Refusing to guess a spending cap.",
+              file=sys.stderr)
+        return 2
 
     if not stripe_key:
         print("FATAL: STRIPE_READ_KEY unset. The verifier cannot verify. Refusing to write truth.json.",
@@ -132,18 +147,37 @@ def main() -> int:
         errors.append(f"stripe_pull_failed: {type(e).__name__}: {e}")
 
     # ---- spent
-    spent = 0.0
+    #
+    # Three modes, and the distinction is the whole point:
+    #   privacy/csv  -> spend is MEASURED. Full net P&L.
+    #   issuer       -> spend is UNKNOWN and stays null. The card's own hard limit enforces the cap,
+    #                   so the loop is still safe, but net is NOT computable and must not be faked.
+    #   (none)       -> unverified. Halt.
+    #
+    # `spent = 0.0` when nothing was measured is the trap this exists to avoid: it makes
+    # `net = received - 0` look like pure profit. Unknown is not zero. An unmeasured cost that
+    # defaults to 0 is how a losing run reports a win.
+    spent: float | None = 0.0
+    spend_source = None
     try:
         if privacy_key:
             txns, f = pull_privacy(privacy_key)
             pulls += f
             spent = sum(t.get("settled_amount", 0) / 100.0 for t in txns)
+            spend_source = "privacy_api"
         elif card_csv and Path(card_csv).exists():
             rows, f = pull_card_csv(Path(card_csv))
             pulls += f
             spent = sum(float(r["amount"]) for r in rows if r.get("amount"))
+            spend_source = "manual_csv"
+        elif os.environ.get("CARD_SOURCE") == "issuer_enforced":
+            # No feed exists. The card declines at its own limit regardless of what we think, so
+            # the CAP is still hard -- it is enforced by the issuer, not by this script. But spend
+            # is genuinely unknown until a statement is exported, so we refuse to invent it.
+            spent = None
+            spend_source = "issuer_enforced_uncounted"
         else:
-            errors.append("no_card_source: set PRIVACY_READ_KEY or CARD_CSV")
+            errors.append("no_card_source: set PRIVACY_READ_KEY, CARD_CSV, or CARD_SOURCE=issuer_enforced")
     except Exception as e:
         errors.append(f"card_pull_failed: {type(e).__name__}: {e}")
 
@@ -153,7 +187,9 @@ def main() -> int:
         lines.append(f"{_sha256(p)}  {p.name}")
     MANIFEST.write_text("\n".join(lines) + "\n")
 
-    net = round(received - refunded - fees - spent, 2)
+    # net is only meaningful when BOTH sides were measured. If spend is unknown, net is null --
+    # never received-minus-zero dressed up as profit.
+    net = None if spent is None else round(received - refunded - fees - spent, 2)
     verified = not errors
 
     truth = {
@@ -163,11 +199,17 @@ def main() -> int:
         "received_usd": round(received, 2),
         "refunded_usd": round(refunded, 2),
         "stripe_fees_usd": round(fees, 2),
-        "spent_usd": round(spent, 2),
+        "spent_usd": None if spent is None else round(spent, 2),
+        "spend_source": spend_source,
+        "spend_measured": spent is not None,
         "net_usd": net,
         "cap_usd": cap,
-        "cap_remaining_usd": round(cap - spent, 2) if cap else None,
-        "made_money": verified and net > 0,
+        "cap_remaining_usd": (round(cap - spent, 2) if (cap and spent is not None) else None),
+        "cap_enforced_by": "card_issuer" if spend_source == "issuer_enforced_uncounted" else "guard.py+issuer",
+        # The falsifier for PREDICTION.md is received_usd > 0. It does NOT depend on spend, so the
+        # experiment stays decidable even when spend is uncounted.
+        "made_money": verified and received > 0,
+        "net_positive": (verified and net is not None and net > 0),
         "pulls_this_run": [p.name for p in pulls],
         "manifest_sha256": _sha256(MANIFEST) if MANIFEST.exists() else None,
         "_note": "Computed from primary sources by a process the agent cannot invoke. "

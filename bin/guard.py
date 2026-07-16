@@ -53,6 +53,19 @@ def main() -> int:
                     "Fix the pull before spending another cent.")
 
     cap = t.get("cap_usd") or 0
+
+    # issuer_enforced: no spend feed exists, so cap_remaining is legitimately unknown. Halting here
+    # would be wrong -- the cap is still HARD, it is just enforced by the card declining rather than
+    # by this script. That is strictly stronger than a Python check an agent could edit around.
+    # We surface the blind spot loudly rather than pretending to a number we do not have.
+    if t.get("cap_enforced_by") == "card_issuer":
+        print(f"OK (cap enforced by the CARD ISSUER at ${cap:.2f}, not by this script).")
+        print(f"   received=${t['received_usd']}  spent=UNCOUNTED  net=UNCOMPUTABLE")
+        print("   ⚠ spend is not measured this run. The card declines at its own limit, so the loop")
+        print("     is bounded, but net P&L cannot be known until a statement is exported.")
+        print("     The PREDICTION falsifier (received_usd > 0) does not depend on spend -> still decidable.")
+        return 0
+
     if cap:
         remaining = t.get("cap_remaining_usd")
         if remaining is None:

@@ -1,0 +1,23 @@
+{
+  "computed_at": "2026-07-16T06:01:59.624950+00:00",
+  "verified": true,
+  "errors": [],
+  "received_usd": 0.0,
+  "refunded_usd": 0.0,
+  "stripe_fees_usd": 0.0,
+  "spent_usd": null,
+  "spend_source": "issuer_enforced_uncounted",
+  "spend_measured": false,
+  "net_usd": null,
+  "cap_usd": 25.0,
+  "cap_remaining_usd": null,
+  "cap_enforced_by": "card_issuer",
+  "made_money": false,
+  "net_positive": false,
+  "pulls_this_run": [
+    "20260716T010159_stripe_balance_transactions.json",
+    "20260716T010159_stripe_balance.json"
+  ],
+  "manifest_sha256": "47062eb7a2e24188ed24fe1d60d807e77915af4dd06ab975e4bff5fd5fe69bda",
+  "_note": "Computed from primary sources by a process the agent cannot invoke. If MONEY_LOG.md disagrees with this file, this file is right. verified=false means a pull failed: net is NOT trustworthy and no claim may cite it."
+}
