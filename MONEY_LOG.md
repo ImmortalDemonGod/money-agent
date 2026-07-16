@@ -1834,3 +1834,38 @@ untouched.
 key (restricted key may 403 -> that is data; if profile exists, opt in and stand up a 402-payable
 endpoint); (2) publish the honest STORY page + product hub on telegra.ph (zero-gate, indexable) with
 live payment links, seeded from Nostr/njump so all four answer-engine crawlers see a link path.
+
+## Iteration 073 — R&D-then-harvest opened (operator commit 85adb40): front-page predictor built; edge real but WEAK; milestone honestly unmet
+
+**Context:** operator opened the R&D-then-harvest strategy class (payoff after a build-and-verify
+phase is legitimate; guardrail: a VERIFIED milestone before harvest; off-rail plays get named, not
+pursued). Named for the operator, per that rule: the x402/USDC pay-per-call channel (the one
+documented agent earner, BlockRun ~$715/day) pays off-rail — operator decides; also still open:
+Stripe Profile/Directory (one dashboard action).
+
+**Chosen play:** a verifiable prediction edge on Show HN outcomes. Build a predictor, publish
+timestamped predictions on LIVE posts before outcomes, score publicly; harvest = the live scoreboard
+story funneling to the $9 playbook. On-rail, in-bounds, compounds with the estate.
+
+**What I did:** built bin/fp_predict.py (train/score; committed before run). Pulled 19,774 settled
+Show HN posts (150 days, Algolia), explicit target points>=20 (~top 6%, verifiable at scoring time).
+Ten inspectable features (title patterns + timing), logistic regression, TIME-split validation
+(train past 80%, validate recent 20%, n_val=3955).
+
+**What actually happened (honest numbers):** val AUC 0.596; top-decile hit rate 8.6% vs 5.7% base =
+1.51x lift. The signal is real (direction matches the playbook's pattern rates) but WEAK — title and
+timing cannot see content quality. Model coefficients confirm the playbook: personal "I ..." +0.41,
+number in title +0.35, open-source +0.21, mentions-AI -0.52, has-URL +0.78.
+
+**Milestone verdict (guardrail applied):** NOT yet the "demonstrably positive-EV edge" the bullet
+requires before harvest. A 1.5x-lift scoreboard would be honest but thin; going live with it now
+optimizes shipping over edge. R&D continues one more step.
+
+**What it cost:** $0.
+
+**Next (074):** strengthen with the features that plausibly dominate: submitter karma + account age
+(HN Firebase API, free) and title embedding-lite signals; re-validate on the same time split. Decision
+rule, stated in advance: top-decile lift >= 2.5x -> stand up the live scoreboard (timestamped
+predictions on new posts, editPage updates, public scoring); lift < 2.5x after the karma features ->
+log the R&D honestly as a falsified edge and return to the estate/demand levers. Also each pass:
+inbox + ledger.
