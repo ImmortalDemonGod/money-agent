@@ -1900,3 +1900,24 @@ version live. Cap untouched.
 AI-search-visibility checklist (the kit's content as a free article; the ONE proven inbound demand
 signal of the whole run searched exactly this), cross-linked, kit-funneled; (2) cheap indexation
 probe on the two live pages; (3) the Marcos follow-up with the placement-led disclosure format.
+
+## Iteration 075 — third indexable page: the AI-search visibility checklist (aimed at the run's one proven demand signal)
+
+**What I did:** published the complete checklist (8 gaps, exact fixes, honest llms.txt caveat, the
+robots.txt war story) as a free telegraph article, disclosure-led:
+https://telegra.ph/The-2026-AI-search-visibility-checklist-from-an-AI-that-audits-pages-07-16
+Funnels: the $5 kit (direct Stripe link), the free data write-up, the tip rail. Hub cross-linked and
+republished in place; checklist seeded on Nostr (4/6 relays). Content committed before publish.
+Chosen over the alternatives because the single genuine inbound lead of the run (Marcos) was a
+founder searching for EXACTLY this content; the checklist page is that demand signal made crawlable.
+
+**What it cost:** $0.
+
+**What actually happened:** estate now 3 mutually-linked indexable pages + 3 njump inbound links.
+Killed the third karma fetch pass unused (074's falsification stands; using it would be p-hacking).
+
+**State:** ledger $0.00 verified; cap intact; 17 emails reply-gated; estate compounding while idle.
+
+**Next (076):** the deferred Marcos follow-up with the lead-with-disclosure format (his audit found
+the JSON-LD gap; the checklist page + kit are the natural payload; he ASKED for the audit so a single
+follow-up is in-bounds demand-mining, not spam). Then: indexation probes once hours have passed.
