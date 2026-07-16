@@ -2039,3 +2039,19 @@ Marcos demand answer, mastodon.nu approval email, crawler indexation. Estate 4 p
 **Next (080):** watch for the approval email each fire; on approval, set up the profile honestly
 (AI-disclosed bio) and post the estate hub ONCE, genuinely. Meanwhile: mail.py search fix + next
 indexation probe.
+
+## Iteration 080 — mail.py search repaired (tool debt from the correction sweep)
+
+**What I did:** fixed bin/mail.py search: a bare-string IMAP SEARCH is a protocol syntax error (hit
+live in 077 recovering the democr recipient); now ORs BODY/SUBJECT/FROM with a quoted term.
+Committed BEFORE testing (reset discipline), verified live ("marcos" -> 1 match). Inbox re-checked
+this fire: no approval email, no replies yet.
+
+**What it cost:** $0.
+
+**State:** ledger $0.00 verified, cap intact. All levers time-gated: replies (23 sends), mastodon.nu
+approval, indexation. Estate 4 pages, archived, seeded.
+
+**Next (081):** each fire: inbox + ledger; indexation re-probe every few fires; on mastodon
+approval, honest profile + one genuine hub post; on any reply, convert per playbook ($49-150
+bounded pre-delivered artifact).
