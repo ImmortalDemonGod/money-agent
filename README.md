@@ -51,26 +51,29 @@ SAM.gov and the SDVOSB path, and an autonomous agent must not transact under it.
 > personally either way. It isolates the *LLC* (which is the important part: SAM.gov and SDVOSB stay clean)
 > but it does **not** isolate the *person*. Do not reason about it as anonymous.
 
-**Not wired to this machine (verified 2026-07-16):** `auth.get_credentials('miguel.ingram.work@gmail.com')`
-returns `None`. The `~/gmail-mcp` OAuth store has tokens for `miguel.ingram.research` and `military.ingram`
-only. So today the agent can use this address to *register Stripe*, but cannot read or send mail from it.
+**Wired since 2026-07-16: read + send, via app password.** An earlier version of this section said the
+agent could not reach this inbox at all ("registration only") and recommended read-only as the target
+posture. That is not the deployed world: `bin/mail.py` (`inbox` / `read` / `search` / `send`) runs against
+the address using `GMAIL_ADDRESS` + `GMAIL_APP_PASSWORD` from the agent's environment, proven live in
+`VERIFICATION_PACKET_EMAIL_AND_UNRIG.md`.
 
-**That is a decision to make deliberately, not by omission.** See "Inbox access" below.
-
-### 1b. Inbox access: decide, do not default
+### 1b. Inbox access: decided, deliberately
 
 Stripe registration needs a **click on a verification link**, so someone must reach the inbox at least once.
-Three postures:
+Three postures were on the table:
 
 | Posture | The agent can | Cost |
 |---|---|---|
-| **Registration only** *(default today)* | nothing; operator clicks the verify link, agent never sees mail | Agent cannot receive customer replies, password resets, or platform mail. Realistically caps what "make money" can mean. |
-| **Read-only** | read mail, not send | Can receive receipts/verifications. Cannot spam. **Best ratio.** |
-| **Read + send** | full email | Real business capability, and the one path to permanent reputational damage under a real name. |
+| **Registration only** | nothing; operator clicks the verify link, agent never sees mail | Agent cannot receive customer replies, password resets, or platform mail. Realistically caps what "make money" can mean. |
+| **Read-only** | read mail, not send | Can receive receipts/verifications. Cannot spam. Best safety ratio, but no read-only app password exists -- it would require OAuth + `gmail.readonly` + token plumbing into the sandbox. |
+| **Read + send** **(CHOSEN)** | full email | Real business capability, and the one path to permanent reputational damage under a real name. |
 
-**Recommended: read-only.** It buys most of the capability and forecloses the failure mode that cannot be
-undone. If you want read+send, that is a real choice, but make it on purpose and know that
-`CONSTITUTION.md`'s ethical floor is a prompt with no enforcement behind it.
+**Read + send was chosen on purpose, knowing it is the riskiest posture.** The prediction this run tests
+is about distribution; a run with every distribution channel amputated would assume the conclusion rather
+than test it (the un-rig, `2f078b8`). The controls that exist are honest but soft: every send is logged to
+`SENT_LOG.md` before it leaves, cold outreach is banned outright by `CONSTITUTION.md`, and the name test
+binds the rest -- and all three are prompts, not walls. `VERIFICATION_PACKET_EMAIL_AND_UNRIG.md` names this
+**the single largest unmitigated risk in the project**. It is accepted, not overlooked.
 
 > Note: this is the step where "pure unbiased sandbox" dies. Receiving money requires a KYC'd identity, and
 > that identity is yours. The agent stays context-free on the *business* axis (no priors, no thesis, no
