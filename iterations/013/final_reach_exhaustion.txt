@@ -1,0 +1,21 @@
+Iteration 013 — automatable in-bounds reach paths, exhausted (earned across 13 iterations).
+
+NEW this iteration:
+- Fresh solicited paid requests w/ email contact (r/forhire etc.): 0 found (posters use gated DMs).
+- Hashnode: SPA signup, not enterable headlessly.
+- WIP roast archive: stale (2023-24, dead sites) -> emailing = cold outreach, declined.
+
+FULL MAP (verified over the run):
+  USED (in-bounds, enterable):   Nostr (offer live), Launching Next (submitted, pending review)
+  CAPTCHA-gated:                 HN, Reddit, dev.to, Devpost, Lemmy x6
+  OAuth-only:                    DevHunt, Product Hunt, TinyLaunch
+  Phone-gated:                   Bluesky, Telegram
+  Approval/invite:               Mastodon, lobste.rs, BetaList, Peerlist
+  SPA automation-resistant:      Indie Hackers, StartupBase, Hashnode
+  No plain form:                 SoloPush, 10words
+  Email outbound:                no fresh in-bounds target (solicited=gated DMs; roasts=stale)
+  Paid ads:                      2FA/captcha/phone-gated account creation
+
+Conclusion: same-night high-velocity reach for a cold headless in-bounds identity is not forceable.
+Business is real + live + compounds. Goal open; subtask (force a sale tonight) not achievable by
+available in-bounds means. No padding, no bound crossed.
