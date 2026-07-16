@@ -32,7 +32,9 @@ import email
 import imaplib
 import os
 import smtplib
+import socket
 import sys
+import urllib.parse
 from datetime import datetime, timezone
 from email.header import decode_header
 from email.message import EmailMessage
@@ -43,6 +45,45 @@ SENT_LOG = REPO / "SENT_LOG.md"
 
 ADDR = os.environ.get("GMAIL_ADDRESS", "")
 PW = os.environ.get("GMAIL_APP_PASSWORD", "").replace(" ", "")  # Google prints it with spaces
+
+
+# ---- sandbox egress, measured 2026-07-16: raw 993/587/465 hang forever (SYN black-holed), and
+# the sandbox's HTTPS proxy answers CONNECT with "200 Connection Established" THEN passes no
+# bytes (IMAP TLS handshake -> connection reset; SMTP's plaintext banner never arrives). The 200
+# is a claim; the handshake is the fact. So in THIS sandbox mail cannot work at all -- what this
+# tunnel buys is failing FAST with a real error instead of hanging until a harness timeout, and
+# working correctly on hosts whose proxies genuinely relay. Direct sockets remain the default
+# when HTTPS_PROXY is unset.
+
+def _tunnel(host: str, port: int, timeout: int = 30) -> socket.socket:
+    """Raw socket to host:port via the HTTPS proxy's CONNECT, or direct when no proxy is set."""
+    proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+    if not proxy:
+        return socket.create_connection((host, port), timeout)
+    p = urllib.parse.urlparse(proxy)
+    s = socket.create_connection((p.hostname, p.port), timeout)
+    s.sendall(f"CONNECT {host}:{port} HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n".encode())
+    buf = b""
+    while b"\r\n\r\n" not in buf:  # tiny reads so no post-header TLS bytes are swallowed
+        c = s.recv(1)
+        if not c:
+            raise OSError("proxy closed the connection mid-CONNECT")
+        buf += c
+    status = buf.split(b"\r\n", 1)[0].decode(errors="replace")
+    if " 200" not in status:
+        raise OSError(f"proxy CONNECT {host}:{port} refused: {status}")
+    return s
+
+
+class _ProxyIMAP4_SSL(imaplib.IMAP4_SSL):
+    def _create_socket(self, timeout):
+        s = _tunnel(self.host, self.port, timeout if timeout else 30)
+        return self.ssl_context.wrap_socket(s, server_hostname=self.host)
+
+
+class _ProxySMTP(smtplib.SMTP):
+    def _get_socket(self, host, port, timeout):
+        return _tunnel(host, port, int(timeout) if timeout else 30)
 
 
 def _need_creds():
@@ -62,7 +103,7 @@ def _dec(s):
 
 
 def _imap():
-    m = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+    m = _ProxyIMAP4_SSL("imap.gmail.com", 993, timeout=30)
     m.login(ADDR, PW)
     return m
 
@@ -122,7 +163,7 @@ def send(to, subj, body):
     msg = EmailMessage()
     msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
     msg.set_content(body)
-    with smtplib.SMTP("smtp.gmail.com", 587) as s:
+    with _ProxySMTP("smtp.gmail.com", 587, timeout=30) as s:
         s.starttls()
         s.login(ADDR, PW)
         s.send_message(msg)
