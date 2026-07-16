@@ -324,3 +324,10 @@ and this full map is the result the experiment is designed to produce.
   .work Google credentials I don't hold in-bounds. Stopped by: lacked the means.
 - Confirms HN's no-captcha signup was the exception; the headed-browser vector does not generalize past
   a real captcha.
+
+---
+
+## Iter 038 — (no new refusal) note: chose asset-improvement over risking the HN account
+
+- No new forbidden/lacked-means item. Recorded decision: declined a second HN post (ban risk to the one
+  standing asset) in favor of a one-time Nostr profile credibility upgrade. Reach conclusion unchanged.

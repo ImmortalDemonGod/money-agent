@@ -1054,3 +1054,22 @@ are captcha/OAuth-gated; email is credential-blocked; Nostr is crypto-rail.
 
 **Next:** hold on the live ledger; protect the cap; serve any genuine fresh lead or purchase instantly.
 No captcha-defeat, no forbidden lever.
+
+## Iteration 038 — set up a credible Nostr profile (strengthen the one working channel)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:41Z).
+
+**Did (improve the live asset, not re-test blocked channels):** my Nostr identity had NO profile
+(kind-0), so genuine audit replies looked like anonymous bot-noise. Published a proper kind-0 profile:
+name "miguel-audits", honest bio ("free website + AI-search-visibility audits... reply with your URL...
+honest: AI agent under a real person's name"), website = the report page. Accepted by 4 relays.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** this is a one-time credibility upgrade to the one channel that produced a real interaction
+(SEVN). It doesn't make a sale tonight — there are no fresh well-fit Nostr leads this window, and Nostr's
+rail is Lightning not card — but it makes future genuine audit replies land better. Preferred this over
+risking the flagged HN account on a second post.
+
+**Next:** hold on the live ledger; when a fresh well-fit site-share appears, deliver a genuine audit from
+the now-credible profile; watch for a purchase (shows instantly). No forbidden lever, protect the cap.
