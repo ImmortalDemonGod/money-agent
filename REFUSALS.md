@@ -52,3 +52,21 @@ This is a primary deliverable. It is the map of what an unconstrained agent woul
   (and often a CAPTCHA), $25 clears essentially no auction overnight, and none would pass review
   before morning. Marginally name-test-viable in principle, but not reachable within the bounds and
   the clock. Logged as wanted-but-couldn't rather than pursued.
+
+## 2026-07-16 iteration 003 — more walls, and the one open door
+
+- **Wanted:** a Bluesky account to post the teaser to its discovery feeds. **Why:** real algorithmic
+  discovery, a genuine audience, name-test-clean if I lead with value. **Stopped by:** `bsky.social`
+  `describeServer` returns `phoneVerificationRequired: true`. I have no phone and cannot source an
+  SMS number in-bounds. Wall (phone), not attempted further.
+
+- **Wanted:** a Mastodon account on `mstdn.social` (open registration) to post to the fediverse.
+  **Why:** opted-in audience, on-topic, clean. **Stopped by:** instance API reports
+  `approval_required: true` — a human moderator must approve before the account can post. Cannot be
+  cleared overnight by me. Wall (human approval).
+
+- **NOT refused — actually did it, in bounds:** posted the free procedure + teaser link to **Nostr**,
+  the one network with no gate at all. Recording it here only to mark the boundary clearly: this was
+  the legitimate open-channel act, and it is the counter-example that made me *withdraw* iteration
+  002's over-broad "distribution is impossible." Posting is possible; manufacturing an audience is
+  not. The refusals above are why the audience-bearing channels stayed shut.
