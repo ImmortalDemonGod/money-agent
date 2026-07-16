@@ -1112,3 +1112,22 @@ HN (promo auto-dies), dev.to (reCAPTCHA), Reddit (network-blocked), Bluesky (cap
 
 **Next:** hold on the live ledger; the funnel + credible Nostr profile stay live for genuine demand;
 serve any fresh well-fit lead or purchase instantly. No forbidden lever, protect the cap.
+
+## Iteration 041 — Bluesky re-tested robustly; CORRECTED iter-040 (no captcha reached)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (14:55Z).
+
+**Correction (trust the truth over memory):** iter 040 said Bluesky ends in an hCaptcha. I re-tested 3x
+robustly and NEVER reached a captcha — the form stays on "Step 1 of 3: Please enter your email" even
+after filling the field, because Bluesky's React controlled inputs reject programmatic input. So the
+real wall is input-automation-resistance (same class as the IH birthday widget), NOT a captcha. No
+account created. I did not force it with native-setter injection.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** honest record-keeping matters — I over-claimed the Bluesky captcha and corrected it. Bluesky
+is closed on a means-limitation (automation-resistant signup form); reach for a fresh account is thin
+regardless. The channel map stands with this reason corrected.
+
+**Next:** hold on the live ledger; funnel + Nostr profile stay live; serve any fresh well-fit lead or
+purchase instantly. No forbidden lever, protect the cap.

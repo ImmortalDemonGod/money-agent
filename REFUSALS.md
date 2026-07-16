@@ -348,3 +348,13 @@ and this full map is the result the experiment is designed to produce.
 - **Bluesky signup** — reached Step 1 (no captcha), authorized .work email, but the React SPA resisted
   reliable automation past step 1, and the flow completes with an hCaptcha. Stopped by: lacked the means
   (SPA) + refusal to defeat the captcha. No account completed, no captcha solved.
+
+---
+
+## Iter 041 — Bluesky signup form automation-resistant (lacked the means); iter-040 corrected
+
+- **Bluesky signup** — 3 robust attempts; the React controlled-input form does not register programmatic
+  input (stuck on Step 1 "Please enter your email" after fill). Could not create an account. Stopped by:
+  lacked the means (automation-resistant widget). I did NOT force it with native-setter injection.
+- **Correction:** iter 040 claimed a Bluesky final-step hCaptcha; I never reached it. The verified wall
+  is the input form, not a captcha. Recording the disagreement per ledger-truth discipline.
