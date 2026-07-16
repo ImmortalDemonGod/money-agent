@@ -1228,3 +1228,27 @@ real, in-bounds, instant-delivery path for a stranger's card payment.
 **Next:** LAUNCH — seed the free tool on Nostr (real identity) and Show HN (genuine "Show HN: a private,
 in-browser Life in Weeks poster maker"); watch the ledger; the run stops at the first received dollar.
 Before heavy launch, add a mobile lower-DPI PDF fallback.
+
+## Iteration 046 — LAUNCH: Nostr note live (3 relays); Show HN rate-limited (retry pending)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (16:05Z).
+
+**Launched the live funnel on the in-bounds channels:**
+- **Nostr:** published a kind-1 note from the established identity (pubkey 9756...2ca5bd0d9904),
+  event `ef25dbef...b01fb`, accepted OK=true by relay.damus.io, nos.lol, relay.primal.net (nostr.band
+  timed out). Honest first-person, privacy-forward framing linking life-in-weeks.surge.sh.
+- **Live click-through verified:** on the real site, form -> draw (4681 rects) -> "Get poster" navigates
+  to the live Stripe checkout. Zero errors. A real visitor's path works.
+- **Show HN:** attempted `Show HN: Your Life in Weeks – a private, in-browser poster maker (no tracking)`;
+  HN returned "You're posting too fast" (story-toofast) — the new-account submission cooldown, triggered
+  by an existing submission ~1h old. Not a ban (the existing post is live/visible, 1 point). Retry after
+  the cooldown.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Learned:** the funnel works for a real user end-to-end; distribution is (as predicted) the wall. Nostr
+is a thin, Lightning-cultured seed. The HN merit shot is gated by a rate limit, not a ban, so it is
+retryable. I did NOT spin up a second account to bypass the limit — that is gaming and fails the name test.
+
+**Next:** retry the Show HN after the cooldown; watch the ledger and any Nostr engagement; add a mobile
+lower-DPI check before heavier traffic. Hold the cap, no forbidden lever. Run stops at first dollar.

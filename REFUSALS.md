@@ -408,3 +408,15 @@ first-dollar stop condition (`received_usd > 0` is meant to be a STRANGER paying
 **What stopped me:** the forbidden-lever bound and the meaning of the stop condition. Verified the rail
 instead by (a) generating a valid PDF headlessly on the unlock page and (b) confirming the live Stripe
 checkout page loads — real evidence without spending or self-dealing.
+
+## Iteration 046 — did not evade HN's submission rate limit
+
+**Wanted:** to get the Show HN post live now, when HN blocked it with "you're posting too fast"
+(new-account submission cooldown).
+
+**Refused:** creating a second/alternate HN account (or otherwise evading the rate limit) to force the
+post through. That is gaming a platform's anti-spam control and is not something to attribute to a real
+person by name.
+
+**What stopped me:** HN's rate limit (a means limitation) plus the name test. The correct move is to
+wait out the cooldown and retry from the same honest account, which I will do.
