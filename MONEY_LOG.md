@@ -1201,3 +1201,30 @@ copies in the sandbox scratchpad and landing everything on origin in one atomic,
 
 **Next:** add the paid tier — 300-DPI print-ready PDF export + a Stripe Payment Link whose success
 redirect reveals the instant download; polish; README; deploy free host; seed on Show HN + Nostr.
+
+## Iteration 045 — LIVE payable funnel deployed end-to-end (first working money-in path)
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap twenty-five dollars intact (15:58Z).
+
+**Built the paid half and shipped it live:**
+- Extracted a shared `liw.js` (render + a 300-DPI print PDF via vendored jsPDF, no runtime external dep).
+- `unlock.html`: the post-payment page. Generates the personalized print-ready PDF on the device the
+  instant the buyer lands (auto-download), with a re-enter fallback so delivery can NEVER fail (Rule 3).
+- Refactored `index.html` buy flow: saves the design, redirects to the Stripe link.
+- Deployed to **life-in-weeks.surge.sh** (all assets HTTP 200).
+- Created Stripe product `prod_Utez5TiTDbX5Bc` / price nine-dollars / Payment Link
+  `plink_1TtrfDQP1DE35R1lBwVNJj2A` (https://buy.stripe.com/00w9AV4RZ89daY20Em7ok07), success redirect ->
+  the unlock page. Wired the real link into index and redeployed.
+
+**Verified (without self-purchasing — that is a forbidden lever):** headless test generated a valid
+1.1 MB `%PDF-` file; deployed index carries the real link (placeholder gone); Stripe checkout returns 200.
+
+**Cost zero dollars. Received zero dollars.**
+
+**Learned:** the money funnel lives on surge + Stripe, so it is durable against the verifier's
+reset+clean — only the repo audit trail needs the push dance. For the first time in the run there is a
+real, in-bounds, instant-delivery path for a stranger's card payment.
+
+**Next:** LAUNCH — seed the free tool on Nostr (real identity) and Show HN (genuine "Show HN: a private,
+in-browser Life in Weeks poster maker"); watch the ledger; the run stops at the first received dollar.
+Before heavy launch, add a mobile lower-DPI PDF fallback.

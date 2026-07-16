@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your poster is ready — Life in Weeks</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root{--bg:#f4f1ea;--ink:#1c1c1c;--muted:#6b6660;--line:#d8d2c6;--accent:#c2410c;--card:#fbfaf6}
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:48px 20px 80px;text-align:center}
+  h1{font-size:28px;letter-spacing:-.02em;margin:0 0 8px}
+  p{color:var(--muted);max-width:52ch;margin:8px auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:24px}
+  button{font:inherit;font-weight:600;cursor:pointer;border-radius:10px;border:1px solid transparent;padding:12px 20px;font-size:15px;background:var(--accent);color:#fff}
+  .ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+  #status{font-size:14px;color:var(--muted);margin-top:14px;min-height:20px}
+  .poster-frame{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;box-shadow:0 6px 24px rgba(0,0,0,.06);max-width:360px;margin:20px auto 0}
+  #poster{display:block;width:100%;height:auto}
+  .reenter{margin-top:20px;text-align:left;display:none}
+  label{display:block;font-weight:600;font-size:13px;margin:12px 0 5px}
+  input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:15px}
+  .mini{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Thank you — your poster is ready.</h1>
+  <p>Your payment is complete. Your personalized, print-ready PDF is generated right here on this page, on your device. Nothing is emailed and nothing is stored — it is yours the moment it downloads.</p>
+
+  <div class="card">
+    <div class="poster-frame"><svg id="poster" viewBox="0 0 660 1000" aria-label="Your poster"></svg></div>
+    <div style="margin-top:18px">
+      <button id="download" type="button">Download my poster (PDF)</button>
+    </div>
+    <div id="status">Preparing your download…</div>
+
+    <div class="reenter" id="reenter">
+      <p class="mini">We could not find the design saved in this browser (this can happen if you paid on a different device or cleared your data). Re-enter the details below and your identical poster will regenerate — no extra charge.</p>
+      <label for="name">Name on the poster (optional)</label>
+      <input id="name" type="text" maxlength="40" />
+      <label for="dob">Date of birth</label>
+      <input id="dob" type="date" />
+      <label for="life">Life expectancy (years)</label>
+      <select id="life"><option value="80">80</option><option value="90" selected>90</option><option value="100">100</option></select>
+      <label for="palette">Palette</label>
+      <select id="palette"><option value="ink">Ink on cream</option><option value="dusk">Dusk indigo</option><option value="ember">Ember</option></select>
+      <div style="margin-top:16px"><button id="regen" class="ghost" type="button">Generate my poster</button></div>
+    </div>
+  </div>
+
+  <p class="mini" style="margin-top:28px">Trouble with the download? It runs entirely in your browser — try a desktop browser, or re-enter your details above. This tool was made by Miguel Ingram.</p>
+</div>
+
+<script src="jspdf.umd.min.js"></script>
+<script src="liw.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var state = null;
+  try{ state = JSON.parse(localStorage.getItem("liw_paid_state")||"null"); }catch(e){}
+
+  function preview(st){
+    var built = LIW.buildSVG(st, {paid:true});
+    var host = $("poster");
+    host.setAttribute("viewBox", "0 0 "+built.W+" "+built.H);
+    host.innerHTML = new DOMParser().parseFromString(built.markup, "image/svg+xml").documentElement.innerHTML;
+  }
+
+  function doDownload(st){
+    $("status").textContent = "Building your print-ready PDF…";
+    LIW.downloadPdf(st, function(err){
+      if(err){ $("status").textContent = "If the download did not start, tap the button above (a desktop browser works best)."; }
+      else { $("status").textContent = "Downloaded. Check your Downloads folder for life-in-weeks-poster.pdf"; }
+    });
+  }
+
+  if(state && state.dob){
+    preview(state);
+    $("download").onclick = function(){ doDownload(state); };
+    // auto-start once fonts/layout settle
+    setTimeout(function(){ doDownload(state); }, 600);
+  } else {
+    $("status").textContent = "";
+    $("reenter").style.display = "block";
+    $("download").style.display = "none";
+    $("regen").onclick = function(){
+      var dob = $("dob").value;
+      if(!dob){ alert("Please enter your date of birth."); return; }
+      var st = {name:$("name").value.trim(), dob:dob, lifeYears:parseInt($("life").value,10), palette:$("palette").value, milestones:[]};
+      state = st;
+      try{ localStorage.setItem("liw_paid_state", JSON.stringify(st)); }catch(e){}
+      preview(st);
+      $("download").style.display = "";
+      $("download").onclick = function(){ doDownload(st); };
+      doDownload(st);
+    };
+  }
+})();
+</script>
+</body>
+</html>

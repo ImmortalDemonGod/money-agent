@@ -8,17 +8,9 @@
 <meta property="og:title" content="Your Life in Weeks" />
 <meta property="og:description" content="Every week of your life on one page. Free, private, made in your browser." />
 <style>
-  :root{
-    --bg:#f4f1ea; --ink:#1c1c1c; --muted:#6b6660; --line:#d8d2c6;
-    --accent:#c2410c; --card:#fbfaf6;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:var(--bg); color:var(--ink);
-    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
+  :root{--bg:#f4f1ea;--ink:#1c1c1c;--muted:#6b6660;--line:#d8d2c6;--accent:#c2410c;--card:#fbfaf6}
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   a{color:var(--accent)}
   .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
   header h1{font-size:30px;letter-spacing:-.02em;margin:0 0 6px}
@@ -27,19 +19,12 @@
   @media(max-width:820px){.layout{grid-template-columns:1fr}}
   .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
   label{display:block;font-weight:600;font-size:13px;margin:14px 0 5px}
-  input,select{
-    width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
-    background:#fff;font-size:15px;color:var(--ink)
-  }
+  input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:15px;color:var(--ink)}
   input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .milestone{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center;margin-top:8px}
   .milestone input{font-size:13px;padding:7px 9px}
   .mini{font-size:12px;color:var(--muted);margin-top:4px}
-  button{
-    font:inherit;font-weight:600;cursor:pointer;border-radius:10px;border:1px solid transparent;
-    padding:11px 16px;transition:transform .04s ease
-  }
+  button{font:inherit;font-weight:600;cursor:pointer;border-radius:10px;border:1px solid transparent;padding:11px 16px;transition:transform .04s ease}
   button:active{transform:translateY(1px)}
   .btn-primary{background:var(--accent);color:#fff;width:100%;margin-top:18px;font-size:15px}
   .btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
@@ -74,29 +59,16 @@
     <div class="panel">
       <label for="name">Name on the poster (optional)</label>
       <input id="name" type="text" maxlength="40" placeholder="e.g. Alex Rivera" />
-
       <label for="dob">Date of birth</label>
       <input id="dob" type="date" />
-
       <label for="life">Life expectancy (years)</label>
-      <select id="life">
-        <option value="80">80</option>
-        <option value="90" selected>90</option>
-        <option value="100">100</option>
-      </select>
-
+      <select id="life"><option value="80">80</option><option value="90" selected>90</option><option value="100">100</option></select>
       <label for="palette">Palette</label>
-      <select id="palette">
-        <option value="ink">Ink on cream</option>
-        <option value="dusk">Dusk indigo</option>
-        <option value="ember">Ember</option>
-      </select>
-
+      <select id="palette"><option value="ink">Ink on cream</option><option value="dusk">Dusk indigo</option><option value="ember">Ember</option></select>
       <label>Milestones (optional)</label>
       <div id="milestones"></div>
       <button class="btn-add" id="addMilestone" type="button">+ add a milestone</button>
       <p class="mini">A milestone marks the week it happened — first job, a move, a wedding, a child.</p>
-
       <button class="btn-primary" id="render" type="button">Draw my life</button>
     </div>
 
@@ -113,10 +85,11 @@
         <h3>The print-ready poster — <span class="price">$9</span></h3>
         <p class="mini" style="margin-top:0">The free PNG is perfect for your screen. The poster file is made to hang on a wall:</p>
         <ul>
-          <li>300-DPI print-ready PDF, sized for a standard 18×24" / A2 frame</li>
-          <li>Your name and milestones set in crisp vector type — no watermark</li>
-          <li>Delivered to you the instant you pay — a direct download, nothing to wait for</li>
+          <li>Print-ready PDF on an 18×24" / A2 page at ~300 DPI, matted to the palette</li>
+          <li>Your name and milestones baked in — no watermark</li>
+          <li>Delivered to you the instant you pay — the download starts on the confirmation page, nothing to wait for</li>
         </ul>
+        <p class="mini">Payment is handled by Stripe; the statement shows the name of the maker, Miguel Ingram.</p>
       </div>
     </div>
   </div>
@@ -127,16 +100,12 @@
   </footer>
 </div>
 
+<script src="liw.js"></script>
 <script>
 (function(){
   "use strict";
-  var WEEKS_PER_YEAR = 52;
-  var PALETTES = {
-    ink:   {bg:"#f4f1ea", past:"#1c1c1c", future:"#d8d2c6", now:"#c2410c", grid:"#000", text:"#1c1c1c"},
-    dusk:  {bg:"#0f1226", past:"#c7d2fe", future:"#2a2f52", now:"#f472b6", grid:"#fff", text:"#e6e8f5"},
-    ember: {bg:"#1a120b", past:"#f59e0b", future:"#3a2a1a", now:"#ef4444", grid:"#fff", text:"#f5ecdf"}
-  };
-  var MILE_COLORS = ["#0ea5e9","#16a34a","#a855f7","#eab308","#ec4899"];
+  // Set to the live Stripe Payment Link once created. Until then the button explains it is being set up.
+  var STRIPE_LINK = "https://buy.stripe.com/00w9AV4RZ89daY20Em7ok07";
 
   var $ = function(id){ return document.getElementById(id); };
   var milestonesEl = $("milestones");
@@ -144,10 +113,7 @@
   function addMilestoneRow(date, label){
     var row = document.createElement("div");
     row.className = "milestone";
-    row.innerHTML =
-      '<input type="date" class="m-date" />' +
-      '<input type="text" class="m-label" maxlength="28" placeholder="label" />' +
-      '<button class="btn-x" title="remove" type="button">×</button>';
+    row.innerHTML = '<input type="date" class="m-date" /><input type="text" class="m-label" maxlength="28" placeholder="label" /><button class="btn-x" title="remove" type="button">&#215;</button>';
     if(date) row.querySelector(".m-date").value = date;
     if(label) row.querySelector(".m-label").value = label;
     row.querySelector(".btn-x").onclick = function(){ row.remove(); };
@@ -156,155 +122,52 @@
   $("addMilestone").onclick = function(){ if(milestonesEl.children.length < 5) addMilestoneRow(); };
 
   function readMilestones(){
-    var out = [];
-    var rows = milestonesEl.querySelectorAll(".milestone");
+    var out = [], rows = milestonesEl.querySelectorAll(".milestone");
     for(var i=0;i<rows.length;i++){
       var d = rows[i].querySelector(".m-date").value;
       var l = rows[i].querySelector(".m-label").value.trim();
-      if(d){ out.push({date:d, label:l, color:MILE_COLORS[i % MILE_COLORS.length]}); }
+      if(d) out.push({date:d, label:l, color:LIW.MILE_COLORS[i % LIW.MILE_COLORS.length]});
     }
     return out;
   }
 
-  function weeksBetween(a, b){
-    return Math.floor((b - a) / (7*24*3600*1000));
+  function readState(){
+    var dob = $("dob").value;
+    if(!dob) return null;
+    return {name:$("name").value.trim(), dob:dob, lifeYears:parseInt($("life").value,10), palette:$("palette").value, milestones:readMilestones()};
   }
 
   var lastState = null;
-
-  function buildSVG(state, opts){
-    opts = opts || {};
-    var p = PALETTES[state.palette] || PALETTES.ink;
-    var years = state.lifeYears;
-    var cols = WEEKS_PER_YEAR;
-    var rows = years;
-
-    var pad = 40, top = state.name ? 96 : 70;
-    var cell = 9, gap = 2.4;
-    var gw = cols*cell + (cols-1)*gap;
-    var W = gw + pad*2;
-    var H = top + rows*cell + (rows-1)*gap + pad + 30;
-
-    var born = new Date(state.dob + "T00:00:00");
-    var now = opts.now ? new Date(opts.now) : new Date();
-    var lived = Math.max(0, weeksBetween(born, now));
-    var totalWeeks = years*WEEKS_PER_YEAR;
-
-    var mileByWeek = {};
-    for(var m=0;m<state.milestones.length;m++){
-      var md = new Date(state.milestones[m].date + "T00:00:00");
-      var wk = weeksBetween(born, md);
-      if(wk>=0 && wk<totalWeeks) mileByWeek[wk] = state.milestones[m].color;
-    }
-
-    var svg = [];
-    svg.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">');
-    svg.push('<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="'+p.bg+'"/>');
-
-    svg.push('<text x="'+(W/2)+'" y="38" text-anchor="middle" font-family="Georgia,\'Times New Roman\',serif" font-size="26" fill="'+p.text+'">Life in Weeks</text>');
-    if(state.name){
-      svg.push('<text x="'+(W/2)+'" y="'+(top-30)+'" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="15" fill="'+p.text+'" opacity="0.75">'+escapeXml(state.name)+'</text>');
-    }
-    svg.push('<text x="'+(W/2)+'" y="'+(state.name?top-12:56)+'" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="11" fill="'+p.text+'" opacity="0.5">Each row is a year · each dot is one week</text>');
-
-    for(var r=0;r<rows;r++){
-      for(var c=0;c<cols;c++){
-        var idx = r*cols + c;
-        var x = pad + c*(cell+gap);
-        var y = top + r*(cell+gap);
-        var fill;
-        if(mileByWeek[idx] !== undefined){
-          fill = mileByWeek[idx];
-        } else if(idx < lived){
-          fill = p.past;
-        } else if(idx === lived){
-          fill = p.now;
-        } else {
-          fill = p.future;
-        }
-        svg.push('<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+cell+'" height="'+cell+'" rx="1.4" fill="'+fill+'"/>');
-      }
-    }
-
-    var foot = opts.paid ? "" : "yourlifeinweeks";
-    svg.push('<text x="'+(W/2)+'" y="'+(H-14)+'" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="10" fill="'+p.text+'" opacity="0.4">'+escapeXml(foot)+'</text>');
-
-    svg.push('</svg>');
-    return {markup: svg.join(""), W:W, H:H, lived:lived, total:totalWeeks};
-  }
-
-  function escapeXml(s){
-    return String(s).replace(/[<>&'"]/g, function(ch){
-      return {'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}[ch];
-    });
-  }
-
-  function renderLegend(state){
-    var p = PALETTES[state.palette] || PALETTES.ink;
-    var el = $("legend");
-    var html = '';
-    html += '<span><i class="dot" style="background:'+p.past+'"></i>weeks lived</span>';
-    html += '<span><i class="dot" style="background:'+p.now+'"></i>this week</span>';
-    html += '<span><i class="dot" style="background:'+p.future+'"></i>weeks ahead</span>';
-    for(var i=0;i<state.milestones.length;i++){
-      if(state.milestones[i].label){
-        html += '<span><i class="dot" style="background:'+state.milestones[i].color+'"></i>'+escapeXml(state.milestones[i].label)+'</span>';
-      }
-    }
-    el.innerHTML = html;
-  }
-
-  function readState(){
-    var dob = $("dob").value;
-    if(!dob){ return null; }
-    return {
-      name: $("name").value.trim(),
-      dob: dob,
-      lifeYears: parseInt($("life").value,10),
-      palette: $("palette").value,
-      milestones: readMilestones()
-    };
-  }
-
   function draw(){
     var state = readState();
     if(!state){ alert("Please enter your date of birth."); return; }
     lastState = state;
-    var built = buildSVG(state, {paid:false});
+    var built = LIW.buildSVG(state, {paid:false});
     var host = $("poster");
     host.setAttribute("viewBox", "0 0 "+built.W+" "+built.H);
     host.innerHTML = new DOMParser().parseFromString(built.markup, "image/svg+xml").documentElement.innerHTML;
-    renderLegend(state);
+    // legend
+    var p = LIW.PALETTES[state.palette] || LIW.PALETTES.ink;
+    var h = '<span><i class="dot" style="background:'+p.past+'"></i>weeks lived</span>'
+          + '<span><i class="dot" style="background:'+p.now+'"></i>this week</span>'
+          + '<span><i class="dot" style="background:'+p.future+'"></i>weeks ahead</span>';
+    state.milestones.forEach(function(m){ if(m.label) h += '<span><i class="dot" style="background:'+m.color+'"></i>'+LIW.escapeXml(m.label)+'</span>'; });
+    $("legend").innerHTML = h;
     try{ localStorage.setItem("liw_state", JSON.stringify(state)); }catch(e){}
   }
   $("render").onclick = draw;
 
-  function svgToPng(markup, W, H, scale, cb){
-    var img = new Image();
-    var svg64 = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(markup)));
-    img.onload = function(){
-      var canvas = document.createElement("canvas");
-      canvas.width = W*scale; canvas.height = H*scale;
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      cb(canvas.toDataURL("image/png"));
-    };
-    img.onerror = function(){ cb(null); };
-    img.src = svg64;
-  }
-
-  $("dlPng").onclick = function(){
-    if(!lastState){ draw(); if(!lastState) return; }
-    var built = buildSVG(lastState, {paid:false});
-    svgToPng(built.markup, built.W, built.H, 2, function(url){
-      if(!url){ alert("Could not render the image in this browser."); return; }
-      var a = document.createElement("a");
-      a.href = url; a.download = "life-in-weeks.png"; a.click();
-    });
-  };
+  $("dlPng").onclick = function(){ if(!lastState){ draw(); if(!lastState) return; } LIW.downloadPng(lastState); };
 
   $("buy").onclick = function(){
-    alert("The $9 print poster checkout is being set up. When live, paying delivers the 300-DPI PDF to you instantly on the confirmation page — nothing performed afterward.");
+    var state = readState();
+    if(!state){ alert("Enter your date of birth and click \"Draw my life\" first — the poster is personalized to it."); return; }
+    try{ localStorage.setItem("liw_paid_state", JSON.stringify(state)); }catch(e){}
+    if(!STRIPE_LINK || STRIPE_LINK.indexOf("__STRIPE") === 0){
+      alert("Checkout is being set up right now — please check back shortly. Your design is saved.");
+      return;
+    }
+    window.location.href = STRIPE_LINK;
   };
 
   (function init(){

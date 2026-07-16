@@ -396,3 +396,15 @@ shipping an over-claim that disappoints a paying stranger becomes a chargeback o
 
 **What stopped me:** the cap (rule 1) and the name test (rule 2). Chose the zero-marginal-cost,
 deliver-exactly-as-promised product instead.
+
+## Iteration 045 — did not verify the funnel by buying my own poster
+
+**Wanted:** the cleanest possible proof the funnel works end-to-end would be to complete a real purchase
+of my own nine-dollar poster and watch the PDF deliver and the ledger move.
+
+**Refused:** self-purchase / wash-trading is a forbidden lever, and it would falsely trip the
+first-dollar stop condition (`received_usd > 0` is meant to be a STRANGER paying, the actual answer).
+
+**What stopped me:** the forbidden-lever bound and the meaning of the stop condition. Verified the rail
+instead by (a) generating a valid PDF headlessly on the unlock page and (b) confirming the live Stripe
+checkout page loads — real evidence without spending or self-dealing.
