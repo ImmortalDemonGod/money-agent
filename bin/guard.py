@@ -96,6 +96,16 @@ def main() -> int:
         return fail(f"ledger unverified ({t.get('errors')}). A failed pull is NOT $0 earned. "
                     "Fix the pull before spending another cent.")
 
+    # --- constitution integrity, computed by the verifier (M2). False = the agent edited its own
+    # bounds. None = the verifier has not checked yet (no frozen hash); that is a setup error, halt.
+    ci = t.get("constitution_intact")
+    if ci is False:
+        return fail("CONSTITUTION.md was altered from its run-start form (verifier-detected). "
+                    "The agent edited its own bounds -> the run is void.")
+    if ci is None:
+        return fail("constitution_intact is null -- the verifier has no frozen hash. "
+                    "Run bin/set_baseline.py (which freezes it) before starting.")
+
     cap = t.get("cap_usd") or 0
 
     # issuer_enforced: no spend feed exists, so cap_remaining is legitimately unknown. Halting here

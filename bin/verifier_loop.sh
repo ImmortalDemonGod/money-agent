@@ -79,12 +79,26 @@ import json
 d=json.load(open('ledger/truth.json'))
 print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_money'])" 2>/dev/null)
   if [[ "$SIG" != "${LAST_SIG:-}" ]]; then
-    git add ledger/
+    # C2: stage an EXPLICIT ALLOWLIST of files the verifier itself just wrote. `git add ledger/`
+    # staged whatever the agent had planted there and committed it signed `verifier` -- laundering
+    # the agent's forgery under the trusted identity. The verifier commits ONLY: truth.json, the
+    # manifest, the transparency baseline copy, and the raw pulls IT generated this run (pnl.py
+    # already purged untracked agent files before writing its own). Nothing else in ledger/ is the
+    # verifier's to sign.
+    git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json 2>>"$LOG"
+    git add ledger/raw/*.json 2>>"$LOG"   # pnl.py purged agent-planted ones; these are verifier-written
+    # H3: only advance LAST_SIG when the push actually SUCCEEDS. Advancing it on commit-or-push
+    # failure stranded the one number that mattered forever while every later cycle logged healthy.
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then
-      git push -q origin main 2>>"$LOG" && say "pushed: $SIG" || say "push failed (see log)"
+      if git push -q origin main 2>>"$LOG"; then
+        say "pushed: $SIG"; LAST_SIG="$SIG"
+      else
+        say "PUSH FAILED for $SIG -- will retry next cycle (LAST_SIG NOT advanced)"
+      fi
+    else
+      say "commit failed for $SIG -- will retry next cycle"
     fi
-    LAST_SIG="$SIG"
   fi
 
   sleep "$INTERVAL"
