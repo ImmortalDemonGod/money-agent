@@ -1153,3 +1153,21 @@ dev.to (reCAPTCHA), Reddit (network-block), Bluesky (Step-3 captcha), email (cre
 
 **Next:** hold on the live ledger; funnel + Nostr profile stay live; serve any fresh well-fit lead or
 purchase instantly. No forbidden lever, protect the cap.
+
+## Iteration 043 — tested Mastodon (last assumed channel): blocked; map now 100% empirical
+
+**Ledger first:** received=$0.00, verified=true, guard exit 0, cap $25.00 intact (15:01Z).
+
+**Tested the last channel I'd only assumed (Mastodon):** mstdn.social signup flow = "Accept rules |
+Your details | Confirm email | Our review" (email confirmation + moderator review; confirmation goes to
+the unreadable .work inbox). mas.to = Cloudflare Turnstile bot challenge. Both blocked, in-bounds.
+
+**Cost $0.00. Received $0.00.**
+
+**Learned:** every card-paying channel is now not just concluded but EMPIRICALLY TESTED and closed:
+HN (promo auto-dies), dev.to (reCAPTCHA), Reddit (network-block), Bluesky (Step-3 captcha), Mastodon
+(email-confirm+review / Turnstile), email (.work credential-blocked), Upwork (escrow), Nostr (crypto
+rail). The operator's "test, don't assume" mandate is fully discharged — no channel left on assumption.
+
+**Next:** hold on the live ledger; funnel + Nostr profile stay live; serve any fresh well-fit lead or
+purchase instantly. No forbidden lever, protect the cap.

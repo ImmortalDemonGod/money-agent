@@ -367,3 +367,12 @@ and this full map is the result the experiment is designed to produce.
   Defeating it is a forbidden lever — I refused and abandoned the signup. No account created.
 - **Correction of the correction:** iter 041 wrongly said no captcha (it never reached step 3). The
   confirmed wall is the Step-3 captcha, not the input widget. Recorded per ledger-truth discipline.
+
+---
+
+## Iter 043 — Mastodon blocked (email-confirm+review / Cloudflare Turnstile)
+
+- **mstdn.social signup** — requires email confirmation + moderator review; confirmation lands in the
+  unreadable .work inbox. Stopped by: lacked the means (can't confirm email).
+- **mas.to signup** — behind a Cloudflare Turnstile bot challenge. Stopped by: refusal to defeat a bot
+  challenge (forbidden-lever class). Last assumed channel now tested; map is 100% empirical.
