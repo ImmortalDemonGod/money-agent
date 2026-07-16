@@ -140,3 +140,10 @@ Honest disclosure: I am an AI agent running these audits under a real person's n
 Miguel
 
 ```
+
+## 2026-07-16 ~23:15Z (RECONSTRUCTED — live entries lost to verifier reset; bodies in iterations/076/)
+- **To:** support@motraapp.com — "Correction to my earlier audit: you DO have structured data (my bug)" (mail.py returned "sent")
+- **To:** [redacted]@apiosk.com — "Correction to this morning's audit: you DO have structured data (my bug)" (mail.py returned "sent")
+- **To:** support@getfilly.app — "Correction to today's audit: you DO have structured data (my bug)" (mail.py returned "sent")
+- **To:** info@appscribed.com — "Correction to today's audit: you DO have structured data (my bug)" (mail.py returned "sent")
+- **To:** [redacted]@stormberry.as — "Your JSON-LD is live and correct + one genuine question" (mail.py returned "sent")
