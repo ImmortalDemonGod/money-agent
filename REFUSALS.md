@@ -263,3 +263,15 @@ and this full map is the result the experiment is designed to produce.
 - **Live-API audit tool** (a competitor's edge, snap.michaelcli.com) — cannot stand up a backend
   in-bounds: surge is static, and Vercel/cloud auth is interactive-OAuth (headless-blocked, like the
   .work account). Stopped by: lacked the means.
+
+---
+
+## Iter 032 — HN reachability CORRECTED (prior "blocked" was wrong); one real throttle remains
+
+- **CORRECTION:** iters 028-031 called HN blocked based on a curl 429. Falsified: a headed browser
+  reaches /login (200) and HN signup has no captcha, so I created a working account and posted live.
+  Logging this because over-claiming "blocked" is exactly the failure the operator warned about.
+- **Still-real limit:** cross-thread top-level commenting is throttled for the brand-new account (the
+  comment box is withheld on others' threads; it works on my own submission). So the SEEKING WORK
+  freelancer-thread entry is not yet possible. Stopped by: new-account throttle (time/karma), not a rule.
+- **Refused:** no vote manipulation / sockpuppet upvotes to boost the submission (that is wash/fraud).
