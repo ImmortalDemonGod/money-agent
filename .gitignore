@@ -9,3 +9,4 @@ __pycache__/
 PREDICTION.md
 verifier.log
 ledger/verifier.log
+.telegraph_token
