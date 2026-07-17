@@ -505,7 +505,7 @@ code during the merge: the stranded-push convergence keeps main's round-3 struct
 branch's divergence RESCUE path; supervise.sh keeps main's parse-fail verdict plus this branch's
 edge display; caffeinate portability keeps the bash-3.2-safe string form.
 
-## Entry 015 — 2026-07-17 (follow-up branch) — the two things PR #18 named and skipped: the edge rail (#6) and standing posture (#4)
+## Entry 012 — 2026-07-17 (follow-up branch) — the two things PR #18 named and skipped: the edge rail (#6) and standing posture (#4)
 
 **Why.** PR #18's own summary drew the line honestly: "#6 asks for a paper-trading rail and a
 changed scoring surface — that's core-system work, not strategy, and I did not build it. #4 I only
@@ -566,10 +566,10 @@ still prose + agenda visibility. (4) EDGE claims in packets are matched by regex
 that dodges the trigger phrases dodges stage 2a-bis (the canonical-JSON packet form would close
 this properly — future work with upstream aiv-protocol).
 
-## Entry 016 — the bottleneck inventory (the /loop's working backlog), plus the first two fixes
+## Entry 013 — the bottleneck inventory (the /loop's working backlog), plus the first two fixes
 
 **Method note for this loop.** Each entry names the bottleneck it attacks, the source that proves
-it is real (run-1 logs / v2 DEGRADED list / entry-015 critique / aiv-protocol audit), the fix, and
+it is real (run-1 logs / v2 DEGRADED list / entry-012 critique / aiv-protocol audit), the fix, and
 the test. The inventory below is priority-ordered and will be consumed top-down until exhaustion;
 items get struck through as they land.
 
@@ -584,7 +584,7 @@ items get struck through as they land.
   the last self-graded surface). Plan: require a committed adversary TRANSCRIPT artifact (tool-use
   records, not just a verdict file), pin its hash in the report, and give the verifier loop an
   optional re-run hook so grounding can be operator-side.
-- **B4 — edge claims are matched by regex; a paraphrase dodges stage 2a-bis** (entry-015 critique).
+- **B4 — edge claims are matched by regex; a paraphrase dodges stage 2a-bis** (entry-012 critique).
   Plan: when the edge rail is live (verdict != NONE), REQUIRE a structured `EDGE_CLAIM:` line in
   any packet whose iteration traded, and adjudicate that line -- structure the claim, not the prose.
 - **B5 — weak mode has no non-destructive runner** (DEGRADED #9's second half). Plan: run_weak.sh
@@ -594,7 +594,7 @@ items get struck through as they land.
   fails an honest packet -- documented in TEMPLATE as a trap). Plan: fix both upstream in the
   aiv-protocol repo (in scope for this session) so the workaround and the trap note can eventually
   be deleted.
-- **B7 — nothing mechanically paces iterations against the due-bet schedule** (entry-015 critique;
+- **B7 — nothing mechanically paces iterations against the due-bet schedule** (entry-012 critique;
   run 1 burned 091–094 polling). Plan: guard advisory when an iteration opens with zero due bets
   and the last N closes were watch-eligible; keep it advisory -- a hard block would fight genuine
   new work.
@@ -603,7 +603,7 @@ items get struck through as they land.
 - **B9 — bets resolutions don't feed knowledge/outcomes.jsonl** (the compounding layer misses the
   richest records: resolved day-scale bets ARE channel outcomes). Plan: bets.py resolve appends an
   outcome record automatically.
-- **B10 — the edge rail has never touched the live paper API** (entry-015 residual, same class as
+- **B10 — the edge rail has never touched the live paper API** (entry-012 residual, same class as
   PR #18's unproven two-lane). Operator-gated: write the one-cycle live acceptance checklist into
   SETUP so it cannot be skipped silently.
 
@@ -619,7 +619,7 @@ test read $? through a pipe -- iter-091's exact trap -- caught and redone; the t
 knowledge/traps.md is earning its keep. Next: B9 (bets->outcomes compounding), then B6 upstream
 aiv-protocol fixes.
 
-## Entry 017 — B9 (bets feed the compounding layer) + B6 (both upstream aiv-protocol defects fixed at the source)
+## Entry 014 — B9 (bets feed the compounding layer) + B6 (both upstream aiv-protocol defects fixed at the source)
 
 **B9.** `bets.py resolve` now appends a structured record to knowledge/outcomes.jsonl
 automatically (via append_log, durable), so a resolved day-scale bet -- the richest channel
@@ -718,7 +718,7 @@ close output readable; the full report is one command away.
 
 ## Entry 017 — CLOSING: inventory exhausted, final audit, and the port-to-main checklist
 
-**Exhaustion statement (scoped honestly).** Every item in the entry-016 inventory is landed and
+**Exhaustion statement (scoped honestly).** Every item in the entry-013 inventory is landed and
 tested (B1-B9) or documented as an operator-gated acceptance step (B10). "Exhausted" here means:
 no remaining item is both (a) evidenced by a run-1/v2/aiv-protocol source and (b) reachable from
 inside this session. What remains is out of reach BY NATURE, not by fatigue:
@@ -735,7 +735,7 @@ inside this session. What remains is out of reach BY NATURE, not by fatigue:
 **Final regression sweep (all changed components, one pass):** guard 0/2/1 exits correct across
 EDGE_TERMINAL and VOID states; full gate PASS on the reference edge packet; conclusion_gate clean
 multi-layer fail with no crash; truth.py both fact files grounded; edge.py status grounded. The
-sim suite's full history across entries 015-013: every fix was demonstrated failing before and
+sim suite's full history across entries 012-013: every fix was demonstrated failing before and
 passing after in a bare-origin two-lane clone.
 
 **What this design now is, in one paragraph.** Two scored rails, each with the same shape: a
@@ -770,3 +770,27 @@ by switching to consecutive in-session iterations (the correct fix, since the wo
 standing run's -- was not gated on external clocks). The inventory method (source-evidenced
 bottlenecks, consumed top-down, each with fix + test + critique) is itself the reusable artifact:
 it is what "systematic self-improvement over the baseline" turned out to mechanically mean.
+
+## Entry 018 — ROUND 4 (pre-merge review of this branch): three findings, all fixed
+
+An independent round-4 reviewer attacked the full origin/main...HEAD diff with an explicit
+merge-damage hunt list, empirically verifying each finding and each clean check. Verdict:
+merge-with-nits — no code section, function, or gate was dropped by the reconciliation; every
+conflicted file integrated both parents' semantics, repeatedly with the stricter/fail-closed
+variant; all gates behaved fail-closed under adversarial inputs. Findings, all landed here:
+
+- **F1 (MEDIUM, the log itself):** the merge-note renumbering collided — a sequential
+  find-replace re-hit its own output (009→012 later swallowed by 012→015), leaving entries
+  015-017 duplicated and 012-014 absent. No content was lost. Regenerated the tail from the
+  pristine pre-merge text with a DESCENDING mapping (verified unique + monotonic 001-017). The
+  bug class is worth naming for the traps file: sequential renumbering must map high-to-low.
+- **F2 (LOW, latent fail-closed crash):** parse_registration accepted a timezone-NAIVE
+  RESOLVE_BY; the bet froze, then every verdict cycle crashed comparing naive vs aware into the
+  fail-closed handler — an active registration masquerading as an idle rail. Now rejected at
+  registration with an explicit message (verified: aware accepted, naive refused).
+- **F3 (nit):** run_weak.sh still used fixed /tmp names after verifier_loop moved to mktemp -d
+  (symlink pre-placement hardening). Aligned.
+
+Also re-verified on the merged branch this round: the conclusion gate's full four-layer pass
+path (transcript + CONCLUSION bar + resolved bets + non-PENDING edge), corrupt bets.json
+(conclusion fails closed, guard advisory survives), and the MAX_ITERS counter.

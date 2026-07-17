@@ -18,12 +18,16 @@ cd "$R"
 INTERVAL="${INTERVAL:-120}"
 [[ -f "$R/.env" ]] || { echo "FATAL: .env missing (verifier read keys)." >&2; exit 2; }
 set -a; . "$R/.env"; set +a
+# private tmp dir, same hardening as verifier_loop.sh (fixed /tmp names invite symlink
+# pre-placement by anything sharing the host; round-4 nit)
+TMPD="$(mktemp -d "${TMPDIR:-/tmp}/pnl_w.XXXXXX")"
+trap 'rm -rf "$TMPD"' EXIT
 
 echo "=== WEAK MODE (tripwire-only; see SETUP.md). Facts commit to the CURRENT branch: $(git branch --show-current) ==="
 echo "=== No resets ever happen in this loop. Ctrl-C to stop. ==="
 while true; do
-  if AIV_VERIFIER=1 python3 bin/pnl.py > /tmp/pnl_w.out 2>/tmp/pnl_w.err; then
-    AIV_VERIFIER=1 python3 bin/edge_pnl.py > /tmp/edge_w.out 2>/tmp/edge_w.err || true
+  if AIV_VERIFIER=1 python3 bin/pnl.py > "$TMPD/pnl_out" 2>"$TMPD/pnl_err"; then
+    AIV_VERIFIER=1 python3 bin/edge_pnl.py > "$TMPD/edge_out" 2>"$TMPD/edge_err" || true
     git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json 2>/dev/null
     git add ledger/edge.json ledger/raw/EDGE_MANIFEST.sha256 2>/dev/null
     git add ledger/raw/*.json 2>/dev/null
@@ -35,7 +39,7 @@ while true; do
         || echo "[$(date -u +%H:%M:%SZ)] commit/push failed -- retrying next cycle"
     fi
   else
-    echo "[$(date -u +%H:%M:%SZ)] pnl FAILED: $(head -1 /tmp/pnl_w.err)"
+    echo "[$(date -u +%H:%M:%SZ)] pnl FAILED: $(head -1 "$TMPD/pnl_err")"
   fi
   sleep "$INTERVAL"
 done

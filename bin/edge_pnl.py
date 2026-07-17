@@ -114,9 +114,17 @@ def parse_registration(text: str) -> tuple[dict | None, str | None]:
     try:
         float(fields["BAR"])
         int(fields["MIN_FILLED_ORDERS"])
-        dt.datetime.fromisoformat(fields["RESOLVE_BY"].replace("Z", "+00:00"))
+        deadline = dt.datetime.fromisoformat(fields["RESOLVE_BY"].replace("Z", "+00:00"))
     except ValueError as e:
         return None, f"registration field unparseable: {e}"
+    # ROUND-4 FIX: fromisoformat accepts a timezone-NAIVE value, which would freeze a bet whose
+    # deadline can never be compared to aware now() -- every later verdict cycle then crashes into
+    # the fail-closed handler and an active registration masquerades as an idle rail (verdict NONE,
+    # verified false). Reject at registration instead: a deadline must carry Z or an offset.
+    if deadline.tzinfo is None:
+        return None, (f"RESOLVE_BY {fields['RESOLVE_BY']!r} has no timezone -- use an aware "
+                      "ISO-8601 value (e.g. 2026-08-01T00:00:00Z); a naive deadline cannot be "
+                      "adjudicated against UTC now.")
     return fields, None
 
 
