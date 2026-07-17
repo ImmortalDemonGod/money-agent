@@ -44,12 +44,16 @@ done
 
 # --- 2. money claims: hash-anchored AND not exceeding the verifier's committed number
 if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET"; then
-  # (a) must cite a manifest hash
-  if [[ ! -f "$MANIFEST" ]]; then
-    fail "money claim present but MANIFEST.sha256 does not exist"
+  # (a) must cite a manifest hash. v2: the authoritative manifest lives on the LEDGER branch
+  # (working-tree copy goes stale on the claims lane, same class of bug as the truth.json read).
+  LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
+  MANIFEST_TXT=$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/MANIFEST.sha256" 2>/dev/null)
+  [[ -z "$MANIFEST_TXT" && -f "$MANIFEST" ]] && MANIFEST_TXT=$(cat "$MANIFEST")
+  if [[ -z "$MANIFEST_TXT" ]]; then
+    fail "money claim present but no MANIFEST.sha256 (ledger branch or working tree)"
   else
     hit=0
-    while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done < "$MANIFEST"
+    while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done <<< "$MANIFEST_TXT"
     [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 (unanchored claim)"
   fi
   # (b) the claimed dollar amount must not exceed what the VERIFIER committed. v2: read through
@@ -64,6 +68,14 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
     OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > float('$TRUTH_RECV') + 0.001 else 0)" 2>/dev/null || echo 0)
     [[ "$OVER" == "1" ]] && fail "packet claims \$$MAX_CLAIM but verifier-committed received_usd is \$$TRUTH_RECV (false money claim)"
   fi
+fi
+
+# --- 2b. publish claims must be verified at the SERVING LAYER (run-1's surge trap: ~60 iterations
+# of "shipped" product force-served robots Disallow-all, discovered only at iter 070). A packet
+# that claims a publish must cite a PASSING host_check line for the live URL.
+if grep -qiE '(published|deployed|went live|now live|live at http)' "$PACKET"; then
+  grep -qE 'HOST_CHECK: .* verdict=PASS' "$PACKET" \
+    || fail "publish claim present but no passing 'HOST_CHECK:' line (run bin/host_check.py <url> and cite its output; a page the host hides from crawlers is not published)"
 fi
 
 # --- 3. CONSTITUTION integrity is now the VERIFIER's job, not the gate's.
