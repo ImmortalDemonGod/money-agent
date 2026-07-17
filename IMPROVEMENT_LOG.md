@@ -51,3 +51,53 @@ M4 (ungated sends): enforced on main once this lands. M5 (losable sends): fixed 
 
 **Next (entry 002):** A1 two-lane git — verifier_loop v2 publishes to a `ledger` branch;
 `bin/truth.py` single read path; guard.py reads the ledger branch; `bin/append_log.py` general.
+
+---
+
+## Entry 002 — 2026-07-17T04:40Z–04:50Z — two-lane git: the harness can no longer destroy its own evidence
+
+**What:** A1 implemented. The verifier now publishes facts to a dedicated `ledger` branch from its
+own checkout (`verifier_loop.sh` rewrite); the agent's claims branch is never named, reset, or
+written by any harness process. `bin/truth.py` is the single read path (ledger-branch first,
+working-tree fallback, source labeled); `bin/guard.py` reads through it and the SoD tripwire is now
+mode-aware; `bin/pnl.py` hashes the constitution from the AGENT's committed copy (`AGENT_BRANCH`)
+instead of the verifier's own tree; `bin/append_log.py` makes narrative appends durable in one
+fail-closed step (write+commit atomic, rollback on failure). This entry itself is the append_log
+end-to-end test.
+
+**Why first among the structural changes:** B1 had the highest measured damage in v1 — at least six
+evidence-loss events, a partly-RECONSTRUCTED send log, two iterations with no surviving record, and
+an entire class of agent workarounds (commit-in-the-same-breath, ls-tree blob checks) that existed
+only because the facts channel could bulldoze the claims channel. The two-lane design deletes the
+mechanism rather than mitigating it. Bonus effects: the 196 verifier heartbeat commits stop
+polluting the claims history (M11), and "only the verifier writes the ledger branch" is now
+enforceable at the REMOTE (branch protection) — SoD upgrades from tripwire to wall for the first
+time.
+
+**Verified by running, not reading (v1's own rule):**
+- truth.py: working-tree fallback returns source-labeled facts; simulated `origin/ledger` ref
+  returns `ledger-branch` source.
+- guard.py forgery test: a non-verifier author on the facts lane → HALT "SoD is broken", exit 1.
+- guard.py planted-ledger test: any post-baseline ledger commit on the claims lane → HALT, exit 1.
+- guard.py staleness: a day-old ledger still HALTS by default (H2 transfers unchanged).
+- Migration wrinkle FOUND BY THE TEST and pinned in a comment: the planted-ledger check is only
+  sound with a fresh run-start baseline (a v1-era branch carries legitimate old verifier ledger
+  commits). `set_baseline.py` at run start — already step 3 of start_verifier.sh — is load-bearing.
+
+**Scorecard:** M1: 6 → 0 by construction (no process resets the claims lane). M11: 196 → 0.
+M5 completed (append_log generalizes the mail.py fix from entry 001).
+
+**Critique pass:**
+- start_verifier.sh still speaks v1 (syncs the agent branch, BRANCH env) — must be updated to the
+  two-lane invocation or operators will resurrect the old topology. Queued for entry 003.
+- setup_sandbox.sh preflight doesn't yet assert the two-lane invariants (ledger branch exists,
+  truth.py resolves). Queued.
+- aiv_gate.sh reads `git show HEAD:ledger/truth.json` (the claims lane) for its money-claim
+  comparison — in two-lane mode that file goes stale on the claims branch; it must read via
+  truth.py. This is a REAL residual bug introduced by the migration. Queued for entry 003 with
+  the stop-grounding work.
+- The ledger branch grows one commit per meaningful change + heartbeat (~12/hr); fine for a run,
+  worth a squash/rotate note in SETUP for multi-week standing presence.
+
+**Next (entry 003):** A2 (grounded stop: conclusion_gate + adversary requirement + /goal v2) plus
+the three queued migration fixes above.
