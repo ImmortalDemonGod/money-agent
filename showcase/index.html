@@ -42,12 +42,14 @@
   .hero p.deck{font-size:1.18rem;line-height:1.55;color:var(--mid);max-width:38rem;margin:0}
   .hero p.deck b{color:var(--ink);font-weight:600}
 
-  .verdict{display:flex;flex-wrap:wrap;gap:.55rem;margin:2.4rem 0 0}
-  .chip{background:var(--panel);border:1px solid var(--line);border-radius:.65rem;padding:.6rem .85rem;line-height:1.2}
-  .chip .n{font:650 1.15rem/1 ui-monospace,monospace;display:block;margin-bottom:.3rem}
-  .chip .l{font-size:.76rem;color:var(--dim)}
-  .chip.hi .n{color:var(--good)}
-  .scrollcue{margin-top:2.6rem;color:var(--faint);font:500 .8rem/1 ui-monospace,monospace;letter-spacing:.1em}
+  .bignum{display:flex;align-items:flex-end;gap:1.15rem;flex-wrap:wrap;margin:2.2rem 0 1.5rem}
+  .bignum .zero{font:680 clamp(4rem,15vw,8.5rem)/.86 ui-monospace,monospace;letter-spacing:-.045em;color:var(--ink)}
+  .bignum .zmeta{display:flex;flex-direction:column;gap:.5rem;padding-bottom:.65rem}
+  .vtag{align-self:flex-start;font:600 .78rem/1 ui-monospace,monospace;letter-spacing:.03em;color:var(--good);border:1px solid var(--good);border-radius:1rem;padding:.3rem .62rem}
+  .zsub{color:var(--dim);font-size:.92rem;line-height:1.4;max-width:15rem}
+  .specs{display:flex;flex-wrap:wrap;gap:.35rem 1.4rem;color:var(--mid);font:500 .92rem/1.5 ui-monospace,monospace;margin-top:.5rem}
+  .specs i{color:var(--faint);font-style:normal}
+  .scrollcue{margin-top:2.8rem;color:var(--faint);font:500 .8rem/1 ui-monospace,monospace;letter-spacing:.1em}
 
   /* ---------- section scaffold ---------- */
   section.chapter{padding:3.4rem 0;border-top:1px solid var(--line)}
@@ -57,6 +59,14 @@
   section.chapter p{color:var(--mid);margin:0 0 1.05rem}
   section.chapter p b, section.chapter p strong{color:var(--ink);font-weight:600}
   .pull{font-size:1.24rem;line-height:1.5;color:var(--ink);border-left:2px solid var(--gold);padding-left:1.1rem;margin:1.6rem 0}
+
+  /* ---------- full-bleed interlude (rhythm breaks) ---------- */
+  .interlude{padding:5.5rem 1.25rem;text-align:center;background:var(--bg2);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .interlude .big{font-size:clamp(1.9rem,5.6vw,3.35rem);line-height:1.12;letter-spacing:-.02em;
+    font-weight:640;color:var(--ink);max-width:30rem;margin:0 auto}
+  .interlude .big .g{color:var(--gold)}
+  .interlude .cap{margin:1.1rem auto 0;max-width:26rem;color:var(--dim);font:500 .88rem/1.5 ui-monospace,monospace}
 
   /* ---------- wall map ---------- */
   .wallmap{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1.4rem 0}
@@ -105,16 +115,14 @@
 <header class="hero">
   <div class="wrap">
     <div class="kicker">Black Box Research Labs · Run One</div>
-    <h1>An AI agent, $25,<br>and one job:<br><span class="thin">earn a single honest dollar.</span></h1>
-    <p class="deck">It was given a real card, a real payment rail, and no strategy — then run overnight, autonomously, under hard bounds. <b>It made $0.00.</b> A verifier it could not touch computed that number. The story of <em>why</em> is the point.</p>
-    <div class="verdict">
-      <div class="chip hi"><span class="n">$0.00</span><span class="l">received · verified</span></div>
-      <div class="chip"><span class="n">$25/$25</span><span class="l">card cap intact</span></div>
-      <div class="chip"><span class="n">~17h</span><span class="l">one continuous run</span></div>
-      <div class="chip"><span class="n">88</span><span class="l">iterations</span></div>
-      <div class="chip"><span class="n">0</span><span class="l">bounds breached</span></div>
+    <h1>An AI agent, $25, and one&nbsp;job:<br><span class="thin">earn a single honest dollar.</span></h1>
+    <div class="bignum">
+      <div class="zero">$0.00</div>
+      <div class="zmeta"><span class="vtag">✓&nbsp;verified</span><span class="zsub">received — the one number the agent could not fabricate</span></div>
     </div>
-    <div class="scrollcue">↓ &nbsp;how a $0 became the most honest result it could produce</div>
+    <p class="deck">Given a real card and a real payment rail, no strategy, run overnight under hard bounds. It made nothing — and the story of <em>why</em> is the point.</p>
+    <div class="specs"><span>$25 / $25 <i>cap intact</i></span><span>~17h <i>one run</i></span><span>88 <i>iterations</i></span><span>0 <i>bounds breached</i></span></div>
+    <div class="scrollcue">↓&nbsp;&nbsp;how a $0 became the most honest result it could produce</div>
   </div>
 </header>
 
@@ -166,6 +174,11 @@
   </ul>
 </div></section>
 
+<div class="interlude">
+  <p class="big">It refused <span class="g">all four.</span></p>
+  <p class="cap">Each was a shortcut to real money. Taking any one is why a $0.00 that <em>wasn't</em> refused would have meant nothing.</p>
+</div>
+
 <section class="chapter"><div class="wrap">
   <div class="lbl"><span class="num">05</span> &nbsp;The twist</div>
   <h2>Its own host had been hiding everything it built.</h2>
@@ -179,6 +192,11 @@
   <p>Asked directly who was visiting, the agent built its own telemetry and reported the uncomfortable result: every <em>measurable</em> surface showed zero organic humans. But the surfaces where a sale would originate had no analytics at all.</p>
   <p class="pull">So $0.00 is consistent with two very different worlds: <b>nobody arrived</b>, or <b>people arrived and didn't buy</b>. The run genuinely cannot tell which — and an earlier confident claim that "the wall is reach" was retracted for exactly this reason. The instrument that would answer it was built, and left ready to deploy.</p>
 </div></section>
+
+<div class="interlude">
+  <p class="big">So did <span class="g">no one come</span>—<br>or did they come and not buy?</p>
+  <p class="cap">The run cannot tell. It never measured who arrived. That gap is the difference between a wall of reach and a wall of demand — and the instrument to close it was built, then left ready to deploy.</p>
+</div>
 
 <section class="chapter"><div class="wrap">
   <div class="lbl"><span class="num">07</span> &nbsp;The false finish</div>
