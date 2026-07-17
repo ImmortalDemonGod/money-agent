@@ -33,6 +33,15 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 LOCAL = REPO / "ledger" / "truth.json"
+
+# LEDGER_BRANCH is a VERIFIER/OPERATOR control, not an agent input. Its trustworthiness does NOT
+# come from this env var (the agent controls its own env) -- it comes from PROVISIONING: the
+# sandbox must be given an origin it cannot repoint and no push access to create branches, and the
+# real `ledger` branch must be verifier-written + remote-protected. Under that provisioning, an
+# agent setting LEDGER_BRANCH elsewhere finds no verifier commits and truth.py fails (guard halts).
+# Absent that provisioning this is a TRIPWIRE, like everything else in this repo that isn't the
+# out-of-band verifier or the card issuer. We additionally cross-check the branch we read against
+# the branch truth.json declares for itself, which catches misconfig and one forgery class.
 LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
 
 # Sources a MONEY decision (first-dollar halt, a packet's money claim) may rest on. An uncommitted
@@ -52,9 +61,18 @@ def load() -> tuple[dict, str]:
     show = _git("show", f"origin/{LEDGER_BRANCH}:ledger/truth.json")
     if show.returncode == 0 and show.stdout.strip():
         try:
-            return json.loads(show.stdout), "ledger-branch"
+            d = json.loads(show.stdout)
         except json.JSONDecodeError as e:
             raise RuntimeError(f"origin/{LEDGER_BRANCH}:ledger/truth.json is not valid JSON: {e}")
+        # cross-check: the verifier-signed ledger declares which lane it is; if it disagrees with
+        # the branch we actually read, something is misconfigured or forged -- do not label it
+        # grounded.
+        declared = d.get("ledger_branch")
+        if declared and declared != LEDGER_BRANCH:
+            raise RuntimeError(
+                f"ledger read from origin/{LEDGER_BRANCH} declares ledger_branch={declared!r} -- "
+                "lane mismatch; refusing to treat as grounded.")
+        return d, "ledger-branch"
     # 2. weak mode: read the COMMITTED copy via git show, never the raw working-tree file. An
     #    uncommitted working-tree truth.json is agent-forgeable and would bypass the whole SoD
     #    tripwire family (guard's author check + sod_hook both only see COMMITS). A committed

@@ -16,11 +16,26 @@ STATE_DIR = pathlib.Path(os.environ.get("MONEY_AGENT_STATE",
 B = STATE_DIR / "baseline.json"
 REPO_COPY = pathlib.Path(__file__).resolve().parent.parent / "ledger" / "baseline.json"
 
+import subprocess as _sp
+REPO = pathlib.Path(__file__).resolve().parent.parent
+LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
+
+# Record the facts-lane tip OID at run start. guard.py scopes its SoD author check to
+# `<this commit>..origin/<ledger>` -- ANCESTRY, not `--since` (committer dates are agent-forgeable,
+# so a backdated planted commit escaped a date window; CodeRabbit finding). Any ledger/ commit
+# reachable from the facts-lane tip but NOT from this baseline is "this run's" and must be
+# verifier-authored. Empty string => the branch did not exist at run start => check full history.
+_r = _sp.run(["git", "rev-parse", f"origin/{LEDGER_BRANCH}"], cwd=REPO,
+             capture_output=True, text=True)
+baseline_ledger_commit = _r.stdout.strip() if _r.returncode == 0 else ""
+
 now = int(time.time())
 STATE_DIR.mkdir(parents=True, exist_ok=True)
 payload = json.dumps({
     "created_gt": now,
     "set_at_iso": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(now)),
+    "baseline_ledger_commit": baseline_ledger_commit,
+    "ledger_branch": LEDGER_BRANCH,
     "_note": "AUTHORITATIVE COPY. Lives outside the repo, unreachable by the sandbox agent. "
              "Stripe balance_transactions created at or before this are NOT the agent's.",
 }, indent=2) + "\n"

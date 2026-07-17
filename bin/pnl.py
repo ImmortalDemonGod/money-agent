@@ -89,6 +89,14 @@ def load_baseline() -> int:
     return 0
 
 
+def load_baseline_ledger_commit() -> str:
+    """The facts-lane tip OID frozen at run start (agent-unreachable state dir). guard.py uses it
+    for an ancestry-scoped SoD check that does not trust agent-forgeable commit dates."""
+    if BASELINE.exists():
+        return json.loads(BASELINE.read_text()).get("baseline_ledger_commit", "") or ""
+    return ""
+
+
 def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
     """Every cent that moved through Stripe. balance_transactions is the canonical ledger:
     charges alone miss refunds, fees, disputes and adjustments."""
@@ -374,6 +382,8 @@ def main() -> int:
     truth = {
         "computed_at": _now(),
         "baseline_created_gt": baseline,
+        "baseline_ledger_commit": load_baseline_ledger_commit(),  # verifier-signed; guard scopes SoD by it
+        "ledger_branch": os.environ.get("LEDGER_BRANCH", "ledger"),  # self-declared lane; truth.py cross-checks
         "counts_only_money_after": (dt.datetime.fromtimestamp(baseline, dt.timezone.utc).isoformat()
                                     if baseline else "NO BASELINE -- counting all history"),
         "verified": verified,

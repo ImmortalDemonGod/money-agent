@@ -36,8 +36,8 @@ while IFS= read -r f; do
     # v2 moved the whole trusted read/adjudication path into these files. If the agent could commit
     # them it could make guard/aiv_gate/gates believe anything -- so they are all verifier-owned now
     # (the v1 blocklist covered only pnl.py+guard.py, which was the migration hole the audit found).
-    bin/pnl.py|bin/guard.py|bin/truth.py|bin/aiv_gate.sh|bin/conclusion_gate.py|bin/disclosure_gate.py|bin/iter.py|bin/host_check.py|bin/append_log.py|bin/verifier_loop.sh|bin/set_baseline.py|bin/sod_hook.sh) \
-        block "the agent may not edit its own verifier/gate: $f" ;;
+    bin/pnl.py|bin/guard.py|bin/truth.py|bin/aiv_gate.sh|bin/conclusion_gate.py|bin/disclosure_gate.py|bin/iter.py|bin/host_check.py|bin/append_log.py|bin/verifier_loop.sh|bin/set_baseline.py|bin/sod_hook.sh|bin/mail.py|bin/outcome.py) \
+        block "the agent may not edit its own verifier/gate/sender: $f" ;;
   esac
 done <<< "$STAGED"
 

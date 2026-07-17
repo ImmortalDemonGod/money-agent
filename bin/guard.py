@@ -133,61 +133,61 @@ def main() -> int:
 
     # --- SoD tripwire: did anyone but the verifier touch the ledger SINCE THE RUN STARTED?
     #
-    # Scoped to the baseline on purpose. Commits before it are the operator building the harness --
-    # legitimately human-authored. Commits after it are the run, and only the verifier may write.
+    # ANCESTRY-scoped, not date-scoped. `--since` trusted committer dates, which the committing
+    # agent sets freely -- a backdated planted ledger commit escaped the window (CodeRabbit finding).
+    # We scope by `<baseline_ledger_commit>..ref`: any ledger/ commit REACHABLE from the facts-lane
+    # tip but NOT from the run-start baseline is "this run's" and must be verifier-authored. The
+    # baseline OID rides in verifier-signed truth.json (set_baseline.py froze it, agent-unreachable).
     #
-    # TWO bugs lived here, both found by an INDEPENDENT read rather than by the author:
-    #   1. the allowlist contained "Miguel Ingram" -- the exact git identity the agent's clone
-    #      commits under, so the tripwire passed the one actor it existed to catch.
-    #   2. unscoped, it flagged the operator's own setup commits and halted every run.
-    # That is the same-author weakness every packet in this repo names, demonstrated twice.
+    # And it is FAIL-CLOSED: a git error or an unexpected exception HALTS, it does not warn-and-pass.
+    # An integrity check that swallows its own failure is worse than none (it looks green).
+    #
+    # Honest scope, unchanged from the rest of this repo: this is a TRIPWIRE. In weak mode an author
+    # name is assumable (`-c user.name=verifier`); the real WALL is the out-of-band verifier + a
+    # remote ledger branch the sandbox cannot push to or repoint (see SETUP.md).
+    def _fail_closed(msg: str) -> int:
+        return fail(msg)
     try:
-        # `since` prefers the verifier-signed timestamp inside truth.json itself (in two-lane mode
-        # the local baseline.json copy may predate the run); local file is the fallback.
-        # `since` comes from the verifier-signed truth.json (agent cannot forge it without tripping
-        # the constitution/source checks). The BASELINE working-tree copy is a fallback ONLY, and a
-        # corrupt one must not silently widen the window -- so its parse failure is contained here,
-        # not allowed to fail-open the whole SoD block below.
+        base = t.get("baseline_ledger_commit", "") or ""
+        # v1-compat: older baselines have no OID -> fall back to the (weaker) date scope, noted.
         since = None
-        cm = t.get("counts_only_money_after", "")
-        if cm and not cm.startswith("NO BASELINE"):
-            since = cm
-        elif BASELINE.exists():
-            try:
-                since = json.loads(BASELINE.read_text()).get("set_at_iso")
-            except Exception:
-                since = None  # unbounded window (checks ALL ledger commits) -- safe direction
+        if not base:
+            cm = t.get("counts_only_money_after", "")
+            if cm and not cm.startswith("NO BASELINE"):
+                since = cm
 
         def _ledger_authors(ref: str | None) -> set[str]:
             args = ["git", "log", "--format=%an"]
-            if ref:
+            if base and ref:
+                args.append(f"{base}..{ref}")   # ancestry range (date-independent)
+            elif base:
+                args.append(f"{base}..HEAD")
+            elif ref:
                 args.append(ref)
-            if since:
+            if since and not base:
                 args.append(f"--since={since}")
             args += ["--", "ledger/"]
             r = subprocess.run(args, cwd=REPO, capture_output=True, text=True, timeout=10)
+            if r.returncode != 0:
+                raise RuntimeError(f"git log failed ({r.returncode}): {r.stderr.strip()[:120]}")
             return {a.strip() for a in r.stdout.splitlines() if a.strip()}
 
         if truth_source == "ledger-branch":
-            # two-lane mode: (a) only the verifier may author the facts lane; (b) NOBODY -- the
-            # verifier included -- writes ledger/ on the claims lane anymore, so ANY post-baseline
-            # ledger commit here is a planted forgery attempt.
-            # MIGRATION NOTE (verified by test): check (b) depends on the baseline being FRESH.
-            # A branch cut from v1-era main carries legitimate old verifier ledger commits; a
-            # stale baseline puts them inside the window and false-halts. set_baseline.py at run
-            # start (start_verifier.sh step 3) is what makes this check sound -- do not skip it.
+            # (a) only the verifier may author the facts lane since the baseline
             lb = os.environ.get("LEDGER_BRANCH", "ledger")
             bad = _ledger_authors(f"origin/{lb}") - {"verifier"}
             if bad:
-                return fail(f"facts lane origin/{lb} has non-verifier ledger authors: {sorted(bad)}. "
-                            "SoD is broken -> the experiment is void.")
+                return fail(f"facts lane origin/{lb} has non-verifier ledger authors since the "
+                            f"baseline: {sorted(bad)}. SoD is broken -> the experiment is void.")
+            # (b) NOTHING writes ledger/ on the claims lane in two-lane mode -> any such commit is
+            # planted. (truth.py never READS the claims-lane ledger, so this is defense-in-depth.)
             planted = _ledger_authors(None)
             if planted:
                 return fail(f"ledger/ was committed ON THE CLAIMS LANE since the run started "
                             f"(authors: {sorted(planted)}). In two-lane mode nothing writes ledger/ "
                             "here -- this reads as a planted ledger. The experiment is void.")
         else:
-            # v1-compat weak mode: shared tree, verifier-only authorship (the original tripwire).
+            # weak / working-tree-committed mode: shared tree, verifier-only authorship
             bad = _ledger_authors(None) - {"verifier"}
             if bad:
                 return fail(f"ledger/ was written by a non-verifier author since the run started: "
@@ -195,7 +195,9 @@ def main() -> int:
                             "       (Verifier must commit as user.name='verifier'. Fresh clone? "
                             "Run bin/setup_sandbox.sh first.)")
     except Exception as e:
-        print(f"warn: SoD author check skipped ({type(e).__name__}: {e})", file=sys.stderr)
+        # FAIL-CLOSED: an integrity check that cannot complete must halt, not pass silently.
+        return _fail_closed(f"SoD author check could not complete ({type(e).__name__}: {e}). "
+                            "Refusing to proceed on an unverifiable ledger lane.")
 
     # --- an unverified ledger must never authorize more spend
     if not t.get("verified"):

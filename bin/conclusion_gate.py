@@ -101,21 +101,35 @@ def main() -> int:
         fails.append(f"effort floor not met: {len(sent_lines)} demand probes in SENT_LOG.md "
                      f"(need >= {MIN_DEMAND_PROBES}).")
 
-    # --- layer 2: the packet, all five bars, no placeholders
+    # --- layer 2: the packet. Every bar AND the conclusion must carry REAL evidence -- not the
+    # template's own instruction prose. The template ships all instructions as `>` blockquote lines
+    # and a sentinel; the gate rejects the sentinel and ignores `>` lines when counting content, so
+    # a copied-but-unfilled template has zero evidence and FAILS (CodeRabbit finding: instructional
+    # prose used to count as content, letting a blank template pass).
     if not PACKET.exists():
         fails.append("EXHAUSTION_PACKET.md does not exist (copy the template and fill it with "
                      "real evidence).")
     else:
-        secs = _sections(_read(PACKET))
-        for bar in BARS:
+        raw = _read(PACKET)
+        if "UNFILLED-EXHAUSTION-TEMPLATE" in raw:
+            fails.append("EXHAUSTION_PACKET.md still carries the unfilled-template sentinel -- it "
+                         "has not been filled with real evidence.")
+        secs = _sections(raw)
+
+        def _evidence(body: str) -> list[str]:
+            # a real evidence line is non-empty, NOT a `>` instruction, and NOT a placeholder
+            return [ln.strip() for ln in body.splitlines()
+                    if ln.strip() and not ln.lstrip().startswith(">")
+                    and not PLACEHOLDER.search(ln.strip())]
+
+        for bar in BARS + ["CONCLUSION"]:  # the conclusion itself now needs real content too
             body = next((b for h, b in secs.items() if bar in h), None)
             if body is None:
                 fails.append(f"packet missing the '{bar}' section")
                 continue
-            content = [ln.strip() for ln in body.splitlines()
-                       if ln.strip() and not PLACEHOLDER.search(ln.strip())]
-            if not content:
-                fails.append(f"packet '{bar}' section is empty or placeholder")
+            if not _evidence(body):
+                fails.append(f"packet '{bar}' section has no real evidence (only instructions/"
+                             "placeholders) -- fill it with plain (non-'>') lines")
 
     # --- layer 3: NOVELTY -- the fresh-context adversary must have come back empty-handed
     if not ADVERSARY.exists():

@@ -65,18 +65,19 @@ def _commit_push(paths: list[Path], msg: str) -> None:
 
 
 def _manifest_lines(t: dict) -> list[str]:
-    """Per-file hash lines for this run's pulls, from the authoritative manifest (ledger branch
-    first, working-tree fallback). These are the hashes the aiv gate accepts as money anchors --
-    v1 hand-copied them, which was a per-iteration chance to cite the wrong pull."""
+    """Per-file hash lines for this run's pulls, from the VERIFIER-OWNED manifest only. These are
+    pre-filled into the packet as citable money anchors, so they must come from a source the agent
+    cannot write. The working-tree ledger/raw/MANIFEST.sha256 is agent-writable -- reading it here
+    would let a forged hash be pre-presented as 'citable' (CodeRabbit finding). So: read ONLY the
+    committed manifest on the facts lane; if it is unreachable, pre-fill NOTHING (the agent fills
+    the anchor by hand and aiv_gate validates it against the same committed manifest at close)."""
     import os
     lb = os.environ.get("LEDGER_BRANCH", "ledger")
     r = _run("git", "show", f"origin/{lb}:ledger/raw/MANIFEST.sha256", check=False)
-    text = r.stdout if r.returncode == 0 else ""
-    if not text:
-        mf = REPO / "ledger" / "raw" / "MANIFEST.sha256"
-        text = mf.read_text() if mf.exists() else ""
+    if r.returncode != 0 or not r.stdout:
+        return []  # no verifier-owned manifest reachable -> do NOT fall back to the writable file
     pulls = set(t.get("pulls_this_run") or [])
-    lines = [ln for ln in text.splitlines() if ln.split()[-1:] and ln.split()[-1] in pulls]
+    lines = [ln for ln in r.stdout.splitlines() if ln.split()[-1:] and ln.split()[-1] in pulls]
     return lines[:5]
 
 
