@@ -60,14 +60,29 @@ while true; do
   #    push any pending local commits FIRST, and only reset when local is not ahead of origin.
   git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" || true
   if git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
-    if [[ -n "$(git rev-list -q "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null)" ]]; then
-      git push -q origin "HEAD:$LEDGER_BRANCH" 2>>"$LOG" \
-        && git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" \
-        || say "WARN: local ledger commits not yet pushed; NOT resetting (would lose raw pulls)"
+    # ROUND-3 FIX: the previous guard here used `git rev-list -q <range>`, which is a usage error
+    # (-q is not a rev-list flag): stderr was swallowed, the substitution was ALWAYS empty, the
+    # push-before-reset branch never fired, and the reset ran unconditionally every cycle -- i.e.
+    # the data-loss fix was inert and the hazard it claimed to close stayed open. `--count` is the
+    # correct primitive; verified against a blocked remote (commit preserved) and after unblocking
+    # (commit recovered to origin).
+    AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
+    if [[ "${AHEAD:-0}" -gt 0 ]]; then
+      if git merge-base --is-ancestor "origin/$LEDGER_BRANCH" HEAD 2>>"$LOG"; then
+        # genuinely ahead (a prior push failed): push the stranded facts commits, never reset over
+        git push -q origin "HEAD:$LEDGER_BRANCH" 2>>"$LOG" \
+          && { git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG"; say "recovered $AHEAD stranded facts commit(s)"; } \
+          || say "WARN: $AHEAD local ledger commit(s) not yet pushed; NOT resetting (would lose raw pulls)"
+        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
+      else
+        # diverged (origin force-moved by another verifier checkout): skip-forever would deadlock
+        # the lane, so converge loudly -- origin is the published record.
+        say "WARN: facts lane diverged from origin -- converging to origin/$LEDGER_BRANCH"
+        AHEAD=0
+      fi
     fi
     # reset only when we are NOT ahead of origin (else keep the local commits for next push)
-    [[ -z "$(git rev-list -q "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null)" ]] && \
-      git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
+    [[ "${AHEAD:-0}" -eq 0 ]] && git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
   fi
   # keep the agent's committed constitution reachable for pnl.py's hash check. FAIL CLOSED: if the
   # strong-mode fetch fails, a stale origin/AGENT_BRANCH could make pnl publish constitution_intact

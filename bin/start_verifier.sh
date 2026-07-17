@@ -30,7 +30,18 @@ if ! git show "origin/$AGENT_BRANCH:CONSTITUTION.md" 2>/dev/null | grep -qi "fir
   echo "    branched off an OLD base; have it merge the current default branch before the run." >&2
 fi
 
-echo "=== 2. fresh baseline (true run-start; freezes the AGENT's constitution hash) ==="
+echo "=== 2. ensure the facts lane exists, THEN freeze the baseline ==="
+# ROUND-3 FIX (ordering): set_baseline froze the facts-lane OID, but this script used to run it
+# BEFORE verifier_loop.sh created the ledger branch -- so the OID froze empty on every fresh run
+# and guard's ancestry-scoped SoD check silently degraded to the bypassable date scope. Create the
+# lane first (exactly as verifier_loop.sh would), so the baseline records its real tip.
+if ! git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
+  DEFAULT=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||')
+  git push -q origin "origin/${DEFAULT:-main}:refs/heads/$LEDGER_BRANCH" \
+    && echo "  created facts lane '$LEDGER_BRANCH' from origin/${DEFAULT:-main}" \
+    || { echo "FATAL: could not create origin/$LEDGER_BRANCH." >&2; exit 2; }
+  git fetch -q origin "$LEDGER_BRANCH"
+fi
 python3 bin/set_baseline.py
 
 echo "=== 3. launch verifier_loop (two-lane) under caffeinate (background) ==="

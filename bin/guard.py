@@ -149,7 +149,17 @@ def main() -> int:
         return fail(msg)
     try:
         base = t.get("baseline_ledger_commit", "") or ""
-        # v1-compat: older baselines have no OID -> fall back to the (weaker) date scope, noted.
+        # ROUND-3 FIX: in STRONG (ledger-branch) mode a missing baseline OID must FAIL, not fall
+        # back to date scoping -- committer dates are agent-forgeable, so the date fallback is the
+        # exact backdating bypass the ancestry check was built to close. (It was also the DEFAULT
+        # path on fresh runs, because set_baseline used to run before the ledger branch existed;
+        # set_baseline now always freezes an OID.) The date fallback survives ONLY for weak mode,
+        # where the whole check is a tripwire anyway.
+        if truth_source == "ledger-branch" and not base:
+            return fail("strong mode but truth.json carries no baseline_ledger_commit -- the SoD "
+                        "ancestry scope cannot engage, and the date fallback is bypassable by "
+                        "backdating. Re-run bin/set_baseline.py (it now always freezes an OID), "
+                        "then restart the verifier.")
         since = None
         if not base:
             cm = t.get("counts_only_money_after", "")

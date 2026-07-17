@@ -24,10 +24,32 @@ LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
 # `<this commit>..origin/<ledger>` -- ANCESTRY, not `--since` (committer dates are agent-forgeable,
 # so a backdated planted commit escaped a date window; CodeRabbit finding). Any ledger/ commit
 # reachable from the facts-lane tip but NOT from this baseline is "this run's" and must be
-# verifier-authored. Empty string => the branch did not exist at run start => check full history.
+# verifier-authored.
+#
+# ROUND-3 FIX: the OID was frozen "" on every FRESH run -- start_verifier.sh ran this script
+# BEFORE verifier_loop.sh created the ledger branch, so the rev-parse always failed and guard
+# silently fell back to the bypassable date scope for the whole run (the fallback the ancestry
+# check exists to kill). Two changes: (1) fetch first, so the ref is current, never stale;
+# (2) if the ledger branch does not exist yet, freeze the OID it is ABOUT to be created from
+# (origin's default branch tip -- exactly what verifier_loop.sh branches from), so the ancestry
+# scope engages from cycle one. start_verifier.sh now also pre-creates the branch (belt).
+_sp.run(["git", "fetch", "-q", "origin"], cwd=REPO, capture_output=True, timeout=60)
 _r = _sp.run(["git", "rev-parse", f"origin/{LEDGER_BRANCH}"], cwd=REPO,
              capture_output=True, text=True)
-baseline_ledger_commit = _r.stdout.strip() if _r.returncode == 0 else ""
+if _r.returncode == 0:
+    baseline_ledger_commit = _r.stdout.strip()
+else:
+    _d = _sp.run(["git", "symbolic-ref", "-q", "--short", "refs/remotes/origin/HEAD"],
+                 cwd=REPO, capture_output=True, text=True)
+    default = (_d.stdout.strip() or "origin/main")
+    _r2 = _sp.run(["git", "rev-parse", default], cwd=REPO, capture_output=True, text=True)
+    if _r2.returncode != 0:
+        raise SystemExit(f"FATAL: origin/{LEDGER_BRANCH} does not exist and {default} is "
+                         "unresolvable -- cannot freeze a baseline OID. Fetch origin and retry; "
+                         "guard REFUSES strong mode without this OID (fail-closed).")
+    baseline_ledger_commit = _r2.stdout.strip()
+    print(f"note: origin/{LEDGER_BRANCH} absent; froze baseline OID from {default} "
+          f"({baseline_ledger_commit[:12]}) -- the lane will be created from it.")
 
 now = int(time.time())
 STATE_DIR.mkdir(parents=True, exist_ok=True)
