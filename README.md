@@ -53,9 +53,9 @@ the point of the experiment, not a disclaimer on it.
 |---|---|
 | Wall clock | ~17 hours, 2026-07-16 (~03:38 → ~21:00 local), two sessions split by a ~2–3h operator break |
 | Iterations | 88 logged in `MONEY_LOG.md`, numbered to 098 with gaps (several numbers lost to verifier resets) |
-| Commits ahead of main | 349 (excluding this documentation commit) — 198 verifier heartbeats, 149 agent, 2 Claude-attributed |
+| Commits ahead of main | ~348 — 196 verifier heartbeats, ~150 agent, 2 Claude-attributed |
 | Verification packets | 95 (`.github/aiv-packets/VERIFICATION_PACKET_ITER_*.md`) |
-| Immutable raw ledger pulls | 885 (`ledger/raw/`, hashed into `MANIFEST.sha256`) |
+| Immutable raw ledger pulls | 884 (`ledger/raw/`, hashed into `MANIFEST.sha256`) |
 | Outbound email | ~23 documented sends (the run's own accounting, iter 077: 17 value-first outreach + 5 false-claim corrections + 1 demand follow-up); parts of `SENT_LOG.md` are reconstructed (see below) |
 | Products shipped | 9 live surge.sh funnels; 7 payable Stripe links (6 products + a pay-what-you-want tip link) |
 | Tools built | ~12 (see inventory below) |
@@ -376,7 +376,7 @@ each tracked its verification quality exactly:
 
 | Claim | Verification | Artifact | Trustworthy? |
 |---|---|---|---|
-| "I made $0.00" | Grounded, out of band: agent-unreachable keys, immutable hashed pulls, wash-trade exclusion, staleness halts | `received_usd = 0.00`, verified | **Yes.** Held for 17 hours and 198 verifier cycles; every pre-hardened attack path stayed closed |
+| "I made $0.00" | Grounded, out of band: agent-unreachable keys, immutable hashed pulls, wash-trade exclusion, staleness halts | `received_usd = 0.00`, verified | **Yes.** Held for 17 hours and 196 verifier cycles; every pre-hardened attack path stayed closed |
 | "The task is exhausted" | Self-graded: a gate counting the agent's own effort artifacts (≥8 iteration headers, ≥3 email lines, five filled sections) | `EXHAUSTION PROVEN` | **No.** False — a live bet was still pending, and the agent stopped on the certification |
 
 The failure mechanism (096's diagnosis): three prompt-level safeguards that all routed through one
@@ -419,8 +419,8 @@ never got that treatment in v1. That is issue #7, the precondition for v2. Full 
    converted is untested.
 
 **Unmeasured entirely: the run's real costs.** `spent_usd = 0` counts the card only. Token spend, ~17
-hours of compute, and substantial operator attention (two redirect documents, at least six live
-corrections, the workers.dev claim) sit outside every ledger. v1's true P&L is negative by an
+hours of compute, and substantial operator attention (two redirect documents, ~ten live steering
+interventions, the workers.dev claim) sit outside every ledger. v1's true P&L is negative by an
 unrecorded amount — worth stating in a repo whose premise is that unmeasured costs default to looking
 like zero.
 
@@ -507,7 +507,7 @@ exhaustion. The open work is in the [issue tracker](../../issues).
 | mastodon.nu account | Email-confirmed, awaiting human staff approval |
 | workers.dev hub | Claimed and persistent; staged title-fix (`iterations/089/worker.js`) awaiting an operator redeploy |
 | `.telegraph_token` leak | Tracked early in the run, history-scrubbed on this branch, low-stakes, disclosed in the PR body |
-| `disclosure_gate.py` promotion | Open policy question (issue #11) — note `main`'s `mail.py` already imports it fail-closed, so main's send path is inert until it is promoted or the import is made optional |
+| `disclosure_gate.py` promotion | Open policy question (issue #11). The fail-closed import lives in **this branch's** `mail.py` — `main` predates the gate and has neither the import nor the file — so once #8 merges, every send will require a logged EV decision in `DISCLOSURE_EV_LOG.md`; the send path is gated until the policy is finalized |
 | PR #8 | Open, unmerged — the run's evidence stays on its branch by design, to keep v2 context-free |
 
 ---
