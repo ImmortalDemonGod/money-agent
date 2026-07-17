@@ -440,3 +440,56 @@ trusting it). (3) Nothing rate-limits iterations against the due-bet schedule �
 still prose + agenda visibility. (4) EDGE claims in packets are matched by regex; a paraphrase
 that dodges the trigger phrases dodges stage 2a-bis (the canonical-JSON packet form would close
 this properly — future work with upstream aiv-protocol).
+
+## Entry 010 — the bottleneck inventory (the /loop's working backlog), plus the first two fixes
+
+**Method note for this loop.** Each entry names the bottleneck it attacks, the source that proves
+it is real (run-1 logs / v2 DEGRADED list / entry-009 critique / aiv-protocol audit), the fix, and
+the test. The inventory below is priority-ordered and will be consumed top-down until exhaustion;
+items get struck through as they land.
+
+**The inventory:**
+- **B1 — push-fail + reset destroys committed raw pulls** (v2 DEGRADED #10; the audit-trail hole).
+  FIXED this entry: verifier_loop pushes unpushed facts commits BEFORE converging, and skips the
+  reset while local is ahead — the reset that ate evidence can no longer run against unpushed
+  history.
+- **B2 — MAX_ITERS counts packets by glob while iter.py owns a monotonic COUNTER** (design said
+  counter, guard never migrated). FIXED this entry: guard prefers iterations/COUNTER when present.
+- **B3 — the conclusion adversary is agent-invoked and one Write away** (DEGRADED #8, M3 residual;
+  the last self-graded surface). Plan: require a committed adversary TRANSCRIPT artifact (tool-use
+  records, not just a verdict file), pin its hash in the report, and give the verifier loop an
+  optional re-run hook so grounding can be operator-side.
+- **B4 — edge claims are matched by regex; a paraphrase dodges stage 2a-bis** (entry-009 critique).
+  Plan: when the edge rail is live (verdict != NONE), REQUIRE a structured `EDGE_CLAIM:` line in
+  any packet whose iteration traded, and adjudicate that line -- structure the claim, not the prose.
+- **B5 — weak mode has no non-destructive runner** (DEGRADED #9's second half). Plan: run_weak.sh
+  (co-located verifier without resets, honest tripwire-only labeling).
+- **B6 — aiv-protocol upstream defects bite this integration**: the init shebang bug (#29, worked
+  around in setup_sandbox.sh) and the E010 bug-fix heuristic false-positive ("issue #N" in Class E
+  fails an honest packet -- documented in TEMPLATE as a trap). Plan: fix both upstream in the
+  aiv-protocol repo (in scope for this session) so the workaround and the trap note can eventually
+  be deleted.
+- **B7 — nothing mechanically paces iterations against the due-bet schedule** (entry-009 critique;
+  run 1 burned 091–094 polling). Plan: guard advisory when an iteration opens with zero due bets
+  and the last N closes were watch-eligible; keep it advisory -- a hard block would fight genuine
+  new work.
+- **B8 — `aiv audit` is installed but never runs** (canonical quality sweep exists, unused). Plan:
+  wire into iter.py close as non-blocking report first; blocking only if signal/noise proves out.
+- **B9 — bets resolutions don't feed knowledge/outcomes.jsonl** (the compounding layer misses the
+  richest records: resolved day-scale bets ARE channel outcomes). Plan: bets.py resolve appends an
+  outcome record automatically.
+- **B10 — the edge rail has never touched the live paper API** (entry-009 residual, same class as
+  PR #18's unproven two-lane). Operator-gated: write the one-cycle live acceptance checklist into
+  SETUP so it cannot be skipped silently.
+
+**Entry 010 results.** B1 landed and tested in both failure modes: with pushes blocked, the
+stranded facts commit and its raw pull survive (reset skipped, loud log line); on divergence
+(external rotation), the lane converges instead of deadlocking AND any pull that existed only in
+local history is rescued by re-COMMIT as verifier (a bare file restore would be eaten by pnl.py's
+C3 untracked-purge -- that interaction is why the rescue commits). B2 landed and tested: MAX_ITERS
+reads iterations/COUNTER (exit 2 at the ceiling, silent below it). Critique of this entry: (1) the
+divergence-rescue path shells comm/mktemp/xargs -- the most fragile bash in the loop; if it ever
+misbehaves the failure is loud (say lines) but a python helper would be sturdier; (2) my own first
+test read $? through a pipe -- iter-091's exact trap -- caught and redone; the trap note in
+knowledge/traps.md is earning its keep. Next: B9 (bets->outcomes compounding), then B6 upstream
+aiv-protocol fixes.

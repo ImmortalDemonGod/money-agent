@@ -65,9 +65,16 @@ def main() -> int:
     # halt after N iterations as a CHECKPOINT (not a failure) for the operator to raise or stop.
     max_iters = int(os.environ.get("MAX_ITERS", "0") or "0")
     if max_iters > 0:
-        pkts = list((REPO / ".github" / "aiv-packets").glob("VERIFICATION_PACKET_ITER_*.md"))
-        if len(pkts) >= max_iters:
-            print(f"HALT: iteration ceiling reached ({len(pkts)} >= MAX_ITERS={max_iters}). This "
+        # B2 FIX: iter.py owns a monotonic committed counter precisely because glob-counting
+        # drifted in run 1 (gaps at 024/027 distorted MAX_ITERS). Prefer the counter; the glob
+        # remains the fallback for a tree that has never run iter.py new.
+        counter = REPO / "iterations" / "COUNTER"
+        if counter.exists():
+            n_iters = int(counter.read_text().strip() or "0")
+        else:
+            n_iters = len(list((REPO / ".github" / "aiv-packets").glob("VERIFICATION_PACKET_ITER_*.md")))
+        if n_iters >= max_iters:
+            print(f"HALT: iteration ceiling reached ({n_iters} >= MAX_ITERS={max_iters}). This "
                   "bounds the loop's own token cost; it is a checkpoint, not a failure. Write the retro "
                   "in MONEY_LOG.md; the operator decides whether to raise MAX_ITERS or stop.",
                   file=sys.stderr)

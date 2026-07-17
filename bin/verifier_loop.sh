@@ -50,9 +50,54 @@ say "verifier up (two-lane). facts=$LEDGER_BRANCH agent=${AGENT_BRANCH:-<unset>}
 while true; do
   # 1. converge OUR lane only. This reset touches the verifier's own branch -- the agent's branch
   #    is never named anywhere in this loop, which is the whole point of v2.
+  #    B1 FIX (DEGRADED #10): if a prior cycle committed facts but the PUSH failed, HEAD is ahead
+  #    of origin and a hard reset would DELETE those committed raw pulls -- the "immutable" audit
+  #    trail losing a pull to its own convergence step. So: push the stranded commits first, and
+  #    NEVER reset while local is ahead (retry next cycle instead; truth.json self-heals either
+  #    way, this preserves the pulls).
   git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" || true
-  git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1 && \
-    git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
+  if git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
+    AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null || echo 0)
+    if [[ "${AHEAD:-0}" -gt 0 ]]; then
+      if git merge-base --is-ancestor "origin/$LEDGER_BRANCH" HEAD 2>/dev/null; then
+        # true fast-forward strandedness: these commits belong on origin. Push, never reset over.
+        if git push -q origin "$LEDGER_BRANCH" 2>>"$LOG"; then
+          say "recovered $AHEAD stranded facts commit(s) from a failed push"
+          git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" || true
+        else
+          say "still cannot push $AHEAD stranded facts commit(s) -- SKIPPING reset to preserve them"
+        fi
+        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null || echo 0)
+      else
+        # DIVERGED: origin was force-moved (rotation from another checkout). A skip-forever here
+        # would deadlock the lane, so converge -- but first RESCUE any raw pull that exists only
+        # in the local history (a stranded pull committed after the divergence point). It must be
+        # re-COMMITTED, not just restored: pnl.py's C3 purge deletes untracked raw files as
+        # agent-planted, so a bare file restore would be eaten next cycle.
+        RESCUE=$(comm -23 <(git ls-tree -r HEAD --name-only -- ledger/raw/ | sort) \
+                          <(git ls-tree -r "origin/$LEDGER_BRANCH" --name-only -- ledger/raw/ | sort))
+        RD=""
+        if [[ -n "$RESCUE" ]]; then
+          RD=$(mktemp -d)
+          while IFS= read -r f; do
+            mkdir -p "$RD/$(dirname "$f")"; git show "HEAD:$f" > "$RD/$f" 2>>"$LOG"
+          done <<< "$RESCUE"
+        fi
+        say "facts lane diverged from origin (rotation elsewhere?) -- converging to origin"
+        git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
+        if [[ -n "$RESCUE" ]]; then
+          (cd "$RD" && find . -type f -print0 | xargs -0 -I{} sh -c 'mkdir -p "$0/$(dirname "{}")" && cp "{}" "$0/{}"' "$R")
+          git add ledger/raw/ 2>>"$LOG"
+          git -c user.name="verifier" -c user.email="verifier@local" commit -q --no-gpg-sign \
+            -m "verifier: rescued $(wc -l <<< "$RESCUE") stranded raw pull(s) after divergence" 2>>"$LOG" \
+            && say "rescued stranded pulls: $(echo "$RESCUE" | tr '\n' ' ')"
+          rm -rf "$RD"
+        fi
+        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null || echo 0)
+      fi
+    fi
+    [[ "${AHEAD:-0}" -eq 0 ]] && git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
+  fi
   # keep the agent's committed constitution reachable for pnl.py's hash check
   [[ -n "$AGENT_BRANCH" ]] && { git fetch -q origin "$AGENT_BRANCH" 2>>"$LOG" || true; }
 
