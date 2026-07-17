@@ -614,113 +614,119 @@ by checking the artifact instead of the memory of it.
 
 ---
 
-## 15. Enabling rails — making cases 2 and 3 DOABLE, not just contained
+## 15. The generalized system — failure classes and business-blind primitives
 
-§14 diagnosed; this section constructs. The template is the edge rail itself: trading
-was v1's unscoreable/unsafe shape, and v2 enabled it not by relaxing a rule but by
-building a rail — pre-registration → an external system's books as the fact lane →
-a mechanical operator checkpoint before the harmful step. Both remaining cases
-decompose the same way.
+**Correction to this section's own first draft.** As first written, §15 constructed
+three vertical rails (a "data rail," a "fulfillment rail," an affiliate variant). That
+over-fits: it bakes specific business models into the harness, which breaks the
+experiment's premise — the agent must *converge* on a business, not choose from a menu
+the harness pre-blessed. The three cases in §14 were **probes**, and the correct yield
+of a probe is the *failure class* it exposes, not a bespoke fix for the probe itself.
 
-### 15.0 The recipe (and one new primitive)
+The codebase already contains the style proof in both directions. `bets.py` is the
+exemplar of the right style: it does not know what "indexation" is — it knows **clock
+classes**, so any business's external waits fit it unchanged. The edge rail is the
+cautionary instance: it knows what "Alpaca" is — a vertical, whose pattern must be
+re-derived for every new revenue source. The generalized system is: extract the
+failure classes the probes revealed, give each ONE business-blind primitive, and let
+any business — probed or never-imagined — decompose into a composition of them.
 
-Every "the agent can't do X" splits into three parts, each with a known treatment:
+### 15.1 The failure-class table (what the probes actually found)
 
-1. **A groundable fact** — some external system's books can attest it → build a
-   verifier pull (the Alpaca move).
-2. **An irreducible judgment** — legality, brand risk, ToS interpretation → an
-   **operator countersign on the facts lane**: the agent *requests* by committing a
-   registration on the claims lane; the operator *approves* by committing a signed
-   approval to the ledger branch the agent cannot write; `guard.py` checks presence,
-   not content. This is the one new primitive this section needs, and the two-lane
-   architecture already paid for it. Crucially it is **asynchronous**: the agent
-   registers an `approval`-clock bet (`bets.py` already has the clock class) and keeps
-   working other leads — the operator becomes an async oracle, never a blocker, so the
-   autonomy rule survives intact.
-3. **A harm window** — the interval where a customer could be hurt → fail-closed
-   automatic remediation held by the VERIFIER (not the agent), sized by exposure caps.
+| # | Failure class (business-agnostic) | Revealed by | v2 today | Primitive |
+|---|---|---|---|---|
+| FC1 | **Unscoreable outcomes** — results arriving outside a provisioned fact source are invisible to the run | trading, affiliate | Two hard-coded rails (Stripe in `pnl.py`, Alpaca in `edge_pnl.py`); anything else is prose | P1 fact-source adapter contract |
+| FC2 | **Self-adjudicated experiments** — a bar the claimant can move after seeing results | trading (and run-1's fp_predict, solved there by discipline) | Solved for ONE vertical (`edge_pnl.py` freeze/VOID) | P2 generic pre-registration freeze |
+| FC3 | **Judgment-gated actions** — acceptability is not machine-decidable (ToS, licensing, PII, advice-giving, name-test calls) | scraped data; signals-newsletter sub-case | One topic-specific gate (`disclosure_gate.py`); everything else prose → over-refusal or name damage | P3 recorded-decision gate + P4 facts-lane countersign |
+| FC4 | **Post-payment obligations** — anything owed after the money lands (fulfilment, service delivery, subscriptions, support) | dropshipping | Nothing represents an obligation; containment only via the first-dollar stop | P5 obligation register + verifier watchdog |
+| FC5 | **Unverified substrate** — building on a layer never proven to work (serving, delivery chain, account rail) | all three (and run-1's robots.txt at iter 070) | `host_check.py`, web-only | P6 substrate-probe registry |
+| FC6 | **Unbounded exposure** — liability that accumulates per action with no cap | dropshipping | Caps exist for card spend only, not for obligations/liability | P7 exposure caps (generic) |
+| FC7 | **External clocks** — outcomes that resolve on the world's schedule | all three | **Solved, generally** (`bets.py`) — kept in the table as the existence proof that business-blind primitives are achievable | (done) |
 
-### 15.1 The data rail (case 2: scraped datasets) — no constitutional change needed
+Everything §14 found — including G1–G5 — lands in exactly one row. That is the test
+that the classes are cut right.
 
-Nothing in the constitution forbids this shape; only bounds *uncertainty* blocks it
-(over-refusal) or gets it wrong (name-test damage). The rail:
+### 15.2 The primitive set (each spec business-blind)
 
-- **Pre-registration:** `DATA_REGISTRATION.md` before scraping at scale — sources
-  (domains/paths), per-source license basis (public-domain / open-license / ToS-cited),
-  PII policy, intended buyer class. Same freeze semantics as `EDGE_REGISTRATION.md`.
-- **Mechanical lane (deterministic, buildable today):**
-  - *robots compliance per source* — `host_check.py`'s exact logic pointed at source
-    paths instead of own funnels; run at registration and re-run at each scrape batch.
-  - *harness-owned scraper* with enforced rate caps, logging every fetched URL into a
-    hashed manifest (`ledger/raw` convention) so the dataset's provenance is a
-    committed, citable artifact — packets about the dataset must cite it (aiv_gate
-    pattern).
-  - *fail-closed PII scan* over the output (emails/phones/addresses/name-like
-    entities): any hit blocks listing until redacted and re-scanned clean. Detection
-    is imperfect → acceptable, because it fails closed AND sits under the countersign.
-- **Judgment lane:** one operator countersign **per SKU class** (e.g. "aggregated
-  public filings data"), requested async via an approval bet. First approval of a
-  class is human; every subsequent dataset of the same class lists mechanically.
-- **Delivery:** a file at the payment instant — passes the G4/A4 probe trivially.
-  Demand outreach already runs under `disclosure_gate` + reply-clock bets.
+- **P1 — Fact-source adapter contract.** Not "add rail #3" but: extract the contract
+  `pnl.py` and `edge_pnl.py` both already implement implicitly — verifier-side
+  credential, immutable timestamped raw pulls, manifest hashing, facts published to
+  the ledger branch, a mechanical verdict field, fail-closed on pull error. A new
+  outcome source (any broker, any network's reporting API, any marketplace) becomes a
+  *config + one pull function*, not a redesign. Registration-time behavior for the
+  rest: a strategy citing a non-provisioned source gets the mechanical message "not
+  scored — request provisioning or an operator ruling" (G5, generalized).
+- **P2 — Pre-registration freeze, generic.** The `edge_pnl.py` freeze/VOID machinery
+  lifted out of the trading vertical: ANY claim of the form "METRIC from FACT-SOURCE
+  will clear BAR with ≥ SAMPLE by DEADLINE" can be registered, frozen (sha256 +
+  baseline snapshot in the verifier's private state), and mechanically adjudicated.
+  Trading was merely the first user. G1's risk-shape fields become optional
+  registration keys, not trading-specific code.
+- **P3 — Recorded-decision gate, generic.** `disclosure_gate.py` generalized from its
+  one topic: before any action in a declared **risk class** (external send, publish,
+  listing, data acquisition), a decision record keyed by content hash must exist —
+  fail-closed on *absence*, never graded on *content*. The gate doesn't know what
+  scraping is; it knows "this action class requires a recorded reasoning entry."
+- **P4 — Facts-lane countersign.** The async operator-approval primitive (§15's first
+  draft had this right, and it is already general): request on the claims lane,
+  approval committed to the ledger branch the agent cannot write, `guard.py` checks
+  presence. Consumed via an `approval`-clock bet so the agent never waits. Typed by
+  **risk class**, never by business ("sell-derived-data-class", "post-payment-
+  obligation-class"), so one approval covers every future instance of the class.
+- **P5 — Obligation register + watchdog.** The general form of the dropship problem:
+  a sale MAY create an obligation record (what is owed, completion oracle, deadline).
+  The verifier watches obligations like it watches the ledger; an unmet deadline
+  triggers the fail-closed remediation (verifier-issued refund) and halts the
+  activity. Completion oracles are plug-ins under P1 (carrier tracking, client
+  confirmation, subscription delivery) — the register itself never knows what a
+  "shipment" is. Under the current constitution the register is trivially empty
+  (deliver-in-full = no obligations may exist); the primitive is what makes any
+  future relaxation *safe* rather than prose.
+- **P6 — Substrate-probe registry.** `host_check.py` as the first entry in an
+  extensible set of deterministic "does the layer under me actually work" probes
+  (serving, mail round-trip, payment-link flow — including the G4/A4 instant-delivery
+  probe, which is just the payment-substrate probe). A claim of type X must cite a
+  passing probe of type X (the `HOST_CHECK`-line-in-packet pattern, generalized).
+- **P7 — Exposure caps, generic.** Per-risk-class ceilings (count of open
+  obligations, max single-item liability, cumulative liability as a fraction of
+  received funds), enforced at action time — the liability-side twin of the card's
+  spend cap.
 
-Result: the agent can scrape, package, probe demand, and list — with the name-test
-judgment placed once per class, and every risky sub-fact (robots, rate, PII,
-provenance) grounded or fail-closed.
+### 15.3 The probes, recomposed (no primitive knows which business it is serving)
 
-### 15.2 The fulfillment rail (case 3: dropshipping) — operator-provisioned, like the edge rail
+| Probe | Composition |
+|---|---|
+| Trading | P1 (broker adapter) + P2 (frozen bar) + P4 (real-capital countersign) |
+| Scraped datasets | P3 (acquisition + listing decision records) + P4 (sell-derived-data class) + P6 (source-robots probe) + P7 |
+| Dropshipping | P4 (obligation-class enable) + P5 (fulfilment obligations, carrier oracle via P1) + P6 (supplier-chain probe) + P7 |
+| Affiliate | P1 (network reporting adapter) + P3 (disclosure-leading decision record) + P6 (live-page probe) |
 
-Deliver-in-full's *purpose* is "no disputable charge on a real man's name."
-Post-payment fulfillment is not itself the harm; an unsupervised agent's inability to
-GUARANTEE fulfillment is. So ground the guarantee. This requires amending a frozen
-bound, which only the operator can do — so the rail ships exactly as the edge rail
-did: "IF the run is provisioned for it." The generalized bound:
+The harness never contains the words "dropshipping," "dataset," or "trade." The agent
+chooses the business; the primitives price its risks.
 
-> Delivery is either INSTANT, or MECHANICALLY GUARANTEED by an out-of-band watchdog
-> holding refund authority.
+### 15.4 The generality check (a probe the system was NOT built from)
 
-The machinery:
+Run a fourth archetype that none of the probes shaped — **custom services / paid
+consulting**, the most common thing a capable agent would try: it decomposes with zero
+new primitives. Service owed after payment → P5 obligation (completion oracle:
+client confirmation via the mail fact lane — the weakest oracle class, and P5 makes
+that weakness explicit rather than hidden); scope-of-work acceptability → P3 record +
+P4 class approval; capacity → P7 (open-obligation count); the deliver-in-full tension →
+same P5 gate as dropshipping, no new rule. A **subscription product** likewise: a
+recurring P5 obligation on a Stripe oracle P1 already provides. When a fourth and
+fifth case need nothing new, the primitive set — not the probe list — is the system.
 
-- **Substrate proof before listing:** one test order to the operator's own address —
-  a `bets.py` shipping-clock bet proving the supplier chain end-to-end (the §5 stage-1
-  discipline, applied). No listing until it resolves `won`.
-- **The fact lane is the carrier's books** (the Alpaca move): on each sale the harness
-  auto-registers a fulfillment bet (supplier order within T hours → tracking obtained
-  → delivered-by deadline), and the VERIFIER polls the carrier tracking API
-  out-of-band. A fabricated or stalled tracking number gains the agent nothing: no
-  verified delivery by the deadline is simply a missed deadline.
-- **Fail-closed remediation: verifier-issued auto-refund.** Deadline missed → the
-  verifier refunds the charge via Stripe and disables the rail pending operator
-  review. This requires deliberately widening the verifier key from read-only to
-  read+refund — a documented posture change on the operator-controlled side; the agent
-  side gains nothing. The refund fires *before* a chargeback window matters, which is
-  what collapses the dispute risk onto ordinary refund mechanics.
-- **Exposure caps:** max 1 unfulfilled order initially, max item price, cumulative
-  unfulfilled liability ≤ a configured fraction of received funds; any refund event
-  halts the rail.
-- **Countersign:** the operator enables the rail per supplier, on the facts lane.
+The residual, named: completion oracles vary enormously in strength (carrier API ≫
+client-confirmation email), and P5 inherits whatever oracle quality P1 can provide.
+The register makes oracle weakness *visible and cappable* (P7 can be tightened for
+weak-oracle classes); it cannot make weak oracles strong.
 
-**Affiliate marketing** is the light variant of the same construction: the operator
-provisions the network account (as they provisioned Alpaca paper creds); the verifier
-reads the network's reporting API as rail #3's fact lane (`ledger/affiliate.json`);
-and the FTC-disclosure requirement becomes mechanical by composing two existing tools —
-the published page must fetch live (`host_check` pattern) with the disclosure present
-and leading (`disclosure_gate` pattern) before any packet may claim the publish.
+### 15.5 Costs (unchanged from the first draft, and they attach to the primitives now)
 
-### 15.3 What this buys, and what it costs
-
-Buys: the three shapes stress-tested in §14 all become *scored, bounded, doable* —
-none by weakening a wall, each by adding a fact lane and moving the irreducible
-judgment to an async, unforgeable operator signature. The funnel widens again, the way
-v2 widened it for trading.
-
-Costs, named honestly: (1) the verifier accretes authority (refunds, more API pulls) —
-it is becoming a small custodial system, and its own correctness is now
-harm-load-bearing, not just truth-load-bearing; its scripts deserve the same
-adversarial review cadence the gates got. (2) The countersign primitive reintroduces
-the operator into the loop — asynchronously and unforgeably, but §15 should not
-pretend this is full autonomy; it is autonomy with a human oracle for judgment calls,
-which is exactly the H1/H2 shape aiv-workflow never apologized for. (3) Each rail is
-real engineering (carrier polling, PII scanning, approval verification) and each new
-integration is new attack surface on the verifier host — SSRF-class care
-(`host_check.py:28-40`'s guard) applies to every new fetcher.
+(1) The verifier accretes authority (refund execution in P5, more pulls in P1) — it
+becomes harm-load-bearing, not just truth-load-bearing, and deserves the gates'
+adversarial-review cadence. (2) P4 reintroduces the operator as an async, unforgeable
+judgment oracle — bounded autonomy, the H1/H2 shape aiv-workflow never apologized
+for; the honest statement is that FC3 is irreducible, not that it was mechanized.
+(3) Every P1 adapter and P6 probe is new attack surface on the verifier host —
+`host_check.py:28-40`'s SSRF posture applies to each.
