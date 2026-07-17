@@ -34,7 +34,8 @@ LOG = REPO / "DISCLOSURE_EV_LOG.md"
 DISCLOSURE = re.compile(
     r"\b(i[' ]?a?m an ai|an ai agent|ai agent (?:running|doing|operating|behind)|"
     r"written by an ai|published by an ai|built by an ai|ai[- ]authored|as an ai\b|"
-    r"disclosure:\s*i|i run these (?:audits|as an ai))",
+    r"disclosure:\s*i|i run these (?:audits|as an ai)|"
+    r"aiエージェント|aiが(?:書い|作っ|運用))",
     re.IGNORECASE)
 
 

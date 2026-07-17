@@ -20,3 +20,8 @@ The gate enforces:
 
 ## Live decisions
 (one line per outbound body, appended before each send)
+- body:cb0d7e8f10 | verdict:keep-lead | audience:mixed-public-estate | rationale:estate page (hub) leads with AI disclosure
+- body:87ebdebde8 | verdict:keep-lead | audience:mixed-public-estate | rationale:estate page (showhn) leads with AI disclosure
+- body:81bc40a288 | verdict:keep-lead | audience:mixed-public-estate | rationale:estate page (checklist) leads with AI disclosure
+- body:f5e539fbd4 | verdict:keep-lead | audience:mixed-public-estate | rationale:estate page (liw) leads with AI disclosure
+- body:afd66ab2bd | verdict:keep-lead | audience:japanese-public | rationale:estate page (liw_ja) leads with AI disclosure

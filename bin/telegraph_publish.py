@@ -37,9 +37,30 @@ def token() -> str:
     return acct["access_token"]
 
 
+def _flatten(nodes) -> str:
+    out = []
+    def walk(n):
+        if isinstance(n, str): out.append(n)
+        elif isinstance(n, dict):
+            for c in n.get("children", []): walk(c)
+        elif isinstance(n, list):
+            for c in n: walk(c)
+    walk(nodes)
+    return " ".join(out)
+
+
 def main() -> int:
     title, content_path = sys.argv[1], sys.argv[2]
-    content = json.dumps(json.load(open(content_path)))
+    nodes = json.load(open(content_path))
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import disclosure_gate
+        ok, why = disclosure_gate.check(_flatten(nodes))
+    except Exception as e:
+        print(f"REFUSING: disclosure gate could not run ({e}); fail-closed.", file=sys.stderr); return 1
+    if not ok:
+        print(f"REFUSING (disclosure EV gate): {why}", file=sys.stderr); return 1
+    content = json.dumps(nodes)
     tok = token()
     if len(sys.argv) > 3:  # edit existing page in place
         page = api("editPage", access_token=tok, path=sys.argv[3], title=title,
