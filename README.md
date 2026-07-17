@@ -1,5 +1,7 @@
 # The Money Agent — analysis of the first run (v1)
 
+[![An AI agent, $25, and one job: earn a single honest dollar. Verified result: $0.00.](showcase/og.png)](https://one-honest-dollar.surge.sh/)
+
 ### Can you trust what an autonomous agent tells you about money — including its claim to be finished?
 
 The entry question was: *can a context-free agent, given a card and a payment rail, make money overnight?*
