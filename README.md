@@ -47,8 +47,7 @@ the run should last days. That is the whole list.
 **You are the RUN AGENT:**
 your world is `CLAUDE.md` (the bounds), `CONSTITUTION.md`, `PROMPT.md`, `RUN_COMMANDS.md`,
 `knowledge/` (what past runs falsified, so you do not re-pay for it), and the facts via
-`python3 bin/truth.py`. Deliberately nothing else — not this README, not `docs/` (the
-context-free premise: what you converge on only means something if nothing pointed you there).
+`python3 bin/truth.py`. 
 
 **You are a REVIEWER or AUDITOR (did it really?):**
 `ledger/truth.json` and `ledger/edge.json` on the run's ledger branch are the only real numbers;
