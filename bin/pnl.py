@@ -242,10 +242,27 @@ def main() -> int:
     # agent-unreachable state dir. The agent can edit + commit CONSTITUTION.md (a gate comparing to
     # HEAD goes clean once committed); it cannot change what was frozen here. Result rides in
     # truth.json (verifier-signed), and guard.py halts on a mismatch.
+    #
+    # v2 two-lane: this process runs from the FACTS-lane checkout, so the working-tree
+    # CONSTITUTION.md is the verifier's own copy -- hashing it would check the wrong document. When
+    # AGENT_BRANCH is set (verifier_loop.sh exports it), hash the constitution the AGENT actually
+    # sees: its committed copy on origin. Fall back to the working tree for v1-compat weak mode.
     const_expected = (STATE_DIR / "constitution.sha256")
     constitution_intact = None
     if const_expected.exists():
-        actual = hashlib.sha256((REPO / "CONSTITUTION.md").read_bytes()).hexdigest()
+        const_bytes = None
+        agent_branch = os.environ.get("AGENT_BRANCH", "")
+        if agent_branch:
+            r = subprocess.run(["git", "show", f"origin/{agent_branch}:CONSTITUTION.md"],
+                               cwd=REPO, capture_output=True, timeout=15)
+            if r.returncode == 0:
+                const_bytes = r.stdout
+            else:
+                print(f"warn: cannot read CONSTITUTION.md from origin/{agent_branch}; "
+                      "falling back to working tree for the integrity hash", file=sys.stderr)
+        if const_bytes is None:
+            const_bytes = (REPO / "CONSTITUTION.md").read_bytes()
+        actual = hashlib.sha256(const_bytes).hexdigest()
         constitution_intact = (actual == const_expected.read_text().strip())
 
     # C3: purge any raw pull the verifier did not itself commit, BEFORE computing anything. The

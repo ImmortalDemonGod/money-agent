@@ -76,11 +76,16 @@ def main() -> int:
     if mismatch:
         return fail(mismatch)
 
-    if not TRUTH.exists():
-        return fail("ledger/truth.json missing. Run bin/pnl.py first. "
-                    "The loop must never start blind to its own P&L.")
-
-    t = json.loads(TRUTH.read_text())
+    # v2: facts come through the ONE read path (bin/truth.py) -- ledger branch first (two-lane,
+    # strong), working-tree fallback (v1 compat / weak). The source rides along so the SoD check
+    # below can match its method to the mode.
+    sys.path.insert(0, str(REPO / "bin"))
+    try:
+        import truth as _truth
+        t, truth_source = _truth.load()
+    except Exception as e:
+        return fail(f"cannot load the ledger ({type(e).__name__}: {e}). Run bin/pnl.py (via "
+                    "bin/verifier_loop.sh) first. The loop must never start blind to its own P&L.")
 
     # --- H2: a dead verifier must not look like an honest $0. If the loop stopped (Mac slept, key
     # rotated), truth.json freezes -- still verified:true, still received:0 -- and the agent would
@@ -113,21 +118,51 @@ def main() -> int:
     #   2. unscoped, it flagged the operator's own setup commits and halted every run.
     # That is the same-author weakness every packet in this repo names, demonstrated twice.
     try:
+        # `since` prefers the verifier-signed timestamp inside truth.json itself (in two-lane mode
+        # the local baseline.json copy may predate the run); local file is the fallback.
         since = None
-        if BASELINE.exists():
+        cm = t.get("counts_only_money_after", "")
+        if cm and not cm.startswith("NO BASELINE"):
+            since = cm
+        elif BASELINE.exists():
             since = json.loads(BASELINE.read_text()).get("set_at_iso")
-        args = ["git", "log", "--format=%an"]
-        if since:
-            args.append(f"--since={since}")
-        args += ["--", "ledger/"]
-        r = subprocess.run(args, cwd=REPO, capture_output=True, text=True, timeout=10)
-        authors = {a.strip() for a in r.stdout.splitlines() if a.strip()}
-        bad = authors - {"verifier"}
-        if bad:
-            return fail(f"ledger/ was written by a non-verifier author since the run started: "
-                        f"{sorted(bad)}. SoD is broken -> the experiment is void.\n"
-                        "       (Verifier must commit as user.name='verifier'. Fresh clone? "
-                        "Run bin/setup_sandbox.sh first.)")
+
+        def _ledger_authors(ref: str | None) -> set[str]:
+            args = ["git", "log", "--format=%an"]
+            if ref:
+                args.append(ref)
+            if since:
+                args.append(f"--since={since}")
+            args += ["--", "ledger/"]
+            r = subprocess.run(args, cwd=REPO, capture_output=True, text=True, timeout=10)
+            return {a.strip() for a in r.stdout.splitlines() if a.strip()}
+
+        if truth_source == "ledger-branch":
+            # two-lane mode: (a) only the verifier may author the facts lane; (b) NOBODY -- the
+            # verifier included -- writes ledger/ on the claims lane anymore, so ANY post-baseline
+            # ledger commit here is a planted forgery attempt.
+            # MIGRATION NOTE (verified by test): check (b) depends on the baseline being FRESH.
+            # A branch cut from v1-era main carries legitimate old verifier ledger commits; a
+            # stale baseline puts them inside the window and false-halts. set_baseline.py at run
+            # start (start_verifier.sh step 3) is what makes this check sound -- do not skip it.
+            lb = os.environ.get("LEDGER_BRANCH", "ledger")
+            bad = _ledger_authors(f"origin/{lb}") - {"verifier"}
+            if bad:
+                return fail(f"facts lane origin/{lb} has non-verifier ledger authors: {sorted(bad)}. "
+                            "SoD is broken -> the experiment is void.")
+            planted = _ledger_authors(None)
+            if planted:
+                return fail(f"ledger/ was committed ON THE CLAIMS LANE since the run started "
+                            f"(authors: {sorted(planted)}). In two-lane mode nothing writes ledger/ "
+                            "here -- this reads as a planted ledger. The experiment is void.")
+        else:
+            # v1-compat weak mode: shared tree, verifier-only authorship (the original tripwire).
+            bad = _ledger_authors(None) - {"verifier"}
+            if bad:
+                return fail(f"ledger/ was written by a non-verifier author since the run started: "
+                            f"{sorted(bad)}. SoD is broken -> the experiment is void.\n"
+                            "       (Verifier must commit as user.name='verifier'. Fresh clone? "
+                            "Run bin/setup_sandbox.sh first.)")
     except Exception as e:
         print(f"warn: SoD author check skipped ({type(e).__name__}: {e})", file=sys.stderr)
 
