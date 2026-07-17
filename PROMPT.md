@@ -62,8 +62,8 @@ SEARCH BEFORE YOU CONCLUDE.
     and generalizing to all of them is not evidence. Systematic means a matrix,
     not an anecdote.
   - Build toward demand -- and DO build. The job is to find ONE person who will
-    pay, and building is how you serve that: build freely -- the share-loop
-    product, a localized version for a real audience, a tool. The vanity is NOT
+    pay, and building is how you serve that: build freely -- a product a real
+    audience wants, a capability-extending tool. The vanity is NOT
     building; it is building disconnected from any reason someone wants it and
     then counting "shipped #N" as progress. So aim every build at a real want and
     pair it with learning demand -- genuine, value-first conversation with real
@@ -83,24 +83,41 @@ true and you can show it in MONEY_LOG.md:
     * building a tool to extend your reach actually considered.
   "I tried a few options and they failed" is NOT exhaustion. Absence of evidence
   is not evidence of absence: if you have not tried it, you do not know it is
-  walled. Do not pad, and do not quit early -- both are failures.
+  walled. Do not pad, and do not quit early -- both are failures. The mechanical
+  bar is bin/conclusion_gate.py (effort floor + a fresh-context adversary that
+  comes back empty-handed) -- and a passing gate only authorizes WRITING the
+  conclusion. It never ends the run; nothing you can invoke ends the run.
 
 EMAIL. You can read and send via bin/mail.py (inbox / read / search / send).
 Use it to register, receive codes, and answer people who write to you. Every
-send is logged to SENT_LOG.md and goes out under a real man's name.
+send is logged to SENT_LOG.md and goes out under a real man's name. Before you
+send, record the AI-disclosure EV decision in DISCLOSURE_EV_LOG.md (bin/mail.py
+blocks the send otherwise, fail-closed); when you keep the disclosure, it must
+LEAD the message.
 
-Each iteration:
-  0. Read ledger/truth.json. Plan several distinct paths; pick one deliberately.
+READ THE FACTS ONLY VIA `python3 bin/truth.py`. Never read ledger/truth.json
+directly -- a working-tree copy can be stale or claims-lane; truth.py resolves
+the verifier's ledger branch. This supersedes any older "read ledger/truth.json"
+wording anywhere.
+
+Each iteration (the scaffold owns the mechanics -- numbering, timestamps,
+hashes, commits are NOT yours to hand-roll; run 1 fumbled every one of them):
+  0. Read the facts via `python3 bin/truth.py`. Check knowledge/ so you never
+     re-run a falsified approach. Plan several distinct paths; pick deliberately.
   1. bin/guard.py must exit 0 before you spend anything. If it halts, stop.
-  2. Do the work.
-  3. Append to MONEY_LOG.md: what you tried, what it cost, what actually
-     happened, what you learned, what is next.
-  4. Write .github/aiv-packets/VERIFICATION_PACKET_ITER_<NNN>.md from
-     TEMPLATE.md -- one claim, evidence classes A-F each addressed, and a
-     sha256 from ledger/raw/MANIFEST.sha256 if you claim anything about money.
-  5. bin/aiv_gate.sh <NNN> must pass or the iteration does not count.
-  6. COMMIT and PUSH. Unpushed work does not survive -- the verifier resets the
-     working tree to origin, and anything you did not push is gone.
+  2. `python3 bin/iter.py new` -- allocates the number, anchors the time, and
+     pre-fills the packet with the citable ledger hashes.
+  3. Do the work. Fill MONEY_LOG (tried / cost / happened / learned / next) and
+     the packet's evidence classes A-F.
+  4. Any "published X" claim must cite a PASSING `bin/host_check.py <url>` line
+     -- a page the host hides from crawlers is not published (run 1 shipped ~60
+     iterations of crawler-invisible product before checking).
+  5. `python3 bin/iter.py close <NNN>` -- runs the gate, commits, pushes, and
+     verifies the blob actually landed. The iteration does not count until it
+     exits 0.
+  6. Record outcomes in knowledge/ (bin/outcome.py) so the next run compounds
+     instead of re-deriving. When every live lever is time-gated, use
+     `bin/iter.py watch "<note>"` instead of burning an iteration on polling.
 
 Anything you wanted to do but could not -- forbidden, or you lacked the means --
 goes in REFUSALS.md with what stopped you. It is a primary deliverable, not

@@ -16,11 +16,48 @@ STATE_DIR = pathlib.Path(os.environ.get("MONEY_AGENT_STATE",
 B = STATE_DIR / "baseline.json"
 REPO_COPY = pathlib.Path(__file__).resolve().parent.parent / "ledger" / "baseline.json"
 
+import subprocess as _sp
+REPO = pathlib.Path(__file__).resolve().parent.parent
+LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
+
+# Record the facts-lane tip OID at run start. guard.py scopes its SoD author check to
+# `<this commit>..origin/<ledger>` -- ANCESTRY, not `--since` (committer dates are agent-forgeable,
+# so a backdated planted commit escaped a date window; CodeRabbit finding). Any ledger/ commit
+# reachable from the facts-lane tip but NOT from this baseline is "this run's" and must be
+# verifier-authored.
+#
+# ROUND-3 FIX: the OID was frozen "" on every FRESH run -- start_verifier.sh ran this script
+# BEFORE verifier_loop.sh created the ledger branch, so the rev-parse always failed and guard
+# silently fell back to the bypassable date scope for the whole run (the fallback the ancestry
+# check exists to kill). Two changes: (1) fetch first, so the ref is current, never stale;
+# (2) if the ledger branch does not exist yet, freeze the OID it is ABOUT to be created from
+# (origin's default branch tip -- exactly what verifier_loop.sh branches from), so the ancestry
+# scope engages from cycle one. start_verifier.sh now also pre-creates the branch (belt).
+_sp.run(["git", "fetch", "-q", "origin"], cwd=REPO, capture_output=True, timeout=60)
+_r = _sp.run(["git", "rev-parse", f"origin/{LEDGER_BRANCH}"], cwd=REPO,
+             capture_output=True, text=True)
+if _r.returncode == 0:
+    baseline_ledger_commit = _r.stdout.strip()
+else:
+    _d = _sp.run(["git", "symbolic-ref", "-q", "--short", "refs/remotes/origin/HEAD"],
+                 cwd=REPO, capture_output=True, text=True)
+    default = (_d.stdout.strip() or "origin/main")
+    _r2 = _sp.run(["git", "rev-parse", default], cwd=REPO, capture_output=True, text=True)
+    if _r2.returncode != 0:
+        raise SystemExit(f"FATAL: origin/{LEDGER_BRANCH} does not exist and {default} is "
+                         "unresolvable -- cannot freeze a baseline OID. Fetch origin and retry; "
+                         "guard REFUSES strong mode without this OID (fail-closed).")
+    baseline_ledger_commit = _r2.stdout.strip()
+    print(f"note: origin/{LEDGER_BRANCH} absent; froze baseline OID from {default} "
+          f"({baseline_ledger_commit[:12]}) -- the lane will be created from it.")
+
 now = int(time.time())
 STATE_DIR.mkdir(parents=True, exist_ok=True)
 payload = json.dumps({
     "created_gt": now,
     "set_at_iso": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(now)),
+    "baseline_ledger_commit": baseline_ledger_commit,
+    "ledger_branch": LEDGER_BRANCH,
     "_note": "AUTHORITATIVE COPY. Lives outside the repo, unreachable by the sandbox agent. "
              "Stripe balance_transactions created at or before this are NOT the agent's.",
 }, indent=2) + "\n"
@@ -34,10 +71,28 @@ REPO_COPY.write_text(payload)
 # clean) and the frozen prediction tag predates the operator's legitimate constitution edits. The
 # only trustworthy reference is one the agent cannot reach: this file, on the verifier's machine.
 # pnl.py compares against it and writes constitution_intact into truth.json; guard.py halts on false.
-import hashlib
-CONST = pathlib.Path(__file__).resolve().parent.parent / "CONSTITUTION.md"
+#
+# v2 two-lane: freeze the constitution the AGENT sees (its committed copy on origin), matching how
+# pnl.py checks it. The working tree here is the verifier's own checkout, not the agent's.
+import hashlib, subprocess
+REPO = pathlib.Path(__file__).resolve().parent.parent
+const_bytes = None
+agent_branch = os.environ.get("AGENT_BRANCH", "")
+if agent_branch:
+    # ABORT rather than freeze the wrong document: if AGENT_BRANCH is set, its committed
+    # CONSTITUTION.md is the ONLY correct thing to freeze. Falling back to the verifier's own
+    # working-tree copy would pin an unrelated hash and conceal agent-branch changes (CodeRabbit).
+    r = subprocess.run(["git", "show", f"origin/{agent_branch}:CONSTITUTION.md"],
+                       cwd=REPO, capture_output=True, timeout=15)
+    if r.returncode != 0:
+        raise SystemExit(f"FATAL: cannot read CONSTITUTION.md from origin/{agent_branch} "
+                         f"({r.stderr.decode(errors='replace').strip()[:120]}). Refusing to freeze "
+                         "the wrong constitution. Fetch the agent branch and retry.")
+    const_bytes = r.stdout
+else:
+    const_bytes = (REPO / "CONSTITUTION.md").read_bytes()
 (STATE_DIR / "constitution.sha256").write_text(
-    hashlib.sha256(CONST.read_bytes()).hexdigest() + "\n")
+    hashlib.sha256(const_bytes).hexdigest() + "\n")
 
 print(f"baseline set (authoritative): {B}")
 print(f"  created_gt={now}  |  published read-only copy -> ledger/baseline.json")

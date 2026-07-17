@@ -121,6 +121,25 @@ done
 [[ ! -f .env ]] && ok ".env absent (verifier creds stay off the sandbox)"
 [[ -f .env.agent ]] && ok ".env.agent present" || bad ".env.agent missing -- the agent has no keys"
 
+# v2 two-lane: the facts must be readable through the ONE path. In strong mode this resolves the
+# ledger branch; a fresh repo that has never run a verifier fails here, which is correct -- the
+# loop must never start blind to its own P&L.
+if SRC=$(python3 bin/truth.py received_usd 2>&1 >/dev/null); then
+  SRCL="${SRC#source: }"
+  case "$SRCL" in
+    ledger-branch)
+      ok "facts grounded via bin/truth.py (ledger-branch, strong mode)" ;;
+    working-tree-committed)
+      ok "facts readable via bin/truth.py (working-tree-committed, weak mode)"
+      echo "  ⚠ weak mode: strong mode = verifier publishing to '${LEDGER_BRANCH:-ledger}' (bin/verifier_loop.sh)." ;;
+    *)  # working-tree-uncommitted or anything else: guard.py will refuse it, so fail preflight too
+      bad "bin/truth.py source is '$SRCL' -- NOT grounded (an uncommitted working-tree ledger is agent-writable). guard.py will refuse it." ;;
+  esac
+else
+  bad "bin/truth.py cannot resolve any ledger (no origin/ledger branch, no local truth.json)." \
+      "Start the verifier (bin/start_verifier.sh) before the loop."
+fi
+
 echo
 if [[ $fails -gt 0 ]]; then
   echo "RESULT: $fails PROBLEM(S). Do not start the loop."; exit 1

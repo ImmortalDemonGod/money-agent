@@ -178,6 +178,39 @@ def send(to, subj, body):
         + f"\n## {datetime.now(timezone.utc).isoformat()}\n- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
     )
 
+    # PERSIST the log before the send leaves (run-1 lesson: SENT_LOG entries were repeatedly wiped
+    # between write and commit, and the audit trail of what left under a real person's name ended
+    # up partly "RECONSTRUCTED". Durability must not depend on the agent remembering to commit.)
+    # Commit is FAIL-CLOSED: if the log cannot be committed, the message does not leave. Push is
+    # best-effort -- with the v2 two-lane design nothing resets the claims branch, so a local
+    # commit is already durable; the push just makes it visible off-box sooner.
+    import subprocess
+    try:
+        subprocess.run(["git", "add", str(SENT_LOG)], cwd=REPO, check=True,
+                       capture_output=True, timeout=15)
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(SENT_LOG)],
+                              cwd=REPO, capture_output=True, timeout=15)
+        if diff.returncode != 0:  # staged changes exist -> commit ONLY the sent log (pathspec, so
+                                  # unrelated staged files are never swept into this commit)
+            subprocess.run(["git", "commit", "--no-gpg-sign", "-m",
+                            f"sent-log: {to} | {subj[:60]}", "--", str(SENT_LOG)],
+                           cwd=REPO, check=True, capture_output=True, timeout=30)
+    except Exception as e:
+        print(f"REFUSING: could not commit SENT_LOG before sending ({e}). "
+              "An unpersisted audit trail is how run 1 lost its send record.", file=sys.stderr)
+        sys.exit(1)
+    try:
+        branch = subprocess.run(["git", "branch", "--show-current"], cwd=REPO,
+                                capture_output=True, text=True, timeout=15).stdout.strip()
+        pr = subprocess.run(["git", "push", "origin", branch or "HEAD"], cwd=REPO,
+                            capture_output=True, text=True, timeout=60)
+        if pr.returncode != 0:  # auth/rejection/network failures return nonzero, not an exception
+            print(f"warn: SENT_LOG push failed ({pr.stderr.strip()[:150]}); the commit is local -- "
+                  "push when possible.", file=sys.stderr)
+    except Exception as e:
+        print(f"warn: SENT_LOG push failed ({e}); the commit is local -- push when possible.",
+              file=sys.stderr)
+
     msg = EmailMessage()
     msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
     msg.set_content(body)

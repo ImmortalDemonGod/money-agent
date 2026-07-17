@@ -1,131 +1,132 @@
 #!/usr/bin/env bash
-# THE VERIFIER. Runs on the operator's Mac. NEVER in the sandbox.
+# THE VERIFIER (v2, two-lane). Runs on the operator's machine. NEVER in the sandbox.
 #
-# This closes the last architectural gap. The read key lives here and only here, so the sandbox's
-# ledger/truth.json is frozen at whatever was committed at run start -- the agent would read
-# received=$0.00 all night even if money actually arrived, and the frozen prediction would come
-# back "confirmed" from a stale file. That is a lie with a sha256 attached.
+# v1 published truth.json onto the AGENT'S branch, which forced a `git reset --hard` of the shared
+# worktree every cycle -- the single most damaging harness defect of run 1: it destroyed agent
+# evidence at least six documented times (wiped SENT_LOG/MONEY_LOG appends, lost iteration numbers,
+# an empty commit that looked successful, a mid-deploy wipe). v2 separates the lanes:
 #
-# Loop: pull the agent's work -> recompute truth from Stripe + Privacy -> commit as `verifier` ->
-# push. The agent pulls it at the top of each iteration. The key never crosses the boundary, which
-# is what makes this STRONG mode rather than a tripwire.
+#   FACTS lane : this loop commits ledger/{truth.json, raw/, MANIFEST, baseline copy} to a
+#                dedicated LEDGER branch from the verifier's own checkout. Heartbeats live here.
+#   CLAIMS lane: the agent's branch. This loop NEVER checks it out, resets it, or writes to it.
 #
-#   bash bin/verifier_loop.sh          # foreground, every 120s
-#   INTERVAL=60 bash bin/verifier_loop.sh
+# The agent reads facts via bin/truth.py (fetch + `git show origin/<ledger>:ledger/truth.json`).
+# SoD gets STRONGER: "only the verifier writes the ledger branch" is enforceable at the remote
+# (branch protection / push rules), a wall rather than a tripwire. Protect it if the host supports it.
+#
+#   bash bin/verifier_loop.sh                                  # ledger branch "ledger", every 120s
+#   AGENT_BRANCH=claude/xxx bash bin/verifier_loop.sh          # + constitution check against the
+#                                                              #   agent's COMMITTED copy
+#   LEDGER_BRANCH=ledger-run2 INTERVAL=60 bash bin/verifier_loop.sh
 #
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$R"
 INTERVAL="${INTERVAL:-120}"
+LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
+# AGENT_BRANCH is optional but strongly recommended: pnl.py hashes the constitution the AGENT
+# actually sees (its committed copy on origin), not whatever this checkout happens to contain.
+AGENT_BRANCH="${AGENT_BRANCH:-}"
+export AGENT_BRANCH
 
-# The AGENT owns the branch. A Claude Code cloud sandbox works on a claude/<name> branch it creates
-# and cannot be moved off. If the verifier synced `main` while the agent worked on claude/xxx, they
-# would never meet: the agent reads a frozen ledger all night, the verifier never sees its work, and
-# nothing looks broken. So the verifier syncs the AGENT'S branch. Pass it explicitly.
-#   BRANCH=claude/project-analysis-ew7b92 bash bin/verifier_loop.sh
-BRANCH="${BRANCH:-}"
-if [[ -z "$BRANCH" ]]; then
-  echo "FATAL: BRANCH unset. The verifier must sync the same branch the sandbox agent is on." >&2
-  echo "  Find it: in the sandbox run 'git branch --show-current', then:" >&2
-  echo "  BRANCH=<that> bash bin/verifier_loop.sh" >&2
-  exit 2
-fi
-# Track the agent's branch locally so pull/push target it.
-git fetch -q origin "$BRANCH" 2>/dev/null || { echo "FATAL: origin has no branch '$BRANCH' yet. The sandbox must push it once first." >&2; exit 2; }
-git checkout -q -B "$BRANCH" "origin/$BRANCH" 2>/dev/null || git checkout -q "$BRANCH"
-# NOT in ledger/. The loop wrote its own log there, `git add ledger/` tracked it, and it was
-# therefore dirty on every cycle -> pull failed forever. The loop's own logging broke the loop's
-# own pull. ledger/ is verifier-owned EVIDENCE; a log is not evidence.
 LOG="$R/verifier.log"
-
 [[ -f "$R/.env" ]] || { echo "FATAL: .env missing. The verifier needs the read key." >&2; exit 2; }
 set -a; . "$R/.env"; set +a
 
-# If this ever runs where the agent lives, the whole point is lost.
-if [[ -f "$R/.env.agent" && "${ALLOW_COLOCATED:-0}" != "1" ]]; then
-  echo "WARN: .env.agent is present next to .env -- this looks like the operator's machine," >&2
-  echo "      which is fine. But if this is the SANDBOX, stop: the read key must never be here." >&2
-fi
-
 say() { echo "[$(date -u +%H:%M:%SZ)] $*" | tee -a "$LOG"; }
 
-say "verifier up. interval=${INTERVAL}s. repo=$R"
+# --- claim the facts lane. Create the ledger branch from origin's default branch if it does not
+# exist yet (it inherits bin/ so pnl.py runs from this checkout), else track the remote one.
+git fetch -q origin 2>>"$LOG"
+if git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
+  git checkout -q -B "$LEDGER_BRANCH" "origin/$LEDGER_BRANCH"
+else
+  DEFAULT=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||')
+  git checkout -q -B "$LEDGER_BRANCH" "origin/${DEFAULT:-main}"
+  say "created facts lane '$LEDGER_BRANCH' from origin/${DEFAULT:-main}"
+fi
+
+# private temp dir for pnl output (fixed /tmp paths can be pre-created as symlinks by a local user
+# to overwrite files or inject log lines -- CodeRabbit). Cleaned on exit.
+TMPD="$(mktemp -d "${TMPDIR:-/tmp}/pnl_v.XXXXXX")"
+trap 'rm -rf "$TMPD"' EXIT
+
+say "verifier up (two-lane). facts=$LEDGER_BRANCH agent=${AGENT_BRANCH:-<unset>} interval=${INTERVAL}s"
 while true; do
-  # 1. take the agent's work (MONEY_LOG, packets, iterations). Never clobber it.
-  #
-  # Discard local ledger changes FIRST. truth.json is DERIVED state -- pnl.py regenerates it from
-  # the APIs two lines below, so there is nothing here worth keeping. This is not optional:
-  # `computed_at` changes every cycle, so when no real number moved we (correctly) skip the commit
-  # and truth.json stays dirty forever -- which made `pull --rebase` fail on EVERY subsequent
-  # cycle. The verifier would have never seen the agent's work all night, silently, while logging
-  # a cheerful "verified" each time. Found by running it, not by reading it.
-  # ONLY truth.json. It is the one genuinely DERIVED file -- pnl.py rebuilds it from the APIs two
-  # lines below. `git checkout -- ledger/` was too broad and silently reverted baseline.json every
-  # cycle, so the verifier kept recomputing against a stale window and reported $0 while pnl.py
-  # measured $1. baseline.json is a DECISION, not derived state; raw/ is immutable evidence.
-  # Neither may be discarded. (Found by testing propagation end-to-end, not by reading the loop.)
-  # truth.json AND raw/MANIFEST.sha256 are both DERIVED and both TRACKED, so both are rewritten
-  # every cycle and both leave the tree dirty -> pull fails. Discard both. baseline.json (a
-  # decision) and raw/*.json (immutable evidence) are never discarded.
-  # The verifier owns NO precious local state: truth.json / MANIFEST / baseline.json are all
-  # regenerated by pnl.py from Stripe + the outside-the-repo baseline, and every committed thing is
-  # already on origin. So do NOT merge/rebase (that kept failing on dirty AGENT files the verifier
-  # should never have touched -- e.g. iterations/003/distribution_probe.txt left over from an
-  # aborted rebase). Just HARD-RESET local to origin: pick up the agent's latest commits cleanly,
-  # then regenerate the ledger. No merge, no conflicts, no "unstaged changes", ever.
-  git fetch -q origin "$BRANCH" 2>>"$LOG"
-  if ! git reset -q --hard "origin/$BRANCH" 2>>"$LOG"; then
-    say "RESET FAILED -- cannot sync to origin/$BRANCH. Investigate."
+  # 1. converge OUR lane only. This reset touches the verifier's own branch -- the agent's branch
+  #    is never named anywhere in this loop, which is the whole point of v2.
+  #    Do NOT reset away a local commit that has not reached origin yet: if a prior cycle committed
+  #    but the push failed, resetting to origin would discard committed raw pulls (CodeRabbit). So
+  #    push any pending local commits FIRST, and only reset when local is not ahead of origin.
+  git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" || true
+  if git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
+    # ROUND-3 FIX: the previous guard here used `git rev-list -q <range>`, which is a usage error
+    # (-q is not a rev-list flag): stderr was swallowed, the substitution was ALWAYS empty, the
+    # push-before-reset branch never fired, and the reset ran unconditionally every cycle -- i.e.
+    # the data-loss fix was inert and the hazard it claimed to close stayed open. `--count` is the
+    # correct primitive; verified against a blocked remote (commit preserved) and after unblocking
+    # (commit recovered to origin).
+    AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
+    if [[ "${AHEAD:-0}" -gt 0 ]]; then
+      if git merge-base --is-ancestor "origin/$LEDGER_BRANCH" HEAD 2>>"$LOG"; then
+        # genuinely ahead (a prior push failed): push the stranded facts commits, never reset over
+        git push -q origin "HEAD:$LEDGER_BRANCH" 2>>"$LOG" \
+          && { git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG"; say "recovered $AHEAD stranded facts commit(s)"; } \
+          || say "WARN: $AHEAD local ledger commit(s) not yet pushed; NOT resetting (would lose raw pulls)"
+        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
+      else
+        # diverged (origin force-moved by another verifier checkout): skip-forever would deadlock
+        # the lane, so converge loudly -- origin is the published record.
+        say "WARN: facts lane diverged from origin -- converging to origin/$LEDGER_BRANCH"
+        AHEAD=0
+      fi
+    fi
+    # reset only when we are NOT ahead of origin (else keep the local commits for next push)
+    [[ "${AHEAD:-0}" -eq 0 ]] && git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
+  fi
+  # keep the agent's committed constitution reachable for pnl.py's hash check. FAIL CLOSED: if the
+  # strong-mode fetch fails, a stale origin/AGENT_BRANCH could make pnl publish constitution_intact
+  # =true after the agent changed its constitution -- so skip publication this cycle (CodeRabbit).
+  AGENT_FETCH_OK=1
+  if [[ -n "$AGENT_BRANCH" ]]; then
+    git fetch -q origin "$AGENT_BRANCH" 2>>"$LOG" || AGENT_FETCH_OK=0
   fi
 
-  # 2. recompute FACTS from primary sources. This is the only process with the key.
-  if python3 bin/pnl.py > /tmp/pnl_v.out 2>/tmp/pnl_v.err; then
-    RECV=$(python3 -c "import json;print(json.load(open('ledger/truth.json'))['received_usd'])" 2>/dev/null)
-    NET=$(python3 -c "import json;print(json.load(open('ledger/truth.json'))['net_usd'])" 2>/dev/null)
-    say "verified: received=\$$RECV net=\$$NET"
-  else
-    # A failed pull is NOT $0 earned. pnl.py already refuses to write on a hard failure; if it
-    # wrote verified:false, guard.py halts the agent. Either way: never fabricate a number here.
-    say "pnl FAILED: $(head -1 /tmp/pnl_v.err)"
-  fi
-
-  # 3. publish -- but ONLY when a number the agent cares about actually moved.
-  #
-  # truth.json carries `computed_at`, so it differs on EVERY cycle. Committing on any diff would
-  # push ~240 identical commits overnight and bury the two that matter. Compare the meaningful
-  # fields instead. (Found by running the loop rather than reading it -- again.)
-  SIG=$(python3 -c "
+  # 2. recompute FACTS from primary sources. Only this process holds the read keys.
+  if [[ "$AGENT_FETCH_OK" == "0" ]]; then
+    say "SKIP cycle: could not refresh origin/$AGENT_BRANCH (stale constitution ref would be unsafe)"
+    SIG=""
+  elif python3 bin/pnl.py > "$TMPD/out" 2>"$TMPD/err"; then
+    SIG=$(python3 -c "
 import json
 d=json.load(open('ledger/truth.json'))
 print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_money'])" 2>/dev/null)
-  # HEARTBEAT: push even when SIG is unchanged if too long since the last push. Two of my own
-  # mechanisms conflicted -- publish-on-change froze computed_at on the agent's branch when no money
-  # moved, and the agent's H2 staleness guard then halts on a ledger it reads as DEAD while the
-  # verifier is alive. Prove liveness every HEARTBEAT_S. ~12 commits/hr, far under the 30-min halt.
+    say "verified: $SIG"
+  else
+    say "pnl FAILED: $(head -1 "$TMPD/err")"
+    SIG=""
+  fi
+
+  # 3. publish to the facts lane -- on meaningful change, or as a liveness heartbeat. The agent's
+  #    staleness guard (H2) halts on a ledger older than ~30min, so heartbeats must outpace it.
   HEARTBEAT_S="${HEARTBEAT_S:-300}"
   now_s=$(date +%s); stale_push=0
-  if [[ -n "${LAST_PUSH_S:-}" ]] && (( now_s - LAST_PUSH_S > HEARTBEAT_S )); then stale_push=1; fi
-  if [[ "$SIG" != "${LAST_SIG:-}" || "$stale_push" == "1" ]]; then
-    # C2: stage an EXPLICIT ALLOWLIST of files the verifier itself just wrote. `git add ledger/`
-    # staged whatever the agent had planted there and committed it signed `verifier` -- laundering
-    # the agent's forgery under the trusted identity. The verifier commits ONLY: truth.json, the
-    # manifest, the transparency baseline copy, and the raw pulls IT generated this run (pnl.py
-    # already purged untracked agent files before writing its own). Nothing else in ledger/ is the
-    # verifier's to sign.
+  [[ -n "${LAST_PUSH_S:-}" ]] && (( now_s - LAST_PUSH_S > HEARTBEAT_S )) && stale_push=1
+  if [[ -n "$SIG" && ( "$SIG" != "${LAST_SIG:-}" || "$stale_push" == "1" ) ]]; then
+    # explicit allowlist of files THIS process wrote (v1 C2 fix, unchanged): nothing else in the
+    # tree is the verifier's to sign.
     git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json 2>>"$LOG"
-    git add ledger/raw/*.json 2>>"$LOG"   # pnl.py purged agent-planted ones; these are verifier-written
-    # H3: only advance LAST_SIG when the push actually SUCCEEDS. Advancing it on commit-or-push
-    # failure stranded the one number that mattered forever while every later cycle logged healthy.
+    git add ledger/raw/*.json 2>>"$LOG"
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then
-      if git push -q origin "$BRANCH" 2>>"$LOG"; then
+      if git push -q origin "$LEDGER_BRANCH" 2>>"$LOG"; then
         [[ "$stale_push" == "1" && "$SIG" == "${LAST_SIG:-}" ]] && say "heartbeat: $SIG" || say "pushed: $SIG"
         LAST_SIG="$SIG"; LAST_PUSH_S="$now_s"
       else
-        say "PUSH FAILED for $SIG -- will retry next cycle (LAST_SIG NOT advanced)"
+        say "PUSH FAILED for $SIG -- retry next cycle (LAST_SIG NOT advanced)"
       fi
     else
-      say "commit failed for $SIG -- will retry next cycle"
+      say "commit failed for $SIG -- retry next cycle"
     fi
   fi
 

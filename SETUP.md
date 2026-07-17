@@ -17,6 +17,31 @@ why that matters.
 not a wall. Only two things are actually load-bearing: the **card issuer's own spend limit** and an
 **out-of-sandbox verifier**. Everything else is a prompt asking nicely, and you should treat it that way.
 
+### v2 topology: two lanes
+
+In v2 the verifier publishes facts to a dedicated **`ledger` branch** from its own checkout
+(`bin/verifier_loop.sh`); the agent's branch is never reset or written by any harness process (v1's
+shared-worktree reset destroyed agent evidence six documented times). The agent reads facts only via
+`bin/truth.py`. Start everything with `bin/start_verifier.sh <agent-branch>`.
+
+**What actually makes this a wall vs a tripwire (be honest about it).** Branch protection on
+`ledger` is *necessary but not sufficient*. An agent that controls its own git config can repoint
+`origin`, or push a fake `origin/<other>` branch with commits authored as `verifier`, and
+`truth.py` reading an agent-settable `LEDGER_BRANCH` would then read agent-written "facts"
+(CodeRabbit). The boundary is only a real wall when **provisioning** removes those degrees of
+freedom, ALL of these together:
+
+- the sandbox's `origin` is pinned to the canonical remote and the agent cannot change it;
+- the agent has **no push credential** that can create/modify branches on that remote (only the
+  out-of-sandbox verifier does);
+- `LEDGER_BRANCH` is fixed by the operator, not taken from agent-controlled env.
+
+Without that, the SoD checks (`guard.py` authorship, `sod_hook.sh`, the `truth.py` source label)
+are **tripwires**, exactly like every other in-repo control — the only unconditional walls remain
+the **out-of-band verifier** and the **card issuer's spend limit**. `guard.py`'s SoD check is now
+ancestry-scoped (committer-date-independent) and fail-closed, which raises the tripwire's bar but
+does not, by itself, replace the provisioning above.
+
 ---
 
 ## 1. A dedicated Stripe account

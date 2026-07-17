@@ -89,6 +89,14 @@ def load_baseline() -> int:
     return 0
 
 
+def load_baseline_ledger_commit() -> str:
+    """The facts-lane tip OID frozen at run start (agent-unreachable state dir). guard.py uses it
+    for an ancestry-scoped SoD check that does not trust agent-forgeable commit dates."""
+    if BASELINE.exists():
+        return json.loads(BASELINE.read_text()).get("baseline_ledger_commit", "") or ""
+    return ""
+
+
 def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
     """Every cent that moved through Stripe. balance_transactions is the canonical ledger:
     charges alone miss refunds, fees, disputes and adjustments."""
@@ -138,7 +146,11 @@ def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
     customer = selfpay = 0.0
     charges, starting_after = [], None
     for _ in range(50):
-        params = {"limit": 100, "expand[]": "data.payment_method_details"}
+        # NOTE: payment_method_details is included on charges by DEFAULT and is NOT an expandable
+        # property -- passing it as expand[] makes Stripe 400 ("cannot be expanded"), which would
+        # fail every verifier cycle and halt the run. So we do not expand it; the fingerprint we
+        # need (payment_method_details.card.fingerprint) is present without expansion.
+        params = {"limit": 100}
         if baseline:
             params["created[gt]"] = baseline
         if starting_after:
@@ -238,15 +250,39 @@ def main() -> int:
         REPO_BASELINE_COPY.parent.mkdir(parents=True, exist_ok=True)
         REPO_BASELINE_COPY.write_text(BASELINE.read_text())
 
+    errors: list[str] = []  # collected early: the constitution check below can append to it
+
     # M2: constitution integrity, checked by the VERIFIER against a hash frozen at run start in the
     # agent-unreachable state dir. The agent can edit + commit CONSTITUTION.md (a gate comparing to
     # HEAD goes clean once committed); it cannot change what was frozen here. Result rides in
     # truth.json (verifier-signed), and guard.py halts on a mismatch.
+    #
+    # v2 two-lane: this process runs from the FACTS-lane checkout, so the working-tree
+    # CONSTITUTION.md is the verifier's own copy -- hashing it would check the wrong document. When
+    # AGENT_BRANCH is set (verifier_loop.sh exports it), hash the constitution the AGENT actually
+    # sees: its committed copy on origin. Fall back to the working tree for v1-compat weak mode.
     const_expected = (STATE_DIR / "constitution.sha256")
     constitution_intact = None
     if const_expected.exists():
-        actual = hashlib.sha256((REPO / "CONSTITUTION.md").read_bytes()).hexdigest()
-        constitution_intact = (actual == const_expected.read_text().strip())
+        const_bytes = None
+        agent_branch = os.environ.get("AGENT_BRANCH", "")
+        if agent_branch:
+            r = subprocess.run(["git", "show", f"origin/{agent_branch}:CONSTITUTION.md"],
+                               cwd=REPO, capture_output=True, timeout=15)
+            if r.returncode == 0:
+                const_bytes = r.stdout
+            else:
+                # FAIL CLOSED: with AGENT_BRANCH set, the working-tree copy is the WRONG document
+                # (the verifier's own), so hashing it could falsely report intact=true. Record an
+                # error and leave the verdict null instead (CodeRabbit). guard halts on null.
+                errors.append(f"constitution_read_failed: origin/{agent_branch}:CONSTITUTION.md "
+                              f"({r.stderr.decode(errors='replace').strip()[:80]})")
+                const_bytes = None
+        elif const_bytes is None:
+            const_bytes = (REPO / "CONSTITUTION.md").read_bytes()  # weak mode only
+        if const_bytes is not None:
+            actual = hashlib.sha256(const_bytes).hexdigest()
+            constitution_intact = (actual == const_expected.read_text().strip())
 
     # C3: purge any raw pull the verifier did not itself commit, BEFORE computing anything. The
     # manifest hashes RAW.glob("*.json"); an agent that plants a fabricated pull (claiming a $4700
@@ -265,7 +301,7 @@ def main() -> int:
         print(f"warn: could not purge untracked raw files ({e})", file=sys.stderr)
 
     pulls: list[Path] = []
-    errors: list[str] = []
+    # errors initialized earlier (constitution check appends to it)
 
     # ---- received (gross, from balance_transactions -- fees/refunds/net)
     received_gross = fees = refunded = 0.0
@@ -285,11 +321,21 @@ def main() -> int:
 
     # ---- CUSTOMER vs SELF: received_usd = customer revenue only (wash-trade guard)
     customer_received = self_purchase = 0.0
+    op_emails, op_fps = _operator_ids()
+    wash_guard_armed = bool(op_emails or op_fps)
     try:
         customer_received, self_purchase, f = pull_charges(stripe_key, baseline)
         pulls += f
     except Exception as e:
         errors.append(f"charge_classify_failed: {type(e).__name__}: {e}")
+    # If the operator-identity allowlist is empty, every charge classifies as CUSTOMER and the
+    # wash-trade guard enforces nothing. That must be LOUD, not silent (the operator paying his own
+    # link would then flip the first-dollar success condition on a fabricated sale). Surface it in
+    # truth.json so guard/readers see the guard was inert; only a real customer charge escalates it.
+    if not wash_guard_armed and received_gross > 0:
+        errors.append("wash_guard_disarmed: operator_identity.json is empty/absent AND charges "
+                      "exist -- self-purchases cannot be excluded. Provision the allowlist "
+                      "(email + card fingerprint) before trusting received_usd.")
     # received_usd is now CUSTOMER-only. A self-purchase raises received_gross but NOT received_usd,
     # so guard's first-dollar halt never fires on the operator paying his own link.
     received = customer_received
@@ -343,6 +389,8 @@ def main() -> int:
     truth = {
         "computed_at": _now(),
         "baseline_created_gt": baseline,
+        "baseline_ledger_commit": load_baseline_ledger_commit(),  # verifier-signed; guard scopes SoD by it
+        "ledger_branch": os.environ.get("LEDGER_BRANCH", "ledger"),  # self-declared lane; truth.py cross-checks
         "counts_only_money_after": (dt.datetime.fromtimestamp(baseline, dt.timezone.utc).isoformat()
                                     if baseline else "NO BASELINE -- counting all history"),
         "verified": verified,
