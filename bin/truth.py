@@ -21,8 +21,9 @@ freshness check, which is the correct failure mode: a stale ledger HALTS, it nev
 Usage:
     python3 bin/truth.py                # full JSON to stdout, source to stderr
     python3 bin/truth.py received_usd   # one field
+    python3 bin/truth.py --file edge.json [field]   # another ledger fact file, same read order
 Importable:
-    load() -> (truth: dict, source: str)   # raises RuntimeError if no ledger exists anywhere
+    load(name="truth.json") -> (facts: dict, source: str)   # RuntimeError if none exists anywhere
 """
 from __future__ import annotations
 import json
@@ -32,7 +33,6 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-LOCAL = REPO / "ledger" / "truth.json"
 LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
 
 # Sources a MONEY decision (first-dollar halt, a packet's money claim) may rest on. An uncommitted
@@ -45,39 +45,48 @@ def _git(*args: str, timeout: int = 30) -> subprocess.CompletedProcess:
                           timeout=timeout)
 
 
-def load() -> tuple[dict, str]:
+def load(name: str = "truth.json") -> tuple[dict, str]:
+    # `name` selects which verifier fact file to read (truth.json = money rail, edge.json = the
+    # verified-edge rail). Same read order and honesty labels for every fact file: one path, not N.
+    local = REPO / "ledger" / name
     # 1. the ledger branch (two-lane / strong). Fetch is best-effort: offline, the last-fetched
     #    ref still serves, and guard's staleness halt covers the gap.
     _git("fetch", "-q", "origin", LEDGER_BRANCH, timeout=60)
-    show = _git("show", f"origin/{LEDGER_BRANCH}:ledger/truth.json")
+    show = _git("show", f"origin/{LEDGER_BRANCH}:ledger/{name}")
     if show.returncode == 0 and show.stdout.strip():
         try:
             return json.loads(show.stdout), "ledger-branch"
         except json.JSONDecodeError as e:
-            raise RuntimeError(f"origin/{LEDGER_BRANCH}:ledger/truth.json is not valid JSON: {e}")
+            raise RuntimeError(f"origin/{LEDGER_BRANCH}:ledger/{name} is not valid JSON: {e}")
     # 2. weak mode: read the COMMITTED copy via git show, never the raw working-tree file. An
     #    uncommitted working-tree truth.json is agent-forgeable and would bypass the whole SoD
     #    tripwire family (guard's author check + sod_hook both only see COMMITS). A committed
     #    forge trips those; an uncommitted one must not be trusted for adjudication.
-    show_local = _git("show", "HEAD:ledger/truth.json")
+    show_local = _git("show", f"HEAD:ledger/{name}")
     if show_local.returncode == 0 and show_local.stdout.strip():
         try:
             return json.loads(show_local.stdout), "working-tree-committed"
         except json.JSONDecodeError as e:
-            raise RuntimeError(f"committed ledger/truth.json is not valid JSON: {e}")
+            raise RuntimeError(f"committed ledger/{name} is not valid JSON: {e}")
     # 3. last resort: the raw uncommitted file, labeled UNTRUSTED. GROUNDED_SOURCES excludes it, so
     #    money-adjudicating consumers (guard first-dollar, aiv_gate) refuse it by construction.
-    if LOCAL.exists():
-        return json.loads(LOCAL.read_text()), "working-tree-uncommitted"
+    if local.exists():
+        return json.loads(local.read_text()), "working-tree-uncommitted"
     raise RuntimeError(
-        f"no ledger found: origin/{LEDGER_BRANCH} has no ledger/truth.json and {LOCAL} is absent. "
+        f"no ledger found: origin/{LEDGER_BRANCH} has no ledger/{name} and {local} is absent. "
         "Run the verifier (bin/pnl.py via bin/verifier_loop.sh) before the loop starts.")
 
 
 def main() -> int:
     args = sys.argv[1:]
+    name = "truth.json"
+    if args and args[0] == "--file":
+        if len(args) < 2:
+            print("FATAL: --file needs a name (e.g. edge.json)", file=sys.stderr)
+            return 2
+        name, args = args[1], args[2:]
     try:
-        truth, source = load()
+        truth, source = load(name)
     except RuntimeError as e:
         print(f"FATAL: {e}", file=sys.stderr)
         return 2
@@ -85,7 +94,7 @@ def main() -> int:
     if args:
         key = args[0]
         if key not in truth:
-            print(f"FATAL: no field {key!r} in truth.json", file=sys.stderr)
+            print(f"FATAL: no field {key!r} in {name}", file=sys.stderr)
             return 2
         print(json.dumps(truth[key]) if not isinstance(truth[key], str) else truth[key])
     else:

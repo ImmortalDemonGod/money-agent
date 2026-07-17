@@ -13,7 +13,7 @@ WHAT THIS GATE IS: a PERMISSION-TO-RECORD check, nothing more. Exit 0 authorizes
 stop condition may reference it. Only a verified customer dollar, verified cap exhaustion, or the
 operator ends a run (RUN_COMMANDS.md /goal v2).
 
-WHAT IT CHECKS (three layers, each necessary, none sufficient alone):
+WHAT IT CHECKS (four layers, each necessary, none sufficient alone):
   1. EFFORT FLOOR (v1's counters, kept as a floor and labeled honestly): >= MIN_APPROACHES logged
      iterations in MONEY_LOG.md, >= MIN_DEMAND_PROBES real sends in SENT_LOG.md.
   2. THE PACKET: EXHAUSTION_PACKET.md exists with all five bars filled (no placeholders).
@@ -27,6 +27,11 @@ WHAT IT CHECKS (three layers, each necessary, none sufficient alone):
          the verdict line names it and this gate FAILS, because there is work to do;
        - show a real search ("## Search performed" section, non-placeholder).
      See ADVERSARY_REPORT.template.md for the exact fresh-context prompt.
+  4. NO LIVE BETS (the literal iteration-095 failure, mechanized): run 1 concluded "exhausted"
+     with a multi-day bet (search indexation) still open and unfalsified. Now every open entry in
+     run/bets.json (bin/bets.py) and any PENDING verified-edge experiment (ledger/edge.json)
+     blocks the conclusion. A pending bet is by definition an untried-to-completion approach --
+     resolve it (won / lost / expired, with evidence) or wait out its clock in a WATCH state.
 
 HONEST LIMIT, printed on every pass: the agent invokes the adversary, so this is a strong tripwire,
 not out-of-band grounding. True grounding = the verifier/operator running the same adversary from
@@ -145,6 +150,33 @@ def main() -> int:
         if len(real_lines) < 5:
             fails.append("adversary report's 'Search performed' section is too thin to be a real "
                          "search (need >= 5 substantive lines).")
+
+    # --- layer 4: NO LIVE BETS. Concluding over an open bet is not exhaustion, it is amnesia --
+    # run 1 did exactly this at iteration 095. Both registries are consulted:
+    #   (a) run/bets.json -- day-scale external bets (agent-committed; a tripwire, but the failure
+    #       mode this catches is FORGETTING under drift, and deleting a bet is a visible commit);
+    #   (b) ledger/edge.json -- a PENDING verified-edge experiment is an open bet on the facts
+    #       lane, which the agent cannot edit at all.
+    try:
+        sys.path.insert(0, str(REPO / "bin"))
+        import bets as _bets
+        for b in _bets.open_bets():
+            fails.append(f"open external bet {b['id']} ({b['clock']}): {b['what']!r} -- resolve "
+                         "it (bin/bets.py resolve) or wait out its clock; an unresolved bet is "
+                         "not an exhausted approach.")
+    except Exception as e:
+        fails.append(f"cannot read the bet registry ({type(e).__name__}: {e}) -- fail-closed: "
+                     "unknown bets are not resolved bets.")
+    try:
+        import truth as _truth
+        e_facts, e_src = _truth.load("edge.json")
+        if e_src in _truth.GROUNDED_SOURCES and e_facts.get("verdict") == "PENDING":
+            fails.append("the verified-edge experiment is PENDING (ledger/edge.json) -- a live "
+                         "pre-registered bet. Its deadline resolves it; a conclusion cannot.")
+    except RuntimeError:
+        pass  # no edge.json anywhere: rail idle, nothing pending
+    except Exception as e:
+        fails.append(f"cannot read edge facts ({type(e).__name__}: {e}) -- fail-closed.")
 
     if fails:
         print("CONCLUSION NOT RECORDABLE:", file=sys.stderr)

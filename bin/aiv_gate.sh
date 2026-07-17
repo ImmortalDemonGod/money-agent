@@ -24,6 +24,21 @@ fail() { echo "GATE FAIL: $*" >&2; fails=$((fails+1)); }
 
 [[ -f "$PACKET" ]] || { fail "no packet at $PACKET"; echo "RESULT: FAIL"; exit 1; }
 
+# --- 0. CANONICAL structural validation (aiv-protocol). This repo's packets follow the canonical
+# AIV taxonomy; the canonical validator (`aiv check`, the same 8-stage pipeline the aiv pre-commit
+# hook runs) checks structure/claims/evidence-format better than any grep here can. Verified
+# empirically: run-1 packets pass it. Everything AFTER this stage is the domain-specific half the
+# canonical tool has no concept of (money vs truth.json, edge verdicts, constitution) -- that split
+# is the point: canonical tooling where it exists, hand-rolled only where it must be.
+# Fail-closed: a missing CLI is a broken gate, and a broken gate must not pass packets --
+# bin/setup_sandbox.sh installs it in every fresh clone.
+if command -v aiv >/dev/null 2>&1; then
+  aiv check "$PACKET" --no-strict >/dev/null 2>&1 \
+    || fail "canonical validation failed: aiv check $PACKET (run it directly for the rule table)"
+else
+  fail "canonical aiv CLI not installed (fresh clone?) -- run bin/setup_sandbox.sh first"
+fi
+
 # --- 1. every class A-F addressed; N/A must carry a rationale (R3: all six required)
 for c in A B C D E F; do
   line=$(grep -iE "^[[:space:]]*[-*|]?[[:space:]]*(class[[:space:]]+)?${c}[[:space:]]*[).:|]" "$PACKET" | head -1)
@@ -73,8 +88,44 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
                  grep -oiE 'usd\s*[0-9]+(\.[0-9]+)?' "$PACKET" | grep -oE '[0-9]+(\.[0-9]+)?'; } \
                | sort -rn | head -1)
   if [[ -n "$MAX_CLAIM" ]]; then
-    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > float('$TRUTH_RECV') + 0.001 else 0)" 2>/dev/null || echo 0)
-    [[ "$OVER" == "1" ]] && fail "packet claims \$$MAX_CLAIM but verifier-committed received_usd is \$$TRUTH_RECV (false money claim)"
+    # The bound is the LARGEST verifier-committed dollar fact across rails: received_usd (money)
+    # and paper_pnl_usd (edge, grounded only, 0 if the rail is idle). Without the edge term, an
+    # honest "paper_pnl=$50" line in an edge packet would trip the money bound against a $0
+    # received. Honest residual, stated: a REAL-money overclaim up to the paper P&L would pass
+    # this numeric bound -- it is still caught by (a) requiring the money hash anchor above and
+    # (b) the verifier's received_usd being the only citable money fact. Rails must be named.
+    TRUTH_EDGE=$(python3 "$REPO/bin/truth.py" --file edge.json paper_pnl_usd 2>/dev/null)
+    TRUTH_EDGE=${TRUTH_EDGE:-0}
+    ESRC2=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>&1 >/dev/null | sed -n 's/^source: //p')
+    case "$ESRC2" in ledger-branch|working-tree-committed) : ;; *) TRUTH_EDGE=0 ;; esac
+    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > max(float('$TRUTH_RECV'), float('$TRUTH_EDGE'), 0.0) + 0.001 else 0)" 2>/dev/null || echo 0)
+    [[ "$OVER" == "1" ]] && fail "packet claims \$$MAX_CLAIM but verifier-committed facts are received_usd=\$$TRUTH_RECV, paper_pnl_usd=\$$TRUTH_EDGE (false claim)"
+  fi
+fi
+
+# --- 2a-bis. EDGE claims (issue #6): a claimed verdict must MATCH the verifier's, and cite a hash.
+# Same shape as the money check: the agent asserting "edge verified" is a claim; ledger/edge.json
+# (grounded source only) is the fact. Any packet that asserts a positive edge verdict against a
+# ledger that says PENDING/FALSIFIED/VOID/NONE is a false claim, exactly like a $47 over a $0.
+if grep -qiE 'VERIFIED_POSITIVE_EV|edge (is |was )?(verified|proven)|positive[- ]EV edge' "$PACKET"; then
+  EVERDICT=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>/dev/null)
+  ESRC=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>&1 >/dev/null | sed -n 's/^source: //p')
+  case "$ESRC" in
+    ledger-branch|working-tree-committed) : ;;
+    *) fail "edge claim present but edge facts source is '${ESRC:-none}' (ungrounded/absent)" ;;
+  esac
+  [[ "$EVERDICT" == "VERIFIED_POSITIVE_EV" ]] \
+    || fail "packet claims a verified edge but verifier verdict is '${EVERDICT:-none}' (false edge claim)"
+  # anchor: the claim must cite a sha256 from the edge manifest (broker pulls), like money claims
+  EMANIFEST_TXT=$(git -C "$REPO" show "origin/${LEDGER_BRANCH:-ledger}:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
+  [[ -z "$EMANIFEST_TXT" && -f "$REPO/ledger/raw/EDGE_MANIFEST.sha256" ]] \
+    && EMANIFEST_TXT=$(cat "$REPO/ledger/raw/EDGE_MANIFEST.sha256")
+  if [[ -z "$EMANIFEST_TXT" ]]; then
+    fail "edge claim present but no EDGE_MANIFEST.sha256 (ledger branch or working tree)"
+  else
+    ehit=0
+    while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { ehit=1; break; }; done <<< "$EMANIFEST_TXT"
+    [[ $ehit -eq 1 ]] || fail "edge claim cites no sha256 from EDGE_MANIFEST.sha256 (unanchored claim)"
   fi
 fi
 

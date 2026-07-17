@@ -80,6 +80,23 @@ def _manifest_lines(t: dict) -> list[str]:
     return lines[:5]
 
 
+def _edge_anchor() -> str:
+    """One pre-filled line for the verified-edge rail, when it is live and grounded. An edge claim
+    in a packet must cite the verifier's verdict + a hash from EDGE_MANIFEST.sha256 (aiv_gate 2a-bis);
+    pre-filling both removes the hand-copy step, same rationale as the money anchor."""
+    sys.path.insert(0, str(REPO / "bin"))
+    import truth as _t
+    try:
+        e, src = _t.load("edge.json")
+    except Exception:
+        return ""
+    if src not in _t.GROUNDED_SOURCES or e.get("verdict") in (None, "NONE"):
+        return ""
+    return (f"> edge rail: verdict = {e.get('verdict')} | paper_pnl_usd = {e.get('paper_pnl_usd')}"
+            f" | fills = {e.get('filled_orders_since_freeze')} | edge_manifest_sha256 = "
+            f"`{e.get('edge_manifest_sha256')}`\n")
+
+
 def new() -> int:
     t = _truth()
     n = int(COUNTER.read_text().strip()) + 1 if COUNTER.exists() else 1
@@ -98,7 +115,8 @@ def new() -> int:
               f"> manifest_sha256 = `{t.get('manifest_sha256')}`\n"
               f"> received_usd = {t.get('received_usd')} | verified = {t.get('verified')} | "
               f"ledger computed_at = {t.get('computed_at')}\n"
-              f"> citable per-pull hashes (the gate accepts any of these):\n{manifest_cites}\n")
+              f"> citable per-pull hashes (the gate accepts any of these):\n{manifest_cites}\n"
+              + _edge_anchor())
     body = body.replace("## Ledger anchor", "## Ledger anchor\n" + anchor, 1)
     packet.write_text(body)
 
@@ -146,8 +164,17 @@ def close(nnn: str) -> int:
 
 def watch(note: str) -> int:
     t = _truth()
-    line = (f"- {_now()} | received_usd={t.get('received_usd')} verified={t.get('verified')} "
-            f"| {note}\n")
+    # the open-bet agenda rides on every watch tick: a watch state exists to wait on external
+    # clocks, so the tick should say which clocks (issue #4; run 1 forgot its live bet at 095)
+    bets_note = ""
+    try:
+        sys.path.insert(0, str(REPO / "bin"))
+        import bets as _bets
+        bets_note = f" | {_bets.summary_line()}"
+    except Exception:
+        pass
+    line = (f"- {_now()} | received_usd={t.get('received_usd')} verified={t.get('verified')}"
+            f"{bets_note} | {note}\n")
     WATCH_LOG.write_text(
         (WATCH_LOG.read_text() if WATCH_LOG.exists()
          else "# WATCH_LOG — watch-state ticks (no iteration number consumed)\n\n"

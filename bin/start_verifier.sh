@@ -40,7 +40,14 @@ PIDFILE="$R/.run/verifier.pid"
 if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
   echo "  verifier already running (pid $(cat "$PIDFILE")). Kill it first: kill \$(cat $PIDFILE)"; exit 1
 fi
-nohup caffeinate -i env AGENT_BRANCH="$AGENT_BRANCH" LEDGER_BRANCH="$LEDGER_BRANCH" \
+# caffeinate is macOS-only (v2 DEGRADED finding #9: a hard dependency killed the verifier on
+# Linux). Use it where it exists; elsewhere the host must stay awake by its own means (a server
+# does; a laptop needs systemd-inhibit or equivalent) -- say so instead of dying.
+KEEPAWAKE=""
+if command -v caffeinate >/dev/null 2>&1; then KEEPAWAKE="caffeinate -i"
+else echo "  note: no caffeinate on this host (Linux?) -- ensure the machine does not sleep."; fi
+# shellcheck disable=SC2086  # KEEPAWAKE is deliberately word-split ("caffeinate -i" or empty)
+nohup $KEEPAWAKE env AGENT_BRANCH="$AGENT_BRANCH" LEDGER_BRANCH="$LEDGER_BRANCH" \
   bash bin/verifier_loop.sh > "$R/verifier.log" 2>&1 &
 echo $! > "$PIDFILE"
 sleep 3
