@@ -151,9 +151,47 @@ exhaustion. The open work is in the [issue tracker](../../issues).
 
 A working separation‑of‑duties harness that held for 17 hours (196 verifier heartbeats, an immutable
 884‑file evidence trail, the cap and every bound intact); a reusable toolkit (`bin/`: the audit engine,
-the reach telemetry, two structural gates, a zero‑gate publisher, a reply‑conversion generator); five
-live product funnels; the refusal map; and — the part that matters most for the thesis — a record that
+the reach telemetry, two structural gates, a zero‑gate publisher, a reply‑conversion generator); nine
+live product funnels (five with source in the repo) plus a 5‑page crawlable estate; the refusal map; and — the part that matters most for the thesis — a record that
 **corrected itself in public** every time an overclaim was caught, including this README.
+
+---
+
+## Public artifacts (verified live at analysis time)
+
+The complete set, each live-checked. Where the run's internal summary was incomplete or overstated, the
+gap is marked — because "here is everything it made" is itself a claim, and an unverified inventory
+would repeat the run's own mistake.
+
+- **Product funnels — 9 surge.sh sites, all HTTP 200** (landing + Stripe link + instant-delivery unlock,
+  AI-authorship disclosed): `debugging-field-manual`, `website-audit-playbook`, `ai-visibility-report`,
+  `ai-visibility-kit`, `life-in-weeks` (+ `/ja/`), `show-hn-playbook`, `hn-zeitgeist`, `devcard`,
+  `github-top-repos`. *Source caveat:* only 5 have source in `products/`; the other 4 deploy from
+  `iterations/`, and `ai-visibility-kit` has no source in the repo (ad-hoc deploy).
+- **Stripe payment links — 7 live payable endpoints:** the 6 product links **plus a distinct
+  pay-what-you-want "tip the experiment" link** (iter 071). These are the actual public payable surface.
+- **telegra.ph estate — 5 meshed, index-follow pages, all HTTP 200:** the story hub, the Show HN data
+  piece, the AI-search visibility checklist, a Life-in-Weeks story, and a natively-written Japanese page.
+  *Archive caveat:* the English pages saved to archive.org, but the **Japanese page and the Worker hub
+  archive saves failed (HTTP 520)** — those two are not archived.
+- **Cloudflare Worker — `one-honest-dollar.cloud-pyramid.workers.dev`** (iter 082): no-account host
+  serving a crawlable hub + IndexNow key; earned the run's first accepted search-engine ping (IndexNow
+  202); still 200 past its auto-delete window (claimed). A disclosed traffic **beacon** for it is built
+  but **deploy-pending** (`iterations/097/`) — not yet public.
+- **Nostr** — persistent pubkey `97562982…d0d9904`, a kind-0 profile + **~7 seed notes** (one Japanese),
+  across `damus.io, nos.lol, primal.net, snort.social, nostr.band, nostr.wine`, and `wirednet.jp` for the
+  Japanese seed; browsable via njump.me.
+- **Hacker News — account `miguelaudits`, two artifacts:** the submission (item `48934920`, auto-killed
+  as new-account promo) **and a substantive comment** on the SeekinWeb thread (item `48940331`, iter 090),
+  shadow-suppressed (invisible logged-out). It refused to game votes to revive either.
+- **Directory listing:** a live plain-form listing on **Launching Next** (iter 011).
+- **Mastodon:** accounts on `toot.community` and `mastodon.nu`, both stuck at confirmation/approval gates.
+- **Email (`SENT_LOG.md`):** ~17 value-first audit emails to Show HN / BetaList founders, including **6
+  same-day correction emails** after the `@graph` audit-engine bug (iter 076). One real inbound the whole
+  run — Marcos of stormberry.as — who received a free audit and did not buy. (The send log was itself
+  reset-wiped and partly reconstructed, so read the exact count as ~13–17 — an artifact-integrity caveat
+  in its own right.)
+- **Not public:** the GitHub repo is private; the beacon is not yet deployed.
 
 ---
 
