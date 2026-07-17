@@ -844,3 +844,36 @@ drift risk; kept because reseeding from templates/ would couple the script to fi
 might edit mid-run. (3) sim.sh runs ~30s and is not wired to CI or a pre-push hook — deliberate
 for now (the repo has no CI), but "run tests/sim.sh" is now in the contributor persona and the
 PR-review discipline; wiring it mechanically is the natural next hardening.
+
+## Entry 020 — ROUND 5 (pre-merge review of the restructure): six findings fixed, and the matrix caught its author twice more
+
+An independent round-5 reviewer attacked the 3-commit restructure with mutation testing — deliberately
+reintroducing the historical defect classes to see whether tests/sim.sh catches them. Verdict:
+merge-with-nits. The matrix caught the inert rev-list bug, a deleted gate section, and a broken
+first-dollar check; new_run.sh survived every edge case thrown at it and no gate-read path is missed.
+
+**F1 (the real finding — another half-true self-claim):** entry 019 said the marker extraction
+"fails if the markers drift"; true only for the BEGIN marker. Deleting the END marker kept the matrix
+green while the rig silently executed the rest of the verifier loop mid-source. Fixed: both markers
+required, extraction rejected if it contains invocations past the block, execution gated off entirely
+on a bad extraction, and the recovery cycle's clean exit asserted. Mutation-verified in a clone:
+end-marker deletion now produces two loud FAILs and the block is never executed.
+
+**F2–F6, all landed:** sod_hook's blocklist now covers every bin/ script and tests/ (and bin/README's
+claim about it is worded to match reality plus the tripwire-vs-wall limit); the agent's reading rules
+gain `templates/` (gate-required) and forbid `archive/` (prior-run strategy contamination — the
+in-tree equivalent of a prior-run branch); new_run.sh refuses on ANY porcelain output (untracked
+sweep), creates the archive dir lazily, removes the empty run/ dir, and its lane-confirmation
+checklist now says what is actually being confirmed; set_baseline's stale-freeze archive can never
+clobber a same-second predecessor.
+
+**Process failures of my own, recorded because the log exists for exactly this:** (1) fixing F1 the
+first time, I ran the mutation against the REAL tree and cleaned up with `git reset --hard` — which
+destroyed the uncommitted round-5 fixes AND (because a failed temp-commit left HEAD one short) dropped
+the docs commit from local history; recovered from origin, fixes reapplied, and the rule is now
+personal law: mutations run in CLONES, fixes are committed BEFORE testing. (2) My first overrun check
+false-positived on a comment that mentions pnl.py inside the legitimate block (invocations, not
+mentions, are now matched), and my first exit-code assertion was stricter than the block's actual
+contract (the failing-push cycle legitimately returns the short-circuited guard's status). The matrix
+ended 22/22 with the mutation still caught — but it took three tries, each mistake exactly the class
+this repo documents.
