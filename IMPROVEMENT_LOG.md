@@ -437,3 +437,60 @@ Honest one-line: v2 is a real structural improvement, now adversarially reviewed
 but it remains **unproven on a live run**, and M1(facts-lane)/M7 carry named residuals rather than
 being fully closed. The PR body's "all twelve met, three with residuals" should be read as **nine
 cleanly met, three (M1-facts/M3/M7) carrying explicit residuals** — this entry is the correction.
+
+## Entry 011 — ROUND 3: an independent review falsified two of entry 010's claims; fixes + corrections
+
+An independent reviewer (fresh context, full-delta read, empirical tests) audited entries 009-010
+against the code. Its headline finding is exactly the failure class this repo hunts: **entry 010's
+push-before-reset fix was INERT, and the "All verified by running" line was therefore false.**
+
+**The inert fix (HIGH, now actually fixed and actually observed).** `git rev-list -q <range>` is a
+usage error (rc 129); with stderr swallowed the substitution was always empty, so the
+push-before-reset branch never fired and `reset --hard` ran unconditionally every cycle — the
+facts-lane data-loss window (commit lands, push blips, next cycle's reset destroys the raw pull)
+stayed fully open while the log recorded it fixed. The rewritten block uses `git rev-list --count`
+plus a `merge-base --is-ancestor` split (genuinely-ahead → push and never reset over; diverged →
+converge loudly rather than deadlock). This time the behavior was OBSERVED: with pushes blocked at
+the remote, the stranded commit and its raw pull survive the cycle with a WARN; after unblocking,
+the next cycle pushes them ("recovered N stranded facts commit(s)").
+
+**Corrections to the record (they outrank the prose that contradicts them):**
+- Entry 010's "All verified by running" is RETRACTED as written. Correct statement: the round-2
+  fixes were verified at the component level EXCEPT verifier_loop's push-before-reset (inert, see
+  above — it could never have been observed working) and the beacon changes (not deployed; already
+  stated at the scorecard, contradicting the blanket line).
+- The scorecard reconciliation's "entry-010 mitigates (push-before-reset)" for M1-facts-lane
+  described dead code. As of THIS entry the mitigation is real and observed; M1-facts-lane moves
+  to mitigated-and-tested (still not "proven live" — that remains gated on the live verifier run).
+
+**Round-3 fixes landed with tests (the reviewer's remaining OPEN findings):**
+- **Strong-mode SoD fail-closed + the fresh-run ordering hole.** The ancestry-scoped SoD check
+  silently fell back to bypassable date scoping whenever `baseline_ledger_commit` was empty — and
+  it was ALWAYS empty on fresh runs, because start_verifier ran set_baseline before the ledger
+  branch existed (the guard.py comment blamed "older baselines"; wrong — it was the default path).
+  Now: start_verifier creates the lane BEFORE freezing the baseline; set_baseline fetches and, if
+  the lane is still absent, freezes the OID the lane will be created from (origin's default tip)
+  and refuses to write an empty OID; guard FAILS in ledger-branch mode when the OID is missing
+  (date fallback survives only in weak mode, where the whole check is a tripwire anyway).
+- **host_check blocked redirect = failure.** A redirect to a private target used to surface as the
+  original 3xx → `status<400` → verdict PASS → the gate accepted the publish claim. Blocked
+  redirects now raise 599.
+- **Weak-mode manifest anchor reads the COMMITTED blob** (`git show HEAD:`), not the agent-
+  overwritable worktree file — completing what round 2 only narrowed.
+- **Overclaim adjudication is fail-closed:** a python error comparing claimed-vs-received used to
+  default to "not over" (silent pass); it now fails the gate as unadjudicable.
+- **Adversary DATE must be a parseable ISO-8601 value** — the previous check ANDed an anchored
+  regex with its own unanchored superset, reducing to "does 'DATE:x' appear anywhere" ('UPDATE:
+  reran' passed).
+- **outcome.py denylist covers --evidence** (persisted like every other field, so screened like
+  every other field).
+- **Beacon HASH_SALT warning now exists** (the comment promised one; missing secret now
+  console.warns once per isolate).
+- aiv_gate consolidated to ONE truth.py read for the money checks (was three fetches + a TOCTOU
+  window between label and value).
+
+**Deferred, documented (not silently):** host_check DNS rebinding (TOCTOU between the vetted
+resolution and urllib's re-resolve) — residual now documented in the SSRF guard's docstring with
+the reasoning (agent-sandbox egress, GET-only; revisit if the tool ever runs verifier-side).
+LEDGER_BRANCH env pinning stays a provisioning wall per SETUP.md; the round-3 attack test confirms
+guard halts on lane authorship when an agent self-consistently forges an alternate lane.
