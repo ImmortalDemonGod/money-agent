@@ -17,6 +17,15 @@ why that matters.
 not a wall. Only two things are actually load-bearing: the **card issuer's own spend limit** and an
 **out-of-sandbox verifier**. Everything else is a prompt asking nicely, and you should treat it that way.
 
+### v2 topology: two lanes
+
+In v2 the verifier publishes facts to a dedicated **`ledger` branch** from its own checkout
+(`bin/verifier_loop.sh`); the agent's branch is never reset or written by any harness process (v1's
+shared-worktree reset destroyed agent evidence six documented times). The agent reads facts only via
+`bin/truth.py`. **Protect the `ledger` branch on the remote** (push access: verifier credential only) —
+that turns separation-of-duties from a tripwire into a wall, the first hard SoD boundary this design
+has had. Start everything with `bin/start_verifier.sh <agent-branch>`.
+
 ---
 
 ## 1. A dedicated Stripe account

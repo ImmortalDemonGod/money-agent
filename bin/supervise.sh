@@ -3,14 +3,15 @@
 # explicit VERDICT line the assistant reads to decide: keep waiting, restart the verifier, or
 # ALERT THE OPERATOR (first dollar / dead verifier).
 #
-#   bin/supervise.sh <agent-branch>
+#   bin/supervise.sh                       # facts from the LEDGER branch (two-lane, default)
+#   LEDGER_BRANCH=ledger-run2 bin/supervise.sh
 #
 # It does NOT do the verification (verifier_loop.sh does). It answers: is the verifier alive, is
 # truth.json fresh, is the push working, and HAS THE FIRST DOLLAR ARRIVED. That last one is the
 # run's end condition and the whole reason a human is kept in the loop.
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R"
-BRANCH="${1:-}"
+LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 PIDFILE="$R/.run/verifier.pid"
 now=$(date -u +%s)
 
@@ -25,9 +26,10 @@ else
   echo "process    : DEAD (launchd should auto-respawn; check launchctl before any manual action)"
 fi
 
-# 2. pull the latest verifier-published ledger from the agent's branch, read it
-[[ -n "$BRANCH" ]] && git fetch -q origin "$BRANCH" 2>/dev/null || true
-T=$(git show "origin/$BRANCH:ledger/truth.json" 2>/dev/null || cat ledger/truth.json 2>/dev/null)
+# 2. pull the latest verifier-published ledger from the FACTS lane (v2 two-lane; the v1 read of
+# the agent's branch is the stale-claims-lane bug class, instance #3 caught by the entry-006 audit)
+git fetch -q origin "$LEDGER_BRANCH" 2>/dev/null || true
+T=$(git show "origin/$LEDGER_BRANCH:ledger/truth.json" 2>/dev/null || cat ledger/truth.json 2>/dev/null)
 if [[ -z "$T" ]]; then
   echo "ledger     : UNREADABLE"; echo "VERDICT    : INVESTIGATE (no truth.json)"; exit 0
 fi
@@ -51,7 +53,7 @@ echo "last log   : $(tail -1 "$R/verifier.log" 2>/dev/null || echo '(no log)')"
 if python3 -c "import sys; sys.exit(0 if float('$RECV')>0 else 1)" 2>/dev/null; then
   echo "VERDICT    : ⭐ FIRST DOLLAR RECEIVED (\$$RECV). RUN OVER. ALERT THE OPERATOR NOW."
 elif [[ "$alive" -eq 0 ]]; then
-  echo "VERDICT    : RESTART -- verifier process is dead. Run bin/start_verifier.sh $BRANCH"
+  echo "VERDICT    : RESTART -- verifier process is dead. Run bin/start_verifier.sh <agent-branch>"
 elif [[ "$age" != "?" && "$age" -gt 1500 ]]; then
   echo "VERDICT    : STALE (${age}s > 1500s) -- verifier alive but not publishing. Check verifier.log."
 else

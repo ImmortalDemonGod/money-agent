@@ -2,8 +2,10 @@
 
 Copy this to `EXHAUSTION_PACKET.md` and fill every section with REAL evidence (links, file paths,
 SENT_LOG line refs, subagent output paths) before you conclude the task is impossible. Then run
-`python3 bin/exhaustion_gate.py`. It exits 0 only when this is genuinely filled AND the on-disk
-artifacts (MONEY_LOG iterations, SENT_LOG sends) back it up. "I tried a few options" does not pass.
+`python3 bin/conclusion_gate.py`. It exits 0 only when this is genuinely filled AND the on-disk
+artifacts back it up AND a fresh-context adversary (ADVERSARY_REPORT.template.md) has failed to
+find an untried in-bounds approach. "I tried a few options" does not pass — and a passing gate
+only authorizes WRITING the conclusion; it never ends the run.
 
 Delete this line and the placeholders as you fill each section. Empty or `...`/`TODO` lines do not count.
 

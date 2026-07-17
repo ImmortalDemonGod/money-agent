@@ -20,7 +20,8 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-TRUTH = REPO / "ledger" / "truth.json"
+# facts are read ONLY via bin/truth.py (ledger branch first); the local baseline copy is kept
+# solely as a `since` fallback for the SoD window when truth.json lacks the timestamp.
 BASELINE = REPO / "ledger" / "baseline.json"
 
 
