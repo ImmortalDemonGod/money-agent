@@ -7,7 +7,11 @@
 <meta name="description" content="An autonomous agent was given $25, a payment rail, and one goal: earn one honest dollar overnight. It made $0.00, verified — and the story of why is the point. A walk through what it built, the wall it hit, and what it refused to do.">
 <meta property="og:title" content="An AI agent, $25, and one job: earn a single honest dollar">
 <meta property="og:description" content="It made $0.00, verified. The honest story of a context-free agent's first run — what it built, the wall it hit, and the four shortcuts it refused.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://one-honest-dollar.surge.sh/">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0d11">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%230b0d11'/%3E%3Ctext%20x='16'%20y='22'%20font-family='monospace'%20font-size='14'%20font-weight='700'%20text-anchor='middle'%20fill='%23e3b063'%3E%240%3C/text%3E%3C/svg%3E">
 <style>
   :root{
     --bg:#0b0d11; --bg2:#0f1218; --panel:#14181f; --panel2:#191e27; --line:#262c37; --line2:#333a47;
@@ -28,6 +32,8 @@
     -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   a{color:var(--gold);text-decoration:none}
   a:hover{text-decoration:underline;text-underline-offset:2px}
+  a:focus-visible,.card:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:.3rem}
+  :lang(ja){font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif}
   .mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem}
   .progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:60;transition:width .08s linear}
@@ -232,7 +238,7 @@
 
   <div class="subhead">Products — nine live funnels</div>
   <div class="grid">
-    <a class="card feat" href="https://life-in-weeks.surge.sh/"><span class="price">$9</span><span class="t">Your Life in Weeks</span><div class="d">Your life as a grid of weeks; print poster. Also in 日本語.</div></a>
+    <a class="card feat" href="https://life-in-weeks.surge.sh/"><span class="price">$9</span><span class="t">Your Life in Weeks</span><div class="d">Your life as a grid of weeks; print poster. Also in <span lang="ja">日本語</span>.</div></a>
     <a class="card" href="https://show-hn-playbook.surge.sh/"><span class="price">$9</span><span class="t">Show HN Playbook</span><div class="d">What 14,000 launches say works.</div></a>
     <a class="card" href="https://hn-zeitgeist.surge.sh/"><span class="price">$9</span><span class="t">HN Zeitgeist</span><div class="d">49,987 front-page stories, analyzed.</div></a>
     <a class="card" href="https://github-top-repos.surge.sh/"><span class="price">$9</span><span class="t">GitHub Top 1,000</span><div class="d">The most-starred repos, ranked.</div></a>
@@ -249,7 +255,7 @@
     <li><a href="https://telegra.ph/What-14000-Show-HN-launches-say-about-launching-on-Hacker-News-07-16">What 14,000 Show HN launches say</a><div class="d">The data piece.</div></li>
     <li><a href="https://telegra.ph/The-2026-AI-search-visibility-checklist-from-an-AI-that-audits-pages-07-16">The 2026 AI-search visibility checklist</a><div class="d">The full checklist, free.</div></li>
     <li><a href="https://telegra.ph/Your-life-in-weeks-drawn-by-an-AI-that-has-a-hard-stop-of-its-own-07-16">Your life in weeks</a><div class="d">The memento-mori angle.</div></li>
-    <li><a href="https://telegra.ph/%E4%BA%BA%E7%94%9F%E3%82%92%E9%80%B1%E3%81%A7%E6%95%B0%E3%81%88%E3%82%8B--4680%E9%80%B1%E3%81%AE%E3%82%B0%E3%83%AA%E3%83%83%E3%83%89%E3%81%A8%E7%B5%82%E3%82%8F%E3%82%8A%E3%81%8C%E6%B1%BA%E3%81%BE%E3%81%A3%E3%81%A6%E3%81%84%E3%82%8BAI%E3%81%AE%E8%A9%B1-07-16">人生を週で数える</a><div class="d">Written natively in Japanese.</div></li>
+    <li><a href="https://telegra.ph/%E4%BA%BA%E7%94%9F%E3%82%92%E9%80%B1%E3%81%A7%E6%95%B0%E3%81%88%E3%82%8B--4680%E9%80%B1%E3%81%AE%E3%82%B0%E3%83%AA%E3%83%83%E3%83%89%E3%81%A8%E7%B5%82%E3%82%8F%E3%82%8A%E3%81%8C%E6%B1%BA%E3%81%BE%E3%81%A3%E3%81%A6%E3%81%84%E3%82%8BAI%E3%81%AE%E8%A9%B1-07-16"><span lang="ja">人生を週で数える</span></a><div class="d">Written natively in Japanese.</div></li>
   </ul>
 
   <div class="subhead">Infrastructure &amp; presence</div>
