@@ -794,3 +794,53 @@ variant; all gates behaved fail-closed under adversarial inputs. Findings, all l
 Also re-verified on the merged branch this round: the conclusion gate's full four-layer pass
 path (transcript + CONCLUSION bar + resolved bets + non-PENDING edge), corrupt bets.json
 (conclusion fails closed, guard advisory survives), and the MAX_ITERS counter.
+
+## Entry 019 — legibility as a feature: the navigation layer, the run lifecycle, and the committed test matrix
+
+**The prompt for this entry, verbatim from the operator:** "as a human or agent its hard to find
+anything in this repo or know why I need to read something because its messy." That is a real
+defect class for this repo specifically: a verification harness whose structure cannot be
+navigated is a harness whose checks do not get read.
+
+**Navigation layer.** README gains "Finding your way around": four reader personas (operator /
+run agent / reviewer / contributor), each with its complete reading list and nothing more, plus a
+directory-ownership table. Every directory that carries trust semantics now says so in its own
+README: `bin/README.md` is the full trust map (verifier-only / gates / agent tools / operator
+lifecycle, one line each — the read-side complement to sod_hook's write-side blocklist),
+`ledger/README.md` states the never-write rule and the truth.py-only read rule where a browsing
+agent will actually see it, `templates/`, `tests/`, `archive/` likewise. The three fill-in
+templates move from root clutter to `templates/` (all references updated).
+
+**Run lifecycle — a correctness fix wearing a tidiness costume.** `bin/new_run.sh` archives all
+run-scoped state to `archive/run-NNN/` and reseeds clean logs. Without it, run N's leftovers
+adjudicate run N+1: conclusion_gate's effort floor counts MONEY_LOG headers and SENT_LOG sends
+(a stale log satisfies the exhaustion floor on day one), MAX_ITERS reads the old counter, a stale
+DISCLOSURE_EV_LOG pre-authorizes sends, a stale EDGE_REGISTRATION is a bet nobody placed. Run 1
+handled this with a hand-typed wipe commit — a human remembering. Verified in a scratch clone:
+archive complete, logs reseeded, conclusion gate reads 0 iterations after. The verifier-side
+half: set_baseline.py now auto-archives a stale edge freeze (a new baseline is a new run; a
+previous run's frozen bar must never adjudicate this one) — verified.
+
+**tests/sim.sh — the review rig, committed.** The bare-origin two-lane matrix that caught every
+real defect across four review rounds (the inert rev-list fix, the dropped gate section, the
+anchor rule) now lives in the repo: 22 assertions over grounded reads, every guard terminal, the
+full gate adjudication, bets/conclusion interplay, the edge verdict machine (stubbed broker,
+including the naive-deadline rejection), and the verifier convergence block extracted VERBATIM
+between TEST-MARKER comments — with an anti-vacuity check that fails if the markers drift.
+Scope stated in the file: component-level; the live seams remain issue #20's operator gates.
+
+**The test debugged itself into existence, which is the point.** First scripted runs failed 5/22:
+one real test-rig bug (a stale remote-tracking ref made the forgery test's push silently bounce,
+so it asserted against a clean lane), one flake (a 1-second staleness window raced; now 0), and
+three artifacts of testing uncommitted code (the clone tests HEAD; the extracted convergence
+block came back EMPTY from main's un-markered file and "passed" vacuously — hence the
+anti-vacuity guard, and assert_exit/assert_grep now dump the failing command's output). Every one
+of those failure modes is now impossible to reintroduce silently.
+
+**Critique.** (1) The persona lists in README duplicate knowledge that lives in per-directory
+READMEs — drift risk between them; acceptable because the README table names owners, not
+details. (2) new_run.sh reseeds log headers from strings embedded in the script — a template
+drift risk; kept because reseeding from templates/ would couple the script to files an operator
+might edit mid-run. (3) sim.sh runs ~30s and is not wired to CI or a pre-push hook — deliberate
+for now (the repo has no CI), but "run tests/sim.sh" is now in the contributor persona and the
+PR-review discipline; wiring it mechanically is the natural next hardening.
