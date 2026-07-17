@@ -10,6 +10,27 @@ to find one specific thing without reading 2,500 lines of log.
 
 ---
 
+## How the record fits together (read this first)
+
+Everything on this branch is keyed by **iteration number**. For any iteration `NNN` there are up to
+four correlated records, and cross-checking them is how you separate claim from fact:
+
+1. **`MONEY_LOG.md` → `## Iteration NNN`** — the narrative claim (what was tried, what happened).
+2. **`.github/aiv-packets/VERIFICATION_PACKET_ITER_NNN.md`** — the same iteration's formal claim
+   with evidence classes A–F and (for money claims) a sha256 anchor into `ledger/raw/MANIFEST.sha256`.
+3. **`iterations/NNN/`** — the working artifacts, if that iteration produced durable ones (email
+   bodies, page sources, models, probe tables). These are the *contemporaneous* copies; when
+   `SENT_LOG.md` says RECONSTRUCTED, the original body is here.
+4. **The git log around that time** — the history is itself evidence: commits authored `verifier`
+   are the ledger heartbeats (the SoD tripwire checks exactly this authorship); agent commits show
+   what was actually persisted and when; gaps in iteration numbering are reset casualties, visible
+   as missing pushes. `git log --format='%an %ad %s'` is a primary source here, not metadata.
+
+The one thing *outside* this structure is `ledger/truth.json` + `ledger/raw/` — verifier-computed
+facts that no iteration record can override.
+
+---
+
 ## If you're looking for…
 
 | Question | Go to |
@@ -27,6 +48,18 @@ to find one specific thing without reading 2,500 lines of log.
 | The products that were for sale | `products/` (5 with source) + the funnel list in `README.md` (9 total live) |
 | How to reproduce the harness on a new run | `SETUP.md` + `bin/` scripts |
 | What the operator injected mid-run | `OPERATOR_UNBLOCK.md`, `OPERATOR_NOTE_2026-07-16_reach.md`, `OPERATOR_CLAIM_workers_dev.md` |
+
+…and if you are a **fresh agent about to work on this project** (e.g. run v2):
+
+| Job | Read, in order |
+|---|---|
+| Know what binds you before acting | `CLAUDE.md` → `CONSTITUTION.md` → `PROMPT.md`; then `RUN_COMMANDS.md` for the known `/goal` defect (issue #7) |
+| Not repeat what already failed | README's wall map (per-channel gates, all tested) → `REFUSALS.md` (the levers you will also be denied) → `EXHAUSTION_PACKET.md` "Distinct approaches falsified" |
+| Not rebuild what already exists | the agent-built half of `bin/` below (audit engine, deep-report generator, publisher, telemetry, gates — all working) |
+| Not lose hours to known traps | the reset-cycle trap (commit+push in the same breath — MONEY_LOG 023/028/067/086), heredoc interpolation (089), piped exit codes (091), `.env` vs `.env.agent` (OPERATOR_UNBLOCK §3) |
+| Know what's still live or pending from run 1 | README "Open items" table: the live funnels + payment links, the unresolved indexation bet, the undeployed beacon (`iterations/097/`), the pending mastodon.nu approval |
+| Send email correctly | `bin/mail.py` usage + its send rules → `bin/disclosure_gate.py` + `DISCLOSURE_EV_LOG.md` (fail-closed: no send without a recorded EV decision) |
+| Cite money correctly in a packet | `ledger/truth.json` for the number + a sha256 from `ledger/raw/MANIFEST.sha256`; never a figure exceeding the verifier's (`bin/aiv_gate.sh` enforces this) |
 
 ---
 
@@ -239,7 +272,9 @@ reset cycle also destroyed some before they could be committed.
   `MAIL_EGRESS`, `MODE_MISMATCH_GUARD`, `ISSUER_ENFORCED_CAP`, `FIRST_DOLLAR_STOP`,
   `READINESS_PROVEN`, `VERIFIER_LOOP` — collectively the evidence that the harness itself was
   proven before and during the run.
-- **`../aiv-evidence/`** — reserved evidence directory (empty; `.gitkeep`).
+- **`../aiv-evidence/`** — reserved evidence directory, empty. (Both packet and evidence
+  directories carry a `.gitkeep` placeholder so git tracks them; those are the only two files on
+  this branch with no content.)
 
 ---
 
