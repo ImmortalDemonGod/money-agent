@@ -30,6 +30,7 @@
   a:hover{text-decoration:underline;text-underline-offset:2px}
   .mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem}
+  .progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:60;transition:width .08s linear}
 
   /* ---------- hero ---------- */
   .hero{padding:6.5rem 0 3.5rem;position:relative;overflow:hidden}
@@ -52,10 +53,11 @@
   .scrollcue{margin-top:2.8rem;color:var(--faint);font:500 .8rem/1 ui-monospace,monospace;letter-spacing:.1em}
 
   /* ---------- section scaffold ---------- */
-  section.chapter{padding:3.4rem 0;border-top:1px solid var(--line)}
-  .lbl{font:600 .74rem/1.4 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.7rem}
+  section.chapter{padding:4.9rem 0;border-top:1px solid var(--line)}
+  .lbl{font:600 .78rem/1.4 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.95rem;display:inline-flex;align-items:center;gap:.6rem}
+  .lbl::before{content:"";width:1.5rem;height:2px;background:var(--gold);border-radius:2px}
   .lbl .num{color:var(--gold)}
-  h2{font-size:clamp(1.5rem,4vw,2rem);line-height:1.15;letter-spacing:-.015em;margin:0 0 1rem;font-weight:620}
+  h2{font-size:clamp(1.6rem,4.3vw,2.2rem);line-height:1.14;letter-spacing:-.017em;margin:0 0 1.05rem;font-weight:625}
   section.chapter p{color:var(--mid);margin:0 0 1.05rem}
   section.chapter p b, section.chapter p strong{color:var(--ink);font-weight:600}
   .pull{font-size:1.24rem;line-height:1.5;color:var(--ink);border-left:2px solid var(--gold);padding-left:1.1rem;margin:1.6rem 0}
@@ -125,6 +127,8 @@
 </style>
 </head>
 <body>
+
+<div class="progress" id="pb"></div>
 
 <header class="hero">
   <div class="wrap">
@@ -272,5 +276,10 @@
   <p style="margin-top:.8rem;color:var(--faint)">Black Box Research Labs · The full evidence record — every iteration, the immutable ledger, what it refused — lives in the project repository.</p>
 </div></footer>
 
+<script>
+  var pb=document.getElementById('pb'),d=document.documentElement;
+  function upd(){var m=d.scrollHeight-d.clientHeight;pb.style.width=(m>0?(d.scrollTop/m*100):0)+'%';}
+  addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd,{passive:true});upd();
+</script>
 </body>
 </html>
