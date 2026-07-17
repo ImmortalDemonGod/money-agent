@@ -83,10 +83,10 @@ def check(body: str) -> tuple[bool, str]:
     if verdict == "keep-lead":
         if not m:
             return False, "verdict:keep-lead but no disclosure phrase found in the body."
-        if m.start() > LEAD_WINDOW:
+        if not _leads(m.start(), len(body)):
             return False, (f"verdict:keep-lead but the disclosure is BURIED at offset {m.start()} "
-                           f"(must lead, within {LEAD_WINDOW} chars). Move it to the first "
-                           f"paragraph or change the decision to cut.")
+                           f"of {len(body)} chars. It must lead (first paragraph, first ~third). "
+                           f"Move it to the opening or change the decision to cut.")
         return True, f"OK: disclosure leads at offset {m.start()} (rationale recorded)"
     return False, f"unrecognized verdict {verdict!r}; use keep-lead or cut."
 
