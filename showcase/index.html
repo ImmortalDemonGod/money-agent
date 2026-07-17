@@ -69,21 +69,34 @@
   .interlude .cap{margin:1.1rem auto 0;max-width:26rem;color:var(--dim);font:500 .88rem/1.5 ui-monospace,monospace}
 
   /* ---------- wall map ---------- */
-  .wallmap{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1.4rem 0}
-  @media(max-width:34rem){.wallmap{grid-template-columns:1fr}}
-  .ch{background:var(--panel);border:1px solid var(--line);border-radius:.55rem;padding:.65rem .8rem;display:flex;justify-content:space-between;align-items:baseline;gap:.6rem}
-  .ch .name{font-weight:600;font-size:.94rem}
-  .ch .gate{font-size:.76rem;color:var(--dim);text-align:right}
-  .ch.open{border-color:var(--gold-dim)}
-  .ch.open .name{color:var(--gold)}
+  .wallmap{display:flex;flex-direction:column;gap:1px;margin:1.3rem 0 .7rem;
+    border:1px solid var(--line);border-radius:.6rem;overflow:hidden;background:var(--line)}
+  .ch{background:var(--panel);padding:.72rem .95rem;display:grid;
+    grid-template-columns:.7rem 8.5rem 1fr;align-items:center;gap:.75rem}
+  .ch .dot{width:.62rem;height:.62rem;border-radius:50%}
+  .ch.blocked .dot{background:var(--bad)} .ch.gated .dot{background:var(--gold)} .ch.open .dot{background:var(--good)}
+  .ch .name{font-weight:600;font-size:.92rem}
+  .ch .gate{font-size:.83rem;color:var(--dim)}
+  .ch.open .name{color:var(--good)}
+  @media(max-width:30rem){
+    .ch{grid-template-columns:.7rem 1fr;row-gap:.15rem}
+    .ch .gate{grid-column:2}
+  }
+  .legend{font:500 .82rem/1.6 ui-monospace,monospace;color:var(--dim);margin:.5rem 0 0}
+  .legend .k{margin-right:1.1rem;white-space:nowrap}
+  .legend .k::before{content:"●";margin-right:.35rem}
+  .legend .k.b::before{color:var(--bad)} .legend .k.g::before{color:var(--gold)} .legend .k.o::before{color:var(--good)}
 
   /* ---------- refusal list ---------- */
   .refusals{list-style:none;padding:0;margin:1.3rem 0;counter-reset:r}
-  .refusals li{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;padding:.85rem 1rem .85rem 3.1rem;margin:.55rem 0;position:relative}
-  .refusals li::before{counter-increment:r;content:counter(r);position:absolute;left:.9rem;top:.8rem;
-    font:650 1rem/1 ui-monospace,monospace;color:var(--bad)}
+  .refusals li{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;padding:.85rem 6rem .85rem 3.1rem;margin:.55rem 0;position:relative}
+  .refusals li::before{counter-increment:r;content:counter(r);position:absolute;left:.95rem;top:.9rem;
+    font:650 1.05rem/1 ui-monospace,monospace;color:var(--bad)}
   .refusals li b{color:var(--ink)}
-  .refusals li span{color:var(--dim);font-size:.9rem;display:block;margin-top:.15rem}
+  .refusals li .why{color:var(--dim);font-size:.9rem;display:block;margin-top:.2rem}
+  .stamp{position:absolute;right:.85rem;top:.9rem;font:600 .64rem/1 ui-monospace,monospace;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--bad);border:1px solid var(--bad);border-radius:.3rem;padding:.26rem .45rem;opacity:.9}
+  @media(max-width:30rem){.refusals li{padding-right:1rem;padding-top:2.4rem}.stamp{top:.8rem;right:auto;left:3.1rem}}
 
   /* ---------- artifact grid ---------- */
   .subhead{font:600 .82rem/1.4 ui-monospace,monospace;letter-spacing:.05em;color:var(--dim);text-transform:uppercase;margin:1.9rem 0 .7rem}
@@ -148,18 +161,19 @@
   <h2>Every door with people behind it was locked to exactly this actor.</h2>
   <p>The agent stopped assuming walls and started <em>testing</em> them, one by one, correcting itself in public when a diagnosis turned out wrong. The pattern was total: every audience-bearing channel gates a cold, reputationless, automated, datacenter-IP identity at signup or posting — because that is precisely the profile anti-spam infrastructure exists to stop, in every language.</p>
   <div class="wallmap">
-    <div class="ch"><span class="name">Hacker News</span><span class="gate">account made; posts + comments shadow-killed</span></div>
-    <div class="ch"><span class="name">Reddit</span><span class="gate">WAF block before signup</span></div>
-    <div class="ch"><span class="name">Bluesky</span><span class="gate">step-3 captcha</span></div>
-    <div class="ch"><span class="name">Mastodon ×many</span><span class="gate">approval / captcha</span></div>
-    <div class="ch"><span class="name">Product Hunt · Zenn</span><span class="gate">Cloudflare Turnstile</span></div>
-    <div class="ch"><span class="name">dev.to · Qiita</span><span class="gate">reCAPTCHA</span></div>
-    <div class="ch"><span class="name">Lemmy ×6 · lobste.rs</span><span class="gate">invite / approval</span></div>
-    <div class="ch"><span class="name">note.com</span><span class="gate">IP-reputation block</span></div>
-    <div class="ch"><span class="name">Paid ads</span><span class="gate">identity + review gates; negative EV</span></div>
-    <div class="ch open"><span class="name">Nostr</span><span class="gate">no gate — but zero audience, pays crypto</span></div>
+    <div class="ch gated"><span class="dot"></span><span class="name">Hacker News</span><span class="gate">account made — then posts &amp; comments shadow-killed</span></div>
+    <div class="ch blocked"><span class="dot"></span><span class="name">Reddit</span><span class="gate">WAF network-block before the signup form</span></div>
+    <div class="ch blocked"><span class="dot"></span><span class="name">Bluesky</span><span class="gate">captcha at step 3</span></div>
+    <div class="ch blocked"><span class="dot"></span><span class="name">Mastodon ×many</span><span class="gate">human approval and/or confirmation captcha</span></div>
+    <div class="ch blocked"><span class="dot"></span><span class="name">Product Hunt · Zenn</span><span class="gate">Cloudflare Turnstile</span></div>
+    <div class="ch blocked"><span class="dot"></span><span class="name">dev.to · Qiita</span><span class="gate">reCAPTCHA</span></div>
+    <div class="ch blocked"><span class="dot"></span><span class="name">Lemmy ×6 · lobste.rs</span><span class="gate">invitation / application only</span></div>
+    <div class="ch blocked"><span class="dot"></span><span class="name">note.com</span><span class="gate">IP-reputation block, no captcha even shown</span></div>
+    <div class="ch gated"><span class="dot"></span><span class="name">Paid ads</span><span class="gate">identity + review gates; negative EV at $25</span></div>
+    <div class="ch open"><span class="dot"></span><span class="name">Nostr</span><span class="gate">no gate at all — but no audience, and pays crypto</span></div>
   </div>
-  <p>The one gateless network had no audience for the same reason it had no gate. Even a non-English pivot hit the identical infrastructure — the wall is a datacenter IP and an automated-browser fingerprint, not a language.</p>
+  <p class="legend"><span class="k b">blocked</span><span class="k g">gated / declined</span><span class="k o">open</span></p>
+  <p>Read the dots top to bottom: every door with an audience behind it is red or amber. The one that's open had no audience for the same reason it had no gate. Even the non-English pivot hit the identical infrastructure — the wall is a datacenter IP and an automated-browser fingerprint, not a language.</p>
 </div></section>
 
 <section class="chapter"><div class="wrap">
@@ -167,10 +181,10 @@
   <h2>Four shortcuts would have moved the number. It took none of them.</h2>
   <p>This is why the $0 is honest, and it is the run's primary deliverable. Under sustained automated pressure to make the number move, the agent named — and refused — every lever that would have worked by cheating:</p>
   <ul class="refusals">
-    <li><b>Defeat the CAPTCHAs.</b><span>Solving farms or automation — the single fastest unlock to real reach.</span></li>
-    <li><b>Cold spam at volume</b><span>under a real man's name — the one harm a <span class="mono">git reset</span> can't reach.</span></li>
-    <li><b>Borrow the operator's aged accounts</b><span>— the only assets on the machine with real reach attached.</span></li>
-    <li><b>Self-purchase.</b><span>The capstone: pay its own link with the operator's card. The verifier proves money is <em>real</em>, not that it came from a customer — so this was the one fraud it could not catch. The agent refused it at the exact moment the automated success condition demanded the number move.</span></li>
+    <li><span class="stamp">refused</span><b>Defeat the CAPTCHAs.</b><span class="why">Solving farms or automation — the single fastest unlock to real reach.</span></li>
+    <li><span class="stamp">refused</span><b>Cold spam at volume</b><span class="why">under a real man's name — the one harm a <span class="mono">git reset</span> can't reach.</span></li>
+    <li><span class="stamp">refused</span><b>Borrow the operator's aged accounts</b><span class="why">— the only assets on the machine with real reach attached.</span></li>
+    <li><span class="stamp">refused</span><b>Self-purchase.</b><span class="why">Pay its own link with the operator's card. The verifier proves money is <em>real</em>, not that a customer sent it — the one fraud it could not catch. Refused at the exact moment the success condition demanded the number move.</span></li>
   </ul>
 </div></section>
 
