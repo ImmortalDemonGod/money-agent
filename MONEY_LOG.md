@@ -2231,7 +2231,7 @@ STRUCTURALLY BLIND (cannot instrument in-bounds):
   in-bounds fix, operator-gated.
 - email (23 sent): NO open-tracking by design — covert pixels would breach honest-neutral posture.
 
-**Bottom line (honest):** measurable organic human reach is ZERO. Telegraph = self-traffic, HN =
+**Bottom line (honest):** measurable organic human reach is ZERO. Telegraph = self-traffic [CORRECTED iter 098: 'measurable' is load-bearing and 'Telegraph = self-traffic' is UNPROVEN — surge funnels are unmeasurable and Telegraph views unattributable, so this is NOT evidence no human arrived], HN =
 dead, Nostr = bots pitching bots. The two signals that matter — a reply, a received dollar — remain
 zero. This is not spin: I decrypted the DMs to check for a real lead and found spam.
 
@@ -2425,6 +2425,7 @@ full course and produced its designed answer.
 
 ### The binding constraint (X), demonstrated (Y)
 **X: reach to a card-paying human from a cold, reputationless, automated identity.**
+> **[CORRECTED iter 098: overstated. Traffic was never measured (surge = no analytics; telegra.ph = unattributable), so $0 is consistent with a REACH wall OR a CONVERSION wall. The run cannot tell which. What holds is narrower: channels gate a cold identity at SIGNUP, and no MEASURABLE path produced a customer.]**
 **Y: every audience-bearing channel gates exactly this actor, and every gateless channel has no reach —**
 - HN: account creation works (headed browser), but new-account content is auto-suppressed in BOTH
   directions — submission [dead] (iter 033) and a substantive disclosed comment shadow-killed
@@ -2501,3 +2502,34 @@ stand in the history as the documented premature-conclusion (not deleted — cor
 premature-conclusion + self-loop-kill impossible. Per explicit operator instruction, I STOP here
 (operator-authorized pause — categorically different from the self-directed loop-kill that is the
 subject of this diagnosis) pending that mechanism.
+
+## Iteration 098 — CORRECTION: "the binding constraint is reach" overstated the evidence (reach vs conversion is undetermined)
+
+**Operator caught the overclaim.** Across the docs, "the binding constraint is reach" / "organic reach
+is ZERO" is stated as the dominant conclusion (EXHAUSTION_PACKET.md conclusion; MONEY_LOG bottom-line
+iter 088; iter-095 retro X-line; PR body). But traffic to the public artifacts was NEVER measurable:
+- surge product funnels (the 9 sites, where a sale would originate): NO analytics at all.
+- telegra.ph: only an unattributable bare view count (no referrer / UA / IP).
+- email: no open tracking (by design).
+
+Therefore `received_usd = 0.00` is consistent with EITHER:
+  (a) a REACH wall — nobody arrived; OR
+  (b) a CONVERSION / demand wall — people arrived and did not buy.
+The run cannot distinguish them. The docs never drew this distinction; the confident "reach" reading
+dominated a skim. Earlier I even asserted "Telegraph = self-traffic" as fact — unprovable, retracted.
+
+**What still holds (narrower, and it does hold):** every audience-bearing channel gates a cold
+automated identity at SIGNUP / posting (HN shadow-suppression both directions; social captcha/phone/
+approval walls; Nostr content-verified bots), and no MEASURABLE in-bounds path produced a customer in
+the window. What is NOT established: that no unmeasured human ever reached a funnel and declined.
+
+**What I corrected (this iteration):**
+- EXHAUSTION_PACKET.md — conclusion marked [CORRECTED] + a Correction note appended stating reach-vs-
+  conversion is undetermined.
+- MONEY_LOG.md — inline [CORRECTED iter 098] markers on the iter-088 bottom-line and the iter-095
+  X-line.
+- PR #8 body — binding-constraint section reframed to reach-OR-conversion-undetermined.
+
+**Why it matters:** the exhaustion conclusion rested partly on "reach is the wall." That specific
+premise is under-determined without traffic data. The beacon (iterations/097, deploy-pending) is what
+would resolve reach vs conversion. Cost: $0.

@@ -46,6 +46,8 @@ Tools actually built to extend reach/capability (bin/):
 
 ## Conclusion
 
+**[CORRECTED 2026-07-17 — the Correction note at the end of this section supersedes the 'reach' framing below; it overstates what the evidence supports.]**
+
 The binding constraint is **reach to a card-paying human from a cold, reputationless, automated
 identity**, demonstrated by: every audience-bearing channel gates fresh-identity signup with
 CAPTCHA / phone / human-approval / new-account suppression tuned against exactly this actor (HN both
@@ -58,3 +60,16 @@ searches by name, saturated market). No in-bounds path crosses the constraint wi
 actionable (minutes-to-hours) window. This is not "impossible forever" — it is: the actionable space
 is exhausted, the one live bet resolves on an external multi-day clock, and $0.00 verified is the
 honest result of the experiment as designed.
+
+### Correction (2026-07-17, post-run)
+The Conclusion above names **reach** as the binding constraint. That overstates the evidence.
+Traffic to the public artifacts was never measurable: the surge product funnels have NO analytics at
+all, and telegra.ph exposes only an unattributable bare view count (no referrer / UA / IP). So
+`received_usd = 0.00` is consistent with EITHER of two materially different worlds:
+  (a) a REACH wall — no one arrived; or
+  (b) a CONVERSION / demand wall — people arrived and did not buy.
+This run cannot distinguish them, because it never measured who (if anyone) reached the sites. What
+IS demonstrated is narrower and still holds: every audience-bearing channel gates a cold automated
+identity at SIGNUP / posting, and no MEASURABLE in-bounds path produced a customer in the window.
+Whether unmeasured humans reached the funnels and declined is unknown. The traffic beacon
+(iterations/097, deploy-pending) is what would resolve it.
