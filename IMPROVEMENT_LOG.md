@@ -493,3 +493,34 @@ misbehaves the failure is loud (say lines) but a python helper would be sturdier
 test read $? through a pipe -- iter-091's exact trap -- caught and redone; the trap note in
 knowledge/traps.md is earning its keep. Next: B9 (bets->outcomes compounding), then B6 upstream
 aiv-protocol fixes.
+
+## Entry 011 — B9 (bets feed the compounding layer) + B6 (both upstream aiv-protocol defects fixed at the source)
+
+**B9.** `bets.py resolve` now appends a structured record to knowledge/outcomes.jsonl
+automatically (via append_log, durable), so a resolved day-scale bet -- the richest channel
+outcome the run produces -- reaches run N+1 even if the agent forgets the manual outcome.py step.
+Best-effort by design: a knowledge write must never block a bet resolution. Tested in the sim
+(bet-002 lost -> outcomes.jsonl line with clock, span, evidence).
+
+**B6, upstream (aiv-protocol branch claude/money-agent-analysis-10o1nb, 2 commits).**
+- E010 false positive: `has_provenance_evidence` consulted only per-claim class assignments (which
+  the markdown parser rarely populates), so an honest packet with a filled `### Class F` section
+  BLOCKED whenever its intent text said "issue #N". Fixed to also consult
+  `evidence_classes_present` -- the model field that already tracked exactly this. Regression
+  verified: the money-agent packet that failed with "issue 6" wording now passes.
+- Shebang bug (#29): `aiv init` hooks now pin `sys.executable` (the interpreter that can import
+  aiv by definition) instead of PATH's python3; whitespace-path fallback kept. Fresh-init verified:
+  the hook's first line is the owning interpreter's absolute path.
+- Full upstream suite: 739 passed, 22 skipped.
+- Downstream consequences once upstream merges: setup_sandbox.sh's sed repair of the hook and
+  TEMPLATE.md's E010 trap note both become deletable -- left in place for now (they are harmless
+  with the fix and load-bearing without it; note-to-port: remove them when main pins an aiv
+  version carrying these fixes).
+
+**Critique of this entry.** (1) The E010 fix widens `has_provenance_evidence` for every consumer,
+not just E010 -- reviewed the call sites (E010 is the only one) but a maintainer should confirm the
+intent of `evidence_classes_present` matches; flagged in the commit body. (2) The upstream branch
+name is this session's default, not a descriptive fix branch -- the operator may want to re-branch
+before PRing upstream. (3) bets->outcomes uses the bet's clock class as `channel`, which is coarser
+than outcome.py's free-form channel; good enough for queryability, revisit if it muddies the map.
+Next: B4 (structured edge claims), then B3 (adversary transcript), B5 (weak-mode runner).

@@ -184,6 +184,23 @@ def cmd_resolve(a) -> int:
     b["status"] = a.outcome
     b["resolution"] = {"at": _iso(_now()), "outcome": a.outcome, "evidence": a.evidence}
     _save(bets, f"bets: resolve {a.id} {a.outcome}")
+    # B9: a resolved day-scale bet IS a channel outcome -- the richest record the compounding
+    # layer gets. Feed knowledge/outcomes.jsonl automatically so run N+1 inherits the resolution
+    # even if the agent forgets the manual outcome.py step. Best-effort: a knowledge write must
+    # never block a bet resolution.
+    try:
+        sys.path.insert(0, str(REPO / "bin"))
+        import append_log
+        rec = {"at": b["resolution"]["at"], "channel": b["clock"],
+               "action": f"bet {b['id']}: {b['what']}",
+               "result": f"{a.outcome} after {b['placed_at']} -> {b['resolution']['at']}",
+               "evidence": a.evidence}
+        append_log.append("knowledge/outcomes.jsonl", json.dumps(rec, ensure_ascii=False),
+                          f"outcome: bet {b['id']} {a.outcome}")
+        print(f"knowledge/outcomes.jsonl fed automatically ({b['id']} {a.outcome}).")
+    except Exception as e:
+        print(f"warn: could not feed knowledge/outcomes.jsonl ({type(e).__name__}: {e}) -- "
+              "record it manually with bin/outcome.py add.", file=sys.stderr)
     print(f"{a.id} resolved: {a.outcome}. Record what it taught in MONEY_LOG.md.")
     return 0
 
