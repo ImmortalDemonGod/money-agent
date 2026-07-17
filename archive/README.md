@@ -10,3 +10,7 @@ DISCLOSURE_EV_LOG pre-authorizes sends. `new_run.sh`'s header documents the full
 
 The facts side is NOT here: each run's `ledger/` lives on that run's ledger branch
 (`ledger`, `ledger-run2`, ...), verifier-owned end to end.
+
+**Agent-facing rule:** if you are the RUN AGENT, this directory is NOT in your world -- prior runs'
+logs are strategy contamination, the in-tree equivalent of the prior-run branches CLAUDE.md already
+forbids. `knowledge/` is the sanctioned cross-run memory; use it instead.

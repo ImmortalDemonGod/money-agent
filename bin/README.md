@@ -2,9 +2,12 @@
 
 Every script belongs to exactly one trust class. The classes are the experiment: the agent
 produces CLAIMS, the verifier produces FACTS, and the gates adjudicate one against the other.
-`sod_hook.sh` enforces the write side of this table (the agent cannot commit changes to
-verifier/gate scripts); this file is the read side, so a human or agent can tell at a glance why
-a script exists and whether they should be touching it.
+`sod_hook.sh` enforces the write side (its blocklist covers every script in the VERIFIER-ONLY
+and GATES tables, the agent tools, and `tests/`); this file is the read side, so a human or agent
+can tell at a glance why a script exists and whether they should be touching it. The honest limit
+that applies to every agent-side check in this repo: the hook is a tripwire -- the walls are the
+out-of-band verifier (which executes its OWN checkout's scripts, never the agent branch's) and
+remote branch protection.
 
 ## VERIFIER-ONLY — run on the operator's machine, never in the sandbox (they hold/read keys)
 

@@ -229,9 +229,19 @@ echo '{"probe": true}' > ledger/raw/29990101T000000_probe.json
 git add ledger/raw/29990101T000000_probe.json && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: stranded"
 CONV="$W/convergence.sh"
 sed -n '/TEST-MARKER: convergence-begin/,/TEST-MARKER: convergence-end/p' bin/verifier_loop.sh > "$CONV"
-# an empty extraction means the markers drifted -- that must FAIL loudly, never pass vacuously
+# marker drift must FAIL loudly, never pass vacuously -- and BOTH markers matter (round-5 F1:
+# with only the begin-marker, sed extracts to end-of-file and the rig would EXECUTE the rest of
+# the verifier loop, pnl.py and all). CONV_OK gates execution: a bad extraction is never sourced.
+CONV_OK=1
+if ! grep -q "TEST-MARKER: convergence-begin" bin/verifier_loop.sh \
+   || ! grep -q "TEST-MARKER: convergence-end" bin/verifier_loop.sh; then
+  bad "convergence: a TEST-MARKER is missing from verifier_loop.sh"; CONV_OK=0
+fi
 if ! grep -q "git fetch" "$CONV"; then
-  bad "convergence: TEST-MARKER extraction came back empty (markers drifted in verifier_loop.sh)"
+  bad "convergence: TEST-MARKER extraction came back empty"; CONV_OK=0
+fi
+if grep -qE "python3 bin/|sleep \"" "$CONV"; then  # invocations, not comment mentions
+  bad "convergence: extraction overran the block (end marker drifted) -- not executing it"; CONV_OK=0
 fi
 run_convergence() {
   R="$PWD" LOG=/dev/null LEDGER_BRANCH=ledger bash -c '
@@ -239,14 +249,20 @@ run_convergence() {
     say() { :; }
     source "'"$CONV"'"'
 }
-git remote set-url origin /nonexistent-remote
-run_convergence
-[[ -f ledger/raw/29990101T000000_probe.json ]] && ok "convergence: stranded pull preserved under failing push" \
-  || bad "convergence: stranded pull LOST under failing push"
-git remote set-url origin "$W/origin.git"
-run_convergence
-git ls-tree origin/ledger -r --name-only | grep -q 29990101 \
-  && ok "convergence: stranded pull recovered to origin" || bad "convergence: recovery"
+if [[ "$CONV_OK" == "1" ]]; then
+  git remote set-url origin /nonexistent-remote
+  # exit status is NOT asserted here: the block's last statement is the short-circuited
+  # `[[ AHEAD -eq 0 ]] && reset` guard, which legitimately returns 1 when ahead. The behavioral
+  # assertions below (probe preserved / recovered) are the contract; the recovery cycle's clean
+  # exit is asserted because there AHEAD ends 0 and a non-zero can only mean a crash.
+  run_convergence || true
+  [[ -f ledger/raw/29990101T000000_probe.json ]] && ok "convergence: stranded pull preserved under failing push" \
+    || bad "convergence: stranded pull LOST under failing push"
+  git remote set-url origin "$W/origin.git"
+  run_convergence || bad "convergence: block exited non-zero on recovery cycle"
+  git ls-tree origin/ledger -r --name-only | grep -q 29990101 \
+    && ok "convergence: stranded pull recovered to origin" || bad "convergence: recovery"
+fi
 
 echo
 echo "=============================================="

@@ -19,10 +19,10 @@ N="${1:?usage: new_run.sh <finished-run-number>   (e.g. 001; archives into archi
 DEST="archive/run-$(printf '%03d' "$((10#$N))")"
 
 [[ -e "$DEST" ]] && { echo "FATAL: $DEST already exists -- refusing to overwrite an archive." >&2; exit 2; }
-git diff --quiet && git diff --cached --quiet \
-  || { echo "FATAL: working tree not clean -- commit or stash first (archival must be atomic)." >&2; exit 2; }
-
-mkdir -p "$DEST"
+# porcelain, not diff: untracked files count too -- `git add -A` below would silently sweep an
+# unrelated stray file into the archival commit (round-5 F4)
+[[ -z "$(git status --porcelain)" ]] \
+  || { echo "FATAL: working tree not clean (tracked or untracked) -- commit/stash/remove first (archival must be atomic)." >&2; exit 2; }
 archive() {  # move if present (tracked or not); silence if absent
   local f
   for f in "$@"; do
@@ -37,6 +37,7 @@ echo "=== archiving run $N state -> $DEST ==="
 archive MONEY_LOG.md SENT_LOG.md REFUSALS.md WATCH_LOG.md DISCLOSURE_EV_LOG.md \
         EXHAUSTION_PACKET.md ADVERSARY_REPORT.md ADVERSARY_TRANSCRIPT.md EDGE_REGISTRATION.md
 archive run/bets.json
+rmdir run 2>/dev/null || true   # bets.py recreates it on first use
 [[ -d iterations ]] && { mkdir -p "$DEST"; git mv iterations "$DEST/iterations" 2>/dev/null || mv iterations "$DEST/iterations"; echo "  archived: iterations/"; }
 shopt -s nullglob
 PKTS=(.github/aiv-packets/VERIFICATION_PACKET_ITER_*.md)
@@ -94,5 +95,8 @@ VERIFIER-MACHINE checklist (this script cannot reach that machine -- do these th
   2. bin/start_verifier.sh <new-agent-branch>   -- creates the lane, then set_baseline.py
      freezes the new baseline + constitution hash AND auto-archives any stale edge freeze
      from the previous run (it prints loudly when it does).
-  3. Confirm before the loop starts: python3 bin/truth.py prints 'source: ledger-branch'.
+  3. Confirm before the loop starts (with the NEW lane exported, in the agent's clone):
+     LEDGER_BRANCH=<the new lane> python3 bin/truth.py  -> 'source: ledger-branch' AND a fresh
+     computed_at. A stale run-N lane also prints 'ledger-branch' -- the lane NAME and freshness
+     are what you are confirming, not just the label.
 EOF

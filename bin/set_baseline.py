@@ -61,6 +61,10 @@ STATE_DIR.mkdir(parents=True, exist_ok=True)
 _stale_edge = STATE_DIR / "edge_registration.json"
 if _stale_edge.exists():
     _dest = STATE_DIR / f"edge_registration.{now}.archived.json"
+    _n = 1
+    while _dest.exists():  # same-second re-runs must not clobber the earlier archive (round-5 F5)
+        _dest = STATE_DIR / f"edge_registration.{now}.{_n}.archived.json"
+        _n += 1
     _stale_edge.rename(_dest)
     print(f"NOTE: archived a STALE edge freeze from a previous run -> {_dest}")
     print("      The edge rail is unfrozen for this run; the agent must re-register its bet.")
