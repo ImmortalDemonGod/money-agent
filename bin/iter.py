@@ -155,6 +155,17 @@ def close(nnn: str) -> int:
         print(f"iteration {nnn} DOES NOT COUNT yet (gate failed). Fix the packet and re-close.",
               file=sys.stderr)
         return 1
+    # B8: the canonical quality sweep, NON-BLOCKING by design -- aiv audit reads every packet and
+    # flags drift (TODO remnants, missing classes, SHA gaps). Surfacing it at close makes quality
+    # decay visible per-iteration; it does not gate, because audit findings are advisory quality
+    # signal, not per-claim adjudication (promote to blocking only if signal/noise proves out).
+    try:
+        audit = subprocess.run(["aiv", "audit", str(PACKETS), "--no-evidence"], cwd=REPO,
+                               capture_output=True, text=True, timeout=120)
+        for ln in (audit.stdout or audit.stderr).strip().splitlines()[-3:]:
+            print(f"   audit: {ln}")
+    except Exception as e:  # advisory means advisory: a missing/broken auditor never blocks close
+        print(f"   audit: skipped ({type(e).__name__}) -- run bin/setup_sandbox.sh to install aiv")
     _commit_push([packet, MONEY_LOG], f"iter {nnn}: close (gate PASS)")
     # the 086 lesson: a commit that exits 0 can still be empty. Verify the blob is IN the tree.
     ls = _run("git", "ls-tree", "HEAD", "--", str(packet.relative_to(REPO)), check=False)

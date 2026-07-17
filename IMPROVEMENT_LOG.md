@@ -558,3 +558,35 @@ one verifier cycle, acceptable. (2) B3's line thresholds are guessable constants
 the diff surface for the operator re-run, not the count itself. (3) The transcript check reads
 content patterns (searched/considered/...) -- an English-keyword heuristic; a non-English
 adversary transcript would need the list extended.
+
+## Entry 013 — B5 (weak-mode runner) + B7 (pacing advisory) + B8 (canonical audit at close) + B10 (live acceptance checklist)
+
+**B5.** `bin/run_weak.sh`: the co-located fast-trial verifier DEGRADED #9 said was missing. Same
+facts pipeline (pnl + edge_pnl), same verifier authorship, and the one hard guarantee both modes
+now share: NO resets, ever -- it only appends facts commits, so v1's destroy-your-own-evidence
+loop stays dead in weak mode too. The banner states plainly that weak mode is tripwire-only and
+its results debug the harness, never conclude anything about the agent.
+
+**B7.** guard now prints, when open bets exist and NONE is due: "if there is no NEW lever this
+iteration, this should be a watch tick, not an iteration." Deliberately advisory -- a hard block
+would fight genuine new work; the run-1 failure this targets (091-094 polling not-yet-due clocks
+as iterations) was a visibility failure, and the agenda line plus this question is the visibility.
+Tested: prints exactly when open>0 and due==0, silent otherwise. Testing note: the first attempt
+"failed" because the sim ledger had gone 8h stale and guard halted at freshness before the bets
+section -- the staleness gate doing its job during a test of a different feature.
+
+**B8.** `iter.py close` runs `aiv audit` after the gate passes and surfaces its last lines --
+non-blocking BY DESIGN (audit is drift-visibility, not per-claim adjudication; promote to blocking
+only if signal/noise proves out), and fail-OPEN on a missing/broken auditor with an install hint,
+because advisory means advisory. Tested the fail-open path.
+
+**B10.** SETUP.md 4b now carries the five-step live acceptance checklist (freeze, field shapes,
+fills movement, VOID detection, re-register) with the reason it cannot be skipped: an edge verdict
+from an unproven rail is exactly the class of green check this program exists to kill.
+
+**Critique.** (1) run_weak.sh shares no code with verifier_loop.sh -- a deliberate copy so weak
+mode cannot accidentally inherit reset/rotation behavior, at the cost of two publish blocks to
+keep in sync (noted for a future refactor into a shared publish function). (2) B7's advisory can
+nag during legitimate build sprints between bet placements; it is one line, and wrongly-iterating
+was the costlier error in run 1. (3) B8 surfaces only the audit tail -- 3 lines chosen to keep
+close output readable; the full report is one command away.

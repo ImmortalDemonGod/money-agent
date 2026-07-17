@@ -128,6 +128,23 @@ variant; unprovisioned, the rail is inert.
    count stays `PENDING` (variance is not an edge). Editing the registration after the verifier
    freezes it = `VOID` (bar-moving, detected).
 
+**Live acceptance (B10 — do not skip): the rail is simulation-tested only until this passes.**
+Before trusting the edge rail in a real run, one live cycle against the actual paper API:
+```bash
+# on the verifier machine, with ALPACA_PAPER_* in .env and AGENT_BRANCH exported:
+# 1. agent side: commit a toy registration (tiny bar, small min fills, short deadline) via
+#    bin/edge.py register
+# 2. verifier: python3 bin/edge_pnl.py   -> expect "registration FROZEN" + verdict PENDING
+# 3. place ONE paper order in the account; next cycle -> fills count moves
+# 4. edit the registration file and re-run -> expect verdict VOID (bar-moving detected)
+# 5. revert, delete the toy freeze from $MONEY_AGENT_STATE/edge_registration.json, re-register
+#    the real bet
+```
+Each step checks one seam that the simulation stubbed: auth, the account/orders/positions
+endpoints' real field shapes, the freeze file, and integrity detection. If any step surprises,
+fix before the run — an edge verdict from an unproven rail is exactly the class of green check
+this program exists to kill.
+
 ---
 
 ## 4c. Optional: standing-presence posture (issue #4)

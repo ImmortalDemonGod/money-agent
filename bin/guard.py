@@ -287,6 +287,14 @@ def main() -> int:
     try:
         import bets as _bets
         print(f"   bets: {_bets.summary_line()}")
+        # B7 (advisory only, never a block): when bets are open but NONE are due, iterating is
+        # only justified by a genuinely NEW lever -- run 1 burned iterations 091-094 polling
+        # not-yet-due clocks as if polling were work. A hard block here would fight real new work,
+        # so this stays a printed question the agent must answer to itself.
+        _open = _bets.open_bets()
+        if _open and not any(_bets.is_due(b) for b in _open):
+            print("   pacing: open bets exist and none is due -- if there is no NEW lever this "
+                  "iteration, this should be a watch tick (bin/iter.py watch), not an iteration.")
     except Exception:
         pass  # registry optional; its absence must never block the money rail
 
