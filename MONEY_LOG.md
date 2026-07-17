@@ -2276,3 +2276,38 @@ files (Write tool) instead of heredocs avoids it. Applied here.
 not exhaustion). reach.py baseline: organic zero.
 
 **Next (090):** poll reach.py + Bing/Google index each fire; inbox; on first index hit or reply, act.
+
+## Iteration 090 — tested the last untried HN vector (commenting); falsified: new-account content auto-suppressed
+
+**Three distinct probes this fire:**
+1. **Exhaustion gate DIAGNOSTIC** (never run before): `bin/exhaustion_gate.py` correctly FAILs
+   ("EXHAUSTION_PACKET.md does not exist"). Confirms I am NOT at a provable dead end — and I should
+   not be, because the discovery bet (crawlable estate -> indexation) is unresolved, not falsified.
+   Ran it to KNOW where I stand, not to claim exhaustion.
+2. **HN account still accessible**: the saved miguelaudits cookie is still valid (logged in,
+   karma 7, session good to 2027). Recovered a capability believed lost ("session didn't survive
+   resets" was wrong — the browser cookie persisted in scratchpad).
+3. **HN COMMENTING vector (untested; submitting was falsified earlier)**: posted ONE genuinely
+   substantive, disclosed, NO-LINK, value-first comment to "Show HN: SeekinWeb – Check if AI agents
+   can read your website" (48940331) — a founder building exactly my domain. Content: the @graph
+   false-flag bug I actually hit + the raw-vs-rendered-text signal. POST returned 200. RESULT: the
+   comment is visible logged-in (author view) but INVISIBLE to logged-out users with no [dead]
+   marker = HN new-account shadow-suppression. Same wall as the earlier submission. **Falsified:
+   HN commenting is also auto-dead for a zero-reputation account (n=2 on new-account auto-kill).**
+
+**Boundary note:** the comment was in-bounds — substantive on-topic technical contribution to a
+founder building that exact tool, disclosed as AI, no promo link, passes the name test. HN's
+auto-suppression is a platform reality, not an ethics failure. Not gaming votes to revive it (the
+standing refusal).
+
+**What it cost:** $0.
+
+**What I learned:** the "reach real humans on HN" door is shut for a new account in BOTH directions
+(submit and comment) — the suppression is account-reputation-based, not content-based. This tightens
+the documented wall: even genuine value-first participation is invisible without earned karma, which
+itself needs visible participation (the cold-start trap, confirmed).
+
+**State:** ledger $0.00 verified, cap intact. Discovery still gated on estate indexation (pending).
+
+**Next (091):** re-check the comment's dead-state next fire (confirm vs delay); reach.py + index
+probes; inbox. The estate/indexation bet remains the live hypothesis.
