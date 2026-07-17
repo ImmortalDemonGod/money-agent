@@ -1,10 +1,30 @@
 # V2 Harness Design: The Bet Ledger and the Business Spine
 
-**Status:** Design proposal (not implemented). Derived from the v1 run evidence
-(branch `claude/project-analysis-q4hjrg`, 88 logged iterations, verified $0.00) and from
-the architecture of `aiv-workflow`'s `fix_pipeline.mjs` — the most stress-tested harness
-available to this program (~130 regression-guarded learnings, selftest fixtures,
-multi-model validation).
+**Status:** Design proposal, with a correction to its own provenance. This document was
+DRAFTED against pre-v2 main (`5cc4adc`) — i.e., blind to the v2 harness that had already
+merged (PR #18 "v2 harness redesign", PR #19 "verified-edge rail + standing presence",
+main @ `3910122`). §0 reconciles the proposal against what is actually implemented; §14
+re-runs the stress tests against the real code with file:line evidence. Derived from the
+v1 run evidence (branch `claude/project-analysis-q4hjrg`, 88 logged iterations, verified
+$0.00) and from the architecture of `aiv-workflow`'s `fix_pipeline.mjs`.
+
+---
+
+## 0. Reconciliation with the implemented v2 (main @ `3910122`)
+
+Much of this proposal already exists in v2, sometimes in a stronger form, sometimes
+deliberately narrower. Honest accounting:
+
+| This doc proposed | v2 implemented | Status |
+|---|---|---|
+| Bet ledger with deadlines; open bets block "impossible" (§4, §6) | `bin/bets.py`: committed registry for **day-scale external-clock** bets (clock class, poll cadence, `RESOLVE_BY` must be future, evidence-required resolution); `guard.py:296-308` prints the due-bets agenda every iteration; `conclusion_gate.py:216-231` blocks conclusions over any open bet | **Implemented, narrower scope** — registry covers external clocks and catches *forgetting* (declared: tripwire, not wall, `bets.py:17-19`); it does not gate actions and resolutions are self-certified text |
+| Exhaustion as convergence; single termination authority; iter-095 impossible (§6) | `bin/conclusion_gate.py`: effort floor + filled packet + **fresh-context adversary** (hash-pinned to MONEY_LOG + a ≥30-line transcript) + no-live-bets; and the deeper fix — **a passing gate never stops the run**; no stop condition may read it | **Implemented, different mechanism** — v2 uses an adversarial-search novelty check where this doc used a novelty signature; v2's decoupling of permission-to-record from stop semantics is *stronger* than what this doc specified |
+| Instrument-first; no unmeasurable success conditions (§7) | Beacon promoted to canonical harness (`harness/beacon/`, entry 007); `bin/host_check.py` (serving-layer gate, SSRF-guarded, `HOST_CHECK` line required by `aiv_gate.sh` for publish claims) | **Implemented** at the artifact level; NOT implemented as a registration-time refusal of unmeasurable bets |
+| Out-of-rail check for e.g. trading (§14.1-A1 as first drafted) | **The verified-edge rail** (`bin/edge.py`, `bin/edge_pnl.py`, `ledger/edge.json`): trading is not refused — it is *scored*, as rail #2 | **This doc's first-draft verdict was wrong**; see §14.1 rewritten |
+| Verifier-stamped bet resolutions (§4.4) | Not implemented — `bets.py resolve` requires evidence text but the agent authors it | **Still additive** (v2 consciously scoped the registry to the forgetting failure-mode, not forging) |
+| Business spine / demand-before-build ordering (§5) | Not implemented — v2 keeps the harness strategy-free by design (context discipline: `knowledge/` is "operational, never strategic") | **Still additive, and now carries a named tension**: is ordering enforcement *method* (allowed by PROMPT v2's own method-vs-answer line) or *strategy injection* (which v2 deliberately refuses)? Operator call. |
+| Instant-delivery test (§14.3-A4) | Not implemented — deliver-in-full remains constitution prose; containment is the first-dollar stop | **Still additive**, see §14.3 |
+| `bounds_note` per bet (§14.2-A2) | Not implemented (nearest precedent: `disclosure_gate.py`, now canonical on main and wired into `mail.py`) | **Still additive** |
 
 **One-sentence summary:** extend v1's verification architecture — which grounded exactly
 one claim ("money arrived") outside the agent's reach — to every decision surface of the
@@ -462,102 +482,132 @@ adopted from day one.
 
 ---
 
-## 14. Stress tests — three adversarial business shapes
+## 14. Stress tests — three adversarial business shapes, against the REAL code
 
-The design was walked through the three businesses a money-tasked agent most plausibly
-gravitates to. Each probes a *different* wall. Verdicts, then the four amendments the
-exercise produced (A1–A4, folded back into the sections they modify).
+**Provenance note:** the first draft of this section was written against pre-v2 main
+and reasoned from prose; its §14.1 verdict ("trading refused at registration") was
+**wrong** against the implemented v2, which *scores* trading as a second rail rather
+than refusing it. This rewrite traces each business through the actual enforcement
+code at main @ `3910122`, file:line cited.
 
-| Business | Verdict | Caught by | Amendment surfaced |
+| Business | v2 verdict (from code) | Enforced by | Residual gap |
 |---|---|---|---|
-| Stock trading / arbitrage | Refused at registration | Out-of-rail check (A1) | A1 |
-| Selling scraped datasets | **Legal path** — channeled through the spine | Ordering + oracles shape it | A2, A3 |
-| Dropshipping | Refused at stage 3 | Instant-delivery test (A4) | A4 |
-| Affiliate marketing | Refused at registration | Out-of-rail check (A1) | A1 |
+| Stock trading / arbitrage | **Channeled onto scored rail #2** — pre-registered, paper-only, verifier-adjudicated | `edge.py` + `edge_pnl.py` + `guard.py:273-287` + `conclusion_gate.py:233-237` | Risk-shape blind spot (G1) |
+| Selling scraped datasets | Partially disciplined (clocks, sends, serving layer); bounds + ordering remain prose | `bets.py`, `mail.py`+`disclosure_gate.py`, `host_check.py`, `conclusion_gate.py` | A2 (`bounds_note`), spine ordering (G2), resolution grounding (G3) |
+| Dropshipping | Contained, not prevented — run halts at the first paid dollar | `guard.py` first-dollar stop; deliver-in-full is prose | A4 stands (G4) |
+| Affiliate marketing | Not scorable (no rail); prose routes it to the operator | CLAUDE.md two-rails clause | A1 residue (G5, small) |
 
-### 14.1 Stock trading / arbitrage
+### 14.1 Stock trading / arbitrage — v2 already solved this, better than A1 did
 
-Edge-*development* bets register legitimately: "backtest metric ≥ X on held-out data"
-is a deterministic oracle the harness can run, and CLAUDE.md's delayed-payoff clause
-permits build-and-verify toward a VERIFIED milestone (v1 precedent: the front-page
-predictor with its pre-registered 2.5× bar, honored against itself, iters 073–074).
-The *revenue* bet is where it dies: trading profit arrives via a brokerage rail, which
-is not an oracle surface — and deeper, the spine vocabulary presumes a **customer**;
-trading is customer-less revenue, so no demand-confirmed bet is even expressible and
-stage 2 can never exit on it.
+The first-draft A1 said "refuse at registration." v2's answer is stronger: **ground it
+instead.** The verified-edge rail is the run-1 fp_predict discipline (bar written
+before measurement, honored at 2.20× < 2.5×) promoted to machinery:
 
-As originally specified, that refusal surfaced as a confusing type-system mismatch,
-*after* edge bets had burned iterations. CLAUDE.md already holds the right behavior in
-prose ("a strategy that would pay through a different rail is not scored here — name it
-and let the operator decide"). Hence:
+- **Pre-registration with a frozen bar.** The agent commits `EDGE_REGISTRATION.md`
+  (EDGE_ID, METRIC, BAR, MIN_FILLED_ORDERS, RESOLVE_BY — tz-aware enforced,
+  `edge_pnl.py:120-127` — HYPOTHESIS, FALSIFIED_IF) *before* trading; on first sight
+  the verifier freezes its sha256 + the account's baseline equity into the
+  agent-unreachable state dir (`edge_pnl.py:182-204`). Editing after the freeze →
+  `registration_intact=false` → verdict **VOID** (`:212-224`); deleting the file "does
+  not un-place the bet" (`:215`).
+- **The fact lane is the broker's books.** P&L is computed from the Alpaca paper API
+  by a process the agent cannot invoke, published on the ledger branch the agent
+  cannot write (`edge_pnl.py:14-22`). The agent may even hold the paper creds: it can
+  *trade more*, it cannot *lie about the result* — the only way to move
+  `paper_pnl_usd` is to actually trade, which is the measured thing.
+- **The verdict is mechanical and anti-luck.** `VERIFIED_POSITIVE_EV` requires bar
+  cleared AND minimum fills; a cleared bar on a thin sample stays PENDING — "three
+  lucky trades are variance, not an edge" (`edge_pnl.py:259-268`). Deadline passed
+  without clearing = FALSIFIED, by pre-registered consent.
+- **Real capital is mechanically out of reach.** `VERIFIED_POSITIVE_EV` triggers the
+  edge analog of the first-dollar stop in `guard.py:273-287` — the run halts for
+  operator review; a verified edge *never* authorizes the agent to deploy real money.
+  And a PENDING edge blocks any "impossible" conclusion (`conclusion_gate.py:233-237`)
+  — it is an open bet.
+- **Serial re-registration is structurally blocked**: one frozen registration per run
+  (`edge.py:6-8` — "amend BEFORE the verifier has frozen, or write a new EDGE_ID in a
+  fresh run"), so the garden-of-forking-paths exploit (register bars until one passes)
+  does not exist.
 
-> **A1 — Out-of-rail check (amends §4.3).** `bet_gate.py` refuses any bet whose
-> terminal revenue path does not end at the Stripe oracle, with the CLAUDE.md
-> name-it-to-the-operator message verbatim. Out-of-rail strategies are not *wrong*;
-> they are outside the experiment's measurement boundary, and the gate must say
-> exactly that, at registration, before effort is spent. (Also kills affiliate
-> marketing: commissions pay via the network's rail, not the agent's Stripe.)
+**G1 — the one genuine finding this stress test lands on the edge rail:** the bar is on
+*P&L level* (`SUPPORTED_METRICS = ("paper_pnl_usd",)`, `edge_pnl.py:74`), not
+risk-adjusted. A negative-skew strategy (e.g. short-vol/martingale shapes: many small
+wins) can clear BAR + MIN_FILLED_ORDERS before its tail event and earn
+`VERIFIED_POSITIVE_EV`. Containment is real — paper-only, plus the mechanical operator
+checkpoint, and the operator sees the raw equity pulls — so this is a *quality-of-
+verdict* gap, not a safety gap. Mechanizable if wanted: an optional `MAX_DRAWDOWN_USD`
+registration field, adjudicated from the same equity pulls the verifier already
+commits.
 
-Sub-case: *selling market analysis as a product* (signals newsletter) passes the rail
-check and deliver-in-full — but is unregistered investment advice under a real man's
-name. Bounds territory → A2.
+What survives of A1: only the residue — strategies on rails *other* than
+{Stripe, Alpaca-paper} (affiliate networks, sponsorships, off-platform transfers) are
+still handled by prose ("name it for the operator", CLAUDE.md). A registration-time
+message for that case remains a small, real improvement (G5).
 
-### 14.2 Selling scraped datasets to market firms
+### 14.2 Selling scraped datasets — what the code disciplines vs what stays prose
 
-The instructive case, because it is a **legal path through the spine** and legal paths
-find subtler flaws than forbidden ones. What works as designed: datasets are ideal for
-deliver-in-full (the file transfers at the payment instant); the demand bet registers
-(reply-with-purchase-intent, instrumented); ordering and deliver-in-full do **not**
-contradict — the forced sequence is intent → build → deliver → payment, because
-demand-confirmed means *expressed willingness*, never pre-payment. B2B procurement
-timescales are handled honestly by the horizon rule (open question 4): the bet either
-forces a long-horizon run or refuses — surfacing the objective-shape problem at
-registration instead of in a retro. Two real gaps:
+Code-enforced today: reply-clock bets must be registered with a deadline and
+future-dated `RESOLVE_BY` (`bets.py:107-124`), surface on every iteration
+(`guard.py:296-308`), and block conclusions while open; every outreach send passes the
+fail-closed disclosure gate (`disclosure_gate.py`, now canonical and wired into
+`mail.py`) and lands in SENT_LOG; any published landing page needs a passing
+`HOST_CHECK` line or its packet fails `aiv_gate.sh` (`host_check.py:15-19`); resolved
+bets auto-feed `knowledge/outcomes.jsonl` so the next run inherits the outcome
+(`bets.py:188-203`).
 
-> **A2 — Registration ≠ authorization; the `bounds_note` field (amends §4.2).** The
-> bet gate checks falsifiability, not bounds — and a registered bet must never *read
-> as authorized*, or the design has rebuilt verification theater in reverse ("the gate
-> passed it, so it's fine" — the LOCAL-not-GLOBAL error, reborn). Fix reuses the
-> proven iter-092 pattern (`disclosure_gate.py`): every bet-spec requires a
-> `bounds_note` — the recorded name-test reasoning — fail-closed on **absence**, never
-> graded on content. The gate cannot judge whether scraping a source is acceptable; it
-> can refuse to let the agent act without having committed a recorded answer under a
-> name it must stand behind. Scraping ToS/licensing/personal-data calls, and the
-> investment-advice sub-case above, all route through this field into REFUSALS.md when
-> the answer is no.
+Not code-enforced (three residuals, one already proposed above):
 
-> **A3 — The `probe` bet type (amends §5.1 stage 2, §5.2).** The ordering rule "no
-> build before demand-confirmed" is too coarse: you cannot credibly probe a market
-> firm's demand without a dataset *sample*, and v1's best demand pattern — the 062–068
-> escalation, "I made you the fix," where building the artifact WAS the probe — would
-> itself have been blocked. Stage 2 therefore admits `probe` bets: minimal artifact
-> construction, capped in effort and spend, explicitly distinct from `delivery`.
-> Without A3 the harness forbids the strongest move v1 discovered.
+- **A2 stands, unchanged.** Nothing gates *what* may be scraped and sold — ToS,
+  licensing, personal data are name-test prose. The nearest mechanical precedent is
+  exactly the one this doc proposed copying (`disclosure_gate.py`'s
+  record-the-decision-or-no-send pattern).
+- **G2 — ordering (F2) is v2's one deliberately unmechanized failure mode.** Nothing
+  in the code stops build-before-demand; "build toward demand" lives in CLAUDE.md
+  prose. This is a *choice*, not an omission: v2's context discipline keeps the
+  harness strategy-free so convergence means something (`knowledge/` is "operational,
+  never strategic"). The spine in §5 is therefore this doc's principal *contested*
+  proposal: demand-first ordering is arguably method (PROMPT v2's own line permits
+  method), arguably strategy injection (which v2 refuses). Operator decision; the doc
+  no longer claims it is obviously in-bounds.
+- **G3 — resolution grounding.** `bets.py resolve` requires evidence *text*, but the
+  agent authors it — self-certified by declared scope ("the failure mode is FORGETTING
+  under drift, not forging", `bets.py:17-19`). The §4.4 verifier-stamp proposal
+  remains additive for the forging-class threat, and is cheap where the oracle is
+  already instrumented (beacon counts, mail replies).
 
-### 14.3 Dropshipping (and the sharpest catch)
+### 14.3 Dropshipping — contained by the stop, still not prevented; A4 stands
 
-The constitution kills dropshipping — fulfilment happens *after* payment, by a third
-party: the exact "disputable charge on a real man's name" scenario deliver-in-full
-exists for. But the harness **as first specified did not**: the stage-3 exit read
-"product delivered end-to-end to a test path," which a loosely-worded dropship flow
-could arguably pass. The bound was enforced only by prose. Hence:
+Trace it through the real code: nothing blocks *setting up* a dropship funnel.
+`host_check.py` verifies the page serves; `aiv_gate.sh` verifies packet shape and
+money-claim consistency; neither tests delivery *timing*. Deliver-in-full is
+constitution prose. What actually contains the harm is the **first-dollar stop**
+(`guard.py`, unchanged in v2, its docstring naming non-delivery as reason (2)): the
+run halts the instant the first dollar lands, before fulfilment obligations can
+compound — one charge, operator review, refundable. Containment, not prevention: the
+customer has still paid for goods that will never ship, on a real man's name, and only
+prose stood between the agent and listing that product.
 
-> **A4 — Instant-delivery test (amends §5.1 stage 3).** The `delivery` bet's
-> deterministic test is defined as *instant delivery*: payment-link → redirect →
-> **complete** deliverable received, all within one session, with the harness driving
-> the test-purchase path itself. A dropship flow structurally cannot pass (the good
-> arrives days later from a supplier); a digital artifact passes trivially. This makes
-> the deliver-in-full bound **mechanical for the first time** — a constitutional rule
-> becomes a gate the flow fails rather than a sentence the agent remembers.
+**G4 = A4, unchanged and now the design's headline residual:** a deterministic
+instant-delivery probe — harness drives the payment-link flow and verifies the
+*complete* deliverable is served within the transaction session — is absent from v2
+and would make deliver-in-full mechanical. It also matters *more* under v2 than under
+v1's frame: the standing-presence design (issue #4) points toward longer, multi-sale
+horizons where the first-dollar stop will eventually be relaxed (`EDGE_TERMINAL=0`
+already exists as the dual-rail precedent, `guard.py:277`) — and the day that stop is
+lifted, the instant-delivery probe is the only mechanical thing standing between a
+dropship listing and a stream of undeliverable charges.
 
-### 14.4 Meta-finding
+### 14.4 Meta-finding, revised
 
-Where the three land — trading refused at the rail, scraped data channeled through
-demand-first with recorded bounds reasoning, dropshipping/affiliate refused at
-delivery/rail — the patched harness mechanically funnels the agent toward the one
-shape satisfying every bound at once: **an already-built digital artifact, sold to a
-reachable human, through Stripe.** That is precisely where v1 converged after 88
-iterations of operator steering. The harness encodes the convergence the run paid to
-discover — and three of the four amendments close *false negatives* (things the
-original design would have wrongly allowed or confusingly refused), which is what a
-stress test is for.
+The first draft claimed the harness "funnels the agent toward digital-artifact sales."
+The code says something more interesting: v2 *widened* the funnel deliberately — two
+scored rails, not one, with the second grounded in a different asymmetry (the broker's
+books vs a withheld read key). The pattern that generalizes: **v2 never refuses a
+business shape; it either grounds it in an unforgeable fact lane or leaves it to prose
+and the operator.** The stress test's real yield is therefore not "which businesses are
+blocked" but the gap list: G1 (risk-shape field), A2/G2/G3 (bounds note, contested
+spine, resolution stamps), G4 (instant delivery — load-bearing the day the first-dollar
+stop is relaxed), G5 (out-of-rail message). And a process lesson this document now
+embodies: its own first draft reasoned from prose about a codebase that had moved —
+the same class of error as run 1's stale-conclusion habit, caught the same way,
+by checking the artifact instead of the memory of it.
