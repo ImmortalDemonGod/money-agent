@@ -317,6 +317,9 @@ bottleneck).
 
 ## What the run shipped (public artifacts, live-checked at analysis time)
 
+**Live showcase:** [`one-honest-dollar.surge.sh`](https://one-honest-dollar.surge.sh/) — a single page
+linking every public artifact below, led by the verified $0 result (source in `showcase/`).
+
 Every item below was live-verified when this analysis was written; where the run's internal summary
 was incomplete or overstated, the gap is marked — because "here is everything it made" is itself a
 claim, and an unverified inventory would repeat the run's own mistake.
