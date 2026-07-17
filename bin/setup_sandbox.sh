@@ -121,6 +121,18 @@ done
 [[ ! -f .env ]] && ok ".env absent (verifier creds stay off the sandbox)"
 [[ -f .env.agent ]] && ok ".env.agent present" || bad ".env.agent missing -- the agent has no keys"
 
+# v2 two-lane: the facts must be readable through the ONE path. In strong mode this resolves the
+# ledger branch; a fresh repo that has never run a verifier fails here, which is correct -- the
+# loop must never start blind to its own P&L.
+if SRC=$(python3 bin/truth.py received_usd 2>&1 >/dev/null); then
+  ok "facts readable via bin/truth.py (${SRC#source: })"
+  [[ "$SRC" == *working-tree* ]] && echo "  ⚠ weak mode: facts come from the shared working tree." \
+    "Strong mode = verifier publishing to the '$(echo "${LEDGER_BRANCH:-ledger}")' branch (bin/verifier_loop.sh)."
+else
+  bad "bin/truth.py cannot resolve any ledger (no origin/ledger branch, no local truth.json)." \
+      "Start the verifier (bin/start_verifier.sh) before the loop."
+fi
+
 echo
 if [[ $fails -gt 0 ]]; then
   echo "RESULT: $fails PROBLEM(S). Do not start the loop."; exit 1

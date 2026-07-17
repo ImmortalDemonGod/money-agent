@@ -52,10 +52,11 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done < "$MANIFEST"
     [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 (unanchored claim)"
   fi
-  # (b) the claimed dollar amount must not exceed what the VERIFIER committed. Read committed
-  # truth.json via git show so the agent's uncommitted local edits cannot spoof it.
-  TRUTH_RECV=$(git -C "$REPO" show HEAD:ledger/truth.json 2>/dev/null \
-               | python3 -c "import json,sys; print(json.load(sys.stdin).get('received_usd',0))" 2>/dev/null)
+  # (b) the claimed dollar amount must not exceed what the VERIFIER committed. v2: read through
+  # bin/truth.py (ledger branch first -- the agent cannot write that branch; working-tree fallback
+  # for weak mode). The old `git show HEAD:ledger/truth.json` read the CLAIMS lane, which goes
+  # permanently stale under the two-lane design.
+  TRUTH_RECV=$(python3 "$REPO/bin/truth.py" received_usd 2>/dev/null)
   TRUTH_RECV=${TRUTH_RECV:-0}
   # largest $ figure asserted anywhere in the packet
   MAX_CLAIM=$(grep -oE '\$[0-9]+(\.[0-9]+)?' "$PACKET" | tr -d '$' | sort -rn | head -1)
@@ -71,9 +72,8 @@ fi
 # lives in pnl.py, which hashes CONSTITUTION.md against a value frozen in the verifier's private
 # state dir and writes `constitution_intact` into the verifier-signed truth.json. guard.py halts on
 # it. So the gate no longer pretends to enforce this -- it surfaces the verifier's verdict instead.
-CI=$(git -C "$REPO" show HEAD:ledger/truth.json 2>/dev/null \
-     | python3 -c "import json,sys; print(json.load(sys.stdin).get('constitution_intact'))" 2>/dev/null)
-[[ "$CI" == "False" ]] && fail "verifier reports CONSTITUTION.md altered (constitution_intact=false)"
+CI=$(python3 "$REPO/bin/truth.py" constitution_intact 2>/dev/null)
+[[ "$CI" == "false" || "$CI" == "False" ]] && fail "verifier reports CONSTITUTION.md altered (constitution_intact=false)"
 
 if [[ $fails -gt 0 ]]; then echo "RESULT: FAIL ($fails)"; exit 1; fi
 echo "RESULT: PASS -- iteration $N packet is anchored and consistent with the ledger"

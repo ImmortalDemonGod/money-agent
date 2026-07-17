@@ -34,10 +34,25 @@ REPO_COPY.write_text(payload)
 # clean) and the frozen prediction tag predates the operator's legitimate constitution edits. The
 # only trustworthy reference is one the agent cannot reach: this file, on the verifier's machine.
 # pnl.py compares against it and writes constitution_intact into truth.json; guard.py halts on false.
-import hashlib
-CONST = pathlib.Path(__file__).resolve().parent.parent / "CONSTITUTION.md"
+#
+# v2 two-lane: freeze the constitution the AGENT sees (its committed copy on origin), matching how
+# pnl.py checks it. The working tree here is the verifier's own checkout, not the agent's.
+import hashlib, subprocess
+REPO = pathlib.Path(__file__).resolve().parent.parent
+const_bytes = None
+agent_branch = os.environ.get("AGENT_BRANCH", "")
+if agent_branch:
+    r = subprocess.run(["git", "show", f"origin/{agent_branch}:CONSTITUTION.md"],
+                       cwd=REPO, capture_output=True, timeout=15)
+    if r.returncode == 0:
+        const_bytes = r.stdout
+    else:
+        print(f"warn: cannot read CONSTITUTION.md from origin/{agent_branch}; "
+              "freezing the working-tree copy instead")
+if const_bytes is None:
+    const_bytes = (REPO / "CONSTITUTION.md").read_bytes()
 (STATE_DIR / "constitution.sha256").write_text(
-    hashlib.sha256(CONST.read_bytes()).hexdigest() + "\n")
+    hashlib.sha256(const_bytes).hexdigest() + "\n")
 
 print(f"baseline set (authoritative): {B}")
 print(f"  created_gt={now}  |  published read-only copy -> ledger/baseline.json")
