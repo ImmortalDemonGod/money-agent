@@ -29,7 +29,15 @@ import urllib.request
 def _public_https(url: str) -> bool:
     """SSRF guard: this tool is agent-invocable, so it must not be turned into a probe of
     operator-local services or cloud metadata (169.254.169.254). Accept only http/https to a
-    public host (reject loopback/private/link-local/reserved resolved addresses)."""
+    public host (reject loopback/private/link-local/reserved resolved addresses).
+
+    KNOWN RESIDUAL (deliberately deferred, documented per round-3 review): this validates one
+    getaddrinfo() resolution, and urllib re-resolves at connect time -- a DNS-rebinding name (short
+    TTL, answer flips between checks) can still reach a private address. Closing it properly means
+    connecting to the vetted IP while preserving Host/SNI (a custom HTTPSConnection), which is a
+    heavier change than this tool's risk warrants today: the tool runs in the agent sandbox (same
+    egress the agent already has), fetches with GET only, and never returns response bodies to a
+    trust decision beyond robots/meta parsing. Revisit if it ever runs on the verifier host."""
     import ipaddress
     import socket
     p = urllib.parse.urlparse(url)
@@ -48,10 +56,13 @@ def _public_https(url: str) -> bool:
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        # revalidate the redirect target through the same SSRF guard before following
+        # revalidate the redirect target through the same SSRF guard before following.
+        # ROUND-3 FIX: raise with code 599, NOT the original 3xx -- _get returns e.code, and a 3xx
+        # here satisfied `status < 400`, so a page redirecting to a private target got verdict=PASS
+        # and the aiv gate accepted the publish claim. A blocked redirect is a FAILURE.
         if not _public_https(newurl):
-            raise urllib.error.HTTPError(newurl, code, "redirect to non-public target blocked",
-                                         headers, fp)
+            raise urllib.error.HTTPError(newurl, 599, "redirect to non-public target blocked "
+                                         "(SSRF guard) -- treated as unpublished", headers, fp)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 

@@ -143,8 +143,22 @@ def main() -> int:
         # no evidence it came from a fresh context or the operator (CodeRabbit).
         if not re.search(r"^GENERATED_BY:\s*(fresh subagent|operator)\b", rep, re.MULTILINE | re.I):
             fails.append("adversary report has no valid GENERATED_BY (fresh subagent | operator).")
-        if not re.search(r"^DATE:\s*\S", rep, re.MULTILINE) and not re.search(r"DATE:\s*\S", rep):
-            fails.append("adversary report has no DATE.")
+        # ROUND-3 FIX: the previous check ANDed an anchored search with an unanchored superset, so
+        # it reduced to "does 'DATE:<nonspace>' appear anywhere" -- 'UPDATE: reran' and template
+        # prose both passed. Require a parseable ISO-8601 value (the template puts DATE: on the
+        # GENERATED_BY line, so the field is matched anywhere, but its VALUE must be a real date).
+        m_date = re.search(r"\bDATE:\s*(\d{4}-\d{2}-\d{2}(?:[T ][0-9:.]+(?:Z|[+-]\d{2}:?\d{2})?)?)",
+                           rep)
+        if not m_date:
+            fails.append("adversary report has no ISO-8601 DATE (e.g. DATE: 2026-07-17T17:30:00Z) "
+                         "-- a verdict without a real timestamp carries no 'when' provenance.")
+        else:
+            try:
+                import datetime as _dt
+                _dt.datetime.fromisoformat(m_date.group(1).replace("Z", "+00:00"))
+            except ValueError:
+                fails.append(f"adversary report DATE {m_date.group(1)!r} does not parse as "
+                             "ISO-8601.")
         m = re.search(r"^MONEY_LOG_SHA256:\s*([0-9a-f]{64})\s*$", rep, re.MULTILINE)
         if not m:
             fails.append("adversary report pins no MONEY_LOG_SHA256 -- a verdict not bound to the "

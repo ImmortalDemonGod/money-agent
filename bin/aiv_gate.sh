@@ -47,27 +47,29 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
   # (a) must cite a manifest hash. v2: the authoritative manifest lives on the LEDGER branch
   # (working-tree copy goes stale on the claims lane, same class of bug as the truth.json read).
   LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
-  TSRC_M=$(python3 "$REPO/bin/truth.py" received_usd 2>&1 >/dev/null | sed -n 's/^source: //p')
+  # ONE truth.py invocation serves both (a) and (b): source label from stderr, value from stdout.
+  # (Round-3: the previous three separate invocations were slow -- each does a fetch -- and left a
+  # TOCTOU window between the call that produced the label and the call that produced the number.)
+  TRUTH_OUT=$(python3 "$REPO/bin/truth.py" received_usd 2>&1)
+  TSRC=$(sed -n 's/^source: //p' <<<"$TRUTH_OUT")
+  TRUTH_RECV=$(grep -vE '^(source:|FATAL:)' <<<"$TRUTH_OUT" | tail -1)
+  TRUTH_RECV=${TRUTH_RECV:-0}
   MANIFEST_TXT=$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/MANIFEST.sha256" 2>/dev/null)
-  # Only fall back to the working-tree manifest in WEAK mode (working-tree-committed). In two-lane
-  # mode the working-tree file is agent-writable, so a planted local manifest could satisfy the
-  # hash requirement (CodeRabbit) -- require the ledger-branch manifest there.
-  if [[ -z "$MANIFEST_TXT" && "$TSRC_M" == "working-tree-committed" && -f "$MANIFEST" ]]; then
-    MANIFEST_TXT=$(cat "$MANIFEST")
+  # Weak-mode fallback reads the COMMITTED manifest blob, never the worktree file: the agent can
+  # overwrite the worktree copy after the verifier's commit and sod_hook only sees commits
+  # (round-3, completing the round-2 narrowing). Two-lane mode still requires the lane's manifest.
+  if [[ -z "$MANIFEST_TXT" && "$TSRC" == "working-tree-committed" ]]; then
+    MANIFEST_TXT=$(git -C "$REPO" show "HEAD:ledger/raw/MANIFEST.sha256" 2>/dev/null)
   fi
   if [[ -z "$MANIFEST_TXT" ]]; then
-    fail "money claim present but no grounded MANIFEST.sha256 (source=$TSRC_M; two-lane requires the ledger-branch manifest)"
+    fail "money claim present but no grounded MANIFEST.sha256 (source=$TSRC; two-lane requires the ledger-branch manifest)"
   else
     hit=0
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done <<< "$MANIFEST_TXT"
     [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 (unanchored claim)"
   fi
-  # (b) the claimed dollar amount must not exceed what the VERIFIER committed. Read via truth.py
-  # AND require a GROUNDED source: an uncommitted working-tree ledger is agent-forgeable, so a
-  # money claim adjudicated against it is worthless. truth.py prints "source: <s>" to stderr.
-  TSRC=$(python3 "$REPO/bin/truth.py" received_usd 2>&1 >/dev/null | sed -n 's/^source: //p')
-  TRUTH_RECV=$(python3 "$REPO/bin/truth.py" received_usd 2>/dev/null)
-  TRUTH_RECV=${TRUTH_RECV:-0}
+  # (b) the claimed dollar amount must not exceed what the VERIFIER committed, and the source must
+  # be GROUNDED: an uncommitted working-tree ledger is agent-forgeable.
   case "$TSRC" in
     ledger-branch|working-tree-committed) : ;;
     *) fail "money claim present but ledger source is '$TSRC' (agent-writable/uncommitted); no grounded number to check it against" ;;
@@ -79,8 +81,15 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
                  grep -oiE 'usd\s*[0-9]+(\.[0-9]+)?' "$PACKET" | grep -oE '[0-9]+(\.[0-9]+)?'; } \
                | sort -rn | head -1)
   if [[ -n "$MAX_CLAIM" ]]; then
-    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > float('$TRUTH_RECV') + 0.001 else 0)" 2>/dev/null || echo 0)
-    [[ "$OVER" == "1" ]] && fail "packet claims \$$MAX_CLAIM but verifier-committed received_usd is \$$TRUTH_RECV (false money claim)"
+    # FAIL-CLOSED (round-3): a python error here used to default to OVER=0, silently passing the
+    # false-money-claim check on e.g. a malformed received_usd. A gate that cannot adjudicate must
+    # fail, not shrug.
+    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > float('$TRUTH_RECV') + 0.001 else 0)" 2>/dev/null || echo ERR)
+    if [[ "$OVER" == "ERR" ]]; then
+      fail "cannot adjudicate claimed amount (\$$MAX_CLAIM vs received_usd='$TRUTH_RECV' unparseable) -- fail-closed"
+    elif [[ "$OVER" == "1" ]]; then
+      fail "packet claims \$$MAX_CLAIM but verifier-committed received_usd is \$$TRUTH_RECV (false money claim)"
+    fi
   fi
 fi
 

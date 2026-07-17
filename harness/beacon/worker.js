@@ -63,7 +63,13 @@ async function logHit(env, ctx, req, path, dest) {
     const cf = req.cf || {};
     const ip = req.headers.get("cf-connecting-ip") || "";
     // SECRET keyed daily salt: a PUBLIC date salt is guessable, so ip_hash would be reversible by
-    // dictionary. env.HASH_SALT is a wrangler secret; without it we still rotate daily but warn.
+    // dictionary. env.HASH_SALT is a wrangler secret; without it we still rotate daily but WARN
+    // (round-3: the comment promised a warning that did not exist -- now it does, once per isolate).
+    if (!env.HASH_SALT && !globalThis.__saltWarned) {
+      globalThis.__saltWarned = true;
+      console.warn("beacon: HASH_SALT secret is NOT set -- ip_hash uses a guessable public salt " +
+                   "and is dictionary-reversible. Set it: wrangler secret put HASH_SALT");
+    }
     const daySalt = (env.HASH_SALT || "NO_SECRET_SET") + "|" + new Date().toISOString().slice(0, 10);
     const iph = ip ? await ipHash(ip, daySalt) : "";
     const row = env.DB.prepare(

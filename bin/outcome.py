@@ -46,7 +46,9 @@ def main() -> int:
                 print(f"REFUSING: --{f} is empty (operational records need all fields).",
                       file=sys.stderr)
                 return 2
-        blob = f"{ns.channel} {ns.action} {ns.result}".lower()
+        # --evidence included (round-3): it is persisted like the rest, so it is a leak surface
+        # like the rest -- the denylist must see every free-text field that reaches disk.
+        blob = f"{ns.channel} {ns.action} {ns.result} {ns.evidence}".lower()
         STRATEGY = ("pitch", "product idea", "icp", "target audience", "we should sell",
                     "business idea", "go-to-market", "positioning")
         hit = next((s for s in STRATEGY if s in blob), None)
