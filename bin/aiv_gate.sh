@@ -61,15 +61,22 @@ done
 if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET"; then
   # (a) must cite a manifest hash. v2: the authoritative manifest lives on the LEDGER branch
   # (working-tree copy goes stale on the claims lane, same class of bug as the truth.json read).
+  # EDGE_MANIFEST hashes are accepted as anchors too: an edge packet's dollar figures are paper
+  # P&L, provenanced by the broker pulls -- the NUMERIC bound in (b) is what stops a real-money
+  # overclaim, this check is provenance (some verifier-signed pull must back every $ claim).
   LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
   MANIFEST_TXT=$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/MANIFEST.sha256" 2>/dev/null)
   [[ -z "$MANIFEST_TXT" && -f "$MANIFEST" ]] && MANIFEST_TXT=$(cat "$MANIFEST")
-  if [[ -z "$MANIFEST_TXT" ]]; then
+  MANIFEST_TXT="$MANIFEST_TXT
+$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)"
+  [[ -f "$REPO/ledger/raw/EDGE_MANIFEST.sha256" ]] && MANIFEST_TXT="$MANIFEST_TXT
+$(cat "$REPO/ledger/raw/EDGE_MANIFEST.sha256")"
+  if [[ -z "${MANIFEST_TXT// /}" ]]; then
     fail "money claim present but no MANIFEST.sha256 (ledger branch or working tree)"
   else
     hit=0
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done <<< "$MANIFEST_TXT"
-    [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 (unanchored claim)"
+    [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 or EDGE_MANIFEST.sha256 (unanchored claim)"
   fi
   # (b) the claimed dollar amount must not exceed what the VERIFIER committed. Read via truth.py
   # AND require a GROUNDED source: an uncommitted working-tree ledger is agent-forgeable, so a
