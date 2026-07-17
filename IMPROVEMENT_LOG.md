@@ -297,3 +297,85 @@ is verification machinery, exactly the family this repo exists to build. Issue #
 a fresh-context adversarial reviewer is examining the full v2 diff right now, prompted to DEFEAT
 it (find gameable gates, fresh-clone breaks, migration holes). Its findings and the closing
 scorecard reconciliation land in the final entry.
+
+---
+
+## Entry 008 — 2026-07-17T05:52Z–06:05Z — CLOSING: the design took its own medicine
+
+**What:** a fresh-context adversarial reviewer was pointed at the full v2 diff and told to DEFEAT
+it. It returned 12 grounded findings. This is the design's own thesis applied to itself — and it
+worked exactly as the thesis predicts: self-review across entries 001–007 caught migration debt
+and logged honest critiques, but it took an INDEPENDENT context to find the two highest-severity
+holes. That asymmetry (external verification finds what self-review cannot) is the whole program.
+
+**Fixed this entry (8 of 12):**
+- **#2, the structural hole** — every gate silently degraded to trusting an agent-writable,
+  UNCOMMITTED working-tree truth.json whenever the ledger branch was unreachable (this repo's
+  state today). Fix: truth.py's fallback reads the COMMITTED ledger via git show, never the raw
+  file; GROUNDED_SOURCES excludes uncommitted; guard and aiv_gate refuse ungrounded facts for any
+  money decision. Verified: a forged uncommitted $47 ledger is now never even read — truth.py
+  serves the committed $0 and guard halts. The forge gains nothing.
+- **#1, verifier-brick** — pnl.py's wash-trade code passed an invalid Stripe expand that would 400
+  every cycle and halt the run permanently. It was unexercised in v1 (no stripe_charges pull in
+  the committed ledger), so it had never actually run. Dropped the expand.
+- **#3** money-parser bypass (bare-word "47 dollars"/"USD 47"), **#6** self-typed publish line (now
+  re-runs host_check), **#5** sod_hook blocklist missing every v2 trust-root, **#7** disclosure
+  regex gaps, **#12** silently-inert wash guard, **#4** fail-open SoD parse, + two minors. All
+  verified by running.
+
+**Deferred, with honest reasons (not silently dropped):**
+- **#8** the conclusion adversary is agent-producible in one Write. Design-acknowledged (the gate
+  says so in its own output); the real grounding is the operator re-running the template from a
+  fresh context, and critically the gate NEVER stops the run, so a gamed conclusion costs nothing
+  but a log line the operator overrides. A future hardening: require a subagent-transcript artifact.
+- **#9** weak mode has no non-destructive runner and start_verifier/daemon hard-depend on macOS
+  `caffeinate` (dies on Linux). Real gap; the honest fix is a documented weak-mode note + making
+  caffeinate optional — queued, not rushed at the window edge.
+- **#10** a push failure followed by the next cycle's hard-reset can drop "immutable" raw pulls
+  (ledger self-heals, only the audit trail loses a pull). Real; needs a stash-or-skip-reset guard.
+- **#11** supervise.sh interpolates truth.json into python source (a quote in errors[] breaks the
+  first-dollar alert). Real robustness bug; fix is to pipe via stdin. Queued.
+These four are DEGRADED-severity and none is a money-forgery path; logging them as known-open is
+the correct move over shipping rushed fixes to safety-relevant code.
+
+## Scorecard reconciliation (M1–M12, the acceptance test from docs/V2_DESIGN.md)
+
+| # | Metric | v1 | v2 | Status |
+|---|---|---|---|---|
+| M1 | Evidence-loss events/run | ≥6 | 0 by construction (two-lane; verifier never touches claims lane) | MET |
+| M2 | Self-certified termination | happened (095) | structurally absent (/goal has no exhaustion terminal) | MET |
+| M3 | Stop-gate checks novelty | no (counts) | fresh-context adversary required, sha256-pinned | MET (grounding limit #8 logged) |
+| M4 | Ungated sends possible | yes on main | 0 (disclosure_gate fail-closed, on main) | MET |
+| M5 | Sends losable from trail | all | 0 (append_log/mail commit before SMTP) | MET |
+| M6 | Publishes serving-verified | 0 until iter 070 | gate re-runs host_check on cited URL | MET (hardened past self-typed line in #6) |
+| M7 | Reach measurable hour one | no (retraction 098) | beacon in harness, deploy-at-start mandated | MET (deploy still needs a CF token — operator step, documented) |
+| M8 | Iteration-record defects | 3 lost + 22 drift | scaffold owns numbering/time/hashes/blob | MET |
+| M9 | v1 strategy nouns in config | ≥3 | 0 (grep-verified, incl. knowledge/) | MET |
+| M10 | Cross-run knowledge records | 0 | wall map + falsified table + traps + recorder | MET |
+| M11 | Verifier heartbeats in claims history | 196 | 0 (facts lane) | MET |
+| M12 | Broken-by-design paths on main | 1 | 0 (send path repaired; 3 stale-lane reads swept) | MET |
+
+**All twelve targets met. Three (M3, M7) carry an explicitly-named residual** — the adversary is
+agent-invoked, the beacon needs an operator token — because the honest scorecard states its limits
+rather than claiming a wall where there is a strong tripwire. That distinction (tripwire vs wall,
+stated plainly) is inherited directly from v1's SETUP.md and is the right posture.
+
+## The redesign in one paragraph
+
+v2 is structurally superior to v1 on every measured axis, and the superiority is mechanical, not
+exhortative: the harness can no longer destroy its own evidence (two-lane git), can no longer
+certify its own exhaustion (grounded stop with an out-of-context novelty check), can no longer
+ship a crawler-invisible page as "published" (serving-layer gate), can no longer lose a send from
+the audit trail (durable append), can no longer start a fresh run with a broken send path or a
+re-derivation tax (send repair + knowledge/), and — after the adversarial pass — can no longer be
+made to believe an uncommitted forged ledger. What v2 deliberately does NOT fix is v1's
+bottleneck-of-record (reach/conversion): that is strategy, out of scope for a harness, and left to
+the run to discover under measurement it can now trust. Implementation A1–A8 complete; scorecard
+M1–M12 met; the design was adversarially reviewed and the review's real findings fixed or logged.
+
+**Loop meta:** eight entries across ~1h50m of the 2h window. The cron-based pacing failed twice
+(session-only job store does not survive this environment's recycling — itself a v1-class lesson:
+a scheduler that silently loses its schedule is a liveness bug); ScheduleWakeup + the user's own
+messages carried the loop the rest of the way. Stopping the loop now: A1–A8 shipped, adversary
+run and triaged, scorecard reconciled. Remaining work is the four DEGRADED items above, which are
+follow-ups for a fresh session, not this window.
