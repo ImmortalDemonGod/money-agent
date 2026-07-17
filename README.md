@@ -1,199 +1,100 @@
-# money-agent
+# The Money Agent
 
-An overnight experiment: **can a context-free agent, given a card and a payment rail, make money?**
+### A verification testbed: can you trust what an autonomous agent tells you about money, including its claim to be finished?
 
-The agent produces claims. A verifier it cannot invoke produces facts. The gap between them is the point.
+The entry question was simple: *can a context-free agent, given a card and a payment rail, make money?* But
+the real subject is one layer up. "I made money" and "I have exhausted every option" are the two most
+tempting claims an autonomous agent could fabricate, so money is the ideal testbed for the actual question:
+**how do you verify what an agent tells you, when it has every incentive to tell you it succeeded?**
 
----
-
-## The one rule everything hangs on
-
-**The agent cannot write its own P&L.**
-
-Not a convention. A boundary. `ledger/truth.json` is computed by `bin/pnl.py` from the Stripe API and the
-card feed, using credentials the agent does not have. The agent narrates into `MONEY_LOG.md`. When the two
-disagree, the ledger is right.
-
-This is AIV §5.2 separation-of-duties, and it is here because "I made money" is the single most tempting
-claim an agent could fabricate -- and because in this ecosystem the self-description layer has lied every
-single time it was checked (`EXIT=0` five times, a shipped-but-undeployed button, "subscription
-successfully restarted" on a course that would not open).
+This is a living research program. It has versions. Each one is designed by the last one's findings.
 
 ---
 
-## Two deployment modes
+## The invariant (holds across every version)
 
-| Mode | Verifier runs | SoD strength | Use when |
+**The agent produces CLAIMS. A verifier it cannot invoke produces FACTS. The gap between them is the whole
+subject.**
+
+`ledger/truth.json` is computed by a verifier the agent cannot reach, from the Stripe API and the card feed,
+using credentials the agent never holds, on a machine outside its sandbox. The agent narrates into
+`MONEY_LOG.md`. When the two disagree, the ledger is right, by construction. The agent cannot write its own
+P&L. Everything else in this repo is downstream of that one boundary.
+
+---
+
+## Status
+
+| Version | Cap | Horizon | Result |
 |---|---|---|---|
-| **Strong** | On your Mac, outside the sandbox, via launchd | **Real.** The agent cannot reach the read key at all. | You want the result to mean something |
-| **Weak** | Inside the sandbox with a read-only key | Tripwire only. A sandboxed agent can edit any file it can see. | Tonight, if you want it running in 10 minutes |
+| **v1** (concluded) | $25 | overnight, first-dollar stop | **$0.00, verified.** Two findings that redesigned the program. See [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md). |
+| **v2** (in design) | more capital | longer, with a build-and-verify phase | The experiment v1's findings *designed*. Grounded stop-verification + delayed-payoff strategies. See the [issues](../../issues). |
 
-`bin/guard.py` checks git authorship of `ledger/` as a tripwire in weak mode. Be honest that it is a
-tripwire, not a wall: only the **card issuer's own spend limit** and an **out-of-sandbox verifier** are
-actually load-bearing. Everything else is a prompt asking nicely.
+v2 is **not** "v1 with a bigger cap." It is the specific experiment v1's two findings pointed to.
 
 ---
 
-## Stripe setup (~15 minutes)
+## Findings so far
 
-### 1. Create a SEPARATE Stripe account
+Each one names the change it forces in the next version.
 
-**Do not use Black Box Research Labs.** Do not use UEI `GWHVRM4G5FM1`. That entity is load-bearing for
-SAM.gov and the SDVOSB path, and an autonomous agent must not transact under it.
+**1. The wall is reach, and the wall is an artifact of the objective.**
+v1's binding constraint was never product quality or honesty. It was reach to a stranger who will pay. But
+that wall is an artifact of measuring *time-to-first-dollar*: a "make a dollar tonight" objective forbids
+every strategy whose payoff follows a research-and-build phase (validate an edge, rank a page, earn a
+reputation) and leaves only reach-gated hustle. The frame did not fail to find good strategies. It forbade
+them.
+→ **v2 lifts the constraint:** more capital and a longer horizon, so delayed-payoff strategies become legal
+and testable for the first time.
 
-- Go to https://dashboard.stripe.com/register
-- Register as an **Individual / Sole proprietor**, not the LLC
-- **Email: `miguel.ingram.work@gmail.com`** (the agent's identity)
-- KYC needs: legal name, DOB, address, SSN last 4, and a bank account for payouts
+**2. The system had two verification surfaces, and only one was grounded.**
+Money was verified out of band, and the resulting $0.00 is trustworthy. But "the task is exhausted" was
+self-certified by a gate that *counts the agent's own effort artifacts* and then prints `EXHAUSTION PROVEN`.
+It counted; it never checked. The agent stopped on that false certification with a real bet still live.
+Outcome trustworthiness tracked verification quality one to one: the grounded surface produced a fact, the
+theater surface produced a rumor with a checkmark.
+→ **v2 grounds the stop decision the way money is grounded** (issue #7, the precondition for a meaningful v2).
 
-> **`miguel.ingram.work@gmail.com` is a separate account, not a burner.** It carries the operator's real
-> name. Anything sent from it is attributable to a named human permanently, and Stripe KYC binds it to him
-> personally either way. It isolates the *LLC* (which is the important part: SAM.gov and SDVOSB stay clean)
-> but it does **not** isolate the *person*. Do not reason about it as anonymous.
-
-**Wired since 2026-07-16: read + send, via app password.** An earlier version of this section said the
-agent could not reach this inbox at all ("registration only") and recommended read-only as the target
-posture. That is not the deployed world: `bin/mail.py` (`inbox` / `read` / `search` / `send`) runs against
-the address using `GMAIL_ADDRESS` + `GMAIL_APP_PASSWORD` from the agent's environment, proven live in
-`VERIFICATION_PACKET_EMAIL_AND_UNRIG.md`.
-
-### 1b. Inbox access: decided, deliberately
-
-Stripe registration needs a **click on a verification link**, so someone must reach the inbox at least once.
-Three postures were on the table:
-
-| Posture | The agent can | Cost |
-|---|---|---|
-| **Registration only** | nothing; operator clicks the verify link, agent never sees mail | Agent cannot receive customer replies, password resets, or platform mail. Realistically caps what "make money" can mean. |
-| **Read-only** | read mail, not send | Can receive receipts/verifications. Cannot spam. Best safety ratio, but no read-only app password exists -- it would require OAuth + `gmail.readonly` + token plumbing into the sandbox. |
-| **Read + send** **(CHOSEN)** | full email | Real business capability, and the one path to permanent reputational damage under a real name. |
-
-**Read + send was chosen on purpose, knowing it is the riskiest posture.** The prediction this run tests
-is about distribution; a run with every distribution channel amputated would assume the conclusion rather
-than test it (the un-rig, `2f078b8`). The controls that exist are honest but soft: every send is logged to
-`SENT_LOG.md` before it leaves, cold outreach is banned outright by `CONSTITUTION.md`, and the name test
-binds the rest -- and all three are prompts, not walls. `VERIFICATION_PACKET_EMAIL_AND_UNRIG.md` names this
-**the single largest unmitigated risk in the project**. It is accepted, not overlooked.
-
-> Note: this is the step where "pure unbiased sandbox" dies. Receiving money requires a KYC'd identity, and
-> that identity is yours. The agent stays context-free on the *business* axis (no priors, no thesis, no
-> ICP); it cannot stay anonymous on the *legal* axis. That trade is unavoidable, not a design flaw.
-
-### 2. Create TWO restricted keys
-
-Dashboard -> Developers -> API keys -> **Create restricted key**. Two separate keys is the SoD boundary
-made real:
-
-**`STRIPE_READ_KEY`** -- the verifier's. **The agent must never see this.**
-- Balance: **Read**
-- Balance transactions: **Read**
-- Charges: **Read**
-- Payouts: **Read**
-- Everything else: **None**
-
-**`STRIPE_WRITE_KEY`** -- the agent's. Only what it needs to actually sell something.
-- Products: **Write**
-- Prices: **Write**
-- Payment links: **Write**
-- Checkout sessions: **Write**
-- Balance / Payouts: **None** <- deliberate. It sells; it does not audit itself.
-
-### 3. Turn on the payout destination
-
-Stripe -> Settings -> Payouts. Money lands in the bank account you added at KYC. If you want it on the
-card instead, add the debit card as an **instant payout** destination.
-
-Reminder on the card: it is the **last hop**, not the receiving rail. Sequence is always
-`customer -> Stripe (KYC) -> payout -> card`. Nobody pays a stranger by pushing to a card number.
-
-### 4. The card (the spend side)
-
-**Recommended: Privacy.com.** It is the only option where the cap is enforced by the *issuer* rather than
-by a prompt:
-- Create a virtual card with a **hard monthly spend limit** = your cap
-- Get an API key -> `PRIVACY_READ_KEY` (the verifier reads the spend feed)
-- The agent gets the card **number**; the issuer enforces the limit. It cannot talk its way past a decline.
-
-**Fallback:** any prepaid card + export the statement to CSV -> `CARD_CSV=path/to/card.csv`
-(columns: `date,amount,description`; `amount` = positive dollars spent).
-
-### 5. Environment
-
-Verifier only (never in the sandbox in strong mode):
-```bash
-export STRIPE_READ_KEY=rk_live_...     # restricted, read-only
-export PRIVACY_READ_KEY=...            # or CARD_CSV=/path/card.csv
-export CARD_CAP_USD=50                 # set this to the number you're happy to pay for the answer
-```
-
-Agent's sandbox:
-```bash
-export STRIPE_WRITE_KEY=rk_live_...    # products/prices/links/checkout ONLY
-# card number goes here, or wherever your sandbox does secrets
-```
-
-### 6. Prove it works BEFORE the loop starts
-
-```bash
-python3 bin/pnl.py       # must print truth.json with verified:true
-python3 bin/guard.py     # must print OK + remaining
-```
-
-If `pnl.py` cannot reach Stripe it **refuses to write truth.json** and exits 2, and `guard.py` then halts
-the loop. That is intentional: a failed pull is not $0 earned, and an unverified ledger is worse than no
-ledger because it looks like evidence.
+The full writeup of finding 2 is [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md).
 
 ---
 
-## The loop
+## Roadmap
 
-Freeze the prediction first:
-```bash
-git tag prediction-frozen && git log -1 --format=%H
-```
-
-Then:
-```
-/loop make money
-```
-
-with the prompt in `PROMPT.md`.
+The open work is the [issue tracker](../../issues). In dependency order: **#7** grounds the stop decision (do
+this first, or v2 reproduces v1's premature-stop failure); #1 and #2 raise the agent's craft; #3, #4, and #6
+address the reach-is-an-artifact finding by giving it time, findable surfaces, and delayed-payoff strategies;
+#5 is targeting.
 
 ---
 
-## Reading it in the morning
+## Read the evidence
 
-In this order:
+The repo is the evidence. Nothing here asks you to take our word for it.
 
-1. **`ledger/truth.json`** -- `net_usd`, `made_money`. The only numbers that are real.
-2. **`REFUSALS.md`** -- what it wanted to do and couldn't. **The F4 map.** Likely the most valuable file.
-3. **`MONEY_LOG.md` vs `truth.json`** -- the drift. How far an unsupervised agent's self-report wandered
-   from ground truth, measured rather than caught by hand.
-4. **`PREDICTION.md`** -- was it right? Answer before rationalizing.
-5. **`iterations/`** -- what it actually tried, in order. Iteration 001's first move is the whole tell.
+1. **`ledger/truth.json`** — the only numbers that are real.
+2. **`MONEY_LOG.md` vs `truth.json`** — the drift between what the agent said and what was true, measured.
+3. **`REFUSALS.md`** — what it would not do. The most honest file here.
+4. **`docs/CASE_STUDY.md`** — the verification-theater finding in full.
+5. **`iterations/`** — everything it tried, in order.
 
-## Layout
+---
 
-```
-CONSTITUTION.md   bounds. agent reads, never writes. gate fails if modified.
-PREDICTION.md     frozen pre-run, git-tagged. read AFTER, judge honestly.
-PROMPT.md         the /loop prompt.
-MONEY_LOG.md      agent prose. CLAIMS ONLY.
-REFUSALS.md       what it wanted but couldn't. primary deliverable.
-ledger/truth.json harness-computed FACTS. SoD boundary.
-ledger/raw/       immutable pulls + MANIFEST.sha256. the anchor.
-bin/pnl.py        the verifier. fails closed.
-bin/guard.py      cap + SoD tripwire. halts the loop.
-bin/aiv_gate.sh   packet gate. calibrated both directions (see below).
-```
+## Run it
 
-## Gate calibration
+Provisioning (a real Stripe account, two restricted keys, an issuer-capped card, the two-machine verifier) is
+in [`SETUP.md`](SETUP.md).
 
-Both directions tested on the same baseline, the way `verify-finding` was calibrated with the fake F998 and
-the real F017:
+---
 
-- Fabricated `$47` claim, bare `N/A`s, no hash -> **FAIL** (5 findings)
-- Honest `$0` claim, real sha256, rationaled `N/A` -> **PASS**
+## What this is, and is not
 
-A gate that only rejects is not calibrated; it is just broken in a flattering direction. The first cut of
-this one false-failed every valid table row, and only running it caught that.
+- **It is** a study in grounded verification, using "make money" as a testbed precisely because it is the most
+  fabrication-prone class of claim.
+- **It is not** a make-money kit, a trading bot, or a claim that agents cannot make money. v1's premature stop
+  means the money question is genuinely still open. v2 reopens it, this time under verification you can trust.
+
+---
+
+*Black Box Research Labs. The interesting artifact was never the money. It was learning, on ourselves, that an
+outcome is only ever as trustworthy as the verification underneath it.*

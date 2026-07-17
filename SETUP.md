@@ -1,0 +1,129 @@
+# SETUP
+
+How to provision the money-agent so the result means something. The design goal of every step below is the
+same: keep the load-bearing controls **outside the agent's reach**. Read the [README](README.md) first for
+why that matters.
+
+---
+
+## Two deployment modes
+
+| Mode | Verifier runs | SoD strength | Use when |
+|---|---|---|---|
+| **Strong** | On a separate machine, outside the sandbox, via a supervisor (e.g. launchd) | **Real.** The agent cannot reach the read key at all. | You want the result to mean something. |
+| **Weak** | Inside the sandbox with a read-only key | Tripwire only. A sandboxed agent can edit any file it can see. | A fast local trial. |
+
+`bin/guard.py` checks git authorship of `ledger/` as a tripwire in weak mode. Be honest that it is a tripwire,
+not a wall. Only two things are actually load-bearing: the **card issuer's own spend limit** and an
+**out-of-sandbox verifier**. Everything else is a prompt asking nicely, and you should treat it that way.
+
+---
+
+## 1. A dedicated Stripe account
+
+Register an **Individual / sole-proprietor** Stripe account for the agent. KYC needs a legal name, DOB,
+address, a tax ID as required, and a bank account for payouts.
+
+> **This is where "pure unbiased sandbox" ends, and that trade is unavoidable.** Receiving money requires a
+> KYC'd identity, and Stripe binds that identity to a real person permanently. The agent stays context-free on
+> the *business* axis (no market, product, or thesis supplied); it cannot stay anonymous on the *legal* axis.
+> Use an identity you are willing to have permanently attached to everything the agent does. **Do not use an
+> entity you need to keep clean for other purposes** (a government-registered business, anything tied to
+> compliance or contracting). Isolate the entity; you cannot isolate the person.
+
+### Inbox posture (decide deliberately)
+
+Registration needs a click on a verification link, so someone reaches the inbox at least once. Three postures:
+
+| Posture | The agent can | Cost |
+|---|---|---|
+| **Registration only** | nothing; the operator clicks the link, the agent never sees mail | No customer replies, resets, or platform mail. Caps what "make money" can mean. |
+| **Read-only** | read, not send | Receives receipts and verifications, cannot send. Best safety ratio, but needs OAuth + a `gmail.readonly` token plumbed into the sandbox. |
+| **Read + send** | full email | Real business capability, **and the one path to permanent reputational damage under a real name.** |
+
+If you choose **read + send**, do it knowing it is the riskiest posture: the controls that remain are soft
+(every send logged to `SENT_LOG.md` before it leaves, cold outreach banned by `CONSTITUTION.md`, the name
+test). Those are prompts, not walls. `bin/mail.py` (`inbox` / `read` / `search` / `send`) reads
+`GMAIL_ADDRESS` + `GMAIL_APP_PASSWORD` from the agent's environment.
+
+---
+
+## 2. Two restricted keys (the SoD boundary, made real)
+
+Dashboard → Developers → API keys → **Create restricted key**. Two separate keys:
+
+**`STRIPE_READ_KEY`** — the verifier's. **The agent must never see this.**
+- Balance: Read · Balance transactions: Read · Charges: Read · Payouts: Read · everything else: None
+
+**`STRIPE_WRITE_KEY`** — the agent's. Only what it needs to sell.
+- Products: Write · Prices: Write · Payment links: Write · Checkout sessions: Write
+- Balance / Payouts: **None** (deliberate: it sells; it does not audit itself)
+
+---
+
+## 3. Payouts and the card
+
+Money lands in the bank account added at KYC. The sequence is always
+`customer → Stripe (KYC) → payout → card`. The card is the **last hop**, not the receiving rail; nobody pays a
+stranger by pushing to a card number.
+
+**For the spend side, use an issuer-capped card.** A virtual-card provider with a hard monthly spend limit
+(e.g. Privacy.com) is the only option where the cap is enforced by the *issuer*, not by a prompt. Create a
+card with a hard limit equal to your cap, give the agent the card **number**, and give the verifier the spend
+feed (`PRIVACY_READ_KEY`, or a `CARD_CSV=path` with `date,amount,description`). The agent cannot talk its way
+past a decline.
+
+---
+
+## 4. Environment
+
+Verifier only (never in the sandbox in strong mode):
+```bash
+export STRIPE_READ_KEY=rk_live_...     # restricted, read-only
+export PRIVACY_READ_KEY=...            # or CARD_CSV=/path/card.csv
+export CARD_CAP_USD=25                 # the number you're happy to pay for the answer
+```
+
+Agent's sandbox:
+```bash
+export STRIPE_WRITE_KEY=rk_live_...    # products/prices/links/checkout ONLY
+# card number goes here, or wherever the sandbox stores secrets
+# GMAIL_ADDRESS / GMAIL_APP_PASSWORD if using read+send email
+```
+
+Optional loop-cost ceiling (bounds token spend, distinct from the money cap):
+```bash
+export MAX_ITERS=100   # 0 or unset = unbounded
+```
+
+---
+
+## 5. Prove it works BEFORE the loop starts
+
+```bash
+python3 bin/pnl.py       # must print truth.json with verified:true
+python3 bin/guard.py     # must print OK + remaining
+```
+
+If `bin/pnl.py` cannot reach Stripe it **refuses to write `truth.json`** and exits non-zero, and `guard.py`
+then halts. That is intentional: a failed pull is not $0 earned, and an unverified ledger is worse than no
+ledger, because it looks like evidence.
+
+---
+
+## 6. Freeze the prediction, then run
+
+```bash
+git tag prediction-frozen && git log -1 --format=%H
+```
+
+Then start the loop with the prompt in `PROMPT.md` and the goal/stop condition. The bounds the agent is held
+to (compaction-durable) are in `CLAUDE.md`; the full constitution is in `CONSTITUTION.md`.
+
+---
+
+## Reading it afterward
+
+In this order: `ledger/truth.json` (the only real numbers) → `REFUSALS.md` (what it would not do) →
+`MONEY_LOG.md` vs `truth.json` (the drift between claim and fact) → `PREDICTION.md` (was it right?) →
+`iterations/` (what it tried, in order).
