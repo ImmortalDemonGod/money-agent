@@ -590,3 +590,58 @@ keep in sync (noted for a future refactor into a shared publish function). (2) B
 nag during legitimate build sprints between bet placements; it is one line, and wrongly-iterating
 was the costlier error in run 1. (3) B8 surfaces only the audit tail -- 3 lines chosen to keep
 close output readable; the full report is one command away.
+
+## Entry 014 — CLOSING: inventory exhausted, final audit, and the port-to-main checklist
+
+**Exhaustion statement (scoped honestly).** Every item in the entry-010 inventory is landed and
+tested (B1-B9) or documented as an operator-gated acceptance step (B10). "Exhausted" here means:
+no remaining item is both (a) evidenced by a run-1/v2/aiv-protocol source and (b) reachable from
+inside this session. What remains is out of reach BY NATURE, not by fatigue:
+- the one-cycle LIVE runs (two-lane verifier with a real Stripe key; edge rail against the real
+  paper API; the B10 checklist) need the operator's machine and keys;
+- the beacon deploy (M7) needs the operator's Cloudflare token;
+- true out-of-band grounding of the conclusion adversary needs a second party by definition -- the
+  transcript upgrade (B3) raised the forgery cost, only the operator's re-run grounds it;
+- canonical-JSON packet adoption (the guard-grade schema with SHA binding and scope inventory) is
+  the right NEXT HORIZON for the aiv integration, but it is an upstream-shaped project (the guard
+  runs CI-side against PRs, not local iteration loops), logged here so it is not mistaken for
+  forgotten.
+
+**Final regression sweep (all changed components, one pass):** guard 0/2/1 exits correct across
+EDGE_TERMINAL and VOID states; full gate PASS on the reference edge packet; conclusion_gate clean
+multi-layer fail with no crash; truth.py both fact files grounded; edge.py status grounded. The
+sim suite's full history across entries 009-013: every fix was demonstrated failing before and
+passing after in a bare-origin two-lane clone.
+
+**What this design now is, in one paragraph.** Two scored rails, each with the same shape: a
+grounded fact file on a branch the agent cannot write, produced by a process it cannot invoke,
+consumed through one read path, adjudicated by gates that compare structured claims to verifier
+numbers. A stop set that is still closed ({customer dollar, cap exhaustion, operator} plus the
+edge checkpoint, which is an operator review, not an agent power). Waiting that is recorded,
+surfaced, and blocks conclusions while live. A compounding layer that feeds itself. And the
+canonical aiv toolchain doing the structural half of packet verification, with the hand-rolled
+half shrunk to exactly the domain semantics no generic tool can know. The self-graded surfaces
+remaining are named (bets registry, adversary transcript), each with the honest label "tripwire"
+and the reason the tripwire is acceptable.
+
+**PORT-TO-MAIN CHECKLIST (if the operator blesses this exploration):**
+1. Merge PR #18 first (this branch stacks on it), then fast-forward this branch's commits.
+2. Run the two live acceptance gates before any run 2: one verifier cycle against real keys
+   (PR #18's own caveat) and the B10 edge-rail checklist (SETUP.md 4b).
+3. Upstream: PR the two aiv-protocol fixes (E010, shebang #29) from its
+   claude/money-agent-analysis-10o1nb branch -- consider re-branching to descriptive names first.
+   Once a pinned aiv version carries them: delete setup_sandbox.sh's hook sed-repair and
+   TEMPLATE.md's E010 trap note.
+4. Provision decisions the operator owns: ALPACA_PAPER_* in the verifier .env (edge rail on/off),
+   EDGE_TERMINAL (dual-rail vs single-answer run), MAX_WALL_CLOCK_H + LEDGER_MAX_COMMITS +
+   INTERVAL/HEARTBEAT_S per docs/STANDING_RUN.md, and whether the agent gets its own broker creds.
+5. Protect the ledger branch at the remote (now with force-push allowance for the verifier
+   credential if rotation is on).
+6. Scheduling for a standing run: durable queued wakeups only -- session-local cron died twice in
+   this program's history and once more in this very loop (8h gap, entry 012).
+
+**Loop meta, closing.** Entries 009-014 across two sessions; one 8-hour scheduler death absorbed
+by switching to consecutive in-session iterations (the correct fix, since the work -- unlike a
+standing run's -- was not gated on external clocks). The inventory method (source-evidenced
+bottlenecks, consumed top-down, each with fix + test + critique) is itself the reusable artifact:
+it is what "systematic self-improvement over the baseline" turned out to mechanically mean.
