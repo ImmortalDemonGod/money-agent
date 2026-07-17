@@ -247,3 +247,53 @@ one A-item not yet landed) and the entry-006 audit.
 **Next (entry 006, final in window):** the audit iteration — full-sweep for remaining
 working-tree reads of verifier-owned files (two instances of that bug class already found),
 adversarial review of everything landed, scorecard reconciliation, closing entry.
+
+---
+
+## Entry 006 — 2026-07-17T05:34Z–05:45Z — the audit: instance #3, and v1's topology fully retired
+
+**What:** the systematic sweep the two earlier bug-class finds demanded. Grepped every read of
+verifier-owned files (truth.json, MANIFEST, baseline, raw/) across bin/. Found and fixed
+**instance #3**: `supervise.sh` read truth.json from the AGENT'S branch — the supervisor would
+have watched a permanently-stale ledger all run and its first-dollar VERDICT line would never
+fire. Also retired the last v1-topology holdovers: `verifier_daemon.sh` shipped with run-1's
+literal branch name hardcoded as a default (now AGENT_BRANCH is required, no default — a baked-in
+branch name goes stale the moment a new run starts); the exhaustion-packet template now points at
+conclusion_gate and states a pass never ends the run; guard.py's dead TRUTH constant removed;
+SETUP.md documents the two-lane topology and names ledger-branch remote protection as the first
+hard SoD wall.
+
+**The bug-class lesson, stated for the record:** one architectural change (facts moved to their
+own branch) invalidated FOUR quiet read paths (aiv_gate truth, aiv_gate manifest, supervise,
+daemon default). Entries 002-006 caught all four because every entry's critique pass asked "what
+else reads this?" — the same discipline the run-1 verifier fixes came from. Migration debt hides
+in readers, not writers.
+
+**Verified:** every .py/.sh compiles; zero v1-topology ledger reads remain (sweep output clean —
+remaining LEDGER_BRANCH reads are the correct facts-lane path); M9 still 0; functional smoke green.
+
+---
+
+## Entry 007 — 2026-07-17T05:45Z–05:55Z — the beacon lands (M7) and A8 completes
+
+**What:** run-1's iteration-097 traffic beacon promoted to `harness/beacon/`, genericized:
+mechanism verbatim (bot classifier, D1 hit logging, daily-salted IP hash — no raw IPs, /go
+click-through measurement, /stats), run-1's estate URLs/story/keys moved into a CONFIG block the
+next run fills. The README mandates: deploy at run START (not iteration 097), disclosure line
+through disclosure_gate like any outbound surface, host_check PASS before any packet claims the
+hub published, privacy invariants pinned. Plus the last A8 piece: guard.py gains MAX_WALL_CLOCK_H
+— a standing-presence checkpoint knob (halts for the operator, never concludes anything; verified:
+tiny window → exit 2, off by default).
+
+**Why the beacon is harness, not strategy:** run 1's single most expensive measurement failure was
+shipping 9 funnels with zero analytics — its headline conclusion had to be RETRACTED as
+undecidable (reach vs conversion, iter 098). An instrument that decides your own headline question
+is verification machinery, exactly the family this repo exists to build. Issue #11's promote-test
+(harness-pattern vs business-tool) passes cleanly.
+
+**Verified:** node --check on worker.js; wall-clock checkpoint halts; scorecard below.
+
+**Implementation order A1–A8: COMPLETE.** Final move before closing: the design's own medicine —
+a fresh-context adversarial reviewer is examining the full v2 diff right now, prompted to DEFEAT
+it (find gameable gates, fresh-clone breaks, migration holes). Its findings and the closing
+scorecard reconciliation land in the final entry.
