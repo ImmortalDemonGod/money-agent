@@ -379,3 +379,61 @@ a scheduler that silently loses its schedule is a liveness bug); ScheduleWakeup 
 messages carried the loop the rest of the way. Stopping the loop now: A1–A8 shipped, adversary
 run and triaged, scorecard reconciled. Remaining work is the four DEGRADED items above, which are
 follow-ups for a fresh session, not this window.
+
+---
+
+## Entry 009-010 — 2026-07-17 — CodeRabbit review response (2 rounds) + scorecard correction
+
+An automated reviewer (CodeRabbit) reviewed PR #18 in two passes: 6 Critical inline, then a deeper
+1 Critical + 22 Major + 8 Minor. It found real defects — several in my own entry-008 fixes. The
+program's thesis again: an independent reviewer catches what self-review does not.
+
+**Fixed (round 1, entry 009 — the 6 Criticals):** unfilled-exhaustion-packet passing (instructions
+are now `>` lines the gate ignores + a sentinel + a required CONCLUSION); guard SoD made
+ancestry-scoped (committer-date-independent) AND fail-closed (was warn-and-pass — a tripwire that
+swallowed its own failure); iter.py manifest reads the verifier manifest only; sod_hook covers
+mail.py; truth.py branch cross-check; the SETUP "wall" overclaim corrected to the honest
+tripwire-vs-provisioning framing.
+
+**Fixed (round 2, entry 010 — security/correctness):** supervise.sh code-exec via JSON
+interpolation → stdin parse; host_check SSRF guard + multi-User-agent robots parsing; fail-closed
+constitution checks in set_baseline + pnl + aiv_gate; aiv_gate two-lane manifest requirement;
+verifier_loop mktemp + push-before-reset + agent-fetch fail-closed; path-limited commits in
+iter/append_log + index rollback; disclosure EV record requires audience+rationale; adversary
+report requires GENERATED_BY+DATE; truth.py fetch-timeout resilience; caffeinate portability;
+beacon secret-salt + referrer minimization. All verified by running.
+
+**Deliberately SKIPPED, with reasons (not silently ignored):**
+- The "record a disclosure-EV decision for host_check.py / docs/V2_DESIGN.md / the beacon README /
+  this cohort" findings: category error. `bin/disclosure_gate.py` governs OUTBOUND messages to
+  third parties under the real name; internal repo files are not outbound. Requiring an EV line to
+  commit a Python file is not this repo's contract. (The beacon's rendered HUB PAGE is outbound and
+  DOES need a decision — that one is kept in the README checklist.)
+- outcome.py full "strategy-free" schema enforcement: strategy is not mechanically classifiable. I
+  added fail-closed non-empty fields + an obvious-noun denylist; the rest stays review-backed, and
+  knowledge/README states the rule. Honest partial, not a claimed wall.
+- iter.py new() full allocation rollback and a few other "heavy lift" robustness items: the counter
+  advancing on a failed commit is self-correcting (next `new` sees the packet exists and errors);
+  logged as low-severity known-open rather than rushed.
+
+## Scorecard reconciliation (correcting entry-008's overstatement, per CodeRabbit)
+
+Entry 008 marked all twelve M-targets "MET". That overstated three, exactly the verification-theater
+pattern this project exists to avoid. Corrected standing:
+
+- **M1 (evidence-loss events → 0):** MET on the CLAIMS lane (the v1 failure). PARTIAL on the FACTS
+  lane — a persistently failing push before a reset can still drop raw pulls; entry-010 mitigates
+  (push-before-reset) but does not fully close it. State: **claims-lane MET, facts-lane mitigated-not-proven.**
+- **M3 (novelty check):** MET as a mechanism, but the adversary is agent-invocable and its search
+  quality is not mechanically verifiable — **strong tripwire, not out-of-band grounding.** Unchanged from entry 003's honest caveat.
+- **M6 (publishes serving-verified):** the gate now RE-RUNS host_check (entry 004 + the entry-010
+  SSRF/robots fixes), so this is genuinely enforced — **MET**, and hardened since entry 008.
+- **M7 (reach measurable):** the beacon exists and is privacy-hardened, but it is **not deployed or
+  live-tested** (needs a Cloudflare token). State: **built, NOT live — DEGRADED until a live deploy.**
+- The packet gate still accepts thin evidence CELLS in the A–F table (only conclusion_gate got the
+  no-blank-section treatment). Known-open.
+
+Honest one-line: v2 is a real structural improvement, now adversarially reviewed TWICE and hardened,
+but it remains **unproven on a live run**, and M1(facts-lane)/M7 carry named residuals rather than
+being fully closed. The PR body's "all twelve met, three with residuals" should be read as **nine
+cleanly met, three (M1-facts/M3/M7) carrying explicit residuals** — this entry is the correction.
