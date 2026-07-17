@@ -53,6 +53,17 @@ else:
 
 now = int(time.time())
 STATE_DIR.mkdir(parents=True, exist_ok=True)
+
+# A new baseline means a NEW RUN -- and a frozen edge registration from a previous run must never
+# adjudicate this one (a stale freeze would compare this run's equity to last run's baseline and
+# flag any re-registration as bar-moving). Archive it aside, loudly, instead of trusting a human
+# to remember the SETUP 4b cleanup step.
+_stale_edge = STATE_DIR / "edge_registration.json"
+if _stale_edge.exists():
+    _dest = STATE_DIR / f"edge_registration.{now}.archived.json"
+    _stale_edge.rename(_dest)
+    print(f"NOTE: archived a STALE edge freeze from a previous run -> {_dest}")
+    print("      The edge rail is unfrozen for this run; the agent must re-register its bet.")
 payload = json.dumps({
     "created_gt": now,
     "set_at_iso": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(now)),

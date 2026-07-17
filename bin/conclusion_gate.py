@@ -26,7 +26,7 @@ WHAT IT CHECKS (four layers, each necessary, none sufficient alone):
        - carry `VERDICT: NO_UNTRIED_IN_BOUNDS_APPROACH` -- if the adversary found something,
          the verdict line names it and this gate FAILS, because there is work to do;
        - show a real search ("## Search performed" section, non-placeholder).
-     See ADVERSARY_REPORT.template.md for the exact fresh-context prompt.
+     See templates/ADVERSARY_REPORT.template.md for the exact fresh-context prompt.
   4. NO LIVE BETS (the literal iteration-095 failure, mechanized): run 1 concluded "exhausted"
      with a multi-day bet (search indexation) still open and unfalsified. Now every open entry in
      run/bets.json (bin/bets.py) and any PENDING verified-edge experiment (ledger/edge.json)
@@ -140,7 +140,7 @@ def main() -> int:
     # --- layer 3: NOVELTY -- the fresh-context adversary must have come back empty-handed
     if not ADVERSARY.exists():
         fails.append("ADVERSARY_REPORT.md does not exist. Spawn a FRESH-CONTEXT adversary with the "
-                     "prompt in ADVERSARY_REPORT.template.md; only its empty-handed verdict makes "
+                     "prompt in templates/ADVERSARY_REPORT.template.md; only its empty-handed verdict makes "
                      "a conclusion recordable.")
     else:
         rep = _read(ADVERSARY)
@@ -256,7 +256,7 @@ def main() -> int:
           "dollar, verified cap exhaustion, or the operator ends a run.")
     print("Honest limit: the adversary was agent-invoked -- a strong tripwire, not out-of-band "
           "grounding. The operator can re-run it independently from "
-          "ADVERSARY_REPORT.template.md.")
+          "templates/ADVERSARY_REPORT.template.md.")
     return 0
 
 

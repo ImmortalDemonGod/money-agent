@@ -30,7 +30,7 @@ sys.path.insert(0, str(REPO / "bin"))
 
 def register() -> int:
     if not REG.exists():
-        print("FATAL: EDGE_REGISTRATION.md does not exist. Copy EDGE_REGISTRATION.template.md, "
+        print("FATAL: EDGE_REGISTRATION.md does not exist. Copy templates/EDGE_REGISTRATION.template.md, "
               "fill every field, then re-run.", file=sys.stderr)
         return 1
     import edge_pnl
