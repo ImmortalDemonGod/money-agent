@@ -52,10 +52,13 @@ def _now() -> str:
 
 
 def _commit_push(paths: list[Path], msg: str) -> None:
-    _run("git", "add", *[str(p) for p in paths])
-    staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=REPO)
+    ps = [str(p) for p in paths]
+    _run("git", "add", "--", *ps)
+    # path-limited diff + commit: never sweep unrelated pre-staged work into an iteration commit
+    # (CodeRabbit). The no-op case (these paths have no staged change) is preserved.
+    staged = subprocess.run(["git", "diff", "--cached", "--quiet", "--", *ps], cwd=REPO)
     if staged.returncode != 0:
-        _run("git", "-c", "commit.gpgsign=false", "commit", "-m", msg)
+        _run("git", "-c", "commit.gpgsign=false", "commit", "-m", msg, "--", *ps)
     branch = _run("git", "branch", "--show-current").stdout.strip()
     push = subprocess.run(["git", "push", "origin", branch or "HEAD"], cwd=REPO,
                           capture_output=True, text=True, timeout=90)

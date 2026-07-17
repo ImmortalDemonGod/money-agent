@@ -88,6 +88,13 @@ def check(body: str) -> tuple[bool, str]:
             f"  - body:{h} | verdict:keep-lead|cut | audience:<who> | rationale:<why>\n"
             f"(disclosure phrase currently {'PRESENT' if m else 'ABSENT'} in the body)")
     verdict = dec.get("verdict", "")
+    # the decision must be a COMPLETE EV record, not just a verdict: an audience and a rationale
+    # are what make it an actual expected-value calculation rather than a rubber stamp (CodeRabbit).
+    if verdict in ("cut", "keep-lead"):
+        if len(dec.get("audience", "")) < 2:
+            return False, f"EV decision for {h} has no 'audience' -- record who this is for."
+        if len(dec.get("rationale", "")) < 8:
+            return False, f"EV decision for {h} has no real 'rationale' -- record WHY."
     if verdict == "cut":
         if m:
             return False, (f"verdict:cut but a disclosure phrase is present at offset {m.start()} "

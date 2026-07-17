@@ -40,8 +40,15 @@ PIDFILE="$R/.run/verifier.pid"
 if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
   echo "  verifier already running (pid $(cat "$PIDFILE")). Kill it first: kill \$(cat $PIDFILE)"; exit 1
 fi
-nohup caffeinate -i env AGENT_BRANCH="$AGENT_BRANCH" LEDGER_BRANCH="$LEDGER_BRANCH" \
-  bash bin/verifier_loop.sh > "$R/verifier.log" 2>&1 &
+# caffeinate is macOS-only; gate on it so the verifier also launches on Linux/other hosts.
+if command -v caffeinate >/dev/null 2>&1; then
+  PREFIX=(caffeinate -i)
+else
+  PREFIX=()
+  echo "  note: 'caffeinate' not found (non-macOS) -- launching without it; ensure the host does not sleep."
+fi
+nohup env AGENT_BRANCH="$AGENT_BRANCH" LEDGER_BRANCH="$LEDGER_BRANCH" \
+  "${PREFIX[@]}" bash bin/verifier_loop.sh > "$R/verifier.log" 2>&1 &
 echo $! > "$PIDFILE"
 sleep 3
 if kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then

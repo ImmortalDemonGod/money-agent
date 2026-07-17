@@ -47,10 +47,16 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
   # (a) must cite a manifest hash. v2: the authoritative manifest lives on the LEDGER branch
   # (working-tree copy goes stale on the claims lane, same class of bug as the truth.json read).
   LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
+  TSRC_M=$(python3 "$REPO/bin/truth.py" received_usd 2>&1 >/dev/null | sed -n 's/^source: //p')
   MANIFEST_TXT=$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/MANIFEST.sha256" 2>/dev/null)
-  [[ -z "$MANIFEST_TXT" && -f "$MANIFEST" ]] && MANIFEST_TXT=$(cat "$MANIFEST")
+  # Only fall back to the working-tree manifest in WEAK mode (working-tree-committed). In two-lane
+  # mode the working-tree file is agent-writable, so a planted local manifest could satisfy the
+  # hash requirement (CodeRabbit) -- require the ledger-branch manifest there.
+  if [[ -z "$MANIFEST_TXT" && "$TSRC_M" == "working-tree-committed" && -f "$MANIFEST" ]]; then
+    MANIFEST_TXT=$(cat "$MANIFEST")
+  fi
   if [[ -z "$MANIFEST_TXT" ]]; then
-    fail "money claim present but no MANIFEST.sha256 (ledger branch or working tree)"
+    fail "money claim present but no grounded MANIFEST.sha256 (source=$TSRC_M; two-lane requires the ledger-branch manifest)"
   else
     hit=0
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done <<< "$MANIFEST_TXT"
@@ -99,8 +105,13 @@ fi
 # lives in pnl.py, which hashes CONSTITUTION.md against a value frozen in the verifier's private
 # state dir and writes `constitution_intact` into the verifier-signed truth.json. guard.py halts on
 # it. So the gate no longer pretends to enforce this -- it surfaces the verifier's verdict instead.
-CI=$(python3 "$REPO/bin/truth.py" constitution_intact 2>/dev/null)
-[[ "$CI" == "false" || "$CI" == "False" ]] && fail "verifier reports CONSTITUTION.md altered (constitution_intact=false)"
+# FAIL CLOSED: require an explicit true. A truth.py failure, a missing field, or a null verdict
+# leaves CI empty -- which must NOT pass (CodeRabbit). Only "true" clears this check.
+if ! CI=$(python3 "$REPO/bin/truth.py" constitution_intact 2>/dev/null); then
+  fail "cannot obtain the verifier's constitution verdict (truth.py failed)"
+elif [[ "$CI" != "true" && "$CI" != "True" ]]; then
+  fail "constitution verdict is not true (got '${CI:-<empty>}') -- altered, unverified, or unavailable"
+fi
 
 if [[ $fails -gt 0 ]]; then echo "RESULT: FAIL ($fails)"; exit 1; fi
 echo "RESULT: PASS -- iteration $N packet is anchored and consistent with the ledger"

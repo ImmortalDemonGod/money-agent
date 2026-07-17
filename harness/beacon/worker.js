@@ -47,14 +47,24 @@ async function ipHash(ip, salt) {
   return [...new Uint8Array(buf)].slice(0, 8).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
+// Minimize the referrer to origin+path: query strings routinely carry emails, reset tokens, and
+// other PII, and this runs under a real person's name (name test). Keep only where a click came
+// from, never the query (CodeRabbit).
+function minRef(ref) {
+  if (!ref) return "";
+  try { const u = new URL(ref); return u.origin + u.pathname; } catch { return ""; }
+}
+
 async function logHit(env, ctx, req, path, dest) {
   if (!env.DB) return;
   try {
     const ua = req.headers.get("user-agent") || "";
-    const ref = req.headers.get("referer") || "";
+    const ref = minRef(req.headers.get("referer") || "");
     const cf = req.cf || {};
     const ip = req.headers.get("cf-connecting-ip") || "";
-    const daySalt = new Date().toISOString().slice(0, 10);
+    // SECRET keyed daily salt: a PUBLIC date salt is guessable, so ip_hash would be reversible by
+    // dictionary. env.HASH_SALT is a wrangler secret; without it we still rotate daily but warn.
+    const daySalt = (env.HASH_SALT || "NO_SECRET_SET") + "|" + new Date().toISOString().slice(0, 10);
     const iph = ip ? await ipHash(ip, daySalt) : "";
     const row = env.DB.prepare(
       "INSERT INTO hits (ts,path,dest,ref,ua,country,asn,as_org,ip_hash,bot) VALUES (?,?,?,?,?,?,?,?,?,?)"

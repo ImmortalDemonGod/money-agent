@@ -139,6 +139,12 @@ def main() -> int:
     else:
         rep = _read(ADVERSARY)
         cur_hash = hashlib.sha256(MONEY_LOG.read_bytes()).hexdigest() if MONEY_LOG.exists() else ""
+        # provenance the template promises: WHO generated this and WHEN. Without it a report carries
+        # no evidence it came from a fresh context or the operator (CodeRabbit).
+        if not re.search(r"^GENERATED_BY:\s*(fresh subagent|operator)\b", rep, re.MULTILINE | re.I):
+            fails.append("adversary report has no valid GENERATED_BY (fresh subagent | operator).")
+        if not re.search(r"^DATE:\s*\S", rep, re.MULTILINE) and not re.search(r"DATE:\s*\S", rep):
+            fails.append("adversary report has no DATE.")
         m = re.search(r"^MONEY_LOG_SHA256:\s*([0-9a-f]{64})\s*$", rep, re.MULTILINE)
         if not m:
             fails.append("adversary report pins no MONEY_LOG_SHA256 -- a verdict not bound to the "

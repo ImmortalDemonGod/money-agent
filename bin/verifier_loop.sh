@@ -46,25 +46,49 @@ else
   say "created facts lane '$LEDGER_BRANCH' from origin/${DEFAULT:-main}"
 fi
 
+# private temp dir for pnl output (fixed /tmp paths can be pre-created as symlinks by a local user
+# to overwrite files or inject log lines -- CodeRabbit). Cleaned on exit.
+TMPD="$(mktemp -d "${TMPDIR:-/tmp}/pnl_v.XXXXXX")"
+trap 'rm -rf "$TMPD"' EXIT
+
 say "verifier up (two-lane). facts=$LEDGER_BRANCH agent=${AGENT_BRANCH:-<unset>} interval=${INTERVAL}s"
 while true; do
   # 1. converge OUR lane only. This reset touches the verifier's own branch -- the agent's branch
   #    is never named anywhere in this loop, which is the whole point of v2.
+  #    Do NOT reset away a local commit that has not reached origin yet: if a prior cycle committed
+  #    but the push failed, resetting to origin would discard committed raw pulls (CodeRabbit). So
+  #    push any pending local commits FIRST, and only reset when local is not ahead of origin.
   git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" || true
-  git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1 && \
-    git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
-  # keep the agent's committed constitution reachable for pnl.py's hash check
-  [[ -n "$AGENT_BRANCH" ]] && { git fetch -q origin "$AGENT_BRANCH" 2>>"$LOG" || true; }
+  if git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
+    if [[ -n "$(git rev-list -q "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null)" ]]; then
+      git push -q origin "HEAD:$LEDGER_BRANCH" 2>>"$LOG" \
+        && git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" \
+        || say "WARN: local ledger commits not yet pushed; NOT resetting (would lose raw pulls)"
+    fi
+    # reset only when we are NOT ahead of origin (else keep the local commits for next push)
+    [[ -z "$(git rev-list -q "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null)" ]] && \
+      git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
+  fi
+  # keep the agent's committed constitution reachable for pnl.py's hash check. FAIL CLOSED: if the
+  # strong-mode fetch fails, a stale origin/AGENT_BRANCH could make pnl publish constitution_intact
+  # =true after the agent changed its constitution -- so skip publication this cycle (CodeRabbit).
+  AGENT_FETCH_OK=1
+  if [[ -n "$AGENT_BRANCH" ]]; then
+    git fetch -q origin "$AGENT_BRANCH" 2>>"$LOG" || AGENT_FETCH_OK=0
+  fi
 
   # 2. recompute FACTS from primary sources. Only this process holds the read keys.
-  if python3 bin/pnl.py > /tmp/pnl_v.out 2>/tmp/pnl_v.err; then
+  if [[ "$AGENT_FETCH_OK" == "0" ]]; then
+    say "SKIP cycle: could not refresh origin/$AGENT_BRANCH (stale constitution ref would be unsafe)"
+    SIG=""
+  elif python3 bin/pnl.py > "$TMPD/out" 2>"$TMPD/err"; then
     SIG=$(python3 -c "
 import json
 d=json.load(open('ledger/truth.json'))
 print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_money'])" 2>/dev/null)
     say "verified: $SIG"
   else
-    say "pnl FAILED: $(head -1 /tmp/pnl_v.err)"
+    say "pnl FAILED: $(head -1 "$TMPD/err")"
     SIG=""
   fi
 

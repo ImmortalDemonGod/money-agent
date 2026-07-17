@@ -55,9 +55,13 @@ def _git(*args: str, timeout: int = 30) -> subprocess.CompletedProcess:
 
 
 def load() -> tuple[dict, str]:
-    # 1. the ledger branch (two-lane / strong). Fetch is best-effort: offline, the last-fetched
-    #    ref still serves, and guard's staleness halt covers the gap.
-    _git("fetch", "-q", "origin", LEDGER_BRANCH, timeout=60)
+    # 1. the ledger branch (two-lane / strong). Fetch is best-effort: offline OR SLOW, the
+    #    last-fetched ref still serves, and guard's staleness halt covers the gap. A fetch timeout
+    #    must NOT abort load() (CodeRabbit) -- swallow it and fall through to `git show`.
+    try:
+        _git("fetch", "-q", "origin", LEDGER_BRANCH, timeout=60)
+    except Exception:
+        pass
     show = _git("show", f"origin/{LEDGER_BRANCH}:ledger/truth.json")
     if show.returncode == 0 and show.stdout.strip():
         try:

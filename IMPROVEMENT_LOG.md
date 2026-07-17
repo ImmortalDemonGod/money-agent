@@ -11,7 +11,7 @@ Rule for every entry: what changed | why (cite the v1 evidence) | how it's measu
 
 ---
 
-## Entry 001 — 2026-07-17T04:17Z–04:4xZ — inventory, design, and the send-path repair
+## Entry 001 — 2026-07-17T04:17Z–04:40Z — inventory, design, and the send-path repair
 
 **What:** Bottleneck inventory B1–B9 (each cited to MONEY_LOG iterations), architecture A1–A8,
 scorecard M1–M12 (`docs/V2_DESIGN.md`). First mechanical fix: A5, the send path on main.

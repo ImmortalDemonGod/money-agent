@@ -250,6 +250,8 @@ def main() -> int:
         REPO_BASELINE_COPY.parent.mkdir(parents=True, exist_ok=True)
         REPO_BASELINE_COPY.write_text(BASELINE.read_text())
 
+    errors: list[str] = []  # collected early: the constitution check below can append to it
+
     # M2: constitution integrity, checked by the VERIFIER against a hash frozen at run start in the
     # agent-unreachable state dir. The agent can edit + commit CONSTITUTION.md (a gate comparing to
     # HEAD goes clean once committed); it cannot change what was frozen here. Result rides in
@@ -270,12 +272,17 @@ def main() -> int:
             if r.returncode == 0:
                 const_bytes = r.stdout
             else:
-                print(f"warn: cannot read CONSTITUTION.md from origin/{agent_branch}; "
-                      "falling back to working tree for the integrity hash", file=sys.stderr)
-        if const_bytes is None:
-            const_bytes = (REPO / "CONSTITUTION.md").read_bytes()
-        actual = hashlib.sha256(const_bytes).hexdigest()
-        constitution_intact = (actual == const_expected.read_text().strip())
+                # FAIL CLOSED: with AGENT_BRANCH set, the working-tree copy is the WRONG document
+                # (the verifier's own), so hashing it could falsely report intact=true. Record an
+                # error and leave the verdict null instead (CodeRabbit). guard halts on null.
+                errors.append(f"constitution_read_failed: origin/{agent_branch}:CONSTITUTION.md "
+                              f"({r.stderr.decode(errors='replace').strip()[:80]})")
+                const_bytes = None
+        elif const_bytes is None:
+            const_bytes = (REPO / "CONSTITUTION.md").read_bytes()  # weak mode only
+        if const_bytes is not None:
+            actual = hashlib.sha256(const_bytes).hexdigest()
+            constitution_intact = (actual == const_expected.read_text().strip())
 
     # C3: purge any raw pull the verifier did not itself commit, BEFORE computing anything. The
     # manifest hashes RAW.glob("*.json"); an agent that plants a fabricated pull (claiming a $4700
@@ -294,7 +301,7 @@ def main() -> int:
         print(f"warn: could not purge untracked raw files ({e})", file=sys.stderr)
 
     pulls: list[Path] = []
-    errors: list[str] = []
+    # errors initialized earlier (constitution check appends to it)
 
     # ---- received (gross, from balance_transactions -- fees/refunds/net)
     received_gross = fees = refunded = 0.0

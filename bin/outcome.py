@@ -37,6 +37,24 @@ def main() -> int:
     ns = ap.parse_args()
 
     if ns.cmd == "add":
+        # Operational-only contract (knowledge/README.md), enforced as far as is mechanically
+        # possible: non-empty fields, and a denylist reject on obvious strategy nouns. Full
+        # strategy detection is not mechanical -- the rule stays review-backed -- but this catches
+        # the easy leaks (CodeRabbit).
+        for f in ("channel", "action", "result"):
+            if not getattr(ns, f).strip():
+                print(f"REFUSING: --{f} is empty (operational records need all fields).",
+                      file=sys.stderr)
+                return 2
+        blob = f"{ns.channel} {ns.action} {ns.result}".lower()
+        STRATEGY = ("pitch", "product idea", "icp", "target audience", "we should sell",
+                    "business idea", "go-to-market", "positioning")
+        hit = next((s for s in STRATEGY if s in blob), None)
+        if hit:
+            print(f"REFUSING: record reads as STRATEGY ('{hit}'), not an operational outcome. "
+                  "knowledge/ is strategy-free; keep products/pitches/audiences out.",
+                  file=sys.stderr)
+            return 2
         rec = {
             "at": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "channel": ns.channel, "action": ns.action, "result": ns.result,

@@ -33,10 +33,14 @@ T=$(git show "origin/$LEDGER_BRANCH:ledger/truth.json" 2>/dev/null || cat ledger
 if [[ -z "$T" ]]; then
   echo "ledger     : UNREADABLE"; echo "VERDICT    : INVESTIGATE (no truth.json)"; exit 0
 fi
-read RECV VERIF CA <<<"$(python3 -c "
-import json,sys
-d=json.loads('''$T''')
-print(d.get('received_usd',0), d.get('verified'), d.get('computed_at',''))" 2>/dev/null)"
+# Parse via STDIN, never by interpolating the ledger into python source: truth.json is
+# agent-writable when the remote read fails, and a crafted string could break the literal and run
+# code on the supervisor host (CodeRabbit). A parse failure is UNREADABLE, not a silent OK.
+parsed="$(printf '%s' "$T" | python3 -c 'import json,sys
+d=json.load(sys.stdin)
+print(d.get("received_usd",0), d.get("verified"), d.get("computed_at",""))' 2>/dev/null)" \
+  || { echo "ledger     : UNREADABLE (parse failed)"; echo "VERDICT    : INVESTIGATE (unparseable truth.json)"; exit 0; }
+read -r RECV VERIF CA <<<"$parsed"
 
 # 3. freshness
 age="?"
