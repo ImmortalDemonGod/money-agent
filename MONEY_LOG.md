@@ -2311,3 +2311,31 @@ itself needs visible participation (the cold-start trap, confirmed).
 
 **Next (091):** re-check the comment's dead-state next fire (confirm vs delay); reach.py + index
 probes; inbox. The estate/indexation bet remains the live hypothesis.
+
+## Iteration 091 — integrity correction: exhaustion gate is fail-CLOSED (exit 1); my prior "GATE EXIT: 0" was a pipe artifact
+
+**Integrity item:** in iter 090 I printed "GATE EXIT: 0" for bin/exhaustion_gate.py. That was WRONG
+— `$?` after `| head` captured head's exit, not the gate's. Verified the true exit with no pipe:
+**the gate exits 1 (fail-closed) on a missing packet, exactly as its docstring promises.** No bug;
+the error was my measurement, and it briefly propagated into the stop-hook's own summary. Correcting
+the record: exhaustion is NOT certifiable (gate exit 1), and the gate is working correctly.
+
+**HN comment recheck (promised in 090):** STILL-INVISIBLE — confirms the shadow-suppression was real, not
+delay. HN commenting stays falsified for a cold account.
+
+**Honest position at iter 091 (not a conclusion, a status):** every ACTIVE human-reach channel is
+now falsified — HN (submit + comment, n=2 shadow-suppression), Nostr (bots/spam only), paid ads
+(negative-EV + gated), mainstream social (captcha-walled). The remaining unfalsified paths are all
+TIME-GATED WAITS I cannot accelerate: (1) estate indexation (the live bet, days out), (2) email
+replies (23 sent, 0 so far), (3) mastodon.nu approval. This is NOT exhaustion — the estate/discovery
+bet is unresolved, not falsified — but it IS a state where manufacturing new builds would be the
+motion the PROMPT warns against. The honest work now is the periodic watch (reach.py, index probes,
+inbox), which the cron performs, acting only when a real external signal arrives.
+
+**What it cost:** $0.
+
+**What I learned:** verify exit codes WITHOUT a masking pipe — a piped `$?` lies. Adding to the
+reset/heredoc/empty-commit family of self-inflicted measurement traps this run has caught.
+
+**Next (092):** watch cadence; act on the first real signal (index hit, reply, approval, or dollar).
+Re-fill EXHAUSTION_PACKET only if/when the estate bet resolves negatively over the coming days.
