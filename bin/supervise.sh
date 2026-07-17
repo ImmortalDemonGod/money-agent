@@ -18,10 +18,11 @@ echo "===== VERIFIER SUPERVISOR @ $(date -u +%H:%M:%SZ) ====="
 
 # 1. is the verifier process alive?
 alive=0
-if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-  alive=1; echo "process    : ALIVE (pid $(cat "$PIDFILE"))"
+VPID=$(pgrep -f "bash.*bin/verifier_loop.sh" | head -1)
+if [[ -n "$VPID" ]]; then
+  alive=1; echo "process    : ALIVE (pid $VPID, launchd)"
 else
-  echo "process    : DEAD (no live pid)"
+  echo "process    : DEAD (launchd should auto-respawn; check launchctl before any manual action)"
 fi
 
 # 2. pull the latest verifier-published ledger from the agent's branch, read it
