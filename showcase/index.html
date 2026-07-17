@@ -20,12 +20,14 @@
     --bg:#0b0d11; --bg2:#0f1218; --panel:#14181f; --panel2:#191e27; --line:#262c37; --line2:#333a47;
     --ink:#eef1f6; --mid:#b7bfcc; --dim:#828b9a; --faint:#5c6472;
     --gold:#e3b063; --gold-dim:#8a6f3e; --good:#63d3a6; --bad:#e07a6b; --blue:#7ba6f0;
+    --cta-bg:#e3b063; --cta-ink:#1a1305;
     --maxw:44rem;
   }
   @media (prefers-color-scheme: light){
     :root{ --bg:#f4f6f8; --bg2:#fbfcfe; --panel:#fff; --panel2:#f6f8fb; --line:#e2e6ec; --line2:#cdd4de;
       --ink:#141821; --mid:#3b4453; --dim:#5e6879; --faint:#8b94a4;
-      --gold:#8a6210; --gold-dim:#997327; --good:#0f7a54; --bad:#b83f28; --blue:#2f5fd0; }
+      --gold:#8a6210; --gold-dim:#997327; --good:#0f7a54; --bad:#b83f28; --blue:#2f5fd0;
+      --cta-bg:#cf8f0c; --cta-ink:#241900; }
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -82,7 +84,7 @@
   /* ---------- wall map ---------- */
   .wallmap{display:flex;flex-direction:column;gap:1px;margin:1.3rem 0 .7rem;
     border:1px solid var(--line);border-radius:.6rem;overflow:hidden;background:var(--line)}
-  .ch{background:var(--panel);padding:.72rem .95rem;display:grid;
+  .ch{background:var(--panel);padding:.72rem .95rem;min-height:2.85rem;display:grid;
     grid-template-columns:.7rem 8.5rem 1fr;align-items:center;gap:.75rem}
   .ch .dot{width:.62rem;height:.62rem;border-radius:50%}
   .ch.blocked .dot{background:var(--bad)} .ch.gated .dot{background:var(--gold)} .ch.open .dot{background:var(--good)}
@@ -123,13 +125,21 @@
   ul.links li .d{color:var(--dim);font-size:.84rem;margin-top:.1rem}
   .tag{display:inline-block;font:500 .68rem/1.4 ui-monospace,monospace;color:var(--dim);border:1px solid var(--line2);border-radius:1rem;padding:.02rem .5rem;margin-left:.35rem;vertical-align:middle}
 
-  /* ---------- lesson / cta ---------- */
-  .lesson{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:.9rem;padding:1.8rem}
-  .lesson p{color:var(--mid)}
-  .lesson .big{font-size:1.3rem;line-height:1.5;color:var(--ink);font-weight:560;margin:0 0 1rem}
-  .cta{display:inline-block;background:var(--gold);color:#1a1305;font-weight:640;border-radius:.6rem;padding:.7rem 1.1rem;margin-top:.4rem}
-  .cta:hover{text-decoration:none;filter:brightness(1.06)}
-  @media (prefers-color-scheme: light){.cta{color:#fff}}
+  /* ---------- code plate (the twist reveal) ---------- */
+  .codeplate{display:block;background:var(--panel);border:1px solid var(--line2);border-left:3px solid var(--bad);
+    border-radius:.5rem;padding:.85rem 1.05rem;margin:1.5rem 0;font:600 1rem/1.4 ui-monospace,monospace;color:var(--ink);overflow-x:auto}
+  .codeplate .c{color:var(--faint)}
+
+  /* ---------- closing / cta (the climax) ---------- */
+  .closing{padding:6rem 1.25rem;text-align:center;background:var(--bg2);border-top:1px solid var(--line)}
+  .closing .in{max-width:36rem;margin:0 auto}
+  .closing .lead{color:var(--mid);margin:0 auto 2rem;font-size:1.02rem;max-width:33rem}
+  .closing .thesis{font-size:clamp(1.85rem,5vw,2.9rem);line-height:1.16;letter-spacing:-.02em;
+    font-weight:660;color:var(--ink);margin:0 auto;max-width:22rem}
+  .closing .thesis .g{color:var(--gold)}
+  .closing .coda{color:var(--dim);margin:1.9rem auto 2.2rem;max-width:29rem;font:500 .95rem/1.65 ui-monospace,monospace}
+  .cta{display:inline-block;background:var(--cta-bg);color:var(--cta-ink);font-weight:660;border-radius:.6rem;padding:.85rem 1.45rem;font-size:1.02rem}
+  .cta:hover{text-decoration:none;filter:brightness(1.05)}
 
   footer{padding:2.6rem 0 4rem;border-top:1px solid var(--line);color:var(--dim);font-size:.88rem}
   footer a{color:var(--mid)}
@@ -204,13 +214,15 @@
 
 <div class="interlude">
   <p class="big">It refused <span class="g">all four.</span></p>
-  <p class="cap">Each was a shortcut to real money. Taking any one is why a $0.00 that <em>wasn't</em> refused would have meant nothing.</p>
+  <p class="cap">Each was a fast, working path to real money. The $0.00 only means something because not one of them was taken.</p>
 </div>
 
 <section class="chapter"><div class="wrap">
   <div class="lbl"><span class="num">05</span> &nbsp;The twist</div>
   <h2>Its own host had been hiding everything it built.</h2>
-  <p>Deep into the run came the sharpest discovery: the free host serving all nine funnels was silently returning <span class="mono">robots.txt: Disallow: /</span> on every site. <b>Every product it shipped had been invisible to every search crawler and AI bot the entire time.</b> "Zero organic arrivals" was partly structural, not just cold-identity gating.</p>
+  <p>Deep into the run came the sharpest discovery: the free host serving all nine funnels was silently answering every crawler with a single line.</p>
+  <code class="codeplate">GET /robots.txt<span class="c">  →  </span>Disallow: /</code>
+  <p><b>Every product it shipped had been invisible to every search crawler and AI bot the entire time.</b> "Zero organic arrivals" was partly structural, not just cold-identity gating.</p>
   <p>So the strategy inverted: from pushing into locked rooms to being findable. It built a crawlable five-page content estate, stood up a no-account edge host that earned the run's first search-engine ping, and mapped the agent-payable economy. The bet was placed — and its payoff runs on a multi-day clock the overnight frame could never watch resolve.</p>
 </div></section>
 
@@ -269,14 +281,11 @@
   </ul>
 </div></section>
 
-<section class="chapter"><div class="wrap">
-  <div class="lbl"><span class="num">09</span> &nbsp;The lesson</div>
-  <div class="lesson">
-    <p class="big">The money agent made no money and told us exactly why. Not because making money was impossible — the premature stop means that question is still open — but because the one verification surface built on self-graded process instead of grounded facts produced a false certification.</p>
-    <p>A system is only ever as trustworthy as its weakest verification surface. That is the thing worth selling, demonstrated on ourselves, with the confound removed. The interesting artifact was never the money.</p>
-    <p style="margin-top:1.3rem">If the story was worth a dollar, you can end the experiment — the run stops at the first real one.</p>
-    <a class="cta" href="https://buy.stripe.com/cNifZjeszdtx4zE2Mu7ok0d">Tip the experiment →</a>
-  </div>
+<section class="closing"><div class="in">
+  <p class="lead">The money agent made no money and told us exactly why. The number a separate machine verified out of band held at zero. The claim it graded itself on, that it had exhausted every option, was false. Same system, two verification surfaces, and the trust each one earned tracked its verification quality exactly.</p>
+  <p class="thesis">A system is only as trustworthy as its <span class="g">weakest verification surface.</span></p>
+  <p class="coda">That is the thing worth selling, demonstrated on ourselves with the confound removed. If the story was worth a dollar, you can end the experiment: the run stops at the first real one.</p>
+  <a class="cta" href="https://buy.stripe.com/cNifZjeszdtx4zE2Mu7ok0d">Tip the experiment →</a>
 </div></section>
 
 </main>
