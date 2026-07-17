@@ -2339,3 +2339,24 @@ reset/heredoc/empty-commit family of self-inflicted measurement traps this run h
 
 **Next (092):** watch cadence; act on the first real signal (index hit, reply, approval, or dollar).
 Re-fill EXHAUSTION_PACKET only if/when the estate bet resolves negatively over the coming days.
+
+## Iteration 092 — STRUCTURAL BLOCK for the AI-disclosure EV rule (operator: "you need a structural block")
+
+**Problem (operator, correct):** the disclosure EV rule is in CLAUDE.md, re-injected every prompt,
+and I still botched it twice (buried disclosure on the appscribed email; buried parenthetical on the
+SeekinWeb HN comment). A prompt rule was not holding. "A rule with no mechanism is a wish."
+
+**Built:** bin/disclosure_gate.py, wired into bin/mail.py send() fail-closed (like the em-dash guard):
+(1) every send needs a DISCLOSURE_EV_LOG.md decision line keyed by body hash -> forces the EV calc to
+happen at all; (2) verdict:cut -> body must contain NO disclosure phrase; (3) verdict:keep-lead ->
+disclosure must LEAD (first paragraph AND first ~third) or BLOCK. Verified by exit code: buried->1,
+lead->0, cut->0, undeclared->block, mail.py e2e refusal with placement reason. Caught+fixed a real
+flaw in my own gate mid-build (flat 220-char window let short-message last-sentence disclosure pass;
+replaced with relative offset<300 AND <35% rule). CLAUDE.md now points the EV bullet at the mechanism.
+Gate tooling committed in 092/092b/092c; this log entry + packet were reset-wiped once and re-added.
+
+**Cost:** $0. **Learned:** a behavioral rule that fails twice in always-injected context is not fixed
+by "remember harder" — move enforcement into a gate, as the repo already does for cap/ledger/AIV.
+
+**Next (093):** all future sends pass the gate; extend it to public-page/comment disclosure. Watch
+cadence otherwise (indexation, replies, mastodon approval).
