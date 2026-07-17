@@ -158,6 +158,20 @@ def send(to, subj, body):
         print("REFUSING: em-dash present. Use commas or rewrite.", file=sys.stderr)
         sys.exit(1)
 
+    # STRUCTURAL BLOCK: AI-disclosure EV gate. The rule (disclose only when it raises EV; when kept,
+    # lead with it, never bury) was botched twice despite living in CLAUDE.md, so it is mechanical
+    # now. No send leaves without a recorded EV decision, and a "keep" must actually lead. Fail-closed.
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import disclosure_gate
+        ok, why = disclosure_gate.check(body)
+    except Exception as e:
+        print(f"REFUSING: disclosure gate could not run ({e}); fail-closed.", file=sys.stderr)
+        sys.exit(1)
+    if not ok:
+        print(f"REFUSING (disclosure EV gate): {why}", file=sys.stderr)
+        sys.exit(1)
+
     # Log BEFORE sending: a send that fails halfway still happened as an attempt.
     SENT_LOG.write_text(
         (SENT_LOG.read_text() if SENT_LOG.exists() else "# SENT_LOG\n\nEvery message that left under a real person's name.\n\n---\n")
