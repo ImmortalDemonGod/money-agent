@@ -24,6 +24,21 @@ fail() { echo "GATE FAIL: $*" >&2; fails=$((fails+1)); }
 
 [[ -f "$PACKET" ]] || { fail "no packet at $PACKET"; echo "RESULT: FAIL"; exit 1; }
 
+# --- 0. CANONICAL structural validation (aiv-protocol). This repo's packets follow the canonical
+# AIV taxonomy; the canonical validator (`aiv check`, the same 8-stage pipeline the aiv pre-commit
+# hook runs) checks structure/claims/evidence-format better than any grep here can. Verified
+# empirically: run-1 packets pass it. Everything AFTER this stage is the domain-specific half the
+# canonical tool has no concept of (money vs truth.json, edge verdicts, constitution) -- that split
+# is the point: canonical tooling where it exists, hand-rolled only where it must be.
+# Fail-closed: a missing CLI is a broken gate, and a broken gate must not pass packets --
+# bin/setup_sandbox.sh installs it in every fresh clone.
+if command -v aiv >/dev/null 2>&1; then
+  aiv check "$PACKET" --no-strict >/dev/null 2>&1 \
+    || fail "canonical validation failed: aiv check $PACKET (run it directly for the rule table)"
+else
+  fail "canonical aiv CLI not installed (fresh clone?) -- run bin/setup_sandbox.sh first"
+fi
+
 # --- 1. every class A-F addressed; N/A must carry a rationale (R3: all six required)
 for c in A B C D E F; do
   line=$(grep -iE "^[[:space:]]*[-*|]?[[:space:]]*(class[[:space:]]+)?${c}[[:space:]]*[).:|]" "$PACKET" | head -1)
@@ -46,6 +61,9 @@ done
 if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET"; then
   # (a) must cite a manifest hash. v2: the authoritative manifest lives on the LEDGER branch
   # (working-tree copy goes stale on the claims lane, same class of bug as the truth.json read).
+  # EDGE_MANIFEST hashes are accepted as anchors too: an edge packet's dollar figures are paper
+  # P&L, provenanced by the broker pulls -- the NUMERIC bound in (b) is what stops a real-money
+  # overclaim, this check is provenance (some verifier-signed pull must back every $ claim).
   LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
   # ONE truth.py invocation serves both (a) and (b): source label from stderr, value from stdout.
   # (Round-3: the previous three separate invocations were slow -- each does a fetch -- and left a
@@ -61,12 +79,19 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
   if [[ -z "$MANIFEST_TXT" && "$TSRC" == "working-tree-committed" ]]; then
     MANIFEST_TXT=$(git -C "$REPO" show "HEAD:ledger/raw/MANIFEST.sha256" 2>/dev/null)
   fi
-  if [[ -z "$MANIFEST_TXT" ]]; then
+  # EDGE_MANIFEST hashes join the anchor pool under the same trust rules (lane first, committed
+  # blob in weak mode): an edge packet's dollar figures are paper P&L provenanced by broker pulls.
+  EDGE_M=$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
+  [[ -z "$EDGE_M" && "$TSRC" == "working-tree-committed" ]] \
+    && EDGE_M=$(git -C "$REPO" show "HEAD:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
+  [[ -n "$EDGE_M" ]] && MANIFEST_TXT="$MANIFEST_TXT
+$EDGE_M"
+  if [[ -z "${MANIFEST_TXT//[[:space:]]/}" ]]; then
     fail "money claim present but no grounded MANIFEST.sha256 (source=$TSRC; two-lane requires the ledger-branch manifest)"
   else
     hit=0
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done <<< "$MANIFEST_TXT"
-    [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 (unanchored claim)"
+    [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 or EDGE_MANIFEST.sha256 (unanchored claim)"
   fi
   # (b) the claimed dollar amount must not exceed what the VERIFIER committed, and the source must
   # be GROUNDED: an uncommitted working-tree ledger is agent-forgeable.
@@ -81,15 +106,70 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
                  grep -oiE 'usd\s*[0-9]+(\.[0-9]+)?' "$PACKET" | grep -oE '[0-9]+(\.[0-9]+)?'; } \
                | sort -rn | head -1)
   if [[ -n "$MAX_CLAIM" ]]; then
-    # FAIL-CLOSED (round-3): a python error here used to default to OVER=0, silently passing the
-    # false-money-claim check on e.g. a malformed received_usd. A gate that cannot adjudicate must
-    # fail, not shrug.
-    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > float('$TRUTH_RECV') + 0.001 else 0)" 2>/dev/null || echo ERR)
+    # The bound is the LARGEST verifier-committed dollar fact across rails: received_usd (money)
+    # and paper_pnl_usd (edge, grounded only, 0 if the rail is idle). Without the edge term, an
+    # honest "paper_pnl=$50" line in an edge packet would trip the money bound against a $0
+    # received. Honest residual, stated: a REAL-money overclaim up to the paper P&L would pass
+    # this numeric bound -- it is still caught by (a) requiring a verifier-signed hash anchor
+    # above and (b) the verifier's received_usd being the only citable money fact.
+    TRUTH_EDGE=$(python3 "$REPO/bin/truth.py" --file edge.json paper_pnl_usd 2>/dev/null)
+    TRUTH_EDGE=${TRUTH_EDGE:-0}
+    ESRC2=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>&1 >/dev/null | sed -n 's/^source: //p')
+    case "$ESRC2" in ledger-branch|working-tree-committed) : ;; *) TRUTH_EDGE=0 ;; esac
+    # FAIL-CLOSED (round-3): a python error here used to default to "not over" (silent pass). A
+    # gate that cannot adjudicate must fail, not shrug.
+    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > max(float('$TRUTH_RECV'), float('$TRUTH_EDGE'), 0.0) + 0.001 else 0)" 2>/dev/null || echo ERR)
     if [[ "$OVER" == "ERR" ]]; then
-      fail "cannot adjudicate claimed amount (\$$MAX_CLAIM vs received_usd='$TRUTH_RECV' unparseable) -- fail-closed"
+      fail "cannot adjudicate claimed amount (\$$MAX_CLAIM vs received_usd='$TRUTH_RECV', paper_pnl_usd='$TRUTH_EDGE' unparseable) -- fail-closed"
     elif [[ "$OVER" == "1" ]]; then
-      fail "packet claims \$$MAX_CLAIM but verifier-committed received_usd is \$$TRUTH_RECV (false money claim)"
+      fail "packet claims \$$MAX_CLAIM but verifier-committed facts are received_usd=\$$TRUTH_RECV, paper_pnl_usd=\$$TRUTH_EDGE (false claim)"
     fi
+  fi
+fi
+
+# --- 2a-bis. EDGE claims (issue #6): STRUCTURED adjudication first, prose regex as backstop.
+# B4 FIX (entry 012): the prose regex alone was dodgeable by paraphrase ("the strategy proved
+# profitable on paper"). So when the edge rail is LIVE (grounded verdict, not NONE), every packet
+# MUST carry a machine-readable `EDGE_CLAIM: <verdict>` line and it must MATCH the verifier's
+# verdict -- the claim is structured, so wording cannot route around the check. iter.py pre-fills
+# the line at open; if the verdict moves between open and close, the mismatch fails the gate and
+# forces a conscious re-read of the facts. Prose that asserts a verified edge remains checked as a
+# backstop for un-scaffolded packets.
+EVERDICT=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>/dev/null)
+ESRC=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>&1 >/dev/null | sed -n 's/^source: //p')
+EDGE_LIVE=0
+case "$ESRC" in ledger-branch|working-tree-committed)
+  [[ -n "$EVERDICT" && "$EVERDICT" != "NONE" ]] && EDGE_LIVE=1 ;;
+esac
+if [[ "$EDGE_LIVE" == "1" ]]; then
+  ECLAIM=$(grep -oE '^[>[:space:]]*EDGE_CLAIM:[[:space:]]*[A-Z_]+' "$PACKET" | head -1 | grep -oE '[A-Z_]+$')
+  if [[ -z "${ECLAIM:-}" ]]; then
+    fail "edge rail is live (verdict $EVERDICT) but packet carries no 'EDGE_CLAIM: <verdict>' line (structured-claim mandate; iter.py pre-fills it)"
+  elif [[ "$ECLAIM" != "$EVERDICT" ]]; then
+    fail "EDGE_CLAIM: $ECLAIM contradicts the verifier's verdict $EVERDICT (false edge claim)"
+  fi
+fi
+if grep -qiE 'VERIFIED_POSITIVE_EV|edge (is |was )?(verified|proven)|positive[- ]EV edge' "$PACKET"; then
+  case "$ESRC" in
+    ledger-branch|working-tree-committed) : ;;
+    *) fail "edge claim present but edge facts source is '${ESRC:-none}' (ungrounded/absent)" ;;
+  esac
+  [[ "$EVERDICT" == "VERIFIED_POSITIVE_EV" ]] \
+    || fail "packet claims a verified edge but verifier verdict is '${EVERDICT:-none}' (false edge claim)"
+  # anchor: the claim must cite a sha256 from the edge manifest (broker pulls), like money claims
+  EMANIFEST_TXT=$(git -C "$REPO" show "origin/${LEDGER_BRANCH:-ledger}:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
+  [[ -z "$EMANIFEST_TXT" && "$ESRC" == "working-tree-committed" ]] \
+    && EMANIFEST_TXT=$(git -C "$REPO" show "HEAD:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
+  if [[ -z "$EMANIFEST_TXT" ]]; then
+    fail "edge claim present but no EDGE_MANIFEST.sha256 (ledger branch or working tree)"
+  else
+    ehit=0
+    while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { ehit=1; break; }; done <<< "$EMANIFEST_TXT"
+    # the manifest's OWN sha256 (edge.json.edge_manifest_sha256, verifier-signed) anchors too --
+    # it is what iter.py pre-fills, and it commits to the whole pull set rather than one pull
+    EM_SELF=$(python3 "$REPO/bin/truth.py" --file edge.json edge_manifest_sha256 2>/dev/null)
+    [[ $ehit -eq 0 && -n "${EM_SELF:-}" && "$EM_SELF" != "null" ]] && grep -q "$EM_SELF" "$PACKET" && ehit=1
+    [[ $ehit -eq 1 ]] || fail "edge claim cites no sha256 from EDGE_MANIFEST.sha256 nor the verifier-signed edge_manifest_sha256 (unanchored claim)"
   fi
 fi
 

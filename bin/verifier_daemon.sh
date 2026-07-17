@@ -6,5 +6,10 @@
 # new run starts (v1's copy of this file shipped with run-1's literal branch baked in).
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R"
 [[ -n "${AGENT_BRANCH:-}" ]] || { echo "FATAL: AGENT_BRANCH unset (set it in the launchd plist)."; exit 2; }
-exec caffeinate -dimsu env AGENT_BRANCH="$AGENT_BRANCH" LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}" \
+# caffeinate where it exists (macOS); on Linux the supervisor (systemd Restart=always +
+# a non-sleeping host) provides the equivalent -- a hard dependency here killed portability (#9).
+KEEPAWAKE=""
+command -v caffeinate >/dev/null 2>&1 && KEEPAWAKE="caffeinate -dimsu"
+# shellcheck disable=SC2086  # KEEPAWAKE is deliberately word-split ("caffeinate -dimsu" or empty)
+exec $KEEPAWAKE env AGENT_BRANCH="$AGENT_BRANCH" LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}" \
   INTERVAL="${INTERVAL:-60}" HEARTBEAT_S="${HEARTBEAT_S:-300}" bash bin/verifier_loop.sh

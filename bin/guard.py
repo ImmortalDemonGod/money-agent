@@ -65,9 +65,16 @@ def main() -> int:
     # halt after N iterations as a CHECKPOINT (not a failure) for the operator to raise or stop.
     max_iters = int(os.environ.get("MAX_ITERS", "0") or "0")
     if max_iters > 0:
-        pkts = list((REPO / ".github" / "aiv-packets").glob("VERIFICATION_PACKET_ITER_*.md"))
-        if len(pkts) >= max_iters:
-            print(f"HALT: iteration ceiling reached ({len(pkts)} >= MAX_ITERS={max_iters}). This "
+        # B2 FIX: iter.py owns a monotonic committed counter precisely because glob-counting
+        # drifted in run 1 (gaps at 024/027 distorted MAX_ITERS). Prefer the counter; the glob
+        # remains the fallback for a tree that has never run iter.py new.
+        counter = REPO / "iterations" / "COUNTER"
+        if counter.exists():
+            n_iters = int(counter.read_text().strip() or "0")
+        else:
+            n_iters = len(list((REPO / ".github" / "aiv-packets").glob("VERIFICATION_PACKET_ITER_*.md")))
+        if n_iters >= max_iters:
+            print(f"HALT: iteration ceiling reached ({n_iters} >= MAX_ITERS={max_iters}). This "
                   "bounds the loop's own token cost; it is a checkpoint, not a failure. Write the retro "
                   "in MONEY_LOG.md; the operator decides whether to raise MAX_ITERS or stop.",
                   file=sys.stderr)
@@ -240,6 +247,68 @@ def main() -> int:
     if ci is None:
         return fail("constitution_intact is null -- the verifier has no frozen hash. "
                     "Run bin/set_baseline.py (which freezes it) before starting.")
+
+    # --- VERIFIED-EDGE RAIL (issue #6). A second scoring surface, parallel to first-dollar and
+    # deliberately NOT the same terminal: first-dollar answers "did a customer pay?"; this answers
+    # "did the agent produce a verified positive-EV edge?" (the R&D-then-harvest shape run 1's
+    # frame forbade). The verdict is computed by bin/edge_pnl.py on the verifier from the broker's
+    # books, against a bar FROZEN at registration -- same grounding discipline as received_usd.
+    # The rail is optional: no edge.json anywhere = rail idle = silence.
+    try:
+        e, e_src = _truth.load("edge.json")
+    except Exception:
+        e, e_src = None, None
+    if e is not None:
+        if e_src not in _truth.GROUNDED_SOURCES:
+            print(f"warn: edge.json present but source is {e_src!r} (agent-writable) -- ignored "
+                  "for adjudication.", file=sys.stderr)
+        elif e.get("registration_intact") is False:
+            # bar-moving is the edge rail's constitution edit: the one integrity break that voids it
+            return fail("EDGE_REGISTRATION.md no longer matches the verifier-frozen bar "
+                        "(verdict VOID). Moving a pre-registered bar after the freeze voids the "
+                        "edge rail -- the fp_predict discipline, enforced.")
+        elif not e.get("verified"):
+            print(f"warn: edge rail unverified ({e.get('errors')}) -- its verdict may not be "
+                  "cited until the pull is fixed.", file=sys.stderr)
+        elif e.get("verdict") == "VERIFIED_POSITIVE_EV":
+            # The edge analog of the first-dollar stop, with the same shape: the variant
+            # experiment is ANSWERED, and the next step (real capital) is precisely the step the
+            # agent must never take unsupervised. Halt as a checkpoint for the operator.
+            # EDGE_TERMINAL=0 lets a run that scores BOTH rails keep going after the edge verdict.
+            print(f"HALT: EDGE VERIFIED POSITIVE-EV (paper_pnl=${e.get('paper_pnl_usd')} >= bar, "
+                  f"{e.get('filled_orders_since_freeze')} fills). The variant experiment is "
+                  "answered.", file=sys.stderr)
+            print("  Do NOT deploy real capital -- that decision is the operator's, by "
+                  "construction. Write the retro in MONEY_LOG.md and stop for review.",
+                  file=sys.stderr)
+            if os.environ.get("EDGE_TERMINAL", "1") != "0":
+                return 2  # terminal checkpoint, like first-dollar
+            print("  (EDGE_TERMINAL=0: continuing the money rail despite the edge verdict.)",
+                  file=sys.stderr)
+        elif e.get("verdict") in ("PENDING", "FALSIFIED"):
+            print(f"   edge rail: {e.get('verdict')} "
+                  f"(paper_pnl=${e.get('paper_pnl_usd')}, "
+                  f"fills={e.get('filled_orders_since_freeze')}"
+                  + (f", {e.get('pending_reason')}" if e.get("pending_reason") else "") + ")")
+
+    # --- STANDING-PRESENCE AGENDA (issue #4). Run 1's terminal failure was concluding with a live
+    # day-scale bet open -- nothing mechanical surfaced it at the moment of drift. So the open-bet
+    # agenda prints at the top of EVERY iteration, from the committed registry (bin/bets.py).
+    # Advisory by design here (conclusion_gate is where open bets BLOCK); guard just keeps them in
+    # the agent's face.
+    try:
+        import bets as _bets
+        print(f"   bets: {_bets.summary_line()}")
+        # B7 (advisory only, never a block): when bets are open but NONE are due, iterating is
+        # only justified by a genuinely NEW lever -- run 1 burned iterations 091-094 polling
+        # not-yet-due clocks as if polling were work. A hard block here would fight real new work,
+        # so this stays a printed question the agent must answer to itself.
+        _open = _bets.open_bets()
+        if _open and not any(_bets.is_due(b) for b in _open):
+            print("   pacing: open bets exist and none is due -- if there is no NEW lever this "
+                  "iteration, this should be a watch tick (bin/iter.py watch), not an iteration.")
+    except Exception:
+        pass  # registry optional; its absence must never block the money rail
 
     cap = t.get("cap_usd") or 0
 

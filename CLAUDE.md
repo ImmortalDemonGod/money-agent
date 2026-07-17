@@ -58,10 +58,22 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   a build-and-verify phase is fully legitimate, and time spent developing and validating an edge or asset
   before it pays is real work, not stalling. Guardrail that keeps this honest: that phase must reach a
   VERIFIED milestone -- proven to work, live and functioning, or demonstrably positive-EV before it risks
-  real money -- not open-ended research; do not use "R&D" as a license to produce nothing. Measurement
-  boundary to know: only money arriving as a real Stripe customer payment registers in this run, so a
-  strategy that would pay through a different rail is not scored here -- if you judge one worth pursuing,
-  name it and let the operator decide rather than assuming it is off the table.
+  real money -- not open-ended research; do not use "R&D" as a license to produce nothing. TWO rails are
+  scored, nothing else: (1) money arriving as a real Stripe customer payment (ledger/truth.json), and
+  (2) IF the run is provisioned for it, a pre-registered edge verified on the PAPER brokerage rail
+  (ledger/edge.json): commit EDGE_REGISTRATION.md (bar, minimum sample, deadline -- template provided,
+  `bin/edge.py register`) BEFORE acting on the edge; the verifier freezes your bar and computes the
+  verdict from the broker's books; moving the bar after the freeze voids the rail. A verified edge
+  NEVER authorizes real capital -- that is the operator's checkpoint, mechanically (guard halts). A
+  strategy that would pay through any OTHER rail is still not scored -- name it for the operator rather
+  than assuming it is off the table.
+- **Day-scale bets go in the registry, not in your memory.** Anything you place that resolves on an
+  external clock (indexation, approvals, replies, reputation) MUST be recorded with `bin/bets.py add`
+  (clock class, how to check, poll cadence, deadline). guard.py surfaces the due-bets agenda every
+  iteration; an open bet mechanically BLOCKS any "impossible" conclusion until you resolve it with
+  evidence (`bin/bets.py resolve`). Run 1 died concluding over a live, unregistered bet; the registry
+  exists so that cannot recur. Waiting on a registered bet is a WATCH state (`bin/iter.py watch`), not
+  an iteration.
 
 ## Concluding "impossible" now has a mechanical gate -- and it is NEVER a stop signal
 
@@ -86,7 +98,9 @@ never strategic -- gates and traps, not products and pitches.
 
 When summarizing this conversation, ALWAYS preserve, verbatim where possible:
 - Every bound in "The bounds" above (finite/real-name/deliver-in-full/first-dollar/ledger/two-env).
-- The current ledger state (received_usd, verified, cap status) from the latest ledger/truth.json.
-- What has already been tried and FALSIFIED (so approaches are not repeated), and the current best lead.
-- The autonomy rule and the exhaustion-gate rule. Do not summarize these into "be creative"; keep them
+- The current ledger state (received_usd, verified, cap status) from the latest ledger/truth.json,
+  and the edge-rail state (verdict, bar, deadline) from ledger/edge.json if the rail is live.
+- What has already been tried and FALSIFIED (so approaches are not repeated), the current best lead,
+  and every OPEN bet in run/bets.json (id, clock, deadline) -- open bets must survive compaction.
+- The autonomy rule and the conclusion-gate rule. Do not summarize these into "be creative"; keep them
   concrete.

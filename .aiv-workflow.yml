@@ -4,13 +4,18 @@ policy:
   atomic_commit: true          # 1 unit of work + 1 packet, per black-box's husky rule
   packets_dir: .github/aiv-packets
   all_class_mandate: true      # A-F each addressed; bare N/A rejected
-  require_evidence_hash: true  # money claims must cite ledger/raw/MANIFEST.sha256
+  require_evidence_hash: true  # money claims cite ledger/raw/MANIFEST.sha256; edge claims cite
+                               # ledger/raw/EDGE_MANIFEST.sha256
+  canonical_check: aiv check   # stage 0 of aiv_gate.sh: the canonical validator runs first;
+                               # hand-rolled stages cover only what it has no concept of
 separation_of_duties:
-  claims_by: agent             # MONEY_LOG.md, packets
+  claims_by: agent             # MONEY_LOG.md, packets, EDGE_REGISTRATION.md (frozen at first sight)
   facts_by: verifier           # ledger/ -- agent write = void run
   verifier_entrypoint: bin/pnl.py
+  edge_verifier_entrypoint: bin/edge_pnl.py   # paper rail facts -> ledger/edge.json
   agent_may_invoke_verifier: false
 gates:
   pre_iteration: bin/guard.py
   post_iteration: bin/aiv_gate.sh
+  conclusion: bin/conclusion_gate.py   # permission-to-record only; blocked by open bets (run/bets.json)
 risk_tier: high                # real money, real identity, unsupervised, overnight

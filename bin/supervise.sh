@@ -50,12 +50,26 @@ if [[ -n "${CA:-}" ]]; then
 fi
 echo "ledger age : ${age}s   verified=$VERIF   received=\$$RECV"
 
+# 3b. the verified-edge rail, if it has ever published (same stdin discipline)
+E=$(git show "origin/$LEDGER_BRANCH:ledger/edge.json" 2>/dev/null || cat ledger/edge.json 2>/dev/null)
+EVERDICT=""
+if [[ -n "$E" ]]; then
+  EVERDICT=$(printf '%s' "$E" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+print(d.get('verdict',''))" 2>/dev/null)
+  [[ -n "$EVERDICT" && "$EVERDICT" != "NONE" ]] && echo "edge rail  : $EVERDICT"
+fi
+
 # 4. recent push activity from the log
 echo "last log   : $(tail -1 "$R/verifier.log" 2>/dev/null || echo '(no log)')"
 
 # ---- VERDICT (the line the assistant acts on) ----
 if python3 -c "import sys; sys.exit(0 if float('$RECV')>0 else 1)" 2>/dev/null; then
   echo "VERDICT    : ⭐ FIRST DOLLAR RECEIVED (\$$RECV). RUN OVER. ALERT THE OPERATOR NOW."
+elif [[ "$EVERDICT" == "VERIFIED_POSITIVE_EV" ]]; then
+  echo "VERDICT    : ⭐ EDGE VERIFIED POSITIVE-EV. The variant experiment is answered. ALERT THE"
+  echo "             OPERATOR NOW -- real-capital deployment is a human decision, never the agent's."
 elif [[ "$alive" -eq 0 ]]; then
   echo "VERDICT    : RESTART -- verifier process is dead. Run bin/start_verifier.sh <agent-branch>"
 elif [[ "$age" != "?" && "$age" -gt 1500 ]]; then

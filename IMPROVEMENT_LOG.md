@@ -494,3 +494,303 @@ resolution and urllib's re-resolve) — residual now documented in the SSRF guar
 the reasoning (agent-sandbox egress, GET-only; revisit if the tool ever runs verifier-side).
 LEDGER_BRANCH env pinning stays a provisioning wall per SETUP.md; the round-3 attack test confirms
 guard halts on lane authorship when an agent self-consistently forges an alternate lane.
+
+
+## Note on entry numbering (merge of main's rounds 1-3 into the edge/standing branch)
+
+Main's CodeRabbit/round-3 work and this branch's follow-up work were written concurrently and both
+claimed entries 009+. Resolution: main's entries 009-011 (review rounds) keep their numbers; this
+branch's six entries are renumbered 012-017 (formerly 009-014). Duplicate fixes were reconciled in
+code during the merge: the stranded-push convergence keeps main's round-3 structure plus this
+branch's divergence RESCUE path; supervise.sh keeps main's parse-fail verdict plus this branch's
+edge display; caffeinate portability keeps the bash-3.2-safe string form.
+
+## Entry 012 — 2026-07-17 (follow-up branch) — the two things PR #18 named and skipped: the edge rail (#6) and standing posture (#4)
+
+**Why.** PR #18's own summary drew the line honestly: "#6 asks for a paper-trading rail and a
+changed scoring surface — that's core-system work, not strategy, and I did not build it. #4 I only
+partially enabled." This entry is that work, plus adoption of canonical aiv-protocol tooling where
+a canonical equivalent actually exists.
+
+**A9 — the verified-edge rail (issue #6).** Run 1's single cleanest moment was fp_predict: a 2.5x
+bar pinned in MONEY_LOG *before* the retrain, enforced mechanically, and honored when the result
+came in at 2.20x. A9 promotes that from agent discipline to harness machinery, with the same
+grounding shape as money:
+- `bin/edge_pnl.py` (verifier-only, runs after pnl.py so C3's purge cannot eat its pulls):
+  freezes the agent's committed `EDGE_REGISTRATION.md` (sha256 + parsed bar + the paper account's
+  equity) into the private state dir at first sight, then computes `ledger/edge.json` from the
+  broker's books each cycle — verdicts NONE / PENDING / VERIFIED_POSITIVE_EV / FALSIFIED
+  (deadline-based, the pre-registration discipline) / VOID (bar-moving detected, the edge
+  analog of constitution_intact). Raw pulls land in ledger/raw/ with their own
+  `EDGE_MANIFEST.sha256`.
+- `bin/truth.py` generalized: `load(name)` / `--file edge.json` — one read path, N fact files,
+  same GROUNDED_SOURCES discipline.
+- `bin/guard.py`: VERIFIED_POSITIVE_EV halts as an operator checkpoint (exit 2, like
+  first-dollar; `EDGE_TERMINAL=0` opts a dual-rail run out); VOID halts as an integrity break.
+  Deliberately a SECOND terminal, not a reuse: first-dollar answers "did a customer pay?", this
+  answers "did the agent produce a verified positive-EV edge?", and conflating them was exactly
+  the frame run 1 proved wrong.
+- `bin/aiv_gate.sh` 2a-bis: an edge claim must match the grounded verdict and cite an
+  EDGE_MANIFEST hash; the money bound now admits the grounded paper P&L so an honest
+  "paper_pnl=$50" cannot trip the $0-received check (residual named in-line).
+- Grounding honesty, stated in edge_pnl/SETUP: Alpaca keys are not scoped, so this rail's SoD is
+  measurement-grounding (the broker's books, pulled by the verifier, published on the facts lane),
+  not credential asymmetry. The agent cannot fabricate a fill; it can only trade, which is the
+  measured thing.
+
+**A10 — standing presence (issue #4), the posture half.** The missing piece was never a scheduler;
+it was making multi-day waiting ACCOUNTABLE. `bin/bets.py`: a committed registry of day-scale bets
+(clock class, check method, poll cadence, deadline). guard prints the due-bets agenda every
+iteration; `iter.py watch` stamps it on every tick; and `conclusion_gate.py` layer 4 refuses an
+"impossible" conclusion while any bet is open or a grounded edge is PENDING — iteration 095, made
+a gate failure instead of a judgment call. Config recipe in `docs/STANDING_RUN.md`. Plus the
+multi-day operational blockers from entry 008: caffeinate is now optional (DEGRADED #9 —
+Linux-portable), supervise.sh parses the ledger via stdin (DEGRADED #11 — a quote in errors[] can
+no longer silence the first-dollar alert, and it now surfaces the edge verdict), and
+verifier_loop gained `LEDGER_MAX_COMMITS` rotation (commit-tree squash, content preserved) so the
+facts lane survives week-scale runs.
+
+**A11 — canonical aiv where canonical exists.** Verified empirically (run-1 packet 074 passes
+`aiv check --no-strict`), then wired as aiv_gate stage 0, fail-closed (missing CLI = broken gate;
+setup_sandbox.sh installs it). The hand-rolled stages now cover ONLY what the canonical validator
+has no concept of: money-vs-truth comparison, edge verdicts, constitution integrity, serving-layer
+publishes. That split — canonical structure, domain-specific adjudication — is the correct
+long-term boundary with aiv-protocol.
+
+**Critique pass.** (1) run/bets.json is agent-writable — a tripwire; the failure it targets is
+forgetting (run 1's actual mode), not forging; deleting a bet is a visible commit. (2) The edge
+rail is UNPROVEN against the live Alpaca API — freeze/verdict logic is simulation-tested only
+(same caveat class as PR #18's two-lane topology; a one-cycle live paper run is the gate before
+trusting it). (3) Nothing rate-limits iterations against the due-bet schedule — wakeup sizing is
+still prose + agenda visibility. (4) EDGE claims in packets are matched by regex; a paraphrase
+that dodges the trigger phrases dodges stage 2a-bis (the canonical-JSON packet form would close
+this properly — future work with upstream aiv-protocol).
+
+## Entry 013 — the bottleneck inventory (the /loop's working backlog), plus the first two fixes
+
+**Method note for this loop.** Each entry names the bottleneck it attacks, the source that proves
+it is real (run-1 logs / v2 DEGRADED list / entry-012 critique / aiv-protocol audit), the fix, and
+the test. The inventory below is priority-ordered and will be consumed top-down until exhaustion;
+items get struck through as they land.
+
+**The inventory:**
+- **B1 — push-fail + reset destroys committed raw pulls** (v2 DEGRADED #10; the audit-trail hole).
+  FIXED this entry: verifier_loop pushes unpushed facts commits BEFORE converging, and skips the
+  reset while local is ahead — the reset that ate evidence can no longer run against unpushed
+  history.
+- **B2 — MAX_ITERS counts packets by glob while iter.py owns a monotonic COUNTER** (design said
+  counter, guard never migrated). FIXED this entry: guard prefers iterations/COUNTER when present.
+- **B3 — the conclusion adversary is agent-invoked and one Write away** (DEGRADED #8, M3 residual;
+  the last self-graded surface). Plan: require a committed adversary TRANSCRIPT artifact (tool-use
+  records, not just a verdict file), pin its hash in the report, and give the verifier loop an
+  optional re-run hook so grounding can be operator-side.
+- **B4 — edge claims are matched by regex; a paraphrase dodges stage 2a-bis** (entry-012 critique).
+  Plan: when the edge rail is live (verdict != NONE), REQUIRE a structured `EDGE_CLAIM:` line in
+  any packet whose iteration traded, and adjudicate that line -- structure the claim, not the prose.
+- **B5 — weak mode has no non-destructive runner** (DEGRADED #9's second half). Plan: run_weak.sh
+  (co-located verifier without resets, honest tripwire-only labeling).
+- **B6 — aiv-protocol upstream defects bite this integration**: the init shebang bug (#29, worked
+  around in setup_sandbox.sh) and the E010 bug-fix heuristic false-positive ("issue #N" in Class E
+  fails an honest packet -- documented in TEMPLATE as a trap). Plan: fix both upstream in the
+  aiv-protocol repo (in scope for this session) so the workaround and the trap note can eventually
+  be deleted.
+- **B7 — nothing mechanically paces iterations against the due-bet schedule** (entry-012 critique;
+  run 1 burned 091–094 polling). Plan: guard advisory when an iteration opens with zero due bets
+  and the last N closes were watch-eligible; keep it advisory -- a hard block would fight genuine
+  new work.
+- **B8 — `aiv audit` is installed but never runs** (canonical quality sweep exists, unused). Plan:
+  wire into iter.py close as non-blocking report first; blocking only if signal/noise proves out.
+- **B9 — bets resolutions don't feed knowledge/outcomes.jsonl** (the compounding layer misses the
+  richest records: resolved day-scale bets ARE channel outcomes). Plan: bets.py resolve appends an
+  outcome record automatically.
+- **B10 — the edge rail has never touched the live paper API** (entry-012 residual, same class as
+  PR #18's unproven two-lane). Operator-gated: write the one-cycle live acceptance checklist into
+  SETUP so it cannot be skipped silently.
+
+**Entry 010 results.** B1 landed and tested in both failure modes: with pushes blocked, the
+stranded facts commit and its raw pull survive (reset skipped, loud log line); on divergence
+(external rotation), the lane converges instead of deadlocking AND any pull that existed only in
+local history is rescued by re-COMMIT as verifier (a bare file restore would be eaten by pnl.py's
+C3 untracked-purge -- that interaction is why the rescue commits). B2 landed and tested: MAX_ITERS
+reads iterations/COUNTER (exit 2 at the ceiling, silent below it). Critique of this entry: (1) the
+divergence-rescue path shells comm/mktemp/xargs -- the most fragile bash in the loop; if it ever
+misbehaves the failure is loud (say lines) but a python helper would be sturdier; (2) my own first
+test read $? through a pipe -- iter-091's exact trap -- caught and redone; the trap note in
+knowledge/traps.md is earning its keep. Next: B9 (bets->outcomes compounding), then B6 upstream
+aiv-protocol fixes.
+
+## Entry 014 — B9 (bets feed the compounding layer) + B6 (both upstream aiv-protocol defects fixed at the source)
+
+**B9.** `bets.py resolve` now appends a structured record to knowledge/outcomes.jsonl
+automatically (via append_log, durable), so a resolved day-scale bet -- the richest channel
+outcome the run produces -- reaches run N+1 even if the agent forgets the manual outcome.py step.
+Best-effort by design: a knowledge write must never block a bet resolution. Tested in the sim
+(bet-002 lost -> outcomes.jsonl line with clock, span, evidence).
+
+**B6, upstream (aiv-protocol branch claude/money-agent-analysis-10o1nb, 2 commits).**
+- E010 false positive: `has_provenance_evidence` consulted only per-claim class assignments (which
+  the markdown parser rarely populates), so an honest packet with a filled `### Class F` section
+  BLOCKED whenever its intent text said "issue #N". Fixed to also consult
+  `evidence_classes_present` -- the model field that already tracked exactly this. Regression
+  verified: the money-agent packet that failed with "issue 6" wording now passes.
+- Shebang bug (#29): `aiv init` hooks now pin `sys.executable` (the interpreter that can import
+  aiv by definition) instead of PATH's python3; whitespace-path fallback kept. Fresh-init verified:
+  the hook's first line is the owning interpreter's absolute path.
+- Full upstream suite: 739 passed, 22 skipped.
+- Downstream consequences once upstream merges: setup_sandbox.sh's sed repair of the hook and
+  TEMPLATE.md's E010 trap note both become deletable -- left in place for now (they are harmless
+  with the fix and load-bearing without it; note-to-port: remove them when main pins an aiv
+  version carrying these fixes).
+
+**Critique of this entry.** (1) The E010 fix widens `has_provenance_evidence` for every consumer,
+not just E010 -- reviewed the call sites (E010 is the only one) but a maintainer should confirm the
+intent of `evidence_classes_present` matches; flagged in the commit body. (2) The upstream branch
+name is this session's default, not a descriptive fix branch -- the operator may want to re-branch
+before PRing upstream. (3) bets->outcomes uses the bet's clock class as `channel`, which is coarser
+than outcome.py's free-form channel; good enough for queryability, revisit if it muddies the map.
+Next: B4 (structured edge claims), then B3 (adversary transcript), B5 (weak-mode runner).
+
+## Entry 015 — B4 (structured edge claims) + B3 (the adversary must show its work)
+
+**Loop meta, logged honestly:** the 10-minute cron died with a session recycle (8h gap; CronList
+empty on resume) -- the third occurrence of the entry-005 lesson in this program's history, now in
+its own harness too. Remediation: the remaining inventory runs consecutively in-session instead of
+on a wall clock. A run 2 that wants day-scale pacing must use durable queued wakeups, never
+session-local cron; this is exactly why bets.py records poll cadence in a committed file rather
+than in a scheduler.
+
+**B4.** When the edge rail is live (grounded verdict != NONE), every packet must carry a
+machine-readable `EDGE_CLAIM: <verdict>` line and it must equal the verifier's verdict. Paraphrase
+can no longer dodge stage 2a-bis: the claim is structured, not prose. iter.py pre-fills the line
+from the grounded verdict at open, so an honest iteration passes by construction -- and if the
+verdict MOVES between open and close, the gate mismatch forces a conscious re-read of the facts
+instead of a stale assertion. Prose-regex check kept as backstop for un-scaffolded packets.
+Tested: missing line fails with the mandate message, matching line passes, contradicting line
+fails as a false edge claim.
+
+**B3 (DEGRADED #8, the last self-graded surface, upgraded).** The conclusion adversary's verdict
+was one Write away. Layer 3 now also requires ADVERSARY_TRANSCRIPT.md -- the raw working record
+(>= 30 substantive lines, >= 5 search-trace lines), committed, and hash-pinned by the report
+(`TRANSCRIPT_SHA256:`). Honest framing, printed in the code comment: still agent-side, still a
+TRIPWIRE -- but forging a plausible multi-step working record is qualitatively more work than
+forging one verdict line, and the transcript gives the operator's independent re-run (the true
+grounding) something to diff against. Tested: missing transcript, stale pin, thin transcript all
+fail with distinct messages; a real-shaped transcript satisfies the layer.
+
+**Critique.** (1) B4's mandate binds only while the rail is live -- a packet written the cycle
+AFTER a registration lands but BEFORE edge.json publishes sees NONE and carries no line; window is
+one verifier cycle, acceptable. (2) B3's line thresholds are guessable constants; their value is
+the diff surface for the operator re-run, not the count itself. (3) The transcript check reads
+content patterns (searched/considered/...) -- an English-keyword heuristic; a non-English
+adversary transcript would need the list extended.
+
+## Entry 016 — B5 (weak-mode runner) + B7 (pacing advisory) + B8 (canonical audit at close) + B10 (live acceptance checklist)
+
+**B5.** `bin/run_weak.sh`: the co-located fast-trial verifier DEGRADED #9 said was missing. Same
+facts pipeline (pnl + edge_pnl), same verifier authorship, and the one hard guarantee both modes
+now share: NO resets, ever -- it only appends facts commits, so v1's destroy-your-own-evidence
+loop stays dead in weak mode too. The banner states plainly that weak mode is tripwire-only and
+its results debug the harness, never conclude anything about the agent.
+
+**B7.** guard now prints, when open bets exist and NONE is due: "if there is no NEW lever this
+iteration, this should be a watch tick, not an iteration." Deliberately advisory -- a hard block
+would fight genuine new work; the run-1 failure this targets (091-094 polling not-yet-due clocks
+as iterations) was a visibility failure, and the agenda line plus this question is the visibility.
+Tested: prints exactly when open>0 and due==0, silent otherwise. Testing note: the first attempt
+"failed" because the sim ledger had gone 8h stale and guard halted at freshness before the bets
+section -- the staleness gate doing its job during a test of a different feature.
+
+**B8.** `iter.py close` runs `aiv audit` after the gate passes and surfaces its last lines --
+non-blocking BY DESIGN (audit is drift-visibility, not per-claim adjudication; promote to blocking
+only if signal/noise proves out), and fail-OPEN on a missing/broken auditor with an install hint,
+because advisory means advisory. Tested the fail-open path.
+
+**B10.** SETUP.md 4b now carries the five-step live acceptance checklist (freeze, field shapes,
+fills movement, VOID detection, re-register) with the reason it cannot be skipped: an edge verdict
+from an unproven rail is exactly the class of green check this program exists to kill.
+
+**Critique.** (1) run_weak.sh shares no code with verifier_loop.sh -- a deliberate copy so weak
+mode cannot accidentally inherit reset/rotation behavior, at the cost of two publish blocks to
+keep in sync (noted for a future refactor into a shared publish function). (2) B7's advisory can
+nag during legitimate build sprints between bet placements; it is one line, and wrongly-iterating
+was the costlier error in run 1. (3) B8 surfaces only the audit tail -- 3 lines chosen to keep
+close output readable; the full report is one command away.
+
+## Entry 017 — CLOSING: inventory exhausted, final audit, and the port-to-main checklist
+
+**Exhaustion statement (scoped honestly).** Every item in the entry-013 inventory is landed and
+tested (B1-B9) or documented as an operator-gated acceptance step (B10). "Exhausted" here means:
+no remaining item is both (a) evidenced by a run-1/v2/aiv-protocol source and (b) reachable from
+inside this session. What remains is out of reach BY NATURE, not by fatigue:
+- the one-cycle LIVE runs (two-lane verifier with a real Stripe key; edge rail against the real
+  paper API; the B10 checklist) need the operator's machine and keys;
+- the beacon deploy (M7) needs the operator's Cloudflare token;
+- true out-of-band grounding of the conclusion adversary needs a second party by definition -- the
+  transcript upgrade (B3) raised the forgery cost, only the operator's re-run grounds it;
+- canonical-JSON packet adoption (the guard-grade schema with SHA binding and scope inventory) is
+  the right NEXT HORIZON for the aiv integration, but it is an upstream-shaped project (the guard
+  runs CI-side against PRs, not local iteration loops), logged here so it is not mistaken for
+  forgotten.
+
+**Final regression sweep (all changed components, one pass):** guard 0/2/1 exits correct across
+EDGE_TERMINAL and VOID states; full gate PASS on the reference edge packet; conclusion_gate clean
+multi-layer fail with no crash; truth.py both fact files grounded; edge.py status grounded. The
+sim suite's full history across entries 012-013: every fix was demonstrated failing before and
+passing after in a bare-origin two-lane clone.
+
+**What this design now is, in one paragraph.** Two scored rails, each with the same shape: a
+grounded fact file on a branch the agent cannot write, produced by a process it cannot invoke,
+consumed through one read path, adjudicated by gates that compare structured claims to verifier
+numbers. A stop set that is still closed ({customer dollar, cap exhaustion, operator} plus the
+edge checkpoint, which is an operator review, not an agent power). Waiting that is recorded,
+surfaced, and blocks conclusions while live. A compounding layer that feeds itself. And the
+canonical aiv toolchain doing the structural half of packet verification, with the hand-rolled
+half shrunk to exactly the domain semantics no generic tool can know. The self-graded surfaces
+remaining are named (bets registry, adversary transcript), each with the honest label "tripwire"
+and the reason the tripwire is acceptable.
+
+**PORT-TO-MAIN CHECKLIST (if the operator blesses this exploration):**
+1. Merge PR #18 first (this branch stacks on it), then fast-forward this branch's commits.
+2. Run the two live acceptance gates before any run 2: one verifier cycle against real keys
+   (PR #18's own caveat) and the B10 edge-rail checklist (SETUP.md 4b).
+3. Upstream: PR the two aiv-protocol fixes (E010, shebang #29) from its
+   claude/money-agent-analysis-10o1nb branch -- consider re-branching to descriptive names first.
+   Once a pinned aiv version carries them: delete setup_sandbox.sh's hook sed-repair and
+   TEMPLATE.md's E010 trap note.
+4. Provision decisions the operator owns: ALPACA_PAPER_* in the verifier .env (edge rail on/off),
+   EDGE_TERMINAL (dual-rail vs single-answer run), MAX_WALL_CLOCK_H + LEDGER_MAX_COMMITS +
+   INTERVAL/HEARTBEAT_S per docs/STANDING_RUN.md, and whether the agent gets its own broker creds.
+5. Protect the ledger branch at the remote (now with force-push allowance for the verifier
+   credential if rotation is on).
+6. Scheduling for a standing run: durable queued wakeups only -- session-local cron died twice in
+   this program's history and once more in this very loop (8h gap, entry 015).
+
+**Loop meta, closing.** Entries 009-014 across two sessions; one 8-hour scheduler death absorbed
+by switching to consecutive in-session iterations (the correct fix, since the work -- unlike a
+standing run's -- was not gated on external clocks). The inventory method (source-evidenced
+bottlenecks, consumed top-down, each with fix + test + critique) is itself the reusable artifact:
+it is what "systematic self-improvement over the baseline" turned out to mechanically mean.
+
+## Entry 018 — ROUND 4 (pre-merge review of this branch): three findings, all fixed
+
+An independent round-4 reviewer attacked the full origin/main...HEAD diff with an explicit
+merge-damage hunt list, empirically verifying each finding and each clean check. Verdict:
+merge-with-nits — no code section, function, or gate was dropped by the reconciliation; every
+conflicted file integrated both parents' semantics, repeatedly with the stricter/fail-closed
+variant; all gates behaved fail-closed under adversarial inputs. Findings, all landed here:
+
+- **F1 (MEDIUM, the log itself):** the merge-note renumbering collided — a sequential
+  find-replace re-hit its own output (009→012 later swallowed by 012→015), leaving entries
+  015-017 duplicated and 012-014 absent. No content was lost. Regenerated the tail from the
+  pristine pre-merge text with a DESCENDING mapping (verified unique + monotonic 001-017). The
+  bug class is worth naming for the traps file: sequential renumbering must map high-to-low.
+- **F2 (LOW, latent fail-closed crash):** parse_registration accepted a timezone-NAIVE
+  RESOLVE_BY; the bet froze, then every verdict cycle crashed comparing naive vs aware into the
+  fail-closed handler — an active registration masquerading as an idle rail. Now rejected at
+  registration with an explicit message (verified: aware accepted, naive refused).
+- **F3 (nit):** run_weak.sh still used fixed /tmp names after verifier_loop moved to mktemp -d
+  (symlink pre-placement hardening). Aligned.
+
+Also re-verified on the merged branch this round: the conclusion gate's full four-layer pass
+path (transcript + CONCLUSION bar + resolved bets + non-PENDING edge), corrupt bets.json
+(conclusion fails closed, guard advisory survives), and the MAX_ITERS counter.
