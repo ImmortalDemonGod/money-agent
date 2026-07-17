@@ -90,9 +90,13 @@ in [`SETUP.md`](SETUP.md).
 ## What this is, and is not
 
 - **It is** a study in grounded verification, using "make money" as a testbed precisely because it is the most
-  fabrication-prone class of claim.
-- **It is not** a make-money kit, a trading bot, or a claim that agents cannot make money. v1's premature stop
-  means the money question is genuinely still open. v2 reopens it, this time under verification you can trust.
+  fabrication-prone class of claim. The goal is an agent that *consistently and verifiably* makes money -- at
+  which point it is a make-money kit, and, unusually, a trustworthy one.
+- **It is not** *yet* that, and the word carrying the weight is *consistently*: a single lucky dollar is
+  variance, not a kit -- which is exactly why the verification matters, because it is what separates an earned
+  "it makes money" from a lucky screenshot. It is not a trading bot or a growth hack, and it is not a claim
+  that agents cannot make money. v1's premature stop means the money question is genuinely still open; v2
+  reopens it, under verification you can trust.
 
 ---
 
