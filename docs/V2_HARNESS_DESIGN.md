@@ -274,6 +274,8 @@ robots.txt) is caught by a `curl`.
 
 ```
 demand-confirmed   requires  stage >= 2  (instrument + substrate exited)
+probe              allowed in stage 2: MINIMAL artifact construction, capped in
+                   effort/spend, explicitly distinct from delivery (see note below)
 delivery (build)   requires  >= 1 demand-confirmed CONFIRMED
 funnel             requires  delivery CONFIRMED  AND  channel-open CONFIRMED
 channel-blocked    requires  reproduction protocol in spec (see §4.3.3)
@@ -281,6 +283,18 @@ channel-blocked    requires  reproduction protocol in spec (see §4.3.3)
 
 This is `driveSpine` refusing to run write-code before the plan converges. It is the
 rule that blocks F2 at the moment of temptation rather than in a retro.
+
+**The `probe` type is load-bearing, not a convenience** (restored from the first
+stress-test round, where it was finding A3): "no build before demand-confirmed" applied
+without it blocks v1's best discovered demand pattern — the 062–068 escalation, "I made
+you the fix," where building a small artifact WAS the demand probe. You often cannot
+credibly probe demand without a sample in hand. Probe bets permit that, bounded, without
+reopening the F2 hole.
+
+**And ordering does NOT conflict with deliver-in-full** (also restored): the forced
+sequence is intent → build → deliver → payment. `demand-confirmed` means *expressed
+willingness*, never pre-payment — nothing is sold before it exists; nothing is built
+before someone wants it.
 
 ### 5.3 Re-entry and the pivot loop
 
@@ -667,6 +681,13 @@ that the classes are cut right.
   listing, data acquisition), a decision record keyed by content hash must exist —
   fail-closed on *absence*, never graded on *content*. The gate doesn't know what
   scraping is; it knows "this action class requires a recorded reasoning entry."
+  For **acquisition-class** actions the record must additionally cite a **provenance
+  manifest** — a hashed, committed log of every input fetched (the `ledger/raw`
+  convention applied to agent-acquired data), so what-was-taken-from-where is a citable
+  artifact, not a memory. Concrete instance of the class this catches: an offering that
+  passes every mechanical gate but fails bounds — e.g. market analysis sold as a
+  product is rail-clean and instant-delivery-clean yet is investment advice under a
+  real man's name; P3 forces that reasoning to be committed before the listing acts.
 - **P4 — Facts-lane countersign.** The async operator-approval primitive (§15's first
   draft had this right, and it is already general): request on the claims lane,
   approval committed to the ledger branch the agent cannot write, `guard.py` checks
@@ -681,7 +702,18 @@ that the classes are cut right.
   confirmation, subscription delivery) — the register itself never knows what a
   "shipment" is. Under the current constitution the register is trivially empty
   (deliver-in-full = no obligations may exist); the primitive is what makes any
-  future relaxation *safe* rather than prose.
+  future relaxation *safe* rather than prose. The relaxation itself has exact
+  language (restored — this is the proposed amendment an operator would sign):
+
+  > Delivery is either INSTANT, or MECHANICALLY GUARANTEED by an out-of-band
+  > watchdog holding refund authority.
+
+  Why the guarantee is real: the verifier-issued refund fires on a deadline the
+  harness controls, *before* any chargeback window matters — collapsing the
+  dispute-on-a-real-name risk (the bound's whole purpose) onto ordinary refund
+  mechanics. Cost named where it belongs: this widens the verifier's Stripe key from
+  read-only to read+refund — a deliberate, documented posture change on the
+  operator-controlled side; the agent side gains nothing.
 - **P6 — Substrate-probe registry.** `host_check.py` as the first entry in an
   extensible set of deterministic "does the layer under me actually work" probes
   (serving, mail round-trip, payment-link flow — including the G4/A4 instant-delivery
