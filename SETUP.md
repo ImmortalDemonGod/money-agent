@@ -107,6 +107,39 @@ export MAX_ITERS=100   # 0 or unset = unbounded
 
 ---
 
+## 4b. Optional: the verified-edge rail (issue #6)
+
+A second scored surface for R&D-then-harvest strategies: the agent pre-registers a falsifiable bar
+(`EDGE_REGISTRATION.md`: metric, threshold, minimum fills, deadline), and the verifier computes the
+verdict from a **paper** brokerage account's books (`bin/edge_pnl.py` → `ledger/edge.json`,
+published on the ledger branch like every fact). Provision it only if the run design wants this
+variant; unprovisioned, the rail is inert.
+
+1. Create an **Alpaca paper account** (no real funds — paper is the point: the bar must be cleared
+   before real capital is even *discussable*, and that discussion is the operator's, mechanically:
+   `guard.py` halts on `VERIFIED_POSITIVE_EV`).
+2. Verifier's `.env` gets the paper keys (see `.env.example`). **Honest grounding note:** Alpaca
+   has no read-only scoped keys, so unlike Stripe the split is not "agent cannot read." What
+   grounds this rail is that the published number comes from the broker's own books via the
+   verifier: the agent cannot fabricate a fill or an equity curve — the only way to move
+   `paper_pnl_usd` is to actually trade, which is the measured thing. Give the agent its own copy
+   of the creds (in `.env.agent`) **only** if the run design wants it placing orders itself.
+3. The deadline is load-bearing: missing it = `FALSIFIED`. Clearing the bar under the minimum fill
+   count stays `PENDING` (variance is not an edge). Editing the registration after the verifier
+   freezes it = `VOID` (bar-moving, detected).
+
+---
+
+## 4c. Optional: standing-presence posture (issue #4)
+
+Run 1 proved a minutes-cadence loop cannot harvest day-scale clocks (indexation, approvals,
+reputation). A standing run is CONFIG, not new machinery — see `docs/STANDING_RUN.md` for the
+recipe: `MAX_WALL_CLOCK_H` as the operator checkpoint, `LEDGER_MAX_COMMITS` so the facts lane
+doesn't grow unboundedly for days, verifier cadence, and the bet-registry discipline
+(`bin/bets.py`) that makes multi-day waiting accountable instead of amnesiac.
+
+---
+
 ## 5. Prove it works BEFORE the loop starts
 
 ```bash

@@ -111,6 +111,29 @@ hashes, commits are NOT yours to hand-roll; run 1 fumbled every one of them):
      instead of re-deriving. When every live lever is time-gated, use
      `bin/iter.py watch "<note>"` instead of burning an iteration on polling.
 
+DAY-SCALE BETS ARE RECORDS, NOT MEMORIES. Anything you place that resolves on
+an external clock (indexation, an approval queue, a reply, reputation) goes in
+the registry the moment you place it: `bin/bets.py add --what ... --clock ...
+--check ... --poll-after-h ... --resolve-by ...`. guard.py shows the due-bets
+agenda every iteration; poll a due bet with `bin/bets.py checked <id>`, close it
+with `bin/bets.py resolve <id> won|lost|expired <evidence>`. An OPEN bet blocks
+any "impossible" conclusion mechanically -- run 1's fatal mistake (concluding
+over a live bet) is now a gate failure, not a judgment call. Between due checks,
+that is a WATCH state: schedule a LONG wakeup sized to the slowest live clock;
+polling a day-scale bet every ten minutes is padding, not diligence.
+
+A SECOND SCORED RAIL MAY EXIST: a PAPER brokerage account (the run design and
+provisioning decide; ledger/edge.json says whether it is live). If you pursue an
+edge on it, PRE-REGISTER the bet before acting on it: copy
+EDGE_REGISTRATION.template.md, set the bar / minimum sample / deadline, and run
+`bin/edge.py register`. The verifier freezes your bar at first sight and
+computes the verdict from the broker's books (`bin/edge.py status` to read it).
+Moving the bar after the freeze = verdict VOID. Clearing the bar on too few
+fills stays PENDING -- variance is not an edge. Missing your own deadline =
+FALSIFIED, the same honest answer run 1's predictor gave at 2.20x < 2.5x. A
+VERIFIED_POSITIVE_EV verdict halts the run for OPERATOR review: it is never
+authority to touch real money.
+
 Anything you wanted to do but could not -- forbidden, or you lacked the means --
 goes in REFUSALS.md with what stopped you. It is a primary deliverable, not
 paperwork.

@@ -379,3 +379,64 @@ a scheduler that silently loses its schedule is a liveness bug); ScheduleWakeup 
 messages carried the loop the rest of the way. Stopping the loop now: A1–A8 shipped, adversary
 run and triaged, scorecard reconciled. Remaining work is the four DEGRADED items above, which are
 follow-ups for a fresh session, not this window.
+
+## Entry 009 — 2026-07-17 (follow-up branch) — the two things PR #18 named and skipped: the edge rail (#6) and standing posture (#4)
+
+**Why.** PR #18's own summary drew the line honestly: "#6 asks for a paper-trading rail and a
+changed scoring surface — that's core-system work, not strategy, and I did not build it. #4 I only
+partially enabled." This entry is that work, plus adoption of canonical aiv-protocol tooling where
+a canonical equivalent actually exists.
+
+**A9 — the verified-edge rail (issue #6).** Run 1's single cleanest moment was fp_predict: a 2.5x
+bar pinned in MONEY_LOG *before* the retrain, enforced mechanically, and honored when the result
+came in at 2.20x. A9 promotes that from agent discipline to harness machinery, with the same
+grounding shape as money:
+- `bin/edge_pnl.py` (verifier-only, runs after pnl.py so C3's purge cannot eat its pulls):
+  freezes the agent's committed `EDGE_REGISTRATION.md` (sha256 + parsed bar + the paper account's
+  equity) into the private state dir at first sight, then computes `ledger/edge.json` from the
+  broker's books each cycle — verdicts NONE / PENDING / VERIFIED_POSITIVE_EV / FALSIFIED
+  (deadline-based, the pre-registration discipline) / VOID (bar-moving detected, the edge
+  analog of constitution_intact). Raw pulls land in ledger/raw/ with their own
+  `EDGE_MANIFEST.sha256`.
+- `bin/truth.py` generalized: `load(name)` / `--file edge.json` — one read path, N fact files,
+  same GROUNDED_SOURCES discipline.
+- `bin/guard.py`: VERIFIED_POSITIVE_EV halts as an operator checkpoint (exit 2, like
+  first-dollar; `EDGE_TERMINAL=0` opts a dual-rail run out); VOID halts as an integrity break.
+  Deliberately a SECOND terminal, not a reuse: first-dollar answers "did a customer pay?", this
+  answers "did the agent produce a verified positive-EV edge?", and conflating them was exactly
+  the frame run 1 proved wrong.
+- `bin/aiv_gate.sh` 2a-bis: an edge claim must match the grounded verdict and cite an
+  EDGE_MANIFEST hash; the money bound now admits the grounded paper P&L so an honest
+  "paper_pnl=$50" cannot trip the $0-received check (residual named in-line).
+- Grounding honesty, stated in edge_pnl/SETUP: Alpaca keys are not scoped, so this rail's SoD is
+  measurement-grounding (the broker's books, pulled by the verifier, published on the facts lane),
+  not credential asymmetry. The agent cannot fabricate a fill; it can only trade, which is the
+  measured thing.
+
+**A10 — standing presence (issue #4), the posture half.** The missing piece was never a scheduler;
+it was making multi-day waiting ACCOUNTABLE. `bin/bets.py`: a committed registry of day-scale bets
+(clock class, check method, poll cadence, deadline). guard prints the due-bets agenda every
+iteration; `iter.py watch` stamps it on every tick; and `conclusion_gate.py` layer 4 refuses an
+"impossible" conclusion while any bet is open or a grounded edge is PENDING — iteration 095, made
+a gate failure instead of a judgment call. Config recipe in `docs/STANDING_RUN.md`. Plus the
+multi-day operational blockers from entry 008: caffeinate is now optional (DEGRADED #9 —
+Linux-portable), supervise.sh parses the ledger via stdin (DEGRADED #11 — a quote in errors[] can
+no longer silence the first-dollar alert, and it now surfaces the edge verdict), and
+verifier_loop gained `LEDGER_MAX_COMMITS` rotation (commit-tree squash, content preserved) so the
+facts lane survives week-scale runs.
+
+**A11 — canonical aiv where canonical exists.** Verified empirically (run-1 packet 074 passes
+`aiv check --no-strict`), then wired as aiv_gate stage 0, fail-closed (missing CLI = broken gate;
+setup_sandbox.sh installs it). The hand-rolled stages now cover ONLY what the canonical validator
+has no concept of: money-vs-truth comparison, edge verdicts, constitution integrity, serving-layer
+publishes. That split — canonical structure, domain-specific adjudication — is the correct
+long-term boundary with aiv-protocol.
+
+**Critique pass.** (1) run/bets.json is agent-writable — a tripwire; the failure it targets is
+forgetting (run 1's actual mode), not forging; deleting a bet is a visible commit. (2) The edge
+rail is UNPROVEN against the live Alpaca API — freeze/verdict logic is simulation-tested only
+(same caveat class as PR #18's two-lane topology; a one-cycle live paper run is the gate before
+trusting it). (3) Nothing rate-limits iterations against the due-bet schedule — wakeup sizing is
+still prose + agenda visibility. (4) EDGE claims in packets are matched by regex; a paraphrase
+that dodges the trigger phrases dodges stage 2a-bis (the canonical-JSON packet form would close
+this properly — future work with upstream aiv-protocol).

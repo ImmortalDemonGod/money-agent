@@ -13,6 +13,11 @@ received_usd > 0 AND verified is true: one real CUSTOMER dollar has arrived. The
 classifies the payer, so a self-payment does NOT count. The instant it is true, STOP: no second
 sale, no scaling. Write the retro in MONEY_LOG.md and hand back.
 
+ALSO DONE when the edge rail is live and ledger/edge.json (via bin/truth.py --file edge.json)
+shows verdict VERIFIED_POSITIVE_EV with verified true: the pre-registered bar was cleared on the
+broker's books. STOP for operator review exactly as with the first dollar -- deploying real
+capital is the operator's decision, never yours; bin/guard.py halts on this verdict.
+
 One other legitimate terminal state: the card is exhausted (bin/guard.py reports it and halts).
 
 THERE IS NO SELF-CERTIFIED EXHAUSTION TERMINAL STATE. bin/conclusion_gate.py exit 0 authorizes
@@ -43,11 +48,16 @@ Work the loop, self-paced (go again the moment there is a distinct next thing to
    ~60 iterations of crawler-invisible product because nobody verified the serving layer).
 6. When every live lever is externally time-gated (indexation, replies, approvals), that is a
    WATCH state: schedule a long wakeup instead of manufacturing motion. Watching is legal;
-   padding is not.
+   padding is not. Every such lever must already be in the registry (bin/bets.py add) -- guard
+   prints the due-bets agenda each iteration; check due bets first (bin/bets.py due / checked),
+   and size the wakeup to the SLOWEST live clock (day-scale bets get day-scale wakeups).
+7. Pursuing an edge on the paper rail? Pre-register the bar FIRST (bin/edge.py register), then
+   work it; read the verdict only via bin/edge.py status.
 
 Falsify before you conclude "blocked" — one failed test is n=1. An "impossible" conclusion may be
 RECORDED only if bin/conclusion_gate.py exits 0 (effort floor + packet + a fresh-context adversary
-that came back empty-handed) — and recording it does not end the run.
+that came back empty-handed + NO open bets in run/bets.json and no PENDING edge) — and recording
+it does not end the run.
 ```
 
 ## Design intent
