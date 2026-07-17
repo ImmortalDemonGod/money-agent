@@ -108,6 +108,22 @@ def main() -> int:
     else:
         return fail("truth.json has no computed_at -- cannot tell a live ledger from a dead one.")
 
+    # --- A8: wall-clock checkpoint (issues #4/#6 -- standing-presence runs). Like MAX_ITERS this
+    # is a CHECKPOINT for the operator, never a conclusion: it bounds unattended time, it does not
+    # say anything about the task. OFF by default.
+    max_wall_h = float(os.environ.get("MAX_WALL_CLOCK_H", "0") or "0")
+    if max_wall_h > 0:
+        start = t.get("counts_only_money_after", "")
+        if start and not start.startswith("NO BASELINE"):
+            import datetime as _dt2
+            age_h = (_dt2.datetime.now(_dt2.timezone.utc)
+                     - _dt2.datetime.fromisoformat(start.replace("Z", "+00:00"))).total_seconds() / 3600
+            if age_h > max_wall_h:
+                print(f"HALT: wall-clock checkpoint reached ({age_h:.1f}h > MAX_WALL_CLOCK_H="
+                      f"{max_wall_h}). A checkpoint, not a failure: the operator decides whether "
+                      "to extend or stop.", file=sys.stderr)
+                return 2
+
     # --- SoD tripwire: did anyone but the verifier touch the ledger SINCE THE RUN STARTED?
     #
     # Scoped to the baseline on purpose. Commits before it are the operator building the harness --
