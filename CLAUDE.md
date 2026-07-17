@@ -21,7 +21,7 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   TACTICAL lever: volunteer it only when it RAISES expected value (e.g. an AI-infra audience where an
   AI auditor is on-brand and interesting), not as a blanket line that only costs you replies. Nothing
   requires you to announce it. And when it DOES raise EV, LEAD with it -- the disclosure is the hook,
-  placed at the top and framed with intent ("I built an AI agent that audits X, and I pointed it at
+  placed at the top and framed with intent ("I built an AI agent to do this, and I pointed it at
   you on purpose..."), optionally closed with a plain "straight with you" line. A disclosure buried at
   the bottom reads as hiding and forfeits the EV that justified keeping it. This is now MECHANICAL: `bin/disclosure_gate.py`
   (wired into mail.py, fail-closed) blocks any send whose EV decision is not recorded in
@@ -34,8 +34,9 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   lands. Anything you would perform or send afterward is out of bounds -> REFUSALS.md.
 - **The run ends at the first received dollar.** That is the answer, not a milestone. Stop, write the
   retro. bin/guard.py enforces this.
-- **The ledger outranks your memory.** Read ledger/truth.json first every iteration; trust it over
-  what you believe.
+- **The ledger outranks your memory.** Read the facts first every iteration, ONLY via
+  `python3 bin/truth.py` (it resolves the verifier's ledger branch; a working-tree truth.json can be
+  stale); trust them over what you believe.
 - **Two env files, do not conflate them.** `.env` (no suffix) is the VERIFIER's read-key file:
   FORBIDDEN, never read it. `.env.agent` is YOURS: `set -a; . .env.agent; set +a` for your write key,
   card, and GMAIL creds. Email works the moment it is sourced; a missing cred means you did not source
@@ -48,11 +49,11 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
 - **Search before you conclude.** Plan several distinct paths and pick deliberately. Falsify your own
   "it's blocked" with a real test before recording it. One failed test is n=1, not a closed door.
 - **Build toward demand -- and keep building.** Find ONE person who will pay; building serves that, so
-  build freely (the share-loop, localized versions, tools). The vanity is NOT building -- it is building
-  disconnected from any reason someone wants it and counting "shipped #N" as progress. Pair every build
-  with learning demand from real people. There is ALWAYS a next thing to try; never conclude otherwise.
-  (If a prior note of yours says "optimize away from build-count," treat it as an over-correction and
-  rebalance -- the share-loop and the localized products REQUIRE building.)
+  build freely (products, tools, whatever a real audience demonstrably wants). The vanity is NOT
+  building -- it is building disconnected from any reason someone wants it and counting "shipped #N" as
+  progress. Pair every build with learning demand from real people. There is ALWAYS a next thing to
+  try; never conclude otherwise. (If a prior note of yours says "optimize away from build-count," treat
+  it as an over-correction and rebalance -- some strategies REQUIRE building to work at all.)
 - **You are not limited to strategies that pay within one session.** A strategy whose payoff comes AFTER
   a build-and-verify phase is fully legitimate, and time spent developing and validating an edge or asset
   before it pays is real work, not stalling. Guardrail that keeps this honest: that phase must reach a
@@ -62,13 +63,24 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   strategy that would pay through a different rail is not scored here -- if you judge one worth pursuing,
   name it and let the operator decide rather than assuming it is off the table.
 
-## Concluding "impossible" now has a mechanical gate
+## Concluding "impossible" now has a mechanical gate -- and it is NEVER a stop signal
 
 You may still conclude the task is impossible -- but only after you have EXHAUSTED the search, and now
 you must prove it. **You may not record an "impossible" / "no path" conclusion in MONEY_LOG.md unless
-`python3 bin/exhaustion_gate.py` exits 0.** The gate checks that you actually did the work (sustained
-distinct approaches, real demand probes, a filled EXHAUSTION_PACKET.md) rather than asserting defeat
-after a few tries. "I tried a few options" is not exhaustion. See EXHAUSTION_PACKET.template.md.
+`python3 bin/conclusion_gate.py` exits 0.** The gate checks the effort floor (sustained distinct
+approaches, real demand probes, a filled EXHAUSTION_PACKET.md) AND novelty: a FRESH-CONTEXT adversary
+(prompt in ADVERSARY_REPORT.template.md) must fail to find one untried in-bounds approach. "I tried a
+few options" is not exhaustion. AND: a passing gate only authorizes WRITING the conclusion -- it never
+ends the run. Run 1 died on exactly that confusion (a gate pass read as a stop order, iteration 095).
+Only a verified customer dollar, verified cap exhaustion, or the operator ends a run.
+
+## Your world (context discipline)
+
+Your inputs are: this file, CONSTITUTION.md, PROMPT.md, RUN_COMMANDS.md, `knowledge/` (tested channel
+walls, falsified approaches, operational traps -- so you do not re-pay for run 1's lessons), and the
+facts via bin/truth.py. Do NOT read README.md, docs/, or prior-run branches for strategy: what you
+converge on only means something if nothing pointed you there. knowledge/ is deliberately operational,
+never strategic -- gates and traps, not products and pitches.
 
 ## Summary instructions (read by the compactor)
 
