@@ -524,3 +524,37 @@ name is this session's default, not a descriptive fix branch -- the operator may
 before PRing upstream. (3) bets->outcomes uses the bet's clock class as `channel`, which is coarser
 than outcome.py's free-form channel; good enough for queryability, revisit if it muddies the map.
 Next: B4 (structured edge claims), then B3 (adversary transcript), B5 (weak-mode runner).
+
+## Entry 012 — B4 (structured edge claims) + B3 (the adversary must show its work)
+
+**Loop meta, logged honestly:** the 10-minute cron died with a session recycle (8h gap; CronList
+empty on resume) -- the third occurrence of the entry-005 lesson in this program's history, now in
+its own harness too. Remediation: the remaining inventory runs consecutively in-session instead of
+on a wall clock. A run 2 that wants day-scale pacing must use durable queued wakeups, never
+session-local cron; this is exactly why bets.py records poll cadence in a committed file rather
+than in a scheduler.
+
+**B4.** When the edge rail is live (grounded verdict != NONE), every packet must carry a
+machine-readable `EDGE_CLAIM: <verdict>` line and it must equal the verifier's verdict. Paraphrase
+can no longer dodge stage 2a-bis: the claim is structured, not prose. iter.py pre-fills the line
+from the grounded verdict at open, so an honest iteration passes by construction -- and if the
+verdict MOVES between open and close, the gate mismatch forces a conscious re-read of the facts
+instead of a stale assertion. Prose-regex check kept as backstop for un-scaffolded packets.
+Tested: missing line fails with the mandate message, matching line passes, contradicting line
+fails as a false edge claim.
+
+**B3 (DEGRADED #8, the last self-graded surface, upgraded).** The conclusion adversary's verdict
+was one Write away. Layer 3 now also requires ADVERSARY_TRANSCRIPT.md -- the raw working record
+(>= 30 substantive lines, >= 5 search-trace lines), committed, and hash-pinned by the report
+(`TRANSCRIPT_SHA256:`). Honest framing, printed in the code comment: still agent-side, still a
+TRIPWIRE -- but forging a plausible multi-step working record is qualitatively more work than
+forging one verdict line, and the transcript gives the operator's independent re-run (the true
+grounding) something to diff against. Tested: missing transcript, stale pin, thin transcript all
+fail with distinct messages; a real-shaped transcript satisfies the layer.
+
+**Critique.** (1) B4's mandate binds only while the rail is live -- a packet written the cycle
+AFTER a registration lands but BEFORE edge.json publishes sees NONE and carries no line; window is
+one verifier cycle, acceptable. (2) B3's line thresholds are guessable constants; their value is
+the diff surface for the operator re-run, not the count itself. (3) The transcript check reads
+content patterns (searched/considered/...) -- an English-keyword heuristic; a non-English
+adversary transcript would need the list extended.

@@ -92,9 +92,13 @@ def _edge_anchor() -> str:
         return ""
     if src not in _t.GROUNDED_SOURCES or e.get("verdict") in (None, "NONE"):
         return ""
-    return (f"> edge rail: verdict = {e.get('verdict')} | paper_pnl_usd = {e.get('paper_pnl_usd')}"
+    # the bare EDGE_CLAIM line is the STRUCTURED claim the gate adjudicates (B4): pre-filled from
+    # the grounded verdict so it matches by construction at open; if the verdict moves before
+    # close, the gate mismatch forces a conscious re-read rather than a stale assertion.
+    return (f"> edge rail: paper_pnl_usd = {e.get('paper_pnl_usd')}"
             f" | fills = {e.get('filled_orders_since_freeze')} | edge_manifest_sha256 = "
-            f"`{e.get('edge_manifest_sha256')}`\n")
+            f"`{e.get('edge_manifest_sha256')}`\n"
+            f"EDGE_CLAIM: {e.get('verdict')}\n")
 
 
 def new() -> int:

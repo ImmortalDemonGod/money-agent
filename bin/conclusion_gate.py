@@ -52,6 +52,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 PACKET = REPO / "EXHAUSTION_PACKET.md"
 ADVERSARY = REPO / "ADVERSARY_REPORT.md"
+TRANSCRIPT = REPO / "ADVERSARY_TRANSCRIPT.md"
 MONEY_LOG = REPO / "MONEY_LOG.md"
 SENT_LOG = REPO / "SENT_LOG.md"
 
@@ -150,6 +151,33 @@ def main() -> int:
         if len(real_lines) < 5:
             fails.append("adversary report's 'Search performed' section is too thin to be a real "
                          "search (need >= 5 substantive lines).")
+        # B3 (entry 012, DEGRADED #8): the report alone is one Write away. Require the adversary's
+        # TRANSCRIPT too -- the raw working record (searches issued, sources examined, candidate
+        # approaches weighed), committed and hash-pinned by the report. Still agent-side, so still
+        # a TRIPWIRE -- but forging a plausible multi-step working record is qualitatively more
+        # work than forging one verdict line, and the artifact gives the operator's independent
+        # re-run (the true grounding) something to diff against.
+        m_t = re.search(r"^TRANSCRIPT_SHA256:\s*([0-9a-f]{64})\s*$", rep, re.MULTILINE)
+        if not TRANSCRIPT.exists():
+            fails.append("ADVERSARY_TRANSCRIPT.md does not exist -- the adversary's raw working "
+                         "record (searches, sources, candidates weighed) must be committed "
+                         "alongside its verdict.")
+        elif not m_t:
+            fails.append("adversary report pins no TRANSCRIPT_SHA256 -- a verdict not bound to "
+                         "its working record is one Write away from forged.")
+        elif m_t.group(1) != hashlib.sha256(TRANSCRIPT.read_bytes()).hexdigest():
+            fails.append("TRANSCRIPT_SHA256 does not match ADVERSARY_TRANSCRIPT.md -- report and "
+                         "transcript are out of sync; re-run the adversary.")
+        else:
+            t_lines = [ln for ln in _read(TRANSCRIPT).splitlines()
+                       if ln.strip() and not PLACEHOLDER.search(ln)]
+            searchish = [ln for ln in t_lines
+                         if re.search(r"searched|queried|checked|fetched|examined|WebSearch|"
+                                      r"candidate|considered", ln, re.IGNORECASE)]
+            if len(t_lines) < 30 or len(searchish) < 5:
+                fails.append(f"adversary transcript is too thin to be a real working record "
+                             f"({len(t_lines)} substantive lines, {len(searchish)} search-trace "
+                             "lines; need >= 30 and >= 5). A verdict needs its work shown.")
 
     # --- layer 4: NO LIVE BETS. Concluding over an open bet is not exhaustion, it is amnesia --
     # run 1 did exactly this at iteration 095. Both registries are consulted:

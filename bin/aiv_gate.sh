@@ -110,13 +110,29 @@ $(cat "$REPO/ledger/raw/EDGE_MANIFEST.sha256")"
   fi
 fi
 
-# --- 2a-bis. EDGE claims (issue #6): a claimed verdict must MATCH the verifier's, and cite a hash.
-# Same shape as the money check: the agent asserting "edge verified" is a claim; ledger/edge.json
-# (grounded source only) is the fact. Any packet that asserts a positive edge verdict against a
-# ledger that says PENDING/FALSIFIED/VOID/NONE is a false claim, exactly like a $47 over a $0.
+# --- 2a-bis. EDGE claims (issue #6): STRUCTURED adjudication first, prose regex as backstop.
+# B4 FIX (entry 012): the prose regex alone was dodgeable by paraphrase ("the strategy proved
+# profitable on paper"). So when the edge rail is LIVE (grounded verdict, not NONE), every packet
+# MUST carry a machine-readable `EDGE_CLAIM: <verdict>` line and it must MATCH the verifier's
+# verdict -- the claim is structured, so wording cannot route around the check. iter.py pre-fills
+# the line at open; if the verdict moves between open and close, the mismatch fails the gate and
+# forces a conscious re-read of the facts. Prose that asserts a verified edge remains checked as a
+# backstop for un-scaffolded packets.
+EVERDICT=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>/dev/null)
+ESRC=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>&1 >/dev/null | sed -n 's/^source: //p')
+EDGE_LIVE=0
+case "$ESRC" in ledger-branch|working-tree-committed)
+  [[ -n "$EVERDICT" && "$EVERDICT" != "NONE" ]] && EDGE_LIVE=1 ;;
+esac
+if [[ "$EDGE_LIVE" == "1" ]]; then
+  ECLAIM=$(grep -oE '^[>[:space:]]*EDGE_CLAIM:[[:space:]]*[A-Z_]+' "$PACKET" | head -1 | grep -oE '[A-Z_]+$')
+  if [[ -z "${ECLAIM:-}" ]]; then
+    fail "edge rail is live (verdict $EVERDICT) but packet carries no 'EDGE_CLAIM: <verdict>' line (structured-claim mandate; iter.py pre-fills it)"
+  elif [[ "$ECLAIM" != "$EVERDICT" ]]; then
+    fail "EDGE_CLAIM: $ECLAIM contradicts the verifier's verdict $EVERDICT (false edge claim)"
+  fi
+fi
 if grep -qiE 'VERIFIED_POSITIVE_EV|edge (is |was )?(verified|proven)|positive[- ]EV edge' "$PACKET"; then
-  EVERDICT=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>/dev/null)
-  ESRC=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>&1 >/dev/null | sed -n 's/^source: //p')
   case "$ESRC" in
     ledger-branch|working-tree-committed) : ;;
     *) fail "edge claim present but edge facts source is '${ESRC:-none}' (ungrounded/absent)" ;;

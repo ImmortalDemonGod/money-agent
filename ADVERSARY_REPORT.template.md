@@ -20,8 +20,15 @@ recordable if an adversary who did NOT do the work fails to find one untried in-
 
 ```
 MONEY_LOG_SHA256: <sha256 of MONEY_LOG.md at generation time — binds the verdict to the log state>
+TRANSCRIPT_SHA256: <sha256 of ADVERSARY_TRANSCRIPT.md — binds the verdict to its working record>
 GENERATED_BY: <fresh subagent | operator>  DATE: <iso>
 ```
+
+The transcript is the adversary's RAW working record — every search issued, source examined, and
+candidate approach weighed, as it worked (>= 30 substantive lines, >= 5 search-trace lines; the
+gate checks). Save the subagent's actual output to `ADVERSARY_TRANSCRIPT.md` and commit it with
+the report. A verdict without its work shown is one Write away from forged; the transcript is what
+the operator's independent re-run gets diffed against.
 
 (Compute the hash: `python3 -c "import hashlib;print(hashlib.sha256(open('MONEY_LOG.md','rb').read()).hexdigest())"`)
 
