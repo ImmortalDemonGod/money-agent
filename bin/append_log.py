@@ -28,8 +28,8 @@ REPO = Path(__file__).resolve().parent.parent
 def append(rel_path: str, text: str, message: str | None = None) -> None:
     """Append text to rel_path, commit fail-closed, push best-effort. Raises on failure."""
     p = (REPO / rel_path).resolve()
-    if REPO not in p.parents and p != REPO:
-        raise ValueError(f"{rel_path} escapes the repo")
+    if p == REPO or REPO not in p.parents:
+        raise ValueError(f"{rel_path} must be a file inside the repo, not the root or outside it")
     if p.parts[len(REPO.parts)] == "ledger":
         raise PermissionError("ledger/ is verifier-owned; the agent never writes it")
     before = p.read_text() if p.exists() else ""

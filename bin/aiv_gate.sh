@@ -56,14 +56,22 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done <<< "$MANIFEST_TXT"
     [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 (unanchored claim)"
   fi
-  # (b) the claimed dollar amount must not exceed what the VERIFIER committed. v2: read through
-  # bin/truth.py (ledger branch first -- the agent cannot write that branch; working-tree fallback
-  # for weak mode). The old `git show HEAD:ledger/truth.json` read the CLAIMS lane, which goes
-  # permanently stale under the two-lane design.
+  # (b) the claimed dollar amount must not exceed what the VERIFIER committed. Read via truth.py
+  # AND require a GROUNDED source: an uncommitted working-tree ledger is agent-forgeable, so a
+  # money claim adjudicated against it is worthless. truth.py prints "source: <s>" to stderr.
+  TSRC=$(python3 "$REPO/bin/truth.py" received_usd 2>&1 >/dev/null | sed -n 's/^source: //p')
   TRUTH_RECV=$(python3 "$REPO/bin/truth.py" received_usd 2>/dev/null)
   TRUTH_RECV=${TRUTH_RECV:-0}
-  # largest $ figure asserted anywhere in the packet
-  MAX_CLAIM=$(grep -oE '\$[0-9]+(\.[0-9]+)?' "$PACKET" | tr -d '$' | sort -rn | head -1)
+  case "$TSRC" in
+    ledger-branch|working-tree-committed) : ;;
+    *) fail "money claim present but ledger source is '$TSRC' (agent-writable/uncommitted); no grounded number to check it against" ;;
+  esac
+  # largest dollar figure asserted anywhere -- match "$47", "47 dollars", and "USD 47" alike
+  # (the bare-word forms were how a false claim slipped past the $-only parser).
+  MAX_CLAIM=$( { grep -oE '\$[0-9]+(\.[0-9]+)?' "$PACKET" | tr -d '$';
+                 grep -oiE '[0-9]+(\.[0-9]+)?\s*(dollars|usd)' "$PACKET" | grep -oE '[0-9]+(\.[0-9]+)?';
+                 grep -oiE 'usd\s*[0-9]+(\.[0-9]+)?' "$PACKET" | grep -oE '[0-9]+(\.[0-9]+)?'; } \
+               | sort -rn | head -1)
   if [[ -n "$MAX_CLAIM" ]]; then
     OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > float('$TRUTH_RECV') + 0.001 else 0)" 2>/dev/null || echo 0)
     [[ "$OVER" == "1" ]] && fail "packet claims \$$MAX_CLAIM but verifier-committed received_usd is \$$TRUTH_RECV (false money claim)"
@@ -74,8 +82,15 @@ fi
 # of "shipped" product force-served robots Disallow-all, discovered only at iter 070). A packet
 # that claims a publish must cite a PASSING host_check line for the live URL.
 if grep -qiE '(published|deployed|went live|now live|live at http)' "$PACKET"; then
-  grep -qE 'HOST_CHECK: .* verdict=PASS' "$PACKET" \
-    || fail "publish claim present but no passing 'HOST_CHECK:' line (run bin/host_check.py <url> and cite its output; a page the host hides from crawlers is not published)"
+  # A self-typed "HOST_CHECK: ... verdict=PASS" line is the exact self-graded-checkmark pattern v2
+  # denounces. Re-RUN host_check.py on the cited URL and trust ONLY our own fresh result. The
+  # packet must carry `HOST_CHECK_URL: <url>` for the claim it makes.
+  HC_URL=$(grep -oiE 'HOST_CHECK_URL:[[:space:]]*https?://[^[:space:]]+' "$PACKET" | head -1 | sed -E 's/.*(https?:\/\/[^ ]+)/\1/')
+  if [[ -z "$HC_URL" ]]; then
+    fail "publish claim present but no 'HOST_CHECK_URL: <url>' line for the gate to verify (the old self-typed HOST_CHECK line is not trusted)"
+  elif ! python3 "$REPO/bin/host_check.py" "$HC_URL" >/dev/null 2>&1; then
+    fail "publish claim: bin/host_check.py FAILED for $HC_URL (host hides it from crawlers, noindex, or unreachable) -- not published"
+  fi
 fi
 
 # --- 3. CONSTITUTION integrity is now the VERIFIER's job, not the gate's.

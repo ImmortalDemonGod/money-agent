@@ -35,6 +35,10 @@ REPO = Path(__file__).resolve().parent.parent
 LOCAL = REPO / "ledger" / "truth.json"
 LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
 
+# Sources a MONEY decision (first-dollar halt, a packet's money claim) may rest on. An uncommitted
+# working-tree file is NOT here: it is agent-writable and invisible to every commit-based tripwire.
+GROUNDED_SOURCES = {"ledger-branch", "working-tree-committed"}
+
 
 def _git(*args: str, timeout: int = 30) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True,
@@ -51,9 +55,20 @@ def load() -> tuple[dict, str]:
             return json.loads(show.stdout), "ledger-branch"
         except json.JSONDecodeError as e:
             raise RuntimeError(f"origin/{LEDGER_BRANCH}:ledger/truth.json is not valid JSON: {e}")
-    # 2. v1-compat: the working-tree copy (weak mode, or a repo that predates the ledger branch)
+    # 2. weak mode: read the COMMITTED copy via git show, never the raw working-tree file. An
+    #    uncommitted working-tree truth.json is agent-forgeable and would bypass the whole SoD
+    #    tripwire family (guard's author check + sod_hook both only see COMMITS). A committed
+    #    forge trips those; an uncommitted one must not be trusted for adjudication.
+    show_local = _git("show", "HEAD:ledger/truth.json")
+    if show_local.returncode == 0 and show_local.stdout.strip():
+        try:
+            return json.loads(show_local.stdout), "working-tree-committed"
+        except json.JSONDecodeError as e:
+            raise RuntimeError(f"committed ledger/truth.json is not valid JSON: {e}")
+    # 3. last resort: the raw uncommitted file, labeled UNTRUSTED. GROUNDED_SOURCES excludes it, so
+    #    money-adjudicating consumers (guard first-dollar, aiv_gate) refuse it by construction.
     if LOCAL.exists():
-        return json.loads(LOCAL.read_text()), "working-tree"
+        return json.loads(LOCAL.read_text()), "working-tree-uncommitted"
     raise RuntimeError(
         f"no ledger found: origin/{LEDGER_BRANCH} has no ledger/truth.json and {LOCAL} is absent. "
         "Run the verifier (bin/pnl.py via bin/verifier_loop.sh) before the loop starts.")

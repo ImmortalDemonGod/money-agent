@@ -88,6 +88,13 @@ def main() -> int:
         return fail(f"cannot load the ledger ({type(e).__name__}: {e}). Run bin/pnl.py (via "
                     "bin/verifier_loop.sh) first. The loop must never start blind to its own P&L.")
 
+    # An uncommitted working-tree ledger is agent-forgeable and invisible to every commit-based
+    # tripwire. It must never authorize spending or trip the first-dollar success condition.
+    if truth_source not in _truth.GROUNDED_SOURCES:
+        return fail(f"ledger source is {truth_source!r} (agent-writable, unverifiable). No committed "
+                    "verifier ledger exists. Start the verifier so facts are grounded before the "
+                    "loop spends or claims anything.")
+
     # --- H2: a dead verifier must not look like an honest $0. If the loop stopped (Mac slept, key
     # rotated), truth.json freezes -- still verified:true, still received:0 -- and the agent would
     # run all night against a stale ledger, then the morning reader concludes "made $0". Halt if the
@@ -137,12 +144,19 @@ def main() -> int:
     try:
         # `since` prefers the verifier-signed timestamp inside truth.json itself (in two-lane mode
         # the local baseline.json copy may predate the run); local file is the fallback.
+        # `since` comes from the verifier-signed truth.json (agent cannot forge it without tripping
+        # the constitution/source checks). The BASELINE working-tree copy is a fallback ONLY, and a
+        # corrupt one must not silently widen the window -- so its parse failure is contained here,
+        # not allowed to fail-open the whole SoD block below.
         since = None
         cm = t.get("counts_only_money_after", "")
         if cm and not cm.startswith("NO BASELINE"):
             since = cm
         elif BASELINE.exists():
-            since = json.loads(BASELINE.read_text()).get("set_at_iso")
+            try:
+                since = json.loads(BASELINE.read_text()).get("set_at_iso")
+            except Exception:
+                since = None  # unbounded window (checks ALL ledger commits) -- safe direction
 
         def _ledger_authors(ref: str | None) -> set[str]:
             args = ["git", "log", "--format=%an"]

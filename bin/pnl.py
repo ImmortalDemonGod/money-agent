@@ -138,7 +138,11 @@ def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
     customer = selfpay = 0.0
     charges, starting_after = [], None
     for _ in range(50):
-        params = {"limit": 100, "expand[]": "data.payment_method_details"}
+        # NOTE: payment_method_details is included on charges by DEFAULT and is NOT an expandable
+        # property -- passing it as expand[] makes Stripe 400 ("cannot be expanded"), which would
+        # fail every verifier cycle and halt the run. So we do not expand it; the fingerprint we
+        # need (payment_method_details.card.fingerprint) is present without expansion.
+        params = {"limit": 100}
         if baseline:
             params["created[gt]"] = baseline
         if starting_after:
@@ -302,11 +306,21 @@ def main() -> int:
 
     # ---- CUSTOMER vs SELF: received_usd = customer revenue only (wash-trade guard)
     customer_received = self_purchase = 0.0
+    op_emails, op_fps = _operator_ids()
+    wash_guard_armed = bool(op_emails or op_fps)
     try:
         customer_received, self_purchase, f = pull_charges(stripe_key, baseline)
         pulls += f
     except Exception as e:
         errors.append(f"charge_classify_failed: {type(e).__name__}: {e}")
+    # If the operator-identity allowlist is empty, every charge classifies as CUSTOMER and the
+    # wash-trade guard enforces nothing. That must be LOUD, not silent (the operator paying his own
+    # link would then flip the first-dollar success condition on a fabricated sale). Surface it in
+    # truth.json so guard/readers see the guard was inert; only a real customer charge escalates it.
+    if not wash_guard_armed and received_gross > 0:
+        errors.append("wash_guard_disarmed: operator_identity.json is empty/absent AND charges "
+                      "exist -- self-purchases cannot be excluded. Provision the allowlist "
+                      "(email + card fingerprint) before trusting received_usd.")
     # received_usd is now CUSTOMER-only. A self-purchase raises received_gross but NOT received_usd,
     # so guard's first-dollar halt never fires on the operator paying his own link.
     received = customer_received

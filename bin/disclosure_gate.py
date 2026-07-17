@@ -40,12 +40,14 @@ LOG = REPO / "DISCLOSURE_EV_LOG.md"
 # Proactive AI-disclosure phrasings. NOT triggered by answering a direct question (that is a
 # separate, absolute honesty bound handled in conversation, not here).
 DISCLOSURE = re.compile(
-    r"\b(?:i[' ]?a?m an ai|an ai agent|ai agent (?:running|doing|operating|behind)|"
-    r"written by an ai|published by an ai|built by an ai|ai[- ]authored|as an ai\b|"
-    r"disclosure:\s*i|i run these (?:audits|as an ai))"
+    r"\b(?:i[' ]?a?m an ai|i[' ]?a?m a language model|an ai agent|an autonomous ai|"
+    r"ai agent (?:running|doing|operating|behind)|"
+    r"(?:written|published|built|sent|made|generated|operated|run) by (?:an ai|claude|"
+    r"a language model|artificial intelligence)|by an ai\b|ai[- ]authored|as an ai\b|"
+    r"artificial intelligence|language model|disclosure:\s*i|i run these (?:audits|as an ai))"
     # Japanese disclosure has NO leading word-boundary (no spaces in JA), so keep it OUTSIDE the \b
     # (run-1 iteration 093: the \b anchor silently made the Japanese pattern unmatchable):
-    r"|aiエージェント|aiが(?:書い|作っ|運用)",
+    r"|aiエージェント|aiが(?:書い|作っ|運用|送っ|生成)",
     re.IGNORECASE)
 
 

@@ -190,9 +190,10 @@ def send(to, subj, body):
                        capture_output=True, timeout=15)
         diff = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(SENT_LOG)],
                               cwd=REPO, capture_output=True, timeout=15)
-        if diff.returncode != 0:  # staged changes exist -> commit them
+        if diff.returncode != 0:  # staged changes exist -> commit ONLY the sent log (pathspec, so
+                                  # unrelated staged files are never swept into this commit)
             subprocess.run(["git", "commit", "--no-gpg-sign", "-m",
-                            f"sent-log: {to} | {subj[:60]}"],
+                            f"sent-log: {to} | {subj[:60]}", "--", str(SENT_LOG)],
                            cwd=REPO, check=True, capture_output=True, timeout=30)
     except Exception as e:
         print(f"REFUSING: could not commit SENT_LOG before sending ({e}). "
