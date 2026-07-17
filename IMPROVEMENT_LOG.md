@@ -153,3 +153,48 @@ unchecked → adversary-gated. M12 stays 0 (aiv_gate would have re-broken under 
 **Next (entry 004):** A4 iteration scaffold (bin/iter.py: monotonic numbering, verifier-anchored
 time, pre-filled packet hashes, atomic close, watch subcommand) + A3a bin/host_check.py with the
 aiv_gate publish-claim hook.
+
+---
+
+## Entry 004 — 2026-07-17T05:05Z–05:12Z — the harness owns the boilerplate; publishes must survive the serving layer
+
+**What:** A4 (`bin/iter.py`) and A3a (`bin/host_check.py` + the aiv_gate publish hook).
+
+**Why:** B4 was death by a dozen small cuts, every one documented in run 1: numbering gaps (024,
+027 unrecorded), 22 iterations of guessed timestamps, hand-copied manifest hashes, one empty
+commit that looked successful, and four full iterations burned polling time-gated externals. All
+of it is boilerplate; v1's own design rule said the harness owns boilerplate. Now it does:
+`iter.py new` allocates from a committed counter and pre-fills the packet with verifier-anchored
+time + the exact citable per-pull hashes (read from the ledger branch); `close` refuses on
+placeholders, runs the gate, and proves the blob is in HEAD; `watch` records external-clock waits
+without consuming iterations. B3a: a "published X" claim now requires a passing HOST_CHECK line —
+and the tool was validated against the genuine article: life-in-weeks.surge.sh STILL force-serves
+robots Disallow-all today, and host_check FAILs it with the exact diagnosis run 1 needed ~60
+iterations to reach.
+
+**Also caught and fixed:** the SECOND stale-claims-lane migration bug — aiv_gate's manifest read
+(`$MANIFEST` from the working tree) had the same defect as its truth.json read fixed in entry 003.
+Two instances of one bug class is a pattern: entry 006's audit must sweep every remaining
+working-tree read of verifier-owned files.
+
+**Verified by running:** robots parser 5/5 unit tests (group-aware: a bot-specific Disallow
+doesn't false-trip); example.com PASS; the real surge funnel FAIL; scratch-clone e2e — open
+(prefill correct, real hashes), close-refuses-on-<fill>, close-passes-gate + blob verified,
+watch tick, numbering advances 001→002 across all operations.
+
+**Scorecard:** M6: 0% → gate-enforced. M8: scaffold-owned (numbering, time, hashes, blob check).
+
+**Critique pass:**
+- The scratch-clone test exposed that the aiv gate PASSES a packet whose evidence CELLS are empty
+  (class rows present, contents blank) — v1's count-not-check weakness survives inside v2's packet
+  gate. Real fix is content-aware class checking; risky to over-tighten (false blocks), so:
+  queued as a named open item for entry 006's audit rather than rushed now.
+- iter.py's push failures are warnings by design (two-lane makes local commits durable), but a
+  long-offline sandbox could pile up unpushed iterations; the verifier can only see pushed work.
+  Mitigation already in RUN_COMMANDS step 4; consider a guard warning when ahead-of-origin > N.
+- host_check reads only the first 512KB and doesn't execute JS — a JS-injected noindex would slip
+  through. Acceptable: the v1 trap class was server-level, and Playwright is available for deep
+  checks when it matters.
+
+**Next (entry 005):** A6 context genericization of CLAUDE.md/PROMPT.md (issues #9/#10) +
+A7 knowledge/ seed (wall map, falsified table, traps) + beacon promotion note (A3b).
