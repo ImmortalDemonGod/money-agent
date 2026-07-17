@@ -1,3 +1,12 @@
+> **STATUS (open item): BUILT, DEPLOY PENDING a credential.**
+> The beacon worker is complete and syntax-checked but NOT yet deployed: the target Worker
+> (`one-honest-dollar.cloud-pyramid.workers.dev`) lives in the operator's Cloudflare account and the
+> sandbox wrangler is unauthenticated. A search of `~/black-box` (.env files, full-tree grep,
+> secrets.yml, wrangler.toml) and wrangler's global config found no usable `CLOUDFLARE_API_TOKEN`
+> (only `cloudflared` tunnel usage + a Hetzner `HCLOUD_TOKEN`). **To finish: provide a scoped
+> `CLOUDFLARE_API_TOKEN` (Workers Scripts: Edit, D1: Edit, Account: Read) + the account ID, or run
+> the steps below.** Until then, real bot-vs-human traffic on the estate remains unmeasured.
+
 # Beacon deploy — measure real traffic on the claimed Worker
 
 The Worker `one-honest-dollar.cloud-pyramid.workers.dev` is in YOUR Cloudflare account; my sandbox
