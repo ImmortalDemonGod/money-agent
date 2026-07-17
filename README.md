@@ -514,7 +514,9 @@ exhaustion. The open work is in the [issue tracker](../../issues).
 
 ## Read the evidence
 
-The repo is the evidence; nothing here asks you to take the agent's word for it.
+The repo is the evidence; nothing here asks you to take the agent's word for it. A file-by-file map
+of everything on this branch — what each file is, who wrote it, and when to read it — is in
+[`INDEX.md`](INDEX.md).
 
 1. **`ledger/truth.json`** — the only numbers grounded out of band.
 2. **`MONEY_LOG.md` vs the ledger** — the drift between what the agent said and what was true.
