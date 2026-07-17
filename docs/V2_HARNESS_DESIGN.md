@@ -762,3 +762,99 @@ judgment oracle — bounded autonomy, the H1/H2 shape aiv-workflow never apologi
 for; the honest statement is that FC3 is irreducible, not that it was mechanized.
 (3) Every P1 adapter and P6 probe is new attack surface on the verifier host —
 `host_check.py:28-40`'s SSRF posture applies to each.
+
+---
+
+## 16. Benchmarking — the evaluation pyramid for a system whose runs are permanent
+
+The problem: a live run is involved (operator, verifier host, real credentials,
+day-scale clocks) and PERMANENT (real emails under a real name, channel reputation,
+world state that does not reset). You cannot run 50 trials for variance. The answer is
+a decomposition: "benchmark the money agent" conflates three measurements, and only
+one needs the expensive run.
+
+- The **harness** is benchmarkable for free, per commit, forever.
+- The **policy** (search discipline, bet hygiene, bounds behavior) is benchmarkable in
+  repeatable shadow runs — possible ONLY because the verification architecture forces
+  every decision through committed artifacts. **The audit trail is the benchmark
+  surface**; this is the unplanned dividend of the whole design.
+- The **outcome** (will a stranger pay?) is not benchmarkable in the statistical
+  sense at all. It is an experiment: n stays tiny, the world is not resettable. The
+  move is not to repeat it cheaply but to make each run maximally informative.
+
+v2 already contains the seeds: the M1–M12 scorecard (docs/V2_DESIGN.md) benchmarks
+harness properties against v1 baselines *measured from the run record*, and
+PREDICTION.md (frozen, agent-unreadable, `setup_sandbox.sh:111`) makes each live run a
+pre-registered hypothesis test. This section arranges those seeds into tiers.
+
+### Tier 0 — Gate regression suite (seconds, per commit)
+
+The `setup_sandbox.sh` pattern (attempt the forbidden thing, assert it fails) extended
+by the key move: **run 1 is a fixture corpus.** Its failures are recorded scenarios
+with known ground truth. Replay the literal iteration-095 exhaustion packet + open-bet
+state against `conclusion_gate.py` and assert FAIL; replay the "$47 claim anchored to
+a $0 pull" against `aiv_gate.sh`; replay a captured `Disallow: /` against
+`host_check.py`. The scorecard's "How verified" column already names tests of this
+class (kill-during-append, e2e refusal, fresh-clone). Discipline going forward: every
+gate change ships with its run-1 replay fixture where one exists — the aiv-workflow
+selftest-fixture rule, applied here.
+
+### Tier 1 — Shadow runs (hours, cheap, repeatable): benchmark the POLICY
+
+Configuration `SHADOW=1`: test-mode Stripe AND no live card (the mode-mismatch guard
+exists because test+live is the unwinnable combination; test+test is the benchmark
+combination — the guard should learn to bless it explicitly), mail captured-not-
+delivered (the sandbox egress-block promoted from accident to feature: sends are
+logged, scored, never sent), channels stubbed from `knowledge/channel_map.json`,
+optionally scripted counterparties — including **planted dilemmas** (a self-purchase
+opportunity, a promise-delivery-later buyer, a scrape-and-sell shortcut) scored on
+refusal behavior.
+
+Fake dollars mean dollars are NOT the score. The score is process metrics computed
+mechanically from the committed record: premature-conclusion rate (blocked-claims
+without reproduction artifacts), bet hygiene (external-clock actions registered vs
+not), instrumentation coverage (claims whose success condition cites a live oracle),
+correction latency (iterations from overclaim to retraction), demand-probe ratio,
+refusal correctness on the planted dilemmas. These extend M1–M12 from harness
+properties to policy properties, with the same form: metric, baseline, mechanical
+check.
+
+Two multipliers: (a) **weak-model-as-sensor** (aiv-workflow's method) — drive shadow
+runs with cheap models; anywhere a weak agent escapes a bound ungated is a harness
+hole found for pennies; (b) shadow runs are where candidate agents/prompts/primitives
+A/B against each other on identical stubbed worlds.
+
+The honest limit, stated where it binds: shadow runs measure *discipline and search
+breadth*, never market truth. A simulated founder's reply is not demand evidence. Sim
+scores the agent; only reality scores the market.
+
+### Tier 2 — Paper rails (real world, zero permanence)
+
+The edge rail already IS this tier: the broker's real books, fake capital, full
+verifier machinery. Generalized under P1: any rail with a paper tier runs identically
+— test-mode Stripe is "paper commerce" in exactly this sense. The bridge between sim
+and live: real-world friction and real APIs, nothing permanent.
+
+### Tier 3 — Live runs (rare, permanent): experiments, not benchmarks
+
+Three disciplines make the cost pay:
+
+1. **Pre-registered predictions** (PREDICTION.md, already built): the run scores by
+   falsifying or confirming a frozen claim — never by contributing to a dollar mean
+   that will not reach statistical n in this lifetime.
+2. **Mandatory corpus extraction**: each run feeds `knowledge/` (automatic via
+   `outcomes.jsonl`), mints tier-0 fixtures from its failures, and updates scorecard
+   baselines. Run 1's 88 iterations became `channel_map`/`falsified`/`traps` + the
+   M1–M12 baselines; that is the template. Run N's record is run N+1's benchmark
+   data — the involvement amortizes or it doesn't pay.
+3. **A permanence budget**: the name is the one non-resettable resource; sends and
+   publishes under it are budgeted and counted (SENT_LOG already counts). The
+   run-level figure of merit is not dollars but **information yield per unit of
+   permanence spent** — live runs are not i.i.d. samples, and each one should retire
+   questions the cheaper tiers cannot.
+
+### The rule that falls out
+
+Never buy at a higher tier what a lower tier sells: harness bugs at tier 0, policy
+regressions at tier 1, integration reality at tier 2, and only market truth — the one
+thing money can't simulate — at tier 3.
