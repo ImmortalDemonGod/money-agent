@@ -38,12 +38,14 @@ v2 is **not** "v1 with a bigger cap." It is the specific experiment v1's two fin
 
 Each one names the change it forces in the next version.
 
-**1. The wall is reach, and the wall is an artifact of the objective.**
-v1's binding constraint was never product quality or honesty. It was reach to a stranger who will pay. But
-that wall is an artifact of measuring *time-to-first-dollar*: a "make a dollar tonight" objective forbids
-every strategy whose payoff follows a research-and-build phase (validate an edge, rank a page, earn a
-reputation) and leaves only reach-gated hustle. The frame did not fail to find good strategies. It forbade
-them.
+**1. The wall is an artifact of the objective — and whether it is reach or conversion is unmeasured.**
+v1's binding constraint was never product quality or honesty. It was getting a stranger to pay. Whether
+that wall is *reach* (nobody arrived) or *conversion* (they arrived and did not buy) is undetermined: traffic
+was never measurable — the surge funnels have no analytics and telegra.ph gives only an unattributable view
+count — so the verified $0.00 is consistent with either. Either way, that wall is an artifact of measuring
+*time-to-first-dollar*: a "make a dollar tonight" objective forbids every strategy whose payoff follows a
+research-and-build phase (validate an edge, rank a page, earn a reputation) and leaves only the same-night,
+arrival-gated hustle. The frame did not fail to find good strategies. It forbade them.
 → **v2 lifts the constraint:** more capital and a longer horizon, so delayed-payoff strategies become legal
 and testable for the first time.
 
@@ -63,7 +65,8 @@ The full writeup of finding 2 is [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md).
 
 The open work is the [issue tracker](../../issues). In dependency order: **#7** grounds the stop decision (do
 this first, or v2 reproduces v1's premature-stop failure); #1 and #2 raise the agent's craft; #3, #4, and #6
-address the reach-is-an-artifact finding by giving it time, findable surfaces, and delayed-payoff strategies;
+address the wall-is-an-artifact finding by giving it time, findable surfaces (which also finally *measure*
+whether anyone arrives), and delayed-payoff strategies;
 #5 is targeting.
 
 ---
