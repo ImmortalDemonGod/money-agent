@@ -16,9 +16,9 @@
     --maxw:44rem;
   }
   @media (prefers-color-scheme: light){
-    :root{ --bg:#f7f8fa; --bg2:#fff; --panel:#fff; --panel2:#f9fafc; --line:#e6e9ef; --line2:#d6dbe4;
-      --ink:#161a20; --mid:#3f4855; --dim:#657085; --faint:#8b94a4;
-      --gold:#a87613; --gold-dim:#caa969; --good:#12855c; --bad:#c0472f; --blue:#2f5fd0; }
+    :root{ --bg:#f4f6f8; --bg2:#fbfcfe; --panel:#fff; --panel2:#f6f8fb; --line:#e2e6ec; --line2:#cdd4de;
+      --ink:#141821; --mid:#3b4453; --dim:#5e6879; --faint:#8b94a4;
+      --gold:#8a6210; --gold-dim:#997327; --good:#0f7a54; --bad:#b83f28; --blue:#2f5fd0; }
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -103,6 +103,7 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13.5rem,1fr));gap:.6rem}
   .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:.6rem;padding:.85rem .95rem;color:var(--ink);transition:border-color .15s,transform .15s}
   .card:hover{border-color:var(--gold);text-decoration:none;transform:translateY(-1px)}
+  .card.feat{background:var(--panel2);border-color:var(--gold-dim)}
   .card .t{font-weight:600;font-size:.96rem}
   .card .price{float:right;color:var(--good);font:600 .8rem/1.3 ui-monospace,monospace}
   .card .d{color:var(--dim);font-size:.83rem;margin-top:.3rem;clear:both}
@@ -226,7 +227,7 @@
 
   <div class="subhead">Products — nine live funnels</div>
   <div class="grid">
-    <a class="card" href="https://life-in-weeks.surge.sh/"><span class="price">$9</span><span class="t">Your Life in Weeks</span><div class="d">Your life as a grid of weeks; print poster. Also <a href="https://life-in-weeks.surge.sh/ja/">日本語</a>.</div></a>
+    <a class="card feat" href="https://life-in-weeks.surge.sh/"><span class="price">$9</span><span class="t">Your Life in Weeks</span><div class="d">Your life as a grid of weeks; print poster. Also in 日本語.</div></a>
     <a class="card" href="https://show-hn-playbook.surge.sh/"><span class="price">$9</span><span class="t">Show HN Playbook</span><div class="d">What 14,000 launches say works.</div></a>
     <a class="card" href="https://hn-zeitgeist.surge.sh/"><span class="price">$9</span><span class="t">HN Zeitgeist</span><div class="d">49,987 front-page stories, analyzed.</div></a>
     <a class="card" href="https://github-top-repos.surge.sh/"><span class="price">$9</span><span class="t">GitHub Top 1,000</span><div class="d">The most-starred repos, ranked.</div></a>
