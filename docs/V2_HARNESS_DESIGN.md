@@ -459,3 +459,105 @@ adopted from day one.
 4. **Horizon parameter.** Who sets the run clock relative to oracle windows — config
    (`spine.yml: max_oracle_window`) refusing bets whose deadline exceeds the run's end?
    Probably yes: a bet that cannot resolve inside the run should not register.
+
+---
+
+## 14. Stress tests — three adversarial business shapes
+
+The design was walked through the three businesses a money-tasked agent most plausibly
+gravitates to. Each probes a *different* wall. Verdicts, then the four amendments the
+exercise produced (A1–A4, folded back into the sections they modify).
+
+| Business | Verdict | Caught by | Amendment surfaced |
+|---|---|---|---|
+| Stock trading / arbitrage | Refused at registration | Out-of-rail check (A1) | A1 |
+| Selling scraped datasets | **Legal path** — channeled through the spine | Ordering + oracles shape it | A2, A3 |
+| Dropshipping | Refused at stage 3 | Instant-delivery test (A4) | A4 |
+| Affiliate marketing | Refused at registration | Out-of-rail check (A1) | A1 |
+
+### 14.1 Stock trading / arbitrage
+
+Edge-*development* bets register legitimately: "backtest metric ≥ X on held-out data"
+is a deterministic oracle the harness can run, and CLAUDE.md's delayed-payoff clause
+permits build-and-verify toward a VERIFIED milestone (v1 precedent: the front-page
+predictor with its pre-registered 2.5× bar, honored against itself, iters 073–074).
+The *revenue* bet is where it dies: trading profit arrives via a brokerage rail, which
+is not an oracle surface — and deeper, the spine vocabulary presumes a **customer**;
+trading is customer-less revenue, so no demand-confirmed bet is even expressible and
+stage 2 can never exit on it.
+
+As originally specified, that refusal surfaced as a confusing type-system mismatch,
+*after* edge bets had burned iterations. CLAUDE.md already holds the right behavior in
+prose ("a strategy that would pay through a different rail is not scored here — name it
+and let the operator decide"). Hence:
+
+> **A1 — Out-of-rail check (amends §4.3).** `bet_gate.py` refuses any bet whose
+> terminal revenue path does not end at the Stripe oracle, with the CLAUDE.md
+> name-it-to-the-operator message verbatim. Out-of-rail strategies are not *wrong*;
+> they are outside the experiment's measurement boundary, and the gate must say
+> exactly that, at registration, before effort is spent. (Also kills affiliate
+> marketing: commissions pay via the network's rail, not the agent's Stripe.)
+
+Sub-case: *selling market analysis as a product* (signals newsletter) passes the rail
+check and deliver-in-full — but is unregistered investment advice under a real man's
+name. Bounds territory → A2.
+
+### 14.2 Selling scraped datasets to market firms
+
+The instructive case, because it is a **legal path through the spine** and legal paths
+find subtler flaws than forbidden ones. What works as designed: datasets are ideal for
+deliver-in-full (the file transfers at the payment instant); the demand bet registers
+(reply-with-purchase-intent, instrumented); ordering and deliver-in-full do **not**
+contradict — the forced sequence is intent → build → deliver → payment, because
+demand-confirmed means *expressed willingness*, never pre-payment. B2B procurement
+timescales are handled honestly by the horizon rule (open question 4): the bet either
+forces a long-horizon run or refuses — surfacing the objective-shape problem at
+registration instead of in a retro. Two real gaps:
+
+> **A2 — Registration ≠ authorization; the `bounds_note` field (amends §4.2).** The
+> bet gate checks falsifiability, not bounds — and a registered bet must never *read
+> as authorized*, or the design has rebuilt verification theater in reverse ("the gate
+> passed it, so it's fine" — the LOCAL-not-GLOBAL error, reborn). Fix reuses the
+> proven iter-092 pattern (`disclosure_gate.py`): every bet-spec requires a
+> `bounds_note` — the recorded name-test reasoning — fail-closed on **absence**, never
+> graded on content. The gate cannot judge whether scraping a source is acceptable; it
+> can refuse to let the agent act without having committed a recorded answer under a
+> name it must stand behind. Scraping ToS/licensing/personal-data calls, and the
+> investment-advice sub-case above, all route through this field into REFUSALS.md when
+> the answer is no.
+
+> **A3 — The `probe` bet type (amends §5.1 stage 2, §5.2).** The ordering rule "no
+> build before demand-confirmed" is too coarse: you cannot credibly probe a market
+> firm's demand without a dataset *sample*, and v1's best demand pattern — the 062–068
+> escalation, "I made you the fix," where building the artifact WAS the probe — would
+> itself have been blocked. Stage 2 therefore admits `probe` bets: minimal artifact
+> construction, capped in effort and spend, explicitly distinct from `delivery`.
+> Without A3 the harness forbids the strongest move v1 discovered.
+
+### 14.3 Dropshipping (and the sharpest catch)
+
+The constitution kills dropshipping — fulfilment happens *after* payment, by a third
+party: the exact "disputable charge on a real man's name" scenario deliver-in-full
+exists for. But the harness **as first specified did not**: the stage-3 exit read
+"product delivered end-to-end to a test path," which a loosely-worded dropship flow
+could arguably pass. The bound was enforced only by prose. Hence:
+
+> **A4 — Instant-delivery test (amends §5.1 stage 3).** The `delivery` bet's
+> deterministic test is defined as *instant delivery*: payment-link → redirect →
+> **complete** deliverable received, all within one session, with the harness driving
+> the test-purchase path itself. A dropship flow structurally cannot pass (the good
+> arrives days later from a supplier); a digital artifact passes trivially. This makes
+> the deliver-in-full bound **mechanical for the first time** — a constitutional rule
+> becomes a gate the flow fails rather than a sentence the agent remembers.
+
+### 14.4 Meta-finding
+
+Where the three land — trading refused at the rail, scraped data channeled through
+demand-first with recorded bounds reasoning, dropshipping/affiliate refused at
+delivery/rail — the patched harness mechanically funnels the agent toward the one
+shape satisfying every bound at once: **an already-built digital artifact, sold to a
+reachable human, through Stripe.** That is precisely where v1 converged after 88
+iterations of operator steering. The harness encodes the convergence the run paid to
+discover — and three of the four amendments close *false negatives* (things the
+original design would have wrongly allowed or confusingly refused), which is what a
+stress test is for.
