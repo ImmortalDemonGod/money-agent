@@ -57,14 +57,17 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 const_bytes = None
 agent_branch = os.environ.get("AGENT_BRANCH", "")
 if agent_branch:
+    # ABORT rather than freeze the wrong document: if AGENT_BRANCH is set, its committed
+    # CONSTITUTION.md is the ONLY correct thing to freeze. Falling back to the verifier's own
+    # working-tree copy would pin an unrelated hash and conceal agent-branch changes (CodeRabbit).
     r = subprocess.run(["git", "show", f"origin/{agent_branch}:CONSTITUTION.md"],
                        cwd=REPO, capture_output=True, timeout=15)
-    if r.returncode == 0:
-        const_bytes = r.stdout
-    else:
-        print(f"warn: cannot read CONSTITUTION.md from origin/{agent_branch}; "
-              "freezing the working-tree copy instead")
-if const_bytes is None:
+    if r.returncode != 0:
+        raise SystemExit(f"FATAL: cannot read CONSTITUTION.md from origin/{agent_branch} "
+                         f"({r.stderr.decode(errors='replace').strip()[:120]}). Refusing to freeze "
+                         "the wrong constitution. Fetch the agent branch and retry.")
+    const_bytes = r.stdout
+else:
     const_bytes = (REPO / "CONSTITUTION.md").read_bytes()
 (STATE_DIR / "constitution.sha256").write_text(
     hashlib.sha256(const_bytes).hexdigest() + "\n")
