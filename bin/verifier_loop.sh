@@ -55,6 +55,7 @@ say "verifier up (two-lane). facts=$LEDGER_BRANCH agent=${AGENT_BRANCH:-<unset>}
 while true; do
   # 1. converge OUR lane only. This reset touches the verifier's own branch -- the agent's branch
   #    is never named anywhere in this loop, which is the whole point of v2.
+  # TEST-MARKER: convergence-begin (tests/sim.sh extracts this block verbatim)
   #    Do NOT reset away a local commit that has not reached origin yet: if a prior cycle committed
   #    but the push failed, resetting to origin would discard committed raw pulls (CodeRabbit). So
   #    push any pending local commits FIRST, and only reset when local is not ahead of origin.
@@ -105,6 +106,7 @@ while true; do
     # reset only when we are NOT ahead of origin (else keep the local commits for next push)
     [[ "${AHEAD:-0}" -eq 0 ]] && git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
   fi
+  # TEST-MARKER: convergence-end
   # keep the agent's committed constitution reachable for pnl.py's hash check. FAIL CLOSED: if the
   # strong-mode fetch fails, a stale origin/AGENT_BRANCH could make pnl publish constitution_intact
   # =true after the agent changed its constitution -- so skip publication this cycle (CodeRabbit).
