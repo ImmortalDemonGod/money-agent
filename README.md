@@ -13,6 +13,10 @@ claim below comes only from the agent's own record, that is marked; where the re
 looks, that is called out (see "Where the record is weaker than it looks"). It is a living research
 program; each version is designed by the last one's findings. v1 is concluded.
 
+> **See the run before you read it:** [**one-honest-dollar.surge.sh**](https://one-honest-dollar.surge.sh/)
+> is a single page that walks through the whole experiment visually, led by the verified $0.00 result.
+> This document is its written companion.
+
 ---
 
 ## The invariant (holds across every version)
@@ -317,7 +321,7 @@ bottleneck).
 
 ## What the run shipped (public artifacts, live-checked at analysis time)
 
-**Live showcase:** [`one-honest-dollar.surge.sh`](https://one-honest-dollar.surge.sh/) — a single page
+**Live showcase:** [`one-honest-dollar.surge.sh`](https://one-honest-dollar.surge.sh/): a single page
 linking every public artifact below, led by the verified $0 result (source in `showcase/`).
 
 Every item below was live-verified when this analysis was written; where the run's internal summary
