@@ -611,3 +611,116 @@ stop is relaxed), G5 (out-of-rail message). And a process lesson this document n
 embodies: its own first draft reasoned from prose about a codebase that had moved —
 the same class of error as run 1's stale-conclusion habit, caught the same way,
 by checking the artifact instead of the memory of it.
+
+---
+
+## 15. Enabling rails — making cases 2 and 3 DOABLE, not just contained
+
+§14 diagnosed; this section constructs. The template is the edge rail itself: trading
+was v1's unscoreable/unsafe shape, and v2 enabled it not by relaxing a rule but by
+building a rail — pre-registration → an external system's books as the fact lane →
+a mechanical operator checkpoint before the harmful step. Both remaining cases
+decompose the same way.
+
+### 15.0 The recipe (and one new primitive)
+
+Every "the agent can't do X" splits into three parts, each with a known treatment:
+
+1. **A groundable fact** — some external system's books can attest it → build a
+   verifier pull (the Alpaca move).
+2. **An irreducible judgment** — legality, brand risk, ToS interpretation → an
+   **operator countersign on the facts lane**: the agent *requests* by committing a
+   registration on the claims lane; the operator *approves* by committing a signed
+   approval to the ledger branch the agent cannot write; `guard.py` checks presence,
+   not content. This is the one new primitive this section needs, and the two-lane
+   architecture already paid for it. Crucially it is **asynchronous**: the agent
+   registers an `approval`-clock bet (`bets.py` already has the clock class) and keeps
+   working other leads — the operator becomes an async oracle, never a blocker, so the
+   autonomy rule survives intact.
+3. **A harm window** — the interval where a customer could be hurt → fail-closed
+   automatic remediation held by the VERIFIER (not the agent), sized by exposure caps.
+
+### 15.1 The data rail (case 2: scraped datasets) — no constitutional change needed
+
+Nothing in the constitution forbids this shape; only bounds *uncertainty* blocks it
+(over-refusal) or gets it wrong (name-test damage). The rail:
+
+- **Pre-registration:** `DATA_REGISTRATION.md` before scraping at scale — sources
+  (domains/paths), per-source license basis (public-domain / open-license / ToS-cited),
+  PII policy, intended buyer class. Same freeze semantics as `EDGE_REGISTRATION.md`.
+- **Mechanical lane (deterministic, buildable today):**
+  - *robots compliance per source* — `host_check.py`'s exact logic pointed at source
+    paths instead of own funnels; run at registration and re-run at each scrape batch.
+  - *harness-owned scraper* with enforced rate caps, logging every fetched URL into a
+    hashed manifest (`ledger/raw` convention) so the dataset's provenance is a
+    committed, citable artifact — packets about the dataset must cite it (aiv_gate
+    pattern).
+  - *fail-closed PII scan* over the output (emails/phones/addresses/name-like
+    entities): any hit blocks listing until redacted and re-scanned clean. Detection
+    is imperfect → acceptable, because it fails closed AND sits under the countersign.
+- **Judgment lane:** one operator countersign **per SKU class** (e.g. "aggregated
+  public filings data"), requested async via an approval bet. First approval of a
+  class is human; every subsequent dataset of the same class lists mechanically.
+- **Delivery:** a file at the payment instant — passes the G4/A4 probe trivially.
+  Demand outreach already runs under `disclosure_gate` + reply-clock bets.
+
+Result: the agent can scrape, package, probe demand, and list — with the name-test
+judgment placed once per class, and every risky sub-fact (robots, rate, PII,
+provenance) grounded or fail-closed.
+
+### 15.2 The fulfillment rail (case 3: dropshipping) — operator-provisioned, like the edge rail
+
+Deliver-in-full's *purpose* is "no disputable charge on a real man's name."
+Post-payment fulfillment is not itself the harm; an unsupervised agent's inability to
+GUARANTEE fulfillment is. So ground the guarantee. This requires amending a frozen
+bound, which only the operator can do — so the rail ships exactly as the edge rail
+did: "IF the run is provisioned for it." The generalized bound:
+
+> Delivery is either INSTANT, or MECHANICALLY GUARANTEED by an out-of-band watchdog
+> holding refund authority.
+
+The machinery:
+
+- **Substrate proof before listing:** one test order to the operator's own address —
+  a `bets.py` shipping-clock bet proving the supplier chain end-to-end (the §5 stage-1
+  discipline, applied). No listing until it resolves `won`.
+- **The fact lane is the carrier's books** (the Alpaca move): on each sale the harness
+  auto-registers a fulfillment bet (supplier order within T hours → tracking obtained
+  → delivered-by deadline), and the VERIFIER polls the carrier tracking API
+  out-of-band. A fabricated or stalled tracking number gains the agent nothing: no
+  verified delivery by the deadline is simply a missed deadline.
+- **Fail-closed remediation: verifier-issued auto-refund.** Deadline missed → the
+  verifier refunds the charge via Stripe and disables the rail pending operator
+  review. This requires deliberately widening the verifier key from read-only to
+  read+refund — a documented posture change on the operator-controlled side; the agent
+  side gains nothing. The refund fires *before* a chargeback window matters, which is
+  what collapses the dispute risk onto ordinary refund mechanics.
+- **Exposure caps:** max 1 unfulfilled order initially, max item price, cumulative
+  unfulfilled liability ≤ a configured fraction of received funds; any refund event
+  halts the rail.
+- **Countersign:** the operator enables the rail per supplier, on the facts lane.
+
+**Affiliate marketing** is the light variant of the same construction: the operator
+provisions the network account (as they provisioned Alpaca paper creds); the verifier
+reads the network's reporting API as rail #3's fact lane (`ledger/affiliate.json`);
+and the FTC-disclosure requirement becomes mechanical by composing two existing tools —
+the published page must fetch live (`host_check` pattern) with the disclosure present
+and leading (`disclosure_gate` pattern) before any packet may claim the publish.
+
+### 15.3 What this buys, and what it costs
+
+Buys: the three shapes stress-tested in §14 all become *scored, bounded, doable* —
+none by weakening a wall, each by adding a fact lane and moving the irreducible
+judgment to an async, unforgeable operator signature. The funnel widens again, the way
+v2 widened it for trading.
+
+Costs, named honestly: (1) the verifier accretes authority (refunds, more API pulls) —
+it is becoming a small custodial system, and its own correctness is now
+harm-load-bearing, not just truth-load-bearing; its scripts deserve the same
+adversarial review cadence the gates got. (2) The countersign primitive reintroduces
+the operator into the loop — asynchronously and unforgeably, but §15 should not
+pretend this is full autonomy; it is autonomy with a human oracle for judgment calls,
+which is exactly the H1/H2 shape aiv-workflow never apologized for. (3) Each rail is
+real engineering (carrier polling, PII scanning, approval verification) and each new
+integration is new attack surface on the verifier host — SSRF-class care
+(`host_check.py:28-40`'s guard) applies to every new fetcher.
