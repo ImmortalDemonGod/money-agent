@@ -101,3 +101,55 @@ M5 completed (append_log generalizes the mail.py fix from entry 001).
 
 **Next (entry 003):** A2 (grounded stop: conclusion_gate + adversary requirement + /goal v2) plus
 the three queued migration fixes above.
+
+---
+
+## Entry 003 — 2026-07-17T04:58Z–05:08Z — the stop decision grounded like money (issue #7 closed at the harness layer)
+
+**What:** A2 implemented, plus the three migration fixes entry 002's critique queued.
+`bin/conclusion_gate.py` replaces the exhaustion gate: it is a permission-to-record check that can
+never end a run, its effort counters are labeled as a floor (necessary, not sufficient), and it
+adds the layer v1 lacked — NOVELTY: a fresh-context adversary (exact prompt in
+ADVERSARY_REPORT.template.md, runnable by agent or operator) must fail to find one untried
+in-bounds approach, and its verdict is pinned to sha256(MONEY_LOG.md) so any new work instantly
+stales it. RUN_COMMANDS.md carries the v2 /goal whose terminal set is closed: {verified customer
+dollar, verified cap exhaustion, operator}. "EXHAUSTION PROVEN" can no longer be printed by
+anything in this repo.
+
+**Why this shape:** run-1's iteration-096 diagnosis was exact — three prose safeguards shared one
+interpreter (the agent's judgment) and the one mechanical gate measured volume, not novelty. The
+fix is not a better exhortation; it is (a) removing the kill switch from the goal entirely, and
+(b) making the recordable-conclusion bar depend on an artifact the tired-of-searching agent cannot
+produce by summarizing its own work: an independent context that TRIES to defeat the conclusion.
+The sha256 pinning came from asking "how would I game my own gate?" — reuse last week's
+empty-handed report forever. Now it expires on contact with new work.
+
+**Migration fixes (from entry 002's critique):** aiv_gate.sh read money claims from
+HEAD:ledger/truth.json — the claims lane, permanently stale under two-lane; it now reads via
+truth.py (a real bug that would have silently weakened the false-money-claim check for the whole
+of run 2). start_verifier.sh no longer checks out the agent's branch at all; set_baseline.py
+freezes the constitution hash from the AGENT'S committed copy (matching pnl.py); setup_sandbox.sh
+preflight asserts facts resolve through the one read path and names the mode it found.
+
+**Verified by running:** five test paths — bare repo (all three layers fail, exit 1), crafted
+passing artifacts (exit 0 with the does-not-stop banner), adversary-FOUND (exit 1: "that is work
+to do"), stale sha256 (exit 1), deprecated shim delegates loudly. Test artifacts deleted, not
+committed.
+
+**Scorecard:** M2: self-certified termination possible → structurally absent. M3: novelty
+unchecked → adversary-gated. M12 stays 0 (aiv_gate would have re-broken under two-lane; caught).
+
+**Critique pass:**
+- The adversary is still agent-invoked (named in the gate's own output). The operator-side upgrade
+  is easy — run the same template from a fresh context — but nothing FORCES it. Genuinely open.
+- The adversary quality is unverifiable mechanically: a lazy 5-line search passes the length
+  check. Mitigation is the template's exact prompt + the operator re-run path; a future idea is
+  requiring the falsified-table hash pin too, so the adversary provably saw the right table.
+- CLAUDE.md/PROMPT.md still reference "exhaustion_gate" and v1 wording — genericization (A6) is
+  entry 005; until then the shim keeps old references working and loud.
+- conclusion_gate reads MONEY_LOG/SENT_LOG from the working tree (claims lane) — correct here,
+  since these are the agent's own claims about its own effort; only money facts route via truth.py.
+
+**Next (entry 004):** A4 iteration scaffold (bin/iter.py: monotonic numbering, verifier-anchored
+time, pre-filled packet hashes, atomic close, watch subcommand) + A3a bin/host_check.py with the
+aiv_gate publish-claim hook.
