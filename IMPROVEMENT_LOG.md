@@ -198,3 +198,52 @@ watch tick, numbering advances 001→002 across all operations.
 
 **Next (entry 005):** A6 context genericization of CLAUDE.md/PROMPT.md (issues #9/#10) +
 A7 knowledge/ seed (wall map, falsified table, traps) + beacon promotion note (A3b).
+
+---
+
+## Entry 005 — 2026-07-17T05:23Z–05:28Z — context hygiene + the compounding layer
+
+**Loop note (meta, belongs in this log):** the 10-minute cron died the same death as the 20-minute
+one — session-only job stores do not survive this environment's session recycling. CronList showed
+"No scheduled jobs" 12 minutes after entry 004. The pacer is now ScheduleWakeup (queued-prompt
+delivery, no dependence on the in-memory cron store). This is itself a v1-class lesson: a scheduler
+that silently loses its schedule is a stale-ledger problem wearing a different hat — liveness must
+be owned by a mechanism that fails loudly. Same design rule, applied to my own loop.
+
+**What:** A6 + A7. CLAUDE.md/PROMPT.md genericized — the three leak sites issue #9 names (the
+"audits X" disclosure example, the two share-loop/localized build clauses) are neutralized to
+principles; M9's grep now returns zero strategy nouns across every agent-facing file. CLAUDE.md
+gains the "Your world" clause (issue #10, option 2): inputs enumerated, README/docs/prior-run
+branches declared off-limits for strategy. PROMPT.md's iteration protocol now speaks v2: truth.py,
+iter.py new/close/watch, the host_check publish rule, knowledge/-before-planning, and the
+conclusion gate explicitly described as never-a-stop-signal. knowledge/ is seeded from run 1's
+expensively-earned map: 19 tested channels with their gates, 7 falsified approach classes, the 2
+still-open bets (including reach-vs-conversion UNDETERMINED — preserved so run 2 doesn't inherit
+the retracted "reach is the wall" overclaim), and 9 operational traps. bin/outcome.py records new
+outcomes as JSONL through the durable append path.
+
+**Why:** B6 and B7 are two faces of one problem — what the next run knows. Too much of the wrong
+kind (v1's business) breaks the experiment's premise; too little of the right kind (v1's walls and
+traps) taxes it ~17 hours of re-derivation. The line drawn: operational forever-facts in, strategy
+out, and the M9 grep extended to knowledge/ so the line is checkable, not aspirational.
+
+**Verified:** M9 grep = 0 on CLAUDE.md/PROMPT.md/CONSTITUTION.md/RUN_COMMANDS.md AND knowledge/;
+both JSON files parse; outcome.py add+query e2e in a scratch clone (durable commit confirmed).
+
+**Scorecard:** M9: ≥3 → 0. M10: 0 → seeded + recorder. Remaining open: M7 (beacon promotion — the
+one A-item not yet landed) and the entry-006 audit.
+
+**Critique pass:**
+- knowledge/channel_map.json cites run-1 iteration numbers as evidence. Useful for the operator;
+  a curious v2 agent could treat them as an invitation to read the run-1 branch. The "Your world"
+  clause forbids it, but that is prose, and this program's whole finding is what prose is worth.
+  Mitigation candidate for entry 006: keep the map, strip the iteration refs into an
+  operator-facing sidecar. Decision deferred to the audit.
+- PROMPT.md's fenced block has grown; the changelog section below it still describes v1 history.
+  Acceptable (it is operator-facing docs inside an agent-facing file), but flagged.
+- The beacon (M7) is still on the run-1 branch only. If entry 006 runs short, the honest move is
+  to log it as NOT-promoted and leave M7 open rather than rush a security-relevant port.
+
+**Next (entry 006, final in window):** the audit iteration — full-sweep for remaining
+working-tree reads of verifier-owned files (two instances of that bug class already found),
+adversarial review of everything landed, scorecard reconciliation, closing entry.
