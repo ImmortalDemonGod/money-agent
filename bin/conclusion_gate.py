@@ -107,21 +107,35 @@ def main() -> int:
         fails.append(f"effort floor not met: {len(sent_lines)} demand probes in SENT_LOG.md "
                      f"(need >= {MIN_DEMAND_PROBES}).")
 
-    # --- layer 2: the packet, all five bars, no placeholders
+    # --- layer 2: the packet. Every bar AND the conclusion must carry REAL evidence -- not the
+    # template's own instruction prose. The template ships all instructions as `>` blockquote lines
+    # and a sentinel; the gate rejects the sentinel and ignores `>` lines when counting content, so
+    # a copied-but-unfilled template has zero evidence and FAILS (CodeRabbit finding: instructional
+    # prose used to count as content, letting a blank template pass).
     if not PACKET.exists():
         fails.append("EXHAUSTION_PACKET.md does not exist (copy the template and fill it with "
                      "real evidence).")
     else:
-        secs = _sections(_read(PACKET))
-        for bar in BARS:
+        raw = _read(PACKET)
+        if "UNFILLED-EXHAUSTION-TEMPLATE" in raw:
+            fails.append("EXHAUSTION_PACKET.md still carries the unfilled-template sentinel -- it "
+                         "has not been filled with real evidence.")
+        secs = _sections(raw)
+
+        def _evidence(body: str) -> list[str]:
+            # a real evidence line is non-empty, NOT a `>` instruction, and NOT a placeholder
+            return [ln.strip() for ln in body.splitlines()
+                    if ln.strip() and not ln.lstrip().startswith(">")
+                    and not PLACEHOLDER.search(ln.strip())]
+
+        for bar in BARS + ["CONCLUSION"]:  # the conclusion itself now needs real content too
             body = next((b for h, b in secs.items() if bar in h), None)
             if body is None:
                 fails.append(f"packet missing the '{bar}' section")
                 continue
-            content = [ln.strip() for ln in body.splitlines()
-                       if ln.strip() and not PLACEHOLDER.search(ln.strip())]
-            if not content:
-                fails.append(f"packet '{bar}' section is empty or placeholder")
+            if not _evidence(body):
+                fails.append(f"packet '{bar}' section has no real evidence (only instructions/"
+                             "placeholders) -- fill it with plain (non-'>') lines")
 
     # --- layer 3: NOVELTY -- the fresh-context adversary must have come back empty-handed
     if not ADVERSARY.exists():
@@ -131,6 +145,26 @@ def main() -> int:
     else:
         rep = _read(ADVERSARY)
         cur_hash = hashlib.sha256(MONEY_LOG.read_bytes()).hexdigest() if MONEY_LOG.exists() else ""
+        # provenance the template promises: WHO generated this and WHEN. Without it a report carries
+        # no evidence it came from a fresh context or the operator (CodeRabbit).
+        if not re.search(r"^GENERATED_BY:\s*(fresh subagent|operator)\b", rep, re.MULTILINE | re.I):
+            fails.append("adversary report has no valid GENERATED_BY (fresh subagent | operator).")
+        # ROUND-3 FIX: the previous check ANDed an anchored search with an unanchored superset, so
+        # it reduced to "does 'DATE:<nonspace>' appear anywhere" -- 'UPDATE: reran' and template
+        # prose both passed. Require a parseable ISO-8601 value (the template puts DATE: on the
+        # GENERATED_BY line, so the field is matched anywhere, but its VALUE must be a real date).
+        m_date = re.search(r"\bDATE:\s*(\d{4}-\d{2}-\d{2}(?:[T ][0-9:.]+(?:Z|[+-]\d{2}:?\d{2})?)?)",
+                           rep)
+        if not m_date:
+            fails.append("adversary report has no ISO-8601 DATE (e.g. DATE: 2026-07-17T17:30:00Z) "
+                         "-- a verdict without a real timestamp carries no 'when' provenance.")
+        else:
+            try:
+                import datetime as _dt
+                _dt.datetime.fromisoformat(m_date.group(1).replace("Z", "+00:00"))
+            except ValueError:
+                fails.append(f"adversary report DATE {m_date.group(1)!r} does not parse as "
+                             "ISO-8601.")
         m = re.search(r"^MONEY_LOG_SHA256:\s*([0-9a-f]{64})\s*$", rep, re.MULTILINE)
         if not m:
             fails.append("adversary report pins no MONEY_LOG_SHA256 -- a verdict not bound to the "

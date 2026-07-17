@@ -11,7 +11,7 @@ Rule for every entry: what changed | why (cite the v1 evidence) | how it's measu
 
 ---
 
-## Entry 001 — 2026-07-17T04:17Z–04:4xZ — inventory, design, and the send-path repair
+## Entry 001 — 2026-07-17T04:17Z–04:40Z — inventory, design, and the send-path repair
 
 **What:** Bottleneck inventory B1–B9 (each cited to MONEY_LOG iterations), architecture A1–A8,
 scorecard M1–M12 (`docs/V2_DESIGN.md`). First mechanical fix: A5, the send path on main.
@@ -380,7 +380,132 @@ messages carried the loop the rest of the way. Stopping the loop now: A1–A8 sh
 run and triaged, scorecard reconciled. Remaining work is the four DEGRADED items above, which are
 follow-ups for a fresh session, not this window.
 
-## Entry 009 — 2026-07-17 (follow-up branch) — the two things PR #18 named and skipped: the edge rail (#6) and standing posture (#4)
+---
+
+## Entry 009-010 — 2026-07-17 — CodeRabbit review response (2 rounds) + scorecard correction
+
+An automated reviewer (CodeRabbit) reviewed PR #18 in two passes: 6 Critical inline, then a deeper
+1 Critical + 22 Major + 8 Minor. It found real defects — several in my own entry-008 fixes. The
+program's thesis again: an independent reviewer catches what self-review does not.
+
+**Fixed (round 1, entry 009 — the 6 Criticals):** unfilled-exhaustion-packet passing (instructions
+are now `>` lines the gate ignores + a sentinel + a required CONCLUSION); guard SoD made
+ancestry-scoped (committer-date-independent) AND fail-closed (was warn-and-pass — a tripwire that
+swallowed its own failure); iter.py manifest reads the verifier manifest only; sod_hook covers
+mail.py; truth.py branch cross-check; the SETUP "wall" overclaim corrected to the honest
+tripwire-vs-provisioning framing.
+
+**Fixed (round 2, entry 010 — security/correctness):** supervise.sh code-exec via JSON
+interpolation → stdin parse; host_check SSRF guard + multi-User-agent robots parsing; fail-closed
+constitution checks in set_baseline + pnl + aiv_gate; aiv_gate two-lane manifest requirement;
+verifier_loop mktemp + push-before-reset + agent-fetch fail-closed; path-limited commits in
+iter/append_log + index rollback; disclosure EV record requires audience+rationale; adversary
+report requires GENERATED_BY+DATE; truth.py fetch-timeout resilience; caffeinate portability;
+beacon secret-salt + referrer minimization. All verified by running.
+
+**Deliberately SKIPPED, with reasons (not silently ignored):**
+- The "record a disclosure-EV decision for host_check.py / docs/V2_DESIGN.md / the beacon README /
+  this cohort" findings: category error. `bin/disclosure_gate.py` governs OUTBOUND messages to
+  third parties under the real name; internal repo files are not outbound. Requiring an EV line to
+  commit a Python file is not this repo's contract. (The beacon's rendered HUB PAGE is outbound and
+  DOES need a decision — that one is kept in the README checklist.)
+- outcome.py full "strategy-free" schema enforcement: strategy is not mechanically classifiable. I
+  added fail-closed non-empty fields + an obvious-noun denylist; the rest stays review-backed, and
+  knowledge/README states the rule. Honest partial, not a claimed wall.
+- iter.py new() full allocation rollback and a few other "heavy lift" robustness items: the counter
+  advancing on a failed commit is self-correcting (next `new` sees the packet exists and errors);
+  logged as low-severity known-open rather than rushed.
+
+## Scorecard reconciliation (correcting entry-008's overstatement, per CodeRabbit)
+
+Entry 008 marked all twelve M-targets "MET". That overstated three, exactly the verification-theater
+pattern this project exists to avoid. Corrected standing:
+
+- **M1 (evidence-loss events → 0):** MET on the CLAIMS lane (the v1 failure). PARTIAL on the FACTS
+  lane — a persistently failing push before a reset can still drop raw pulls; entry-010 mitigates
+  (push-before-reset) but does not fully close it. State: **claims-lane MET, facts-lane mitigated-not-proven.**
+- **M3 (novelty check):** MET as a mechanism, but the adversary is agent-invocable and its search
+  quality is not mechanically verifiable — **strong tripwire, not out-of-band grounding.** Unchanged from entry 003's honest caveat.
+- **M6 (publishes serving-verified):** the gate now RE-RUNS host_check (entry 004 + the entry-010
+  SSRF/robots fixes), so this is genuinely enforced — **MET**, and hardened since entry 008.
+- **M7 (reach measurable):** the beacon exists and is privacy-hardened, but it is **not deployed or
+  live-tested** (needs a Cloudflare token). State: **built, NOT live — DEGRADED until a live deploy.**
+- The packet gate still accepts thin evidence CELLS in the A–F table (only conclusion_gate got the
+  no-blank-section treatment). Known-open.
+
+Honest one-line: v2 is a real structural improvement, now adversarially reviewed TWICE and hardened,
+but it remains **unproven on a live run**, and M1(facts-lane)/M7 carry named residuals rather than
+being fully closed. The PR body's "all twelve met, three with residuals" should be read as **nine
+cleanly met, three (M1-facts/M3/M7) carrying explicit residuals** — this entry is the correction.
+
+## Entry 011 — ROUND 3: an independent review falsified two of entry 010's claims; fixes + corrections
+
+An independent reviewer (fresh context, full-delta read, empirical tests) audited entries 009-010
+against the code. Its headline finding is exactly the failure class this repo hunts: **entry 010's
+push-before-reset fix was INERT, and the "All verified by running" line was therefore false.**
+
+**The inert fix (HIGH, now actually fixed and actually observed).** `git rev-list -q <range>` is a
+usage error (rc 129); with stderr swallowed the substitution was always empty, so the
+push-before-reset branch never fired and `reset --hard` ran unconditionally every cycle — the
+facts-lane data-loss window (commit lands, push blips, next cycle's reset destroys the raw pull)
+stayed fully open while the log recorded it fixed. The rewritten block uses `git rev-list --count`
+plus a `merge-base --is-ancestor` split (genuinely-ahead → push and never reset over; diverged →
+converge loudly rather than deadlock). This time the behavior was OBSERVED: with pushes blocked at
+the remote, the stranded commit and its raw pull survive the cycle with a WARN; after unblocking,
+the next cycle pushes them ("recovered N stranded facts commit(s)").
+
+**Corrections to the record (they outrank the prose that contradicts them):**
+- Entry 010's "All verified by running" is RETRACTED as written. Correct statement: the round-2
+  fixes were verified at the component level EXCEPT verifier_loop's push-before-reset (inert, see
+  above — it could never have been observed working) and the beacon changes (not deployed; already
+  stated at the scorecard, contradicting the blanket line).
+- The scorecard reconciliation's "entry-010 mitigates (push-before-reset)" for M1-facts-lane
+  described dead code. As of THIS entry the mitigation is real and observed; M1-facts-lane moves
+  to mitigated-and-tested (still not "proven live" — that remains gated on the live verifier run).
+
+**Round-3 fixes landed with tests (the reviewer's remaining OPEN findings):**
+- **Strong-mode SoD fail-closed + the fresh-run ordering hole.** The ancestry-scoped SoD check
+  silently fell back to bypassable date scoping whenever `baseline_ledger_commit` was empty — and
+  it was ALWAYS empty on fresh runs, because start_verifier ran set_baseline before the ledger
+  branch existed (the guard.py comment blamed "older baselines"; wrong — it was the default path).
+  Now: start_verifier creates the lane BEFORE freezing the baseline; set_baseline fetches and, if
+  the lane is still absent, freezes the OID the lane will be created from (origin's default tip)
+  and refuses to write an empty OID; guard FAILS in ledger-branch mode when the OID is missing
+  (date fallback survives only in weak mode, where the whole check is a tripwire anyway).
+- **host_check blocked redirect = failure.** A redirect to a private target used to surface as the
+  original 3xx → `status<400` → verdict PASS → the gate accepted the publish claim. Blocked
+  redirects now raise 599.
+- **Weak-mode manifest anchor reads the COMMITTED blob** (`git show HEAD:`), not the agent-
+  overwritable worktree file — completing what round 2 only narrowed.
+- **Overclaim adjudication is fail-closed:** a python error comparing claimed-vs-received used to
+  default to "not over" (silent pass); it now fails the gate as unadjudicable.
+- **Adversary DATE must be a parseable ISO-8601 value** — the previous check ANDed an anchored
+  regex with its own unanchored superset, reducing to "does 'DATE:x' appear anywhere" ('UPDATE:
+  reran' passed).
+- **outcome.py denylist covers --evidence** (persisted like every other field, so screened like
+  every other field).
+- **Beacon HASH_SALT warning now exists** (the comment promised one; missing secret now
+  console.warns once per isolate).
+- aiv_gate consolidated to ONE truth.py read for the money checks (was three fetches + a TOCTOU
+  window between label and value).
+
+**Deferred, documented (not silently):** host_check DNS rebinding (TOCTOU between the vetted
+resolution and urllib's re-resolve) — residual now documented in the SSRF guard's docstring with
+the reasoning (agent-sandbox egress, GET-only; revisit if the tool ever runs verifier-side).
+LEDGER_BRANCH env pinning stays a provisioning wall per SETUP.md; the round-3 attack test confirms
+guard halts on lane authorship when an agent self-consistently forges an alternate lane.
+
+
+## Note on entry numbering (merge of main's rounds 1-3 into the edge/standing branch)
+
+Main's CodeRabbit/round-3 work and this branch's follow-up work were written concurrently and both
+claimed entries 009+. Resolution: main's entries 009-011 (review rounds) keep their numbers; this
+branch's six entries are renumbered 012-017 (formerly 009-014). Duplicate fixes were reconciled in
+code during the merge: the stranded-push convergence keeps main's round-3 structure plus this
+branch's divergence RESCUE path; supervise.sh keeps main's parse-fail verdict plus this branch's
+edge display; caffeinate portability keeps the bash-3.2-safe string form.
+
+## Entry 015 — 2026-07-17 (follow-up branch) — the two things PR #18 named and skipped: the edge rail (#6) and standing posture (#4)
 
 **Why.** PR #18's own summary drew the line honestly: "#6 asks for a paper-trading rail and a
 changed scoring surface — that's core-system work, not strategy, and I did not build it. #4 I only
@@ -441,10 +566,10 @@ still prose + agenda visibility. (4) EDGE claims in packets are matched by regex
 that dodges the trigger phrases dodges stage 2a-bis (the canonical-JSON packet form would close
 this properly — future work with upstream aiv-protocol).
 
-## Entry 010 — the bottleneck inventory (the /loop's working backlog), plus the first two fixes
+## Entry 016 — the bottleneck inventory (the /loop's working backlog), plus the first two fixes
 
 **Method note for this loop.** Each entry names the bottleneck it attacks, the source that proves
-it is real (run-1 logs / v2 DEGRADED list / entry-009 critique / aiv-protocol audit), the fix, and
+it is real (run-1 logs / v2 DEGRADED list / entry-015 critique / aiv-protocol audit), the fix, and
 the test. The inventory below is priority-ordered and will be consumed top-down until exhaustion;
 items get struck through as they land.
 
@@ -459,7 +584,7 @@ items get struck through as they land.
   the last self-graded surface). Plan: require a committed adversary TRANSCRIPT artifact (tool-use
   records, not just a verdict file), pin its hash in the report, and give the verifier loop an
   optional re-run hook so grounding can be operator-side.
-- **B4 — edge claims are matched by regex; a paraphrase dodges stage 2a-bis** (entry-009 critique).
+- **B4 — edge claims are matched by regex; a paraphrase dodges stage 2a-bis** (entry-015 critique).
   Plan: when the edge rail is live (verdict != NONE), REQUIRE a structured `EDGE_CLAIM:` line in
   any packet whose iteration traded, and adjudicate that line -- structure the claim, not the prose.
 - **B5 — weak mode has no non-destructive runner** (DEGRADED #9's second half). Plan: run_weak.sh
@@ -469,7 +594,7 @@ items get struck through as they land.
   fails an honest packet -- documented in TEMPLATE as a trap). Plan: fix both upstream in the
   aiv-protocol repo (in scope for this session) so the workaround and the trap note can eventually
   be deleted.
-- **B7 — nothing mechanically paces iterations against the due-bet schedule** (entry-009 critique;
+- **B7 — nothing mechanically paces iterations against the due-bet schedule** (entry-015 critique;
   run 1 burned 091–094 polling). Plan: guard advisory when an iteration opens with zero due bets
   and the last N closes were watch-eligible; keep it advisory -- a hard block would fight genuine
   new work.
@@ -478,7 +603,7 @@ items get struck through as they land.
 - **B9 — bets resolutions don't feed knowledge/outcomes.jsonl** (the compounding layer misses the
   richest records: resolved day-scale bets ARE channel outcomes). Plan: bets.py resolve appends an
   outcome record automatically.
-- **B10 — the edge rail has never touched the live paper API** (entry-009 residual, same class as
+- **B10 — the edge rail has never touched the live paper API** (entry-015 residual, same class as
   PR #18's unproven two-lane). Operator-gated: write the one-cycle live acceptance checklist into
   SETUP so it cannot be skipped silently.
 
@@ -494,7 +619,7 @@ test read $? through a pipe -- iter-091's exact trap -- caught and redone; the t
 knowledge/traps.md is earning its keep. Next: B9 (bets->outcomes compounding), then B6 upstream
 aiv-protocol fixes.
 
-## Entry 011 — B9 (bets feed the compounding layer) + B6 (both upstream aiv-protocol defects fixed at the source)
+## Entry 017 — B9 (bets feed the compounding layer) + B6 (both upstream aiv-protocol defects fixed at the source)
 
 **B9.** `bets.py resolve` now appends a structured record to knowledge/outcomes.jsonl
 automatically (via append_log, durable), so a resolved day-scale bet -- the richest channel
@@ -525,7 +650,7 @@ before PRing upstream. (3) bets->outcomes uses the bet's clock class as `channel
 than outcome.py's free-form channel; good enough for queryability, revisit if it muddies the map.
 Next: B4 (structured edge claims), then B3 (adversary transcript), B5 (weak-mode runner).
 
-## Entry 012 — B4 (structured edge claims) + B3 (the adversary must show its work)
+## Entry 015 — B4 (structured edge claims) + B3 (the adversary must show its work)
 
 **Loop meta, logged honestly:** the 10-minute cron died with a session recycle (8h gap; CronList
 empty on resume) -- the third occurrence of the entry-005 lesson in this program's history, now in
@@ -559,7 +684,7 @@ the diff surface for the operator re-run, not the count itself. (3) The transcri
 content patterns (searched/considered/...) -- an English-keyword heuristic; a non-English
 adversary transcript would need the list extended.
 
-## Entry 013 — B5 (weak-mode runner) + B7 (pacing advisory) + B8 (canonical audit at close) + B10 (live acceptance checklist)
+## Entry 016 — B5 (weak-mode runner) + B7 (pacing advisory) + B8 (canonical audit at close) + B10 (live acceptance checklist)
 
 **B5.** `bin/run_weak.sh`: the co-located fast-trial verifier DEGRADED #9 said was missing. Same
 facts pipeline (pnl + edge_pnl), same verifier authorship, and the one hard guarantee both modes
@@ -591,9 +716,9 @@ nag during legitimate build sprints between bet placements; it is one line, and 
 was the costlier error in run 1. (3) B8 surfaces only the audit tail -- 3 lines chosen to keep
 close output readable; the full report is one command away.
 
-## Entry 014 — CLOSING: inventory exhausted, final audit, and the port-to-main checklist
+## Entry 017 — CLOSING: inventory exhausted, final audit, and the port-to-main checklist
 
-**Exhaustion statement (scoped honestly).** Every item in the entry-010 inventory is landed and
+**Exhaustion statement (scoped honestly).** Every item in the entry-016 inventory is landed and
 tested (B1-B9) or documented as an operator-gated acceptance step (B10). "Exhausted" here means:
 no remaining item is both (a) evidenced by a run-1/v2/aiv-protocol source and (b) reachable from
 inside this session. What remains is out of reach BY NATURE, not by fatigue:
@@ -610,7 +735,7 @@ inside this session. What remains is out of reach BY NATURE, not by fatigue:
 **Final regression sweep (all changed components, one pass):** guard 0/2/1 exits correct across
 EDGE_TERMINAL and VOID states; full gate PASS on the reference edge packet; conclusion_gate clean
 multi-layer fail with no crash; truth.py both fact files grounded; edge.py status grounded. The
-sim suite's full history across entries 009-013: every fix was demonstrated failing before and
+sim suite's full history across entries 015-013: every fix was demonstrated failing before and
 passing after in a bare-origin two-lane clone.
 
 **What this design now is, in one paragraph.** Two scored rails, each with the same shape: a
@@ -638,7 +763,7 @@ and the reason the tripwire is acceptable.
 5. Protect the ledger branch at the remote (now with force-push allowance for the verifier
    credential if rotation is on).
 6. Scheduling for a standing run: durable queued wakeups only -- session-local cron died twice in
-   this program's history and once more in this very loop (8h gap, entry 012).
+   this program's history and once more in this very loop (8h gap, entry 015).
 
 **Loop meta, closing.** Entries 009-014 across two sessions; one 8-hour scheduler death absorbed
 by switching to consecutive in-session iterations (the correct fix, since the work -- unlike a

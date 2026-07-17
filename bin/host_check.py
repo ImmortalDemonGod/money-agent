@@ -26,10 +26,56 @@ import urllib.parse
 import urllib.request
 
 
+def _public_https(url: str) -> bool:
+    """SSRF guard: this tool is agent-invocable, so it must not be turned into a probe of
+    operator-local services or cloud metadata (169.254.169.254). Accept only http/https to a
+    public host (reject loopback/private/link-local/reserved resolved addresses).
+
+    KNOWN RESIDUAL (deliberately deferred, documented per round-3 review): this validates one
+    getaddrinfo() resolution, and urllib re-resolves at connect time -- a DNS-rebinding name (short
+    TTL, answer flips between checks) can still reach a private address. Closing it properly means
+    connecting to the vetted IP while preserving Host/SNI (a custom HTTPSConnection), which is a
+    heavier change than this tool's risk warrants today: the tool runs in the agent sandbox (same
+    egress the agent already has), fetches with GET only, and never returns response bodies to a
+    trust decision beyond robots/meta parsing. Revisit if it ever runs on the verifier host."""
+    import ipaddress
+    import socket
+    p = urllib.parse.urlparse(url)
+    if p.scheme not in ("http", "https") or not p.hostname:
+        return False
+    try:
+        for fam, _, _, _, sa in socket.getaddrinfo(p.hostname, p.port or (443 if p.scheme == "https" else 80)):
+            ip = ipaddress.ip_address(sa[0])
+            if (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved
+                    or ip.is_multicast or ip.is_unspecified):
+                return False
+    except Exception:
+        return False
+    return True
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        # revalidate the redirect target through the same SSRF guard before following.
+        # ROUND-3 FIX: raise with code 599, NOT the original 3xx -- _get returns e.code, and a 3xx
+        # here satisfied `status < 400`, so a page redirecting to a private target got verdict=PASS
+        # and the aiv gate accepted the publish claim. A blocked redirect is a FAILURE.
+        if not _public_https(newurl):
+            raise urllib.error.HTTPError(newurl, 599, "redirect to non-public target blocked "
+                                         "(SSRF guard) -- treated as unpublished", headers, fp)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+_OPENER = urllib.request.build_opener(_NoRedirect)
+
+
 def _get(url: str, timeout: int = 30) -> tuple[int, str]:
+    if not _public_https(url):
+        print(f"  refused: {url} is not a public http(s) URL (SSRF guard)", file=sys.stderr)
+        return 0, ""
     req = urllib.request.Request(url, headers={"User-Agent": "host-check/2.0 (harness verifier)"})
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:
+        with _OPENER.open(req, timeout=timeout) as r:
             return r.status, r.read(512_000).decode("utf-8", "replace")
     except urllib.error.HTTPError as e:
         return e.code, ""
@@ -43,15 +89,24 @@ def robots_verdict(txt: str) -> str:
     under a specific bot's group is not the trap; under * it is.)"""
     if not txt:
         return "NONE"
-    star = False
+    # A group can carry MULTIPLE consecutive User-agent lines before its rules; the group is a
+    # wildcard group if ANY of them is `*`. A run of UA lines accumulates; the first rule line ends
+    # the UA run. (The old code overwrote `star` on each UA line, so `UA: *` then `UA: Googlebot`
+    # then `Disallow: /` wrongly returned ALLOW and let a crawler-blocked page pass -- CodeRabbit.)
+    star = False        # is the CURRENT group a wildcard group?
+    in_ua_run = False   # are we still reading the UA lines of a group?
     for raw in txt.splitlines():
         line = raw.split("#", 1)[0].strip()
         if not line:
             continue
         m = re.match(r"(?i)^user-agent\s*:\s*(.+)$", line)
         if m:
-            star = m.group(1).strip() == "*"
+            if not in_ua_run:      # starting a new group's UA run
+                star = False
+                in_ua_run = True
+            star = star or (m.group(1).strip() == "*")
             continue
+        in_ua_run = False          # first non-UA line ends the UA run
         if star and re.match(r"(?i)^disallow\s*:\s*/\s*$", line):
             return "DISALLOW-ALL"
     return "ALLOW"

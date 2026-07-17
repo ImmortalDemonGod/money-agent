@@ -26,7 +26,12 @@ daily-salted truncated IP hash (no raw IPs), and `/go` click-through logging to 
 
 ## Privacy / name-test invariants (do not weaken)
 
-- No raw IP is ever stored (daily-salted truncated hash only).
-- The hub page renders the analytics disclosure (`CONFIG.analytics_note`) — measuring people who
-  don't know they're measured under a real man's name fails the name test.
+- No raw IP is ever stored (SECRET-keyed, daily-salted truncated hash only — set `HASH_SALT` via
+  `wrangler secret put HASH_SALT`; a public date salt alone is dictionary-reversible).
+- Referrer is minimized to origin+path before storage (query strings carry emails/tokens).
+- The hub page renders the analytics disclosure (`CONFIG.analytics_note`), and its disclosure line
+  must have a recorded EV decision in `DISCLOSURE_EV_LOG.md` and LEAD the rendered message.
 - `/go` redirects only to `CONFIG.allowed_dest_prefixes` (open-redirect guard).
+- **Retention:** raw `ua` is kept for bot-classification refinement. Add a scheduled purge (a Cron
+  Trigger running `DELETE FROM hits WHERE ts < date('now','-90 days')`) before running this beyond
+  a short experiment — indefinite UA retention under a real name is not acceptable.

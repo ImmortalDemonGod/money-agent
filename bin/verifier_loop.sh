@@ -46,32 +46,38 @@ else
   say "created facts lane '$LEDGER_BRANCH' from origin/${DEFAULT:-main}"
 fi
 
+# private temp dir for pnl output (fixed /tmp paths can be pre-created as symlinks by a local user
+# to overwrite files or inject log lines -- CodeRabbit). Cleaned on exit.
+TMPD="$(mktemp -d "${TMPDIR:-/tmp}/pnl_v.XXXXXX")"
+trap 'rm -rf "$TMPD"' EXIT
+
 say "verifier up (two-lane). facts=$LEDGER_BRANCH agent=${AGENT_BRANCH:-<unset>} interval=${INTERVAL}s"
 while true; do
   # 1. converge OUR lane only. This reset touches the verifier's own branch -- the agent's branch
   #    is never named anywhere in this loop, which is the whole point of v2.
-  #    B1 FIX (DEGRADED #10): if a prior cycle committed facts but the PUSH failed, HEAD is ahead
-  #    of origin and a hard reset would DELETE those committed raw pulls -- the "immutable" audit
-  #    trail losing a pull to its own convergence step. So: push the stranded commits first, and
-  #    NEVER reset while local is ahead (retry next cycle instead; truth.json self-heals either
-  #    way, this preserves the pulls).
+  #    Do NOT reset away a local commit that has not reached origin yet: if a prior cycle committed
+  #    but the push failed, resetting to origin would discard committed raw pulls (CodeRabbit). So
+  #    push any pending local commits FIRST, and only reset when local is not ahead of origin.
   git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" || true
   if git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
-    AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null || echo 0)
+    # ROUND-3 FIX: the previous guard here used `git rev-list -q <range>`, which is a usage error
+    # (-q is not a rev-list flag): stderr was swallowed, the substitution was ALWAYS empty, the
+    # push-before-reset branch never fired, and the reset ran unconditionally every cycle -- i.e.
+    # the data-loss fix was inert and the hazard it claimed to close stayed open. `--count` is the
+    # correct primitive; verified against an unreachable remote (commit + raw pull preserved with
+    # a WARN) and after recovery (stranded commits pushed to origin).
+    AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
     if [[ "${AHEAD:-0}" -gt 0 ]]; then
-      if git merge-base --is-ancestor "origin/$LEDGER_BRANCH" HEAD 2>/dev/null; then
-        # true fast-forward strandedness: these commits belong on origin. Push, never reset over.
-        if git push -q origin "$LEDGER_BRANCH" 2>>"$LOG"; then
-          say "recovered $AHEAD stranded facts commit(s) from a failed push"
-          git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG" || true
-        else
-          say "still cannot push $AHEAD stranded facts commit(s) -- SKIPPING reset to preserve them"
-        fi
-        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null || echo 0)
+      if git merge-base --is-ancestor "origin/$LEDGER_BRANCH" HEAD 2>>"$LOG"; then
+        # genuinely ahead (a prior push failed): push the stranded facts commits, never reset over
+        git push -q origin "HEAD:$LEDGER_BRANCH" 2>>"$LOG" \
+          && { git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG"; say "recovered $AHEAD stranded facts commit(s)"; } \
+          || say "WARN: $AHEAD local ledger commit(s) not yet pushed; NOT resetting (would lose raw pulls)"
+        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
       else
-        # DIVERGED: origin was force-moved (rotation from another checkout). A skip-forever here
-        # would deadlock the lane, so converge -- but first RESCUE any raw pull that exists only
-        # in the local history (a stranded pull committed after the divergence point). It must be
+        # DIVERGED (origin force-moved, e.g. rotation from another checkout): skip-forever would
+        # deadlock the lane, so converge -- but first RESCUE any raw pull that exists only in the
+        # local history (a stranded pull committed after the divergence point). It must be
         # re-COMMITTED, not just restored: pnl.py's C3 purge deletes untracked raw files as
         # agent-planted, so a bare file restore would be eaten next cycle.
         RESCUE=$(comm -23 <(git ls-tree -r HEAD --name-only -- ledger/raw/ | sort) \
@@ -83,7 +89,7 @@ while true; do
             mkdir -p "$RD/$(dirname "$f")"; git show "HEAD:$f" > "$RD/$f" 2>>"$LOG"
           done <<< "$RESCUE"
         fi
-        say "facts lane diverged from origin (rotation elsewhere?) -- converging to origin"
+        say "WARN: facts lane diverged from origin -- converging to origin/$LEDGER_BRANCH"
         git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
         if [[ -n "$RESCUE" ]]; then
           (cd "$RD" && find . -type f -print0 | xargs -0 -I{} sh -c 'mkdir -p "$0/$(dirname "{}")" && cp "{}" "$0/{}"' "$R")
@@ -93,23 +99,32 @@ while true; do
             && say "rescued stranded pulls: $(echo "$RESCUE" | tr '\n' ' ')"
           rm -rf "$RD"
         fi
-        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null || echo 0)
+        AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
       fi
     fi
+    # reset only when we are NOT ahead of origin (else keep the local commits for next push)
     [[ "${AHEAD:-0}" -eq 0 ]] && git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
   fi
-  # keep the agent's committed constitution reachable for pnl.py's hash check
-  [[ -n "$AGENT_BRANCH" ]] && { git fetch -q origin "$AGENT_BRANCH" 2>>"$LOG" || true; }
+  # keep the agent's committed constitution reachable for pnl.py's hash check. FAIL CLOSED: if the
+  # strong-mode fetch fails, a stale origin/AGENT_BRANCH could make pnl publish constitution_intact
+  # =true after the agent changed its constitution -- so skip publication this cycle (CodeRabbit).
+  AGENT_FETCH_OK=1
+  if [[ -n "$AGENT_BRANCH" ]]; then
+    git fetch -q origin "$AGENT_BRANCH" 2>>"$LOG" || AGENT_FETCH_OK=0
+  fi
 
   # 2. recompute FACTS from primary sources. Only this process holds the read keys.
-  if python3 bin/pnl.py > /tmp/pnl_v.out 2>/tmp/pnl_v.err; then
+  if [[ "$AGENT_FETCH_OK" == "0" ]]; then
+    say "SKIP cycle: could not refresh origin/$AGENT_BRANCH (stale constitution ref would be unsafe)"
+    SIG=""
+  elif python3 bin/pnl.py > "$TMPD/out" 2>"$TMPD/err"; then
     SIG=$(python3 -c "
 import json
 d=json.load(open('ledger/truth.json'))
 print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_money'])" 2>/dev/null)
     say "verified: $SIG"
   else
-    say "pnl FAILED: $(head -1 /tmp/pnl_v.err)"
+    say "pnl FAILED: $(head -1 "$TMPD/err")"
     SIG=""
   fi
 
@@ -118,14 +133,16 @@ print(d['received_usd'], d['spent_usd'], d['net_usd'], d['verified'], d['made_mo
   # until the agent commits an EDGE_REGISTRATION.md and the operator provisions ALPACA_PAPER_*
   # creds in .env; it never blocks the money rail.
   EDGE_SIG=""
-  if python3 bin/edge_pnl.py > /tmp/edge_v.out 2>/tmp/edge_v.err; then
+  if [[ "$AGENT_FETCH_OK" == "0" ]]; then
+    say "SKIP edge cycle: stale origin/$AGENT_BRANCH would risk freezing/checking a stale registration"
+  elif python3 bin/edge_pnl.py > "$TMPD/edge_out" 2>"$TMPD/edge_err"; then
     EDGE_SIG=$(python3 -c "
 import json
 d=json.load(open('ledger/edge.json'))
 print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
     [[ -n "$EDGE_SIG" && "$EDGE_SIG" != "NONE None"* ]] && say "edge: $EDGE_SIG"
   else
-    say "edge_pnl FAILED: $(head -1 /tmp/edge_v.err)"
+    say "edge_pnl FAILED: $(head -1 "$TMPD/edge_err")"
   fi
   [[ -n "$SIG" && -n "$EDGE_SIG" ]] && SIG="$SIG | edge $EDGE_SIG"
 

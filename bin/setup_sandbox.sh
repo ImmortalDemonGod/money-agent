@@ -125,9 +125,16 @@ done
 # ledger branch; a fresh repo that has never run a verifier fails here, which is correct -- the
 # loop must never start blind to its own P&L.
 if SRC=$(python3 bin/truth.py received_usd 2>&1 >/dev/null); then
-  ok "facts readable via bin/truth.py (${SRC#source: })"
-  [[ "$SRC" == *working-tree* ]] && echo "  ⚠ weak mode: facts come from the shared working tree." \
-    "Strong mode = verifier publishing to the '$(echo "${LEDGER_BRANCH:-ledger}")' branch (bin/verifier_loop.sh)."
+  SRCL="${SRC#source: }"
+  case "$SRCL" in
+    ledger-branch)
+      ok "facts grounded via bin/truth.py (ledger-branch, strong mode)" ;;
+    working-tree-committed)
+      ok "facts readable via bin/truth.py (working-tree-committed, weak mode)"
+      echo "  ⚠ weak mode: strong mode = verifier publishing to '${LEDGER_BRANCH:-ledger}' (bin/verifier_loop.sh)." ;;
+    *)  # working-tree-uncommitted or anything else: guard.py will refuse it, so fail preflight too
+      bad "bin/truth.py source is '$SRCL' -- NOT grounded (an uncommitted working-tree ledger is agent-writable). guard.py will refuse it." ;;
+  esac
 else
   bad "bin/truth.py cannot resolve any ledger (no origin/ledger branch, no local truth.json)." \
       "Start the verifier (bin/start_verifier.sh) before the loop."

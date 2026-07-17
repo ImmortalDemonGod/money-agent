@@ -65,25 +65,36 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
   # P&L, provenanced by the broker pulls -- the NUMERIC bound in (b) is what stops a real-money
   # overclaim, this check is provenance (some verifier-signed pull must back every $ claim).
   LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
+  # ONE truth.py invocation serves both (a) and (b): source label from stderr, value from stdout.
+  # (Round-3: the previous three separate invocations were slow -- each does a fetch -- and left a
+  # TOCTOU window between the call that produced the label and the call that produced the number.)
+  TRUTH_OUT=$(python3 "$REPO/bin/truth.py" received_usd 2>&1)
+  TSRC=$(sed -n 's/^source: //p' <<<"$TRUTH_OUT")
+  TRUTH_RECV=$(grep -vE '^(source:|FATAL:)' <<<"$TRUTH_OUT" | tail -1)
+  TRUTH_RECV=${TRUTH_RECV:-0}
   MANIFEST_TXT=$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/MANIFEST.sha256" 2>/dev/null)
-  [[ -z "$MANIFEST_TXT" && -f "$MANIFEST" ]] && MANIFEST_TXT=$(cat "$MANIFEST")
-  MANIFEST_TXT="$MANIFEST_TXT
-$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)"
-  [[ -f "$REPO/ledger/raw/EDGE_MANIFEST.sha256" ]] && MANIFEST_TXT="$MANIFEST_TXT
-$(cat "$REPO/ledger/raw/EDGE_MANIFEST.sha256")"
-  if [[ -z "${MANIFEST_TXT// /}" ]]; then
-    fail "money claim present but no MANIFEST.sha256 (ledger branch or working tree)"
+  # Weak-mode fallback reads the COMMITTED manifest blob, never the worktree file: the agent can
+  # overwrite the worktree copy after the verifier's commit and sod_hook only sees commits
+  # (round-3, completing the round-2 narrowing). Two-lane mode still requires the lane's manifest.
+  if [[ -z "$MANIFEST_TXT" && "$TSRC" == "working-tree-committed" ]]; then
+    MANIFEST_TXT=$(git -C "$REPO" show "HEAD:ledger/raw/MANIFEST.sha256" 2>/dev/null)
+  fi
+  # EDGE_MANIFEST hashes join the anchor pool under the same trust rules (lane first, committed
+  # blob in weak mode): an edge packet's dollar figures are paper P&L provenanced by broker pulls.
+  EDGE_M=$(git -C "$REPO" show "origin/$LEDGER_BRANCH:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
+  [[ -z "$EDGE_M" && "$TSRC" == "working-tree-committed" ]] \
+    && EDGE_M=$(git -C "$REPO" show "HEAD:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
+  [[ -n "$EDGE_M" ]] && MANIFEST_TXT="$MANIFEST_TXT
+$EDGE_M"
+  if [[ -z "${MANIFEST_TXT//[[:space:]]/}" ]]; then
+    fail "money claim present but no grounded MANIFEST.sha256 (source=$TSRC; two-lane requires the ledger-branch manifest)"
   else
     hit=0
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { hit=1; break; }; done <<< "$MANIFEST_TXT"
     [[ $hit -eq 1 ]] || fail "money claim cites no sha256 from MANIFEST.sha256 or EDGE_MANIFEST.sha256 (unanchored claim)"
   fi
-  # (b) the claimed dollar amount must not exceed what the VERIFIER committed. Read via truth.py
-  # AND require a GROUNDED source: an uncommitted working-tree ledger is agent-forgeable, so a
-  # money claim adjudicated against it is worthless. truth.py prints "source: <s>" to stderr.
-  TSRC=$(python3 "$REPO/bin/truth.py" received_usd 2>&1 >/dev/null | sed -n 's/^source: //p')
-  TRUTH_RECV=$(python3 "$REPO/bin/truth.py" received_usd 2>/dev/null)
-  TRUTH_RECV=${TRUTH_RECV:-0}
+  # (b) the claimed dollar amount must not exceed what the VERIFIER committed, and the source must
+  # be GROUNDED: an uncommitted working-tree ledger is agent-forgeable.
   case "$TSRC" in
     ledger-branch|working-tree-committed) : ;;
     *) fail "money claim present but ledger source is '$TSRC' (agent-writable/uncommitted); no grounded number to check it against" ;;
@@ -99,14 +110,20 @@ $(cat "$REPO/ledger/raw/EDGE_MANIFEST.sha256")"
     # and paper_pnl_usd (edge, grounded only, 0 if the rail is idle). Without the edge term, an
     # honest "paper_pnl=$50" line in an edge packet would trip the money bound against a $0
     # received. Honest residual, stated: a REAL-money overclaim up to the paper P&L would pass
-    # this numeric bound -- it is still caught by (a) requiring the money hash anchor above and
-    # (b) the verifier's received_usd being the only citable money fact. Rails must be named.
+    # this numeric bound -- it is still caught by (a) requiring a verifier-signed hash anchor
+    # above and (b) the verifier's received_usd being the only citable money fact.
     TRUTH_EDGE=$(python3 "$REPO/bin/truth.py" --file edge.json paper_pnl_usd 2>/dev/null)
     TRUTH_EDGE=${TRUTH_EDGE:-0}
     ESRC2=$(python3 "$REPO/bin/truth.py" --file edge.json verdict 2>&1 >/dev/null | sed -n 's/^source: //p')
     case "$ESRC2" in ledger-branch|working-tree-committed) : ;; *) TRUTH_EDGE=0 ;; esac
-    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > max(float('$TRUTH_RECV'), float('$TRUTH_EDGE'), 0.0) + 0.001 else 0)" 2>/dev/null || echo 0)
-    [[ "$OVER" == "1" ]] && fail "packet claims \$$MAX_CLAIM but verifier-committed facts are received_usd=\$$TRUTH_RECV, paper_pnl_usd=\$$TRUTH_EDGE (false claim)"
+    # FAIL-CLOSED (round-3): a python error here used to default to "not over" (silent pass). A
+    # gate that cannot adjudicate must fail, not shrug.
+    OVER=$(python3 -c "print(1 if float('$MAX_CLAIM') > max(float('$TRUTH_RECV'), float('$TRUTH_EDGE'), 0.0) + 0.001 else 0)" 2>/dev/null || echo ERR)
+    if [[ "$OVER" == "ERR" ]]; then
+      fail "cannot adjudicate claimed amount (\$$MAX_CLAIM vs received_usd='$TRUTH_RECV', paper_pnl_usd='$TRUTH_EDGE' unparseable) -- fail-closed"
+    elif [[ "$OVER" == "1" ]]; then
+      fail "packet claims \$$MAX_CLAIM but verifier-committed facts are received_usd=\$$TRUTH_RECV, paper_pnl_usd=\$$TRUTH_EDGE (false claim)"
+    fi
   fi
 fi
 
@@ -141,14 +158,18 @@ if grep -qiE 'VERIFIED_POSITIVE_EV|edge (is |was )?(verified|proven)|positive[- 
     || fail "packet claims a verified edge but verifier verdict is '${EVERDICT:-none}' (false edge claim)"
   # anchor: the claim must cite a sha256 from the edge manifest (broker pulls), like money claims
   EMANIFEST_TXT=$(git -C "$REPO" show "origin/${LEDGER_BRANCH:-ledger}:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
-  [[ -z "$EMANIFEST_TXT" && -f "$REPO/ledger/raw/EDGE_MANIFEST.sha256" ]] \
-    && EMANIFEST_TXT=$(cat "$REPO/ledger/raw/EDGE_MANIFEST.sha256")
+  [[ -z "$EMANIFEST_TXT" && "$ESRC" == "working-tree-committed" ]] \
+    && EMANIFEST_TXT=$(git -C "$REPO" show "HEAD:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
   if [[ -z "$EMANIFEST_TXT" ]]; then
     fail "edge claim present but no EDGE_MANIFEST.sha256 (ledger branch or working tree)"
   else
     ehit=0
     while read -r h _; do [[ -n "$h" ]] && grep -q "$h" "$PACKET" && { ehit=1; break; }; done <<< "$EMANIFEST_TXT"
-    [[ $ehit -eq 1 ]] || fail "edge claim cites no sha256 from EDGE_MANIFEST.sha256 (unanchored claim)"
+    # the manifest's OWN sha256 (edge.json.edge_manifest_sha256, verifier-signed) anchors too --
+    # it is what iter.py pre-fills, and it commits to the whole pull set rather than one pull
+    EM_SELF=$(python3 "$REPO/bin/truth.py" --file edge.json edge_manifest_sha256 2>/dev/null)
+    [[ $ehit -eq 0 && -n "${EM_SELF:-}" && "$EM_SELF" != "null" ]] && grep -q "$EM_SELF" "$PACKET" && ehit=1
+    [[ $ehit -eq 1 ]] || fail "edge claim cites no sha256 from EDGE_MANIFEST.sha256 nor the verifier-signed edge_manifest_sha256 (unanchored claim)"
   fi
 fi
 
@@ -173,8 +194,13 @@ fi
 # lives in pnl.py, which hashes CONSTITUTION.md against a value frozen in the verifier's private
 # state dir and writes `constitution_intact` into the verifier-signed truth.json. guard.py halts on
 # it. So the gate no longer pretends to enforce this -- it surfaces the verifier's verdict instead.
-CI=$(python3 "$REPO/bin/truth.py" constitution_intact 2>/dev/null)
-[[ "$CI" == "false" || "$CI" == "False" ]] && fail "verifier reports CONSTITUTION.md altered (constitution_intact=false)"
+# FAIL CLOSED: require an explicit true. A truth.py failure, a missing field, or a null verdict
+# leaves CI empty -- which must NOT pass (CodeRabbit). Only "true" clears this check.
+if ! CI=$(python3 "$REPO/bin/truth.py" constitution_intact 2>/dev/null); then
+  fail "cannot obtain the verifier's constitution verdict (truth.py failed)"
+elif [[ "$CI" != "true" && "$CI" != "True" ]]; then
+  fail "constitution verdict is not true (got '${CI:-<empty>}') -- altered, unverified, or unavailable"
+fi
 
 if [[ $fails -gt 0 ]]; then echo "RESULT: FAIL ($fails)"; exit 1; fi
 echo "RESULT: PASS -- iteration $N packet is anchored and consistent with the ledger"

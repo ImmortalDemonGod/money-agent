@@ -35,18 +35,31 @@ def append(rel_path: str, text: str, message: str | None = None) -> None:
     before = p.read_text() if p.exists() else ""
     if text and not text.endswith("\n"):
         text += "\n"
+    # snapshot this file's pre-call INDEX state so a failure can restore it -- otherwise a failed
+    # commit leaves the appended version staged and a later commit persists an entry we reported
+    # rolled back (CodeRabbit).
+    idx = subprocess.run(["git", "ls-files", "-s", "--", str(p)], cwd=REPO, capture_output=True,
+                         text=True, timeout=15).stdout
     p.write_text(before + text)
     try:
-        subprocess.run(["git", "add", str(p)], cwd=REPO, check=True, capture_output=True,
+        subprocess.run(["git", "add", "--", str(p)], cwd=REPO, check=True, capture_output=True,
                        timeout=15)
         staged = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(p)], cwd=REPO,
                                 capture_output=True, timeout=15)
         if staged.returncode != 0:
+            # commit ONLY this path (pathspec) so unrelated staged work is never swept in
             subprocess.run(["git", "commit", "--no-gpg-sign", "-m",
-                            message or f"append: {rel_path}"],
+                            message or f"append: {rel_path}", "--", str(p)],
                            cwd=REPO, check=True, capture_output=True, timeout=30)
     except Exception:
-        p.write_text(before)  # roll back so the file never lies about what persisted
+        p.write_text(before)  # restore the worktree
+        # restore the index entry for this path to its pre-call state (unstage our add)
+        if idx.strip():
+            subprocess.run(["git", "reset", "-q", "HEAD", "--", str(p)], cwd=REPO,
+                           capture_output=True, timeout=15)
+        else:
+            subprocess.run(["git", "rm", "-q", "--cached", "--", str(p)], cwd=REPO,
+                           capture_output=True, timeout=15)
         raise
     branch = subprocess.run(["git", "branch", "--show-current"], cwd=REPO, capture_output=True,
                             text=True, timeout=15).stdout.strip()

@@ -202,8 +202,11 @@ def send(to, subj, body):
     try:
         branch = subprocess.run(["git", "branch", "--show-current"], cwd=REPO,
                                 capture_output=True, text=True, timeout=15).stdout.strip()
-        subprocess.run(["git", "push", "origin", branch or "HEAD"], cwd=REPO,
-                       capture_output=True, timeout=60)
+        pr = subprocess.run(["git", "push", "origin", branch or "HEAD"], cwd=REPO,
+                            capture_output=True, text=True, timeout=60)
+        if pr.returncode != 0:  # auth/rejection/network failures return nonzero, not an exception
+            print(f"warn: SENT_LOG push failed ({pr.stderr.strip()[:150]}); the commit is local -- "
+                  "push when possible.", file=sys.stderr)
     except Exception as e:
         print(f"warn: SENT_LOG push failed ({e}); the commit is local -- push when possible.",
               file=sys.stderr)

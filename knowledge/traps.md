@@ -19,6 +19,10 @@
    023). `bin/iter.py new` anchors time to the verifier; do not hand-write timestamps.
 8. **IMAP SEARCH needs a criterion keyword.** A bare-string search is a protocol error; use
    bin/mail.py's fixed `search` (quotes + OR across BODY/SUBJECT/FROM).
-9. **(historical, v1 only) The verifier reset destroyed uncommitted work.** v2's two-lane design
-   removed the reset entirely; appends are durable via bin/append_log.py / iter.py. If you are ever
-   on a v1-topology repo again: commit+push in the same breath as every write.
+9. **The verifier reset destroyed uncommitted work (v1).** v2 removed the reset **on the CLAIMS
+   lane** (the verifier never touches the agent's branch), so agent appends are durable via
+   bin/append_log.py / iter.py. NOT fully gone on the FACTS lane: if the verifier commits a ledger
+   update and the push then fails, the next cycle's hard-reset to origin could discard those raw
+   pulls. verifier_loop.sh now pushes pending local commits BEFORE any reset and skips the reset
+   while ahead of origin, but a persistently unreachable remote is still a raw-pull hazard until
+   fully resolved. On any v1-topology repo: commit+push in the same breath as every write.

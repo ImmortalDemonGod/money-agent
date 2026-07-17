@@ -12,8 +12,9 @@
     {"approach": "prediction-edge harvest below its pre-registered bar", "killed_by": "its own go-live rule (2.20x < 2.5x); re-fetching until the number crossed was named p-hacking and declined", "evidence_iter": "073, 074"},
     {"approach": "escrow/marketplace labor as scoreable revenue", "killed_by": "payouts route to bank rails, never the scored account", "evidence_iter": "028"}
   ],
-  "never_falsified_still_open": [
-    {"approach": "organic search discovery via crawlable estate + IndexNow", "state": "placed, multi-day clock, undecided at run end -- the bet run 1 wrongly called exhausted", "evidence_iter": "070-089, 095-096"},
-    {"approach": "reach vs conversion as the binding wall", "state": "UNDETERMINED -- run 1 had no traffic telemetry; the beacon decides it", "evidence_iter": "098"}
+  "_open_questions_note": "Kept operational/measurement-only, NOT strategy (this file is strategy-free by rule; CodeRabbit). These are unresolved MEASUREMENT states from run 1, not directions to pursue:",
+  "unresolved_measurement": [
+    {"question": "was the binding wall REACH or CONVERSION?", "state": "UNDETERMINED -- run 1 had no traffic telemetry (surge funnels had no analytics; telegra.ph views unattributable). The beacon (harness/beacon/) is what decides it. Do not assume 'reach' -- run 1 retracted that overclaim (iter 098).", "evidence_iter": "098"},
+    {"question": "did any organic crawler indexation ever land?", "state": "unresolved at run end on a multi-day clock; guard.py halts on the first received dollar regardless. Recorded so this state is not re-mislabeled 'exhausted' (the run-1 error).", "evidence_iter": "089, 095-096"}
   ]
 }
