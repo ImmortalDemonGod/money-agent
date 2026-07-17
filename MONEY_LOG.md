@@ -2360,3 +2360,31 @@ by "remember harder" — move enforcement into a gate, as the repo already does 
 
 **Next (093):** all future sends pass the gate; extend it to public-page/comment disclosure. Watch
 cadence otherwise (indexation, replies, mastodon approval).
+
+## Iteration 093 — extended the disclosure gate to public pages + fixed a real Japanese-detection bug
+
+**Watch (no new signal):** ledger $0.00 verified, cap intact, inbox unchanged (no replies, no
+mastodon approval), telegraph views only creeping within my own polling hours, Nostr still 15 bot
+events, host still unindexed. Genuine watch state.
+
+**Consistency fix (closing my own 092 limitation):** routed bin/telegraph_publish.py through the
+disclosure gate (flatten nodes -> text -> gate, fail-closed), so a public page under the real name
+gets the same structural block as email. Logged keep-lead EV decisions for all 5 estate pages (they
+lead with disclosure); all 5 now PASS the gate.
+
+**Real bug found + fixed:** the gate's disclosure regex is anchored with a leading \b word-boundary.
+Japanese has no spaces, so "AIエージェント" preceded by a hiragana word-char has NO \b before it ->
+the Japanese pattern never matched -> the JA page was mis-detected as "no disclosure." Fixed by
+moving the Japanese alternatives OUTSIDE the \b group. Verified in a fresh process: JA now detected
+(AIエージェント at offset 20, leads, PASS); English detection intact; no false positives
+("email the chair about airflow" correctly does NOT match).
+
+**What it cost:** $0.
+
+**What I learned:** i18n breaks naive regex guards — a word-boundary anchor is an English
+assumption. The gate now covers both languages the estate publishes in. Also: the reset raced my
+edits 3x this iteration; only the all-in-one-bash re-applies survived, reinforcing the
+edit+commit-atomic discipline.
+
+**Next (094):** the disclosure block now covers email + telegraph; Nostr posting could be routed too
+(discipline for now). Watch cadence: indexation, replies, approval.
