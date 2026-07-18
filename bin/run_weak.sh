@@ -14,10 +14,14 @@
 # v1's destroy-your-own-evidence loop stays dead in both modes.
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$R"
+cd "$R" || exit 1
 INTERVAL="${INTERVAL:-120}"
 [[ -f "$R/.env" ]] || { echo "FATAL: .env missing (verifier read keys)." >&2; exit 2; }
-set -a; . "$R/.env"; set +a
+set -a
+# .env is a runtime credential file; shellcheck cannot follow it
+# shellcheck source=/dev/null
+. "$R/.env"
+set +a
 # private tmp dir, same hardening as verifier_loop.sh (fixed /tmp names invite symlink
 # pre-placement by anything sharing the host; round-4 nit)
 TMPD="$(mktemp -d "${TMPDIR:-/tmp}/pnl_w.XXXXXX")"

@@ -18,7 +18,6 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ITER="${1:?usage: aiv_gate.sh <iteration-number>}"
 N=$(printf '%03d' "$ITER")
 PACKET="$REPO/.github/aiv-packets/VERIFICATION_PACKET_ITER_${N}.md"
-MANIFEST="$REPO/ledger/raw/MANIFEST.sha256"
 fails=0
 fail() { echo "GATE FAIL: $*" >&2; fails=$((fails+1)); }
 

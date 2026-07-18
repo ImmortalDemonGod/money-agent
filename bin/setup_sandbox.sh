@@ -12,7 +12,7 @@
 # installed." This script installs them and then PROVES each one fires.
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$R"
+cd "$R" || exit 1
 fails=0
 ok()   { echo "  ✓ $*"; }
 bad()  { echo "  ✗ $*"; fails=$((fails+1)); }
@@ -64,7 +64,7 @@ if command -v aiv >/dev/null 2>&1; then
       && mv .git/hooks/pre-commit .git/hooks/aiv-pre-commit.orig
     if [[ -x .git/hooks/aiv-pre-commit.orig ]]; then
       "$AIV_PY" .git/hooks/aiv-pre-commit.orig </dev/null >/dev/null 2>&1
-      [[ $? -eq 1 ]] && bad "aiv hook still crashes" || ok "aiv hook runs (no ModuleNotFoundError)"
+      if [[ $? -eq 1 ]]; then bad "aiv hook still crashes"; else ok "aiv hook runs (no ModuleNotFoundError)"; fi
     fi
   else
     bad "cannot resolve the interpreter owning aiv ($AIV_PY)"
@@ -108,8 +108,8 @@ git reset -q 2>/dev/null; rm -f ledger/_sod_probe.json
 # ------------------------------------------------------- 4. run-readiness assertions
 echo
 echo "=== preflight ==="
-[[ -f PREDICTION.md ]] && bad "PREDICTION.md is readable -- the agent can read the answer key" \
-                       || ok "PREDICTION.md absent from the working tree"
+if [[ -f PREDICTION.md ]]; then bad "PREDICTION.md is readable -- the agent can read the answer key"
+else ok "PREDICTION.md absent from the working tree"; fi
 git rev-parse -q --verify prediction-frozen >/dev/null 2>&1 \
   && ok "tag prediction-frozen -> $(git rev-list -n1 --abbrev-commit prediction-frozen)" \
   || echo "  ⚠ tag prediction-frozen missing. Run: git fetch --tags"
@@ -119,7 +119,7 @@ for v in STRIPE_READ_KEY PRIVACY_READ_KEY; do
     && bad "FATAL: .env present and contains $v -- the agent can compute (and forge) its own P&L. Only .env.agent belongs here."
 done
 [[ ! -f .env ]] && ok ".env absent (verifier creds stay off the sandbox)"
-[[ -f .env.agent ]] && ok ".env.agent present" || bad ".env.agent missing -- the agent has no keys"
+if [[ -f .env.agent ]]; then ok ".env.agent present"; else bad ".env.agent missing -- the agent has no keys"; fi
 
 # v2 two-lane: the facts must be readable through the ONE path. In strong mode this resolves the
 # ledger branch; a fresh repo that has never run a verifier fails here, which is correct -- the

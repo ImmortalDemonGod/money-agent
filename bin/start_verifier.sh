@@ -14,7 +14,7 @@
 # The loop publishes facts to the LEDGER branch (default "ledger", override LEDGER_BRANCH=...).
 # The agent's branch is never reset or written by any of this.
 set -uo pipefail
-R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R"
+R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 AGENT_BRANCH="${1:?usage: start_verifier.sh <agent-branch>   (e.g. claude/xxx)}"
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 export AGENT_BRANCH LEDGER_BRANCH
@@ -37,9 +37,11 @@ echo "=== 2. ensure the facts lane exists, THEN freeze the baseline ==="
 # lane first (exactly as verifier_loop.sh would), so the baseline records its real tip.
 if ! git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
   DEFAULT=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||')
-  git push -q origin "origin/${DEFAULT:-main}:refs/heads/$LEDGER_BRANCH" \
-    && echo "  created facts lane '$LEDGER_BRANCH' from origin/${DEFAULT:-main}" \
-    || { echo "FATAL: could not create origin/$LEDGER_BRANCH." >&2; exit 2; }
+  if git push -q origin "origin/${DEFAULT:-main}:refs/heads/$LEDGER_BRANCH"; then
+    echo "  created facts lane '$LEDGER_BRANCH' from origin/${DEFAULT:-main}"
+  else
+    echo "FATAL: could not create origin/$LEDGER_BRANCH." >&2; exit 2
+  fi
   git fetch -q origin "$LEDGER_BRANCH"
 fi
 python3 bin/set_baseline.py

@@ -18,7 +18,11 @@ if v=$(kc money-agent-stripe-read) && [[ -n "$v" ]]; then
   export STRIPE_READ_KEY="$v"
   [[ -n "${QUIET:-}" ]] || echo "keys: STRIPE_READ_KEY <- Keychain" >&2
 elif [[ -f "$(dirname "${BASH_SOURCE[0]}")/../.env" ]]; then
-  set -a; . "$(dirname "${BASH_SOURCE[0]}")/../.env"; set +a
+  set -a
+  # .env is a runtime credential file; shellcheck cannot follow it
+  # shellcheck source=/dev/null
+  . "$(dirname "${BASH_SOURCE[0]}")/../.env"
+  set +a
   [[ -n "${QUIET:-}" ]] || echo "keys: loaded from .env (Keychain preferred for launchd -- see header)" >&2
 fi
 if v=$(kc money-agent-privacy-read) && [[ -n "$v" ]]; then export PRIVACY_READ_KEY="$v"; fi

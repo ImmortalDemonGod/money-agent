@@ -10,9 +10,8 @@
 # truth.json fresh, is the push working, and HAS THE FIRST DOLLAR ARRIVED. That last one is the
 # run's end condition and the whole reason a human is kept in the loop.
 set -uo pipefail
-R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R"
+R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
-PIDFILE="$R/.run/verifier.pid"
 now=$(date -u +%s)
 
 echo "===== VERIFIER SUPERVISOR @ $(date -u +%H:%M:%SZ) ====="
