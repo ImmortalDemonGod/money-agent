@@ -1,19 +1,27 @@
 #!/usr/bin/env python3
-"""README integrity check (stdlib only, no deps).
+"""README + diagram-source integrity check (stdlib only, no deps).
 
-Catches the exact regressions this repo has hit before: stale relative links to
-files that were moved or removed, a missing hero asset, a broken in-page nav
-anchor, an unbalanced ```mermaid fence, and curly quotes that drift from the
-repo's straight-quote house style.
+Catches the regressions this repo has actually hit:
+  - stale relative links to files that were moved or removed
+  - a missing hero / diagram asset
+  - a broken in-page nav anchor
+  - an unbalanced ```mermaid / ```text fence
+  - curly quotes drifting from the straight-quote house style
+  - em/en dashes (and their HTML entities) drifting back in -- in the README
+    prose AND in the .github/assets/*.mmd diagram sources that render into the
+    committed images (an em-dash in a subgraph label is invisible until you look
+    at the PNG, so the source is guarded directly)
 
-It deliberately does NOT check `../../...` GitHub web routes (issues, commits,
+Scope of the link check: relative file links, images, and nav anchors only. It
+deliberately does NOT check `../../...` GitHub web routes (issues, commits,
 pull/N, stargazers) or external http(s) links -- those are not files on disk and
-validating them would make CI flaky. Scope: relative file links, images, nav
-anchors, fences, and typography.
+validating them would make CI flaky.
 
 Usage: python3 .github/scripts/check_readme.py [README.md ...]
-Exit 0 if every checked file passes; 1 otherwise.
+Always also scans .github/assets/*.mmd for typography, regardless of args.
+Exit 0 if everything passes; 1 otherwise.
 """
+import glob
 import os
 import re
 import sys
@@ -24,6 +32,8 @@ MD_LINK = re.compile(r"!?\[[^\]]*\]\(([^)\s]+)")   # [text](target) and ![alt](t
 IMG_SRC = re.compile(r'<img\b[^>]*?\bsrc="([^"]+)"', re.IGNORECASE)
 HEADER = re.compile(r"^#{1,6}\s+(.*?)\s*$")
 CURLY = "“”‘’"  # " " ' '
+# em-dash, en-dash, and every HTML entity form of them (named, decimal, hex).
+FANCY_DASH = re.compile(r"[—–]|&(?:m|n)dash;|&#821[12];|&#x201[34];", re.IGNORECASE)
 
 
 def slug(text):
@@ -31,36 +41,32 @@ def slug(text):
     s = text.strip().lower()
     s = re.sub(r"[`*_~]", "", s)          # strip inline markdown emphasis/code
     s = re.sub(r"[^\w\s-]", "", s)        # drop punctuation (parens, commas, ...)
-    s = s.strip().replace(" ", "-")
-    return s
+    return s.strip().replace(" ", "-")
 
 
 def is_external(target):
     return target.startswith(("http://", "https://", "mailto:", "../../"))
 
 
-def check(path):
+def typography(path, text):
+    """Checks that apply to any text file: no curly quotes, no em/en dashes."""
     errors = []
-    with open(path, encoding="utf-8") as fh:
-        text = fh.read()
-    lines = text.splitlines()
+    for i, line in enumerate(text.splitlines(), 1):
+        if any(ch in CURLY for ch in line):
+            errors.append(f"{path}:{i}: curly quote (use straight quotes)")
+        for m in FANCY_DASH.finditer(line):
+            errors.append(f"{path}:{i}: em/en dash {m.group()!r} "
+                          f"(use plain ASCII -- comma, colon, parens, or '-')")
+    return errors
 
-    # 1. Typography: no curly quotes (house style is straight quotes).
-    for i, line in enumerate(lines, 1):
-        for ch in line:
-            if ch in CURLY:
-                errors.append(f"{path}:{i}: curly quote {ch!r} (use straight quotes)")
-                break
 
-    # 2. Balanced code fences (catches an unterminated ```mermaid / ```bash block).
+def markdown_structure(path, text):
+    """Checks specific to the rendered markdown page."""
+    errors = []
     if text.count("```") % 2 != 0:
         errors.append(f"{path}: unbalanced ``` code fences")
-
-    # 3. Anchor targets (nav) must resolve to a real header slug in this file.
-    slugs = {slug(m.group(1)) for m in (HEADER.match(l) for l in lines) if m}
-    # 4. Relative link/image targets must point to a file that exists on disk.
-    targets = MD_LINK.findall(text) + IMG_SRC.findall(text)
-    for raw in targets:
+    slugs = {slug(m.group(1)) for m in (HEADER.match(l) for l in text.splitlines()) if m}
+    for raw in MD_LINK.findall(text) + IMG_SRC.findall(text):
         target = raw.strip()
         if target.startswith("#"):
             if slug(target[1:]) not in slugs:
@@ -75,16 +81,21 @@ def check(path):
 
 
 def main(argv):
-    files = argv[1:] or ["README.md"]
-    all_errors = []
-    for f in files:
-        all_errors.extend(check(f))
-    if all_errors:
+    md_files = argv[1:] or ["README.md"]
+    mmd_files = sorted(glob.glob(os.path.join(REPO_ROOT, ".github/assets/*.mmd")))
+    errors = []
+    for f in md_files:
+        text = open(f, encoding="utf-8").read()
+        errors += typography(f, text) + markdown_structure(f, text)
+    for f in mmd_files:                       # diagram sources: typography only
+        errors += typography(f, open(f, encoding="utf-8").read())
+    checked = md_files + [os.path.relpath(f, REPO_ROOT) for f in mmd_files]
+    if errors:
         print("README check FAILED:")
-        for e in all_errors:
+        for e in errors:
             print("  - " + e)
         return 1
-    print("README check passed: " + ", ".join(files))
+    print("README check passed: " + ", ".join(checked))
     return 0
 
 

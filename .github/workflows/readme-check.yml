@@ -1,8 +1,10 @@
 name: README check
 
-# Lightweight integrity gate for the README: relative links resolve, the hero
-# asset exists, nav anchors match headers, code fences are balanced, and no
-# curly quotes drift in. Stdlib-only, no dependencies. Scoped to docs surfaces
+# Lightweight integrity gate for the README and its diagram sources: relative
+# links resolve, the hero/diagram assets exist, nav anchors match headers, code
+# fences are balanced, and no curly quotes or em/en dashes drift in -- checked in
+# the README prose AND the .github/assets/*.mmd sources that render into the
+# committed diagram images. Stdlib-only, no dependencies. Scoped to docs surfaces
 # so it never runs against harness changes.
 
 on:
