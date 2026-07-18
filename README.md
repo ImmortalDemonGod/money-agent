@@ -106,18 +106,24 @@ The full writeup of finding 2 is [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md).
 
 ## Roadmap
 
-The open work is the [issue tracker](../../issues). In dependency order: **#7** grounds the stop decision (do
-this first, or v2 reproduces v1's premature-stop failure); #1 and #2 raise the agent's craft; #3, #4, and #6
-address the reach-is-an-artifact finding by giving it time, findable surfaces, and delayed-payoff strategies;
-#5 is targeting.
+The harness redesign v1's findings forced is **built and merged** (PRs #18/#19): the grounded stop (#7),
+cross-run memory (#2), the standing-presence machinery (#4), and the verified-edge rail (#6) all shipped.
+What remains is the [issue tracker](../../issues), in dependency order. **#20 comes first** — the
+operator-side pre-run-2 acceptance gates (one live verifier cycle, the edge-rail checklist, remote
+`ledger`-branch protection); until it passes, v2's machinery sits on the unproven side of exactly the line
+this project draws. Then the harness loose ends (#10 context hygiene, #11 tool-promotion policy), and the
+run-2 backlog the harness deliberately does not decide for the agent: craft (#1), findable surfaces and
+targeting (#3, #5), and the untried card-paying levers (#12–#17).
 
 ---
 
 ## Read the evidence
 
 The repo is the evidence. Nothing here asks you to take our word for it. One navigation note: `main`
-carries the harness with the run logs reseeded; **run 1's full artifacts live on its run branch —
-[PR #8](../../pull/8)** — until they are archived under `archive/run-001/`.
+carries the harness with the live run logs reseeded; **run 1 is now archived in full under
+[`archive/run-001/`](archive/run-001/)** — its iterations, products, `MONEY_LOG`, `REFUSALS`, and the
+grounded post-mortem `README`, redacted only for a local username and a vendored library (PR #24). The
+original un-redacted history remains on its run branch, [PR #8](../../pull/8).
 
 1. **`ledger/truth.json`** — the only numbers that are real.
 2. **`MONEY_LOG.md` vs `truth.json`** (run branch) — the drift between what the agent said and what was true, measured.
