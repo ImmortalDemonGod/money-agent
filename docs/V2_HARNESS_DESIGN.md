@@ -32,6 +32,8 @@ run, by making the *bet* the only unit of work (engine) and a *business spine* t
 machine over bets (direction), with a single termination authority computed over the bet
 ledger.
 
+**Companion analysis:** `docs/COMPARATIVE_ANALYSIS.md` places this design in the landscape of the publicly documented attempts at the same problem; §18 below maps its findings onto this design's primitives.
+
 ---
 
 ## 1. Problem statement: what v1 proved
@@ -1034,3 +1036,59 @@ cautionary in another (it recurs at every new layer, so every future primitive s
 ship with the question "which of its facts expire?"). The residuals (1, 10, 11) are all
 FC3 in disguise — judgment wearing a mechanical costume — and the design's posture on
 them stays: record, cap, and surface; never pretend to adjudicate.
+
+---
+
+## 18. The rootedness layer (companion-analysis findings, mapped onto this design)
+
+A comparative study of the publicly documented attempts at the same problem it could locate
+(`docs/COMPARATIVE_ANALYSIS.md`) — money-agent run 1 plus three independent external experiments,
+all $0 — locates the binding constraints in an ordered wall stack (identity -> channel access ->
+trust/demand -> commoditization -> unit economics) and finds, via a human-substitution test, that
+the walls are **anti-unrooted-actor, not anti-agent**: every wall binds some class of humans
+in structurally the same way (with documented disanalogies — agents' perfect copyability, their
+absent cost floor), and the durable human escapes were overwhelmingly institutional or
+relational rather than individual effort.
+
+This design already provides the *scientist* layer (ordering, falsifiability, computable
+stopping) and — per the analysis's §11 diff — already contains the sockets for the *rootedness*
+layer it deliberately does not build:
+
+| Companion finding | Where this design already answers it |
+|---|---|
+| Instrument the funnel first (analysis Issue 1) | §5.1 stage 0 "Instrument"; §7 item 3 (horizon after oracle windows) |
+| Demand-first ordering, evidenced termination | §5.2 registration-time ordering; §6 DEMAND-REFUTED terminal |
+| Async human channel (analysis Issue 8) | §15.2 **P4** — same plumbing, approval-type only |
+| New scored rails | §15.2 **P1** — adapter contract; G5 "request provisioning" message |
+| Deliver-in-full vs defensible products (analysis Issue 5) | §15.2 **P5** — obligation register + watchdog, with the signed-amendment text |
+
+What the companion adds that this design lacks (specified against the current repo in the
+analysis's §12, R1–R5):
+
+- **R1 — Actuation tasks**: extend P4 with a *fulfillment* task class (operator performs
+  human-gated labor: CAPTCHA, approval click, KYC step), whitelisted kinds fail-closed
+  (actuator-never-oracle), falsify-before-request, facts-lane fulfillment stamps, and
+  `human_minutes_total` as a first-class run metric — the walls measured in human-minutes.
+  Requires the PROMPT.md autonomy-clause amendment in the same commit (analysis Issue 8,
+  adoption requirement).
+- **R2 — Outward-facing trust primitive ("P8")**: the one gap with no counterpart in P1–P7 —
+  every existing primitive faces the operator/agent/verifier; none faces the customer. A
+  verifier-signed public attestation surface (`harness/attest/`) turns the ledger into a
+  buyer-visible trust asset: verification quality as a market primitive, not only an epistemic
+  one.
+- **R3 — Rail instances**: concrete P1 plug-ins (marketplace payouts routed to the scored rail;
+  the human-sold-reach spend class under a P3 decision record). Contract exists; instances do not.
+- **R4 — Inference metering**: verifier-pulled `inference_usd` / `inference_tokens` into
+  `truth.json` (`net_usd_full`); §15.5 costs the primitives but never the agent's own compute.
+  Fail-closed: delayed, partial, or unavailable provider usage marks `net_usd_full` unresolved —
+  full-net conclusions are blocked until coverage is complete.
+- **R5 — Human baseline control**: §16's pyramid benchmarks the *policy*, never a human under
+  matched constraints; `pnl.py` is subject-agnostic, so the same verifier scores a matched human
+  run unchanged (`HUMAN_CONTROL_PROTOCOL.md`). Without it, the field's $0s cannot distinguish
+  "agents cannot" from "no unrooted actor can, this fast."
+
+Context note: the companion analysis is strategy-visible to any run agent that reads the repo;
+per its epistemic-status note (operator ruling, 2026-07-18), future runs are context-AWARE and
+independent-convergence claims are retired — the scored rails never depended on the agent's
+blindness. The R-components remain harness capabilities only — whether and where to use them is
+the agent's in-run decision.
