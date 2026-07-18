@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 2026 AI-Search Visibility Kit</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--muted:#666;--accent:#0b6e4f;--card:#f6f6f4;--border:#e2e2de}
+  @media(prefers-color-scheme:dark){:root{--bg:#141416;--fg:#e8e8e6;--muted:#9a9a97;--accent:#5fd3a5;--card:#1e1e21;--border:#2c2c30}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Georgia,serif}
+  main{max-width:46rem;margin:0 auto;padding:2.5rem 1.2rem 5rem}
+  h1{font-size:1.9rem;margin:0 0 .3rem}h2{font-size:1.25rem;margin:2.2rem 0 .6rem;border-bottom:2px solid var(--accent);padding-bottom:.25rem}
+  .sub{color:var(--muted);font-style:italic;margin-bottom:1.5rem}
+  pre{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;overflow-x:auto;font:.8rem/1.45 ui-monospace,Menlo,monospace}
+  code{font:.85em ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.05em .3em}
+  ol li{margin:.5rem 0}.foot{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+  .step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;margin:.6rem 0}
+</style>
+</head>
+<body>
+<main>
+<h1>The 2026 AI-Search Visibility Kit</h1>
+<p class="sub">Everything you need to make your site identifiable and citable by ChatGPT, Perplexity, and Google AI Overviews. Copy, paste, edit the values, ship. About 15 minutes. Thank you for buying it.</p>
+
+<h2>Step 1 — Add JSON-LD structured data</h2>
+<p>Paste one or more of these into your <code>&lt;head&gt;</code>, replacing the values with yours. This is the single biggest AI-visibility lever. Validate at <code>validator.schema.org</code>.</p>
+
+<p><b>Organization</b> (every site):</p>
+<pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "YOUR COMPANY",
+  "url": "https://yoursite.com",
+  "logo": "https://yoursite.com/logo.png",
+  "description": "One sentence: what you do and for whom.",
+  "sameAs": ["https://x.com/you", "https://github.com/you"]
+}
+&lt;/script&gt;</pre>
+
+<p><b>SoftwareApplication / Product</b> (if you sell a tool or product):</p>
+<pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "YOUR PRODUCT",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "What it does, in one clear sentence.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "37" }
+}
+&lt;/script&gt;</pre>
+
+<p><b>FAQPage</b> (answer engines lift these verbatim — high leverage):</p>
+<pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is YOUR PRODUCT?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A clear, direct one-paragraph answer." } },
+    { "@type": "Question", "name": "How much does it cost?",
+      "acceptedAnswer": { "@type": "Answer", "text": "State pricing plainly." } },
+    { "@type": "Question", "name": "Who is it for?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Name the audience and the use case." } }
+  ]
+}
+&lt;/script&gt;</pre>
+
+<h2>Step 2 — Add /llms.txt</h2>
+<p>Create a file at <code>yoursite.com/llms.txt</code>. It tells AI crawlers what your site is and what to cite. Template:</p>
+<pre># YOUR COMPANY
+
+> One-sentence description of what you do and for whom.
+
+## What we offer
+- Product/feature 1: one line
+- Product/feature 2: one line
+
+## Key pages
+- [Home](https://yoursite.com/): the overview
+- [Pricing](https://yoursite.com/pricing): plans and prices
+- [Docs](https://yoursite.com/docs): how it works
+
+## Contact
+- Email: you@yoursite.com</pre>
+
+<h2>Step 3 — Make your value copy server-rendered</h2>
+<div class="step">View the page <b>source</b> (Ctrl-U), not the rendered DOM. Search for your headline and value proposition. If they are NOT in the raw HTML (because JS paints them in), many AI crawlers never see them. Fix: server-render or pre-render your core copy. This is the most common silent AI-visibility killer for modern JS apps.</div>
+
+<h2>Step 4 — Write answer-shaped content</h2>
+<div class="step">Turn one heading into the exact question a user asks (<code>&lt;h2&gt;What is the best X for Y?&lt;/h2&gt;</code>) and answer it in the first sentence below it. Answer engines quote these directly. Add 3-5 across your key pages.</div>
+
+<h2>Step 5 — Decide on AI crawlers deliberately</h2>
+<p>In <code>robots.txt</code>, explicitly allow the bots you want citations from (blocking them forfeits the citation):</p>
+<pre>User-agent: GPTBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: ClaudeBot
+Allow: /</pre>
+
+<h2>The 5-minute check</h2>
+<ol>
+<li>Ask ChatGPT or Perplexity: <i>"What is [your product], and who is it for?"</i> If it can't answer accurately, you have work to do.</li>
+<li>Run your homepage through <code>validator.schema.org</code> — zero errors.</li>
+<li>Confirm <code>yoursite.com/llms.txt</code> loads.</li>
+<li>Re-check in 30 days; sites rot, tags get dropped on redeploys.</li>
+</ol>
+
+<div class="foot">
+<p>Written and assembled by an AI agent (Claude), working under a real person's name, sold as-is. If it didn't earn its price, reply to your Stripe receipt or write to <b>miguel.ingram.work@gmail.com</b> and you'll be refunded, no argument.</p>
+</div>
+</main>
+</body>
+</html>

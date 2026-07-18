@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Dev Card — turn your GitHub into a shareable card</title>
+<meta name="description" content="Type a GitHub username, get a clean shareable Dev Card: stars, top languages, followers, and your tier. Free, runs in your browser."/>
+<meta property="og:title" content="Dev Card — your GitHub as a shareable card"/>
+<meta property="og:description" content="Stars, top languages, followers, your tier. Free, in your browser."/>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--line:#30363d;--fg:#e6edf3;--sub:#8b949e;--accent:#7c3aed}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.wrap{max-width:640px;margin:0 auto;padding:40px 20px 80px;text-align:center}
+h1{font-size:30px;letter-spacing:-.02em;margin:0 0 6px}p.sub{color:var(--sub);margin:0 0 24px}
+.row{display:flex;gap:10px;max-width:440px;margin:0 auto}
+input{flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#010409;color:var(--fg);font-size:16px}
+button{font:inherit;font-weight:700;cursor:pointer;border:none;border-radius:10px;padding:12px 18px;font-size:15px}
+.btn-primary{background:var(--accent);color:#fff}.btn-ghost{background:var(--card);color:var(--fg);border:1px solid var(--line)}
+#status{color:var(--sub);font-size:14px;min-height:20px;margin:14px 0}
+.card-frame{margin:20px auto 0;max-width:520px}#card{display:block;width:100%;height:auto}
+.actions{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.sell{margin:22px auto 0;max-width:520px;background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px 18px;text-align:left;font-size:14px;color:var(--sub)}
+.sell b{color:var(--fg)}
+.foot{margin-top:50px;color:var(--sub);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--accent)}
+</style><!-- geo-patch --><link rel="canonical" href="https://devcard.surge.sh/"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Dev Card", "url": "https://devcard.surge.sh/", "description": "Type a GitHub username, get a clean shareable Dev Card: stars, top languages, followers, and your tier. Free, runs in your browser; HD export $5.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "5", "priceCurrency": "USD"}, "publisher": {"@type": "Person", "name": "Miguel Ingram"}}</script></head><body><div class="wrap">
+<h1>Dev Card</h1>
+<p class="sub">Type a GitHub username. Get a clean card you can share.</p>
+<div class="row">
+  <input id="u" type="text" placeholder="e.g. torvalds" autocomplete="off" spellcheck="false"/>
+  <button class="btn-primary" id="go" type="button">Generate</button>
+</div>
+<div id="status"></div>
+<div class="card-frame"><svg id="card" viewBox="0 0 520 300" role="img" aria-label="Dev card"></svg></div>
+<div class="actions">
+  <button class="btn-ghost" id="dl" type="button">Download PNG (free)</button>
+  <button class="btn-primary" id="buy" type="button">Get the hi-res, no-watermark card — $5</button>
+</div>
+<div class="sell">
+  <b>The pro card — $5.</b> The same card, watermark removed, exported at 4x resolution (crisp for a
+  profile banner, slide, or print) plus a standard size. Generated on your device the instant you pay —
+  a direct download. <span style="color:var(--fg)">Payment by Stripe; the statement shows the maker's name, Miguel Ingram.</span>
+</div>
+<div class="foot">Made by Miguel Ingram. Uses the public GitHub API; unauthenticated calls are limited to 60/hour. No tracking.</div>
+</div>
+<script src="devcard.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $=function(id){return document.getElementById(id);};
+  var STRIPE_LINK="https://buy.stripe.com/aFabJ384b3SXgim3Qy7ok0a";
+  var lastStats=null;
+  function render(stats){
+    lastStats=stats;
+    var b=DevCard.buildSVG(stats,{paid:false});
+    var host=$("card"); host.setAttribute("viewBox","0 0 "+b.W+" "+b.H);
+    host.innerHTML=new DOMParser().parseFromString(b.markup,"image/svg+xml").documentElement.innerHTML;
+    try{ localStorage.setItem("dc_user", stats.login); }catch(e){}
+  }
+  function go(){
+    var u=$("u").value.trim(); if(!u){ $("status").textContent="Enter a GitHub username."; return; }
+    $("status").textContent="Fetching "+u+"…";
+    DevCard.fetchStats(u).then(function(s){ $("status").textContent=""; render(s); })
+      .catch(function(e){ $("status").textContent=e.message||"Could not fetch that user."; });
+  }
+  $("go").onclick=go;
+  $("u").addEventListener("keydown",function(e){ if(e.key==="Enter") go(); });
+  $("dl").onclick=function(){ if(!lastStats){ $("status").textContent="Generate a card first."; return; } DevCard.downloadPng(lastStats,2,false,"dev-card.png"); };
+  $("buy").onclick=function(){
+    if(!lastStats){ $("status").textContent="Generate your card first, then buy the hi-res version."; return; }
+    try{ localStorage.setItem("dc_user", lastStats.login); }catch(e){}
+    if(!STRIPE_LINK||STRIPE_LINK.indexOf("__DC")===0){ $("status").textContent="Checkout is being set up — check back shortly."; return; }
+    window.location.href=STRIPE_LINK;
+  };
+  // restore
+  try{ var last=localStorage.getItem("dc_user"); if(last){ $("u").value=last; go(); } }catch(e){}
+})();
+</script></body></html>

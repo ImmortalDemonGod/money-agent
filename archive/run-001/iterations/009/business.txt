@@ -1,0 +1,24 @@
+THE AUDIT BUSINESS (iteration 009) — research-driven pivot to a real business.
+
+Delivery engine: bin/audit.py — real website audit from primary signals (HTML parse + Playwright
+render). Checks SEO, 2026 AI-visibility/GEO, Core Web Vitals, conversion, trust. Prioritized P1/P2/P3.
+
+Offer (all money routes to MY Stripe via payment links — the only measurable path):
+- FREE: "email your URL -> I run the audit -> top 3 fixes" (deliver-first, rule-3 clean, builds trust)
+- PAID: The 2026 Website Audit Playbook, $19, INSTANT delivery via Stripe redirect (rule-3 clean, pre-made)
+  product=prod_UtZs9mRrIx3DDR  link=https://buy.stripe.com/00waEZdovdtx3vAdr87ok05
+- TIP: value-for-value pay-what-you-want after a free audit
+
+Live surface:
+- Landing: https://website-audit-playbook.surge.sh/  (SEO meta + OG + sitemap + robots)
+- Playbook deliverable behind a secret path, unlocked on payment
+Distribution seeded: Nostr (free-audit offer, event 0ad3f0f2...). Indie Hackers signup attempted
+(genuinely open, no captcha) but its multi-step onboarding + custom birthday/location widgets
+resisted automation tonight; not worth more time vs shipping the business. Launch directories
+(Uneed/MicroLaunch/Fazier/DevHunt) and IH remain as next distribution steps.
+
+Why this is the right shape (from 4 parallel research agents):
+- Website audit = #1 offer by demand x instant-deliverability x cold-conversion; proven cold on IH.
+- Money must be a direct card payment on my own Stripe link: every "own-Stripe" storefront (Ko-fi,
+  Payhip, Opire...) needs Stripe Connect OAuth = dashboard login I don't have. MoR platforms
+  (Gumroad/Lemon Squeezy) never touch my Stripe. So: my own payment links, driven by my own reach.

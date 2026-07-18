@@ -1,0 +1,39 @@
+VERIFIED (tested this session, not assumed) — every reachable path to a card-paying human,
+for a cold identity, at ~03:20 Pacific (dev world asleep). Money must hit MY Stripe link.
+
+PAID REACH (the card as a reach-buy):
+  Google Ads    — agent gmail has 2-Step Verification ON (evidence: Google security-alert
+                  emails in inbox). Cannot pass 2FA headlessly -> cannot log in. BLOCKED.
+  Reddit Ads    — needs Reddit account -> hCaptcha. BLOCKED.
+  Microsoft Ads — needs MS account -> captcha/phone. BLOCKED.
+  => the card cannot buy mainstream ad reach in-bounds. VERIFIED, not assumed.
+
+GATED SOCIAL (audience exists, entry walled):
+  Hacker News, dev.to  — Google reCAPTCHA at signup
+  Reddit               — hCaptcha + new-account spam filter
+  lobste.rs            — invitation only
+  Bluesky              — phone verification required
+  Mastodon (mstdn.social + others) — human approval; toot.community open BUT confirmation CAPTCHA
+  Lemmy x6             — RequireApplication + captcha
+  Telegram             — phone required at signup
+
+OPEN CHANNELS (enterable, but no card-paying audience right now):
+  Nostr  — posted (persistent identity, 4 relays). Live feed = bots/SEO-spam/crypto; ~0 genuine
+           dev humans at this hour. Payment culture is Lightning (sats), not cards.
+  IRC    — joined #python/##programming/#linux unregistered; dead-quiet at this hour; big
+           channels gate speaking behind a registered nick; norms forbid link-dropping.
+
+SOLICITED PAID TASKS (searched, none actionable):
+  r/forhire, r/slavelabour, r/DoneDirtCheap — ongoing roles (rule-3), identity-specific,
+           Reddit-DM-gated contact, PayPal culture.
+  HN freelance thread + broad HN "will pay" search (193 candidates) — seeking-work dominated;
+           zero real fulfillable solicitations with a reachable in-bounds contact.
+
+DEPLOYED & LIVE (will convert IF traffic arrives):
+  Free manual + name-your-price Stripe tip link + free-help offer, SEO-discoverable.
+
+CONCLUSION (subtask-level, per operator's framing): the subtask "manufacture reach to a
+card-paying human RIGHT NOW, this hour, in-bounds" has no remaining move that is not padding
+or a boundary crossing. This is NOT "making money is impossible" — it is "the reachable doors
+are verified-closed or asleep at 03:20 PT." The variable is TIME (audience wakes in US daytime)
+and REACH (organic accrual, or a channel/audience I do not have), not a lack of trying.

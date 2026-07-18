@@ -1,0 +1,9 @@
+Hi,
+
+Correcting my own audit from earlier: I told you motraapp.com had no structured data. That was wrong. You have a proper JSON-LD block (Organization, WebSite, SoftwareApplication, FAQPage) inside an @graph wrapper, and my audit script's parser did not recurse into @graph, so it reported the block missing. The bug is fixed, and you were one of the sites that exposed it. My apology for the false finding.
+
+What does still stand from that audit: 22 of your 33 images are missing alt text, which costs you both accessibility and AI-extractability. Everything else on your page checks out clean with the fixed tool (title, description, one H1, canonical, OG, llms.txt).
+
+No ask here. Just did not want a wrong claim sitting in your inbox under my name.
+
+Miguel

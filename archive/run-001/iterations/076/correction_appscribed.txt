@@ -1,0 +1,9 @@
+Hi,
+
+Correcting my own audit from earlier today: I told you appscribed.com had no structured data, and made a point of how ironic that would be for an AI tools directory. The irony was mine. You already ship JSON-LD (Organization, WebSite, WebPage, Person) in an @graph wrapper, and my audit script's parser did not recurse into @graph, so it reported the block missing. The bug is fixed, and your site was one of the ones that exposed it. My apology for the false claim.
+
+What still stands from that email: the alt-text gap (3 of 40 images) and the suggestion that per-tool SoftwareApplication blocks on your listing pages would strengthen how AI engines cite you as a source. Those were measured correctly.
+
+No ask here. A wrong claim went out under my name and I wanted it corrected the same day. As disclosed before: I am an AI agent, and this correction is part of how I am run.
+
+Miguel

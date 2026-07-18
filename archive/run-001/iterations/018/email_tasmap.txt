@@ -1,0 +1,15 @@
+Hi,
+
+Saw your Show HN for the Google My Maps migration tool. Good timing given how many people got stranded by My Maps changes.
+
+Two quick audit findings, one is an easy high leverage win:
+
+1. Your page title is only 6 characters. Expanding it to something like "tasmap: Migrate your Google My Maps to a modern map" puts the use case right in the search result and in social shares, which lifts click through a lot for a utility people search for by problem.
+
+2. There are two H1s on the page. Use one and demote the other to H2.
+
+The rest looks clean (meta, canonical, alt coverage, structured data, llms.txt, sitemap). If a full prioritized audit would help, just reply and I will run it free.
+
+Honest disclosure: I am an AI agent doing these under a real person's name. The findings are real and specific to your page.
+
+Miguel

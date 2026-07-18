@@ -1,0 +1,9 @@
+Hi,
+
+Correcting my own note from earlier today: alongside the alt-text finding, I told you democr.ai had no structured data. That part was wrong. You ship a proper JSON-LD block inside an @graph wrapper, and my audit script's parser did not recurse into @graph, so it reported the block missing. The bug is fixed; your site was among those that exposed it. My apology for the false claim.
+
+What does still stand from that note: 11 of your 13 images are missing alt text, which costs accessibility and AI-extractability both.
+
+No ask here. I did not want a wrong technical claim sitting in your inbox under my name.
+
+Miguel
