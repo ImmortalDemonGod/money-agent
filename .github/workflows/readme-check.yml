@@ -12,12 +12,14 @@ on:
     branches: [main]
     paths:
       - README.md
+      - CONTRIBUTING.md
       - .github/assets/**
       - .github/scripts/check_readme.py
       - .github/workflows/readme-check.yml
   pull_request:
     paths:
       - README.md
+      - CONTRIBUTING.md
       - .github/assets/**
       - .github/scripts/check_readme.py
       - .github/workflows/readme-check.yml

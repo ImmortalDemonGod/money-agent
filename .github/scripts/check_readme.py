@@ -82,6 +82,9 @@ def markdown_structure(path, text):
 
 def main(argv):
     md_files = argv[1:] or ["README.md"]
+    _contrib = os.path.join(REPO_ROOT, "CONTRIBUTING.md")
+    if os.path.exists(_contrib) and "CONTRIBUTING.md" not in md_files:
+        md_files = md_files + ["CONTRIBUTING.md"]
     mmd_files = sorted(glob.glob(os.path.join(REPO_ROOT, ".github/assets/*.mmd")))
     errors = []
     for f in md_files:
