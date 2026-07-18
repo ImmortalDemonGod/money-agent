@@ -32,7 +32,7 @@ run, by making the *bet* the only unit of work (engine) and a *business spine* t
 machine over bets (direction), with a single termination authority computed over the bet
 ledger.
 
-**Companion analysis:** `docs/COMPARATIVE_ANALYSIS.md` places this design in the landscape of every known public attempt at the same problem; §18 below maps its findings onto this design's primitives.
+**Companion analysis:** `docs/COMPARATIVE_ANALYSIS.md` places this design in the landscape of the publicly documented attempts at the same problem; §18 below maps its findings onto this design's primitives.
 
 ---
 
@@ -1041,12 +1041,14 @@ them stays: record, cap, and surface; never pretend to adjudicate.
 
 ## 18. The rootedness layer (companion-analysis findings, mapped onto this design)
 
-A comparative study of every known public attempt at the same problem
+A comparative study of the publicly documented attempts at the same problem it could locate
 (`docs/COMPARATIVE_ANALYSIS.md`) — money-agent run 1 plus three independent external experiments,
 all $0 — locates the binding constraints in an ordered wall stack (identity -> channel access ->
 trust/demand -> commoditization -> unit economics) and finds, via a human-substitution test, that
 the walls are **anti-unrooted-actor, not anti-agent**: every wall binds some class of humans
-identically, and every human escape was institutional or relational, never individual effort.
+in structurally the same way (with documented disanalogies — agents' perfect copyability, their
+absent cost floor), and the durable human escapes were overwhelmingly institutional or
+relational rather than individual effort.
 
 This design already provides the *scientist* layer (ordering, falsifiability, computable
 stopping) and — per the analysis's §11 diff — already contains the sockets for the *rootedness*
@@ -1078,6 +1080,8 @@ analysis's §12, R1–R5):
   the human-sold-reach spend class under a P3 decision record). Contract exists; instances do not.
 - **R4 — Inference metering**: verifier-pulled `inference_usd` / `inference_tokens` into
   `truth.json` (`net_usd_full`); §15.5 costs the primitives but never the agent's own compute.
+  Fail-closed: delayed, partial, or unavailable provider usage marks `net_usd_full` unresolved —
+  full-net conclusions are blocked until coverage is complete.
 - **R5 — Human baseline control**: §16's pyramid benchmarks the *policy*, never a human under
   matched constraints; `pnl.py` is subject-agnostic, so the same verifier scores a matched human
   run unchanged (`HUMAN_CONTROL_PROTOCOL.md`). Without it, the field's $0s cannot distinguish
