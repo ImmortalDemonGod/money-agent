@@ -4,7 +4,7 @@ import json, hashlib, time, sys, os
 from coincurve import PrivateKey
 import websocket
 
-KEYFILE = "/private/tmp/claude-501/-Users-tomriddle1-money-agent/34eeae53-e5c4-4f2f-92d7-201202989630/scratchpad/nostr_key.hex"
+KEYFILE = "/private/tmp/claude-501/-Users-[redacted]-money-agent/34eeae53-e5c4-4f2f-92d7-201202989630/scratchpad/nostr_key.hex"
 if os.path.exists(KEYFILE):
     sk = PrivateKey(bytes.fromhex(open(KEYFILE).read().strip()))
 else:

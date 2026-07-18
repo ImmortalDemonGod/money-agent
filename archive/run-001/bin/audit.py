@@ -103,7 +103,7 @@ print(json.dumps(out))
 '''
     try:
         r = subprocess.run([sys.executable, "-c", script, url], capture_output=True, text=True,
-                           timeout=70, cwd="/private/tmp/claude-501/-Users-tomriddle1-money-agent/34eeae53-e5c4-4f2f-92d7-201202989630/scratchpad")
+                           timeout=70, cwd="/private/tmp/claude-501/-Users-[redacted]-money-agent/34eeae53-e5c4-4f2f-92d7-201202989630/scratchpad")
         return json.loads(r.stdout.strip().splitlines()[-1])
     except Exception as e:
         return {"ok": False, "err": str(e)[:120]}
