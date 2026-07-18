@@ -81,4 +81,5 @@ jobs:
       - name: Scan for secrets
         uses: gitleaks/gitleaks-action@v2
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # required by gitleaks-action v2 to scan PR commits
           GITLEAKS_CONFIG: .gitleaks.toml
