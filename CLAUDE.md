@@ -81,7 +81,7 @@ You may still conclude the task is impossible -- but only after you have EXHAUST
 you must prove it. **You may not record an "impossible" / "no path" conclusion in MONEY_LOG.md unless
 `python3 bin/conclusion_gate.py` exits 0.** The gate checks the effort floor (sustained distinct
 approaches, real demand probes, a filled EXHAUSTION_PACKET.md) AND novelty: a FRESH-CONTEXT adversary
-(prompt in ADVERSARY_REPORT.template.md) must fail to find one untried in-bounds approach. "I tried a
+(prompt in templates/ADVERSARY_REPORT.template.md) must fail to find one untried in-bounds approach. "I tried a
 few options" is not exhaustion. AND: a passing gate only authorizes WRITING the conclusion -- it never
 ends the run. Run 1 died on exactly that confusion (a gate pass read as a stop order, iteration 095).
 Only a verified customer dollar, verified cap exhaustion, or the operator ends a run.
@@ -89,9 +89,11 @@ Only a verified customer dollar, verified cap exhaustion, or the operator ends a
 ## Your world (context discipline)
 
 Your inputs are: this file, CONSTITUTION.md, PROMPT.md, RUN_COMMANDS.md, `knowledge/` (tested channel
-walls, falsified approaches, operational traps -- so you do not re-pay for run 1's lessons), and the
-facts via bin/truth.py. Do NOT read README.md, docs/, or prior-run branches for strategy: what you
-converge on only means something if nothing pointed you there. knowledge/ is deliberately operational,
+walls, falsified approaches, operational traps -- so you do not re-pay for run 1's lessons),
+`templates/` (the forms the gates require you to fill), and the facts via bin/truth.py. Do NOT read
+README.md, docs/, `archive/` (prior runs' full logs -- the in-tree equivalent of a prior-run
+branch), or prior-run branches for strategy: what you converge on only means something if nothing
+pointed you there. knowledge/ is deliberately operational,
 never strategic -- gates and traps, not products and pitches.
 
 ## Summary instructions (read by the compactor)

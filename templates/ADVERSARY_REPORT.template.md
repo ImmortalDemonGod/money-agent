@@ -18,7 +18,7 @@ recordable if an adversary who did NOT do the work fails to find one untried in-
 
 ## Required pinning (the gate rejects the report without these)
 
-```
+```text
 MONEY_LOG_SHA256: <sha256 of MONEY_LOG.md at generation time — binds the verdict to the log state>
 TRANSCRIPT_SHA256: <sha256 of ADVERSARY_TRANSCRIPT.md — binds the verdict to its working record>
 GENERATED_BY: <fresh subagent | operator>  DATE: <iso>

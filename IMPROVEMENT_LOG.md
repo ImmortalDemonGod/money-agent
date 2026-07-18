@@ -794,3 +794,86 @@ variant; all gates behaved fail-closed under adversarial inputs. Findings, all l
 Also re-verified on the merged branch this round: the conclusion gate's full four-layer pass
 path (transcript + CONCLUSION bar + resolved bets + non-PENDING edge), corrupt bets.json
 (conclusion fails closed, guard advisory survives), and the MAX_ITERS counter.
+
+## Entry 019 — legibility as a feature: the navigation layer, the run lifecycle, and the committed test matrix
+
+**The prompt for this entry, verbatim from the operator:** "as a human or agent its hard to find
+anything in this repo or know why I need to read something because its messy." That is a real
+defect class for this repo specifically: a verification harness whose structure cannot be
+navigated is a harness whose checks do not get read.
+
+**Navigation layer.** README gains "Finding your way around": four reader personas (operator /
+run agent / reviewer / contributor), each with its complete reading list and nothing more, plus a
+directory-ownership table. Every directory that carries trust semantics now says so in its own
+README: `bin/README.md` is the full trust map (verifier-only / gates / agent tools / operator
+lifecycle, one line each — the read-side complement to sod_hook's write-side blocklist),
+`ledger/README.md` states the never-write rule and the truth.py-only read rule where a browsing
+agent will actually see it, `templates/`, `tests/`, `archive/` likewise. The three fill-in
+templates move from root clutter to `templates/` (all references updated).
+
+**Run lifecycle — a correctness fix wearing a tidiness costume.** `bin/new_run.sh` archives all
+run-scoped state to `archive/run-NNN/` and reseeds clean logs. Without it, run N's leftovers
+adjudicate run N+1: conclusion_gate's effort floor counts MONEY_LOG headers and SENT_LOG sends
+(a stale log satisfies the exhaustion floor on day one), MAX_ITERS reads the old counter, a stale
+DISCLOSURE_EV_LOG pre-authorizes sends, a stale EDGE_REGISTRATION is a bet nobody placed. Run 1
+handled this with a hand-typed wipe commit — a human remembering. Verified in a scratch clone:
+archive complete, logs reseeded, conclusion gate reads 0 iterations after. The verifier-side
+half: set_baseline.py now auto-archives a stale edge freeze (a new baseline is a new run; a
+previous run's frozen bar must never adjudicate this one) — verified.
+
+**tests/sim.sh — the review rig, committed.** The bare-origin two-lane matrix that caught every
+real defect across four review rounds (the inert rev-list fix, the dropped gate section, the
+anchor rule) now lives in the repo: 22 assertions over grounded reads, every guard terminal, the
+full gate adjudication, bets/conclusion interplay, the edge verdict machine (stubbed broker,
+including the naive-deadline rejection), and the verifier convergence block extracted VERBATIM
+between TEST-MARKER comments — with an anti-vacuity check that fails if the markers drift.
+Scope stated in the file: component-level; the live seams remain issue #20's operator gates.
+
+**The test debugged itself into existence, which is the point.** First scripted runs failed 5/22:
+one real test-rig bug (a stale remote-tracking ref made the forgery test's push silently bounce,
+so it asserted against a clean lane), one flake (a 1-second staleness window raced; now 0), and
+three artifacts of testing uncommitted code (the clone tests HEAD; the extracted convergence
+block came back EMPTY from main's un-markered file and "passed" vacuously — hence the
+anti-vacuity guard, and assert_exit/assert_grep now dump the failing command's output). Every one
+of those failure modes is now impossible to reintroduce silently.
+
+**Critique.** (1) The persona lists in README duplicate knowledge that lives in per-directory
+READMEs — drift risk between them; acceptable because the README table names owners, not
+details. (2) new_run.sh reseeds log headers from strings embedded in the script — a template
+drift risk; kept because reseeding from templates/ would couple the script to files an operator
+might edit mid-run. (3) sim.sh runs ~30s and is not wired to CI or a pre-push hook — deliberate
+for now (the repo has no CI), but "run tests/sim.sh" is now in the contributor persona and the
+PR-review discipline; wiring it mechanically is the natural next hardening.
+
+## Entry 020 — ROUND 5 (pre-merge review of the restructure): six findings fixed, and the matrix caught its author twice more
+
+An independent round-5 reviewer attacked the 3-commit restructure with mutation testing — deliberately
+reintroducing the historical defect classes to see whether tests/sim.sh catches them. Verdict:
+merge-with-nits. The matrix caught the inert rev-list bug, a deleted gate section, and a broken
+first-dollar check; new_run.sh survived every edge case thrown at it and no gate-read path is missed.
+
+**F1 (the real finding — another half-true self-claim):** entry 019 said the marker extraction
+"fails if the markers drift"; true only for the BEGIN marker. Deleting the END marker kept the matrix
+green while the rig silently executed the rest of the verifier loop mid-source. Fixed: both markers
+required, extraction rejected if it contains invocations past the block, execution gated off entirely
+on a bad extraction, and the recovery cycle's clean exit asserted. Mutation-verified in a clone:
+end-marker deletion now produces two loud FAILs and the block is never executed.
+
+**F2–F6, all landed:** sod_hook's blocklist now covers every bin/ script and tests/ (and bin/README's
+claim about it is worded to match reality plus the tripwire-vs-wall limit); the agent's reading rules
+gain `templates/` (gate-required) and forbid `archive/` (prior-run strategy contamination — the
+in-tree equivalent of a prior-run branch); new_run.sh refuses on ANY porcelain output (untracked
+sweep), creates the archive dir lazily, removes the empty run/ dir, and its lane-confirmation
+checklist now says what is actually being confirmed; set_baseline's stale-freeze archive can never
+clobber a same-second predecessor.
+
+**Process failures of my own, recorded because the log exists for exactly this:** (1) fixing F1 the
+first time, I ran the mutation against the REAL tree and cleaned up with `git reset --hard` — which
+destroyed the uncommitted round-5 fixes AND (because a failed temp-commit left HEAD one short) dropped
+the docs commit from local history; recovered from origin, fixes reapplied, and the rule is now
+personal law: mutations run in CLONES, fixes are committed BEFORE testing. (2) My first overrun check
+false-positived on a comment that mentions pnl.py inside the legitimate block (invocations, not
+mentions, are now matched), and my first exit-code assertion was stricter than the block's actual
+contract (the failing-push cycle legitimately returns the short-circuited guard's status). The matrix
+ended 22/22 with the mutation still caught — but it took three tries, each mistake exactly the class
+this repo documents.

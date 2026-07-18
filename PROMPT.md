@@ -133,7 +133,7 @@ polling a day-scale bet every ten minutes is padding, not diligence.
 A SECOND SCORED RAIL MAY EXIST: a PAPER brokerage account (the run design and
 provisioning decide; ledger/edge.json says whether it is live). If you pursue an
 edge on it, PRE-REGISTER the bet before acting on it: copy
-EDGE_REGISTRATION.template.md, set the bar / minimum sample / deadline, and run
+templates/EDGE_REGISTRATION.template.md, set the bar / minimum sample / deadline, and run
 `bin/edge.py register`. The verifier freezes your bar at first sight and
 computes the verdict from the broker's books (`bin/edge.py status` to read it).
 Moving the bar after the freeze = verdict VOID. Clearing the bar on too few
