@@ -163,7 +163,7 @@ enforced at bet-registration time** ("no `build`-type bet registers while zero
 
 ### 4.1 Bet lifecycle
 
-```
+```text
 DRAFT → REGISTERED → ACTIVE → RESOLVED { CONFIRMED | KILLED | EXPIRED | INCONCLUSIVE }
 ```
 
@@ -183,21 +183,27 @@ after which machinery takes over.
 ```json
 {
   "id": "BET_014",
+  "lane": "showhn-founders/structured-data-fix",
   "stage": 2,
   "type": "demand-confirmed",
   "claim": "Show HN founders with structured-data errors will pay $5 for a validated fix",
   "success_condition": {
+    "oracle_id": "mail.reply_matcher",
     "metric": "reply_with_purchase_intent",
-    "source": "mail.py inbox (verifier-stamped) OR stripe payment (pnl.py)",
-    "threshold": ">= 1 within window"
+    "comparator": ">=",
+    "threshold": 1,
+    "window": "registration..deadline_utc"
   },
   "kill_condition": {
-    "metric": "sends_without_reply",
-    "source": "SENT_LOG.md (harness-counted) + beacon open-tracking",
-    "threshold": ">= 15 value-first sends, 0 replies, window elapsed"
+    "oracle_id": "sent_log.counter",
+    "metric": "value_first_sends_without_reply",
+    "comparator": ">=",
+    "threshold": 15,
+    "window": "registration..deadline_utc"
   },
   "deadline_utc": "2026-07-20T00:00:00Z",
   "oracle": "instrumented",
+  "reproduction_protocol": null,
   "prereq_artifacts": ["beacon deployed", "mail round-trip verified"],
   "ev_note": "free text — the agent's judgment, recorded but never gated",
   "max_spend_usd": 0
@@ -206,14 +212,29 @@ after which machinery takes over.
 
 Schema rules (validated by the gate, fail-closed):
 
-- `success_condition.source` must name an **instrument or verifier surface that
-  exists** — a success condition citing an uninstrumented surface refuses to register.
-  This single rule makes v1's F3 structurally impossible: the iter-022 funnel could not
-  have been bet on, because "conversion" had no measurable source until the beacon
-  existed. It forces Instrument to be stage 0 without ever saying so.
+- **Conditions are typed, never free-form prose** (CodeRabbit PR-22 finding): both
+  `success_condition` and `kill_condition` carry `oracle_id` + `metric` + `comparator`
+  + `threshold` + `window` as machine-validatable fields. `oracle_id` must resolve in
+  the **oracle registry** (the P1 adapter/instrument set, §7) at registration time; the
+  gate fails closed when a condition is invalid, its oracle is unavailable, or the
+  oracle is **self-authored** (agent-writable — the `judgment` row of §4.4). An invalid
+  or self-authored `kill_condition` additionally cannot contribute a KILLED verdict
+  toward DEMAND REFUTED (§6) — a terminal must not be reachable through a condition
+  nobody could validate.
+- `oracle_id` must name an **instrument or verifier surface that exists** — a success
+  condition citing an uninstrumented surface refuses to register. This single rule
+  makes v1's F3 structurally impossible: the iter-022 funnel could not have been bet
+  on, because "conversion" had no measurable source until the beacon existed. It forces
+  Instrument to be stage 0 without ever saying so.
+- `lane` required and typed (the §5.5 lane identity: `audience-or-channel/pain-or-offer`
+  signature); registration permissions derive from the lane's lattice position. One bet
+  belongs to exactly one lane (rule R1, §17.2).
 - `deadline_utc` required. No open-ended bets; "pending forever" was the estate-bet
   ambiguity that made iter 095 arguable.
 - `type` must be legal for the current spine stage (see §5.2).
+- `reproduction_protocol` — required non-null when `type: channel-blocked` (§4.3.3):
+  the enumerated falsification attempts (e.g. headed browser, second account, second
+  vector) that must be run and cited before a blocked verdict may record.
 - `max_spend_usd` — per-bet spend authorization; the card cap remains the hard wall.
 
 ### 4.3 Registration gate — `bin/bet_gate.py` (new, fail-closed)
@@ -228,9 +249,17 @@ Runs at registration and again pre-action. Refuses when:
    vector). This mechanizes v1's strongest habit (the 032–043 falsification campaign)
    and blocks its worst one (F1).
 4. Any *action with external effect* (send, publish, deploy, spend) has no ACTIVE bet
-   whose spec covers it — enforced by wiring `bet_gate.py` into `mail.py` and the
-   publish tools the same way `disclosure_gate.py` already is (fail-closed, proven
-   pattern from iter 092–093).
+   **authorization matching it** — enforced by wiring `bet_gate.py` into `mail.py` and
+   the publish tools the same way `disclosure_gate.py` already is (fail-closed, proven
+   pattern from iter 092–093). "Covers it" is defined, not vibed (CodeRabbit PR-22
+   finding): an authorization names the **action type** (send/publish/deploy/spend),
+   the **target or content hash**, the **lane**, a **volume/spend limit**, and an
+   **expiry** (defaulting to the bet's deadline). The gate matches each attempted
+   action against these fields and **atomically reserves/consumes** the authorization
+   before the external effect fires; unmatched, expired, exhausted, or over-limit
+   actions are rejected. Without consumption semantics, one registered send-bet would
+   authorize unbounded sends — the volume-outreach ban laundered through a single
+   registration.
 
 ### 4.4 Resolution — two-lane, always
 
@@ -272,7 +301,7 @@ robots.txt) is caught by a `curl`.
 
 ### 5.2 Ordering rules (enforced at registration, not by exhortation)
 
-```
+```text
 demand-confirmed   requires  stage >= 2  (instrument + substrate exited)
 probe              allowed in stage 2: MINIMAL artifact construction, capped in
                    effort/spend, explicitly distinct from delivery (see note below)
@@ -365,19 +394,31 @@ plus a volume-counting permission gate) and neither owned it. v2 gives it one pl
 
 1. **FIRST DOLLAR** (unchanged, `guard.py`, verifier-grounded): `received_usd > 0` →
    halt, retro, operator review. Still the run's answer.
-2. **DEMAND REFUTED** (new, the exit-code-5 analog — a *successful* terminal): every
-   registered `demand` bet across ≥ K distinct (audience, pain) pairs resolved KILLED,
-   pivot cap reached. The run's answer is "no demand reachable in-bounds," and it is
-   *evidenced*, not asserted.
+2. **DEMAND REFUTED** (new, the exit-code-5 analog — a *successful* terminal): at
+   least `DEMAND_REFUTED_K` **unique normalized** (audience, pain) pairs whose
+   registered `demand` bets all resolved KILLED, with the pivot cap reached. The run's
+   answer is "no demand reachable in-bounds," and it is *evidenced*, not asserted.
+   Two definitions this sentence needs (CodeRabbit PR-22 finding): `DEMAND_REFUTED_K`
+   is a **committed termination parameter in `spine.yml`** (proposed default 5), never
+   an inline constant; and pairs are counted after **normalization** — the same
+   canonical lane-signature rules as §5.5 (case-folded, tokenized audience/pain
+   strings), so re-worded duplicates cannot inflate the count. Only KILLED verdicts
+   from **valid, non-self-authored kill conditions** (§4.2) count.
 3. **EXHAUSTION AS CONVERGENCE** (replaces `exhaustion_gate.py`'s volume counting):
 
 ```python
 def exhausted() -> bool:
     return (
-        all(bet.resolved for bet in ledger)            # nothing pending — kills the
+        effort_floor_met(ledger)                       # >= MIN_RESOLVED_BETS resolved
+                                                       #   across >= MIN_LANES lanes
+                                                       #   (committed spine.yml params;
+                                                       #   an EMPTY ledger is never
+                                                       #   exhausted — v2's
+                                                       #   conclusion_gate floor, kept)
+        and all(bet.resolved for bet in ledger)        # nothing pending — kills the
                                                        #   iter-095 case by construction
         and no_unexpired_deadlines(ledger)             # no oracle still on the clock
-        and generator_dry_rounds >= K                  # last K generation rounds produced
+        and generator_dry_rounds(ledger) >= K          # last K generation rounds produced
                                                        #   zero registrable novel bets
                                                        #   (novelty = new (type, audience,
                                                        #   channel) signature, harness-
@@ -388,7 +429,13 @@ def exhausted() -> bool:
    "A full round changes nothing, stable K rounds" — `backHalfConverge`'s stable
    predicate, transplanted. Iteration 095 becomes mechanically impossible: the estate
    bet was registered, unexpired, unresolved, so `exhausted()` is false regardless of
-   how the agent feels or how many artifacts exist.
+   how the agent feels or how many artifacts exist. Two hardenings (CodeRabbit PR-22
+   finding): the **effort floor** term means a near-empty ledger can never satisfy the
+   predicate — without it, registering nothing and idling K rounds would "converge,"
+   which is defeat theater one level up from iter 095; and `generator_dry_rounds` is
+   **derived from committed generation-round artifacts** (each round's candidate set is
+   a committed record), never an in-memory counter — so the count survives compaction
+   and a fresh context recomputes it identically from the ledger.
 
 The agent may still *want* to stop; it may not *record* a terminal conclusion unless the
 authority's predicate holds — and unlike v1, the predicate measures the ledger's state,
@@ -533,6 +580,11 @@ adopted from day one.
 4. **Horizon parameter.** Who sets the run clock relative to oracle windows — config
    (`spine.yml: max_oracle_window`) refusing bets whose deadline exceeds the run's end?
    Probably yes: a bet that cannot resolve inside the run should not register.
+5. **Demand-confirmation TTL.** Should a `demand-confirmed` resolution expire before a
+   `delivery` bet may cite it (markets move; a weeks-old confirmation is weak grounds
+   for a build)? Leaning yes: a freshness window in `spine.yml`, after which the
+   confirmation must be re-probed (a cheap `probe` bet) before delivery registers.
+   Surfaced by the §17.2 sweep (case 12).
 
 ---
 
@@ -920,6 +972,8 @@ handles it), **AMENDED** (a real fix, applied here as E1–E3 + rules R1–R3), 
 > bet, re-entering the active count — if the active cap is full at that moment, the
 > agent chooses which active lane to park. Both caps in `spine.yml`.
 
+The second is the same species one layer up:
+
 > **E2 — Global stages hold STANDING facts, not one-time resolutions (amends §5.1
 > stages 0–1).** Stage 0/1 exits as first written are latching: beacon confirmed once,
 > stage exited forever — but the beacon can die mid-run, and a dead instrument
@@ -931,12 +985,19 @@ handles it), **AMENDED** (a real fix, applied here as E1–E3 + rules R1–R3), 
 > on it (they cannot resolve against a dead instrument — unknown ≠ zero, `pnl.py`'s
 > own principle).
 
+And the third governs when evidence counts at all:
+
 > **E3 — Event-time resolution (amends §4.4).** A bet whose evidence arrives before
 > `RESOLVE_BY` but is *observed* after (the agent polls late; the verifier cycle
-> lands late) must resolve by **event time when the oracle timestamps it** (a reply's
-> Date header, a beacon hit's stamp, a Stripe event time), else by observation time —
-> and when only observation time exists, expiry wins (fail-conservative). Without E3,
-> deadline races turn wins into expiries or, worse, invite argument.
+> lands late) must resolve by **trusted event time when one exists** — a timestamp
+> from a source the claimant cannot author: verifier-observed receipt time, a beacon
+> hit's stamp, a Stripe event time, an authenticated provider timestamp. A
+> **sender-controlled email `Date` header is NOT a trusted event time** (CodeRabbit
+> PR-22 finding — it is authored by the counterparty and trivially backdatable; using
+> it for deadline adjudication would let evidence timing be forged, violating §2.2's
+> own two-lane rule): it is retained as metadata only. When no trusted event
+> timestamp exists, observation time governs and expiry wins (fail-conservative).
+> Without E3, deadline races turn wins into expiries or, worse, invite argument.
 
 ### 17.2 The sweep
 
@@ -954,7 +1015,7 @@ handles it), **AMENDED** (a real fix, applied here as E1–E3 + rules R1–R3), 
 | 10 | **Trivially satisfiable success conditions** ("≥0 visits") | RESIDUAL | Content-blind gates cannot judge bar quality. Mitigants: meaningless bets burn capped slots; P3 records the reasoning; terminal review reads the ledger. Named honestly: this is FC3-adjacent and stays judgment. |
 | 11 | **"Minimal" probe is unmeasurable** | RESIDUAL | `max_spend_usd` is mechanical; effort bounds are soft (iteration-count heuristic at best). The spend cap is the wall; the rest is tripwire. |
 | 12 | **Stale demand confirmation** — confirmed weeks ago, market moved | OPEN (question 5) | Should demand confirmations carry a TTL before `delivery` registration? Leaning yes, config in `spine.yml`; added to §13 as open question 5. |
-| 13 | **Registration/resolution race under a parallel host** | RESOLVED | All gates evaluate against COMMITTED state (the `aiv_gate.sh` `git show HEAD:` pattern); benign in the single-agent chat host, safe by construction under a driver. |
+| 13 | **Registration/resolution race under a parallel host** | RESOLVED | All gates evaluate against COMMITTED state (the `aiv_gate.sh` `git show HEAD:` pattern) — and mutations commit **atomically against an unchanged HEAD** (compare-and-swap: revalidate after the commit attempt; a stale registration is rejected and retried), so lane/spend caps and bet-ID uniqueness hold even when two registrations validate concurrently. Trivial in the single-agent chat host; load-bearing under a parallel driver. |
 | 14 | **Micro-lane farming to reach DEMAND-REFUTED faster** | RESOLVED | No incentive exists: conclusion-gate pass never ends the run (`/goal` v2 removed the agent's kill switch), so manufacturing a terminal buys the agent nothing. The monotone lattice (§5.5) already prevents permission-laundering. |
 | 15 | **Card cap exhausts with bets open** | RESOLVED | Terminal outranks; the registry survives for the retro. An open bet at cap-exhaustion is a documented unknown, not a contradiction. |
 | 16 | **Compaction loses lane state** | RESOLVED | Lane state is DERIVED from committed files (bets + resolutions); CLAUDE.md summary instructions already pin open bets. Nothing about lanes lives only in the transcript. |
