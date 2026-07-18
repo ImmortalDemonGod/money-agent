@@ -40,17 +40,30 @@ assert_grep() { # assert_grep <pattern> <label> <cmd...>  -- dumps output on fai
     sed 's/^/        | /' <<<"$out" | tail -8
   fi
 }
+assert_exit_grep() { # assert_exit_grep <exit> <pattern> <label> <cmd...> -- both must hold
+  local want="$1" pat="$2" label="$3"; shift 3
+  local out; out=$("$@" 2>&1); local got=$?
+  if [[ "$got" == "$want" ]] && grep -q "$pat" <<<"$out"; then ok "$label"; else
+    bad "$label (exit $got want $want; pattern '$pat' $(grep -q "$pat" <<<"$out" && echo present || echo absent))"
+    sed 's/^/        | /' <<<"$out" | tail -8
+  fi
+}
+cdx() { cd "$1" || { echo "FATAL: cd $1 failed -- refusing to run git commands in the wrong tree" >&2; exit 1; }; }
 
 echo "=== build: bare origin + agent + verifier clones from HEAD ==="
 git clone -q --bare "$REPO" "$W/origin.git"
-BRANCH=$(git -C "$REPO" branch --show-current); BRANCH=${BRANCH:-main}
+# pin the EXACT commit under test -- `branch --show-current` is empty on a detached HEAD and a
+# main fallback would silently test the wrong tree (CodeRabbit)
+HEAD_SHA=$(git -C "$REPO" rev-parse HEAD)
+BRANCH=sim-under-test
+git --git-dir="$W/origin.git" branch -f "$BRANCH" "$HEAD_SHA"
 git clone -q -b "$BRANCH" "$W/origin.git" "$W/agent"
 git clone -q -b "$BRANCH" "$W/origin.git" "$W/verifier"
 git -C "$W/agent"    config user.name agent-sim;  git -C "$W/agent"    config user.email a@sim
 git -C "$W/verifier" config user.name verifier;   git -C "$W/verifier" config user.email v@sim
 
 echo "=== publish synthesized facts on a real ledger branch ==="
-cd "$W/verifier"
+cdx "$W/verifier"
 git checkout -q -b ledger
 NOW=$(python3 -c "import datetime as d; print(d.datetime.now(d.timezone.utc).isoformat())")
 python3 - "$NOW" <<'PYEOF'
@@ -83,7 +96,7 @@ publish() { # publish <python-snippet mutating ledger files>  -- commit+push as 
     && git push -q origin ledger
 }
 
-cd "$W/agent"
+cdx "$W/agent"
 echo "=== truth + guard ==="
 [[ "$(python3 bin/truth.py received_usd 2>/dev/null)" == "0.0" ]] && ok "truth: grounded money read" || bad "truth: grounded money read"
 [[ "$(python3 bin/truth.py --file edge.json verdict 2>/dev/null)" == "PENDING" ]] && ok "truth: grounded edge read" || bad "truth: grounded edge read"
@@ -93,28 +106,28 @@ assert_exit 0 "guard: clean pass (PENDING edge is not terminal)" python3 bin/gua
 assert_exit 1 "guard: staleness halt" env LEDGER_MAX_AGE_S=0 python3 bin/guard.py
 
 echo "=== first-dollar + edge terminals ==="
-cd "$W/verifier"
+cdx "$W/verifier"
 publish "
 import json; t=json.load(open('ledger/truth.json')); t['received_usd']=1.0; json.dump(t,open('ledger/truth.json','w'))"
-cd "$W/agent"; assert_exit 2 "guard: FIRST DOLLAR halts (exit 2)" python3 bin/guard.py
-cd "$W/verifier"
+cdx "$W/agent"; assert_exit 2 "guard: FIRST DOLLAR halts (exit 2)" python3 bin/guard.py
+cdx "$W/verifier"
 publish "
 import json; t=json.load(open('ledger/truth.json')); t['received_usd']=0.0; json.dump(t,open('ledger/truth.json','w'))
 e=json.load(open('ledger/edge.json')); e.update({'verdict':'VERIFIED_POSITIVE_EV','paper_pnl_usd':62.5,'filled_orders_since_freeze':25}); json.dump(e,open('ledger/edge.json','w'))"
-cd "$W/agent"
+cdx "$W/agent"
 assert_exit 2 "guard: VERIFIED edge halts as operator checkpoint" python3 bin/guard.py
 assert_exit 0 "guard: EDGE_TERMINAL=0 continues past edge verdict" env EDGE_TERMINAL=0 python3 bin/guard.py
-cd "$W/verifier"
+cdx "$W/verifier"
 publish "
 import json; e=json.load(open('ledger/edge.json')); e.update({'verdict':'VOID','registration_intact':False}); json.dump(e,open('ledger/edge.json','w'))"
-cd "$W/agent"
+cdx "$W/agent"
 assert_exit 1 "guard: VOID (bar-moving) halts hard" python3 bin/guard.py
-cd "$W/verifier"
+cdx "$W/verifier"
 publish "
 import json; e=json.load(open('ledger/edge.json')); e.update({'verdict':'VERIFIED_POSITIVE_EV','registration_intact':True}); json.dump(e,open('ledger/edge.json','w'))"
 
 echo "=== SoD: planted forgery on the facts lane ==="
-cd "$W/agent"
+cdx "$W/agent"
 git fetch -q origin ledger
 git checkout -q -b evil origin/ledger
 python3 -c "
@@ -122,21 +135,21 @@ import json; t=json.load(open('ledger/truth.json')); t['received_usd']=47.0; jso
 git add ledger/truth.json && git commit -qm "agent: forge" && git push -q origin evil:ledger
 git checkout -q "$BRANCH"
 assert_exit 1 "guard: non-verifier author on facts lane -> halt" python3 bin/guard.py
-cd "$W/verifier" && git push -q --force origin ledger && cd "$W/agent" && git fetch -q origin ledger
+cdx "$W/verifier" && git push -q --force origin ledger && cdx "$W/agent" && git fetch -q origin ledger
 assert_exit 0 "guard: clean again after lane restore" env EDGE_TERMINAL=0 python3 bin/guard.py
 
 echo "=== bets + conclusion gate ==="
 python3 bin/bets.py add --what "sim bet" --clock indexation --check "search" \
   --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1 \
   && ok "bets: add" || bad "bets: add"
-assert_grep "open external bet" "conclusion: open bet blocks" python3 bin/conclusion_gate.py
+assert_exit_grep 1 "open external bet" "conclusion: open bet blocks (and returns non-zero)" python3 bin/conclusion_gate.py
 python3 bin/bets.py resolve bet-001 expired "sim evidence" >/dev/null 2>&1 \
   && ok "bets: resolve with evidence" || bad "bets: resolve with evidence"
 grep -q "sim evidence" knowledge/outcomes.jsonl 2>/dev/null \
   && ok "bets: resolution fed knowledge/outcomes.jsonl" || bad "bets: resolution fed outcomes"
 
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
-cd "$W/verifier"
+cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'
 import sys, json, os
 sys.path.insert(0, "bin")
@@ -179,7 +192,7 @@ else
   bad "edge_pnl verdict machine: $EDGE_FAILS"
 fi
 git checkout -q -- ledger/ 2>/dev/null || true   # discard the stub's local edge.json edits
-cd "$W/agent"
+cdx "$W/agent"
 
 echo "=== aiv_gate (needs the canonical CLI) ==="
 if command -v aiv >/dev/null 2>&1; then
@@ -222,7 +235,7 @@ else
 fi
 
 echo "=== verifier convergence (the block between TEST-MARKERs, run verbatim) ==="
-cd "$W/verifier"
+cdx "$W/verifier"
 git checkout -q ledger 2>/dev/null || git checkout -q -B ledger origin/ledger
 git reset -q --hard origin/ledger
 echo '{"probe": true}' > ledger/raw/29990101T000000_probe.json

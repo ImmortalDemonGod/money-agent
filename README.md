@@ -46,7 +46,6 @@ the run should last days. That is the whole list.
 
 **You are the RUN AGENT:**
 your world is `CLAUDE.md` (the bounds), `CONSTITUTION.md`, `PROMPT.md`, `RUN_COMMANDS.md`,
-your world is `CLAUDE.md` (the bounds), `CONSTITUTION.md`, `PROMPT.md`, `RUN_COMMANDS.md`,
 `knowledge/` (what past runs falsified, so you do not re-pay for it), `templates/` (the forms the
 gates require), and the facts via `python3 bin/truth.py`.
 

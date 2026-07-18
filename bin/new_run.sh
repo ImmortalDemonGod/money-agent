@@ -23,12 +23,36 @@ DEST="archive/run-$(printf '%03d' "$((10#$N))")"
 # unrelated stray file into the archival commit (round-5 F4)
 [[ -z "$(git status --porcelain)" ]] \
   || { echo "FATAL: working tree not clean (tracked or untracked) -- commit/stash/remove first (archival must be atomic)." >&2; exit 2; }
-archive() {  # move if present (tracked or not); silence if absent
+# ROLLBACK (CodeRabbit): the transition moves state, reseeds, THEN commits. A failure between
+# those steps used to strand a half-transitioned tree that the clean-tree guard then refused to
+# retry. Every move is recorded; on any error the trap moves everything back, hard-resets tracked
+# content to HEAD (legitimate: the guard proved the tree clean at entry), and removes the partial
+# archive -- leaving the tree exactly as found, retryable.
+MOVED=()
+ROLLBACK_ARMED=1
+rollback() {
+  [[ "$ROLLBACK_ARMED" == "1" ]] || return 0
+  echo "!! transition failed -- rolling back to the pre-archival state" >&2
+  local rec src dest
+  for rec in ${MOVED[@]+"${MOVED[@]}"}; do
+    src="${rec%%::*}"; dest="${rec##*::}"
+    [[ -e "$dest" ]] && { mkdir -p "$(dirname "$src")"; mv "$dest" "$src"; }
+  done
+  git reset -q --hard HEAD 2>/dev/null || true
+  rm -rf "$DEST" 2>/dev/null || true
+  rmdir archive 2>/dev/null || true
+  echo "!! rolled back. Verify with: git status (should be clean)" >&2
+}
+trap rollback ERR
+
+archive() {  # move if present (tracked or not); silence if absent; DEST created lazily; every
+  # move recorded for the rollback trap
   local f
   for f in "$@"; do
     [[ -e "$f" ]] || continue
     mkdir -p "$DEST/$(dirname "$f")"
     git mv "$f" "$DEST/$f" 2>/dev/null || mv "$f" "$DEST/$f"
+    MOVED+=("$f::$DEST/$f")
     echo "  archived: $f"
   done
 }
@@ -38,7 +62,7 @@ archive MONEY_LOG.md SENT_LOG.md REFUSALS.md WATCH_LOG.md DISCLOSURE_EV_LOG.md \
         EXHAUSTION_PACKET.md ADVERSARY_REPORT.md ADVERSARY_TRANSCRIPT.md EDGE_REGISTRATION.md
 archive run/bets.json
 rmdir run 2>/dev/null || true   # bets.py recreates it on first use
-[[ -d iterations ]] && { mkdir -p "$DEST"; git mv iterations "$DEST/iterations" 2>/dev/null || mv iterations "$DEST/iterations"; echo "  archived: iterations/"; }
+[[ -d iterations ]] && { mkdir -p "$DEST"; git mv iterations "$DEST/iterations" 2>/dev/null || mv iterations "$DEST/iterations"; MOVED+=("iterations::$DEST/iterations"); echo "  archived: iterations/"; }
 shopt -s nullglob
 PKTS=(.github/aiv-packets/VERIFICATION_PACKET_ITER_*.md)
 [[ ${#PKTS[@]} -gt 0 ]] && archive "${PKTS[@]}"
@@ -84,6 +108,7 @@ echo "  seeded: MONEY_LOG.md SENT_LOG.md REFUSALS.md DISCLOSURE_EV_LOG.md (heade
 
 git add -A
 git commit -q -m "new run: archive run $N state to $DEST, seed clean run logs"
+trap - ERR; ROLLBACK_ARMED=0   # transition published atomically; nothing left to roll back
 echo "=== committed. Push when ready: git push origin HEAD ==="
 
 cat <<EOF
