@@ -1,0 +1,14 @@
+# gitleaks config for money-agent. Extends the default ruleset; allowlists only
+# template placeholders that are provably not real secrets. The point is to catch
+# a real credential before it lands (run 1 leaked a token once) -- not to flag the
+# example file every developer copies.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Template/example placeholders, not real secrets"
+# .env.example ships rk_live_REPLACE_ME etc. by design; the real .env is gitignored.
+paths = ['''\.env\.example$''']
+# Any finding whose secret is a REPLACE_ME placeholder is not a leak.
+regexes = ['''REPLACE_ME''']

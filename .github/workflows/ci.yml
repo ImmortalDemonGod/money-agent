@@ -1,14 +1,15 @@
 name: CI
 
-# The real project gate. Runs the committed verification matrix (tests/sim.sh):
-# it builds a local two-lane git world (bare origin + agent/verifier clones + a
-# synthesized ledger branch) and asserts the harness's load-bearing behaviors --
-# every guard terminal (first dollar, edge verified, VOID, staleness, SoD
-# forgery), the gate adjudication (honest pass + each dishonest fail), the
-# bets/conclusion interplay, the edge verdict machine, and the verifier
-# convergence block run verbatim. No keys, no network. Plus a Python byte-compile
-# of bin/ to catch syntax errors. Unlike readme-check.yml this runs on every push
-# and PR, not just docs.
+# The real project gate. Runs on every push to main and every PR:
+#   sim         - the committed verification matrix (tests/sim.sh): a local
+#                 two-lane git world asserting every guard terminal, gate
+#                 adjudication, the edge verdict machine, SoD forgery, and the
+#                 verifier convergence block. No keys, no network.
+#   python      - byte-compile bin/ to catch syntax errors.
+#   shellcheck  - lint every bin/ + tests/ shell script at default severity
+#                 (the tree is clean; a new finding fails the build).
+#   secret-scan - gitleaks, so a real credential can never land (run 1 leaked
+#                 a token once); template placeholders are allowlisted.
 
 on:
   push:
@@ -18,10 +19,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   sim:
     name: verification matrix (tests/sim.sh)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,25 +35,50 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
       - name: Configure git identity (sim.sh makes commits)
         run: |
           git config --global user.email "ci@example.com"
           git config --global user.name "ci"
       - name: Run the verification matrix
         run: bash tests/sim.sh
-        # Note: the aiv-gate stage tests SKIP loudly without the aiv CLI on PATH.
-        # Installing aiv-protocol here would un-skip them (see issue #20 item 3).
+        # The aiv-gate stage tests SKIP loudly without the aiv CLI (issue #20 item 3).
 
   python:
     name: python byte-compile (bin/)
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
       - name: Byte-compile all bin/ Python
         run: python3 -m compileall -q bin
+
+  shellcheck:
+    name: shellcheck (bin/ + tests/)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run shellcheck (preinstalled on ubuntu-latest)
+        run: shellcheck bin/*.sh tests/*.sh
+
+  secret-scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml

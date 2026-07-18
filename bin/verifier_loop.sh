@@ -21,7 +21,7 @@
 #
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$R"
+cd "$R" || exit 1
 INTERVAL="${INTERVAL:-120}"
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 # AGENT_BRANCH is optional but strongly recommended: pnl.py hashes the constitution the AGENT
@@ -31,7 +31,11 @@ export AGENT_BRANCH
 
 LOG="$R/verifier.log"
 [[ -f "$R/.env" ]] || { echo "FATAL: .env missing. The verifier needs the read key." >&2; exit 2; }
-set -a; . "$R/.env"; set +a
+set -a
+# .env is a runtime credential file; shellcheck cannot follow it
+# shellcheck source=/dev/null
+. "$R/.env"
+set +a
 
 say() { echo "[$(date -u +%H:%M:%SZ)] $*" | tee -a "$LOG"; }
 
@@ -71,9 +75,11 @@ while true; do
     if [[ "${AHEAD:-0}" -gt 0 ]]; then
       if git merge-base --is-ancestor "origin/$LEDGER_BRANCH" HEAD 2>>"$LOG"; then
         # genuinely ahead (a prior push failed): push the stranded facts commits, never reset over
-        git push -q origin "HEAD:$LEDGER_BRANCH" 2>>"$LOG" \
-          && { git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG"; say "recovered $AHEAD stranded facts commit(s)"; } \
-          || say "WARN: $AHEAD local ledger commit(s) not yet pushed; NOT resetting (would lose raw pulls)"
+        if git push -q origin "HEAD:$LEDGER_BRANCH" 2>>"$LOG"; then
+          git fetch -q origin "$LEDGER_BRANCH" 2>>"$LOG"; say "recovered $AHEAD stranded facts commit(s)"
+        else
+          say "WARN: $AHEAD local ledger commit(s) not yet pushed; NOT resetting (would lose raw pulls)"
+        fi
         AHEAD=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>>"$LOG" || echo 0)
       else
         # DIVERGED (origin force-moved, e.g. rotation from another checkout): skip-forever would
@@ -93,6 +99,7 @@ while true; do
         say "WARN: facts lane diverged from origin -- converging to origin/$LEDGER_BRANCH"
         git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"
         if [[ -n "$RESCUE" ]]; then
+          # shellcheck disable=SC2016  # $0 and $(...) are for the inner 'sh -c', not the outer shell
           (cd "$RD" && find . -type f -print0 | xargs -0 -I{} sh -c 'mkdir -p "$0/$(dirname "{}")" && cp "{}" "$0/{}"' "$R")
           git add ledger/raw/ 2>>"$LOG"
           git -c user.name="verifier" -c user.email="verifier@local" commit -q --no-gpg-sign \
@@ -156,13 +163,14 @@ print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
   if [[ -n "$SIG" && ( "$SIG" != "${LAST_SIG:-}" || "$stale_push" == "1" ) ]]; then
     # explicit allowlist of files THIS process wrote (v1 C2 fix, unchanged): nothing else in the
     # tree is the verifier's to sign.
-    git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json 2>>"$LOG"
-    git add ledger/edge.json ledger/raw/EDGE_MANIFEST.sha256 2>>"$LOG"
-    git add ledger/raw/*.json 2>>"$LOG"
+    { git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json
+      git add ledger/edge.json ledger/raw/EDGE_MANIFEST.sha256
+      git add ledger/raw/*.json
+    } 2>>"$LOG"
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then
       if git push -q origin "$LEDGER_BRANCH" 2>>"$LOG"; then
-        [[ "$stale_push" == "1" && "$SIG" == "${LAST_SIG:-}" ]] && say "heartbeat: $SIG" || say "pushed: $SIG"
+        if [[ "$stale_push" == "1" && "$SIG" == "${LAST_SIG:-}" ]]; then say "heartbeat: $SIG"; else say "pushed: $SIG"; fi
         LAST_SIG="$SIG"; LAST_PUSH_S="$now_s"
       else
         say "PUSH FAILED for $SIG -- retry next cycle (LAST_SIG NOT advanced)"

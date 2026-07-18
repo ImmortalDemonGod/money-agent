@@ -19,17 +19,18 @@
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 W="$(mktemp -d "${TMPDIR:-/tmp}/money-sim.XXXXXX")"
-[[ -n "${SIM_KEEP:-}" ]] && echo "SIM_KEEP: workdir $W" || trap 'rm -rf "$W"' EXIT
+if [[ -n "${SIM_KEEP:-}" ]]; then echo "SIM_KEEP: workdir $W"; else trap 'rm -rf "$W"' EXIT; fi
 PASS=0; FAIL=0; SKIP=0
 ok()   { echo "  PASS  $1"; PASS=$((PASS+1)); }
 bad()  { echo "  FAIL  $1"; FAIL=$((FAIL+1)); }
 skip() { echo "  SKIP  $1"; SKIP=$((SKIP+1)); }
+dump() { while IFS= read -r _l; do printf '        | %s\n' "$_l"; done <<<"$1" | tail -8; }
 assert_exit() { # assert_exit <expected> <label> <cmd...>  -- dumps output on failure
   local want="$1" label="$2"; shift 2
   local out; out=$("$@" 2>&1); local got=$?
   if [[ "$got" == "$want" ]]; then ok "$label"; else
     bad "$label (exit $got, want $want)"
-    sed 's/^/        | /' <<<"$out" | tail -8
+    dump "$out"
   fi
 }
 assert_grep() { # assert_grep <pattern> <label> <cmd...>  -- dumps output on failure
@@ -37,7 +38,7 @@ assert_grep() { # assert_grep <pattern> <label> <cmd...>  -- dumps output on fai
   local out; out=$("$@" 2>&1)
   if grep -q "$pat" <<<"$out"; then ok "$label"; else
     bad "$label (pattern '$pat' absent)"
-    sed 's/^/        | /' <<<"$out" | tail -8
+    dump "$out"
   fi
 }
 assert_exit_grep() { # assert_exit_grep <exit> <pattern> <label> <cmd...> -- both must hold
@@ -45,7 +46,7 @@ assert_exit_grep() { # assert_exit_grep <exit> <pattern> <label> <cmd...> -- bot
   local out; out=$("$@" 2>&1); local got=$?
   if [[ "$got" == "$want" ]] && grep -q "$pat" <<<"$out"; then ok "$label"; else
     bad "$label (exit $got want $want; pattern '$pat' $(grep -q "$pat" <<<"$out" && echo present || echo absent))"
-    sed 's/^/        | /' <<<"$out" | tail -8
+    dump "$out"
   fi
 }
 cdx() { cd "$1" || { echo "FATAL: cd $1 failed -- refusing to run git commands in the wrong tree" >&2; exit 1; }; }
@@ -98,10 +99,10 @@ publish() { # publish <python-snippet mutating ledger files>  -- commit+push as 
 
 cdx "$W/agent"
 echo "=== truth + guard ==="
-[[ "$(python3 bin/truth.py received_usd 2>/dev/null)" == "0.0" ]] && ok "truth: grounded money read" || bad "truth: grounded money read"
-[[ "$(python3 bin/truth.py --file edge.json verdict 2>/dev/null)" == "PENDING" ]] && ok "truth: grounded edge read" || bad "truth: grounded edge read"
+if [[ "$(python3 bin/truth.py received_usd 2>/dev/null)" == "0.0" ]]; then ok "truth: grounded money read"; else bad "truth: grounded money read"; fi
+if [[ "$(python3 bin/truth.py --file edge.json verdict 2>/dev/null)" == "PENDING" ]]; then ok "truth: grounded edge read"; else bad "truth: grounded edge read"; fi
 SRC=$(python3 bin/truth.py received_usd 2>&1 >/dev/null | sed -n 's/^source: //p')
-[[ "$SRC" == "ledger-branch" ]] && ok "truth: source is ledger-branch" || bad "truth: source is $SRC"
+if [[ "$SRC" == "ledger-branch" ]]; then ok "truth: source is ledger-branch"; else bad "truth: source is $SRC"; fi
 assert_exit 0 "guard: clean pass (PENDING edge is not terminal)" python3 bin/guard.py
 assert_exit 1 "guard: staleness halt" env LEDGER_MAX_AGE_S=0 python3 bin/guard.py
 
@@ -139,14 +140,14 @@ cdx "$W/verifier" && git push -q --force origin ledger && cdx "$W/agent" && git 
 assert_exit 0 "guard: clean again after lane restore" env EDGE_TERMINAL=0 python3 bin/guard.py
 
 echo "=== bets + conclusion gate ==="
-python3 bin/bets.py add --what "sim bet" --clock indexation --check "search" \
-  --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1 \
-  && ok "bets: add" || bad "bets: add"
+if python3 bin/bets.py add --what "sim bet" --clock indexation --check "search" \
+     --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1; then
+  ok "bets: add"; else bad "bets: add"; fi
 assert_exit_grep 1 "open external bet" "conclusion: open bet blocks (and returns non-zero)" python3 bin/conclusion_gate.py
-python3 bin/bets.py resolve bet-001 expired "sim evidence" >/dev/null 2>&1 \
-  && ok "bets: resolve with evidence" || bad "bets: resolve with evidence"
-grep -q "sim evidence" knowledge/outcomes.jsonl 2>/dev/null \
-  && ok "bets: resolution fed knowledge/outcomes.jsonl" || bad "bets: resolution fed outcomes"
+if python3 bin/bets.py resolve bet-001 expired "sim evidence" >/dev/null 2>&1; then
+  ok "bets: resolve with evidence"; else bad "bets: resolve with evidence"; fi
+if grep -q "sim evidence" knowledge/outcomes.jsonl 2>/dev/null; then
+  ok "bets: resolution fed knowledge/outcomes.jsonl"; else bad "bets: resolution fed outcomes"; fi
 
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
@@ -223,8 +224,10 @@ t += "\nEDGE_CLAIM: VERIFIED_POSITIVE_EV\nedge anchor: `" + "e"*64 + "` (verifie
 open(".github/aiv-packets/VERIFICATION_PACKET_ITER_901.md","w").write(t)
 PYEOF
   assert_exit 0 "gate: honest packet passes" bash bin/aiv_gate.sh 901
+  # shellcheck disable=SC2016  # literal '$999' is intentional test data
   sed -i 's/Nothing this iteration; honest zero./Earned $999 this iteration./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: \$999 overclaim fails" bash bin/aiv_gate.sh 901
+  # shellcheck disable=SC2016  # literal '$999' is intentional test data
   sed -i 's/Earned $999 this iteration./Nothing this iteration; honest zero./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   sed -i 's/^EDGE_CLAIM: VERIFIED_POSITIVE_EV/EDGE_CLAIM: FALSIFIED/' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: contradicting EDGE_CLAIM fails" bash bin/aiv_gate.sh 901
@@ -269,12 +272,12 @@ if [[ "$CONV_OK" == "1" ]]; then
   # assertions below (probe preserved / recovered) are the contract; the recovery cycle's clean
   # exit is asserted because there AHEAD ends 0 and a non-zero can only mean a crash.
   run_convergence || true
-  [[ -f ledger/raw/29990101T000000_probe.json ]] && ok "convergence: stranded pull preserved under failing push" \
-    || bad "convergence: stranded pull LOST under failing push"
+  if [[ -f ledger/raw/29990101T000000_probe.json ]]; then ok "convergence: stranded pull preserved under failing push"
+  else bad "convergence: stranded pull LOST under failing push"; fi
   git remote set-url origin "$W/origin.git"
   run_convergence || bad "convergence: block exited non-zero on recovery cycle"
-  git ls-tree origin/ledger -r --name-only | grep -q 29990101 \
-    && ok "convergence: stranded pull recovered to origin" || bad "convergence: recovery"
+  if git ls-tree origin/ledger -r --name-only | grep -q 29990101; then
+    ok "convergence: stranded pull recovered to origin"; else bad "convergence: recovery"; fi
 fi
 
 echo
