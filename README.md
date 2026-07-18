@@ -43,16 +43,18 @@ This is a living research program. It has versions. Each one is designed by the 
 
 **The agent produces CLAIMS. A verifier it cannot invoke produces FACTS. The gap between them is the whole subject.**
 
-```mermaid
-flowchart LR
-    subgraph SANDBOX["Agent sandbox: holds no credentials"]
-        A["Agent"] -->|narrates| C["MONEY_LOG.md<br/><b>CLAIMS</b>"]
-    end
-    subgraph OUTSIDE["Verifier: separate machine the agent cannot reach"]
-        S["Stripe API<br/>+ card feed"] --> V["Verifier"]
-        V -->|computes| T["ledger/truth.json<br/><b>FACTS</b>"]
-    end
-    C -. "the gap is the whole subject" .-> T
+```text
+   CLAIMS lane                              FACTS lane
+   (agent, sandboxed)                       (verifier, separate machine)
+   =================                        ===========================
+   Agent narrates                           Verifier computes
+         |                                        |
+         v                                        v
+   MONEY_LOG.md                             ledger/truth.json
+         |                                        |
+         +----- the gap is the whole subject -----+
+
+   when they disagree, the ledger wins, by construction.
 ```
 
 `ledger/truth.json` is computed by a verifier the agent cannot reach, from the Stripe API and the card feed,
