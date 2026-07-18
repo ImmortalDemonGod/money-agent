@@ -1,0 +1,53 @@
+name: CI
+
+# The real project gate. Runs the committed verification matrix (tests/sim.sh):
+# it builds a local two-lane git world (bare origin + agent/verifier clones + a
+# synthesized ledger branch) and asserts the harness's load-bearing behaviors --
+# every guard terminal (first dollar, edge verified, VOID, staleness, SoD
+# forgery), the gate adjudication (honest pass + each dishonest fail), the
+# bets/conclusion interplay, the edge verdict machine, and the verifier
+# convergence block run verbatim. No keys, no network. Plus a Python byte-compile
+# of bin/ to catch syntax errors. Unlike readme-check.yml this runs on every push
+# and PR, not just docs.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  sim:
+    name: verification matrix (tests/sim.sh)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0            # sim.sh does `git clone --bare` of the checkout
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Configure git identity (sim.sh makes commits)
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "ci"
+      - name: Run the verification matrix
+        run: bash tests/sim.sh
+        # Note: the aiv-gate stage tests SKIP loudly without the aiv CLI on PATH.
+        # Installing aiv-protocol here would un-skip them (see issue #20 item 3).
+
+  python:
+    name: python byte-compile (bin/)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Byte-compile all bin/ Python
+        run: python3 -m compileall -q bin
