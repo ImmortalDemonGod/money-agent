@@ -898,3 +898,78 @@ Three disciplines make the cost pay:
 Never buy at a higher tier what a lower tier sells: harness bugs at tier 0, policy
 regressions at tier 1, integration reality at tier 2, and only market truth — the one
 thing money can't simulate — at tier 3.
+
+---
+
+## 17. Systematic edge-case analysis (pre-PR sweep)
+
+Method: component-by-component sweep over lanes (§5.5), bets (§4), spine/ordering (§5),
+termination (§6), and cross-system interactions, hunting four failure shapes — freezes,
+races, gaming vectors, stale state. Outcomes are classed **RESOLVED** (design already
+handles it), **AMENDED** (a real fix, applied here as E1–E3 + rules R1–R3), or
+**RESIDUAL** (honestly judgment-bound; named, not hand-waved).
+
+### 17.1 The three amendments (real bugs found by the sweep)
+
+> **E1 — Watch-slot accounting (amends §5.5's lane cap).** As first written, the lane
+> cap re-imports the freeze it was built to prevent: if every slot is held by a
+> `watching` lane (all bets time-gated — legal, encouraged), the agent can open
+> nothing new and the run stalls on other people's clocks. Fix: the cap counts
+> **active** lanes only; `watching` lanes move to a separate, larger watch cap (they
+> cost poll attention, not build attention). A lane re-activates by gaining a due-able
+> bet, re-entering the active count — if the active cap is full at that moment, the
+> agent chooses which active lane to park. Both caps in `spine.yml`.
+
+> **E2 — Global stages hold STANDING facts, not one-time resolutions (amends §5.1
+> stages 0–1).** Stage 0/1 exits as first written are latching: beacon confirmed once,
+> stage exited forever — but the beacon can die mid-run, and a dead instrument
+> silently un-grounds every downstream oracle (the H2 staleness lesson, re-learned one
+> level up). Fix: instrument-live and substrate facts carry freshness windows (beacon
+> heartbeat; substrate probes re-run before any `funnel` resolution — §7 already said
+> this for probes; E2 makes it uniform). A staled global fact does not un-exit the
+> stage for ordering purposes; it **suspends resolution** of bets whose oracles depend
+> on it (they cannot resolve against a dead instrument — unknown ≠ zero, `pnl.py`'s
+> own principle).
+
+> **E3 — Event-time resolution (amends §4.4).** A bet whose evidence arrives before
+> `RESOLVE_BY` but is *observed* after (the agent polls late; the verifier cycle
+> lands late) must resolve by **event time when the oracle timestamps it** (a reply's
+> Date header, a beacon hit's stamp, a Stripe event time), else by observation time —
+> and when only observation time exists, expiry wins (fail-conservative). Without E3,
+> deadline races turn wins into expiries or, worse, invite argument.
+
+### 17.2 The sweep
+
+| # | Edge case | Class | Resolution |
+|---|---|---|---|
+| 1 | **Lane identity is fuzzy** — agent declares vague/overlapping lanes | RESIDUAL | Signature matching (type, audience, channel) is tripwire-grade; overlapping lanes waste the agent's own capped slots (self-limiting), and dead-lane matches route through `falsified.json` evidence citation (§5.5). Content judgment stays with P3/operator. |
+| 2 | **One action serves two lanes** (one email probing two pains) | RESOLVED (rule R1) | A bet belongs to exactly ONE lane; multi-lane actions register one bet per lane or declare a primary. Prevents double-counted confirmations. |
+| 3 | **All slots watching → frozen** | AMENDED | E1. |
+| 4 | **Zombie lanes** — no open bets, never declared dead, uncounted | RESOLVED (rule R2) | A lane with zero open bets must gain a bet or close with a verdict within N iterations; `guard`'s lane board flags zombies. Dead-lane verdicts are the price of new slots (§5.5), so zombies cannot be hoarded. |
+| 5 | **Instrument dies after stage 0 exited** | AMENDED | E2. |
+| 6 | **First dollar lands in lane A while lane B is mid-flight** | RESOLVED | Terminals are global (`/goal` v2); lanes do not shield the stop set. Open bets in other lanes are preserved in the registry for the retro — the run halts, the record stands. |
+| 7 | **Deadline race** — evidence before deadline, observed after | AMENDED | E3. |
+| 8 | **Oracle outage during a bet window** | RESOLVED | Resolves INCONCLUSIVE, never lost — unknown ≠ zero. Re-register with an extended window; the outage itself is a substrate incident under E2. |
+| 9 | **Agent narrative contradicts an instrument stamp** | RESOLVED | Two-lane rule, unchanged: the stamp wins (§4.4). |
+| 10 | **Trivially satisfiable success conditions** ("≥0 visits") | RESIDUAL | Content-blind gates cannot judge bar quality. Mitigants: meaningless bets burn capped slots; P3 records the reasoning; terminal review reads the ledger. Named honestly: this is FC3-adjacent and stays judgment. |
+| 11 | **"Minimal" probe is unmeasurable** | RESIDUAL | `max_spend_usd` is mechanical; effort bounds are soft (iteration-count heuristic at best). The spend cap is the wall; the rest is tripwire. |
+| 12 | **Stale demand confirmation** — confirmed weeks ago, market moved | OPEN (question 5) | Should demand confirmations carry a TTL before `delivery` registration? Leaning yes, config in `spine.yml`; added to §13 as open question 5. |
+| 13 | **Registration/resolution race under a parallel host** | RESOLVED | All gates evaluate against COMMITTED state (the `aiv_gate.sh` `git show HEAD:` pattern); benign in the single-agent chat host, safe by construction under a driver. |
+| 14 | **Micro-lane farming to reach DEMAND-REFUTED faster** | RESOLVED | No incentive exists: conclusion-gate pass never ends the run (`/goal` v2 removed the agent's kill switch), so manufacturing a terminal buys the agent nothing. The monotone lattice (§5.5) already prevents permission-laundering. |
+| 15 | **Card cap exhausts with bets open** | RESOLVED | Terminal outranks; the registry survives for the retro. An open bet at cap-exhaustion is a documented unknown, not a contradiction. |
+| 16 | **Compaction loses lane state** | RESOLVED | Lane state is DERIVED from committed files (bets + resolutions); CLAUDE.md summary instructions already pin open bets. Nothing about lanes lives only in the transcript. |
+| 17 | **Countersign revoked with in-flight bets of that class** | RESOLVED (rule R3) | Revocation (a facts-lane commit, like the grant) stops NEW registrations immediately; in-flight bets complete unless the operator explicitly cancels them in the same commit. Mirrors how a frozen edge registration outlives the file's deletion (`edge_pnl.py:215`). |
+| 18 | **Wrong lane-death verdict poisons future runs** via `falsified.json` | RESOLVED | The existing unlock applies: re-open by citing new evidence the world changed (`knowledge/README.md`). A wrong verdict costs one citation, not a permanent wall. |
+
+### 17.3 What the sweep says about the design
+
+Fifteen of eighteen cases resolve from properties already in the document — mostly the
+same four load-bearing choices doing repeated work: derived-not-stored state, committed-
+state evaluation, unknown ≠ zero, and terminals-are-global. The three amendments are
+all of one species: **a fact treated as latching that is actually perishable** (slots,
+instruments, evidence timing) — the same species as v1's H2 staleness bug, which is
+reassuring in one sense (the failure mode is known and mechanically checkable) and
+cautionary in another (it recurs at every new layer, so every future primitive should
+ship with the question "which of its facts expire?"). The residuals (1, 10, 11) are all
+FC3 in disguise — judgment wearing a mechanical costume — and the design's posture on
+them stays: record, cap, and surface; never pretend to adjudicate.
