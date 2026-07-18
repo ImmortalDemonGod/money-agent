@@ -1,0 +1,11 @@
+flowchart LR
+    subgraph SANDBOX["Agent sandbox (holds no credentials)"]
+        direction LR
+        A["Agent"] -->|narrates| C["MONEY_LOG.md<br/>CLAIMS"]
+    end
+    subgraph OUTSIDE["Verifier (separate machine the agent cannot reach)"]
+        direction LR
+        S["Stripe API + card feed"] --> V["Verifier"]
+        V -->|computes| T["ledger/truth.json<br/>FACTS"]
+    end
+    C -.->|the gap is the whole subject| T

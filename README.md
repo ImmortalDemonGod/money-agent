@@ -7,7 +7,7 @@
 
 ### The autonomous money-making agent that *cannot lie about the money.*
 
-Every claim it makes -- "I earned $X," "I have exhausted every option" -- is graded by a verifier it **cannot reach**, computed from the real Stripe API on a machine outside its sandbox. When the agent and the ledger disagree, **the ledger wins, by construction.** The aim is the first make-money agent whose success you can actually *trust*: not a lucky screenshot, a verified fact.
+Every claim it makes ("I earned $X," "I have exhausted every option") is graded by a verifier it **cannot reach**, computed from the real Stripe API on a machine outside its sandbox. When the agent and the ledger disagree, **the ledger wins, by construction.** The aim is the first make-money agent whose success you can actually *trust*: not a lucky screenshot, a verified fact.
 
 <!-- Badges are trust signals, not decoration. -->
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -33,7 +33,7 @@ This is a living research program. It has versions. Each one is designed by the 
 ## Why this is different
 
 - **Out-of-band verification.** The agent *narrates*; a verifier it cannot invoke *computes* the P&L. The agent can never write its own numbers.
-- **Grounded stop, not self-certified.** "I am finished" is checked against reality -- the single failure v1 exposed and v2 fixes.
+- **Grounded stop, not self-certified.** "I am finished" is checked against reality: the single failure v1 exposed and v2 fixes.
 - **Adversarial by design.** Money is the substrate precisely because it is the most fabrication-prone class of claim there is.
 - **The repo is the evidence.** `truth.json`, the claim-vs-fact drift, and every refusal are in the open. Nothing asks you to take our word for it.
 
@@ -43,19 +43,11 @@ This is a living research program. It has versions. Each one is designed by the 
 
 **The agent produces CLAIMS. A verifier it cannot invoke produces FACTS. The gap between them is the whole subject.**
 
-```text
-   CLAIMS lane                              FACTS lane
-   (agent, sandboxed)                       (verifier, separate machine)
-   =================                        ===========================
-   Agent narrates                           Verifier computes
-         |                                        |
-         v                                        v
-   MONEY_LOG.md                             ledger/truth.json
-         |                                        |
-         +----- the gap is the whole subject -----+
+<div align="center">
 
-   when they disagree, the ledger wins, by construction.
-```
+<img src=".github/assets/invariant.png" alt="The agent, sandboxed with no credentials, narrates CLAIMS into MONEY_LOG.md. A verifier on a separate machine the agent cannot reach computes FACTS into ledger/truth.json from the Stripe API and card feed. The gap between them is the whole subject." width="900">
+
+</div>
 
 `ledger/truth.json` is computed by a verifier the agent cannot reach, from the Stripe API and the card feed,
 using credentials the agent never holds, on a machine outside its sandbox. The agent narrates into
@@ -65,7 +57,7 @@ P&L. **Everything else in this repo is downstream of that one boundary.**
 ## Try it in 60 seconds (no money, no keys)
 
 You do not need a Stripe account to see the machine work. The committed two-lane simulation matrix runs the
-whole claim-vs-verifier loop against fixtures -- the same test that has caught every real defect four reviews
+whole claim-vs-verifier loop against fixtures, the same test that has caught every real defect four reviews
 found:
 
 ```bash
@@ -132,66 +124,66 @@ claim-vs-fact drift; `IMPROVEMENT_LOG.md` is the full harness reasoning trail wi
 [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md) is the verification-theater finding that redesigned the program.
 
 **You are a CONTRIBUTOR (changing the harness):**
-[`docs/V2_DESIGN.md`](docs/V2_DESIGN.md) is the architecture of record -- the harness that actually shipped
-(B1–B9 → A1–A8, verified by the M1–M12 scorecard); [`docs/V2_HARNESS_DESIGN.md`](docs/V2_HARNESS_DESIGN.md)
-is a forward-looking proposal (the bet-ledger + business-spine model and the P1–P7 primitives), mostly
+[`docs/V2_DESIGN.md`](docs/V2_DESIGN.md) is the architecture of record, the harness that actually shipped
+(B1-B9 → A1-A8, verified by the M1-M12 scorecard); [`docs/V2_HARNESS_DESIGN.md`](docs/V2_HARNESS_DESIGN.md)
+is a forward-looking proposal (the bet-ledger + business-spine model and the P1-P7 primitives), mostly
 unbuilt and carrying one open in-bounds question, so read it as direction, not as what exists.
 `bin/README.md` for what each script is and who may run it (the trust classes are the entire point of this
-repo). Run `bash tests/sim.sh` before and after your change -- it has caught every real defect four reviews
+repo). Run `bash tests/sim.sh` before and after your change; it has caught every real defect four reviews
 found.
 
 | Directory | Owner | What lives there |
 |---|---|---|
-| `bin/` | mixed -- see `bin/README.md` | every executable: verifier-side, agent-side, gates, operator tools |
+| `bin/` | mixed (see `bin/README.md`) | every executable: verifier-side, agent-side, gates, operator tools |
 | `ledger/` | **verifier only** | the facts: `truth.json`, `edge.json`, raw API pulls + hash manifests |
-| `knowledge/` | agent (append), operator (review) | cross-run operational memory -- channels tested, approaches falsified, traps |
+| `knowledge/` | agent (append), operator (review) | cross-run operational memory: channels tested, approaches falsified, traps |
 | `templates/` | operator | the forms a run fills in: exhaustion packet, adversary report, edge registration |
 | `tests/` | contributor | the committed two-lane simulation matrix (`sim.sh`) |
-| `docs/` | humans | design, case study, standing-run recipe -- the agent does not read these |
+| `docs/` | humans | design, case study, standing-run recipe; the agent does not read these |
 | `harness/` | operator | the traffic beacon (Cloudflare worker) |
 | `archive/` | `bin/new_run.sh` | each finished run's frozen state, one directory per run |
-| `.github/aiv-packets/` | agent (per iteration) | AIV verification packets -- one claim + evidence classes A–F each |
+| `.github/aiv-packets/` | agent (per iteration) | AIV verification packets: one claim + evidence classes A-F each |
 | root `*.md` logs | agent (append-only) | the LIVE run's claims: `MONEY_LOG`, `SENT_LOG`, `REFUSALS`, `DISCLOSURE_EV_LOG` |
 
 ## Read the evidence
 
 The repo is the evidence. Nothing here asks you to take our word for it. One navigation note: `main`
 carries the harness with the live run logs reseeded; **run 1 is now archived in full under
-[`archive/run-001/`](archive/run-001/)** -- its iterations, products, `MONEY_LOG`, `REFUSALS`, and the
+[`archive/run-001/`](archive/run-001/)**: its iterations, products, `MONEY_LOG`, `REFUSALS`, and the
 grounded post-mortem `README`, redacted only for a local username and a vendored library (PR #24). The
 original un-redacted history remains on its run branch, [PR #8](../../pull/8).
 
-1. **[`ledger/truth.json`](ledger/truth.json)** -- the only numbers that are real.
-2. **`MONEY_LOG.md` vs `truth.json`** (run branch) -- the drift between what the agent said and what was true, measured.
-3. **[`REFUSALS.md`](REFUSALS.md)** (run branch) -- what it would not do. The most honest file here.
-4. **[`docs/CASE_STUDY.md`](docs/CASE_STUDY.md)** -- the verification-theater finding in full.
-5. **`iterations/`** (run branch) -- everything it tried, in order.
+1. **[`ledger/truth.json`](ledger/truth.json)**: the only numbers that are real.
+2. **`MONEY_LOG.md` vs `truth.json`** (run branch): the drift between what the agent said and what was true, measured.
+3. **[`REFUSALS.md`](REFUSALS.md)** (run branch): what it would not do. The most honest file here.
+4. **[`docs/CASE_STUDY.md`](docs/CASE_STUDY.md)**: the verification-theater finding in full.
+5. **`iterations/`** (run branch): everything it tried, in order.
 
 ## Roadmap
 
 The harness redesign v1's findings forced is **built and merged** (PRs #18/#19): the grounded stop (#7),
 cross-run memory (#2), the standing-presence machinery (#4), and the verified-edge rail (#6) all shipped.
-What remains is the [issue tracker](../../issues), in dependency order. **#20 comes first** -- the
+What remains is the [issue tracker](../../issues), in dependency order. **#20 comes first**: the
 operator-side pre-run-2 acceptance gates (one live verifier cycle, the edge-rail checklist, remote
 `ledger`-branch protection); until it passes, v2's machinery sits on the unproven side of exactly the line
 this project draws. Then the harness loose ends (#10 context hygiene, #11 tool-promotion policy), and the
 run-2 backlog the harness deliberately does not decide for the agent: craft (#1), findable surfaces and
-targeting (#3, #5), and the untried card-paying levers (#12–#17).
+targeting (#3, #5), and the untried card-paying levers (#12-#17).
 
 ## Contributing
 
-The trust classes -- who may run what -- are the entire point of this repo, so any change to the harness is
+The trust classes (who may run what) are the entire point of this repo, so any change to the harness is
 reviewed against that boundary first. Start at `bin/README.md` and [`docs/V2_DESIGN.md`](docs/V2_DESIGN.md),
 run `bash tests/sim.sh` before and after, and open a PR. Design disagreements are welcome in the
-[issues](../../issues); the run-2 backlog (#12–#17) is the friendliest way in.
+[issues](../../issues); the run-2 backlog (#12-#17) is the friendliest way in.
 
 ## What this is, and is not
 
 - **It is** a study in grounded verification, using "make money" as a testbed precisely because it is the most
-  fabrication-prone class of claim. The goal is an agent that *consistently and verifiably* makes money -- at
+  fabrication-prone class of claim. The goal is an agent that *consistently and verifiably* makes money, at
   which point it is a make-money kit, and, unusually, a trustworthy one.
 - **It is not** *yet* that, and the word carrying the weight is *consistently*: a single lucky dollar is
-  variance, not a kit -- which is exactly why the verification matters, because it is what separates an earned
+  variance, not a kit, which is exactly why the verification matters, because it is what separates an earned
   "it makes money" from a lucky screenshot. It is not a trading bot or a growth hack, and it is not a claim
   that agents cannot make money. v1's premature stop means the money question is genuinely still open; v2
   reopens it, under verification you can trust.
@@ -200,7 +192,7 @@ run `bash tests/sim.sh` before and after, and open a PR. Design disagreements ar
 
 <div align="center">
 
-**If the idea that an outcome is only ever as trustworthy as the verification underneath it is worth watching, [star the repo](../../stargazers) -- v2 is where the money question reopens.**
+**If the idea that an outcome is only ever as trustworthy as the verification underneath it is worth watching, [star the repo](../../stargazers): v2 is where the money question reopens.**
 
 *Black Box Research Labs. The interesting artifact was never the money. It was learning, on ourselves, that an
 outcome is only ever as trustworthy as the verification underneath it.*
