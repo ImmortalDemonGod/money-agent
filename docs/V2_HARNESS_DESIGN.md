@@ -1083,6 +1083,8 @@ analysis's §12, R1–R5):
   run unchanged (`HUMAN_CONTROL_PROTOCOL.md`). Without it, the field's $0s cannot distinguish
   "agents cannot" from "no unrooted actor can, this fast."
 
-Leak-check discipline (unchanged): the companion analysis contains strategic content and lives in
-`docs/`, outside the run agent's inputs (A6). The R-components are harness capabilities only —
-whether and where to use them remains the agent's in-run decision.
+Context note: the companion analysis is strategy-visible to any run agent that reads the repo;
+per its epistemic-status note (operator ruling, 2026-07-18), future runs are context-AWARE and
+independent-convergence claims are retired — the scored rails never depended on the agent's
+blindness. The R-components remain harness capabilities only — whether and where to use them is
+the agent's in-run decision.
