@@ -1,9 +1,9 @@
 flowchart TB
-    subgraph CLAIMS["CLAIMS lane &nbsp;&mdash;&nbsp; agent sandbox, holds no credentials"]
+    subgraph CLAIMS["CLAIMS lane (agent sandbox, holds no credentials)"]
         direction LR
         A["Agent"] -->|narrates| C["MONEY_LOG.md"]
     end
-    subgraph FACTS["FACTS lane &nbsp;&mdash;&nbsp; verifier on a separate machine the agent cannot reach"]
+    subgraph FACTS["FACTS lane (verifier on a separate machine the agent cannot reach)"]
         direction LR
         S["Stripe API + card feed"] --> V["Verifier"] -->|computes| T["ledger/truth.json"]
     end
