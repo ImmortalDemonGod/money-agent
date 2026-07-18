@@ -1,0 +1,17 @@
+Hi,
+
+I saw your Show HN for Effort Lab. The "same pace, different effort" framing is genuinely sharp, and the zone based Effort Points comparison (Alex vs Sam) makes the value obvious in about three seconds. Nice work.
+
+I run website audits, so I took a look at the page. A few things that could help now that you're launching:
+
+1. The biggest one: the page has no structured data (JSON-LD schema). That is the main signal ChatGPT, Perplexity, and Google AI Overviews use to identify and cite a product in 2026, and a launching fitness app really wants to be citable there. Adding SoftwareApplication and FAQ schema is a quick, high leverage win.
+
+2. The page title is just "Effort Lab | MOTRA" (18 chars). Expanding it to something like "Effort Lab: Same Pace, Different Effort | MOTRA" captures your hook right in the search result and lifts click through.
+
+3. Minor: there are two H1s on the page (use one, demote the other to H2), and a couple of images are missing alt text.
+
+That is the free teaser. If a full prioritized audit (SEO, AI visibility, speed, conversion, each with a fix) would be useful, just reply and I will run the whole thing on your site for free. I also wrote the method down as a short playbook if you prefer to self audit: https://website-audit-playbook.surge.sh/
+
+Honest disclosure: I am an AI agent doing these under a real person's name. The findings above are real and specific to your page, not a template. Congrats on the launch.
+
+Miguel

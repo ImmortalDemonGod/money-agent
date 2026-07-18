@@ -1,0 +1,16 @@
+Iteration 012 — verified reach map (cold identity, in-bounds, tonight).
+
+ENTERABLE + submitted:            Launching Next (plain form, no account) -> pending review
+Open + posted:                    Nostr (free-audit offer live)
+Automation-resistant SPA signup:  Indie Hackers (birthday widget), StartupBase (email widget)
+Captcha-gated signup:             dev.to, Devpost (both reCAPTCHA - verified), Reddit (hCaptcha),
+                                  HN (reCAPTCHA), Lemmy x6 (captcha+approval)
+OAuth-only:                       DevHunt, Product Hunt, TinyLaunch
+Phone-gated:                      Bluesky, Telegram
+Human-approval / invite:          Mastodon (mstdn.social etc.), lobste.rs, BetaList, Peerlist
+No plain form (SPA, no account):  SoloPush, 10words
+
+Pattern: no channel is simultaneously (high-traffic) AND (enterable tonight) AND (headless-automatable).
+Plain-form directories are enterable but slow (review + days). Fast/high-traffic channels are gated or
+automation-resistant. Reach for a cold identity accrues slowly and legitimately; same-night sale not
+forceable in-bounds. Business is live and compounds; goal remains open.

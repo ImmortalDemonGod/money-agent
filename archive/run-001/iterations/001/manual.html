@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Debugging Field Manual</title>
+<style>
+  :root { --bg:#ffffff; --fg:#1a1a1a; --muted:#666; --accent:#0b6e4f; --card:#f6f6f4; --border:#e2e2de; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#141416; --fg:#e8e8e6; --muted:#9a9a97; --accent:#5fd3a5; --card:#1e1e21; --border:#2c2c30; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:17px/1.65 Georgia, 'Times New Roman', serif; }
+  main { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 6rem; }
+  h1 { font-size: 2.1rem; line-height:1.2; margin: 0 0 .4rem; }
+  h2 { font-size: 1.35rem; margin: 3rem 0 1rem; border-bottom: 2px solid var(--accent); padding-bottom:.3rem; }
+  .sub { color: var(--muted); font-style: italic; margin-bottom: 2.5rem; }
+  .rule { background: var(--card); border:1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  .rule b { display:block; font-family: -apple-system, 'Segoe UI', sans-serif; font-size:.95rem; letter-spacing:.02em; margin-bottom:.35rem; }
+  .rule b .n { color: var(--accent); margin-right:.5em; font-variant-numeric: tabular-nums; }
+  .proc { counter-reset: step; padding-left:0; list-style:none; }
+  .proc li { counter-increment: step; margin: 1.1rem 0; padding-left: 2.6rem; position: relative; }
+  .proc li::before { content: counter(step); position:absolute; left:0; top:.1rem; width:1.8rem; height:1.8rem;
+    background:var(--accent); color:var(--bg); border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font: bold .95rem/1 -apple-system, sans-serif; }
+  code { font: .88em/1.4 ui-monospace, 'SF Mono', Menlo, monospace; background: var(--card); border:1px solid var(--border); border-radius:4px; padding:.08em .35em; }
+  .foot { margin-top:4rem; padding-top:1.5rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem; }
+  blockquote { margin:2rem 0; padding:.2rem 1.2rem; border-left:3px solid var(--accent); color:var(--muted); font-style:italic; }
+</style>
+</head>
+<body>
+<main>
+<h1>The Debugging Field Manual</h1>
+<p class="sub">A decision procedure and fifty field heuristics for finding any bug. Thank you for buying it. This page is yours: save it, print it, keep it forever.</p>
+
+<h2>The procedure</h2>
+<p>Every effective debugging session is the same loop, run honestly. When you are lost, you have silently skipped one of these steps. Go back to the one you skipped.</p>
+<ol class="proc">
+<li><strong>Reproduce it.</strong> Reliably, in the smallest environment that still shows it. A bug you cannot reproduce is a bug you cannot verify you fixed.</li>
+<li><strong>State the symptom precisely.</strong> Write one sentence: what you observed, what you expected, and the exact conditions. Vague symptom, vague search.</li>
+<li><strong>Find the last point where the world was correct.</strong> Everything between there and the symptom is the search space. Everything else is not.</li>
+<li><strong>Bisect the search space.</strong> By time (git bisect), by data (half the input), by code path (disable half), or by layer (check the boundary between components). Halving beats staring.</li>
+<li><strong>Form ONE hypothesis and design the cheapest test that could prove it false.</strong> Not the test that could confirm it — the one that could kill it.</li>
+<li><strong>Run the test. Believe the result.</strong> If the hypothesis dies, good: the search space just shrank. Go to 5.</li>
+<li><strong>Fix it, then re-run the ORIGINAL reproduction from step 1.</strong> Then ask: where else does this exact mistake live?</li>
+</ol>
+
+<h2>I. Reproduction</h2>
+<div class="rule"><b><span class="n">1</span>The bug is a gift the moment it reproduces</b>Do not touch anything until you can make it happen twice on demand. The strongest urge — to start fixing — destroys the evidence.</div>
+<div class="rule"><b><span class="n">2</span>Shrink the reproduction before you study it</b>Delete half of everything (input, config, code) and check the bug survives. Repeat. Ten minutes of shrinking saves hours of reading, and the minimal case often IS the diagnosis.</div>
+<div class="rule"><b><span class="n">3</span>"Intermittent" means you don't control an input yet</b>Timing, ordering, environment, uninitialized memory, external state, randomness seeds, clock. List the inputs you are not controlling; the bug lives in one of them.</div>
+<div class="rule"><b><span class="n">4</span>Record everything about the failing run the first time</b>Logs, core dump, inputs, versions, environment. Flaky failures may not grant a second interview.</div>
+<div class="rule"><b><span class="n">5</span>A bug that vanishes when you look at it is telling you the mechanism</b>Adding a print changed timing or memory layout: suspect races and undefined behavior. Attaching a debugger changed scheduling: same. The disappearance is data.</div>
+
+<h2>II. Localization</h2>
+<div class="rule"><b><span class="n">6</span>What changed?</b>Code, data, dependencies, infrastructure, traffic, time. Bugs that appear are usually caused by something that moved. <code>git bisect</code> is the mechanization of this question — use it before your intuition.</div>
+<div class="rule"><b><span class="n">7</span>Follow the data, not the code</b>Trace one concrete value from where it is right to where it is wrong. The bug is at the boundary where correct becomes incorrect. Reading code makes you check what it should do; tracing data shows what it did.</div>
+<div class="rule"><b><span class="n">8</span>Check the boundary between yours and theirs first</b>Most "library bugs" are your call site: wrong argument, violated precondition, ignored return value. Print exactly what crosses the boundary in each direction before blaming the far side.</div>
+<div class="rule"><b><span class="n">9</span>The bug is probably not where the error appears</b>The crash site is where the corruption was noticed, not where it was created. Ask what upstream actor could have produced this broken state, and how long it survived before detection.</div>
+<div class="rule"><b><span class="n">10</span>Binary-search space as well as time</b>Half the input file. Half the request payload. Half the feature flags. Any dimension you can halve is a dimension you can bisect.</div>
+<div class="rule"><b><span class="n">11</span>Make the system tell you where it diverges from a working one</b>Diff the logs of a passing and failing run, the environment of a working and broken machine, the output of v1 and v2. Divergence points are search-space boundaries you get for free.</div>
+<div class="rule"><b><span class="n">12</span>One failing layer at a time</b>When a full stack misbehaves, test each layer in isolation with the real input: the query alone, the function alone, the endpoint alone via curl. Do not debug two layers simultaneously; you will attribute one layer's bug to the other.</div>
+
+<h2>III. Hypotheses</h2>
+<div class="rule"><b><span class="n">13</span>Say it out loud, to anyone or anything</b>Rubber-duck debugging works because producing an explanation forces serialization of assumptions, and the false one usually sounds false the moment you hear yourself say it.</div>
+<div class="rule"><b><span class="n">14</span>Write the three most likely causes before testing any</b>The first hypothesis anchors you. Generating three forces the second-most-likely cause into view — which is, embarrassingly often, the actual one.</div>
+<div class="rule"><b><span class="n">15</span>Rank by cost-to-test, not by likelihood alone</b>A 10-second test of an unlikely cause beats a 30-minute test of a likely one. Sort by expected-information-per-minute.</div>
+<div class="rule"><b><span class="n">16</span>"That can't be it" is where it is</b>The bug survives precisely because it lives behind an assumption you refuse to test. List what you are certain of, then verify the cheapest three. Certainty is not evidence; it is untested confidence.</div>
+<div class="rule"><b><span class="n">17</span>Never debug on top of a mystery</b>If you see something inexplicable on the way to the "real" bug — a warning, an impossible log line, a second oddity — stop. It is usually the same bug wearing different clothes, and always cheaper to understand now.</div>
+<div class="rule"><b><span class="n">18</span>The bug count is not one until proven</b>Two overlapping bugs produce symptoms neither could alone, and every single-cause hypothesis will half-fit. If no hypothesis explains everything, try assuming two causes.</div>
+
+<h2>IV. Instrumentation</h2>
+<div class="rule"><b><span class="n">19</span>Print the thing itself, not your summary of it</b>Log the raw value, with type, length, and quotes around strings: <code>repr()</code>, <code>%q</code>, <code>JSON.stringify</code>. "Looks right" has hidden trailing whitespace, unicode look-alikes, and floats that print rounded.</div>
+<div class="rule"><b><span class="n">20</span>Confirm your code is even running</b>Before interpreting subtle output: add one unmistakable line at the top and prove the file you are editing is the file that executes. Stale builds, wrong virtualenvs, cached bytecode, and duplicate copies eat entire afternoons.</div>
+<div class="rule"><b><span class="n">21</span>Check the actual error message, word by word</b>Read it aloud, including the part after the colon. The answer is in the message a humiliating fraction of the time, at the exact spot your eyes learned to skip.</div>
+<div class="rule"><b><span class="n">22</span>Make the invisible visible at the failure boundary</b>Assertions at function entry, checksums over data at each pipeline stage, an invariant checker you can call from anywhere. You are building a net that catches the corruption earlier than the crash does.</div>
+<div class="rule"><b><span class="n">23</span>A debugger is for reading state, prints are for reading history</b>Use the debugger when you need to inspect one rich moment; use logging when the question is how state evolved. Choosing the wrong tool for the question wastes the session.</div>
+<div class="rule"><b><span class="n">24</span>Timestamps and thread/request IDs on every log line</b>Interleaved logs without IDs actively lie about causality. With them, most concurrency bugs confess on the first read.</div>
+
+<h2>V. The nasty classes</h2>
+<div class="rule"><b><span class="n">25</span>Race conditions: widen the window</b>Insert sleeps at suspected interleaving points to make a rare race constant. If a 50ms delay makes it fire every time, you have converted a heisenbug into a regular bug — the hard part is over.</div>
+<div class="rule"><b><span class="n">26</span>Memory corruption: the victim is not the culprit</b>Whoever crashed was stabbed by an earlier write. Reach for the tools built for this — ASan, Valgrind, hardware watchpoints on the corrupted address — instead of reading code for the needle.</div>
+<div class="rule"><b><span class="n">27</span>Off-by-one: check both ends and the empty case</b>First element, last element, zero elements, exactly-full buffer. Fencepost errors live at boundaries, so test only boundaries: n=0, n=1, n=max, n=max+1.</div>
+<div class="rule"><b><span class="n">28</span>Cache bugs: bypass every cache once</b>Hard-refresh, purge CDN, clear memoization, restart the process, <code>SELECT</code> straight from the database. If the symptom changes at any layer, you found which cache is stale — and stale caches masquerade as impossible logic errors.</div>
+<div class="rule"><b><span class="n">29</span>Time bugs: distrust every clock</b>Timezones, DST transitions, leap seconds, clock skew between machines, monotonic vs wall clock, midnight rollovers, the 25th hour. If the bug correlates with a date, the bug is the date handling.</div>
+<div class="rule"><b><span class="n">30</span>Encoding bugs: look at the bytes</b>Hexdump the actual bytes at each hop. UTF-8 vs Latin-1, BOM, CRLF vs LF, NFC vs NFD normalization, URL-encoding applied twice or not at all. Text that "looks identical" routinely isn't.</div>
+<div class="rule"><b><span class="n">31</span>Float bugs: equality is the bug</b>Any <code>==</code> between floats, any accumulation across many additions, any currency in floating point. Print full precision (<code>%.17g</code>) before reasoning about values.</div>
+<div class="rule"><b><span class="n">32</span>Concurrency deadlock: dump all stacks first</b>Every language has a way to dump every thread's stack (<code>jstack</code>, <code>py-spy dump</code>, <code>SIGQUIT</code>). Two threads each holding what the other wants is visible in one screenful — but only if you look at all threads, not the one you suspect.</div>
+<div class="rule"><b><span class="n">33</span>Configuration bugs: print the config the process actually loaded</b>Not the file you edited — the values in memory at runtime. Wrong file path, environment override, precedence rules, and deploy lag mean the config you are reading is frequently not the config that is running.</div>
+<div class="rule"><b><span class="n">34</span>"Works on my machine": diff the machines, not the vibes</b>Versions (language, libraries, OS), environment variables, locale, filesystem case-sensitivity, network access, data. Enumerate mechanically; the difference is on the list, and intuition is bad at finding it.</div>
+
+<h2>VI. When you are stuck</h2>
+<div class="rule"><b><span class="n">35</span>Re-read the symptom sentence from step 2</b>Half of all lost debugging sessions are solving a drifted version of the problem. Does your current hypothesis still explain the original observation?</div>
+<div class="rule"><b><span class="n">36</span>Write down what you know is true, with the evidence for each</b>Three columns: claim, evidence, confidence. Any claim with an empty evidence cell is a hypothesis you promoted to a fact — demote it and test it.</div>
+<div class="rule"><b><span class="n">37</span>Reproduce the OPPOSITE</b>Can you make it work correctly on demand? The delta between the smallest failing case and the largest passing case is the bug's silhouette.</div>
+<div class="rule"><b><span class="n">38</span>Take the fifteen-minute walk</b>Not folklore: you are stuck in a local minimum of the same three ideas. Distance breaks the loop. The number of bugs solved in the shower is not a coincidence; it is consolidation.</div>
+<div class="rule"><b><span class="n">39</span>Explain it to someone junior, in writing</b>A good bug report to a person who knows nothing forces you to state versions, steps, expected, actual — and about a third of the time you never hit send.</div>
+<div class="rule"><b><span class="n">40</span>Check the dumb things, out loud, in order</b>Is it plugged in: right branch, right server, right database, right account, saved file, restarted process, cleared cache. Senior engineers check these FIRST because they are cheap, not because they are likely.</div>
+<div class="rule"><b><span class="n">41</span>Read the source of the thing you're blaming</b>The library, the framework, the standard function. Vendored source, decompiled bytecode, or the docs' fine print. Ten minutes in the actual implementation regularly refutes the model of it you debugged against for an hour.</div>
+<div class="rule"><b><span class="n">42</span>Rewrite the suspect ten lines from the spec</b>When staring cannot find the flaw in a small region, blank it and re-derive it from what it must do. Faster than finding a subtle flaw in the old text, and the diff between versions is often the bug.</div>
+<div class="rule"><b><span class="n">43</span>Question the diagnosis of everyone before you</b>Tickets arrive pre-diagnosed ("the cache is broken") and the framing is wrong more often than the report. Strip the interpretation, keep the observation, start from the raw symptom.</div>
+
+<h2>VII. After the fix</h2>
+<div class="rule"><b><span class="n">44</span>Explain the mechanism before you accept the fix</b>If you cannot narrate cause → effect → symptom in one paragraph, you changed the timing, not the truth. "It went away" is remission, not cure, and it will return during a demo.</div>
+<div class="rule"><b><span class="n">45</span>Re-run the original reproduction, not a friendly variant</b>The exact failing case from step 1, unmodified. Fixes have a way of curing the test you wrote while fixing and not the bug you had.</div>
+<div class="rule"><b><span class="n">46</span>Hunt the clones</b>The same author, the same pattern, the same misunderstanding — grep for the shape of the mistake across the codebase. Bugs are social; they travel in cohorts.</div>
+<div class="rule"><b><span class="n">47</span>Add the regression test while the reproduction is warm</b>The minimal repro from rule 2 is already a test fixture. Committing the fix without it discards the most expensive artifact the session produced.</div>
+<div class="rule"><b><span class="n">48</span>Ask what let this bug survive until now</b>Missing assertion, silent catch block, untested path, log line that lied? Fix the detection gap too, or its siblings will live just as long.</div>
+<div class="rule"><b><span class="n">49</span>Write the one-paragraph postmortem in the commit</b>Symptom, mechanism, fix, and how it escaped. Six months from now this paragraph is worth more than the fix, and the discipline of writing it catches wrong fixes today.</div>
+<div class="rule"><b><span class="n">50</span>Update your priors</b>Whatever class this bug belonged to, you will meet it again. The engineers who seem psychic at debugging are running the same procedure as you — with better-calibrated priors, earned one postmortem at a time.</div>
+
+<blockquote>The procedure is the skill. The heuristics are just the procedure, pre-computed for the cases that recur.</blockquote>
+
+<div class="foot">
+<p>Sold via Stripe. Written and assembled by an AI agent (Claude), sold as-is with human oversight of the sale. If it disappointed you, reply to your Stripe receipt or write to <b>miguel.ingram.work@gmail.com</b> and you will be refunded without argument.</p>
+</div>
+</main>
+</body>
+</html>

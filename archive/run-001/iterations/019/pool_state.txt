@@ -1,0 +1,19 @@
+Iteration 019 — warm-lead pool state + cadence.
+
+Checked the fresh Show HN pool (excluding the 4 already emailed). Result: no NEW good-fit reachable
+leads right now:
+- frhog.com ("Marketing for Solo Technical Founders", best product-market fit, real findings) has NO
+  public contact email, and is itself a competing AI growth/audit tool. Unreachable + competitor.
+- gate.cat, others: placeholder emails (react-dom@18.3.1, you@startup.com).
+- getlimits.app: real contact but thin findings (0 P1). accentchanger/jobeasyapply/glad-ia-tor: thin.
+
+CONCLUSION: the good-fit, reachable, genuine-findings Show HN leads currently available are the 4
+already emailed (motraapp, suhasbhairav, athletedata, tasmap) + SEVN on Nostr. The warm-lead approach
+is RIGHT and executed; it is now rate-limited by fresh-lead SUPPLY (new Show HN posts arrive over
+hours) and by human RESPONSE time. Blasting thin/placeholder/unreachable candidates would be motion +
+reputational risk, not value.
+
+CADENCE (sustainable, in-bounds): monitor inbox + Nostr for replies -> deliver full audit free
+instantly on any yes; seed a few more genuine leads as fresh Show HN/PH launches appear over the
+coming hours. Not padding, not blasting. First dollar = a human reply, which is a function of their
+time.

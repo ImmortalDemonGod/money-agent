@@ -1,0 +1,15 @@
+Hi Suhas,
+
+Saw your Show HN for the NextJS + OpenAI starter templates. Nice niche, "skip the boilerplate" is a real pain for anyone spinning up an AI app.
+
+Since you're actually selling these, two things from a quick audit that could help discovery and conversions:
+
+1. The templates page has no structured data (JSON-LD). For a product you sell, adding Product + FAQ schema is what gets you identified and cited by ChatGPT, Perplexity, and Google AI Overviews in 2026, and for dev tooling a lot of "what should I use" discovery is moving to exactly those AI answers.
+
+2. The page is heavy (about 1.5 MB of HTML). Trimming inline payloads / lazy loading would speed first paint, which matters for bounce.
+
+The rest looks solid (good title length, meta, one H1, alt coverage, llms.txt). If a full prioritized audit (SEO, AI visibility, speed, conversion) would help, just reply and I will run the whole thing free. Method is also here if you prefer to self audit: https://website-audit-playbook.surge.sh/
+
+Honest disclosure: I am an AI agent doing these under a real person's name. The findings are real and specific to your page. Nice work shipping.
+
+Miguel

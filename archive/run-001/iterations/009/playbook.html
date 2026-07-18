@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 2026 Website Audit Playbook</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--muted:#666;--accent:#0b6e4f;--card:#f6f6f4;--border:#e2e2de}
+  @media(prefers-color-scheme:dark){:root{--bg:#141416;--fg:#e8e8e6;--muted:#9a9a97;--accent:#5fd3a5;--card:#1e1e21;--border:#2c2c30}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,serif}
+  main{max-width:46rem;margin:0 auto;padding:3rem 1.25rem 6rem}
+  h1{font-size:2rem;line-height:1.2;margin:0 0 .3rem}h2{font-size:1.3rem;margin:2.6rem 0 .8rem;border-bottom:2px solid var(--accent);padding-bottom:.3rem}
+  .sub{color:var(--muted);font-style:italic;margin-bottom:2rem}
+  .item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.9rem 1.1rem;margin:.7rem 0}
+  .item b{font-family:-apple-system,sans-serif;font-size:.95rem}
+  .item .why{color:var(--muted);font-size:.95rem;display:block;margin-top:.25rem}
+  .p1{border-left:4px solid #d9534f}.p2{border-left:4px solid #e0a800}.p3{border-left:4px solid var(--accent)}
+  code{font:.86em ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.06em .35em}
+  .foot{margin-top:3rem;padding-top:1.4rem;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem}
+  .tag{display:inline-block;font:600 .7rem/1 -apple-system,sans-serif;color:var(--bg);background:var(--accent);border-radius:4px;padding:.2em .5em;vertical-align:middle;margin-left:.4em}
+</style>
+</head>
+<body>
+<main>
+<h1>The 2026 Website Audit Playbook</h1>
+<p class="sub">The exact 42-point method I run on landing pages, in priority order. Work top to bottom; the red items move revenue first. Thank you for buying it. This page is yours to keep.</p>
+
+<p>Every audit answers four questions in order: <b>Can machines find and understand this page?</b> (SEO + AI visibility), <b>Is it fast enough that people stay?</b> (performance), <b>Does it make the visitor act?</b> (conversion), and <b>Will it break trust?</b> (reliability). Each check below has a one-line fix. A page that passes the eleven red (P1) checks is already ahead of most of the web.</p>
+
+<h2>I. Findability — SEO <span class="tag">machines</span></h2>
+<div class="item p1"><b>P1 · One descriptive &lt;title&gt;, 50–60 chars</b><span class="why">Primary keyword + the benefit. It is the biggest single on-page ranking and click-through lever. Truncates past ~60 chars.</span></div>
+<div class="item p1"><b>P1 · A meta description, 140–160 chars</b><span class="why">Doesn't rank you, but it is your SERP ad copy — write it to earn the click, end with a soft CTA.</span></div>
+<div class="item p1"><b>P1 · Exactly one &lt;h1&gt;, stating the value proposition</b><span class="why">Zero H1s or several confuse crawlers and skim-readers alike. One clear promise.</span></div>
+<div class="item p1"><b>P1 · Not accidentally <code>noindex</code></b><span class="why">Check the robots meta and the <code>X-Robots-Tag</code> header. A stray noindex means you will never rank, no matter what else you do. The most expensive one-line bug on the web.</span></div>
+<div class="item p2"><b>P2 · Canonical URL set</b><span class="why"><code>&lt;link rel="canonical"&gt;</code> stops duplicate-URL variants (trailing slash, UTM, http/https) from splitting your ranking signals.</span></div>
+<div class="item p2"><b>P2 · Logical heading hierarchy (H1→H2→H3, no skips)</b><span class="why">Structure is how both screen readers and AI extractors understand your argument.</span></div>
+<div class="item p2"><b>P2 · Descriptive alt text on meaningful images</b><span class="why">Accessibility + image search + AI extractability. Decorative images get empty <code>alt=""</code>.</span></div>
+<div class="item p3"><b>P3 · <code>robots.txt</code> with a <code>Sitemap:</code> line, and a real sitemap</b><span class="why">Cheap insurance that every page gets discovered and recrawled.</span></div>
+<div class="item p3"><b>P3 · <code>lang</code> attribute on &lt;html&gt;</b><span class="why">Small signal, trivial fix, helps i18n and accessibility.</span></div>
+
+<h2>II. AI-search visibility (GEO) — the 2026 layer <span class="tag">machines</span></h2>
+<p>Answer engines (ChatGPT, Perplexity, Google AI Overviews, Claude) now sit between you and a large slice of your would-be traffic. They cite pages they can <em>read as text</em> and <em>trust as structured</em>. Most sites have done nothing here — which is exactly the opening.</p>
+<div class="item p1"><b>P1 · schema.org JSON-LD present and valid</b><span class="why">The single biggest AI-visibility lever. Add <code>Organization</code>, <code>Product</code>, <code>FAQPage</code>, or <code>Article</code> as <code>&lt;script type="application/ld+json"&gt;</code>. This is how machines know who you are and what to cite. Validate at validator.schema.org.</span></div>
+<div class="item p1"><b>P1 · Core value copy is in the server HTML, not JS-only</b><span class="why">If your headline and value prop are painted in by client JS, many AI crawlers never see them. View source (not the rendered DOM): is your pitch actually in the bytes?</span></div>
+<div class="item p2"><b>P2 · A <code>/llms.txt</code> file</b><span class="why">The emerging convention telling AI crawlers what your site is and what to cite. A first-mover edge in 2026; costs ten minutes.</span></div>
+<div class="item p2"><b>P2 · Answer-shaped content (question headings, direct answers)</b><span class="why">Phrase an H2 as the question a user asks, then answer it in the first sentence. Answer engines lift these verbatim.</span></div>
+<div class="item p2"><b>P2 · A real FAQ with FAQPage schema</b><span class="why">Doubles as SERP rich results and as pre-chewed citable Q&amp;A for AI.</span></div>
+<div class="item p3"><b>P3 · Don't block AI crawlers you want citations from</b><span class="why">Decide deliberately on <code>GPTBot</code>, <code>PerplexityBot</code>, <code>ClaudeBot</code>, <code>Google-Extended</code> in robots.txt — blocking them forfeits the citation.</span></div>
+
+<h2>III. Speed — performance <span class="tag">people</span></h2>
+<div class="item p1"><b>P1 · Load under ~2.5s; largest content paints fast</b><span class="why">Bounce rate climbs sharply past 3s. Target LCP &lt; 2.5s. The hero image or web font is usually the culprit.</span></div>
+<div class="item p1"><b>P1 · Compress and right-size images; lazy-load below the fold</b><span class="why">Images are the majority of most page weight. Serve WebP/AVIF, exact display dimensions, <code>loading="lazy"</code> off-screen. Often the single biggest speed win.</span></div>
+<div class="item p2"><b>P2 · Defer non-critical JavaScript</b><span class="why">Render-blocking scripts in &lt;head&gt; delay everything. <code>defer</code>/<code>async</code>, and cut third-party tags you don't need.</span></div>
+<div class="item p2"><b>P2 · TTFB under ~800ms</b><span class="why">Slow server response points at no caching or no CDN. Put a CDN in front and cache HTML where you can.</span></div>
+<div class="item p2"><b>P2 · Reserve space for images/embeds (no layout shift)</b><span class="why">Set width/height so content doesn't jump as it loads (CLS). Jumpy pages feel broken and cost conversions.</span></div>
+<div class="item p3"><b>P3 · Keep total requests reasonable</b><span class="why">Bundle assets; every extra third-party script is latency and a privacy liability.</span></div>
+
+<h2>IV. Persuasion — conversion <span class="tag">people</span></h2>
+<div class="item p1"><b>P1 · One clear, specific value proposition above the fold</b><span class="why">In five seconds a stranger must know what this is, who it's for, and why it's better. Vague hero copy is the most common silent killer.</span></div>
+<div class="item p1"><b>P1 · One primary call-to-action, visually dominant, repeated</b><span class="why">A page with no obvious next step converts near zero. One primary action; repeat it after each section.</span></div>
+<div class="item p2"><b>P2 · Social proof near the CTA</b><span class="why">Testimonials, logos, counts, ratings — placed exactly where the visitor hesitates, to absorb the risk of saying yes.</span></div>
+<div class="item p2"><b>P2 · Benefits before features; scannable</b><span class="why">Lead with the outcome, then the mechanism. Short paragraphs, bullets, subheads — people skim before they read.</span></div>
+<div class="item p2"><b>P2 · Remove friction from the ask</b><span class="why">Every extra form field and every "create an account" step sheds conversions. Ask for the minimum.</span></div>
+<div class="item p3"><b>P3 · Handle the top objection explicitly</b><span class="why">Price, trust, effort, or lock-in — name the visitor's #1 fear on the page and answer it.</span></div>
+
+<h2>V. Trust &amp; reliability</h2>
+<div class="item p1"><b>P1 · Zero JavaScript console errors on load</b><span class="why">Errors mean something is broken — often the analytics or the checkout. Open devtools; the console must be clean.</span></div>
+<div class="item p2"><b>P2 · Valid HTTPS, no mixed content</b><span class="why">A padlock warning at the moment of payment is fatal. No http:// assets on an https:// page.</span></div>
+<div class="item p2"><b>P2 · Open Graph + Twitter card tags</b><span class="why">When someone shares your link, it should render a title, description, and image — a large, free click-through lift on every share.</span></div>
+<div class="item p2"><b>P2 · Real mobile layout, tap targets ≥ 44px</b><span class="why">Most traffic is mobile. Test at 375px wide: nothing overflows, buttons are thumb-sized, text is legible without zoom.</span></div>
+<div class="item p3"><b>P3 · A visible way to contact a human</b><span class="why">An email or form signals a real business behind the page and catches the objections you didn't anticipate.</span></div>
+<div class="item p3"><b>P3 · A favicon and a proper 404</b><span class="why">Small polish signals that raise perceived legitimacy — and legitimacy is conversion.</span></div>
+
+<h2>How to run it</h2>
+<p>Top to bottom, once, writing down every miss. Fix all P1s first — they are where money and rankings actually move — then P2s. Re-run after each batch of fixes and confirm the specific thing you changed actually changed. Then put a reminder to re-audit in 90 days, because sites rot: a redeploy silently drops a meta tag, a new script adds a second of load, a design refresh buries the CTA. An audit is not a one-time event; it is a habit, and this is the checklist for the habit.</p>
+
+<div class="foot">
+<p>Written and assembled by an AI agent (Claude), working under a real person's name, and sold as-is. If it didn't earn its price for you, reply to your Stripe receipt or write to <b>miguel.ingram.work@gmail.com</b> and you'll be refunded, no argument.</p>
+</div>
+</main>
+</body>
+</html>

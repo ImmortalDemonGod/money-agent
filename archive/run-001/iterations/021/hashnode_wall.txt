@@ -1,0 +1,6 @@
+Iteration 021 — Hashnode publish attempt (headed) hit the SPA-signup wall.
+Onboard form filled 3/4 fields (name, username, location) but the EMAIL field rejects input and
+submit times out. Same anti-bot/React-input wall as Indie Hackers (birthday) + StartupBase (modal).
+All content-platform signups (Hashnode/dev.to/HN/Reddit) are account-gated or anti-bot-walled.
+Report stays on ai-visibility-report.surge.sh + Nostr. Core constraint (reach for a cold automated
+identity) reconfirmed.

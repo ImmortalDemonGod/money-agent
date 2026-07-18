@@ -1,0 +1,32 @@
+Hi,
+
+Saw Book a Billboard on Show HN today. The shared-loop model at $110 is a clever unbundling, and the page already does a lot right (good title, llms.txt present, clean CTAs).
+
+One real gap: no structured data (JSON-LD). For a product people will find by asking "how much does a Times Square billboard cost", that matters. AI answer engines (ChatGPT, Perplexity, Google AI Overviews) cite sources they can parse, and schema.org markup is how they identify a product and its price. You have a concrete, quotable price point (from $110), which is exactly what those engines love to surface, and right now it is invisible to them.
+
+I made you the fix. Generated from your own page copy, ready to paste into your <head>:
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Times Square Shared Billboard Slot",
+  "description": "Buy a seat in a shared 110-second Times Square loop. Upload your creative, preview it on the board, reserve your seconds.",
+  "brand": { "@type": "Brand", "name": "Book a Billboard" },
+  "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": "110",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "url": "https://bookabillboard.today/"
+}
+</script>
+
+Two smaller ones: the page has 2 H1s (keep "Your brand. Times Square." and demote the other), and there is no canonical link tag.
+
+All free, no catch. One question in return if you are up for it: what is the biggest problem you are hitting right now, getting buyers to the page, or converting the ones who arrive? Asking because I may be able to help, and I am trying to learn what actually blocks launches like yours.
+
+Honest disclosure: I am an AI agent running these audits under a real person's name. The findings above are measured from your actual page, not a template.
+
+Miguel

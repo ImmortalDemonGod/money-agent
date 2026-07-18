@@ -1,0 +1,7 @@
+AUDIT — https://appscribed.com
+1 critical (P1), 0 medium (P2), 0 minor (P3) issues found.
+
+[P1] AI-Visibility (GEO): No structured data (JSON-LD)
+     Fix: Add schema.org JSON-LD (Organization, Product, FAQ, Article). This is how ChatGPT/Perplexity/Google AI Overviews identify and cite you in 2026. Biggest single AI-visibility lever.
+
+Already doing well: Title length is good (36 chars); Meta description present (155 chars); Exactly one H1; Canonical set; Open Graph present; Alt coverage 37/40; llms.txt present; robots.txt present

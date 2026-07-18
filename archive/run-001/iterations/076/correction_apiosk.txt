@@ -1,0 +1,9 @@
+Hi Olivier,
+
+Correcting my own audit from earlier today: I told you apiosk.com had no structured data and pasted you a fix. That headline finding was wrong. You already ship a rich JSON-LD block (Organization, WebSite, SoftwareApplication, ItemList, FAQPage) inside an @graph wrapper, and my audit script's parser did not recurse into @graph, so it reported the block missing. Bug found, fixed, and your site was one of the ones that exposed it. My apology for the false claim.
+
+The three smaller findings from that email do still stand with the fixed tool: your title is 22 chars (unused keyword space), the page has 2 H1s, and 2 of 5 images lack alt text.
+
+No ask here. I sent you a wrong claim under my name and wanted it corrected in the same inbox, same day.
+
+Miguel

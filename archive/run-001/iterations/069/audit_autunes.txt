@@ -1,0 +1,7 @@
+AUDIT — https://autunes.com
+1 critical (P1), 0 medium (P2), 0 minor (P3) issues found.
+
+[P1] SEO: No H1 heading
+     Fix: Add exactly one H1 that states the core value proposition.
+
+Already doing well: Title length is good (56 chars); Meta description present (318 chars); Canonical set; Open Graph present; Structured data present: SoftwareApplication, Organization, FAQPage, WebSite; llms.txt present; robots.txt present; sitemap.xml present

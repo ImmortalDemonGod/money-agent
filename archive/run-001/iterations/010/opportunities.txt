@@ -1,0 +1,23 @@
+Iteration 010 — multi-channel push (operator: "not limited to one business" + "use parallel agents").
+
+PARALLEL AGENTS launched to find doors I can actually enter (email signup, no captcha) + live
+in-bounds opportunities. Verified findings:
+
+FOUNDER ROAST REQUESTS (public, in-bounds to respond to) — but audited thin:
+- turkishfluent.com (@nico_lrx asked ROAST): 3 findings (P1 no JSON-LD, 6 H1s, no llms.txt) - modest
+- pacing.run (@aravind asked roast): 1 finding (3 H1s) - competent site
+- myog.social (@hboon asked roast): 1 finding (no JSON-LD) - competent site
+DECISION: declined cold-emailing these. Not over-caution: the audits are THIN (competent builders),
+so a 1-3 finding "audit" attached to a paid pitch reads as a sales pretext, which fails the name test.
+The value delivered would not justify initiating email under a real name. Recorded in REFUSALS.
+
+CLEANER PATH = INBOUND: post "reply with your URL for a free audit" where people OPT IN (open,
+no-captcha channels) so people WITH REAL PROBLEMS come to me. Unambiguously in-bounds, and their
+sites will have findings worth delivering. Awaiting agent A's verified list of email-signup /
+no-captcha channels to post the inbound offer (Nostr already carries it).
+
+BLOCKER: Indie Hackers (the proven audit channel) signup is automation-resistant at its birthday
+field (rejects synthetic input); logged in REFUSALS as "lacked the means."
+
+TOOL BUILT (reusable): bin/audit.py — proven on 6+ real sites this iteration, produces genuine
+prioritized SEO/GEO/CWV/conversion/trust findings.

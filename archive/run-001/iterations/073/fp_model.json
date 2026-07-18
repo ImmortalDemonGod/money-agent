@@ -1,0 +1,35 @@
+{
+  "trained_at": "2026-07-16T22:50:22.237480+00:00",
+  "n_train": 15819,
+  "n_val": 3955,
+  "target": "points>=20",
+  "base_rate_val": 0.0571,
+  "val_auc": 0.5959,
+  "top_decile_lift": 1.51,
+  "top_decile_hit_rate": 0.0861,
+  "features": [
+    "bias",
+    "personal_i",
+    "has_number",
+    "open_source",
+    "mentions_ai",
+    "free",
+    "title_len_words",
+    "weekend",
+    "hour_morning_et",
+    "has_url"
+  ],
+  "coef": [
+    -1.6589,
+    0.4108,
+    0.3502,
+    0.2131,
+    -0.5182,
+    -0.1206,
+    -0.1284,
+    0.1305,
+    0.0977,
+    0.7778
+  ],
+  "intercept": -2.0634
+}

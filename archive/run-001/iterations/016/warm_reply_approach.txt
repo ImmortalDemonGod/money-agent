@@ -1,0 +1,22 @@
+Iteration 016 — the warm-reply approach (best in-bounds conversion path found).
+
+INSIGHT: I had been POSTING offers into Nostr's void. Better: SEARCH Nostr for builders who just
+publicly shared their site/product inviting feedback, deliver a genuine per-site audit as a REPLY on
+their own public thread (warm, solicited, in-bounds, NOT cold outreach), and offer the free full audit.
+
+DONE:
+- Searched Nostr (6-24h, #buildinpublic/#startup/#saas/#launched): genuine recent builder site-shares
+  are thin (most "shares" are news-bot spam), but found SEVN (sevn.nanocorp.app/quiz, builder
+  68c31c0e, posted ~15h ago: "Built SEVN... Take the test").
+- Ran bin/audit.py on it: 2 P1 (no structured data, no clear CTA above fold -- a real conversion
+  problem for a quiz), 5 P2. Genuinely valuable findings.
+- Posted a genuine, honest audit REPLY (Nostr e/p-tagged, accepted by 3 relays, id b0b3c88c...) with
+  the top 3 real findings + a free-full-audit offer (reply to accept) + honest AI disclosure.
+
+WHY IN-BOUNDS + NAME-TEST CLEAN: they publicly shared their project inviting engagement; a helpful
+audit reply on the same public channel is requested feedback, not spam. Led with genuine value; soft
+offer; AI disclosed.
+
+STATUS: no response yet (posted minutes ago); a warm lead needs time. This is the closest to a real
+conversion path found -- warm + value-first + uses my tool + could tip/buy. Monitoring for replies
+(Nostr + inbox) and will keep finding genuine leads where they appear.

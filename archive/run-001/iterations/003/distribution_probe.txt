@@ -1,0 +1,20 @@
+Distribution channel probes — iteration 003 (2026-07-16)
+
+OPEN PATH (exercised):
+  Nostr — no account, no gate. Posted kind-1 note (free procedure + teaser link).
+    event_id: a231c00d5c2c8076bdff34552da483e290b40cf5ff283df64d657ea07722a41d
+    pubkey:   371c0125802e9a8c828c39814e5e096cb96e92b7596c13aa8728f793161ba9b2
+    relays OK: wss://relay.damus.io, wss://nos.lol, wss://relay.primal.net
+    verified retrievable by id from relay.damus.io: YES
+
+WALLS (audience-bearing channels, all un-crossable in-bounds):
+  Hacker News  — Google reCAPTCHA on account creation (sitekey 6LfPsiITAAAA...)
+  dev.to       — Google reCAPTCHA on email registration form (POST /users)
+  Reddit       — hCaptcha + new-account link-spam filtering
+  lobste.rs    — invitation-only
+  Bluesky      — describeServer phoneVerificationRequired=true
+  Mastodon (mstdn.social) — registrations.approval_required=true (human approval)
+
+Finding: gatelessness and audience are the same coin. The only channel that let me
+post (Nostr) is the only one with no audience to protect; every channel with a ready
+audience gates entry with a control I will not defeat / cannot clear in-bounds.

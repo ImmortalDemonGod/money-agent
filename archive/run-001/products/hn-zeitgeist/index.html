@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The Hacker News Zeitgeist: AI ate the front page, crypto vanished</title>
+<meta name="description" content="I analyzed 49,987 Hacker News front-page stories from 2022-2026. AI went from 3.4% to 15.8% of the front page; crypto collapsed; remote-work talk died. Data + charts."/>
+<meta property="og:title" content="The Hacker News Zeitgeist (49,987 front-page stories analyzed)"/>
+<meta property="og:description" content="AI ate the HN front page (3.4% to 15.8%). Crypto vanished. Remote-work talk died. The data."/>
+<style>
+:root{--bg:#faf9f6;--ink:#16130f;--muted:#6b6660;--line:#e2ddd2;--accent:#7c3aed;--card:#fff}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:17px/1.6 Georgia,serif}
+.wrap{max-width:760px;margin:0 auto;padding:40px 20px 90px}
+h1{font-size:33px;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+h2{font-size:22px;margin:44px 0 6px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.sub{color:var(--muted);font-size:16px;margin:0 0 8px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+p{margin:12px 0}.lede{font-size:19px}
+.big{display:flex;gap:16px;flex-wrap:wrap;margin:24px 0;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.big .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;flex:1;min-width:150px}
+.big .num{font-size:28px;font-weight:700;color:var(--accent)}.big .lbl{font-size:13px;color:var(--muted)}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.trow{margin:12px 0}.trow .tl{font-size:14px;font-weight:600;margin-bottom:4px}
+.spark{display:flex;align-items:flex-end;gap:6px;height:60px}
+.spark .b{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+.spark .b span{position:absolute;top:-16px;left:0;right:0;text-align:center;font-size:10px;color:var(--muted)}
+.yl{display:flex;gap:6px;font-size:11px;color:var(--muted);margin-top:3px}.yl span{flex:1;text-align:center}
+.cta{background:var(--card);border:2px solid var(--accent);border-radius:14px;padding:22px;margin:40px 0 10px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.cta h3{margin:0 0 6px;font-size:20px}.cta ul{margin:10px 0;padding-left:18px;color:var(--muted);font-size:15px}
+.btn{display:inline-block;background:var(--accent);color:#fff;font-weight:700;border:none;padding:12px 22px;border-radius:10px;margin-top:8px;font-size:16px;cursor:pointer}
+.method{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding:6px 0 6px 14px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+.foot{margin-top:60px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:14px;font-family:-apple-system,Helvetica,Arial,sans-serif}
+b{color:var(--ink)}</style><!-- geo-patch --><link rel="canonical" href="https://hn-zeitgeist.surge.sh/"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "The Hacker News Zeitgeist", "url": "https://hn-zeitgeist.surge.sh/", "description": "Analysis of 49,987 Hacker News front-page stories, 2022-2026: AI went from 3.4% to 15.8% of the front page, crypto collapsed, remote-work talk died. Full data report $9.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "9", "priceCurrency": "USD"}, "publisher": {"@type": "Person", "name": "Miguel Ingram"}}</script></head><body><div class="wrap">
+<h1>The Hacker News Zeitgeist: AI ate the front page, crypto vanished, nobody talks about remote work</h1>
+<p class="sub" id="sub"></p>
+<p class="lede">I pulled every Hacker News story that cleared 100 points over the last four years and tagged what each was about. The shifts are stark — here's what the community's attention actually did.</p>
+<div class="big">
+  <div class="card"><div class="num" id="k1"></div><div class="lbl">of the front page mentioned AI in 2026, up from <span id="k1b"></span> in 2022</div></div>
+  <div class="card"><div class="num" id="k2"></div><div class="lbl">stories analyzed (100+ points, 2022–2026)</div></div>
+</div>
+<h2>The rise and fall of what HN cares about</h2>
+<p>Each topic's share of front-page stories, by year. AI's climb is the story of the decade; crypto and remote-work talk went the other way.</p>
+<div id="charts"></div>
+<div class="cta">
+  <h3>Get the full dataset + trends report — $9</h3>
+  <ul>
+    <li>The cleaned dataset: all <b id="nrows"></b> front-page stories (CSV) with date, points, title, URL, and per-topic tags — slice your own topics and eras</li>
+    <li>The trends report: the full topic-by-year tables + notes</li>
+    <li>Delivered instantly on the confirmation page — direct download</li>
+  </ul>
+  <button class="btn" id="buy" type="button">Get the dataset + report — $9</button>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">Payment by Stripe; the statement shows the maker's name, Miguel Ingram.</p>
+</div>
+<p class="method"><b>Method, honestly:</b> <span id="method"></span> Topics are tagged by keyword match on the <i>title only</i> (a story can match more than one), and 100+ points is a front-page proxy. These are correlations and coarse buckets, not a precise taxonomy — the dataset is included so you can check the tagging yourself. Data via the public HN Algolia API.</p>
+<div class="foot">Made by Miguel Ingram. Data from the public Hacker News Algolia API. No tracking on this page.</div>
+</div>
+<script>
+var DATA={"n": 49987, "date_from": "2022-06-07", "date_to": "2026-07-15", "years": [2022, 2023, 2024, 2025, 2026], "series": [{"topic": "AI / LLMs", "by_year": [3.4, 8.2, 7.3, 10.9, 15.8]}, {"topic": "Crypto / Web3", "by_year": [1.0, 0.3, 0.3, 0.3, 0.5]}, {"topic": "Rust", "by_year": [1.2, 1.2, 1.3, 1.4, 1.1]}, {"topic": "Privacy / Security", "by_year": [1.6, 1.5, 1.2, 1.3, 1.8]}, {"topic": "Remote / WFH", "by_year": [0.2, 0.2, 0.1, 0.1, 0.0]}, {"topic": "Google/Apple/MSFT", "by_year": [6.0, 6.4, 5.3, 5.0, 5.7]}], "headline": {"ai_from": 3.4, "ai_to": 15.8, "ai_mult": 4.6, "crypto_from": 1.0, "crypto_to": 0.5}};
+var yrs=DATA.years;
+document.getElementById('sub').textContent='Based on '+DATA.n.toLocaleString()+' front-page stories (100+ points), '+DATA.date_from+' to '+DATA.date_to+'.';
+document.getElementById('k1').textContent=DATA.headline.ai_to+'%';
+document.getElementById('k1b').textContent=DATA.headline.ai_from+'%';
+document.getElementById('k2').textContent=DATA.n.toLocaleString();
+document.getElementById('nrows').textContent=DATA.n.toLocaleString();
+document.getElementById('method').textContent=DATA.n.toLocaleString()+' HN stories with 100+ points, '+DATA.date_from+' to '+DATA.date_to+'.';
+var host=document.getElementById('charts');
+var gmax=Math.max.apply(null,DATA.series.map(function(s){return Math.max.apply(null,s.by_year);}));
+host.innerHTML=DATA.series.map(function(s){
+  var bars=s.by_year.map(function(v){var h=Math.round(100*v/gmax);return '<div class="b" style="height:'+h+'%"><span>'+v+'%</span></div>';}).join('');
+  var yl=yrs.map(function(y){return '<span>'+y+'</span>';}).join('');
+  return '<div class="chart"><div class="trow"><div class="tl">'+s.topic+'</div><div class="spark">'+bars+'</div><div class="yl">'+yl+'</div></div></div>';
+}).join('');
+var STRIPE_LINK="https://buy.stripe.com/dRmfZjckrfBF8PU2Mu7ok09";
+document.getElementById('buy').onclick=function(){ if(!STRIPE_LINK||STRIPE_LINK.indexOf('__ZG')===0){alert('Checkout is being set up — check back shortly.');return;} window.location.href=STRIPE_LINK; };
+</script></body></html>

@@ -1,0 +1,32 @@
+Hi,
+
+Saw HeimWall on Show HN today. The on-device, local-only angle is genuinely the right call for this category, and the landing page communicates it well. I ran a quick technical audit on heimwall.ai/individual and one gap stood out that matters more for you than for most products.
+
+You have no structured data (JSON-LD). Here is why that is your problem specifically: when a developer asks ChatGPT or Perplexity "how do I stop secrets leaking into AI prompts", those engines cite sources they can parse, and schema.org markup is how they identify what a product is. A security tool for AI-prompt hygiene is exactly the kind of query AI engines get asked, and right now they cannot cleanly tell that HeimWall is a free macOS app in that category.
+
+So I made you the fix. This block is generated from your own page copy, ready to paste into your <head>:
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "HeimWall",
+  "operatingSystem": "macOS",
+  "applicationCategory": "SecurityApplication",
+  "description": "A free menu-bar app for individual developers that flags secrets and PII in your AI prompts. 100% on-device, local-only, no account. Nothing you type ever leaves the machine.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "url": "https://heimwall.ai/individual"
+}
+</script>
+
+Three smaller ones while I was in there: your title tag is only 27 chars ("The free Mac app | HeimWall"), so you are leaving keyword space unused; the page has 3 H1s (keep the main one, demote the rest to H2); and both images are missing alt text.
+
+All of that is yours free, no catch. One question in return, if you are up for it: what is the biggest problem you are hitting right now getting HeimWall in front of the developers it is for? Asking because I may be able to help, and I am trying to learn what actually blocks launches like yours.
+
+Honest disclosure: I am an AI agent running these audits under a real person's name. The findings above are measured from your actual page, not a template.
+
+Miguel

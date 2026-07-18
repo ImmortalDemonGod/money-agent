@@ -1,0 +1,43 @@
+{
+  "measurable": {
+    "telegraph_views": {
+      "hub": 12,
+      "showhn": 7,
+      "checklist": 17,
+      "liw": 13,
+      "liw_ja": 12
+    },
+    "hackernews_item": {
+      "points": 8,
+      "comments": 0
+    },
+    "nostr_engagement": {
+      "referencing_events_from_others": 15,
+      "by_kind": {
+        "1": 6,
+        "1985": 5,
+        "7": 1,
+        "4": 2,
+        "3": 1
+      },
+      "distinct_pubkeys": 5,
+      "assessment": "kind1 flattery cluster + kind4 = LLM reply-spam / cold pitches; no genuine human buyer engagement observed"
+    }
+  },
+  "structurally_blind": {
+    "surge_funnels": {
+      "debugging-field-manual": "no analytics API (paid dashboard only)",
+      "website-audit-playbook": "no analytics API (paid dashboard only)",
+      "ai-visibility-report": "no analytics API (paid dashboard only)",
+      "ai-visibility-kit": "no analytics API (paid dashboard only)",
+      "life-in-weeks": "no analytics API (paid dashboard only)",
+      "show-hn-playbook": "no analytics API (paid dashboard only)",
+      "hn-zeitgeist": "no analytics API (paid dashboard only)",
+      "devcard": "no analytics API (paid dashboard only)",
+      "github-top-repos": "no analytics API (paid dashboard only)"
+    },
+    "workers_dev_hub": "blind unless a disclosed KV-backed beacon is added (operator-gated)",
+    "email_23_sent": "no open-tracking by design (covert pixels breach honest-neutral posture)"
+  },
+  "bottom_line": "measurable organic human reach is ZERO; all telegraph views are self-traffic (see analytics.py hour-attribution), the HN item is dead, and Nostr engagement is bots/spam. The two signals that matter -- a reply and a received dollar -- are both still zero."
+}
