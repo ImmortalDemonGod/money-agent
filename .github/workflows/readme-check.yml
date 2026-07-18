@@ -1,0 +1,34 @@
+name: README check
+
+# Lightweight integrity gate for the README: relative links resolve, the hero
+# asset exists, nav anchors match headers, code fences are balanced, and no
+# curly quotes drift in. Stdlib-only, no dependencies. Scoped to docs surfaces
+# so it never runs against harness changes.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - README.md
+      - .github/assets/**
+      - .github/scripts/check_readme.py
+      - .github/workflows/readme-check.yml
+  pull_request:
+    paths:
+      - README.md
+      - .github/assets/**
+      - .github/scripts/check_readme.py
+      - .github/workflows/readme-check.yml
+
+jobs:
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Check README integrity
+        run: python3 .github/scripts/check_readme.py README.md
