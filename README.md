@@ -111,13 +111,15 @@ address the reach-is-an-artifact finding by giving it time, findable surfaces, a
 
 ## Read the evidence
 
-The repo is the evidence. Nothing here asks you to take our word for it.
+The repo is the evidence. Nothing here asks you to take our word for it. One navigation note: `main`
+carries the harness with the run logs reseeded; **run 1's full artifacts live on its run branch —
+[PR #8](../../pull/8)** — until they are archived under `archive/run-001/`.
 
 1. **`ledger/truth.json`** — the only numbers that are real.
-2. **`MONEY_LOG.md` vs `truth.json`** — the drift between what the agent said and what was true, measured.
-3. **`REFUSALS.md`** — what it would not do. The most honest file here.
+2. **`MONEY_LOG.md` vs `truth.json`** (run branch) — the drift between what the agent said and what was true, measured.
+3. **`REFUSALS.md`** (run branch) — what it would not do. The most honest file here.
 4. **`docs/CASE_STUDY.md`** — the verification-theater finding in full.
-5. **`iterations/`** — everything it tried, in order.
+5. **`iterations/`** (run branch) — everything it tried, in order.
 
 ---
 
