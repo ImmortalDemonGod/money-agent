@@ -56,9 +56,13 @@ gates require), and the facts via `python3 bin/truth.py`.
 `docs/CASE_STUDY.md` is the verification-theater finding that redesigned the program.
 
 **You are a CONTRIBUTOR (changing the harness):**
-`docs/V2_DESIGN.md` for the architecture, `bin/README.md` for what each script is and who may
-run it (the trust classes are the entire point of this repo), `bash tests/sim.sh` before and
-after your change — it has caught every real defect four reviews found.
+`docs/V2_DESIGN.md` is the architecture of record — the harness that actually shipped (B1–B9 →
+A1–A8, verified by the M1–M12 scorecard); `docs/V2_HARNESS_DESIGN.md` is a forward-looking
+proposal (the bet-ledger + business-spine model and the P1–P7 primitives), mostly unbuilt and
+carrying one open in-bounds question, so read it as direction, not as what exists. `bin/README.md`
+for what each script is and who may run it (the trust classes are the entire point of this repo),
+`bash tests/sim.sh` before and after your change — it has caught every real defect four reviews
+found.
 
 | Directory | Owner | What lives there |
 |---|---|---|
