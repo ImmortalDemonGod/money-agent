@@ -306,6 +306,46 @@ finding recorded (the pivot). Guards, both borrowed from `backHalfConverge`:
 - **Oscillation detector**: two consecutive pivots landing on the same
   (audience, pain) signature HALT — the loop is cycling, not converging.
 
+### 5.5 Lane semantics — stage state is PER LINE OF ATTACK (decided)
+
+Stage state is scoped to a **lane** — a declared (audience/channel, pain/offer) line of
+attack — never global. Decided (operator, this design round): a global spine has a
+livelock built in — one lane whose demand never confirms would block `delivery` bets
+for every other idea forever, when the truth is simply that *some things don't work
+out*. A dead lane must die alone. Semantics:
+
+- **Declaration.** Every bet carries a `lane` field. Lanes are created freely at
+  registration; a new lane always starts at the bottom of the lattice (probe-level
+  permissions only).
+- **The lattice is monotone, which kills the gaming vector for free.** Relabeling work
+  into a "new lane" to escape a refused registration gains nothing: a fresh lane holds
+  *fewer* permissions than the lane it fled, never more. Lane-splitting can only lose
+  progress. Ordering cannot be laundered through renaming.
+- **Global vs per-lane stages.** Stages 0–1 (instrument, substrate) are global
+  infrastructure, with lane-local extensions: a lane citing a new host, channel, or
+  supplier owes that substrate its own probe. Stages 2–4 are per-lane. Stage 5
+  (conclude) is global, computed over ALL lanes.
+- **Lane death is a first-class verdict, and it is the price of breadth.** A lane is
+  `active`, `watching` (all its bets time-gated — the WATCH state, per-lane), or
+  `dead` (closed with killed/expired verdicts, auto-fed to `knowledge/outcomes.jsonl`).
+  A **lane cap** (P7) bounds concurrently active lanes — the anti-fragmentation twin
+  of the user's anti-freeze argument: per-lane without a cap re-creates v1's
+  portfolio-vanity failure (five lanes wide, zero deep, iters 044–056). Opening a new
+  lane requires a free slot or closing a dead one *with a verdict* — so breadth is
+  paid for in recorded honesty about failures, which is exactly the currency the
+  program wants maximized.
+- **Re-opening is gated by the falsified table, not the oscillation detector.**
+  Per-lane, §5.3's oscillation check generalizes cleanly: a new lane whose signature
+  matches a dead lane is re-running a falsified approach, and `knowledge/falsified.json`
+  already states the rule — never without new evidence the world changed. The lane
+  gate enforces citation of that evidence.
+- **Artifacts are global; bets are per-lane.** A product built in lane A is legitimate
+  probe material in lane B (run 1's localization pattern) — the lane must still earn
+  its own demand confirmation, but never re-pays the build cost.
+- **The guard surface becomes a lane board**: per lane — stage, open bets, due checks,
+  watch clocks. The self-pacing rule (size the wakeup to the slowest live clock)
+  applies per-lane and the iteration picks across lanes by due-ness.
+
 ### 5.4 Spine config — `spine.yml`
 
 The stage table, allowed types, exit predicates, ordering rules, caps, and windows live
