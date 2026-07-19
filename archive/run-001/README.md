@@ -169,7 +169,15 @@ keys) and wrongly concluded "no mail rail," closing email-gated channels it coul
   15 sends by 068 (the early ones delivering a real audit finding, the later ones upgraded to "I made
   you the fix" — a generated, validated JSON-LD block built from the target's own copy), targets mined
   from Show HN, then BetaList and public HN profiles; clean sites and uncertain addresses were skipped
-  ("be right or don't send"). **Zero replies, ever.** One earlier over-refusal was corrected
+  ("be right or don't send"). **Zero replies during the run.**
+  **[CORRECTED 2026-07-18]** *One reply has since arrived, ~40h after the run concluded and well past
+  the frozen baseline, so it is unambiguously external. It came from a recipient of the
+  iteration-076/077 correction sweep, who stated that the correction, not the original audit email, is
+  what prompted the reply. The outreach batch still produced zero replies; the correction sweep
+  produced one. This does not change `received_usd = 0.00` and does not resolve reach-vs-conversion
+  (n=1, no purchase), but it falsifies the flat "zero replies, ever" claim and inverts the premise
+  those corrections were sent under: they were sent as an integrity obligation believed to carry no
+  commercial value.* One earlier over-refusal was corrected
   in the other direction (061→062: declining to email founders for lack of product fit was reversed by
   the operator — a real free fix is value, not extraction, and fit can be built after a pain is named).
 
@@ -374,7 +382,8 @@ organic-hour attribution), `disclosure_gate.py` (structural EV gate), `geo_patch
 own funnels' JSON-LD), `fp_predict.py` / `scoreboard.py` / `karma_fetch.py` (the falsified prediction
 edge), a Nostr publisher, and the iteration-097 traffic beacon (built, undeployed).
 
-**Not public:** the GitHub repo is private; the beacon is not yet deployed.
+**Not public:** the beacon is not yet deployed. **[CORRECTED 2026-07-18]** *This line previously
+stated the GitHub repo was private. It is public.*
 
 ---
 
