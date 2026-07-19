@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-07-19T23:02:13.652332+00:00",
+  "computed_at": "2026-07-19T23:07:30.635679+00:00",
   "baseline_created_gt": 1784208205,
   "counts_only_money_after": "2026-07-16T13:23:25+00:00",
   "verified": true,
@@ -20,11 +20,11 @@
   "net_positive": false,
   "constitution_intact": true,
   "pulls_this_run": [
-    "20260719T180211_stripe_balance_transactions.json",
-    "20260719T180212_stripe_balance.json",
-    "20260719T180212_stripe_charges.json",
-    "20260719T180213_privacy_transactions.json"
+    "20260719T180728_stripe_balance_transactions.json",
+    "20260719T180729_stripe_balance.json",
+    "20260719T180729_stripe_charges.json",
+    "20260719T180730_privacy_transactions.json"
   ],
-  "manifest_sha256": "da2f0682167c64825d16703580e797122c77efd84609e0bab23046705c97475b",
+  "manifest_sha256": "e0baf4199cde62978fc492a91e6f67768fbe160f32725d69cf95865cc01c7167",
   "_note": "Computed from primary sources by a process the agent cannot invoke. If MONEY_LOG.md disagrees with this file, this file is right. verified=false means a pull failed: net is NOT trustworthy and no claim may cite it."
 }
