@@ -92,9 +92,16 @@ while true; do
         RD=""
         if [[ -n "$RESCUE" ]]; then
           RD=$(mktemp -d)
+          # #46: side-car copy into the agent-unreachable state dir BEFORE the reset. The
+          # re-commit below is the primary rescue; the side-car survives even a botched rescue or
+          # an operator intervention inside the divergence window (traps.md #9's residual).
+          SIDECAR="${MONEY_AGENT_STATE:-$HOME/.money-agent-verifier}/raw-rescue/$(date -u +%Y%m%dT%H%M%S)-diverged"
+          mkdir -p "$SIDECAR"
           while IFS= read -r f; do
             mkdir -p "$RD/$(dirname "$f")"; git show "HEAD:$f" > "$RD/$f" 2>>"$LOG"
+            cp "$RD/$f" "$SIDECAR/" 2>>"$LOG" || true
           done <<< "$RESCUE"
+          say "side-car: diverged pull(s) copied to $SIDECAR (belt; the re-commit below is the suspenders)"
         fi
         say "WARN: facts lane diverged from origin -- converging to origin/$LEDGER_BRANCH"
         git reset -q --hard "origin/$LEDGER_BRANCH" 2>>"$LOG"

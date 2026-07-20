@@ -1001,3 +1001,56 @@ attempt — stub bug, not product bug).
 
 **Next:** S3 — #46 facts-lane side-car rescue (sim must export a temp `MONEY_AGENT_STATE` before
 executing the marker block) + supervise unpushed-counter, and #41 inference metering.
+
+---
+
+## Entry 023 — 2026-07-20 — S3 durability + metering: quarantine-not-delete, divergence side-car, unpushed counter, inference cost (issues #46, #41)
+
+**What:** (1) `pnl.py` C3 now QUARANTINES untracked raw pulls into `STATE_DIR/raw-rescue/<ts>/`
+instead of unlinking — an untracked raw is either an agent plant (now preserved as evidence of the
+attempt) or the orphan of a failed verifier commit (now preserved as audit trail; deletion was the
+traps.md #9 residual loss path). Tree semantics unchanged: nothing untrusted reaches the manifest.
+(2) `verifier_loop.sh` divergence path copies stranded pulls to a state-dir side-car BEFORE the
+reset (belt; the existing re-commit stays the suspenders). (3) `supervise.sh` surfaces N unpushed
+facts commits when the checkout IS the facts lane. (4) `pnl.py` gains `inference_usd` /
+`inference_source` / `net_usd_full` from `INFERENCE_CSV` (#41): absent feed → nulls (unknown ≠
+zero, both sides of the subtraction), header-only file → measured 0, empty/malformed → fail
+closed. `.env.example` + SETUP + STANDING_RUN document the feed.
+
+**Why (cited):** #46 (traps.md #9: the hazard was "NOT fully gone on the facts lane";
+IMPROVEMENT_LOG 011/013's inert-guard history is the argument for belt-and-suspenders here);
+#41 (archived run-1 README: true P&L "negative by an unrecorded amount"; COMPARATIVE_ANALYSIS
+§9-7/R4). The C3 change also upgrades the FORGERY story: a planted pull used to vanish silently —
+now the attempt itself is preserved in a dir the agent cannot reach.
+
+**Edge cases enumerated before coding:** the sim executes the marker block VERBATIM, so
+`run_convergence` must pin `MONEY_AGENT_STATE` to the rig or the side-car writes the operator's
+real `~/.money-agent-verifier` (caught at planning, fixture-pinned now); divergence needs a true
+sibling commit (bare-side `commit-tree -p ledger^`), not a rewind, or the ancestor check routes to
+the push path; after the divergence cycle the rescue commit is LOCAL (ahead) — origin lands it on
+the NEXT cycle, so the fixture runs the block twice; quarantine must move, not copy (tree stays
+clean for the manifest); header-only vs fully-empty CSV mean different things (measured zero vs
+misconfiguration); supervise counter only speaks when the checkout is the facts lane.
+
+**Verified by running (artifacts):**
+- `bash tests/sim.sh` → **PASS=29 FAIL=0 SKIP=0**, run twice (stability); corpus **11/0**;
+  shellcheck + compileall clean. New assertions: divergence side-car holds the pull, re-commit +
+  push lands it on origin, supervise names "1 unpushed local commit", C3 quarantine (plant moved
+  to state dir, gone from tree), inference nulls/sum/fail-closed/measured-zero (sim cases 8–11).
+- **Retro-bite @ HEAD~1** (fixtures committed with code this time, so the bite ran retroactively
+  in a throwaway clone): plant DELETED, nothing quarantined, `inference_usd`/`net_usd_full`
+  ABSENT from truth.json — with `INFERENCE_CSV` set and silently ignored, `verified:true`.
+
+**Critique pass:**
+- The aggregated "pnl:" sim label still names only the S2 cases though it now covers 11 — cosmetic,
+  queued to S16's sweep rather than churning the matrix mid-stack.
+- The side-car directory grows unboundedly on a pathological flapping remote — acceptable for now
+  (one dir per divergence event, rare by construction); noted for the standing-run posture.
+- The supervise counter is informational and does not change the VERDICT line priority; if the
+  operator wants "unpushed > K" to escalate to a verdict, that is a one-line memo decision (S14).
+- Commit-then-test ordering slipped this unit (code+fixtures in one commit before the first green
+  run) — the retro-bite closed the gap, but the cleaner sequence is fixtures-fail-first; restored
+  as the default next unit.
+
+**Next:** S4 — fact-lane signing (#36 ssh-keygen -Y + previous_hash chain; pubkey location
+decision) + #42 signed attestation.
