@@ -22,6 +22,9 @@ const CONFIG = {
   disclosure: "REPLACE: disclosure-led line about who/what operates this page",
   analytics_note: "This page keeps basic, privacy-respecting analytics (page hits, referrer, " +
                   "coarse location; no full IP is stored) to measure whether real people arrive.",
+  // Named on /privacy so buyers know who touches their card data. "" omits the payments section.
+  payment_processor: "Stripe",
+  payment_processor_privacy_url: "https://stripe.com/privacy",
   // Pages the hub links THROUGH /go so click-throughs are measured: [title, url, blurb]
   pages: [],
   // Open-redirect guard: /go only redirects to these prefixes. Keep it tight.
@@ -93,7 +96,52 @@ function hubHtml(origin) {
 <body><h1>${CONFIG.site_name}</h1>
 <p>${CONFIG.disclosure}</p>
 <ul>${items}</ul>
-<p><small>${CONFIG.analytics_note} Contact: ${CONFIG.contact}.</small></p>
+<p><small>${CONFIG.analytics_note} <a href="${origin}/privacy">Privacy</a>. Contact: ${CONFIG.contact}.</small></p>
+</body></html>`;
+}
+
+// /privacy — the conventional home for the analytics disclosure. Every published funnel should
+// footer-LINK here rather than repeat prose inline: that is what cookieless analytics tools do,
+// it is quieter next to a checkout, and it lets the explanation be a real page instead of one
+// compressed clause. Promoted from run 1 (deployed 2026-07-20 on the run-1 estate).
+function privacyHtml(origin) {
+  const pay = CONFIG.payment_processor ? `
+<h2>Payments</h2>
+<p>Purchases are processed by <strong>${CONFIG.payment_processor}</strong>. Card details go to them and
+are never seen or stored here. Their handling is governed by
+<a href="${CONFIG.payment_processor_privacy_url}" rel="nofollow noopener">their privacy policy</a>.</p>` : "";
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy — ${CONFIG.site_name}</title>
+<meta name="description" content="What this site records, what it does not, and who to ask.">
+<link rel="canonical" href="${origin}/privacy">
+<style>body{font:16px/1.65 system-ui,-apple-system,sans-serif;max-width:42rem;margin:2rem auto;padding:0 1rem;color:#222}
+h1{font-size:1.5rem}h2{font-size:1.05rem;margin-top:2rem}a{color:#06c}small{color:#666}</style></head><body>
+<h1>Privacy</h1>
+<p>${CONFIG.disclosure} Contact: <a href="mailto:${CONFIG.contact}">${CONFIG.contact}</a>.</p>
+<h2>What the visit counter records</h2>
+<p>Per visit: the time, the path, the referring URL, the browser user-agent, a coarse country and
+network operator supplied by Cloudflare, a bot-or-human guess, and a <em>salted, truncated hash</em>
+of your IP address.</p>
+<p><strong>Your full IP address is never stored.</strong> The salt changes daily, so the hash cannot
+follow you across days, and it is truncated so it cannot be reversed. It exists only to count one
+visitor once instead of twice.</p>
+<h2>What it does not do</h2>
+<ul>
+<li><strong>No cookies</strong> and nothing written to your device, so there is no consent banner
+because there is nothing on your machine to consent to.</li>
+<li><strong>No advertising networks, no third-party analytics, no data sharing or sale.</strong></li>
+<li><strong>No cross-site tracking</strong> and no profile of you.</li>
+<li><strong>No email open-tracking.</strong> Messages from this project carry no tracking pixels,
+deliberately. "Delivered, no reply" is all that can be known, and that is on purpose.</li>
+</ul>
+<h2>Why it exists</h2>
+<p>Without this counter, "did anyone actually arrive?" is unanswerable, and $0 cannot tell a
+nobody-came wall from an arrived-and-declined wall. It measures arrival, not identity.</p>${pay}
+<h2>Your requests</h2>
+<p>Email the address above to ask what is held about you, or to have it deleted. Since nothing here
+identifies a person, the honest answer is usually that there is nothing to return.</p>
+<p><small><a href="${origin}/">Back</a>.</small></p>
 </body></html>`;
 }
 
@@ -127,6 +175,11 @@ export default {
       if (!env.STATS_SECRET || u.searchParams.get("k") !== env.STATS_SECRET)
         return new Response("forbidden", { status: 403 });
       return stats(env);
+    }
+
+    if (u.pathname === "/privacy") {
+      await logHit(env, ctx, req, "/privacy", "");
+      return new Response(privacyHtml(origin), { headers: { "content-type": "text/html; charset=utf-8" } });
     }
 
     if (u.pathname === "/go") {

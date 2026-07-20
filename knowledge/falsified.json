@@ -4,17 +4,61 @@
     "rule": "never re-run a falsified approach without new evidence the world changed; re-testing a different VECTOR of a walled channel is legitimate (run 1 overturned three 'blocked' calls that way)"
   },
   "falsified": [
-    {"approach": "cold submit to link aggregators from a fresh identity", "killed_by": "signup gates + new-account content suppression, tested live per channel", "evidence_iter": "002, 004, 032-033, 090"},
-    {"approach": "manufacture same-night reach on any gated card-paying channel", "killed_by": "every entry gate is aimed at exactly this actor (cold, automated, datacenter IP), in every language tested", "evidence_iter": "015, 039-043, 059"},
-    {"approach": "gateless-channel broadcasting as a revenue path", "killed_by": "measured engagement ~100% bots; payment culture off the scored rail", "evidence_iter": "031, 088"},
-    {"approach": "value-first cold email at researched-ceiling volume", "killed_by": "17 personalized sends with real free value, 0 replies; the one inbound never converted", "evidence_iter": "062-069, 026"},
-    {"approach": "buy reach via self-serve ad platforms", "killed_by": "account/identity gates + negative EV at $25 for cold traffic (DECLINED, not spend-tested -- see caveat)", "caveat": "human-sold reach (e.g. newsletter classifieds paid by card over email) was NEVER tested; issue #12", "evidence_iter": "007, 008, 036"},
-    {"approach": "prediction-edge harvest below its pre-registered bar", "killed_by": "its own go-live rule (2.20x < 2.5x); re-fetching until the number crossed was named p-hacking and declined", "evidence_iter": "073, 074"},
-    {"approach": "escrow/marketplace labor as scoreable revenue", "killed_by": "payouts route to bank rails, never the scored account", "evidence_iter": "028"}
+    {
+      "approach": "cold submit to link aggregators from a fresh identity",
+      "killed_by": "signup gates + new-account content suppression, tested live per channel",
+      "evidence_iter": "002, 004, 032-033, 090"
+    },
+    {
+      "approach": "manufacture same-night reach on any gated card-paying channel",
+      "killed_by": "every entry gate is aimed at exactly this actor (cold, automated, datacenter IP), in every language tested",
+      "evidence_iter": "015, 039-043, 059"
+    },
+    {
+      "approach": "gateless-channel broadcasting as a revenue path",
+      "killed_by": "measured engagement ~100% bots; payment culture off the scored rail",
+      "evidence_iter": "031, 088"
+    },
+    {
+      "approach": "value-first cold email at researched-ceiling volume",
+      "killed_by": "17 personalized sends with real free value, 0 replies; the one inbound never converted",
+      "evidence_iter": "062-069, 026"
+    },
+    {
+      "approach": "buy reach via self-serve ad platforms",
+      "killed_by": "account/identity gates + negative EV at $25 for cold traffic (DECLINED, not spend-tested -- see caveat)",
+      "caveat": "human-sold reach (e.g. newsletter classifieds paid by card over email) was NEVER tested; issue #12",
+      "evidence_iter": "007, 008, 036"
+    },
+    {
+      "approach": "prediction-edge harvest below its pre-registered bar",
+      "killed_by": "its own go-live rule (2.20x < 2.5x); re-fetching until the number crossed was named p-hacking and declined",
+      "evidence_iter": "073, 074"
+    },
+    {
+      "approach": "escrow/marketplace labor as scoreable revenue",
+      "killed_by": "payouts route to bank rails, never the scored account",
+      "evidence_iter": "028"
+    }
   ],
   "_open_questions_note": "Kept operational/measurement-only, NOT strategy (this file is strategy-free by rule; CodeRabbit). These are unresolved MEASUREMENT states from run 1, not directions to pursue:",
   "unresolved_measurement": [
-    {"question": "was the binding wall REACH or CONVERSION?", "state": "UNDETERMINED -- run 1 had no traffic telemetry (surge funnels had no analytics; telegra.ph views unattributable). The beacon (harness/beacon/) is what decides it. Do not assume 'reach' -- run 1 retracted that overclaim (iter 098).", "evidence_iter": "098"},
-    {"question": "did any organic crawler indexation ever land?", "state": "unresolved at run end on a multi-day clock; guard.py halts on the first received dollar regardless. Recorded so this state is not re-mislabeled 'exhausted' (the run-1 error).", "evidence_iter": "089, 095-096"}
+    {
+      "question": "was the binding wall REACH or CONVERSION?",
+      "state": "STILL UNDETERMINED FOR RUN 1, but the instrument is now LIVE. The beacon was deployed 2026-07-20 on the run-1 estate (hub + all 8 real surge funnels ping /f/<site>; ai-visibility-kit is a meta-refresh stub and is not beaconed). Its baseline is ZERO at deploy, so it cannot see run-1 traffic and does NOT settle run 1 retroactively -- it settles the question from 2026-07-20 forward. Run 2 inherits a deployed beacon instead of a blind estate.",
+      "evidence_iter": "098",
+      "deployed": {
+        "at": "2026-07-20",
+        "worker": "one-honest-dollar.cloud-pyramid.workers.dev",
+        "read": "GET /stats?k=<STATS_SECRET> -> bot/human split, humans-by-country, /go click-throughs",
+        "gives": "path, referrer, UA + bot classification, CF country/ASN, daily-salted truncated IP hash"
+      },
+      "post_run_measurement": "Independently of the beacon: telegra.ph went 80 -> 130 views (+50) and the HN item 8 -> 9 points (+1) after the run-1 agent stopped touching the pages (TRAFFIC_BASELINE cutoff 2026-07-17T01:54Z), so 'measurable organic human reach is ZERO' is FALSE as stated. Bounds: telegra.ph exposes no referrer/UA so +50 is an UPPER BOUND and may be mostly crawlers; the +1 HN point is the stronger datum because HN votes require a logged-in account. This measures reach to the ESSAYS, not to the STORE."
+    },
+    {
+      "question": "did any organic crawler indexation ever land?",
+      "state": "unresolved at run end on a multi-day clock; guard.py halts on the first received dollar regardless. Recorded so this state is not re-mislabeled 'exhausted' (the run-1 error).",
+      "evidence_iter": "089, 095-096"
+    }
   ]
 }

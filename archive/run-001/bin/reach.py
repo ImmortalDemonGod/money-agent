@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """Unified reach baseline across EVERY public artifact (iter 088).
 
+⚠ EDITED 2026-07-20, POST-FREEZE — the ONE deliberate exception to this archive's freeze.
+`bottom_line` used to be a hardcoded string asserting "reach is ZERO", "all telegraph views
+are self-traffic" and "a reply is still zero". All three were falsified while the string kept
+printing on every run. An executable that emits falsified claims is not a record, it is a
+source of error, so it was made COMPUTED. See ../ADDENDUM-2026-07-20.md section 5.
+
 Answers the operator's question -- "do all public artifacts have telemetry and a baseline?" -- by
 pulling every surface that CAN be measured and explicitly naming the ones that structurally cannot.
 
@@ -10,10 +16,12 @@ Measurable:
   - Nostr notes: relay query for referencing events (reactions/replies/reposts/DMs), classified
     self / bot-spam / candidate-human.
 
-Structurally blind (named honestly, not silently omitted):
-  - surge.sh product funnels (9): no analytics without the paid dashboard; header probe shows nothing.
-  - workers.dev hub: no readable counter without a KV backend or the CF dashboard (a disclosed
-    beacon is the in-bounds fix, an operator-gated option).
+Beaconed since 2026-07-20 (NOT blind any more):
+  - surge.sh product funnels: each entry page pings <beacon>/f/<site> and carries a visible
+    disclosure line. Data is in D1 behind STATS_SECRET, readable via <beacon>/stats?k=...
+  - workers.dev hub: the beacon worker IS the hub; it logs every path incl. /go click-throughs.
+
+Still blind (named honestly, not silently omitted):
   - email (23 sent): NO open-tracking by design -- covert pixels would breach the honest-neutral
     posture. "Delivered, no reply" is all that is knowable.
 
@@ -48,6 +56,16 @@ NOSTR_NOTES = [
 SURGE_BLIND = ["debugging-field-manual", "website-audit-playbook", "ai-visibility-report",
                "ai-visibility-kit", "life-in-weeks", "show-hn-playbook", "hn-zeitgeist",
                "devcard", "github-top-repos"]
+
+# --- Frozen baseline (TRAFFIC_BASELINE.md) -----------------------------------------------------
+# The agent stopped touching the public pages at this instant, so ANY later increase is external
+# by construction. These are historical constants: do not "refresh" them, or the delta dies.
+BASELINE_FROZEN_AT = "2026-07-17T01:54Z"
+BASELINE_TELEGRAPH = {"hub": 12, "showhn": 7, "checklist": 21, "liw": 17, "liw_ja": 23}  # total 80
+BASELINE_HN_POINTS = 8
+
+# Disclosed traffic beacon (iterations/097), DEPLOYED 2026-07-20 to the Cloud Pyramid account.
+BEACON_ORIGIN = "https://one-honest-dollar.cloud-pyramid.workers.dev"
 
 
 def _json(url: str):
@@ -103,22 +121,90 @@ def nostr() -> dict:
                           "no genuine human buyer engagement observed"}
 
 
+def delta_vs_baseline(tg: dict, hn: dict) -> dict:
+    """Compute external traffic since the frozen baseline. NOTHING here is asserted."""
+    per_page = {k: (tg.get(k) or 0) - BASELINE_TELEGRAPH.get(k, 0) for k in BASELINE_TELEGRAPH}
+    tg_delta = sum(per_page.values())
+    pts = hn.get("points")
+    hn_delta = None if pts is None else pts - BASELINE_HN_POINTS
+    return {
+        "frozen_at": BASELINE_FROZEN_AT,
+        "telegraph_baseline_total": sum(BASELINE_TELEGRAPH.values()),
+        "telegraph_now_total": sum((tg.get(k) or 0) for k in BASELINE_TELEGRAPH),
+        "telegraph_delta_total": tg_delta,
+        "telegraph_delta_per_page": per_page,
+        "hn_points_delta": hn_delta,
+    }
+
+
+def received_usd() -> float | None:
+    """Read the dollar from the authoritative ledger. Never assert it from here."""
+    try:
+        t = json.loads((REPO / "ledger" / "truth.json").read_text())
+        return t.get("received_usd") if t.get("verified") else None
+    except Exception:
+        return None
+
+
+def bottom_line(d: dict, usd: float | None) -> str:
+    """COMPUTED, not a literal. The previous hardcoded string outlived its own evidence:
+    it asserted 'reach is ZERO' and 'a reply is still zero' after both had been falsified
+    (external traffic accrued past the baseline; Fabio Rizzo replied 2026-07-18), and it
+    asserted 'all telegraph views are self-traffic', which iter-098 retracted as unprovable."""
+    tg, hn = d["telegraph_delta_total"], d["hn_points_delta"]
+    parts = []
+    if tg <= 0 and not hn:
+        parts.append(f"No external traffic measured since {d['frozen_at']} "
+                     f"(telegra.ph {d['telegraph_now_total']} vs baseline "
+                     f"{d['telegraph_baseline_total']}).")
+    else:
+        parts.append(f"EXTERNAL traffic since {d['frozen_at']}: telegra.ph +{tg} page loads "
+                     f"({d['telegraph_baseline_total']} -> {d['telegraph_now_total']})"
+                     + (f", HN +{hn} point(s)." if hn else "."))
+        parts.append("Post-baseline hits are external BY CONSTRUCTION (the agent stopped touching "
+                     "the pages at the cutoff), but telegra.ph exposes no referrer/UA, so "
+                     "bot-vs-human is NOT separable and +N is an UPPER BOUND on human reach.")
+        if hn:
+            parts.append(f"The HN delta (+{hn}) is the stronger signal: HN votes require a "
+                         "logged-in account.")
+    parts.append("Scope limit: these numbers cover the ESSAYS (telegra.ph) only, and telegra.ph "
+                 "cannot separate bot from human. The STORE (surge funnels + hub) has been "
+                 f"BEACONED since 2026-07-20 and is read separately at {BEACON_ORIGIN}/stats "
+                 "-- which DOES give bot-vs-human, country, referrer and /go click-throughs. "
+                 "Reach-to-CONTENT is evidenced here; reach-to-STORE is now measurable there.")
+    parts.append(f"Authoritative money (ledger/truth.json): received_usd="
+                 f"{'unverified' if usd is None else usd}.")
+    parts.append("Reply status is NOT computed here; see SENT_LOG.md / DISCLOSURE_EV_LOG.md.")
+    return " ".join(parts)
+
+
 def main() -> int:
+    tg, hn = telegraph(), hackernews()
+    d = delta_vs_baseline(tg, hn)
     baseline = {
         "measurable": {
-            "telegraph_views": telegraph(),
-            "hackernews_item": hackernews(),
+            "telegraph_views": tg,
+            "hackernews_item": hn,
             "nostr_engagement": nostr(),
         },
-        "structurally_blind": {
-            "surge_funnels": {s: "no analytics API (paid dashboard only)" for s in SURGE_BLIND},
-            "workers_dev_hub": "blind unless a disclosed KV-backed beacon is added (operator-gated)",
-            "email_23_sent": "no open-tracking by design (covert pixels breach honest-neutral posture)",
+        "delta_vs_frozen_baseline": d,
+        # NOTE 2026-07-20: the funnels and the hub are NO LONGER BLIND. The disclosed beacon
+        # (iterations/097) was deployed to the Cloud Pyramid account; every funnel entry page pings
+        # /f/<site>. reach.py cannot read that data (it lives in D1 behind STATS_SECRET) -- see
+        # beacon_stats below for how to read it. Keeping the old "structurally_blind" key would
+        # repeat this file's previous defect: a description that outlived its artifact.
+        "beaconed_since_2026_07_20": {
+            "surge_funnels": {s: f"{BEACON_ORIGIN}/f/{s}" for s in SURGE_BLIND
+                              if s != "ai-visibility-kit"},
+            "note_ai_visibility_kit": "instant meta-refresh stub; not beaconed (destination is)",
+            "workers_dev_hub": f"{BEACON_ORIGIN}/ (logs every path, incl. /go click-throughs)",
+            "read_it": f'curl "{BEACON_ORIGIN}/stats?k=$(cat ~/money-agent/.beacon_stats_secret.key)"',
         },
-        "bottom_line": "measurable organic human reach is ZERO; all telegraph views are self-traffic "
-                       "(see analytics.py hour-attribution), the HN item is dead, and Nostr "
-                       "engagement is bots/spam. The two signals that matter -- a reply and a "
-                       "received dollar -- are both still zero.",
+        "still_blind": {
+            "email_23_sent": "no open-tracking by design (covert pixels breach honest-neutral posture)",
+            "telegraph": "getViews only: no referrer/UA, so bot-vs-human is not separable here",
+        },
+        "bottom_line": bottom_line(d, received_usd()),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(baseline, indent=2, ensure_ascii=False))
