@@ -116,6 +116,18 @@ export STRIPE_WRITE_KEY=rk_live_...    # products/prices/links/checkout ONLY
 # GMAIL_ADDRESS / GMAIL_APP_PASSWORD if using read+send email
 ```
 
+**The wash-trade allowlist (required before any offer goes live).** `pnl.py` classifies every
+charge's payer against `$MONEY_AGENT_STATE/operator_identity.json` (default
+`~/.money-agent-verifier/operator_identity.json`) so an operator self-purchase can never trip the
+first-dollar success condition. Provision it on the verifier machine:
+```json
+{"emails": ["<operator email>"], "card_fingerprints": ["<stripe card fingerprint>"]}
+```
+`bin/start_verifier.sh` refuses to start while it is missing or empty (issue #37) -- an inert
+wash-trade guard only surfaces at the first charge, where it halts the run as unverifiable instead
+of counting a legitimate sale. The sandbox's `setup_sandbox.sh` cannot check this file (the state
+dir is deliberately unreachable from the sandbox), which is why the check lives verifier-side.
+
 Optional loop-cost ceiling (bounds token spend, distinct from the money cap):
 ```bash
 export MAX_ITERS=100   # 0 or unset = unbounded
