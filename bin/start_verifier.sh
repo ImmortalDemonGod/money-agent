@@ -16,6 +16,17 @@
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 AGENT_BRANCH="${1:?usage: start_verifier.sh <agent-branch>   (e.g. claude/xxx)}"
+# S16 FIX (adversarial correctness pass): learn SHADOW from .env BEFORE resolving + exporting the
+# lane. This script exports LEDGER_BRANCH to the launched verifier_loop, so if it resolved 'ledger'
+# because SHADOW=1 lived only in .env (unread here), pnl.py would then FATAL every cycle on the
+# lane mismatch and the whole run would wedge. Source .env first (it is required anyway) so SHADOW
+# is known from either .env or the command line.
+if [[ -f "$R/.env" ]]; then
+  set -a
+  # shellcheck source=/dev/null
+  . "$R/.env"
+  set +a
+fi
 # S12: shadow defaults (see verifier_loop.sh -- same rule, applied here too because either
 # script can be the entry point).
 if [[ "${SHADOW:-0}" == "1" ]]; then

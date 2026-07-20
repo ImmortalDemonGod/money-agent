@@ -23,6 +23,21 @@ set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$R" || exit 1
 INTERVAL="${INTERVAL:-120}"
+
+LOG="$R/verifier.log"
+# S16 FIX (adversarial correctness pass): source .env BEFORE resolving SHADOW and the lane.
+# .env.example tells the operator to put SHADOW=1 in .env, but the shadow block used to run
+# BEFORE this source -- so SHADOW=1 in .env silently did nothing: the loop kept LEDGER_BRANCH=
+# ledger while pnl.py (a child that DOES see the sourced SHADOW=1) resolved 'shadow-ledger' and
+# wrote shadow:true facts, which the loop then pushed to the LIVE lane. Sourcing first makes
+# SHADOW known (from .env OR the command line) before any default is chosen.
+[[ -f "$R/.env" ]] || { echo "FATAL: .env missing. The verifier needs the read key." >&2; exit 2; }
+set -a
+# .env is a runtime credential file; shellcheck cannot follow it
+# shellcheck source=/dev/null
+. "$R/.env"
+set +a
+
 # S12: a shadow verifier (SHADOW=1) defaults onto its own lane + state dir so a rehearsal can
 # never touch anything a live run trusts. Explicit env still wins -- and pnl.py refuses a
 # non-shadow lane under SHADOW=1 regardless (that is the wall; this is the convenience).
@@ -32,18 +47,13 @@ if [[ "${SHADOW:-0}" == "1" ]]; then
   export MONEY_AGENT_STATE
 fi
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
+# S16 FIX: export the RESOLVED lane so pnl.py/edge_pnl.py children read exactly it, instead of
+# falling back to their own mode-aware default and hoping it coincides with what the loop pushes.
+export LEDGER_BRANCH
 # AGENT_BRANCH is optional but strongly recommended: pnl.py hashes the constitution the AGENT
 # actually sees (its committed copy on origin), not whatever this checkout happens to contain.
 AGENT_BRANCH="${AGENT_BRANCH:-}"
 export AGENT_BRANCH
-
-LOG="$R/verifier.log"
-[[ -f "$R/.env" ]] || { echo "FATAL: .env missing. The verifier needs the read key." >&2; exit 2; }
-set -a
-# .env is a runtime credential file; shellcheck cannot follow it
-# shellcheck source=/dev/null
-. "$R/.env"
-set +a
 
 say() { echo "[$(date -u +%H:%M:%SZ)] $*" | tee -a "$LOG"; }
 

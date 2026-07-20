@@ -213,6 +213,12 @@ def main() -> int:
             return 2
         prereg.freeze("edge_registration", reg_text,
                       {"fields": fields, "baseline_equity_usd": float(acct["equity"])})
+        # S16 FIX (adversarial correctness pass): a FRESH freeze is a fresh bet -- reset the
+        # peak-equity runtime so it tracks from THIS bet's baseline, not a prior registration's
+        # peak carried across a within-run prereg.clear/re-register (which would falsely FALSIFY
+        # the new bet on inherited drawdown before a single trade). set_baseline handles the
+        # cross-run case; this handles re-registration within a run.
+        RUNTIME.unlink(missing_ok=True)
         print(f"edge: registration FROZEN (bar={fields['BAR']} {fields['METRIC']}, "
               f"baseline equity ${float(acct['equity']):.2f})", file=sys.stderr)
 

@@ -49,6 +49,22 @@ def _refund(charge_id: str, key: str) -> tuple[bool, str]:
 def main() -> int:
     branch = os.environ.get("AGENT_BRANCH", "")
     obls: list[dict] = []
+    # S16 FIX (adversarial correctness pass): without AGENT_BRANCH the watchdog cannot locate the
+    # promise-book, so it must NOT publish an affirmative all-clear -- "an unreadable promise-book
+    # is not an empty one" (the module's own contract). The old code left obls=[] and published
+    # verified:true, breached:[], masking any real breach when the verifier ran without the branch.
+    # Publish verified:false with a clear note instead; the operator must export AGENT_BRANCH when
+    # the exposure/obligations feature is in use (runbook + decisions memo).
+    if not branch:
+        out = {"computed_at": _now().isoformat(), "open": None, "breached": [], "verified": False,
+               "_note": "AGENT_BRANCH unset -- the watchdog cannot read the agent's committed "
+                        "promise-book, so this is NOT an all-clear. Export AGENT_BRANCH on the "
+                        "verifier (verifier_loop.sh does when given it). Unknown is not zero."}
+        OUT.parent.mkdir(parents=True, exist_ok=True)
+        OUT.write_text(json.dumps(out, indent=2) + "\n")
+        print("WARN: AGENT_BRANCH unset -- obligation watchdog cannot read the register; "
+              "published verified:false (not an all-clear).", file=sys.stderr)
+        return 0
     if branch:
         # self-sufficient freshness: verifier_loop fetches the agent branch each cycle, but this
         # tool must not silently read a stale promise-book when run standalone

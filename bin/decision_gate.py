@@ -67,7 +67,7 @@ def check(risk_class: str, body: str) -> tuple[bool, str]:
         return False, (f"no decision recorded for this {risk_class} body (hash {h}). Decide,"
                        f" then add ONE line to DECISION_LOG.md:\n  - class:{risk_class} | "
                        f"body:{h} | decision:<what you decided> | rationale:<why>"
-                       + (" | provenance:<sha256 of the committed provenance manifest>"
+                       + (" | manifest:<repo-relative path> | provenance:<sha256 of THAT file>"
                           if risk_class == "data-acquisition" else ""))
     if len(dec.get("decision", "")) < 3 or len(dec.get("rationale", "")) < 8:
         return False, (f"decision record for {h} is a stamp, not a decision -- 'decision' and a "
@@ -78,12 +78,27 @@ def check(risk_class: str, body: str) -> tuple[bool, str]:
             return False, (f"data-acquisition decision for {h} carries no provenance sha256 -- "
                            "an acquisition without a pinned input manifest is untraceable by "
                            "construction.")
-        hits = [p for p in REPO.rglob("*")
-                if p.is_file() and not p.is_symlink() and ".git" not in p.parts
-                and hashlib.sha256(p.read_bytes()).hexdigest() == prov.lower()]
-        if not hits:
-            return False, (f"provenance {prov[:12]}... matches no committed file in the repo -- "
-                           "the manifest must exist where the record points.")
+        # S16 FIX (adversarial correctness pass): the manifest must be NAMED, and THAT file must
+        # hash to the declared value. The old check accepted the hash of ANY committed file (a
+        # README would pass), so the "pinned manifest" was pinned to nothing in particular. The
+        # record now carries `manifest:<repo-relative-path>`; we hash exactly that path.
+        mpath = dec.get("manifest", "")
+        if not mpath:
+            return False, (f"data-acquisition decision for {h} names no `manifest:<path>` -- the "
+                           "provenance sha256 must pin a SPECIFIC committed file, not any file "
+                           "that happens to share the hash.")
+        target = (REPO / mpath).resolve()
+        try:
+            target.relative_to(REPO.resolve())  # no ../ escape outside the repo
+        except ValueError:
+            return False, f"manifest path {mpath!r} escapes the repo -- refused."
+        if not (target.is_file() and not target.is_symlink()):
+            return False, (f"manifest {mpath!r} is not a committed regular file -- the record "
+                           "points at nothing.")
+        actual = hashlib.sha256(target.read_bytes()).hexdigest()
+        if actual != prov.lower():
+            return False, (f"manifest {mpath!r} hashes {actual[:12]}... but the record declares "
+                           f"provenance {prov[:12]}... -- the pin does not match its file.")
     return True, f"OK: {risk_class} decision on record for {h} (rationale recorded)"
 
 

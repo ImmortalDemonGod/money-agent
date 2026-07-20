@@ -207,15 +207,23 @@ def send(to, subj, body):
     # V3 (S9, BET_GATE_ENFORCE=1 only): a send is an external-effect action and needs a live
     # typed bet's reservation -- the hypothesis-first discipline, consumed atomically so one bet
     # never authorizes unbounded sends. Inert by default; fail-closed when armed.
-    try:
-        sys.path.insert(0, str(Path(__file__).resolve().parent))
-        import bet_gate
-        ok_bg, why_bg = bet_gate.authorize("send", consume=True)
-    except Exception as e:
-        if os.environ.get("BET_GATE_ENFORCE", "0") == "1":
-            ok_bg, why_bg = False, f"bet gate could not run ({e}); fail-closed while armed"
-        else:
-            ok_bg, why_bg = True, "bet gate unavailable and unarmed"
+    #
+    # S16 FIX (adversarial correctness pass): CHECK the reservation here (consume=False), but do
+    # not BURN it until the send is actually about to happen. The old consume=True ran BEFORE the
+    # em-dash rule, the disclosure gate, and the fail-closed SENT_LOG commit -- so any refused send
+    # permanently spent a reservation for a message that never left, and repeated blocked attempts
+    # would starve a bet that legitimately still authorized sends. Reserve just before the wire.
+    def _bet_gate(consume):
+        try:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            import bet_gate
+            return bet_gate.authorize("send", consume=consume)
+        except Exception as e:
+            if os.environ.get("BET_GATE_ENFORCE", "0") == "1":
+                return False, f"bet gate could not run ({e}); fail-closed while armed"
+            return True, "bet gate unavailable and unarmed"
+
+    ok_bg, why_bg = _bet_gate(consume=False)
     if not ok_bg:
         print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
         sys.exit(1)
@@ -291,6 +299,14 @@ def send(to, subj, body):
     except Exception as e:
         print(f"warn: SENT_LOG push failed ({e}); the commit is local -- push when possible.",
               file=sys.stderr)
+
+    # S16 FIX: NOW burn the reservation -- every gate passed and the audit trail is committed, so
+    # the send is about to happen (shadow-capture counts, it exercises the same accounting). This
+    # is the only place the bet is consumed; a refusal above returned without spending it.
+    ok_bg, why_bg = _bet_gate(consume=True)
+    if not ok_bg:
+        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
+        sys.exit(1)
 
     if SHADOW:
         # S12: captured, never delivered. Every gate above ran exactly as live; no socket opens.

@@ -63,6 +63,15 @@ def _save(obls: list[dict], msg: str) -> None:
 
 
 def cmd_register(a) -> int:
+    # S16 FIX (adversarial correctness pass): a non-finite or negative value defeats EVERY cap
+    # below -- `nan > x` is False for all x, so `--value-usd nan` slips past the single AND
+    # fraction caps and then poisons every later `total_after` (nan propagates); a negative value
+    # shrinks the open total. Reject anything that is not a real, non-negative liability first.
+    import math
+    if not math.isfinite(a.value_usd) or a.value_usd < 0:
+        print(f"FATAL: --value-usd must be a finite, non-negative number (got {a.value_usd!r}). "
+              "A non-finite liability cannot be capped.", file=sys.stderr)
+        return 1
     max_open = int(os.environ.get("EXPOSURE_MAX_OPEN", "0") or "0")
     max_single = float(os.environ.get("EXPOSURE_MAX_SINGLE_USD", "0") or "0")
     max_frac = float(os.environ.get("EXPOSURE_MAX_TOTAL_FRACTION", "0") or "0")

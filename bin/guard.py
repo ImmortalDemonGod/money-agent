@@ -337,7 +337,13 @@ def main() -> int:
     # anywhere = rule 3 holding = silence.
     try:
         ob, ob_src = _truth.load("obligations.json")
-    except RuntimeError:
+    except RuntimeError as _re:
+        # S16 FIX (adversarial correctness pass): mirror the edge read above -- a SIGNATURE refusal
+        # on obligations.json is not "no obligations," it is a forged/unsigned breach fact that
+        # would otherwise be swallowed exactly when a breach might be hiding in it. Fail closed on
+        # SIGN; genuine absence (no obligations.json anywhere) stays silent.
+        if "SIGN" in str(_re).upper():
+            return fail(f"obligation facts refused: {_re}")
         ob, ob_src = None, None
     except Exception as e:
         return fail(f"cannot read the obligation facts ({type(e).__name__}: {e}) -- fail-closed.")

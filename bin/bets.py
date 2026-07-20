@@ -62,11 +62,15 @@ def _load() -> list[dict]:
 def _save(bets: list[dict], msg: str) -> None:
     BETS.parent.mkdir(parents=True, exist_ok=True)
     BETS.write_text(json.dumps({"bets": bets}, indent=2) + "\n")
+    # S16 FIX (adversarial correctness pass): pathspec the diff-check AND the commit to BETS only.
+    # Without it, a caller with unrelated pre-staged files (e.g. bet_gate consumption inside
+    # mail.send, which stages nothing else but runs mid-flow) would sweep them into a "bets:"
+    # commit -- defeating the pathspec discipline every other _save in this repo already keeps.
     subprocess.run(["git", "add", str(BETS)], cwd=REPO, check=True)
-    staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=REPO)
+    staged = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(BETS)], cwd=REPO)
     if staged.returncode != 0:
-        subprocess.run(["git", "-c", "commit.gpgsign=false", "commit", "-m", msg],
-                       cwd=REPO, check=True)
+        subprocess.run(["git", "-c", "commit.gpgsign=false", "commit", "-m", msg,
+                        "--", str(BETS)], cwd=REPO, check=True)
     branch = subprocess.run(["git", "branch", "--show-current"], cwd=REPO,
                             capture_output=True, text=True).stdout.strip()
     push = subprocess.run(["git", "push", "origin", branch or "HEAD"], cwd=REPO,

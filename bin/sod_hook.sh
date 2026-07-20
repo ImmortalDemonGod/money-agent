@@ -42,6 +42,18 @@ while IFS= read -r f; do
     # S12: the shadow world's fixture pack + scoring inputs. Editing the benchmark mid-run
     # voids the score, same class as editing the spine's config.
     shadow/*) block "the shadow-world pack is operator-owned (editing the benchmark voids the score): $f" ;;
+    # S16 (adversarial SoD pass): setup_sandbox.sh INSTALLS this very hook; a neutered copy
+    # committed here would install a neutered tripwire on the next fresh clone. Same class as the
+    # gates it protects.
+    bin/setup_sandbox.sh) block "the SoD-hook installer is bootstrap/operator-owned: $f" ;;
+    # S16 (adversarial SoD pass): the blocklist is an enumeration, so it cannot name a file that
+    # does not exist yet. `python3 bin/guard.py` puts bin/ first on sys.path, so a NEW bin/*.py
+    # whose basename shadows a stdlib module (bin/datetime.py, bin/os.py, ...) is imported INSIDE
+    # the gate's process and its top-level code runs before any check -- evading the blocklist as
+    # an innocuous "new module." Block committing a bin python file that shadows a stdlib name the
+    # gates import. (A tripwire like the rest: the wall is the out-of-band verifier + read-only origin.)
+    bin/os.py|bin/sys.py|bin/json.py|bin/subprocess.py|bin/datetime.py|bin/hashlib.py|bin/shutil.py|bin/tempfile.py|bin/re.py|bin/csv.py|bin/pathlib.py|bin/time.py|bin/socket.py|bin/email.py|bin/imaplib.py|bin/smtplib.py|bin/urllib.py|bin/argparse.py|bin/glob.py|bin/math.py|bin/io.py) \
+        block "a bin/ python file shadowing a stdlib module name would hijack a gate's imports: $f" ;;
     # #36: the signature trust anchors. An agent that could commit a swapped pubkey could mint its
     # own "verifier" signatures -- same class as editing truth.py itself.
     harness/verifier_key.pub|harness/allowed_signers) \

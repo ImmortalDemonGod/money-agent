@@ -73,6 +73,19 @@ if _stale_edge.exists():
     _stale_edge.rename(_dest)
     print(f"NOTE: archived a STALE edge freeze from a previous run -> {_dest}")
     print("      The edge rail is unfrozen for this run; the agent must re-register its bet.")
+# S16 FIX (adversarial correctness pass): the peak-equity runtime file must ALSO be cleared at a
+# new baseline. Archiving only the freeze left edge_runtime.json behind, so a new run frozen at
+# $100k equity would inherit last run's $110k peak -> drawdown $10k > bar -> verdict FALSIFIED
+# with ZERO trades ever placed, published as a verified fact. A new run starts peak-tracking fresh.
+_stale_runtime = STATE_DIR / "edge_runtime.json"
+if _stale_runtime.exists():
+    _rdest = STATE_DIR / f"edge_runtime.{now}.archived.json"
+    _rn = 1
+    while _rdest.exists():
+        _rdest = STATE_DIR / f"edge_runtime.{now}.{_rn}.archived.json"
+        _rn += 1
+    _stale_runtime.rename(_rdest)
+    print(f"NOTE: archived a STALE edge peak-equity runtime from a previous run -> {_rdest}")
 payload = json.dumps({
     "created_gt": now,
     "set_at_iso": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(now)),
