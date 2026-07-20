@@ -44,7 +44,10 @@ REPO = Path(__file__).resolve().parent.parent
 # Absent that provisioning this is a TRIPWIRE, like everything else in this repo that isn't the
 # out-of-band verifier or the card issuer. We additionally cross-check the branch we read against
 # the branch truth.json declares for itself, which catches misconfig and one forgery class.
-LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
+# S12: a shadow consumer (SHADOW=1, the Tier-1 rehearsal posture) follows the shadow lane by
+# default; the marker check in load() makes the separation semantic, not just nominal.
+SHADOW = os.environ.get("SHADOW", "0") == "1"
+LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "shadow-ledger" if SHADOW else "ledger")
 
 # Sources a MONEY decision (first-dollar halt, a packet's money claim) may rest on. An uncommitted
 # working-tree file is NOT here: it is agent-writable and invisible to every commit-based tripwire.
@@ -124,6 +127,24 @@ def _enforce_signature(content: bytes, name: str, ref: str, facts: dict) -> None
                                    "was forged; refusing.")
 
 
+def _enforce_shadow_wall(d: dict, name: str, where: str) -> None:
+    """S12: a live consumer must never ground on rehearsal facts, and a shadow consumer must
+    never ground on live facts -- contamination is symmetric, so the wall is two-sided and
+    applies at EVERY source (a mislabeled weak-mode read is as poisonous as a mislabeled
+    branch read). truth.json declares its world via the `shadow` marker (absent = live);
+    fact files that never declare one (edge.json) skip -- a stated residual."""
+    if name != "truth.json":
+        return
+    is_shadow = bool(d.get("shadow"))
+    if is_shadow and not SHADOW:
+        raise RuntimeError(f"{where} is SHADOW-RUN facts (shadow:true) but this consumer runs "
+                           "live (SHADOW unset) -- refusing: rehearsal dollars must never "
+                           "reach a live decision.")
+    if SHADOW and not is_shadow:
+        raise RuntimeError(f"{where} is LIVE facts but this consumer runs SHADOW=1 -- "
+                           "refusing: a rehearsal must not ground itself on the live ledger.")
+
+
 def load(name: str = "truth.json") -> tuple[dict, str]:
     # `name` selects which verifier fact file to read (truth.json = money rail, edge.json = the
     # verified-edge rail). Same read order and honesty labels for every fact file: one path, not N.
@@ -149,6 +170,7 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
             raise RuntimeError(
                 f"ledger read from origin/{LEDGER_BRANCH} declares ledger_branch={declared!r} -- "
                 "lane mismatch; refusing to treat as grounded.")
+        _enforce_shadow_wall(d, name, f"origin/{LEDGER_BRANCH}:ledger/{name}")
         _enforce_signature(show.stdout.encode(), name, f"origin/{LEDGER_BRANCH}", d)
         return d, "ledger-branch"
     # 2. weak mode: read the COMMITTED copy via git show, never the raw working-tree file. An
@@ -161,12 +183,15 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
             dl = json.loads(show_local.stdout)
         except json.JSONDecodeError as e:
             raise RuntimeError(f"committed ledger/{name} is not valid JSON: {e}")
+        _enforce_shadow_wall(dl, name, f"HEAD:ledger/{name}")
         _enforce_signature(show_local.stdout.encode(), name, "HEAD", dl)
         return dl, "working-tree-committed"
     # 3. last resort: the raw uncommitted file, labeled UNTRUSTED. GROUNDED_SOURCES excludes it, so
     #    money-adjudicating consumers (guard first-dollar, aiv_gate) refuse it by construction.
     if local.exists():
-        return json.loads(local.read_text()), "working-tree-uncommitted"
+        du = json.loads(local.read_text())
+        _enforce_shadow_wall(du, name, str(local))
+        return du, "working-tree-uncommitted"
     raise RuntimeError(
         f"no ledger found: origin/{LEDGER_BRANCH} has no ledger/{name} and {local} is absent. "
         "Run the verifier (bin/pnl.py via bin/verifier_loop.sh) before the loop starts.")

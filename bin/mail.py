@@ -30,6 +30,7 @@ bounds -> REFUSALS.md.
 
 import email
 import imaplib
+import json
 import os
 import smtplib
 import socket
@@ -43,6 +44,13 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 SENT_LOG = REPO / "SENT_LOG.md"
+
+# S12: SHADOW=1 = captured-not-delivered (design §16). The whole live gate chain still runs --
+# that IS the rehearsal -- but nothing ever opens a socket: inbox/read/search serve the
+# scripted counterparties in shadow/inbox/, and send() appends to run/shadow/outbox.jsonl.
+SHADOW = os.environ.get("SHADOW", "0") == "1"
+SHADOW_INBOX = REPO / "shadow" / "inbox"
+SHADOW_OUTBOX = REPO / "run" / "shadow" / "outbox.jsonl"
 
 ADDR = os.environ.get("GMAIL_ADDRESS", "")
 PW = os.environ.get("GMAIL_APP_PASSWORD", "").replace(" ", "")  # Google prints it with spaces
@@ -88,10 +96,29 @@ class _ProxySMTP(smtplib.SMTP):
 
 
 def _need_creds():
+    if SHADOW:
+        return  # S12: nothing real is contacted in a shadow run -- no creds required
     if not ADDR or not PW or "REPLACE_ME" in (ADDR + PW):
         print("FATAL: GMAIL_ADDRESS / GMAIL_APP_PASSWORD unset in this environment.",
               file=sys.stderr)
         sys.exit(2)
+
+
+def _shadow_msgs() -> list[dict]:
+    """S12: the scripted counterparties (shadow/inbox/*.json, operator-owned). A malformed
+    fixture is FATAL, not skipped -- a half-served world silently corrupts the benchmark, so
+    the pack is all-or-nothing."""
+    msgs = []
+    for p in sorted(SHADOW_INBOX.glob("*.json")):
+        try:
+            m = json.loads(p.read_text())
+        except json.JSONDecodeError as e:
+            print(f"FATAL: shadow inbox fixture {p.name} unparseable: {e}", file=sys.stderr)
+            sys.exit(2)
+        m["id"] = m.get("id") or p.stem
+        msgs.append(m)
+    msgs.sort(key=lambda m: (str(m.get("date", "")), m["id"]))
+    return msgs
 
 
 def _dec(s):
@@ -110,6 +137,11 @@ def _imap():
 
 
 def inbox(n=10):
+    if SHADOW:
+        for m in reversed(_shadow_msgs()[-n:]):
+            print(f"[{m['id']}] {str(m.get('date', ''))[:31]:33s} "
+                  f"{str(m.get('from', ''))[:34]:36s} {str(m.get('subject', ''))[:50]}")
+        return
     m = _imap()
     m.select("INBOX")
     _, data = m.search(None, "ALL")
@@ -122,6 +154,16 @@ def inbox(n=10):
 
 
 def read(mid):
+    if SHADOW:
+        for m in _shadow_msgs():
+            if m["id"] == str(mid):
+                print("From:", m.get("from"), "\nSubject:", m.get("subject"),
+                      "\nDate:", m.get("date"), "\n" + "-" * 60)
+                print(m.get("body", ""))
+                return
+        ids = ", ".join(x["id"] for x in _shadow_msgs()) or "<empty>"
+        print(f"FATAL: no shadow message {mid!r} (have: {ids})", file=sys.stderr)
+        sys.exit(2)
     m = _imap()
     m.select("INBOX")
     _, d = m.fetch(str(mid).encode(), "(RFC822)")
@@ -139,6 +181,14 @@ def read(mid):
 
 
 def search(q):
+    if SHADOW:
+        term = q.replace('"', '').lower()
+        hits = [m for m in _shadow_msgs()
+                if term in " ".join(str(m.get(k, "")) for k in ("from", "subject", "body")).lower()]
+        print(f"{len(hits)} match")
+        for m in hits[-20:]:
+            print(f"[{m['id']}] {str(m.get('from', ''))[:34]:36s} {str(m.get('subject', ''))[:56]}")
+        return
     m = _imap()
     m.select("INBOX")
     # IMAP SEARCH needs a criterion keyword; a bare string is a syntax error (found live when
@@ -194,7 +244,8 @@ def send(to, subj, body, *, bet_id=None, lane=None):
         sys.exit(1)
 
     # Construct the complete SMTP payload before consuming authorization. Failures before the
-    # external-attempt boundary must leave the reservation available.
+    # external-attempt boundary must leave the reservation available. (Under SHADOW=1 the payload
+    # is built but never sent; the capture below is the delivery-equivalent.)
     msg = EmailMessage()
     msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
     msg.set_content(body)
@@ -215,6 +266,32 @@ def send(to, subj, body, *, bet_id=None, lane=None):
         except Exception as e:
             print(f"FATAL: send reservation rollback crashed ({e})", file=sys.stderr)
 
+    # Log BEFORE sending: an attempt that fails halfway still happened. Under SHADOW=1 the message
+    # is captured and never delivered, so the record says exactly that; otherwise it is an
+    # authorized SMTP attempt whose delivery is not yet confirmed.
+    stamp = datetime.now(timezone.utc).isoformat() + (" [SHADOW-CAPTURED]" if SHADOW else "")
+    status = ("captured under SHADOW=1; not delivered" if SHADOW
+              else "authorized SMTP attempt; delivery not yet confirmed")
+    SENT_LOG.write_text(
+        (SENT_LOG.read_text() if SENT_LOG.exists()
+         else "# SENT_LOG\n\nEvery SMTP attempt under a real person's name.\n\n---\n")
+        + f"\n## {stamp}\n- **Status:** {status}\n"
+          f"- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
+    )
+
+    # S12: the machine-readable capture, written alongside SENT_LOG and committed with it so
+    # the score surface is exactly as durable as the audit trail.
+    log_paths = [str(SENT_LOG)]
+    if SHADOW:
+        import hashlib
+        SHADOW_OUTBOX.parent.mkdir(parents=True, exist_ok=True)
+        with SHADOW_OUTBOX.open("a") as f:
+            f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "to": to,
+                                "subject": subj,
+                                "body_sha256": hashlib.sha256(body.encode()).hexdigest(),
+                                "body": body}) + "\n")
+        log_paths.append(str(SHADOW_OUTBOX))
+
     # PERSIST the log before the send leaves (run-1 lesson: SENT_LOG entries were repeatedly wiped
     # between write and commit, and the audit trail of what left under a real person's name ended
     # up partly "RECONSTRUCTED". Durability must not depend on the agent remembering to commit.)
@@ -222,21 +299,15 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     # best-effort -- with the v2 two-lane design nothing resets the claims branch, so a local
     # commit is already durable; the push just makes it visible off-box sooner.
     try:
-        SENT_LOG.write_text(
-            (SENT_LOG.read_text() if SENT_LOG.exists()
-             else "# SENT_LOG\n\nEvery SMTP attempt under a real person's name.\n\n---\n")
-            + f"\n## {datetime.now(timezone.utc).isoformat()}\n"
-              "- **Status:** authorized SMTP attempt; delivery not yet confirmed\n"
-              f"- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
-        )
-        subprocess.run(["git", "add", str(SENT_LOG)], cwd=REPO, check=True,
+        subprocess.run(["git", "add", *log_paths], cwd=REPO, check=True,
                        capture_output=True, timeout=15)
-        diff = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(SENT_LOG)],
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet", "--", *log_paths],
                               cwd=REPO, capture_output=True, timeout=15)
-        if diff.returncode != 0:  # staged changes exist -> commit ONLY the sent log (pathspec, so
-                                  # unrelated staged files are never swept into this commit)
+        if diff.returncode != 0:  # staged changes exist -> commit ONLY the send's own logs
+                                  # (pathspec, so unrelated staged files are never swept in)
             subprocess.run(["git", "commit", "--no-gpg-sign", "-m",
-                            f"sent-log: {to} | {subj[:60]}", "--", str(SENT_LOG)],
+                            f"{'shadow-capture' if SHADOW else 'sent-log'}: {to} | {subj[:60]}",
+                            "--", *log_paths],
                            cwd=REPO, check=True, capture_output=True, timeout=30)
     except Exception as e:
         _rollback_reservation()
@@ -255,8 +326,15 @@ def send(to, subj, body, *, bet_id=None, lane=None):
         print(f"warn: SENT_LOG push failed ({e}); the commit is local -- push when possible.",
               file=sys.stderr)
 
+    if SHADOW:
+        # S12: captured, never delivered. Every gate above ran exactly as live; no socket opens.
+        print(f"SHADOW: captured -> {SHADOW_OUTBOX.relative_to(REPO)} (not delivered). "
+              "Gates ran as live; nothing left the machine.")
+        return
+
     # The external attempt starts after this point. A network attempt consumes the reservation
     # even if the remote server rejects it; the durable record above says attempt, never delivery.
+    # (msg was constructed above, before the reservation was consumed.)
     with _ProxySMTP("smtp.gmail.com", 587, timeout=30) as s:
         s.starttls()
         s.login(ADDR, PW)

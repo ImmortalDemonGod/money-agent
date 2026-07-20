@@ -15,6 +15,9 @@
 set -uo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# S12: a shadow run's gates read the shadow lane by default (covers every later
+# ${LEDGER_BRANCH:-ledger} fallback in this script, since the var is set from here on)
+[[ "${SHADOW:-0}" == "1" ]] && LEDGER_BRANCH="${LEDGER_BRANCH:-shadow-ledger}"
 ITER="${1:?usage: aiv_gate.sh <iteration-number>}"
 N=$(printf '%03d' "$ITER")
 PACKET="$REPO/.github/aiv-packets/VERIFICATION_PACKET_ITER_${N}.md"

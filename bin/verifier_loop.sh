@@ -23,6 +23,14 @@ set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$R" || exit 1
 INTERVAL="${INTERVAL:-120}"
+# S12: a shadow verifier (SHADOW=1) defaults onto its own lane + state dir so a rehearsal can
+# never touch anything a live run trusts. Explicit env still wins -- and pnl.py refuses a
+# non-shadow lane under SHADOW=1 regardless (that is the wall; this is the convenience).
+if [[ "${SHADOW:-0}" == "1" ]]; then
+  LEDGER_BRANCH="${LEDGER_BRANCH:-shadow-ledger}"
+  MONEY_AGENT_STATE="${MONEY_AGENT_STATE:-$HOME/.money-agent-shadow}"
+  export MONEY_AGENT_STATE
+fi
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 # AGENT_BRANCH is optional but strongly recommended: pnl.py hashes the constitution the AGENT
 # actually sees (its committed copy on origin), not whatever this checkout happens to contain.

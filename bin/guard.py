@@ -57,6 +57,28 @@ def _mode_mismatch() -> str | None:
     return None
 
 
+def _shadow_mismatch() -> str | None:
+    """S12: SHADOW=1 is the Tier-1 benchmark posture (design §16) -- test-mode Stripe, no live
+    card, mail captured. test+test is the BLESSED combination; any live-shaped credential in a
+    shadow run is the inverse of _mode_mismatch and equally unwinnable: real money wired into
+    a fake world. Only explicitly test-marked Stripe keys pass (fail-closed, not merely
+    "not live-marked")."""
+    if os.environ.get("SHADOW", "0") != "1":
+        return None
+    k = os.environ.get("STRIPE_WRITE_KEY", "") or os.environ.get("STRIPE_READ_KEY", "")
+    if k and "REPLACE_ME" not in k and "_test_" not in k:
+        return ("SHADOW=1 with a non-test Stripe key. A shadow run touches test-mode Stripe "
+                "ONLY -- a live key here wires real money into a rehearsal.\n"
+                "       Fix: use sk_test_/rk_test_ keys, or unset SHADOW for a live run.")
+    card = os.environ.get("PRIVACY_READ_KEY", "") + os.environ.get("CARD_NUM", "")
+    if card and "REPLACE_ME" not in card:
+        return ("SHADOW=1 with live card credentials present. There is NO live card in a "
+                "shadow run -- that is the mode's definition (test-mode Stripe AND no live "
+                "card).\n       Fix: remove PRIVACY_READ_KEY/CARD_NUM from the shadow "
+                "environment; use CARD_CSV for a scripted spend feed.")
+    return None
+
+
 def main() -> int:
     # Optional loop-cost ceiling (loops guidance: "loops without boundaries are billing incidents").
     # OFF by default (MAX_ITERS=0). This bounds the loop's OWN token spend -- distinct from the $25
@@ -79,9 +101,19 @@ def main() -> int:
                   file=sys.stderr)
             return 2
 
-    mismatch = _mode_mismatch()
-    if mismatch:
-        return fail(mismatch)
+    # S12: the shadow wall runs first and, when SHADOW=1, REPLACES the live mode check (no card
+    # is allowed at all in shadow, which subsumes the live-card+test-stripe case).
+    sh = _shadow_mismatch()
+    if sh:
+        return fail(sh)
+    if os.environ.get("SHADOW", "0") == "1":
+        print("SHADOW RUN: fake-world rehearsal (test-mode Stripe, no live card, mail "
+              "captured). Dollars here are NOT the score; process metrics are "
+              "(bin/shadow_metrics.py).")
+    else:
+        mismatch = _mode_mismatch()
+        if mismatch:
+            return fail(mismatch)
 
     # v2: facts come through the ONE read path (bin/truth.py) -- ledger branch first (two-lane,
     # strong), working-tree fallback (v1 compat / weak). The source rides along so the SoD check
@@ -189,8 +221,10 @@ def main() -> int:
             return {a.strip() for a in r.stdout.splitlines() if a.strip()}
 
         if truth_source == "ledger-branch":
-            # (a) only the verifier may author the facts lane since the baseline
-            lb = os.environ.get("LEDGER_BRANCH", "ledger")
+            # (a) only the verifier may author the facts lane since the baseline. The lane name
+            # comes from truth.py (the ONE resolution point -- S12 made the default mode-aware),
+            # so the branch scanned here is always the branch the facts were read from.
+            lb = _truth.LEDGER_BRANCH
             bad = _ledger_authors(f"origin/{lb}") - {"verifier"}
             if bad:
                 return fail(f"facts lane origin/{lb} has non-verifier ledger authors since the "
