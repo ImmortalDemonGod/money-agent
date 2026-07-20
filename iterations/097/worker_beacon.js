@@ -83,6 +83,56 @@ function hubHtml(origin) {
 </body></html>`;
 }
 
+function privacyHtml(origin) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy — the one-honest-dollar experiment</title>
+<meta name="description" content="What this site collects, what it does not, and who to ask. No cookies, no full IP, no ad networks.">
+<link rel="canonical" href="${origin}/privacy">
+<style>body{font:16px/1.65 system-ui,-apple-system,sans-serif;max-width:42rem;margin:2rem auto;padding:0 1rem;color:#222}
+h1{font-size:1.5rem}h2{font-size:1.05rem;margin-top:2rem}code{background:#f4f4f4;padding:.1rem .3rem;border-radius:3px}
+small{color:#666}a{color:#06c}</style></head><body>
+<h1>Privacy</h1>
+<p>This site is run by <strong>Miguel Ingram</strong>, a real person, as a public experiment in
+which a disclosed AI agent tries to earn one honest dollar. Contact:
+<a href="mailto:miguel.ingram.work@gmail.com">miguel.ingram.work@gmail.com</a>. Ask whether you are
+talking to the AI or the man and you will get a straight answer.</p>
+
+<h2>What the visit counter records</h2>
+<p>Every page here pings a counter I run myself. Per visit it stores: the time, the path, the
+referring URL, the browser user-agent string, a coarse country and network operator supplied by
+Cloudflare, a bot-or-human guess, and a <em>salted, truncated hash</em> of your IP address.</p>
+<p><strong>Your full IP address is never stored.</strong> The hash uses a salt that changes daily, so
+it cannot be used to follow you across days, and it is truncated so it cannot be reversed. It exists
+only to count one visitor twice instead of once.</p>
+
+<h2>What it does not do</h2>
+<ul>
+<li><strong>No cookies</strong> and nothing written to your device. There is no consent banner
+because there is nothing on your machine to consent to.</li>
+<li><strong>No advertising networks, no third-party analytics, no data sharing or sale.</strong></li>
+<li><strong>No cross-site tracking</strong> and no profile of you.</li>
+<li><strong>No email open-tracking.</strong> Messages from this project contain no tracking pixels,
+deliberately. "Delivered, no reply" is all I can know, and that is on purpose.</li>
+</ul>
+
+<h2>Why it exists</h2>
+<p>The whole question this experiment asks is whether a real person ever actually arrives, or whether
+the audience is entirely crawlers. Without this counter that question is unanswerable, and the
+honest answer to "did anyone come?" would be "I have no idea." It measures arrival, not identity.</p>
+
+<h2>Payments</h2>
+<p>Purchases are processed by <strong>Stripe</strong>. Card details go to Stripe and are never seen or
+stored by me; I receive the payment record only. Stripe's handling is governed by
+<a href="https://stripe.com/privacy" rel="nofollow noopener">Stripe's privacy policy</a>.</p>
+
+<h2>Your requests</h2>
+<p>Email the address above to ask what is held about you, or to have it deleted. Given that nothing
+here identifies a person, the usual honest answer is that there is nothing to return.</p>
+<p><small>Last updated 2026-07-20. <a href="${origin}/">Back to the experiment</a>.</small></p>
+</body></html>`;
+}
+
 async function stats(env) {
   if (!env.DB) return new Response("no DB bound", { status: 500 });
   const q = async (sql) => (await env.DB.prepare(sql).all()).results;
@@ -113,6 +163,11 @@ export default {
       if (!env.STATS_SECRET || u.searchParams.get("k") !== env.STATS_SECRET)
         return new Response("forbidden", { status: 403 });
       return stats(env);
+    }
+
+    if (u.pathname === "/privacy") {
+      await logHit(env, ctx, req, "/privacy", "");
+      return new Response(privacyHtml(origin), { headers: { "content-type": "text/html; charset=utf-8" } });
     }
 
     if (u.pathname === "/go") {

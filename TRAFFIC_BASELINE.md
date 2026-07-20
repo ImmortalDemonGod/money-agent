@@ -1,5 +1,12 @@
 # Traffic baseline — frozen 2026-07-17T01:54Z
 
+> **⭐ UPDATE 2026-07-20 — the blind surfaces are now instrumented.** The disclosed beacon
+> (`iterations/097`) was **deployed** to the Cloud Pyramid Cloudflare account, and all 8 real surge
+> funnels + the hub now report referrer / UA / country / bot-vs-human. The rows below that said
+> *UNMEASURABLE* / *deploy-pending* were true when written and are corrected in place. **The
+> telegra.ph baseline itself is unchanged and still load-bearing** — it is the only pre-beacon
+> reference point that exists.
+
 Why this file exists: up to my last activity, traffic to the public artifacts is confounded with my
 own actions (publishing, verifying, archiving, seeding, and — for telegra.ph — page-HTML fetches).
 **After the cutoff below, I stop touching the pages, so any increase is EXTERNAL (not me).** This file
@@ -30,8 +37,8 @@ freezes the "me + whatever I triggered" ceiling so future traffic is a measurabl
 | **telegra.ph TOTAL** | **80 views** | per-hour getViews is available to isolate clean (post-cutoff) hours |
 | HN item `48934920` | 8 points, 0 comments | shadow-dead; points are human votes (weak positive-human signal); effectively frozen |
 | Nostr (referencing events, others) | 15 | content-classifiable; to date all bot/spam by inspection; future events readable per note id |
-| **surge funnels (9 sites)** | **UNMEASURABLE — no baseline possible** | surge exposes no analytics at all; a post-baseline visitor leaves no trace. This is a gap, **not** evidence of zero traffic. |
-| workers.dev hub | in operator's Cloudflare dashboard | the beacon (`iterations/097`, deploy-pending) would log referrer/UA/country per hit |
+| **surge funnels (8 real + 1 redirect stub)** | **0 — beacon deployed 2026-07-20, counting starts now** | ⭐ **NO LONGER BLIND.** Each entry page pings `<beacon>/f/<site>`; read at `<beacon>/stats?k=…`. Gives referrer / UA / country / bot-vs-human. `ai-visibility-kit` is an instant meta-refresh stub and is not beaconed (its destination is). |
+| workers.dev hub | **0 — beacon deployed 2026-07-20** | ⭐ **DEPLOYED.** The beacon worker *is* the hub; it logs every path incl. `/privacy` and `/go` click-throughs. |
 
 surge sites (no counter, no baseline): `debugging-field-manual`, `website-audit-playbook`,
 `ai-visibility-report`, `ai-visibility-kit`, `life-in-weeks` (+ `/ja/`), `show-hn-playbook`,
@@ -45,9 +52,11 @@ surge sites (no counter, no baseline): `debugging-field-manual`, `website-audit-
   human — a rise is an **upper bound** on human reach, not proof of it.
 - **HN / Nostr:** re-read the item / relay query; Nostr content can be classified, HN points can't be
   attributed beyond "some logged-in accounts."
-- **surge / workers.dev:** cannot be read from here. surge is structurally blind; workers.dev lives in
-  the operator's CF dashboard, and the beacon is what turns it into referrer/UA/country/bot-vs-human
-  data.
+- **surge / workers.dev — ⭐ CHANGED 2026-07-20:** both are now beaconed. Read them with
+  `curl "https://one-honest-dollar.cloud-pyramid.workers.dev/stats?k=$(cat ~/money-agent/.beacon_stats_secret.key)"`.
+  This is the first surface in the project that can separate **bot from human**, which telegra.ph
+  never could. Note the beacon's own baseline is **zero at deploy time** — it cannot see any traffic
+  that arrived before 2026-07-20, so it does not retroactively answer the run-1 question.
 
 ## The honest limit this documents
 

@@ -357,8 +357,10 @@ Japanese page and the Worker-hub saves failed (HTTP 520) — those two are not a
 
 **Cloudflare Worker — `one-honest-dollar.cloud-pyramid.workers.dev`** (082): no-account host serving
 a crawlable hub + IndexNow key; earned the run's first accepted search-engine ping (HTTP 202); still
-serving past its auto-delete window (claimed by the operator). Its disclosed traffic beacon is built
-but deploy-pending (`iterations/097/`) — not yet public.
+serving past its auto-delete window (claimed by the operator). **⭐ Its disclosed traffic beacon was
+DEPLOYED 2026-07-20** (`iterations/097/`) and is public: the worker logs every path, serves a
+`/privacy` page, and all 8 real surge funnels ping `/f/<site>`. Read with
+`/stats?k=…`. This is the first surface in the project that can separate bot from human.
 
 **Social and identity artifacts:** a persistent Nostr pubkey (`97562982…d0d9904`) with a kind-0
 profile and ~7 seed notes (one Japanese) across damus.io, nos.lol, primal.net, snort.social,
@@ -539,3 +541,47 @@ of everything on this branch — what each file is, who wrote it, and when to re
 *Black Box Research Labs. The interesting artifact was never the money. It was learning, on ourselves,
 that an outcome is only ever as trustworthy as the verification underneath it — including the outcome
 "we're done."*
+
+
+---
+
+## ⭐ ADDENDUM 2026-07-20 — the blind surfaces are instrumented, and "reach is zero" is falsified
+
+*Appended, not edited. The conclusions above stay exactly as the run reached them; this records what
+is known afterwards. Forward-only provenance.*
+
+**1. The beacon is DEPLOYED.** `iterations/097` went live on `one-honest-dollar.cloud-pyramid.workers.dev`
+(D1-backed, disclosed, `/privacy` page shipped). All 8 real surge funnels now ping `/f/<site>`. For the
+first time the project can separate **bot from human**, with country, referrer and `/go` click-throughs.
+Read: `curl "https://one-honest-dollar.cloud-pyramid.workers.dev/stats?k=$(cat ~/money-agent/.beacon_stats_secret.key)"`.
+
+⚠ **It does NOT answer the run-1 question retroactively.** The beacon's baseline is zero at deploy
+time; it cannot see anything that arrived before 2026-07-20. The reach-vs-conversion question *for the
+run* stays undetermined, exactly as iteration 098 corrected it. What changes is that the question is
+answerable **from now on**.
+
+**2. External traffic DID accrue after the frozen baseline.** `TRAFFIC_BASELINE.md` froze at
+2026-07-17T01:54Z, after which the agent stopped touching the pages, so any increase is external by
+construction. Measured 2026-07-20:
+
+| surface | baseline | 07-20 | delta |
+|---|---|---|---|
+| telegra.ph (5 pages) | 80 | 130 | **+50** |
+| HN item 48934920 | 8 pts | 9 pts | **+1** |
+
+⇒ **"measurable organic human reach is ZERO" is false as stated.** Honest bounds: telegra.ph exposes
+no referrer/UA, so +50 is an **upper bound** on human reach and may be largely crawlers. The **+1 HN
+point is the stronger datum** — HN votes require a logged-in account. And this measures reach to the
+**essays**, not to the **store**; the funnels were unmeasured for that entire window.
+
+**3. What still holds, narrowed.** No *measurable* in-bounds path produced a customer during the run,
+`received_usd` is still **0.00**, and every audience-bearing channel still gated a cold automated
+identity at signup. What is retired is the stronger claim that nobody arrived at all.
+
+**4. Already falsified from outside.** The Fabio Rizzo reply (2026-07-18, two days after run close)
+disproved "zero replies, ever" and externally falsified iteration 095's `EXHAUSTION PROVEN`.
+
+**5. `bin/reach.py` was carrying a hardcoded verdict.** Its `bottom_line` was a string literal
+asserting reach-zero, self-traffic, and zero replies. All three had been falsified while the string
+kept printing. It is now **computed** from the baseline delta and reads `received_usd` from
+`ledger/truth.json`. Same defect this repo exists to hunt: a description that outlived its artifact.

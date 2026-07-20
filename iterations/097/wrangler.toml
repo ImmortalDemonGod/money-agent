@@ -6,4 +6,4 @@ compatibility_date = "2026-07-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "beacon"
-database_id = "REPLACE_AFTER_d1_create"
+database_id = "0fb04bfd-fdb9-47b8-a632-29963e060de1"

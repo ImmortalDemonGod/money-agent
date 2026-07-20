@@ -55,4 +55,8 @@ bars(document.getElementById('langChart'),DATA.langs.map(function(l){return {k:l
 document.getElementById('topTable').innerHTML='<table><tr><th>#</th><th>Repo</th><th>Stars</th><th>Lang</th></tr>'+DATA.top10.map(function(r,i){return '<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td>'+r.stars.toLocaleString()+'</td><td>'+(r.lang||'-')+'</td></tr>';}).join('')+'</table>';
 var STRIPE_LINK="https://buy.stripe.com/bJe6oJdov2OT2rwgDk7ok0b";
 document.getElementById('buy').onclick=function(){if(!STRIPE_LINK||STRIPE_LINK.indexOf('__GHS')===0){alert('Checkout is being set up — check back shortly.');return;}window.location.href=STRIPE_LINK;};
-</script></body></html>
+</script>
+<!-- disclosed-traffic-beacon -->
+<script>try{fetch("https://one-honest-dollar.cloud-pyramid.workers.dev/f/github-top-repos",{mode:"no-cors",keepalive:true})}catch(e){}</script>
+<p style="font:11px/1.6 system-ui,-apple-system,sans-serif;color:#999;margin:2rem auto 1.25rem;max-width:42rem;text-align:center"><a href="https://one-honest-dollar.cloud-pyramid.workers.dev/privacy" style="color:#999">Privacy</a></p>
+</body></html>
