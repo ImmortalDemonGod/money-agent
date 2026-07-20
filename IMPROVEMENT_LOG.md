@@ -877,3 +877,63 @@ mentions, are now matched), and my first exit-code assertion was stricter than t
 contract (the failing-push cycle legitimately returns the short-circuited guard's status). The matrix
 ended 22/22 with the mutation still caught — but it took three tries, each mistake exactly the class
 this repo documents.
+
+---
+
+## Entry 021 — 2026-07-20 — S1 foundation: the Tier-0 regression corpus (issue #44) + full-matrix baseline
+
+**What:** `tests/corpus.sh` — the Tier-0 corpus §16 of V2_HARNESS_DESIGN specified and nothing
+implemented: run-1's REAL failure artifacts replayed against the v2 gates, wired into CI as a step
+after the sim matrix. Fixtures: (1) the iteration-095 false stop — the archived
+`EXHAUSTION_PACKET.md` + full run-1 `MONEY_LOG`/`SENT_LOG` + the open estate bet reconstructed in
+`run/bets.json` (the registry postdates run 1; the bet itself is documented verbatim in the
+archived packet's Conclusion) — asserting `conclusion_gate.py` refuses ON THE RIGHT MESSAGES;
+(1b) a discriminator run (bet resolved → that refusal alone disappears); (2) the stale-adversary
+counterfactual (wrong `MONEY_LOG_SHA256` → STALE, never authorization); (3) the 086 empty-commit
+seam (`iter.py close` fails when the close-commit landed no blob; control run proves the success
+path; labeled a SEAM test — the gate subprocess is stubbed via the sim.sh monkeypatch pattern, the
+ls-tree net is the subject). Also this entry: the `aiv` CLI installed into the sandbox (pip from
+the aiv-protocol repo, through the proxy) — the sim matrix's aiv-gate stage now RUNS here instead
+of SKIPping.
+
+**Why (cited):** V2_HARNESS_DESIGN §16 Tier 0 ("run 1 is a fixture corpus... never buy at a higher
+tier what a lower tier sells"); issue #44. The central regression this pins: at real iteration 095
+the v1 gate PASSED this exact state (docs/CASE_STUDY.md). The replay proves the v1 state satisfies
+everything v1's gate ever measured — the corpus asserts "effort floor not met" and "packet missing"
+are ABSENT — so the refusal rests entirely on the two v2-only layers (open bet, missing
+fresh-context adversary). That isolation is the regression statement.
+
+**Edge cases enumerated before coding:** message-assertions not exit codes (vacuity); discriminator
+run (cause-tracking); effort floor must PASS so failures isolate (full archived logs copied —
+88 iteration headers, 13 emailish SENT_LOG lines, zero `<fill>` placeholders, verified by grep);
+archive copied never mutated; `bets.py _save` pushes → rig needs a local bare origin (sim.sh rig
+pattern); `edge.json` absent on HEAD → conclusion_gate's rail-idle path (no noise); the archived
+packet's headings map onto the gate's BARS by substring (verified against `_sections()` semantics);
+086 fixture is a seam test and says so.
+
+**Verified by running (artifacts):**
+- Baseline at HEAD c2ff14e: `bash tests/sim.sh` → `PASS=18 FAIL=0 SKIP=1` (pre-aiv), then
+  `PASS=22 FAIL=0 SKIP=0` after `pip install git+.../aiv-protocol.git` (aiv at
+  `/usr/local/bin/aiv`).
+- `bash tests/corpus.sh` → `CORPUS PASS=11 FAIL=0`.
+- **The bite check (the fixture-must-bite rule, executed):** in a throwaway clone,
+  `conclusion_gate.py` mutated blind to the bet registry (`open_bets()` → `[]` — the exact v1
+  defect class). Result: gate still exits 1 (adversary layer) but no longer emits "open external
+  bet" → the corpus's message assertion catches the mutation **and an exit-code-only test would
+  not have**. That asymmetry is the empirical justification for message-level assertions.
+
+**Critique pass:**
+- The 086 fixture stubs the aiv_gate subprocess, so it does NOT exercise gate+close end-to-end;
+  the sim matrix's gate tests cover the gate itself. Honest scope, stated in the fixture header.
+- The plan's S1(c) "generic pnl fixture helper" is deferred to S2, its first consumer — building
+  it speculatively here would be scaffolding without a fixture to bite. Recorded as a deliberate
+  deferral, not a drop.
+- The historical-overclaim fixture (bare-word "47 dollars" parser path) belongs in sim.sh's
+  existing aiv block where the synthesized packet + ledger already exist — queued to S2 alongside
+  the sim extensions rather than duplicating the synthesis block here.
+- The corpus reconstructs the estate bet with 2099 deadline (stays open); the REAL bet's honest
+  resolution was "expired unobserved" — the discriminator run uses exactly that resolution, so the
+  counterfactual is also on record.
+
+**Next:** S2 — verifier correctness (#33 currency, #34 pagination, #37 preflight) with the pnl
+monkeypatch fixture helper, plus the queued bare-word overclaim assertion in sim.sh.
