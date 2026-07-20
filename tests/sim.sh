@@ -306,6 +306,93 @@ assert_exit_grep 1 "unreadable" "spine: unreadable config fails closed while arm
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add probe "any/lane"
 mv spine.yml.aside spine.yml
 
+echo "=== P-generalizations (S11): prereg, decision gate, obligations+watchdog, probes, caps ==="
+P2R=$(MONEY_AGENT_STATE=p2state python3 - 2>/dev/null <<'PYEOF'
+import sys, pathlib
+sys.path.insert(0, "bin")
+sys.excepthook = lambda t, v, tb: print(f"P2_FAILS:crash:{t.__name__}:{v}")
+import prereg
+r1 = prereg.freeze("toy", "BAR: 1\n", {"x": 2})
+bad = []
+if prereg.intact("toy", "BAR: 1\n") is not True: bad.append("intact should be True")
+if prereg.intact("toy", "BAR: 9\n") is not False: bad.append("tamper should be False")
+if prereg.freeze("toy", "BAR: 9\n")["sha256"] != r1["sha256"]: bad.append("re-freeze overwrote (the point is that it must not)")
+if prereg.intact("nothing", "x") is not None: bad.append("unfrozen should be None")
+prereg.clear("toy")
+if prereg.frozen("toy") is not None: bad.append("clear left the freeze")
+if not list(pathlib.Path("p2state").glob("toy.*.archived.json")): bad.append("archive missing")
+print("P2_FAILS:" + ";".join(bad))
+PYEOF
+)
+P2_FAILS="${P2R##*P2_FAILS:}"
+if [[ -z "$P2_FAILS" ]]; then ok "prereg (P2): freeze/intact/tamper/no-refreeze/clear-archive all correct"
+else bad "prereg (P2): $P2_FAILS"; fi
+rm -rf p2state
+printf 'the page body for a publish decision, long enough to be real content' > dg_body.txt
+assert_exit_grep 1 "no decision recorded" "decision gate (P3): absent record blocks" \
+  python3 bin/decision_gate.py publish dg_body.txt
+DGH=$(python3 -c "import sys;sys.path.insert(0,'bin');import decision_gate as d;print(d.body_hash(open('dg_body.txt').read()))")
+echo "- class:publish | body:$DGH | decision:ship | rationale:ok" >> DECISION_LOG.md
+assert_exit_grep 1 "stamp" "decision gate (P3): a rubber stamp is not a decision" \
+  python3 bin/decision_gate.py publish dg_body.txt
+sed -i "s/rationale:ok/rationale:page reviewed, name-test applied, worth shipping/" DECISION_LOG.md
+assert_exit 0 "decision gate (P3): recorded publish decision passes (content never graded)" \
+  python3 bin/decision_gate.py publish dg_body.txt
+printf 'scraped dataset payload A (no provenance recorded)' > dg_acq.txt
+AQH=$(python3 -c "import sys;sys.path.insert(0,'bin');import decision_gate as d;print(d.body_hash(open('dg_acq.txt').read()))")
+echo "- class:data-acquisition | body:$AQH | decision:acquire | rationale:public docs pages only, robots respected" >> DECISION_LOG.md
+assert_exit_grep 1 "provenance" "decision gate (P3): acquisition without a provenance manifest blocks" \
+  python3 bin/decision_gate.py data-acquisition dg_acq.txt
+printf 'scraped dataset payload B (provenance pinned)' > dg_acq2.txt
+AQH2=$(python3 -c "import sys;sys.path.insert(0,'bin');import decision_gate as d;print(d.body_hash(open('dg_acq2.txt').read()))")
+PROV=$(python3 -c "import hashlib;print(hashlib.sha256(open('LICENSE','rb').read()).hexdigest())")
+echo "- class:data-acquisition | body:$AQH2 | decision:acquire | rationale:public docs pages only, robots respected | provenance:$PROV" >> DECISION_LOG.md
+assert_exit 0 "decision gate (P3): pinned provenance manifest passes" \
+  python3 bin/decision_gate.py data-acquisition dg_acq2.txt
+assert_exit_grep 1 "EXPOSURE_MAX_OPEN=0" "obligations (P5/P7): default caps are ZERO -- rule 3 stands" \
+  python3 bin/obligations.py register --what "ship later" --check "true" \
+  --deadline 2099-01-01T00:00:00Z --value-usd 1
+assert_exit_grep 1 "EXPOSURE_MAX_SINGLE" "obligations (P7): single-value cap refuses" \
+  env EXPOSURE_MAX_OPEN=1 python3 bin/obligations.py register --what x --check true \
+  --deadline 2099-01-01T00:00:00Z --value-usd 5
+assert_exit_grep 1 "fraction of what real customers" "obligations (P7): cumulative cap is a fraction of VERIFIED revenue (0 here)" \
+  env EXPOSURE_MAX_OPEN=1 EXPOSURE_MAX_SINGLE_USD=10 EXPOSURE_MAX_TOTAL_FRACTION=0.5 \
+  python3 bin/obligations.py register --what x --check true \
+  --deadline 2099-01-01T00:00:00Z --value-usd 5
+python3 - <<'PYEOF'
+import json, pathlib
+pathlib.Path("run").mkdir(exist_ok=True)
+reg = {"obligations": [{"id": "obl-001", "registered_at": "2026-07-20T00:00:00Z",
+                        "what": "sim: promised and never delivered", "check": "true",
+                        "deadline": "2000-01-01T00:00:00Z", "value_usd": 5.0,
+                        "charge_id": None, "status": "open", "resolution": None}]}
+pathlib.Path("run/obligations.json").write_text(json.dumps(reg, indent=2) + "\n")
+PYEOF
+git add run/obligations.json && git commit -qm "agent: overdue obligation (sim)" && git push -q origin "$BRANCH"
+cdx "$W/verifier"
+git checkout -q ledger 2>/dev/null || git checkout -q -B ledger origin/ledger
+git fetch -q origin ledger && git reset -q --hard origin/ledger
+OBL_PRE=$(git rev-parse HEAD)
+AGENT_BRANCH="$BRANCH" python3 bin/obligation_watch.py >/dev/null 2>&1
+git add ledger/obligations.json && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: obligations" \
+  && git push -q origin ledger
+cdx "$W/agent"
+assert_exit_grep 1 "OBLIGATION BREACHED" "guard (P5): a watchdog-published breach halts everything" \
+  env EDGE_TERMINAL=0 python3 bin/guard.py
+cdx "$W/verifier"
+git reset -q --hard "$OBL_PRE" && git push -qf origin ledger
+cdx "$W/agent"
+git rm -q run/obligations.json && git commit -qm "agent: clear sim obligation" && git push -q origin "$BRANCH"
+assert_exit 0 "guard (P5): breach cleared, run continues" env EDGE_TERMINAL=0 python3 bin/guard.py
+assert_exit 0 "probes (P6): registry lists claim-type -> probe -> gate" python3 bin/probes.py list
+assert_exit_grep 2 "unknown claim type" "probes (P6): unregistered claim type refused" \
+  python3 bin/probes.py run seo-magic https://x.invalid/
+assert_exit 1 "probes (P6): dispatch runs the real probe (SSRF-refused target FAILs through)" \
+  python3 bin/probes.py run published https://sim-delivery.invalid/x
+assert_exit_grep 2 "GMAIL_ADDRESS" "probes (P6): mail-roundtrip demands sourced creds (the two-env trap)" \
+  env -u GMAIL_ADDRESS -u GMAIL_APP_PASSWORD python3 bin/probes.py run mail-roundtrip
+rm -f dg_body.txt dg_acq.txt dg_acq2.txt DECISION_LOG.md
+
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'

@@ -298,6 +298,22 @@ def main() -> int:
                   f"fills={e.get('filled_orders_since_freeze')}"
                   + (f", {e.get('pending_reason')}" if e.get("pending_reason") else "") + ")")
 
+    # --- P5 (S11): a BREACHED obligation is a dispute-in-waiting on a real name -- nothing else
+    # matters until it is addressed. Grounded read of the watchdog's verdict; no obligations.json
+    # anywhere = rule 3 holding = silence.
+    try:
+        ob, ob_src = _truth.load("obligations.json")
+    except RuntimeError:
+        ob, ob_src = None, None
+    except Exception as e:
+        return fail(f"cannot read the obligation facts ({type(e).__name__}: {e}) -- fail-closed.")
+    if ob is not None and ob_src in _truth.GROUNDED_SOURCES and ob.get("breached"):
+        b0 = ob["breached"][0]
+        return fail(f"OBLIGATION BREACHED: {b0.get('id')} ({b0.get('breach')}; "
+                    f"refund: {b0.get('refund_status')}). A paid-for thing not delivered by its "
+                    "deadline is the harm rule 3 exists to prevent -- resolve it before anything "
+                    "else.")
+
     # --- V3 DEMAND-REFUTED checkpoint (S10; armed by DEMAND_REFUTED_K>0, default off -- the
     # closed terminal set {verified dollar, cap, operator} is UNCHANGED until the operator flips
     # this in the decisions memo). Like MAX_ITERS it is a CHECKPOINT: >= K distinct lanes whose

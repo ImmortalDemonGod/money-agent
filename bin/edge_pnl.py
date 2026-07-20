@@ -64,7 +64,12 @@ EDGE_MANIFEST = RAW / "EDGE_MANIFEST.sha256"
 
 # same private state dir as pnl.py -- outside the repo, unreachable from the sandbox
 STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-agent-verifier")))
-FROZEN = STATE_DIR / "edge_registration.json"
+# P2 (S11): the freeze/VOID machinery this file pioneered now lives generically in bin/prereg.py;
+# this rail is its first client. Same state file name and record shape as before the lift --
+# the sim verdict-walk is the behavior-identical proof.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import prereg
+FROZEN = STATE_DIR / "edge_registration.json"  # kept for reference; prereg owns the file now
 
 ALPACA_BASE = os.environ.get("ALPACA_PAPER_BASE", "https://paper-api.alpaca.markets")
 
@@ -201,18 +206,12 @@ def main() -> int:
             out["errors"].append(f"alpaca_account_pull_failed_at_freeze: {type(e).__name__}: {e}")
             _publish(out)
             return 2
-        STATE_DIR.mkdir(parents=True, exist_ok=True)
-        FROZEN.write_text(json.dumps({
-            "sha256": hashlib.sha256(reg_text.encode()).hexdigest(),
-            "frozen_at": _now(),
-            "fields": fields,
-            "baseline_equity_usd": float(acct["equity"]),
-            "_note": "AUTHORITATIVE. Outside the repo, unreachable by the sandbox agent.",
-        }, indent=2))
+        prereg.freeze("edge_registration", reg_text,
+                      {"fields": fields, "baseline_equity_usd": float(acct["equity"])})
         print(f"edge: registration FROZEN (bar={fields['BAR']} {fields['METRIC']}, "
               f"baseline equity ${float(acct['equity']):.2f})", file=sys.stderr)
 
-    frozen = json.loads(FROZEN.read_text())
+    frozen = prereg.frozen("edge_registration")
     fields = frozen["fields"]
     out["registration"] = {**fields, "frozen_at": frozen["frozen_at"],
                            "sha256": frozen["sha256"]}
@@ -224,8 +223,7 @@ def main() -> int:
         out["errors"].append("EDGE_REGISTRATION.md was frozen but is no longer committed on the "
                              "agent's branch -- deleting a registration does not un-place the bet.")
     else:
-        out["registration_intact"] = (
-            hashlib.sha256(reg_text.encode()).hexdigest() == frozen["sha256"])
+        out["registration_intact"] = prereg.intact("edge_registration", reg_text)
     if out["registration_intact"] is False:
         out["verdict"] = "VOID"
         out["verified"] = True  # the VOID itself is a verified fact
