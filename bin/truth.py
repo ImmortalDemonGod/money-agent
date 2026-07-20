@@ -156,7 +156,11 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
         _git("fetch", "-q", "origin", LEDGER_BRANCH, timeout=60)
     except Exception:
         pass
-    show = _git("show", f"origin/{LEDGER_BRANCH}:ledger/{name}")
+    # S16: BYTES, not text -- signature verification must see the exact committed bytes. A
+    # text-mode read locale-decodes and newline-translates (CRLF->LF), so a correctly signed
+    # file with CRLF or non-UTF8 content would FAIL verification on good data, and the chain
+    # check would compare raw parent bytes against a re-encoded child. json.loads takes bytes.
+    show = _git_bytes("show", f"origin/{LEDGER_BRANCH}:ledger/{name}")
     if show.returncode == 0 and show.stdout.strip():
         try:
             d = json.loads(show.stdout)
@@ -171,20 +175,20 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
                 f"ledger read from origin/{LEDGER_BRANCH} declares ledger_branch={declared!r} -- "
                 "lane mismatch; refusing to treat as grounded.")
         _enforce_shadow_wall(d, name, f"origin/{LEDGER_BRANCH}:ledger/{name}")
-        _enforce_signature(show.stdout.encode(), name, f"origin/{LEDGER_BRANCH}", d)
+        _enforce_signature(show.stdout, name, f"origin/{LEDGER_BRANCH}", d)
         return d, "ledger-branch"
     # 2. weak mode: read the COMMITTED copy via git show, never the raw working-tree file. An
     #    uncommitted working-tree truth.json is agent-forgeable and would bypass the whole SoD
     #    tripwire family (guard's author check + sod_hook both only see COMMITS). A committed
     #    forge trips those; an uncommitted one must not be trusted for adjudication.
-    show_local = _git("show", f"HEAD:ledger/{name}")
+    show_local = _git_bytes("show", f"HEAD:ledger/{name}")
     if show_local.returncode == 0 and show_local.stdout.strip():
         try:
             dl = json.loads(show_local.stdout)
         except json.JSONDecodeError as e:
             raise RuntimeError(f"committed ledger/{name} is not valid JSON: {e}")
         _enforce_shadow_wall(dl, name, f"HEAD:ledger/{name}")
-        _enforce_signature(show_local.stdout.encode(), name, "HEAD", dl)
+        _enforce_signature(show_local.stdout, name, "HEAD", dl)
         return dl, "working-tree-committed"
     # 3. last resort: the raw uncommitted file, labeled UNTRUSTED. GROUNDED_SOURCES excludes it, so
     #    money-adjudicating consumers (guard first-dollar, aiv_gate) refuse it by construction.
