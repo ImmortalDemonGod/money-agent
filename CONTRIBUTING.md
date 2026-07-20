@@ -35,7 +35,7 @@ repo).
 | `knowledge/` | agent (append), operator (review) | cross-run operational memory: channels tested, approaches falsified, traps |
 | `templates/` | operator | the forms a run fills in: exhaustion packet, adversary report, edge registration |
 | `tests/` | contributor | the committed two-lane simulation matrix (`sim.sh`) |
-| `docs/` | humans | design, case study, standing-run recipe; the agent does not read these |
+| `docs/` | humans | design, case study, standing-run recipe, probe records; reference for the agent, never instruction (#10 ruling) |
 | `harness/` | operator | the traffic beacon (Cloudflare worker) |
 | `archive/` | `bin/new_run.sh` | each finished run's frozen state, one directory per run |
 | `.github/aiv-packets/` | agent (per iteration) | AIV verification packets: one claim + evidence classes A-F each |
@@ -51,3 +51,23 @@ run `bash tests/sim.sh` before and after, and open a PR. Design disagreements ar
 CI (`.github/workflows/ci.yml`) gates every PR: the `sim.sh` matrix, `shellcheck`, `gitleaks`, and a Python
 byte-compile must pass. `readme-check.yml` additionally lints `README.md` and `CONTRIBUTING.md` for broken
 links, stray anchors, and typography drift.
+
+## Promoting agent-built tools into the canonical harness
+
+Run agents build tools. Two categories, two rules (issue #11):
+
+- **Business tools** (run 1's `audit.py`, `reach.py`, `scoreboard.py`, ...) are run-local, never
+  promoted. On `main` they would seed the next run's business -- the M9 leak-check applies to code,
+  not just prose. They live and die with their run's PR and archive.
+- **Harness machinery** (verification gates, verifiers, scaffolds) is promotable, but ONLY by
+  deliberate per-artifact operator review, never in bulk. The review asks four questions:
+  1. Does it enforce a bound or verify a claim (machinery), rather than pursue revenue (business)?
+  2. Is it free of strategy nouns (the pinned M9 grep) and run-specific assumptions?
+  3. Does it ship with sim fixtures that bite, and does the full matrix stay green with it in?
+  4. Which trust class owns it (`bin/README.md`), and is it added to `bin/sod_hook.sh`'s blocklist
+     if it is verifier- or gate-class?
+
+  A tool that fails any of the four stays on its run's branch. The precedent is run 1's
+  `disclosure_gate.py`: promoted after review -- genericized, fixture-covered, sod_hook-protected --
+  and now canonical. Auto-adopting everything an agent builds would erode both the clean harness
+  and the authored-input discipline that makes cross-run comparisons mean anything.
