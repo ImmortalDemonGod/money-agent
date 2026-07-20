@@ -1570,3 +1570,73 @@ SHADOW unset the truth.json key is absent by construction and the whole pre-exis
 
 **Next:** S13 read-only marketplace probes, then S14 governance docs + memo, S15 runbook,
 S16 adversarial+mutation+stacking.
+
+## Entry 033 — 2026-07-20 — S13 issue #32 read-only marketplace probes (the sandbox-safe slices)
+
+**What (planned; the probe honesty rules enumerated BEFORE any fetch, per protocol):**
+- Scope per the recorded operator decision: execute the READ-ONLY slices of #32's six-step
+  protocol now — step 1 (primary docs, not landing copy), step 2 (ToS/AUP automation clauses
+  VERBATIM), step 3 (onchain explorer reads where reachable), step 5 (unit economics from
+  PUBLISHED numbers vs gas), step 6 (cold-start mechanics as DOCUMENTED). Step 4 (the
+  signup/onboarding probe from the real environment) is NOT executed — it goes to the S15
+  runbook; every record carries it as `not_run`, never silently missing.
+- One ProbeRecord-style artifact per platform under `docs/probes/` (NOT knowledge/ — platform
+  fit is strategy-adjacent and the run agent's context discipline excludes docs/). Schema
+  adapted from the third-party suggestion on #32 (mheilimo comment, provenance noted in the
+  README; the schema idea is taken, the product plug is not).
+- **Honesty rules that bind every field:** (1) `not_observed`/`inaccessible`/`not_run` never
+  render as `absent` and cannot flip a fit label; (2) a provider statement stays a CLAIM at
+  its evidence tier — a docs page is Tier 3/4, an onchain read Tier 1-2, and the tier is
+  recorded per finding; (3) verbatim quotes are copy-paste with URL + retrieval timestamp,
+  never paraphrase-as-quote; (4) unit economics recomputable (task value, fee, rail cost,
+  asset, price source, capture time) — no silent estimates; (5) payer/worker identities stay
+  `unknown` until evidence classifies them — seeded/wash volume is NOT inferred from
+  concentration alone; (6) nothing from model memory: these platforms are mostly post-cutoff,
+  so every claim carries a fetched source or is marked unfetched; (7) proxy-blocked reads are
+  `inaccessible: <error>` — a blocked read is a fact about THIS sandbox, not about the
+  platform; (8) label flips (vs #32's prior labels) require a named falsifier + the artifact
+  that flipped it, recorded in the record itself.
+- Execution: parallel research subagents (fan-out per platform group), each instructed with
+  the same honesty rules; load-bearing quotes spot-checked by a second fetch before the
+  record is written. Fit-table rebuild posts to #30/#32 at PR time (S16), derived from these
+  records.
+
+**Verified by running:** 11 records under docs/probes/ (one per #32 bullet), written from
+four parallel research subagents' fetch logs (2026-07-20T08:43-08:58Z window, ~260 URL
+fetches total) and validated with a schema check: every record parses, carries all six
+protocol steps, and has `onboarding: not_run` (the runbooked step 4) -- `OK` x11, verdicts
+7 flipped / 3 confirmed / 1 undetermined. FIVE independent session-lead spot-checks, all
+exact matches against the subagent evidence: taskmarket.dev landing stats (813.860379 USDC
+/ 192 open -- also identical to the issue's day-earlier read: the dashboard did not move);
+execution.market published-tasks JSON ({"total":0} twice, ~35 min apart); dealwork
+openapi.json onboard schema (required=["agentName"] alone); market.near.ai fee-schedule
+JSON (field-for-field); bountybook oracle/stats (4,668 verifications / 0.69% pass /
+~21.6-day avg / 0 disputes, number-for-number). Headline label flips, each with its named
+falsifier + artifact IN the record: dealwork (agentName-only API key, no KYC anywhere, fee
+10%/3% not 15%); BountyBook ("onchain escrow" is a plain EOA holding 0.965 USDC vs $636
+displayed open bounties; "instant payout" vs 21.6-day displayed average); ClawTasks
+(wind-down mode, dead escrow, hidden Moltbook social-verification gate) vs Claw Earn (a
+SEPARATE operation whose "no allowlist" claim holds at docs tier with verified contracts);
+Near AI (registration is one unauthenticated POST -- less gated than even the issue's
+falsifier hypothesized); Circle (the Google Form gates only the LISTING; the x402 sell
+path needs an EVM address; the form itself 401s without a Google login -- a sharper gate
+found); opentask (rail is crypto non-custodial, not Stripe -- and self-reported DOWN at
+capture with 0 paid contracts ever, 826 offers -> 2 tasks -> 0 contracts in 30 days).
+
+**Critique pass:** all four reports carried real fetch-failure signatures (404s, DNS
+ENOTFOUND, HTTP 401/500s, JS-shell findings, a basescan maintenance banner) and
+distinguished [raw] curl quotes from extraction-mediated ones -- but most quotes ARE
+extraction-mediated (WebFetch's model layer), stated per-record; only curl-marked quotes
+are byte-exact. Five spot-checks cover the five most load-bearing claims, not all claims.
+The records deliberately make NO wash/seeding inferences (gate 5) even where displayed
+ratios invite them (TaskMarket 15.7K agents vs $813 lifetime; BountyBook treasury). Fit
+labels remain docs-tier: gate 6 means NO cold-start conclusion is possible until step 4
+runs -- every record's next_falsifier names its cheapest decisive probe. The fit-table
+rebuild posts to #30/#32 at PR time (S16), derived from these records. One bounds-relevant
+find recorded for the run agent's future: ClawTasks' own bounty-template library solicits
+spam-by-proxy, paywall circumvention, and undisclosed promotion -- REFUSALS.md material if
+ever encountered in-run (noted in the record, deliberately NOT copied into knowledge/,
+which stays operational-only).
+
+**Next:** S14 governance docs + decisions memo, then S15 runbook (which owns every
+next_falsifier above), S16 adversarial+mutation+stacking.

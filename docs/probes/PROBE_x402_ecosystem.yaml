@@ -1,0 +1,118 @@
+schema_version: 1
+platform_id: x402-endpoints
+captured_at: "2026-07-20T08:43-08:49Z"
+repository_commit: f764094
+prior_label: "strong-fit (different motion: deploy a pay-per-call API; suspected empty demand side)"
+verdict: undetermined
+verdict_basis: |-
+  The load-bearing question -- would anyone's agent actually PAY a newly deployed endpoint --
+  is not answerable from the read-only slice: the ecosystem explorers are client-rendered
+  shells, the volume numbers exist only as homepage aggregates (Tier 4), and the one
+  marketplace surface found (xgate.fi) is "Coming Soon". Supply-side permissionlessness IS
+  confirmed at docs tier (Bazaar auto-lists on first settled payment, no signup). Neither
+  confirms nor flips the fit label; demand remains the untested dimension.
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      x402 is a protocol/standard (HTTP 402 + onchain settlement), not itself a marketplace.
+      Whitepaper (Coinbase Developer Platform, dated May 6 2025, fetched and text-extracted):
+      "x402 is an open payment standard that enables AI agents and web services to
+      autonomously pay for API access, data, and digital services." Governance discrepancy AS
+      DISPLAYED: x402.org footer says "x402 a Series of LF Projects, LLC" linking
+      github.com/x402-foundation/x402, while x402.eco links github.com/coinbase/x402 --
+      recorded, not reconciled. Discovery layer: Coinbase Bazaar catalogs services
+      automatically ("There is no separate registration step. The CDP Facilitator catalogs
+      your service the first time it settles a payment for that endpoint"); discovery reads
+      are keyless GET routes; 30-day-inactive resources are excluded.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://docs.x402.org ; https://x402.org/x402-whitepaper.pdf ; https://docs.cdp.coinbase.com/x402/bazaar"
+      retrieved_at: "2026-07-20T08:45-08:48Z"
+    quotes:
+      - '"...allows clients to programmatically pay for resources without accounts, sessions, or credential management." (docs.x402.org)'
+  - step: terms
+    status: observed
+    finding: |-
+      x402.eco/terms exists and contains NO automation/agent clauses: "The Terms contain no
+      restrictions, prohibitions, or permissions regarding automation, bots, AI agents,
+      scraping, or autonomous agent operation." It self-describes as informational only.
+      x402.org: no ToS link observed. x402scan: undeterminable (JS shell).
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://x402.eco/terms"
+      retrieved_at: "2026-07-20T08:45Z"
+    quotes:
+      - '"x402.eco is an informational website that provides resources, documentation, and ecosystem information about the x402 protocol."'
+  - step: onchain
+    status: not_observed
+    finding: |-
+      No contract addresses named in the fetched protocol docs (chain-agnostic; settlement
+      via facilitators) -- nothing to look up. DEMAND STATS exist only as homepage aggregates
+      AS DISPLAYED (Tier 4, unverifiable in this read): x402.org "Last 30 Days: 75.41M
+      Transactions, $24.24M Volume, 94.06K Buyers, 22K Sellers". The independent explorers
+      that could verify these were unreachable by this method: x402scan.com served a
+      client-rendered shell with no stats in the HTML; x402.watch not fetched.
+    evidence:
+      tier: 4
+      source_class: landing
+      locator: "https://x402.org (stats) ; https://www.x402scan.com/ (JS shell)"
+      retrieved_at: "2026-07-20T08:43-08:47Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      Protocol layer: "Zero protocol fees -- just pay nominal payment network fees";
+      stablecoins primary, EVM + Solana. Per-endpoint pricing directory not obtained (shells;
+      Bazaar catalog API not queried). One gateway's displayed economics (xgate.fi, landing
+      Tier 4): "$0.01+ per call", marketplace "Coming Soon" with "70% revenue share",
+      example "earn $21 from 1,000 monthly calls" at $0.03/call, USDC on Base. NOTE:
+      Daydreams' own footer links xgate.run, which does NOT resolve (DNS ENOTFOUND);
+      xgate.fi's relationship to it is unestablished.
+    evidence:
+      tier: 4
+      source_class: landing
+      locator: "https://x402.org ; https://www.xgate.fi/ ; xgate.run (DNS dead)"
+      retrieved_at: "2026-07-20T08:43-08:47Z"
+    quotes: []
+  - step: cold_start
+    status: observed
+    finding: |-
+      Selling requires no listing approval (Bazaar auto-catalog on first settled payment);
+      buyers need no accounts. No reputation layer observed at the protocol level. The
+      cold-start problem here is DISCOVERY/DEMAND, not gating: a new endpoint is listable by
+      construction but there is no evidence in this read that any external agent would find
+      and pay it.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://docs.cdp.coinbase.com/x402/bazaar"
+      retrieved_at: "2026-07-20T08:47Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "Deploying a live paid endpoint + querying the Bazaar catalog for it: runbooked (needs a host + wallet; read-only slice excluded it)."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "stablecoins (USDC primary); EVM chains + Solana"
+  task_value: "per-call $0.01-$0.03 in the one displayed example (xgate.fi, Tier 4)"
+  platform_fee: "protocol 0%; gateways/marketplaces set their own (xgate.fi: 30% to platform)"
+  gas_or_rail_cost: "facilitator-dependent; 'nominal payment network fees' per x402.org"
+  net_value: null
+  price_source_and_time: "x402.org + xgate.fi landing pages, 2026-07-20T08:43-08:47Z"
+identities:
+  requester: unknown
+  worker: "n/a"
+limitation: |-
+  The 30-day volume aggregates could not be cross-verified (explorer shells; Bazaar catalog
+  endpoint GET /v2/x402/discovery/resources exists, keyless, but was not queried in this
+  pass). Whitepaper text self-extracted from PDF streams with spacing loss. This record
+  cannot say whether demand for a NEW endpoint exists -- only that the read-only slice could
+  not observe it.
+next_falsifier: |-
+  Query the keyless Bazaar catalog (GET .../discovery/resources) and count listed resources
+  + their staleness; then (runbooked) deploy a minimal paid endpoint and measure whether ANY
+  external call arrives within N days -- the direct demand test.

@@ -1,0 +1,152 @@
+schema_version: 1
+platform_id: clawtasks-clawearn-useclaw
+captured_at: "2026-07-20T08:44-08:58Z"
+repository_commit: f764094
+prior_label: "strong-fit ('any funded wallet, no allowlist, keys stay local'; suspected vaporware ecosystem + near-zero liquidity)"
+verdict: flipped
+verdict_basis: |-
+  LABEL CHANGE (gate 7) -- and a STRUCTURAL correction first: the issue's premise treats
+  clawtasks.com / useclaw.pro / aiagentstore.ai as one platform; as displayed they are
+  THREE SEPARATE OPERATIONS (clawtasks.com "Operated by AI Magic, LLC"; Claw Earn at
+  aiagentstore.ai, operator "MB Skydis"; useclaw.pro a security hub whose raw HTML
+  contains zero occurrences of either product, and whose 63-project ecosystem map lists
+  NEITHER). Per-operation:
+  - ClawTasks: FLIPPED to non-viable-at-capture. Sitewide wind-down banner + machine
+    config free_tasks_only:true ("paid bounty wind-down"); the escrow contract
+    (unverified source) holds ZERO USDC with no onchain activity since 2026-02-03; every
+    public read API returned persistent HTTP 500; and a hidden gate exists -- posting or
+    claiming requires PUBLIC social verification on Moltbook ("You must verify before you
+    can post bounties or claim work."). The "no allowlist" phrase is not in ClawTasks
+    docs at all (not_observed) -- it belongs to Claw Earn.
+  - Claw Earn: the label's three claims hold at docs+explorer tier ("no platform
+    allowlist" documented in the API reference, not just landing; keys local; contracts
+    VERIFIED on Basescan with the platform claiming "No admin pause and no emergency
+    withdrawal path") -- but liquidity at capture: 0 available tasks (0/1/82
+    available/occupied/completed), contract balances 93.40 + 5.74 + 3.80 + 8.50 USDC,
+    most recent onchain activity 2026-07-13 (7 days before capture -- the freshest real
+    activity in this probe set outside TaskMarket). No audit referenced (not_observed).
+  - useclaw.pro "63+ projects": the page lists exactly 63 entries, ALL hyperlinked (0
+    name-only) -- the vaporware falsifier is NOT supported by the page itself; link
+    liveness untested.
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      ClawTasks (curl-exact): registration open (POST /api/agents {name, wallet_address})
+      BUT verification gate mandatory (Moltbook public post of a code + /api/agents/verify);
+      keys generated locally (install.sh: ethers.Wallet.createRandom(), chmod 600, only
+      the address sent); modes instant/proposal/race/contest; stake 10% within 2h;
+      auto-approve at 48h; max 10 active as poster / 5 as worker. Growth-loop machinery
+      recorded as displayed: "You MUST post to Moltbook after key actions. This is not
+      optional. ... Agents who don't post are invisible."; referral pays 50% of platform
+      fee on a recruit's first 10 bounties; official bounty TEMPLATES include "Send
+      outreach emails from your domain" ("my domain has no reputation. Send these
+      [NUMBER] personalized emails from YOUR email"), "Get me this paywalled content",
+      "Post about my product from your accounts" -- i.e., the platform's own template
+      library solicits spam-by-proxy, paywall circumvention, and undisclosed promotion
+      (bounds-relevant: each is REFUSALS.md material if ever encountered in-run).
+      Claw Earn (curl-exact, api docs "Last updated: 2026-04-01"): "Any funded wallet can
+      participate (human or agent). No platform allowlist is required in production.";
+      four execution patterns (H-A primary, A-A, A-H, H-H); live /claw/tasks JSON:
+      counts available 0 / occupied 1 / completed 82.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "clawtasks.com/skill.md + /docs + /api/config + install.sh + heartbeat.md (curl) ; aiagentstore.ai/docs/claw-earn-agent-api.md + /claw/tasks (curl)"
+      retrieved_at: "2026-07-20T08:44-08:54Z"
+    quotes:
+      - '"You must verify before you can post bounties or claim work." (clawtasks skill.md)'
+      - '"free_tasks_only":true,"free_mode_reason":"We are simplifying to free tasks while we harden reliability, review flow, and worker quality." (clawtasks /api/config, live JSON)'
+      - '"Any funded wallet can participate (human or agent). No platform allowlist is required in production." (claw-earn-agent-api.md)'
+      - '"No admin pause and no emergency withdrawal path exist in the Claw escrow contracts." (claw-earn-agent-api.md -- platform claim; Solidity not reviewed)'
+  - step: terms
+    status: observed
+    finding: |-
+      ClawTasks ToS (Feb 2026, AI Magic LLC): experimental beta, agent operation is the
+      designed use, operator responsible, no prohibited-uses section at all
+      (not_observed). Claw Earn ToS (2026-06-27, MB Skydis) + AUP: explicit automated-
+      agents clause (4.9, use at own risk); contract addresses published IN the ToS
+      (4.8); AUP prohibits fraud/impersonation, IP infringement and "requests to bypass
+      paywalls or terms of other services", money laundering.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "clawtasks.com/terms ; aiagentstore.ai/terms-of-service ; aiagentstore.ai/claw-earn/policy (all curl-exact)"
+      retrieved_at: "2026-07-20T08:45-08:57Z"
+    quotes:
+      - '"4.9 Automated Agents: Users may utilize automated AI agents ... Users deploying Agents are solely responsible for their operation, funding, and behavior." (Claw Earn ToS)'
+      - '"IP infringement, piracy, or requests to bypass paywalls or terms of other services." (Claw Earn AUP prohibited list -- note ClawTasks'' own template library solicits exactly this class)'
+  - step: onchain
+    status: observed
+    finding: |-
+      ClawTasks escrow 0xa2ED6FCDfbdD498282FD7F6b33e59FD606c12452 (published only via
+      /api/config): is_contract true, source NOT verified, 379 txs, ZERO USDC (only meme
+      dust), newest tx 2026-02-03 (a claimBounty ok + one errored tx) -- dead for ~5.5
+      months at capture. Claw Earn contracts (published in ToS 4.8 + live API), all
+      VERIFIED on Blockscout: ClawEscrow 0xa2808f8b... 93.40 USDC (txs Jun 4-9);
+      ClawEscrowAgentFast 0xd59439e3... 5.744 USDC (txs 2026-07-13: ratePosterAndClaimStake,
+      submitWork); two older unlisted contracts 0x336541... 3.80 USDC (newest 2026-03-09)
+      and 0x1845e2... 8.50 USDC (newest 2026-03-13) -- deprecation undocumented. Spam
+      airdrop tokens present in balances, recorded as displayed.
+    evidence:
+      tier: 1
+      source_class: explorer
+      locator: "base.blockscout.com/api/v2/addresses/{0xa2ED6FCD...,0xa2808f8b...,0xd59439e3...,0x33654112...,0x1845e2dc...} raw JSON (+token-balances,+transactions)"
+      retrieved_at: "2026-07-20T08:51-08:56Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      ClawTasks (moot while free_tasks_only): min bounty 1 USDC, stake 10%, fee 5%
+      (worker 95% + stake back), direct payments 1%, gas "~0.001 ETH is plenty".
+      Claw Earn: fee 10% (90% to winner); minimums 9 USDC human-flow / 3 USDC A2A
+      (fee floor 0.5 USDC); cancellation 1 / 0.5 USDC; stake ramp 30% first task, 20%
+      tasks 2-3, 10% after; auto-approve 48h. Total observable Claw Earn economy:
+      completed-task count 82 lifetime; escrow balances ~111 USDC across four contracts.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "clawtasks.com/docs + /api/config ; aiagentstore.ai/claw-earn landing + api.md ; balances: explorer raw"
+      retrieved_at: "2026-07-20T08:44-08:56Z"
+    quotes: []
+  - step: cold_start
+    status: observed
+    finding: |-
+      ClawTasks: discovery IS the social loop -- "Posters browse Moltbook looking for
+      workers. If you're not there, they hire someone else." (mandatory public posting =
+      an identity/disclosure surface the run's bounds care about). Claw Earn documented
+      fairness mechanics (curl-exact): new-worker stake ramp; auto-start capped at 100
+      USDC until >=3 ratings; an early 1-star blocks auto-start (recovery at >=6 ratings
+      avg >=4.0); low-trust buyer reject refunds 70% time-locked. Zero-history entry is
+      permissionless; zero AVAILABLE tasks existed to enter at capture.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "clawtasks.com/skill.md ; aiagentstore.ai/docs/claw-earn-agent-api.md ('Marketplace fairness mechanics')"
+      retrieved_at: "2026-07-20T08:49-08:54Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "ClawTasks requires a PUBLIC Moltbook post to verify -- an outward-facing identity action under a real name; if ever attempted it goes through the disclosure-EV gate + bin/human.py, runbooked with that flag. Claw Earn: wallet-only entry, runbooked."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USDC on Base (both operations)"
+  task_value: "ClawTasks: free-only at capture. Claw Earn: min 3 (A2A) / 9 (human) USDC; 0 available at capture"
+  platform_fee: "ClawTasks 5% (paused); Claw Earn 10% + stake mechanics"
+  gas_or_rail_cost: "Base gas ~0.001 ETH bootstrap (ClawTasks docs)"
+  net_value: null
+  price_source_and_time: "docs + live /claw/tasks + /api/config, 2026-07-20T08:44-08:56Z"
+identities:
+  requester: unknown
+  worker: "n/a (read-only)"
+limitation: |-
+  ClawTasks live liquidity unobservable (JS shells + all read APIs 500ing) -- whether
+  free-mode has ANY tasks is undetermined; Claw Earn Solidity not reviewed ("no admin
+  pause" is the platform's claim + explorer verification of existence); useclaw.pro link
+  liveness untested; Moltbook-verification enforcement untested; historical Claw Earn
+  volume totals not displayed anywhere found.
+next_falsifier: |-
+  Claw Earn only (ClawTasks is wound down; revisit if it relaunches): register a wallet,
+  poll /claw/tasks across days -- does available ever exceed 0, and at what task sizes?
+  The 2026-07-13 onchain activity says SOMEONE completes tasks; find where they come from.
