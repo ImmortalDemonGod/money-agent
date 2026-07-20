@@ -1331,3 +1331,45 @@ outright — the behavior change IS the amendment, which is why the issue demand
 
 **Next:** S9 — V3 bet-spec + bet_gate.py (typed conditions, action authorization,
 BET_GATE_ENFORCE default off).
+
+---
+
+## Entry 029 — 2026-07-20 — S9 V3 typed bet-spec + action authorization (bet-ledger layer, config-gated)
+
+**What:** `bin/bet_gate.py` + typed extensions to `bets.py` — the UNCONTESTED half of
+V2_HARNESS_DESIGN's bet-ledger: typed bets (type/lane/typed success+kill conditions/action
+reservations/bounds_note; `reproduction_protocol` required for `channel-blocked`; **judgment is
+never a legal success oracle** — a bet only the agent can grade does not register) extend the
+registry backward-compatibly and are schema-validated FAIL-CLOSED before anything saves. Action
+authorization: with `BET_GATE_ENFORCE=1`, an external-effect action (send/publish/deploy/spend)
+requires an OPEN typed bet with an unconsumed reservation, decremented+committed in the same call.
+`mail.py` wires the check FIRST in `send()` — inert by default, fail-closed when armed. E3
+discipline stated at the stamp sites: lifecycle timestamps are local UTC at commit time, never
+counterparty-controlled content (an email Date header being the canonical counterexample).
+Ordering/spine rules deliberately NOT here — they are S10's config-gate.
+
+**Edge cases enumerated before coding:** validation must precede `_save` (a rejected typed bet
+must not exist); untyped bets stay fully legal (the registry's original not-forgetting job, and
+every existing sim/corpus fixture); reservations are per-action integers and consumption is
+single-invocation decrement+commit (single-agent CLI semantics — "atomic" stated honestly, not
+oversold); the mail wiring must precede creds/em-dash/disclosure so an armed refusal needs no
+credentials to test; flag-off must be byte-inert (acceptance criterion 6).
+
+**Verified by running (artifacts):** sim → **PASS=66 FAIL=0 SKIP=0** (was 57): flag-off grants;
+armed-no-bet refuses; judgment success oracle rejected; repro-less block-claim rejected; valid
+typed bet registers; two reservations consume then the third refuses; armed `mail.send` refuses
+pre-creds with the bet-gate message. Corpus **11/0**; shellcheck+compileall clean. **Bite:**
+definitional (bet_gate.py absent at HEAD~1) plus mechanical — the same armed send at HEAD~1 is
+refused by the DISCLOSURE gate, not the bet gate ("REFUSING: disclosure gate..." vs "REFUSING
+(bet gate)"), proving the new barrier is real and first.
+
+**Critique pass:**
+- Only mail.py consumes authorization today; "publish/deploy/spend" surfaces are declared in the
+  schema but have no wired chokepoint (publishing is ad hoc tooling) — the S10 spine +
+  S11 P6 probe registry are where publish paths get their chokepoints; until then an armed run
+  constrains sends only. Stated plainly for the memo.
+- `authorize` grants from the FIRST matching bet; no lane-matching of action→bet yet (that is
+  spine ordering, S10).
+
+**Next:** S10 — the spine (spine.yml + bin/spine.py, SPINE_ENFORCE off, DEMAND_REFUTED_K off,
+E1/E2 amendments, §13 answers recorded).

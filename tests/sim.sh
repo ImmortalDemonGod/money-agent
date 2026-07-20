@@ -279,6 +279,35 @@ else bad "human: decline sync"; fi
 assert_grep "human_minutes_total: 3.25" "human: fulfillment + decline minutes are metered" \
   python3 bin/human.py list
 
+echo "=== V3 bet_gate: typed bets + action authorization (S9, BET_GATE_ENFORCE) ==="
+assert_exit 0 "bet_gate: flag off always grants (advisory; run-2 semantics unchanged)" \
+  python3 bin/bet_gate.py authorize send
+assert_exit_grep 1 "no OPEN typed bet" "bet_gate: armed with no typed bet refuses" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send
+assert_exit_grep 1 "judgment" "bets: judgment is not a legal success oracle for typed bets" \
+  python3 bin/bets.py add --what t --clock reply --check true --poll-after-h 24 \
+  --resolve-by 2099-01-01T00:00:00Z --type probe --lane "x/y" \
+  --success '{"oracle_id":"judgment","metric":"replies","comparator":">=","threshold":1,"window_h":24}'
+assert_exit_grep 1 "reproduction_protocol" "bets: a block-claim without a repro is rejected" \
+  python3 bin/bets.py add --what t --clock other --check true --poll-after-h 24 \
+  --resolve-by 2099-01-01T00:00:00Z --type channel-blocked --lane "x/y" \
+  --success '{"oracle_id":"deterministic","metric":"signup","comparator":"==","threshold":0,"window_h":24}'
+if python3 bin/bets.py add --what "typed probe" --clock reply --check "true" --oracle instrumented \
+     --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type probe --lane "ja-makers/liw" \
+     --authorizes "send:2" \
+     --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":168}' \
+     >/dev/null 2>&1; then
+  ok "bets: valid typed bet with send reservations registered"
+else bad "bets: typed add"; fi
+assert_exit 0 "bet_gate: reservation 1 of 2 consumed" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --consume
+assert_exit 0 "bet_gate: reservation 2 of 2 consumed" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --consume
+assert_exit_grep 1 "no OPEN typed bet" "bet_gate: exhausted reservations refuse (consumption is real)" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --consume
+assert_exit_grep 1 "bet gate" "mail: an armed send refuses without a reservation (wired first, pre-creds)" \
+  env BET_GATE_ENFORCE=1 python3 -c "import sys; sys.path.insert(0,'bin'); import mail; mail.send('a@b.c','s','body')"
+
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'
