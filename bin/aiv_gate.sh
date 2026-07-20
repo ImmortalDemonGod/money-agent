@@ -187,6 +187,23 @@ if grep -qiE '(published|deployed|went live|now live|live at http)' "$PACKET"; t
   fi
 fi
 
+# --- 2c. PAID-OFFER claims must verify the pay->deliver seam (issue #39 / G4) and the provider-
+# level first-sale cap (issue #35). Trigger: the packet carries a Stripe checkout/payment-link
+# URL -- a packet naming a live payment surface is claiming a sellable offer, and CONSTITUTION
+# rule 3 makes that claim false unless the deliverable is already complete AT the success
+# redirect. Same trust posture as 2b: the gate re-RUNS delivery_check.py and believes only its
+# own fresh result; a self-typed verdict line is not evidence.
+PAY_URL=$(grep -oE 'https://(buy|checkout)\.stripe\.com/[^[:space:])`"]+' "$PACKET" | head -1)
+if [[ -n "$PAY_URL" ]]; then
+  DC_URL=$(grep -oiE 'DELIVERY_CHECK_URL:[[:space:]]*https?://[^[:space:]]+' "$PACKET" | head -1 \
+           | sed -E 's/.*(https?:\/\/[^ ]+)/\1/')
+  if [[ -z "$DC_URL" ]]; then
+    fail "packet carries a payment surface ($PAY_URL) but no 'DELIVERY_CHECK_URL: <url>' line -- a paid offer whose delivery seam is unverified is not sellable (rule 3)"
+  elif ! python3 "$REPO/bin/delivery_check.py" "$DC_URL" --payment-link "$PAY_URL" >/dev/null 2>&1; then
+    fail "paid-offer claim: bin/delivery_check.py FAILED for $DC_URL (broken delivery seam, placeholder content, or the payment link is not provider-capped at 1 completed session)"
+  fi
+fi
+
 # --- 3. CONSTITUTION integrity is now the VERIFIER's job, not the gate's.
 # The gate runs in the agent's environment; any check it does over agent-controlled git state can be
 # defeated by the agent (commit the edit, move HEAD, bypass with --no-verify). The trustworthy check

@@ -223,8 +223,9 @@ def main() -> int:
         sys.path.insert(0, str(REPO / "bin"))
         import bets as _bets
         for b in _bets.open_bets():
-            fails.append(f"open external bet {b['id']} ({b['clock']}): {b['what']!r} -- resolve "
-                         "it (bin/bets.py resolve) or wait out its clock; an unresolved bet is "
+            fails.append(f"open external bet {b['id']} ({b['clock']}, oracle: "
+                         f"{b.get('oracle', 'judgment')}): {b['what']!r} -- resolve it "
+                         "(bin/bets.py resolve) or wait out its clock; an unresolved bet is "
                          "not an exhausted approach.")
     except Exception as e:
         fails.append(f"cannot read the bet registry ({type(e).__name__}: {e}) -- fail-closed: "
