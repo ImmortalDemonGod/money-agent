@@ -43,6 +43,10 @@ while IFS= read -r f; do
     # own "verifier" signatures -- same class as editing truth.py itself.
     harness/verifier_key.pub|harness/allowed_signers) \
         block "the signature trust anchor is verifier-owned: $f" ;;
+    # S10: the spine's ordering/caps config -- when armed, editing it to unlock a stage is the
+    # same class as editing the constitution.
+    spine.yml|bin/spine.py) \
+        block "the spine config/evaluator is operator-owned: $f" ;;
     # the edge rail's one agent-owned INPUT is EDGE_REGISTRATION.md -- writable exactly once.
     # After the verifier freezes it, edits flip registration_intact=false (verdict VOID), so this
     # hook does not need to block it; the freeze does. Listed here so the boundary is legible.

@@ -241,6 +241,71 @@ assert_exit_grep 1 "no OPEN typed bet" "bet_gate: exhausted reservations refuse 
 assert_exit_grep 1 "bet gate" "mail: an armed send refuses without a reservation (wired first, pre-creds)" \
   env BET_GATE_ENFORCE=1 python3 -c "import sys; sys.path.insert(0,'bin'); import mail; mail.send('a@b.c','s','body')"
 
+echo "=== V3 spine: ordering, lattice, caps, E2, demand-refuted (S10, SPINE_ENFORCE) ==="
+assert_exit 0 "spine: flag off places anything (inert by default)" \
+  python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit_grep 1 "stage" "spine: armed refuses demand-confirmed in a stage-0 lane (relabel loses permissions)" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit 0 "spine: armed allows a probe anywhere (stage-0 work)" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add probe "fresh/lane"
+assert_exit_grep 1 "ordering" "bets: armed placement refuses the out-of-order type" \
+  env SPINE_ENFORCE=1 python3 bin/bets.py add --what x --clock reply --check true \
+  --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type demand-confirmed --lane "fresh/lane" \
+  --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":24}'
+L="spine-lane/offer"
+for M in instrument-probe substrate-probe; do
+  python3 bin/bets.py add --what "$M" --clock other --check "exit 0" --oracle deterministic \
+    --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type probe --lane "$L" \
+    --success "{\"oracle_id\":\"deterministic\",\"metric\":\"$M\",\"comparator\":\">=\",\"threshold\":1,\"window_h\":24}" \
+    >/dev/null 2>&1
+done
+python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK line in output)" >/dev/null 2>&1
+python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)" >/dev/null 2>&1
+assert_exit 0 "spine: ladder cleared -> demand-confirmed placeable at stage 2" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "$L"
+python3 bin/bets.py add --what "demand probe" --clock reply --check true --oracle instrumented \
+  --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type demand-confirmed --lane "$L" \
+  --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":24}' \
+  >/dev/null 2>&1
+python3 - <<'PY'
+import json, datetime as dt
+d = json.load(open("run/bets.json"))
+old = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=100)).strftime("%Y-%m-%dT%H:%M:%SZ")
+for b in d["bets"]:
+    if b["id"] == "bet-009":
+        b["resolution"]["at"] = old
+open("run/bets.json", "w").write(json.dumps(d, indent=2) + "\n")
+PY
+assert_exit_grep 1 "suspended" "bets: E2 -- a stale instrument suspends dependent resolution" \
+  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-011 lost "no replies in window"
+python3 - <<'PY'
+import json, datetime as dt
+d = json.load(open("run/bets.json"))
+now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+for b in d["bets"]:
+    if b["id"] == "bet-009":
+        b["resolution"]["at"] = now
+open("run/bets.json", "w").write(json.dumps(d, indent=2) + "\n")
+PY
+assert_exit 0 "bets: refreshed instrument un-suspends the lane" \
+  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-011 lost "no replies in window"
+assert_exit_grep 2 "DEMAND REFUTED" "guard: DEMAND_REFUTED_K checkpoint fires (armed only)" \
+  env DEMAND_REFUTED_K=1 EDGE_TERMINAL=0 python3 bin/guard.py
+assert_exit 0 "guard: K off leaves the closed terminal set unchanged" \
+  env EDGE_TERMINAL=0 python3 bin/guard.py
+for i in 1 2; do
+  python3 bin/bets.py add --what "cap probe $i" --clock other --check true --oracle deterministic \
+    --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type probe --lane "cap-$i/x" \
+    --success '{"oracle_id":"deterministic","metric":"instrument-probe","comparator":">=","threshold":1,"window_h":24}' \
+    >/dev/null 2>&1
+done
+assert_exit_grep 1 "lane cap" "spine: E1 active-lane cap refuses a fourth active lane" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add probe "cap-3/x"
+mv spine.yml spine.yml.aside
+assert_exit_grep 1 "unreadable" "spine: unreadable config fails closed while armed" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add probe "any/lane"
+mv spine.yml.aside spine.yml
+
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'

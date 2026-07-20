@@ -298,6 +298,25 @@ def main() -> int:
                   f"fills={e.get('filled_orders_since_freeze')}"
                   + (f", {e.get('pending_reason')}" if e.get("pending_reason") else "") + ")")
 
+    # --- V3 DEMAND-REFUTED checkpoint (S10; armed by DEMAND_REFUTED_K>0, default off -- the
+    # closed terminal set {verified dollar, cap, operator} is UNCHANGED until the operator flips
+    # this in the decisions memo). Like MAX_ITERS it is a CHECKPOINT: >= K distinct lanes whose
+    # demand-confirmed bets all graded dead means the pivot cap is reached and a human should
+    # look; it concludes nothing.
+    k_refuted = int(os.environ.get("DEMAND_REFUTED_K", "0") or "0")
+    if k_refuted > 0:
+        try:
+            import spine as _spine
+            hit, why = _spine.demand_refuted(k_refuted)
+        except Exception as e:
+            return fail(f"DEMAND_REFUTED_K armed but the spine is unreadable "
+                        f"({type(e).__name__}: {e}) -- fail-closed.")
+        if hit:
+            print(f"HALT: DEMAND REFUTED checkpoint -- {why}. The pivot cap is reached; this is "
+                  "an operator checkpoint, not a conclusion. Write the retro in MONEY_LOG.md and "
+                  "stop for review.", file=sys.stderr)
+            return 2
+
     # --- STANDING-PRESENCE AGENDA (issue #4). Run 1's terminal failure was concluding with a live
     # day-scale bet open -- nothing mechanical surfaced it at the moment of drift. So the open-bet
     # agenda prints at the top of EVERY iteration, from the committed registry (bin/bets.py).
