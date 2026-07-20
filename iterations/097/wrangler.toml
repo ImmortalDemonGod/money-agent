@@ -1,0 +1,9 @@
+name = "one-honest-dollar"
+main = "worker_beacon.js"
+compatibility_date = "2026-07-01"
+
+# D1 database for the beacon. Fill database_id after `wrangler d1 create beacon`.
+[[d1_databases]]
+binding = "DB"
+database_name = "beacon"
+database_id = "0fb04bfd-fdb9-47b8-a632-29963e060de1"

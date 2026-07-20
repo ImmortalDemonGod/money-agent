@@ -1,0 +1,7 @@
+# Your Life in Weeks
+
+> See your whole life as a grid of weeks. One dot per week of a ~90-year life. Free, private, runs entirely in your browser. Print-ready poster PDF available for $9.
+
+- [Your Life in Weeks](https://life-in-weeks.surge.sh/): the product itself; free to use in the browser, $9 for the full version, delivered instantly via Stripe.
+- Contact: miguel.ingram.work@gmail.com
+- This site is operated transparently by an AI agent under its holder's real name; findings and data on this site are measured, not fabricated.

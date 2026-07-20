@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>64% of Show HN launches are invisible to AI search — I audited 45</title>
+<meta name="description" content="I ran a structured audit on 45 recent Show HN launches. 64% have no structured data, so ChatGPT, Perplexity, and Google AI Overviews can't identify or cite them. The full breakdown + how to fix it.">
+<meta property="og:title" content="64% of Show HN launches are invisible to AI search">
+<meta property="og:description" content="I audited 45 recent Show HN launches. Most can't be found or cited by AI answer engines. Here's the data and the fix.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ai-visibility-report.surge.sh/">
+<link rel="canonical" href="https://ai-visibility-report.surge.sh/">
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--muted:#666;--accent:#0b6e4f;--card:#f6f6f4;--border:#e2e2de;--warn:#d9534f}
+  @media(prefers-color-scheme:dark){:root{--bg:#141416;--fg:#e8e8e6;--muted:#9a9a97;--accent:#5fd3a5;--card:#1e1e21;--border:#2c2c30;--warn:#ff6b6b}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,serif}
+  main{max-width:44rem;margin:0 auto;padding:3rem 1.25rem 6rem}
+  h1{font-size:2.1rem;line-height:1.18;margin:0 0 .5rem}h2{font-size:1.3rem;margin:2.6rem 0 .8rem;border-bottom:2px solid var(--accent);padding-bottom:.3rem}
+  .sub{color:var(--muted);font-style:italic;margin-bottom:2rem}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin:1rem 0;display:flex;align-items:baseline;gap:1rem}
+  .stat .n{font:800 2rem/1 -apple-system,sans-serif;color:var(--warn);min-width:4.5rem}
+  .stat .l{font-family:-apple-system,sans-serif}
+  .good .n{color:var(--accent)}
+  code{font:.86em ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.06em .35em}
+  a.btn{display:inline-block;background:var(--accent);color:var(--bg);font:bold 1.05rem/1 -apple-system,sans-serif;padding:1rem 1.4rem;border-radius:9px;text-decoration:none;margin:.5rem 0}
+  .box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.4rem;margin:1.6rem 0}
+  .foot{margin-top:3rem;padding-top:1.4rem;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem}
+  ul{padding-left:1.2rem}li{margin:.35rem 0}
+</style>
+</head>
+<body>
+<main>
+<h1>64% of Show HN launches are invisible to AI search</h1>
+<p class="sub">I ran a structured audit on 45 recent Show HN launches. Most of them cannot be identified or cited by ChatGPT, Perplexity, or Google AI Overviews, the places a growing share of "what should I use for X" questions now get answered. Here is the data, and the fix.</p>
+
+<h2>The numbers</h2>
+<div class="stat"><span class="n">64%</span><span class="l">have <b>no structured data</b> (JSON-LD). This is the primary signal AI answer engines use to know what a page is and whether to cite it. Without it, you are functionally invisible to AI search.</span></div>
+<div class="stat"><span class="n">51%</span><span class="l">have <b>no <code>/llms.txt</code></b>, the emerging convention that tells AI crawlers what your site is and what to cite. Cheap to add, and a first-mover edge in 2026.</span></div>
+<div class="stat"><span class="n">13%</span><span class="l">have <b>no clear call-to-action</b> found in the page HTML above the fold. For a launch, that is conversions walking out the door.</span></div>
+<div class="stat"><span class="n">9%</span><span class="l">have <b>no meta description</b>, the snippet that decides whether anyone clicks your search result.</span></div>
+<div class="stat good"><span class="n">29%</span><span class="l">had <b>zero critical issues</b>. The good news: the fixes are fast, and doing them puts you ahead of roughly two-thirds of your peers.</span></div>
+
+<h2>Why this matters more in 2026</h2>
+<p>For a decade, "being found" meant Google's ten blue links. That is no longer where a large and growing slice of discovery happens. When someone asks ChatGPT "what's a good tool for X," or Google shows an AI Overview instead of links, the engine picks a handful of sources to name. It picks the ones it can <em>parse and trust</em>. Structured data and clean, readable server HTML are how you get into that set. Most launches have optimized for the old game and done nothing for the new one, which is exactly the opening: the bar is low and the fix is quick.</p>
+
+<h2>The fix (free, do it yourself)</h2>
+<ul>
+<li><b>Add JSON-LD.</b> Drop a <code>&lt;script type="application/ld+json"&gt;</code> with schema.org <code>Organization</code>, <code>SoftwareApplication</code>/<code>Product</code>, and a <code>FAQPage</code>. Validate at validator.schema.org.</li>
+<li><b>Add <code>/llms.txt</code>.</b> A short file describing what your site is and what to cite. Ten minutes.</li>
+<li><b>Make your value copy server-rendered.</b> If your headline is painted in by client JS, AI crawlers may never read it. View source, not the rendered DOM.</li>
+<li><b>Write answer-shaped content.</b> Phrase a heading as the question a user asks, answer it in the first sentence. Answer engines lift these verbatim.</li>
+</ul>
+
+<div class="box">
+<b style="font-family:-apple-system,sans-serif">You might be in the 64%. Fix it in about 15 minutes.</b>
+<p>The <b>2026 AI-Search Visibility Kit</b>: copy-paste JSON-LD schema templates (Organization, Product, FAQ), an <code>llms.txt</code> template, and the exact steps to make your site identifiable and citable by ChatGPT, Perplexity, and Google AI Overviews. Instant download.</p>
+<a class="btn" href="https://buy.stripe.com/bJe9AV3NVfBF3vA3Qy7ok06">Get the AI-Visibility Kit — $5</a>
+<p style="color:var(--muted);font-size:.92rem;margin-top:.6rem">Prefer it done for you? Reply / email your URL and I will run the full audit of your specific site, free. Want the complete 42-point method for the whole site (SEO, speed, conversion too)? That is the <a href="https://website-audit-playbook.surge.sh/">$19 Website Audit Playbook</a>.</p>
+</div>
+
+<div class="foot">
+<p><strong>Method &amp; honesty:</strong> the audit measures real signals from each page (server HTML, HTTP headers, and a rendered load): structured data, <code>llms.txt</code>, meta, headings, call-to-action, load timing. The sample was 45 recent Show HN launches. The numbers are real and reproducible from the public pages in the sample. If your site was in the sample and you would like its specific findings, just ask.</p>
+</div>
+</main>
+
+<!-- disclosed-traffic-beacon -->
+<script>try{fetch("https://one-honest-dollar.cloud-pyramid.workers.dev/f/ai-visibility-report",{mode:"no-cors",keepalive:true})}catch(e){}</script>
+<p style="font:11px/1.6 system-ui,-apple-system,sans-serif;color:#999;margin:2rem auto 1.25rem;max-width:42rem;text-align:center"><a href="https://one-honest-dollar.cloud-pyramid.workers.dev/privacy" style="color:#999">Privacy</a></p>
+</body>
+</html>

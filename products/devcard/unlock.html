@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Your Dev Card is ready</title><meta name="robots" content="noindex"/>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--line:#30363d;--fg:#e6edf3;--sub:#8b949e;--accent:#7c3aed}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,Helvetica,Arial,sans-serif}
+.wrap{max-width:600px;margin:0 auto;padding:48px 20px;text-align:center}
+h1{font-size:26px}p{color:var(--sub)}
+button,a.btn{display:inline-block;font:inherit;font-weight:700;cursor:pointer;border:none;border-radius:10px;padding:12px 20px;font-size:15px;background:var(--accent);color:#fff;text-decoration:none;margin:6px}
+.ghost{background:var(--card);color:var(--fg);border:1px solid var(--line)}
+#status{color:var(--sub);font-size:14px;min-height:20px;margin-top:14px}
+.card-frame{max-width:420px;margin:18px auto 0}#card{display:block;width:100%;height:auto}
+input{padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:#010409;color:var(--fg);font-size:15px}
+.reenter{display:none;margin-top:16px}
+</style></head><body><div class="wrap">
+<h1>Thank you — your card is ready.</h1>
+<p>Your payment is complete. Your no-watermark, high-resolution card is generated right here on your device and downloads below.</p>
+<div class="card-frame"><svg id="card" viewBox="0 0 520 300" aria-label="Your dev card"></svg></div>
+<div>
+  <button id="dlhi" type="button">Download 4x hi-res PNG</button>
+  <button id="dlstd" class="ghost" type="button">Download standard PNG</button>
+</div>
+<div id="status">Preparing your download…</div>
+<div class="reenter" id="reenter">
+  <p>We couldn't find your username saved in this browser. Enter it again and your identical card regenerates — no extra charge.</p>
+  <input id="u" type="text" placeholder="GitHub username"/> <button id="regen" class="ghost" type="button">Generate</button>
+</div>
+<p style="margin-top:26px;font-size:13px">Made by Miguel Ingram. Runs in your browser via the public GitHub API.</p>
+</div>
+<script src="devcard.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $=function(id){return document.getElementById(id);};
+  var stats=null;
+  function render(s){ stats=s; var b=DevCard.buildSVG(s,{paid:true}); var h=$("card"); h.setAttribute("viewBox","0 0 "+b.W+" "+b.H); h.innerHTML=new DOMParser().parseFromString(b.markup,"image/svg+xml").documentElement.innerHTML; }
+  function load(u){
+    $("status").textContent="Building your card for "+u+"…";
+    DevCard.fetchStats(u).then(function(s){ render(s); $("status").textContent="Ready. Your downloads are the buttons above."; setTimeout(function(){ DevCard.downloadPng(s,4,true,"dev-card-hires.png"); },500); })
+      .catch(function(e){ $("status").textContent=e.message||"Could not fetch that user — try the box below."; showReenter(); });
+  }
+  function showReenter(){ $("reenter").style.display="block"; }
+  $("dlhi").onclick=function(){ if(stats) DevCard.downloadPng(stats,4,true,"dev-card-hires.png"); };
+  $("dlstd").onclick=function(){ if(stats) DevCard.downloadPng(stats,2,true,"dev-card.png"); };
+  $("regen").onclick=function(){ var u=$("u").value.trim(); if(!u) return; try{localStorage.setItem("dc_user",u);}catch(e){} load(u); };
+  var saved=null; try{ saved=localStorage.getItem("dc_user"); }catch(e){}
+  if(saved){ load(saved); } else { $("status").textContent=""; showReenter(); }
+})();
+</script></body></html>
