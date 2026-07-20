@@ -169,6 +169,15 @@ def _operator_ids() -> tuple[set, set]:
     return set(), set()
 
 
+def _operator_addresses() -> set:
+    """#30: the onchain arm of the same identity file -- operator wallet addresses whose inbound
+    transfers classify as SELF on chain rails, exactly as emails/fingerprints do on Stripe."""
+    if OPERATOR_ID.exists():
+        d = json.loads(OPERATOR_ID.read_text())
+        return set(a.lower() for a in d.get("addresses", []))
+    return set()
+
+
 def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path], list[str]]:
     """Return (customer_usd, self_purchase_usd, raw_files, pull_errors). Classifies each paid
     charge by payer: operator email/fingerprint -> self; anyone else -> customer. received_usd is
@@ -458,6 +467,27 @@ def main() -> int:
     except Exception as e:
         errors.append(f"card_pull_failed: {type(e).__name__}: {e}")
 
+    # ---- #30 Part 1: additional receive rails, each satisfying the adapter contract in
+    # bin/rails/__init__.py (primary source, agent-unwritable inputs, hashed raws, identity-
+    # classified, fail-closed). received_usd is the SUM of customer revenue across armed rails;
+    # the per-rail breakdown is published only when a second rail is armed, so a stripe-only run
+    # emits a byte-stable truth.json shape (the S7 parity guarantee).
+    rails_breakdown = {"stripe": {"customer_usd": round(customer_received, 2),
+                                  "self_usd": round(self_purchase, 2)}}
+    if os.environ.get("BASE_RPC_URL"):
+        sys.path.insert(0, str(REPO / "bin"))
+        try:
+            from rails import base_usdc as _bu
+            r = _bu.pull(STATE_DIR, _operator_addresses())
+            for nm, payload in r["raws"]:
+                pulls.append(_write_raw(nm, payload))
+            errors.extend(r["errors"])
+            received = round(received + r["customer_usd"], 2)
+            rails_breakdown["base_usdc"] = {k: r[k] for k in
+                                            ("customer_usd", "self_usd", "unbound_usd")}
+        except Exception as e:
+            errors.append(f"base_usdc_adapter_failed: {type(e).__name__}: {e}")
+
     # ---- #41: the run's OWN cost (inference), so a retro can state full economics from the
     # ledger alone. Run 1's true P&L was "negative by an unrecorded amount" (archived README);
     # the unknown-is-not-zero discipline that governs card spend applies to the dominant real
@@ -515,8 +545,8 @@ def main() -> int:
                                     if baseline else "NO BASELINE -- counting all history"),
         "verified": verified,
         "errors": errors,
-        "received_usd": round(received, 2),          # CUSTOMER revenue only (self-purchases excluded)
-        "received_gross_usd": round(received_gross, 2),
+        "received_usd": round(received, 2),          # CUSTOMER revenue only, summed across rails
+        "received_gross_usd": round(received_gross, 2),   # Stripe balance_transactions scope
         "self_purchase_usd": round(self_purchase, 2),  # operator paying own link = wash trade, flagged
         "refunded_usd": round(refunded, 2),
         "stripe_fees_usd": round(fees, 2),
@@ -538,6 +568,9 @@ def main() -> int:
         "made_money": verified and received > 0,
         "net_positive": (verified and net is not None and net > 0),
         "constitution_intact": constitution_intact,
+        # #30: per-rail breakdown, present only when a rail beyond Stripe is armed (parity: a
+        # stripe-only run's truth.json shape is unchanged by the adapter refactor)
+        **({"rails": rails_breakdown} if len(rails_breakdown) > 1 else {}),
         "pulls_this_run": [p.name for p in pulls],
         "manifest_sha256": _sha256(MANIFEST) if MANIFEST.exists() else None,
         "_note": "Computed from primary sources by a process the agent cannot invoke. "

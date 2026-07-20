@@ -401,14 +401,73 @@ if not t["verified"] or t.get("inference_usd") != 0.0:
     fails.append(f"header-only inference feed not a measured zero: {t.get('inference_usd')} {t['errors']}")
 os.environ.pop("INFERENCE_CSV", None)
 
+# 12. #30: a stripe-only run publishes NO rails breakdown (the S7 parity guarantee)
+t = run(clean)
+if "rails" in t:
+    fails.append("stripe-only run leaked a rails breakdown (parity broken)")
+
+# 13. #30: the Base/USDC adapter -- settlement-BOUND transfers count, unbound are visible and
+# never counted, operator addresses classify as self, the baseline block freezes once, and both
+# misprovisioning and a dead chain fail closed
+os.environ.update({"BASE_RPC_URL": "http://rpc.sim",
+                   "BASE_SETTLEMENT_ADDRESS": "0x" + "ab" * 20,
+                   "BASE_MARKETPLACE_ADDRESS": "0x" + "cd" * 20,
+                   "BASE_SETTLEMENT_EVENT_TOPIC0": "0x" + "ee" * 32})
+import rails.base_usdc as bu
+importlib.reload(bu)
+OP_ADDR = "0x" + "77" * 20
+calls = []
+def rpc_stub(url, method, params):
+    calls.append((method, params))
+    if method == "eth_blockNumber":
+        return hex(1000)
+    if method == "eth_getLogs":
+        def lg(sender, amt, tx):
+            return {"data": hex(amt), "transactionHash": tx,
+                    "topics": [bu.TRANSFER_TOPIC0, bu._addr_topic(sender), params[0]["topics"][2]]}
+        return [lg("0x" + "11" * 20, 12_340_000, "0xbound"),
+                lg("0x" + "22" * 20, 5_000_000, "0xunbound"),
+                lg(OP_ADDR, 9_000_000, "0xself")]
+    if method == "eth_getTransactionReceipt":
+        if params[0] == "0xbound":
+            return {"logs": [{"address": "0x" + "cd" * 20, "topics": ["0x" + "ee" * 32]}]}
+        return {"logs": []}
+    raise RuntimeError("unexpected rpc " + method)
+bu._rpc = rpc_stub
+opid = json.load(open("pnl_state/operator_identity.json"))
+opid["addresses"] = [OP_ADDR]
+json.dump(opid, open("pnl_state/operator_identity.json", "w"))
+t = run(clean)
+b = t.get("rails", {}).get("base_usdc", {})
+if not t["verified"] or t["received_usd"] != 24.68 \
+   or b != {"customer_usd": 12.34, "self_usd": 9.0, "unbound_usd": 5.0}:
+    fails.append(f"base adapter classification wrong: recv={t['received_usd']} rails={t.get('rails')} "
+                 f"errors={t['errors']}")
+calls.clear()
+t = run(clean)
+if any(m == "eth_blockNumber" for m, _ in calls):
+    fails.append("baseline block re-frozen on the second run")
+if not any(m == "eth_getLogs" and p[0]["fromBlock"] == hex(1001) for m, p in calls):
+    fails.append("frozen fromBlock not used on the second run")
+os.environ.pop("BASE_SETTLEMENT_EVENT_TOPIC0")
+t = run(clean)
+if t["verified"] or not any("base_usdc_misprovisioned" in e for e in t["errors"]):
+    fails.append(f"missing binding config not fail-closed: {t['errors']}")
+os.environ["BASE_SETTLEMENT_EVENT_TOPIC0"] = "0x" + "ee" * 32
+bu._rpc = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("chain down"))
+t = run(clean)
+if t["verified"] or not any("base_usdc_pull_failed" in e for e in t["errors"]):
+    fails.append(f"dead chain not fail-closed: {t['errors']}")
+os.environ.pop("BASE_RPC_URL")
+
 print("PNL_FAILS:" + ";".join(fails))
 PYEOF
 )
 PNL_FAILS="${PNL_RESULT##*PNL_FAILS:}"
 if [[ -z "$PNL_FAILS" ]]; then
-  ok "pnl: clean-usd passes; JPY charge/bt, missing currency, 3x truncation, EUR spend all fail closed"
+  ok "pnl: clean case passes; currency/coverage/quarantine/inference/rails cases all behave (13 cases)"
 else
-  bad "pnl currency/coverage: $PNL_FAILS"
+  bad "pnl verifier cases: $PNL_FAILS"
 fi
 rm -rf pnl_state inf.csv inf_bad.csv inf_zero.csv
 git checkout -q -- ledger/ 2>/dev/null || true

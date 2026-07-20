@@ -1231,3 +1231,52 @@ vs genuine absence must stay distinguishable in every consumer (guard, conclusio
 
 **Next:** S7 — the rail-adapter refactor (#30 Part 1) with the golden parity artifact, plus the
 stubbed Base/USDC adapter with settlement-event binding.
+
+---
+
+## Entry 027 — 2026-07-20 — S7 rail adapters: the P1 contract, and a Base/USDC rail with settlement-event binding (issue #30 Part 1)
+
+**What:** `bin/rails/` writes down the fact-source contract `pnl.py`'s Stripe path implicitly
+defined (primary source; agent-unwritable inputs; hashed raws through the same manifest flow;
+identity-classified; fail-closed) — the P1 generalization, with onboarding explicitly a reviewed
+harness change the agent cannot perform on itself. `received_usd` is now the sum of customer
+revenue across armed rails, with a per-rail breakdown published ONLY when a second rail is armed
+— which makes parity structural: a stripe-only run's truth.json shape is untouched. The Base/USDC
+adapter (stub-tested; live RPC + wallet funding are runbook items): verifier-frozen baseline
+block (the created_gt discipline on a block clock), inbound-USDC log watch, operator wallet
+addresses in operator_identity.json classifying as self, and the owner-comment's onchain
+wash-trade analogue — a transfer counts as CUSTOMER revenue only when its transaction also
+emitted the provisioned marketplace settlement event; bare transfers land in `unbound_usd`,
+visible and never counted. Missing binding config and a dead chain both poison the pull.
+
+**Edge cases enumerated before coding:** the breakdown key must be ABSENT on stripe-only runs or
+parity breaks by shape; the settlement binding is REQUIRED provisioning (an armed adapter without
+it refuses rather than counting bare transfers); baseline block freezes exactly once (second
+cycle must reuse frozen fromBlock and never re-read eth_blockNumber); receipts are fetched once
+per tx; sender extraction from topic padding; USDC 6-decimal scaling; operator addresses
+lowercased both sides.
+
+**Verified by running (artifacts):**
+- `bash tests/sim.sh` → **PASS=49 FAIL=0 SKIP=0** (aggregate pnl case now covers 13 cases: +
+  stripe-only-no-breakdown, bound/unbound/self classification with received summing 12.34+12.34,
+  frozen-baseline reuse, misprovision fail-closed, dead-chain fail-closed). Corpus **11/0**;
+  shellcheck + compileall clean.
+- **PARITY PROVEN (the S7 golden artifact):** identical stripe-only stub run against HEAD~1 and
+  HEAD in throwaway clones — truth.json field-identical (25 fields; excluding only
+  computed_at/previous_hash/pulls/manifest by design, and even those matched to the second in
+  this capture); `rails` key absent; received_usd 12.34 both sides.
+
+**Critique pass:**
+- The settlement-event topic/address values are PROVISIONING inputs pending S13's read-only
+  probes of the actual marketplace contracts — the adapter is deliberately agnostic about which
+  event signature is "the" acceptance event; the runbook will carry what S13 finds, and until a
+  real value is provisioned the rail simply cannot arm. Stub-tested only, stated plainly.
+- `eth_getLogs` from frozen-block to latest is one unbounded range — fine at run scale, but a
+  long standing run on a busy wallet would want block-windowing; noted, not built.
+- USDC-on-Base is treated 1 USDC = 1 USD (the issue's own framing); a depeg is out of scope and
+  would be visible in the raws.
+- received_gross_usd stays Stripe-scoped (balance_transactions semantics) — the rails breakdown
+  is where cross-rail gross lives; documented in the field comment.
+
+**Next:** S8 — the human-actuation queue (#31): bin/human.py + the atomic PROMPT.md autonomy
+amendment.
