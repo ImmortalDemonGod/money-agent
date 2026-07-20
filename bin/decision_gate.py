@@ -80,6 +80,10 @@ def check(risk_class: str, body: str) -> tuple[bool, str]:
             return False, (f"data-acquisition decision for {h} carries no provenance sha256 -- "
                            "an acquisition without a pinned input manifest is untraceable by "
                            "construction.")
+        # The manifest must be NAMED and THAT committed file must hash to the declared value --
+        # not "any committed file sharing the hash" (S16 C5). We check the COMMITTED bytes (git
+        # show HEAD:<path>), which is stronger than reading the working tree: the pin holds against
+        # what is committed, not a file the agent could edit after the decision was recorded.
         manifest = dec.get("manifest", "")
         if not manifest or Path(manifest).is_absolute() or ".." in Path(manifest).parts:
             return False, "data-acquisition decision must name a safe repo-relative manifest path"

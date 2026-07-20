@@ -347,6 +347,8 @@ def main() -> int:
         # NOT "rule 3 holding". Collapsing every RuntimeError to absence would let a forged, unsigned
         # or corrupt promise-book read as empty -- hiding a breach exactly when a dispute-in-waiting
         # sits in it. Fail closed; only genuine absence (no obligations.json anywhere) stays silent.
+        # (This is strictly broader than the S16 "SIGN-only" fix: it also catches lane-mismatch and
+        # invalid-JSON refusals, not just signature failures.)
         if "no ledger found" not in str(_obre).lower():
             return fail(f"obligation facts refused: {_obre} -- an unverifiable promise-book is not "
                         "an empty one")

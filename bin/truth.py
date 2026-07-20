@@ -145,9 +145,30 @@ def _enforce_shadow_wall(d: dict, name: str, where: str) -> None:
                            "refusing: a rehearsal must not ground itself on the live ledger.")
 
 
+def _enforce_lane_world(name: str) -> None:
+    """S16 FIX (adversarial correctness/SoD pass): the per-file `shadow` marker only covers
+    truth.json; edge.json and obligations.json carry no marker, so a consumer pointed at the
+    wrong lane could read them under a grounded label. Bind EVERY fact file to the lane's world:
+    a shadow lane (LEDGER_BRANCH starts with 'shadow') must be read only under SHADOW=1, and a
+    live lane only under SHADOW unset -- the same invariant pnl.py enforces at write time. This
+    is lane-level, complementing the content-level marker wall that already binds truth.json
+    (whose own richer messages we leave to _enforce_shadow_wall)."""
+    if name == "truth.json":
+        return  # truth.json carries a `shadow` marker; _enforce_shadow_wall owns it
+    lane_is_shadow = LEDGER_BRANCH.startswith("shadow")
+    if lane_is_shadow and not SHADOW:
+        raise RuntimeError(f"LEDGER_BRANCH={LEDGER_BRANCH!r} is a SHADOW lane but this consumer "
+                           "runs live (SHADOW unset) -- refusing to read rehearsal facts "
+                           f"({name}) into a live decision.")
+    if SHADOW and not lane_is_shadow:
+        raise RuntimeError(f"SHADOW=1 but LEDGER_BRANCH={LEDGER_BRANCH!r} is not a shadow lane -- "
+                           f"refusing to ground a rehearsal on the live ledger ({name}).")
+
+
 def load(name: str = "truth.json") -> tuple[dict, str]:
     # `name` selects which verifier fact file to read (truth.json = money rail, edge.json = the
     # verified-edge rail). Same read order and honesty labels for every fact file: one path, not N.
+    _enforce_lane_world(name)
     local = REPO / "ledger" / name
     # 1. the ledger branch (two-lane / strong). Fetch is best-effort: offline OR SLOW, the
     #    last-fetched ref still serves, and guard's staleness halt covers the gap. A fetch timeout
