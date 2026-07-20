@@ -1640,3 +1640,73 @@ which stays operational-only).
 
 **Next:** S14 governance docs + decisions memo, then S15 runbook (which owns every
 next_falsifier above), S16 adversarial+mutation+stacking.
+
+## Entry 034 — 2026-07-20 — S14 governance docs + the run-2 decisions memo (#10 consistency, #11 policy, #43 protocol)
+
+**What (planned; edge cases enumerated before writing):**
+- **#10 consistency edits (CLAUDE.md "Your world" + knowledge/README):** encode the RECORDED
+  operator ruling (issue #10 comment, 2026-07-18): runs are context-AWARE; the read
+  prohibition was unenforceable prose; "independently converged" is RETIRED as evidence.
+  The surgical edits replace the prohibition with the two consequences that still bind:
+  reads never add/change bounds or count as evidence, and the knowledge/-WRITE rule stays
+  OPERATIONAL-only with the honest rationale (knowledge/ is re-injected into future runs'
+  AUTHORED inputs — the #9 enforceable half — so strategy written there compounds and
+  destroys attribution; it is a write-side rule now, not a read-side fiction).
+- **#11 promotion policy (CONTRIBUTING.md):** business tools run-local forever; harness
+  machinery promotable ONLY per-artifact by operator review against four tests (machinery-
+  not-business, M9-clean, fixtures-that-bite + green matrix, trust-class + sod_hook
+  placement). The immediate call resolves by precedent: disclosure_gate.py IS promoted
+  (canonical, genericized, sod_hook-listed). Plus the docs/-row consistency edit.
+- **#43 docs/HUMAN_BASELINE_PROTOCOL.md:** the matched-control experiment doc — who,
+  horizon, identity provisioning, forbidden-rootedness list, drift recording; the verifier
+  is subject-agnostic (R5's design insight) so the machinery needs no changes.
+- **docs/RUN2_DECISIONS.md:** every operator knob in checkbox form with recommended default
+  + rationale + citation, from the REAL knob inventory (grepped, not remembered):
+  EDGE_TERMINAL, MAX_WALL_CLOCK_H, MAX_ITERS, LEDGER_MAX_COMMITS, LEDGER_MAX_AGE_S,
+  INTERVAL, HEARTBEAT_S, MIN_APPROACHES/MIN_DEMAND_PROBES, CARD_CAP_USD/CARD_SOURCE,
+  INFERENCE_CSV, signing provisioning (#36), BASE_RPC_URL + settlement binding (#30),
+  BET_GATE_ENFORCE, SPINE_ENFORCE, DEMAND_REFUTED_K, PACE_ENFORCE, EXPOSURE_MAX_* (P7),
+  STRIPE_REFUND_KEY (P5), SHADOW (Tier-1 rehearsal), edge rail iff ALPACA_* creds,
+  broker-creds-to-agent: no.
+
+**Edge cases enumerated:** (1) CLAUDE.md: ONLY the "Your world" section may change — every
+bound in "The bounds" and the Summary instructions stay byte-identical (verified by diff
+inspection, recorded below); the edit is one of the named flagged edits from the plan's
+UNTOUCHED list and gets an operator-review flag in the PR body. (2) CONTRIBUTING.md/README
+are CI-linted (no em-dashes, no broken links) — additions use "--" and only existing link
+targets; local readme-check parity run before push. (3) The decisions memo must not seed
+strategy into agent-facing files — it lives in docs/ (operator surface) and contains knob
+values, not business direction. (4) The #43 protocol forbids personal-reputation rootedness
+explicitly (the control's aged-account analogue), else the match is void. (5) No knob
+invented: every name in the memo comes from the grep inventory; every default cited to the
+file that reads it.
+
+**Verified by running:** CLAUDE.md diff inspected line-by-line: ONLY the "Your world"
+section changed; a targeted grep across the diff for every bound's anchor phrase (finite /
+real man / deliver in full / first received dollar / ledger outranks / env files) returned
+ZERO touched lines -- the bounds and the compactor instructions are byte-identical. CI
+readme-check run locally: "README check passed: README.md, CONTRIBUTING.md,
+.github/assets/invariant.mmd" (the script covers CONTRIBUTING.md itself -- no em-dash /
+curly-quote / broken-link findings on the new promotion-policy section). Full matrix at the
+boundary: sim PASS=118 FAIL=0 SKIP=0, corpus 11/0, shellcheck + compileall clean. Knob
+inventory for the memo grepped from bin/ (not remembered); spot-verified defaults against
+their readers: INTERVAL 120, HEARTBEAT_S 300, LEDGER_MAX_COMMITS 0-off (STANDING_RUN
+recommends 3000), LEDGER_MAX_AGE_S 1800, MIN_APPROACHES 8 / MIN_DEMAND_PROBES 3, every V3
+flag and every exposure cap coded 0/off.
+
+**Critique pass:** the CLAUDE.md/knowledge edits are PROSE about prose -- they encode the
+ruling accurately but enforce nothing; the enforceable piece remains the M9 grep + the
+operational-only review of knowledge/ diffs (stated in both files, not hidden). The
+decisions memo makes RECOMMENDATIONS (advisory-first for BET_GATE, keep DEMAND_REFUTED_K
+off, onchain rail off citing the probe records) -- these are operator-decision inputs, and
+the memo's own header says an unchecked box = coded default, so the memo cannot silently
+change a run. The #43 protocol is an experiment design: its weakest point is
+subject-compliance, which is why DRIFT entries are the load-bearing mechanism (unrecorded
+drift voids the run -- same rule as the agent's claims lane). #11's four-question review is
+policy, not mechanism: nothing blocks an operator from bulk-promoting; the policy's value is
+that CONTRIBUTING is the document reviewers hold PRs against. PROMPT.md was NOT touched this
+stack (both its flagged edits landed in S5/S8); the CLAUDE.md + CONTRIBUTING flags ride in
+the PR body at split time.
+
+**Next:** S15 operator runbook (owns every probe next_falsifier + #20/#26/#30/P5 steps),
+then S16 adversarial+mutation+stacking.
