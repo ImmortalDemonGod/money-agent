@@ -1,0 +1,128 @@
+schema_version: 1
+platform_id: dealwork-ai
+captured_at: "2026-07-20T08:44-08:50Z"
+repository_commit: f764094
+prior_label: "poor-fit (Stripe/fiat + KYC) -- flagged in #32 as the highest-value re-check"
+verdict: flipped
+verdict_basis: |-
+  LABEL CHANGE (gate 7). Previous: poor-fit, Stripe/fiat + KYC. New: candidate strong-fit at
+  docs tier -- agent-API path with no documented KYC. Named falsifier (from #32): "an agent
+  API path that issues an API key without KYC" -- OBSERVED: the live OpenAPI spec's
+  POST /agents/onboard requires exactly ONE field, agentName (minLength 2); no email, no
+  identity, no payment method in the schema; returns the apiKey. SPOT-CHECKED by the session
+  lead with an independent fetch of the live spec (~09:30Z): required is ["agentName"]
+  alone; the only identity-adjacent field (moltbookIdentityToken) is OPTIONAL. The string "KYC" appears
+  NOWHERE on any fetched page including the ToS. Identity-bearing steps sit at PAYOUT
+  (Stripe-Connect bank onboarding endpoints), and the rail is not fiat-only: the ToS
+  documents USDC-on-Polygon top-ups and the withdraw enum includes "crypto". Fee is 10%
+  (3% AI-to-AI), not the previously believed 15%. Untested dimensions (gate 7): the
+  undocumented KYA "verification checks"/trust-tier content, and whether onboarding without
+  email works in practice (step 4, runbooked).
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      Agent-native API ("OpenWork API" v1.0.0): POST /api/v1/agents/onboard -> apiKey
+      (ak_xxxxx), auth "Authorization: Bearer {apiKey}". Onboard schema required fields:
+      ["agentName"] only; optional: description, modelProvider, capabilityTags,
+      connectToken, autonomous, referralCode, etc. Endpoint self-describes as "Autonomous
+      agent registration or owner-authorized via connect token." Hosted MCP at
+      api.dealwork.ai/mcp ("48 Tools Across 8 Domains"). Wallet: POST /wallet/topup
+      (Stripe), POST /wallet/withdraw {amount, method: ["stripe","crypto"]},
+      POST /wallet/connect-account + /onboarding ("Get bank onboarding URL") -- the
+      identity-bearing surface, at withdrawal. Marketplace scale AS DISPLAYED (landing,
+      Tier 4): "265 tasks completed", "129 open tasks", "1.7K marketplace workers"; /explore
+      showed "28 human jobs found" (page 1 of 3), budgets $10-$75.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://api.dealwork.ai/openapi.json (live spec) ; https://dealwork.ai/skill.md ; /mcp ; /explore"
+      retrieved_at: "2026-07-20T08:44-08:49Z"
+    quotes:
+      - '"POST /api/v1/agents/onboard with agent name, description, capability tags -> Returns apiKey for all future requests" (skill.md)'
+  - step: terms
+    status: observed
+    finding: |-
+      ToS explicitly contemplates agent accounts and pins liability on a human owner. No KYC
+      or identity clause exists ("contains no sentences using the terms 'identity' or
+      'KYC'" -- targeted re-fetch). Trust tiers + "verification checks" are reserved but
+      undocumented.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://dealwork.ai/terms (fetched twice, section-numbered re-pass)"
+      retrieved_at: "2026-07-20T08:45Z and 08:49Z"
+    quotes:
+      - '"AI agents act on the platform through their own authenticated accounts." (S2)'
+      - '"Every agent must have a responsible human or legal-entity owner." (S2)'
+      - '"Agent accounts are subject to trust tiers, verification checks, and daily spending limits that we may adjust to protect the marketplace." (S2)'
+      - '"Current rates: 10% per contract, and 3% when both the client and the provider are AI agents." (S4)'
+      - '"on-chain top-ups (USDC on Polygon) are credited after the transaction is verified." (S3)'
+  - step: onchain
+    status: not_observed
+    finding: |-
+      USDC-on-Polygon top-ups documented in ToS; withdraw method "crypto" exists in the spec
+      with no chain documented; NO contract addresses observed on any fetched page --
+      nothing to look up on an explorer.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://dealwork.ai/terms ; https://api.dealwork.ai/openapi.json"
+      retrieved_at: "2026-07-20T08:45-08:48Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      Fee 10% per contract, 3% AI-to-AI (ToS verbatim; homepage matrix consistent). "no
+      listing fees or subscription". Budgets on their own vendor blog: $0.05-$20+; /explore
+      live sample $10-$75. CONFLICT recorded: a third-party article (dev.to "Kiro", May
+      2026) claims 15% -- conflicts with the current ToS fetched today; the ToS is the
+      higher-tier source. Vendor blog (Aubrey Air, 2026-03-27, VENDOR SOURCE) claims "avg
+      3-7 bids/job" and an agent persona earning "$14.99" across 7 contracts.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://dealwork.ai/terms ; https://dealwork.ai/ ; vendor blog: /blog/the-state-of-ai-agent-marketplaces-in-2026-a-comprehensive-comparison ; conflict: dev.to/kirothebot (third_party)"
+      retrieved_at: "2026-07-20T08:44-08:50Z"
+    quotes: []
+  - step: cold_start
+    status: observed
+    finding: |-
+      Trust tiers are mechanical and start at "new" (Agent schema trustTier enum
+      ["new","active","verified","trusted"]); ToS ties tiers to verification checks + daily
+      spending limits. Selection per skill.md: bids must reference job details ("generic
+      bids are rejected"), auto-approval after 24h if the buyer does not review. KYA badge
+      claimed on how-it-works (landing) with NO documented procedure. Competition signals:
+      vendor blog 3-7 bids/job; third-party "Too competitive at the low end" (dev.to Kiro,
+      no earnings).
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://api.dealwork.ai/openapi.json (trustTier) ; https://dealwork.ai/skill.md ; /how-it-works (landing)"
+      retrieved_at: "2026-07-20T08:44-08:47Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "POST /agents/onboard with a bare agentName (does a key really come back with no email?) is exactly step 4 -- runbooked, highest-priority signup slice per #32."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USD wallet balance; top-up Stripe or USDC-on-Polygon; withdraw stripe|crypto"
+  task_value: "displayed budgets $0.05-$75 across sources"
+  platform_fee: "10% per contract; 3% AI-to-AI (ToS)"
+  gas_or_rail_cost: "not documented for the crypto paths; Stripe fees implicit"
+  net_value: null
+  price_source_and_time: "dealwork.ai/terms + landing, 2026-07-20T08:45-08:49Z"
+identities:
+  requester: unknown
+  worker: "n/a (read-only)"
+limitation: |-
+  KYA and "verification checks" content undocumented -- the flip is docs-tier and could be
+  narrowed by an undocumented gate in practice; what Stripe Connect demands at bank
+  onboarding is Stripe-side and unobservable read-only; crypto withdraw undocumented beyond
+  the enum; /api-docs page is a JS shell (raw openapi.json is the artifact).
+next_falsifier: |-
+  Step 4 (runbooked, FIRST in queue per #32's "highest-value re-check"): call
+  POST /agents/onboard with only an agentName from the sandbox and record whether an ak_ key
+  returns; then walk the task-bid path to the first identity/KYA gate and record its exact
+  lifecycle position.

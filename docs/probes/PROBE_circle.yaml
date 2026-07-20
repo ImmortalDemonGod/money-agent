@@ -1,0 +1,123 @@
+schema_version: 1
+platform_id: circle-agent-stack
+captured_at: "2026-07-20T08:44-08:57Z"
+repository_commit: f764094
+prior_label: "poor-fit (great rail, gated by persistent URL + Google Form)"
+verdict: flipped
+verdict_basis: |-
+  LABEL CHANGE (gate 7), partial. Previous: gated (Google Form). New at docs tier: the gate
+  applies ONLY to the curated marketplace LISTING; the underlying sell path is documented
+  permissionless. Named falsifier from #32 ("a permissionless x402 path exists AROUND the
+  marketplace listing") -- OBSERVED: the Nanopayments seller quickstart's complete
+  prerequisites are "Installed Node.js v22.6+, An EVM wallet address where you want to
+  receive USDC payments" -- no Circle account, no API key, no KYC, no listing requirement;
+  buyers `client.pay()` any x402 URL directly. Agent Wallets need email + one-time password
+  plus HUMAN Terms consent (the agent-facing setup file mandates "NEVER run `circle terms
+  accept` without explicit user consent") -- no KYC documented. NEW SHARPER GATE FOUND on
+  the listing side: the Google Form returns HTTP 401 with Google's sign-in interstitial --
+  even VIEWING the listing form requires a Google account (curl-verified). Untested: what
+  the form asks, whether email+OTP triggers KYC at higher usage, and whether the live
+  marketplace has any listings at all (services table empty in fetched HTML).
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      Agent Stack = CLI + Agent Wallets + Agent Marketplace + Nanopayments (press release,
+      May 2026): wallets "permissionless, policy-controlled"; Nanopayments "gas-free USDC
+      transfers as small as $0.000001" via x402. Marketplace listing path per landing FAQ:
+      "Visit https://forms.gle/7YFzvdmMcn1JH5tF6 to submit your service" -- no criteria,
+      timeline, or review process documented; the marketplace docs URL 404s
+      (developers.circle.com/agent-stack/agent-marketplace). agents.circle.com/services
+      loads with table headers + "All / 1P / 3P" filters but ZERO service rows in fetched
+      HTML (JS-loaded or empty -- undetermined). Wallet compliance guardrails: sanctions
+      screening on all transfers; per-wallet transfer limits/allowlists/blocklists.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "circle.com/pressroom/circle-launches-ai-infrastructure-to-power-the-agentic-economy ; developers.circle.com/agent-stack/* ; agents.circle.com/skills/setup.md ; /skills/wallet-login.md ; forms.gle/7YFzvdmMcn1JH5tF6 (401, curl)"
+      retrieved_at: "2026-07-20T08:44-08:48Z"
+    quotes:
+      - '"Installed Node.js v22.6+, An EVM wallet address where you want to receive USDC payments" (seller quickstart prerequisites, complete list)'
+      - '"Pay for x402-compatible APIs on a per-request basis. No subscriptions or per-service sign-ups." (agent-nanopayments docs)'
+  - step: terms
+    status: observed
+    finding: |-
+      The most explicit agent-permission terms in the probe set: automated/AI use is
+      expressly PERMITTED with a natural-person Responsible User who accepted the Terms and
+      bears all liability -- including for agents spawned by other agents. 18+, sanctions
+      restrictions. This is a name-test-compatible structure: the operator is the
+      Responsible User.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://agents.circle.com/terms-of-use"
+      retrieved_at: "2026-07-20T08:46Z"
+    quotes:
+      - '"You may use automated systems or AI agents (\"AI Agent\") in connection with the Agent Platform; however, you remain fully responsible for all actions taken by such systems on your behalf."'
+      - '"AI Agents are not permitted to access or otherwise use the Agent Platform unless and until the Responsible User on whose behalf the AI Agent acts has accepted these Terms."'
+      - '"YOU ARE SOLELY RESPONSIBLE FOR ANY AI AGENT ... INCLUDING ANY AI AGENT CREATED, DELEGATED, DEPLOYED, OR OTHERWISE ENABLED BY ANY OTHER AI AGENT FOR WHICH YOU ARE RESPONSIBLE"'
+  - step: onchain
+    status: not_observed
+    finding: |-
+      Supported chains as displayed: Arbitrum, Arc Testnet (testnet only), Avalanche, Base,
+      Ethereum, Monad, Optimism, Polygon PoS, Unichain (mainnet + testnet each). Specific
+      contract addresses: not_observed on any fetched page -- nothing to look up.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "developers.circle.com/agent-stack/agent-wallets/supported-blockchains"
+      retrieved_at: "2026-07-20T08:46:52Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      Fee table (docs): gas $0 (sponsored, "capped, subject to fair use"); Gateway protocol
+      fee 0.5 bps on crosschain x402 (free same-chain); swap 2 bps; bridging forwarding
+      $0.05 + variable. Minimum payment $0.000001 (press). No marketplace listing fee
+      observed. The economics are the strongest in the probe set IF sponsorship holds --
+      sub-cent tasks are not gas-killed on this rail.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "developers.circle.com/agent-stack/agent-wallets/fees"
+      retrieved_at: "2026-07-20T08:47:08Z"
+    quotes:
+      - '"Onchain transactions on agent wallets are gas-sponsored at no cost to you. Sponsorship is capped, subject to fair use, and may change over time."'
+  - step: cold_start
+    status: observed
+    finding: |-
+      Selling via bare x402: no documented gate for a zero-history seller (Node + EVM
+      address); discovery is the gated layer (Form-listed marketplace) -- so the cold-start
+      problem is the same as PROBE_x402_ecosystem: reachable rail, unproven demand. Buyer
+      agents: email+OTP login, human Terms consent, no reputation system observed anywhere
+      in Agent Stack docs.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "developers.circle.com/gateway/nanopayments/quickstarts/seller + /buyer"
+      retrieved_at: "2026-07-20T08:45-08:57Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "Form submission (needs a Google account + operator decision), CLI wallet creation (needs human Terms consent by design), and a live nanopayment round-trip: all runbooked. The quickstarts are testnet-framed -- the mainnet path needs the operator."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USDC across 8 mainnet chains (Base included)"
+  task_value: "per-call transfers down to $0.000001 (press claim)"
+  platform_fee: "0 listing fee observed; rail fees: 0.5 bps crosschain x402, 0 same-chain"
+  gas_or_rail_cost: "$0 gas (sponsored, capped/fair-use)"
+  net_value: null
+  price_source_and_time: "developers.circle.com fee table, 2026-07-20T08:47Z"
+identities:
+  requester: unknown
+  worker: "n/a (read-only)"
+limitation: |-
+  The Google Form's questions could not be read (sign-in wall) -- the listing bar's height
+  is unknown; live marketplace inventory undetermined (JS table); email+OTP-to-KYC
+  escalation undocumented (not_observed, not absent); all Circle quotes are
+  WebFetch-extracted except the Form 401 (curl); quickstarts are testnet-framed.
+next_falsifier: |-
+  Step 4 (runbooked): (1) view/submit the listing form from a Google-logged-in browser and
+  record every field; (2) run the seller quickstart against MAINNET with a real EVM address
+  and take one live nanopayment end-to-end -- the rail-works proof that needs no listing.

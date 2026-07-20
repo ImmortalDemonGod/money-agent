@@ -1,0 +1,134 @@
+schema_version: 1
+platform_id: bountybook
+captured_at: "2026-07-20T08:44-08:58Z"
+repository_commit: f764094
+prior_label: "strong-fit (AI oracle verifies onchain, instant payout / full refund)"
+verdict: flipped
+verdict_basis: |-
+  LABEL CHANGE (gate 7). Previous: strong-fit. New: the label's THREE load-bearing claims
+  each failed falsification at docs/onchain tier. (1) "verifies onchain" -- the escrow is
+  NOT a smart contract: docs say "No custom contracts", the ToS says funds are "escrowed
+  in the platform treasury", and the manifest-named treasury address is a plain EOA
+  (explorer-verified, is_contract:false). (2) "instant payout" -- the platform's own
+  oracle-stats API displays avg_verification_seconds 1,862,540 (~21.6 days) and a pass
+  rate of ~0.69% (4,668 verifications, 0 disputes ever). (3) The oracle is
+  operator-controlled: "automated and final", disputes "resolved at our sole discretion"
+  (ToS). Plus the displayed-value juxtaposition (gate 5: recorded as displayed, no wash
+  inference): the API shows $636 available across 124 open bounties while the named
+  treasury holds 0.965 USDC -- and the changelog ships treasury-SHORTFALL machinery
+  ("shows treasury balance, total owed to agents, shortfall, and list of all blocked
+  payouts"; "Payout retry cron skips attempts when treasury balance is below $1").
+  Also found: a hidden gate the docs' "No accounts" framing omits -- wallets must be >72h
+  old to claim, with cooldowns and rate limits. Their own banner is the honest label:
+  "early beta ... do not deposit funds you cannot afford to lose."
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      Agent-native flow: Ethereum key + HTTP client, sign-nonce auth to 1h bearer token;
+      claim first-come with a 10-deep queue; auto-approve mechanics; webhook
+      subscriptions. Sybil protection: ">72 hours old" wallet-age gate, claim cooldowns,
+      5 claims/min. Homepage-vs-API split: server HTML shows 0 open (pre-hydration);
+      live /stats JSON: {"total":178, "totalBudget":934.5, "totalPaidOut":169.5,
+      "completed":32, "openCount":124, "totalAvailable":636, "activeAgents":15}.
+      Leaderboard economy: top agent lifetime $96.50 (14 jobs, success_rate 0.28); next
+      $12.50, $10, $8... Production ai-plugin.json points at http://localhost:8080
+      (config sloppiness, recorded). Site is v0.17.10 by "@_ptonik".
+    evidence:
+      tier: 2
+      source_class: request_response
+      locator: "https://www.bountybook.ai/llms.txt + /llms-full.txt (curl-exact) ; https://api.bountybook.ai/stats ; /leaderboard?limit=5 ; /.well-known/x402 ; /.well-known/ai-plugin.json (all live JSON, curl)"
+      retrieved_at: "2026-07-20T08:46-08:52Z"
+    quotes:
+      - '"No accounts. No browser. Just an Ethereum private key and an HTTP client." (llms.txt)'
+      - '"All paid endpoints use x402 -- USDC payments via HTTP 402 headers on Base L2. No custom contracts, no token approvals." (llms.txt)'
+      - '"Wallet must be >72 hours old to claim jobs" (llms-full.txt, Sybil Protection)'
+  - step: terms
+    status: observed
+    finding: |-
+      ToS (server-rendered, curl-exact, "Last updated: February 2026") is unusually
+      candid: proof-of-concept, unaudited, oracle probabilistic, liability zero. Disputes
+      at sole discretion. Sybil wallets prohibited (banning + forfeiture). Agent
+      operation is the designed use ("does not employ, supervise, or control any agent").
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://www.bountybook.ai/terms"
+      retrieved_at: "2026-07-20T08:46:17Z"
+    quotes:
+      - '"BountyBook is a technical proof of concept built for agent research purposes. ... Smart contracts, oracle logic, and escrow mechanisms are under active development and have not been formally audited."'
+      - '"Oracle decisions are automated and final for standard bounties. ... verification is probabilistic, not deterministic."'
+      - '"Disputed jobs are reviewed and resolved at our sole discretion."'
+      - '"Total aggregate liability is limited to zero."'
+  - step: onchain
+    status: observed
+    finding: |-
+      Treasury 0x1bc6c2268260c391C7871cF9f2Dfa43207F72f2b (named by the x402 manifest) is
+      an EOA: is_contract false, source unverified. Holdings AS DISPLAYED: 0.965 USDC +
+      ~0.0146 ETH + spam dust. 43 transactions; latest native tx 2026-03-18; latest
+      genuine USDC event 2026-07-15 INBOUND $0.10. Token-transfer page-1 is polluted with
+      spoofed lookalike tokens (" U5DC ", "USDС" with Cyrillic С) valued $11-14 -- NOT
+      payouts; recorded so no one reads them as such. Onchain oracle verification:
+      nothing exists to verify -- there is no contract.
+    evidence:
+      tier: 1
+      source_class: explorer
+      locator: "https://base.blockscout.com/api/v2/addresses/0x1bc6c2268260c391C7871cF9f2Dfa43207F72f2b (+/token-balances, /transactions, /token-transfers -- raw JSON) ; basescan cross-read (extraction-mediated, one self-contradicted date noted)"
+      retrieved_at: "2026-07-20T08:53-08:56Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      Fee 4% on success only (96% to agent). Boosts $5/$10/$20; verification-as-a-service
+      $0.02-$0.05/call; A2A deals 2%; early-access $0.10 buys a 15-minute head start
+      before public listing (pay-to-play advantage, recorded). Minimum bounty:
+      not_observed. Gas: sub-cent on Base, agents need "a tiny amount of ETH". $25 weekly
+      prize to #1 earner. THE NUMBERS THAT DECIDE EV: totalPaidOut $169.50 lifetime
+      across 32 completed of 178 total bounties; pass rate ~0.69%; avg verification ~21.6
+      days (may be skewed by stuck/expired jobs -- no distribution published; displayed
+      number reported as displayed).
+    evidence:
+      tier: 2
+      source_class: request_response
+      locator: "https://api.bountybook.ai/oracle/stats + /stats (live JSON, curl; oracle/stats spot-checked by the session lead ~09:45Z)"
+      retrieved_at: "2026-07-20T08:47-08:49Z"
+    quotes: []
+  - step: cold_start
+    status: observed
+    finding: |-
+      Open first-come claiming with queue; newcomer gates: 72h wallet age + cooldowns +
+      rate limits. Tier ladder documented INCONSISTENTLY across two doc surfaces (5-tier
+      newcomer->legendary in llms.txt vs 2-tier newcomer/expert on /docs -- recorded).
+      Paid head-start advantage exists. With a 0.69% displayed pass rate, the effective
+      wall for a new agent is the ORACLE, not selection.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "llms.txt vs /docs (tier inconsistency) ; x402 manifest (early-access product)"
+      retrieved_at: "2026-07-20T08:46-08:52Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "Claiming a $1-tier bounty with a fresh wallet (post-72h) and measuring real verification latency + payout: runbooked -- but the EV math above should be read first."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USDC on Base (x402; treasury custody, not contract escrow)"
+  task_value: "displayed open range up to $25 highest; totalAvailable $636 across 124 open"
+  platform_fee: "4% on success; boosts/early-access/VaaS priced separately"
+  gas_or_rail_cost: "sub-cent Base gas + 'tiny amount of ETH' for agents"
+  net_value: "lifetime totalPaidOut $169.50 across all agents (displayed)"
+  price_source_and_time: "api.bountybook.ai live JSON, 2026-07-20T08:47-08:49Z"
+identities:
+  requester: unknown
+  worker: "n/a (read-only)"
+limitation: |-
+  /oracle and /leaderboard page content beyond server HTML unobserved (JS); oracle
+  model/governance beyond "LLM-based"/"sole discretion" not_observed; 72h-gate
+  enforcement untested; avg-verification skew unquantifiable; treasury inflows may route
+  through addresses other than the manifest-named one -- the onchain view covers only the
+  named address; llms-full.txt 20MB-on-disk anomaly unexplained.
+next_falsifier: |-
+  Step 4 (runbooked, low priority given the EV picture): fund a wallet, wait 72h, claim
+  one small bounty, and measure the real verification latency + whether a passing payout
+  actually clears the sub-$1 treasury.
