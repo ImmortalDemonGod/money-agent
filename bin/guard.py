@@ -256,6 +256,13 @@ def main() -> int:
     # The rail is optional: no edge.json anywhere = rail idle = silence.
     try:
         e, e_src = _truth.load("edge.json")
+    except RuntimeError as _re:
+        # #36: a SIGNATURE refusal is not "rail idle" -- treating it as absence would make an
+        # unsigned/forged edge.json invisible exactly when a VOID or VERIFIED verdict might be
+        # hiding in it. Fail closed; genuine absence (no edge.json anywhere) stays silent.
+        if "SIGN" in str(_re).upper():
+            return fail(f"edge facts refused: {_re}")
+        e, e_src = None, None
     except Exception:
         e, e_src = None, None
     if e is not None:
