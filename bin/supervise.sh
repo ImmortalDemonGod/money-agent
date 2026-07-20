@@ -60,6 +60,17 @@ print(d.get('verdict',''))" 2>/dev/null)
   [[ -n "$EVERDICT" && "$EVERDICT" != "NONE" ]] && echo "edge rail  : $EVERDICT"
 fi
 
+# 3c. #46: facts commits that never reached origin -- a long-offline verifier writing locally is
+# invisible on every other line here, and its raw pulls are at risk until they land. Only
+# meaningful when this checkout IS the facts lane (the verifier machine); elsewhere it stays quiet.
+if [[ "$(git branch --show-current 2>/dev/null)" == "$LEDGER_BRANCH" ]] \
+   && git rev-parse -q --verify "origin/$LEDGER_BRANCH" >/dev/null 2>&1; then
+  UNPUSHED=$(git rev-list --count "origin/$LEDGER_BRANCH..HEAD" 2>/dev/null || echo 0)
+  if [[ "${UNPUSHED:-0}" -gt 0 ]]; then
+    echo "facts lane : $UNPUSHED unpushed local commit(s) -- push failing? pulls at risk until they land"
+  fi
+fi
+
 # 4. recent push activity from the log
 echo "last log   : $(tail -1 "$R/verifier.log" 2>/dev/null || echo '(no log)')"
 

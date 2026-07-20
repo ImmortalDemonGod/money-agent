@@ -346,17 +346,30 @@ def main() -> int:
     # manifest hashes RAW.glob("*.json"); an agent that plants a fabricated pull (claiming a $4700
     # charge) would otherwise get it hashed into the trusted manifest and signed by the verifier.
     # A raw file the verifier wrote is committed within the same cycle, so any UNTRACKED raw file is
-    # not the verifier's and must not be trusted. Remove it.
+    # not the verifier's and must not be trusted.
+    #
+    # #46 FIX: QUARANTINE, do not delete. An untracked raw here is EITHER an agent plant (worth
+    # preserving as evidence of the attempt) OR the verifier's own orphan from a cycle whose commit
+    # failed (git lock, crash) -- and deleting that orphan was a real loss path: traps.md #9's
+    # residual, where a written pull could vanish without ever reaching origin. Moving it to the
+    # agent-unreachable state dir keeps the audit trail in both cases; the tree stays clean either
+    # way, so nothing untrusted reaches the manifest.
     try:
         untracked = subprocess.run(
             ["git", "ls-files", "-o", "--exclude-standard", "ledger/raw/"],
             cwd=REPO, capture_output=True, text=True, timeout=10).stdout.split()
-        for rel in untracked:
-            (REPO / rel).unlink(missing_ok=True)
         if untracked:
-            print(f"C3: purged {len(untracked)} untracked (agent-planted?) raw file(s)", file=sys.stderr)
+            qdir = STATE_DIR / "raw-rescue" / time.strftime("%Y%m%dT%H%M%S")
+            qdir.mkdir(parents=True, exist_ok=True)
+            for rel in untracked:
+                src = REPO / rel
+                if src.exists():
+                    src.rename(qdir / src.name)
+            print(f"C3: quarantined {len(untracked)} untracked raw file(s) -> {qdir} "
+                  "(agent plant or orphan of a failed commit -- preserved, not trusted)",
+                  file=sys.stderr)
     except Exception as e:
-        print(f"warn: could not purge untracked raw files ({e})", file=sys.stderr)
+        print(f"warn: could not quarantine untracked raw files ({e})", file=sys.stderr)
 
     pulls: list[Path] = []
     # errors initialized earlier (constitution check appends to it)
@@ -445,6 +458,30 @@ def main() -> int:
     except Exception as e:
         errors.append(f"card_pull_failed: {type(e).__name__}: {e}")
 
+    # ---- #41: the run's OWN cost (inference), so a retro can state full economics from the
+    # ledger alone. Run 1's true P&L was "negative by an unrecorded amount" (archived README);
+    # the unknown-is-not-zero discipline that governs card spend applies to the dominant real
+    # cost too. Feed: INFERENCE_CSV in the verifier's .env -- `date,usd` rows exported from the
+    # provider's usage page (or kept by hand). Absent feed -> null fields, never 0. A header-only
+    # file IS a measured zero (the operator asserting no cost yet); a fully empty file is a
+    # misconfiguration and fails closed. Measurement only: no stop condition reads these fields.
+    inference: float | None = None
+    inference_source = None
+    inf_csv = _clean(os.environ.get("INFERENCE_CSV", ""))
+    if inf_csv:
+        try:
+            text = Path(inf_csv).read_text()
+            if not text.strip():
+                raise ValueError("empty file -- for a genuine zero, provide the 'date,usd' "
+                                 "header (a header-only file reads as measured 0)")
+            rows = list(csv.DictReader(text.splitlines()))
+            if any("usd" not in r or r["usd"] in (None, "") for r in rows):
+                raise ValueError("rows missing a 'usd' value (need date,usd columns)")
+            inference = round(sum(float(r["usd"]) for r in rows), 2)
+            inference_source = "manual_csv"
+        except Exception as e:
+            errors.append(f"inference_feed_failed: {type(e).__name__}: {e}")
+
     # ---- manifest: every pull hashed, so a packet can cite one
     lines = []
     for p in sorted(RAW.glob("*.json")):
@@ -474,6 +511,12 @@ def main() -> int:
         "spend_source": spend_source,
         "spend_measured": spent is not None,
         "net_usd": net,
+        # #41: full economics -- net including the run's own inference cost. Null unless BOTH
+        # sides are measured (unknown is not zero, on either side of the subtraction).
+        "inference_usd": inference,
+        "inference_source": inference_source,
+        "net_usd_full": (round(net - inference, 2)
+                         if (net is not None and inference is not None) else None),
         "cap_usd": cap,
         "cap_remaining_usd": (round(cap - spent, 2) if (cap and spent is not None) else None),
         "cap_enforced_by": "card_issuer" if spend_source == "issuer_enforced_uncounted" else "guard.py+issuer",

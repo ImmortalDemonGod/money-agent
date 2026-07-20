@@ -309,6 +309,49 @@ if t["verified"] or not any(e.startswith("non_usd_amount:privacy:EUR") for e in 
    or t["spent_usd"] != 2.0:
     fails.append(f"privacy EUR txn not poisoned/excluded: {t['errors']} spent={t['spent_usd']}")
 
+# 8. #46: an untracked raw pull is QUARANTINED into the state dir, never deleted (it is either a
+#    plant preserved as evidence, or the orphan of a failed commit preserved as audit trail)
+import pathlib
+plant = pathlib.Path("ledger/raw/29990104T000000_plant.json")
+plant.parent.mkdir(parents=True, exist_ok=True)
+plant.write_text('{"plant": true}')
+def privacy_clean(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [], "has_more": False}
+    if "/charges" in url: return {"data": [], "has_more": False}
+    if "transactions" in url:
+        return {"data": [{"token": "t1", "settled_amount": 100},
+                         {"token": "t2", "settled_amount": 200}]}
+    return {}
+t = run(privacy_clean)
+q = list(pathlib.Path("pnl_state/raw-rescue").glob("*/29990104T000000_plant.json"))
+if plant.exists() or not q:
+    fails.append(f"C3 quarantine broken: still_in_tree={plant.exists()} quarantined={bool(q)}")
+
+# 9. #41: absent feed -> null fields (unknown is not zero), even with spend measured
+if t.get("inference_usd") is not None or t.get("net_usd_full") is not None:
+    fails.append(f"inference absent-feed not null: {t.get('inference_usd')}/{t.get('net_usd_full')}")
+
+# 10. #41: valid feed + measured spend -> summed inference and full net
+pathlib.Path("inf.csv").write_text("date,usd\n2026-07-20,1.25\n2026-07-20,0.50\n")
+os.environ["INFERENCE_CSV"] = "inf.csv"
+t = run(privacy_clean)
+if not t["verified"] or t.get("inference_usd") != 1.75 or t.get("net_usd_full") != -4.75:
+    fails.append(f"inference metering wrong: verified={t['verified']} inf={t.get('inference_usd')} "
+                 f"full={t.get('net_usd_full')} errors={t['errors']}")
+
+# 11. #41: malformed feed fails closed; header-only file is a measured zero
+pathlib.Path("inf_bad.csv").write_text("date,usd\n2026-07-20,notanumber\n")
+os.environ["INFERENCE_CSV"] = "inf_bad.csv"
+t = run(privacy_clean)
+if t["verified"] or not any(e.startswith("inference_feed_failed") for e in t["errors"]):
+    fails.append(f"malformed inference feed not failing closed: {t['errors']}")
+pathlib.Path("inf_zero.csv").write_text("date,usd\n")
+os.environ["INFERENCE_CSV"] = "inf_zero.csv"
+t = run(privacy_clean)
+if not t["verified"] or t.get("inference_usd") != 0.0:
+    fails.append(f"header-only inference feed not a measured zero: {t.get('inference_usd')} {t['errors']}")
+os.environ.pop("INFERENCE_CSV", None)
+
 print("PNL_FAILS:" + ";".join(fails))
 PYEOF
 )
@@ -318,7 +361,7 @@ if [[ -z "$PNL_FAILS" ]]; then
 else
   bad "pnl currency/coverage: $PNL_FAILS"
 fi
-rm -rf pnl_state
+rm -rf pnl_state inf.csv inf_bad.csv inf_zero.csv
 git checkout -q -- ledger/ 2>/dev/null || true
 git clean -qfd ledger/raw/ 2>/dev/null || true
 
@@ -419,8 +462,12 @@ if grep -qE "python3 bin/|sleep \"" "$CONV"; then  # invocations, not comment me
   bad "convergence: extraction overran the block (end marker drifted) -- not executing it"; CONV_OK=0
 fi
 run_convergence() {
+  # MONEY_AGENT_STATE MUST be pinned to the rig (#46): the block's side-car writes
+  # ${MONEY_AGENT_STATE:-$HOME/...}; without this export the sim would write the operator's REAL
+  # ~/.money-agent-verifier -- the exact class of rig-escapes this file exists to prevent.
   R="$PWD" LOG=/dev/null LEDGER_BRANCH=ledger bash -c '
     set -uo pipefail; cd "'"$PWD"'"; R="'"$PWD"'"; LOG=/dev/null; LEDGER_BRANCH=ledger
+    export MONEY_AGENT_STATE="'"$W"'/vstate"
     say() { :; }
     source "'"$CONV"'"'
 }
@@ -437,6 +484,33 @@ if [[ "$CONV_OK" == "1" ]]; then
   run_convergence || bad "convergence: block exited non-zero on recovery cycle"
   if git ls-tree origin/ledger -r --name-only | grep -q 29990101; then
     ok "convergence: stranded pull recovered to origin"; else bad "convergence: recovery"; fi
+
+  # --- #46: FORCED DIVERGENCE (origin rotated from another checkout while a pull sat local-only).
+  # The side-car in the agent-unreachable state dir must hold the pull BEFORE the reset (belt);
+  # the block's re-commit + next-cycle push must land it on origin (suspenders).
+  git fetch -q origin ledger && git reset -q --hard origin/ledger
+  echo '{"probe2": true}' > ledger/raw/29990102T000000_probe2.json
+  git add ledger/raw/29990102T000000_probe2.json \
+    && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: stranded2"
+  TREE=$(git --git-dir="$W/origin.git" rev-parse "ledger^{tree}")
+  DIVERGED=$(git --git-dir="$W/origin.git" commit-tree "$TREE" -p "ledger^" -m "rotated elsewhere")
+  git --git-dir="$W/origin.git" update-ref refs/heads/ledger "$DIVERGED"
+  run_convergence || true    # divergence cycle: reset + rescue re-commit (local, ahead)
+  if compgen -G "$W/vstate/raw-rescue/*-diverged/29990102T000000_probe2.json" >/dev/null; then
+    ok "divergence: side-car holds the pull (agent-unreachable state dir)"
+  else bad "divergence: side-car missing the pull"; fi
+  run_convergence || bad "divergence: push cycle exited non-zero"   # ahead -> push path
+  git fetch -q origin ledger
+  if git ls-tree origin/ledger -r --name-only | grep -q 29990102; then
+    ok "divergence: pull re-committed and pushed to origin"; else bad "divergence: re-commit/push"; fi
+
+  echo "=== supervise: unpushed facts counter (issue #46) ==="
+  git reset -q --hard origin/ledger
+  echo '{"x": 1}' > ledger/raw/29990103T000000_local.json
+  git add ledger/raw/29990103T000000_local.json \
+    && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: local-only"
+  assert_grep "1 unpushed local commit" "supervise: surfaces unpushed facts commits" bash bin/supervise.sh
+  git reset -q --hard origin/ledger
 fi
 
 echo
