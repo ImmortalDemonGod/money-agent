@@ -24,8 +24,11 @@ import os
 import time
 from pathlib import Path
 
+# S12: mode-aware default (shadow runs get their own private state; explicit env wins)
 STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE",
-                                str(Path.home() / ".money-agent-verifier")))
+                                str(Path.home() / (".money-agent-shadow"
+                                                   if os.environ.get("SHADOW", "0") == "1"
+                                                   else ".money-agent-verifier"))))
 
 
 def _path(name: str) -> Path:

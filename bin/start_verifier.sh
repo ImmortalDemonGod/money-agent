@@ -16,6 +16,14 @@
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 AGENT_BRANCH="${1:?usage: start_verifier.sh <agent-branch>   (e.g. claude/xxx)}"
+# S12: shadow defaults (see verifier_loop.sh -- same rule, applied here too because either
+# script can be the entry point).
+if [[ "${SHADOW:-0}" == "1" ]]; then
+  LEDGER_BRANCH="${LEDGER_BRANCH:-shadow-ledger}"
+  MONEY_AGENT_STATE="${MONEY_AGENT_STATE:-$HOME/.money-agent-shadow}"
+  export MONEY_AGENT_STATE SHADOW
+  echo "=== SHADOW RUN: facts -> '$LEDGER_BRANCH', state -> '$MONEY_AGENT_STATE' ==="
+fi
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 export AGENT_BRANCH LEDGER_BRANCH
 

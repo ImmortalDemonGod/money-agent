@@ -11,6 +11,8 @@
 # run's end condition and the whole reason a human is kept in the loop.
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
+# S12: shadow runs supervise the shadow lane by default (one env var flips the verifier side)
+[[ "${SHADOW:-0}" == "1" ]] && LEDGER_BRANCH="${LEDGER_BRANCH:-shadow-ledger}"
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 now=$(date -u +%s)
 

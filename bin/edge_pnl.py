@@ -63,7 +63,12 @@ RAW = REPO / "ledger" / "raw"
 EDGE_MANIFEST = RAW / "EDGE_MANIFEST.sha256"
 
 # same private state dir as pnl.py -- outside the repo, unreachable from the sandbox
-STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-agent-verifier")))
+# S12: every STATE_DIR default in bin/ is mode-aware -- a shadow run (SHADOW=1) must never
+# share private state with a live run on the same machine. Explicit MONEY_AGENT_STATE wins.
+STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE",
+                                str(Path.home() / (".money-agent-shadow"
+                                                   if os.environ.get("SHADOW", "0") == "1"
+                                                   else ".money-agent-verifier"))))
 # P2 (S11): the freeze/VOID machinery this file pioneered now lives generically in bin/prereg.py;
 # this rail is its first client. Same state file name and record shape as before the lift --
 # the sim verdict-walk is the behavior-identical proof.

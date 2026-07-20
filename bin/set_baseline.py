@@ -11,14 +11,19 @@ repo for transparency. This is the boundary that makes the baseline non-forgeabl
 """
 import json, os, pathlib, time
 
+# S12: shadow runs freeze their baseline in the SHADOW state dir against the SHADOW lane --
+# same mode-aware defaults as pnl.py/truth.py, so one env var flips the whole verifier side.
+_SHADOW = os.environ.get("SHADOW", "0") == "1"
 STATE_DIR = pathlib.Path(os.environ.get("MONEY_AGENT_STATE",
-                                        str(pathlib.Path.home() / ".money-agent-verifier")))
+                                        str(pathlib.Path.home() /
+                                            (".money-agent-shadow" if _SHADOW
+                                             else ".money-agent-verifier"))))
 B = STATE_DIR / "baseline.json"
 REPO_COPY = pathlib.Path(__file__).resolve().parent.parent / "ledger" / "baseline.json"
 
 import subprocess as _sp
 REPO = pathlib.Path(__file__).resolve().parent.parent
-LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
+LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "shadow-ledger" if _SHADOW else "ledger")
 
 # Record the facts-lane tip OID at run start. guard.py scopes its SoD author check to
 # `<this commit>..origin/<ledger>` -- ANCESTRY, not `--since` (committer dates are agent-forgeable,
