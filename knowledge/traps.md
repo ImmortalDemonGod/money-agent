@@ -39,3 +39,11 @@ A local `main` that had not been fetched was **85 commits behind**. Reasoning fr
 confident, wrong "`archive/run-001` does not exist on any branch", and a PR branched from the stale
 base that duplicated archived content at live root paths. **`git fetch` before any claim about what
 a branch contains**, and before cutting a branch to PR from.
+
+## Analytics that counts asset fetches and datacenter traffic will invent humans
+A beacon deployed 2026-07-20 reported 2 "human" visitors within two hours. Both were
+`/favicon.ico` fetches from cloud networks (Google LLC; a NO hosting company) with browser UAs and
+`Accept-Language`. Real human page views: zero. Two rules, both now in `harness/beacon/`: exclude
+asset paths from every human-facing count, and treat a browser UA from a datacenter ASN as a bot.
+Report what was excluded so the drop is visible. **An instrument that flatters its own numbers is
+worse than none** — a false "someone arrived" is the exact conclusion run 1 had to retract.

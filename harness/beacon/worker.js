@@ -37,11 +37,27 @@ const CONFIG = {
 // is stored too so the classification can be refined from the data later.
 const BOT_RE = /bot\b|crawl|spider|slurp|bing|googlebot|yandex|baidu|duckduck|archive\.org|ia_archiver|facebookexternalhit|twitterbot|discordbot|slackbot|telegrambot|whatsapp|linkedinbot|pinterest|embedly|preview|nostr|curl|wget|python-requests|go-http|okhttp|java\/|headless|phantom|puppeteer|playwright|monitor|uptime|scan|semrush|ahrefs|dataprovider|petalbot|bytespider|gptbot|claudebot|ccbot|perplexity/i;
 
-function classifyBot(ua, req) {
+// Hosting/cloud networks. A "browser" arriving from one of these is a crawler or a link-preview
+// fetcher wearing a browser UA, not a person on a laptop. Consumer ISPs (Comcast, AT&T, Telekom,
+// Vodafone...) are deliberately NOT here. The raw as_org is stored, so this can be refined later
+// without losing data.
+const DATACENTER_RE = /google|amazon|aws\b|microsoft|azure|digitalocean|linode|akamai|fastly|hetzner|ovh|vultr|scaleway|contabo|leaseweb|choopa|equinix|oracle|alibaba|tencent|cloudflare|m247|datacamp|hostinger|namecheap|godaddy|blix/i;
+
+// Browsers fetch these automatically alongside a page. Counting them as visits double-counts a real
+// visitor and, worse, manufactures a "visit" out of a bare crawler asset fetch.
+const ASSET_RE = /^\/(favicon\.ico|apple-touch-icon[^/]*|robots\.txt|sitemap\.xml|.*\.(png|jpe?g|gif|svg|webp|ico|css|js|mjs|map|woff2?|ttf))$/i;
+
+function isAsset(path) { return ASSET_RE.test(path || ""); }
+
+function classifyBot(ua, req, cf) {
   if (!ua) return 1;                                   // no UA at all -> bot
   if (BOT_RE.test(ua)) return 1;                       // known bot signature
   if (!req.headers.get("accept-language")) return 1;   // real browsers send Accept-Language
   if (!/mozilla|applewebkit|gecko|chrome|safari|firefox|edge/i.test(ua)) return 1;
+  // Caught live on run 1's estate 2026-07-20: two /favicon.ico fetches, one from Google LLC and one
+  // from a Norwegian hosting network, both wearing full browser UAs with Accept-Language, were being
+  // counted as HUMAN. An instrument that flatters its own numbers is worse than none.
+  if (cf && DATACENTER_RE.test(cf.asOrganization || "")) return 1;
   return 0;
 }
 
@@ -78,7 +94,7 @@ async function logHit(env, ctx, req, path, dest) {
     const row = env.DB.prepare(
       "INSERT INTO hits (ts,path,dest,ref,ua,country,asn,as_org,ip_hash,bot) VALUES (?,?,?,?,?,?,?,?,?,?)"
     ).bind(new Date().toISOString(), path, dest || "", ref, ua,
-           cf.country || "", cf.asn || 0, cf.asOrganization || "", iph, classifyBot(ua, req));
+           cf.country || "", cf.asn || 0, cf.asOrganization || "", iph, classifyBot(ua, req, cf));
     ctx.waitUntil(row.run());
   } catch (e) { /* never let logging break serving */ }
 }
@@ -148,10 +164,13 @@ identifies a person, the honest answer is usually that there is nothing to retur
 async function stats(env) {
   if (!env.DB) return new Response("no DB bound", { status: 500 });
   const q = async (sql) => (await env.DB.prepare(sql).all()).results;
-  const [tot] = await q("SELECT COUNT(*) n, SUM(CASE WHEN bot=0 THEN 1 ELSE 0 END) humans, SUM(CASE WHEN bot=1 THEN 1 ELSE 0 END) bots, COUNT(DISTINCT ip_hash) distinct_ips FROM hits");
-  const humansByCountry = await q("SELECT country, COUNT(*) n FROM hits WHERE bot=0 GROUP BY country ORDER BY n DESC LIMIT 15");
+  // ASSET_SQL must mirror ASSET_RE. Asset fetches are still logged (they are evidence) but never
+  // counted as visits: the headline number has to mean "a page was opened".
+  const ASSET_SQL = "(path='/favicon.ico' OR path='/robots.txt' OR path='/sitemap.xml' OR path LIKE '/apple-touch-icon%' OR path LIKE '%.png' OR path LIKE '%.jpg' OR path LIKE '%.jpeg' OR path LIKE '%.gif' OR path LIKE '%.svg' OR path LIKE '%.webp' OR path LIKE '%.ico' OR path LIKE '%.css' OR path LIKE '%.js' OR path LIKE '%.mjs' OR path LIKE '%.map' OR path LIKE '%.woff' OR path LIKE '%.woff2' OR path LIKE '%.ttf')";
+  const [tot] = await q(`SELECT COUNT(*) n_all, SUM(CASE WHEN NOT ${ASSET_SQL} THEN 1 ELSE 0 END) page_views, SUM(CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END) humans, SUM(CASE WHEN bot=1 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END) bots, SUM(CASE WHEN ${ASSET_SQL} THEN 1 ELSE 0 END) assets_excluded, COUNT(DISTINCT CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN ip_hash END) distinct_human_ips FROM hits`);
+  const humansByCountry = await q(`SELECT country, COUNT(*) n FROM hits WHERE bot=0 AND NOT ${ASSET_SQL} GROUP BY country ORDER BY n DESC LIMIT 15`);
   const clicks = await q("SELECT dest, COUNT(*) n, SUM(CASE WHEN bot=0 THEN 1 ELSE 0 END) human_clicks FROM hits WHERE path='/go' GROUP BY dest ORDER BY n DESC");
-  const recentHumans = await q("SELECT ts,path,dest,country,as_org,ref,substr(ua,1,80) ua FROM hits WHERE bot=0 ORDER BY id DESC LIMIT 30");
+  const recentHumans = await q(`SELECT ts,path,dest,country,as_org,ref,substr(ua,1,80) ua FROM hits WHERE bot=0 AND NOT ${ASSET_SQL} ORDER BY id DESC LIMIT 30`);
   const recentAll = await q("SELECT ts,path,country,bot,substr(ua,1,60) ua FROM hits ORDER BY id DESC LIMIT 15");
   return Response.json({ summary: tot, humans_by_country: humansByCountry, click_throughs: clicks,
                          recent_human_hits: recentHumans, recent_any: recentAll });
