@@ -149,6 +149,40 @@ if python3 bin/bets.py resolve bet-001 expired "sim evidence" >/dev/null 2>&1; t
 if grep -q "sim evidence" knowledge/outcomes.jsonl 2>/dev/null; then
   ok "bets: resolution fed knowledge/outcomes.jsonl"; else bad "bets: resolution fed outcomes"; fi
 
+echo "=== oracle-classed resolutions (#40) ==="
+python3 bin/bets.py add --what "det-unrunnable" --clock other --check "no_such_cmd_zz9" \
+  --oracle deterministic --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+assert_exit_grep 1 "oracle: deterministic" "conclusion: open-bet refusal names its oracle class" \
+  python3 bin/conclusion_gate.py
+assert_exit_grep 1 "could not EXECUTE" "bets: unrunnable deterministic oracle refuses a prose resolve" \
+  python3 bin/bets.py resolve bet-002 lost "prose only"
+if python3 bin/bets.py resolve bet-002 lost "prose only" --downgrade-judgment >/dev/null 2>&1 \
+   && grep -q "downgraded-to-judgment" run/bets.json; then
+  ok "bets: --downgrade-judgment resolves and relabels visibly"
+else bad "bets: downgrade path"; fi
+python3 bin/bets.py add --what "det-runnable" --clock other --check "exit 3" \
+  --oracle deterministic --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+if python3 bin/bets.py resolve bet-003 lost "the check exited 3 = condition absent" >/dev/null 2>&1 \
+   && grep -q '"rc": 3' run/bets.json; then
+  ok "bets: executed check output stored with the resolution (rc is evidence, not a refusal)"
+else bad "bets: executed-check resolution"; fi
+
+echo "=== iteration pacing: PACE_ENFORCE (#45) ==="
+python3 bin/bets.py add --what "quiet clock" --clock indexation --check "true" \
+  --poll-after-h 999 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+python3 bin/bets.py checked bet-004 "sim tick" >/dev/null 2>&1
+assert_exit_grep 1 "declared lever" "pace: quiet open bets block a lever-less new iteration" \
+  env PACE_ENFORCE=1 python3 bin/iter.py new
+if env PACE_ENFORCE=1 python3 bin/iter.py new --lever "sim: a genuinely new probe" >/dev/null 2>&1 \
+   && grep -q "Lever:.*genuinely new probe" MONEY_LOG.md; then
+  ok "pace: a declared lever opens the iteration and lands in MONEY_LOG"
+else bad "pace: lever path"; fi
+python3 bin/bets.py add --what "due clock" --clock reply --check "true" \
+  --poll-after-h 1 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+assert_exit 0 "pace: a due bet unblocks lever-less iterations" \
+  env PACE_ENFORCE=1 python3 bin/iter.py new
+assert_exit 0 "pace: default-off leaves iteration-opening untouched" python3 bin/iter.py new
+
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'
@@ -435,8 +469,59 @@ PYEOF
   assert_exit 1 "gate: contradicting EDGE_CLAIM fails" bash bin/aiv_gate.sh 901
   grep -v "^EDGE_CLAIM:" .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md > p.tmp && mv p.tmp .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: missing EDGE_CLAIM while rail live fails" bash bin/aiv_gate.sh 901
+  # #39/#35 stage 2c: a payment-surface claim requires a fresh delivery_check the gate runs itself
+  printf 'EDGE_CLAIM: VERIFIED_POSITIVE_EV\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  printf 'Offer live: https://buy.stripe.com/test_simoffer123\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  assert_exit 1 "gate: payment URL without DELIVERY_CHECK_URL fails (paid-offer mandate)" \
+    bash bin/aiv_gate.sh 901
+  printf 'DELIVERY_CHECK_URL: https://sim-delivery.invalid/unlock\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  assert_exit 1 "gate: failing delivery_check fails the packet (fresh re-run, never self-typed)" \
+    bash bin/aiv_gate.sh 901
 else
   skip "gate tests (aiv CLI not on PATH -- pip install aiv-protocol, or accept stage-0 fail-closed)"
+fi
+
+echo "=== delivery_check unit (#39/#35, monkeypatched fetch -- SSRF guard blocks a live-serve rig) ==="
+DC_RESULT=$(python3 - 2>/dev/null <<'PYEOF'
+import sys
+sys.path.insert(0, "bin")
+sys.excepthook = lambda t, v, tb: print(f"DC_FAILS:crash:{t.__name__}:{v}")
+import importlib, delivery_check as dc
+importlib.reload(dc)
+fails = []
+def case(label, want_rc, fetch, limit, argv):
+    dc._fetch = fetch
+    dc._link_limit = lambda u: limit
+    sys.argv = ["delivery_check.py"] + argv
+    rc = dc.main()
+    if rc != want_rc:
+        fails.append(f"{label}: rc={rc} want {want_rc}")
+GOOD = lambda u: (200, b"X" * 400)
+case("complete artifact + capped link passes", 0, GOOD, "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("placeholder body fails", 1, lambda u: (200, b"deliverable <fill> pending" + b"x" * 400), "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("stub-sized body fails", 1, lambda u: (200, b"ok"), "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("uncapped link fails (#35)", 1, GOOD, "none",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("unverifiable limit fails closed (#35)", 1, GOOD, "unverified",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("no payment link -> delivery-only check passes", 0, GOOD, "n/a",
+     ["https://example.com/unlock"])
+import hashlib
+h = hashlib.sha256(b"X" * 400).hexdigest()
+case("sha256 match passes", 0, GOOD, "n/a", ["https://example.com/unlock", "--expect-sha256", h])
+case("sha256 mismatch fails", 1, GOOD, "n/a",
+     ["https://example.com/unlock", "--expect-sha256", "0" * 64])
+print("DC_FAILS:" + ";".join(fails))
+PYEOF
+)
+DC_FAILS="${DC_RESULT##*DC_FAILS:}"
+if [[ -z "$DC_FAILS" ]]; then
+  ok "delivery_check: pass/placeholder/size/uncapped/unverified/sha cases all correct"
+else
+  bad "delivery_check unit: $DC_FAILS"
 fi
 
 echo "=== verifier convergence (the block between TEST-MARKERs, run verbatim) ==="
