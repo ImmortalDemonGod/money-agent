@@ -154,6 +154,14 @@ def cmd_add(a) -> int:
             for e in errs:
                 print(f"FATAL: {e}", file=sys.stderr)
             return 1
+        # S10: spine ordering/caps at placement -- armed by SPINE_ENFORCE=1 only, fail-closed
+        # inside spine.check_placement when its config is unreadable.
+        import spine
+        serrs = spine.check_placement(a.type, typed.get("lane", ""))
+        if serrs:
+            for e in serrs:
+                print(f"FATAL: {e}", file=sys.stderr)
+            return 1
     bets = _load()
     bid = f"bet-{len(bets) + 1:03d}"
     bets.append({
@@ -225,6 +233,18 @@ def cmd_resolve(a) -> int:
     b = next((x for x in bets if x["id"] == a.id), None)
     if not b or b["status"] != "open":
         print(f"FATAL: no open bet {a.id!r}", file=sys.stderr)
+        return 1
+    # S10/E2: a stale instrument suspends dependent resolutions in the lane (armed only)
+    import os as _os
+    try:
+        import spine as _spine
+        serrs = _spine.check_resolution(b)
+    except Exception as e:
+        serrs = ([f"spine check failed ({type(e).__name__}: {e}) -- fail-closed"]
+                 if _os.environ.get("SPINE_ENFORCE", "0") == "1" else [])
+    if serrs:
+        for e in serrs:
+            print(f"FATAL: {e}", file=sys.stderr)
         return 1
     # #40: a deterministic/instrumented clock has an observable primary source, so its resolution
     # must SHOW the observation -- the recorded --check command is executed here and its output

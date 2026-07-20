@@ -1373,3 +1373,58 @@ refused by the DISCLOSURE gate, not the bet gate ("REFUSING: disclosure gate..."
 
 **Next:** S10 — the spine (spine.yml + bin/spine.py, SPINE_ENFORCE off, DEMAND_REFUTED_K off,
 E1/E2 amendments, §13 answers recorded).
+
+---
+
+## Entry 030 — 2026-07-20 — S10 V3 spine: per-lane ordering, config-gated (the contested layer, by explicit switch only)
+
+**What:** `spine.yml` + `bin/spine.py` per the plan's S10 (see commit 18c2d92 for the full
+mechanism summary): derived-not-stored lane stages over the typed registry, monotone lattice,
+E1 active/watching lane caps, E2 freshness suspension, `DEMAND_REFUTED_K` guard CHECKPOINT.
+Wired: `bets.py` placement/resolution consult the spine when `SPINE_ENFORCE=1`; guard consults
+`demand_refuted()` when `K>0`; both default OFF (the demand-first ordering is the design's one
+contested proposal — adoption is a memo decision, and the terminal set stays closed until then).
+sod_hook owns `spine.yml`/`spine.py` (editing ordering to unlock a stage = the constitution-edit
+class, when armed).
+
+**V2_HARNESS_DESIGN §13's five open questions, answered as implementation decisions:**
+1. *Where do resolution stamps commit?* → CO-COMMITTED in `run/bets.json` at resolve time
+   (bets._save), local-UTC stamped (E3); verifier countersigning stays the S11/P4-adjacent
+   upgrade path.
+2. *Novelty-signature calibration for generator_dry?* → DEFERRED WITH REASON: no bet-generator
+   exists in the harness; a dry-generator terminal without a generator is config theater.
+3. *Does INCONCLUSIVE count toward DEMAND-REFUTED?* → NO, implemented: only lost/expired grade a
+   lane's demand bets dead; an ungraded bet keeps the lane alive.
+4. *The horizon parameter?* → belongs to run config (`MAX_WALL_CLOCK_H`), not the spine;
+   the spine deliberately owns ordering, not time.
+5. *Demand-confirmation TTL?* → machinery present (freshness_h is the extension point; stage-0/1
+   shipped); stage-2 TTL is a memo knob, off unless set.
+
+**Edge cases enumerated before coding:** stdlib has no YAML, so the config is a deliberate
+YAML-subset with its own ~25-line parser that FAILS CLOSED while armed (an unreadable config
+refuses placements rather than guessing); probes must stay resolvable in a suspended lane (they
+are how it un-suspends); a placed delivery bet IS the stage-3 exit (building is the bet);
+demand-refuted counts graded kills only; the lattice needs no relabel detection — a new lane
+starting at 0 makes relabeling self-defeating.
+
+**Verified by running (artifacts):** sim → **PASS=77 FAIL=0 SKIP=0** (was 66; 11 new): flag-off
+inert; stage-0 demand refused; probe placeable anywhere; armed bets.py add refuses out-of-order;
+instrument+substrate wins unlock stage 2; E2 aged instrument suspends the demand resolution and
+refresh un-suspends; DEMAND_REFUTED_K=1 guard checkpoint fires and K-off leaves terminals
+unchanged; E1 cap refuses a 4th active lane; unreadable config fails closed. Corpus **11/0**;
+shellcheck + compileall clean. Bite: definitional (no spine existed; every armed refusal is
+new behavior) — the flag-off assertions are the compatibility half of the proof.
+
+**Critique pass:**
+- Stage exits are metric-name conventions (`instrument-probe`/`substrate-probe`) — a mislabeled
+  probe metric silently fails to unlock a stage. Acceptable: armed mode's error names the
+  ordering rule and `spine.py status` shows the ladder; S16's doc-truthfulness lens should
+  confirm the runbook/memo explain the convention.
+- `check_placement` runs config-load + full lane derivation per add — O(bets) per call, fine at
+  registry scale.
+- bet_gate authorization and spine ordering are not yet lane-joined (an action is authorized by
+  any typed bet, not necessarily one in the acting lane) — V2_HARNESS_DESIGN leaves this
+  composition open; recorded as the S16-review question it is.
+
+**Next:** S11 — P-generalizations (P2 prereg module, P3 decision-gate, P5 obligations+watchdog,
+P6 probe registry, P7 exposure caps).
