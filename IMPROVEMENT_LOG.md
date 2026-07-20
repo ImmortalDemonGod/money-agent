@@ -1790,8 +1790,66 @@ verification packets; (e) split into stacked PRs bottom-up.
   in the S7 PR body (a tripwire comparing charge-classified customer sum against
   balance-transaction gross).
 
-**Verified by running:** (to be filled per phase)
+**Adversarial phase (four fresh-context subagents, distinct lenses, prompted to DEFEAT the
+c2ff14e..HEAD diff):**
+- **Correctness (two passes -- the /loop cron re-spawned a deeper second run, which earned its
+  keep):** the shallow pass confirmed no fail-open in any money/halt rail and one fail-closed
+  accounting bug (F2). The deep pass found EIGHT confirmed bugs with reproductions, all in this
+  backlog's own code: F1 (signing verified-flip was dead code -- list compared to itself), F2
+  (bet-gate consume before the send-blocking gates), F3 (edge peak-equity never reset across
+  runs -> a fresh bet FALSIFIED on inherited drawdown with zero trades), F4 (roundtrip token in
+  the disclosure-hashed body -> probe could never pass), F5 (SHADOW read before .env sourced ->
+  shadow facts onto the LIVE lane), F6 (run_weak add-list omitted the .sig -> weak+signing
+  wedges), F7 (obligation_watch without AGENT_BRANCH published a verified all-clear -> masked
+  breaches), F8 (NaN/negative defeats every exposure cap), F9 (bets._save pathspec-less commit
+  sweeps unrelated staged files).
+- **SoD-bypass:** confirmed the CRITICAL CEILING HOLDS -- no forge of the operator-scored fact
+  is possible (received_usd on origin/ledger is signed by a key never in the sandbox; no agent
+  Stripe write path). Gates fail closed; the human queue cannot suppress a halt; SHADOW=1 cannot
+  be used as a bypass (it ADDS the marker wall and halts on any live cred). Two actionable
+  blocklist gaps: the enumeration cannot name not-yet-created files, so a stdlib-shadowing
+  bin/datetime.py would hijack a gate's imports; and setup_sandbox.sh (the hook installer) was
+  unlisted.
+- **Test-vacuity:** "unusually hard to fool" -- 10 feature-reverts demonstrated every
+  load-bearing wall (signature, currency, first-dollar, write/read walls, capture) genuinely
+  bites; only two vacuous tests, both low-stakes (a shadow-search line, a tautological env-
+  precedence check).
+- **Doc-truthfulness:** clean bill on every load-bearing surface (the entire RUN2_DECISIONS
+  knob table and every runbook output string verified exact); one real drift (a stale PASS=118
+  I introduced in S16), fixed.
 
-**Critique pass:** (to be filled)
+**Dispositions:** 12 code fixes (F1-F9, C2, C4, C5) + 2 SoD blocklist additions + 1 test-
+vacuity strengthening, EACH with a fixture that bit the pre-fix code. Refuted-with-record (not
+regressions from this backlog; ceiling confirmed): the SoD strong->weak downgrade (a pre-
+existing, documented weak-mode/provisioning property -- the wall is a read-only origin, per
+truth.py:39-43 and runbook step 6; candidate verifier-side mode-pin issue); obligations.json
+unsigned (branch wall is the strong-mode protection; a follow-up could sign it via
+obligation_watch); human.py self-fulfill (an agent-side actuator by design; conclusion_gate
+never stops the run); the tautological state-dir test (a defensible regression guard, left).
 
-**Next:** (to be filled)
+**Verified by running:** sim **PASS=134 FAIL=0 SKIP=0** (was 119; +15 S16 fixtures), corpus
+**11/0**, shellcheck + compileall clean. **Bite proof:** the new tests/sim.sh run against the
+pre-fix bin/ (old code, new fixtures, committed in a throwaway clone) -> **14 FAILs** on
+exactly the S16 assertions (F5 even reported the pre-fix ordering: shadow block line 31 before
+the .env source line 46), all green on the fix. **Mutation pass 8/8 CAUGHT** on the post-fix
+code (tests/mutation_test.sh + tests/MUTATION_LOG.md): each historical defect class -- inert
+halt, signature skip, shadow-wall removal, silent truncation, currency leak, bet-gate fail-
+open, exposure-cap removal, marker drift -- reintroduced in a clone and confirmed to turn the
+matrix red. (The mutation harness itself produced a finding about itself the first run: 8/8
+ESCAPED until mutations were COMMITTED, because the rig builds its origin from committed HEAD --
+banked in MUTATION_LOG.)
+
+**Critique pass:** the second correctness pass finding eight bugs the first missed is the
+argument for perspective-diverse adversaries over redundant ones -- and for the operator's
+own warning (this backlog's tendency to under-test edge cases was real, and the fixtures now
+exist because the reviewers, not the author, found the holes). Coverage honesty: C4 (guard
+obligation SIGN re-raise) has no dedicated sim fixture -- it mirrors the edge-read SIGN path
+line-for-line (which IS fixtured) and is verified by inspection; F5/F6 are structural-ordering
+guards (source-before-shadow, add-list-contains-sig) rather than full-loop functional tests,
+because the rig cannot stand up a live verifier_loop -- stated, not hidden. The SoD stdlib-
+shadow blocklist is an enumeration of the names the gates actually import (auditable, finite),
+not a general defense against every possible stdlib name -- the honest wall remains the out-of-
+band verifier + read-only origin, as everywhere in this repo.
+
+**Next:** split the 18 stack-tagged commits into stacked PRs (7 branches, linear ranges, each
+targeting the previous) with per-stack packets + operator-review flags, green CI per stack.
