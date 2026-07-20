@@ -210,6 +210,7 @@ os.environ.update({"MONEY_AGENT_STATE": "state", "AGENT_BRANCH": "sim-agent",
 import importlib, edge_pnl
 importlib.reload(edge_pnl)
 reg = ("EDGE_ID: sim\nMETRIC: paper_pnl_usd\nBAR: 50.0\nMIN_FILLED_ORDERS: 10\n"
+       "MAX_DRAWDOWN_USD: 25.0\n"
        "RESOLVE_BY: 2099-01-01T00:00:00Z\nHYPOTHESIS: h\nFALSIFIED_IF: f\n")
 edge_pnl.committed_registration = lambda: (reg, None)
 state = {"equity": "100000", "orders": []}
@@ -223,11 +224,25 @@ state.update(equity="100062.5", orders=[{"status": "filled"}]*4)
 if verdict() != "PENDING": fails.append("bar-cleared-small-sample stays PENDING")
 state["orders"] = [{"status": "filled"}]*12
 if verdict() != "VERIFIED_POSITIVE_EV": fails.append("bar+sample -> VERIFIED")
+# #38: the martingale catch -- a NEW peak then a drop breaching the frozen risk cap FALSIFIES
+# even though pnl (60) still clears the bar (50). A raw level-check would have said VERIFIED.
+state.update(equity="100100")
+if verdict() != "VERIFIED_POSITIVE_EV": fails.append("new peak should stay VERIFIED (dd=0)")
+state.update(equity="100060")
+v = verdict()
+_e = json.load(open("ledger/edge.json"))
+if v != "FALSIFIED" or "drawdown" not in _e.get("falsified_reason", ""):
+    fails.append(f"drawdown breach not FALSIFIED-with-reason: {v} / {_e.get('falsified_reason')}")
+nofield_f, nofield_e = edge_pnl.parse_registration(reg.replace("MAX_DRAWDOWN_USD: 25.0\n", ""))
+if not nofield_e: fails.append("registration without MAX_DRAWDOWN_USD accepted")
 frozen = json.load(open("state/edge_registration.json"))
 frozen["fields"]["RESOLVE_BY"] = "2000-01-01T00:00:00Z"
 json.dump(frozen, open("state/edge_registration.json","w"))
+os.remove("state/edge_runtime.json")   # reset peak so the deadline leg (not drawdown) decides
 state.update(equity="100010")
 if verdict() != "FALSIFIED": fails.append("deadline-missed -> FALSIFIED")
+if "deadline" not in json.load(open("ledger/edge.json")).get("falsified_reason", ""):
+    fails.append("deadline falsification lost its reason")
 edge_pnl.committed_registration = lambda: (reg + "tampered\n", None)
 frozen["fields"]["RESOLVE_BY"] = "2099-01-01T00:00:00Z"
 json.dump(frozen, open("state/edge_registration.json","w"))
@@ -638,7 +653,13 @@ if [[ "$CONV_OK" == "1" ]]; then
   git add ledger/raw/29990102T000000_probe2.json \
     && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: stranded2"
   TREE=$(git --git-dir="$W/origin.git" rev-parse "ledger^{tree}")
-  DIVERGED=$(git --git-dir="$W/origin.git" commit-tree "$TREE" -p "ledger^" -m "rotated elsewhere")
+  # explicit identity, like verifier_loop's real rotation: a bare repo has no local git config, so
+  # commit-tree would author as the HOST's global user -- and guard's ancestry-scoped SoD scan
+  # (correctly) halts on any non-verifier author reachable from the facts lane. The matrix caught
+  # exactly this when the fixture omitted it.
+  DIVERGED=$(GIT_AUTHOR_NAME=verifier GIT_AUTHOR_EMAIL=v@sim \
+             GIT_COMMITTER_NAME=verifier GIT_COMMITTER_EMAIL=v@sim \
+             git --git-dir="$W/origin.git" commit-tree "$TREE" -p "ledger^" -m "rotated elsewhere")
   git --git-dir="$W/origin.git" update-ref refs/heads/ledger "$DIVERGED"
   run_convergence || true    # divergence cycle: reset + rescue re-commit (local, ahead)
   if compgen -G "$W/vstate/raw-rescue/*-diverged/29990102T000000_probe2.json" >/dev/null; then
@@ -805,9 +826,64 @@ PYEOF
   else
     bad "pnl signing: $SIGN_FAILS"
   fi
-  rm -rf sig_state
+  # edge.json signs too (the S4 deferral, closed in the edge-quality stack): a stubbed edge_pnl
+  # cycle with the key provisioned must emit a verifiable ledger/edge.json.sig
   git checkout -q -- ledger/ 2>/dev/null || true
   git clean -qfd ledger/ 2>/dev/null || true
+  EDGESIGN_RESULT=$(SIM_VKEY="$W/vkey" python3 - 2>/dev/null <<'PYEOF'
+import sys, os, json, subprocess
+sys.path.insert(0, "bin")
+sys.excepthook = lambda t, v, tb: print(f"ES_FAILS:crash:{t.__name__}:{v}")
+os.environ.update({"MONEY_AGENT_STATE": "sig_state2", "AGENT_BRANCH": "sim-agent",
+                   "ALPACA_PAPER_KEY_ID": "k", "ALPACA_PAPER_SECRET_KEY": "s"})
+os.makedirs("sig_state2", exist_ok=True)
+import shutil
+shutil.copy(os.environ["SIM_VKEY"], "sig_state2/verifier_signing_key")
+os.chmod("sig_state2/verifier_signing_key", 0o600)
+import importlib, edge_pnl
+importlib.reload(edge_pnl)
+reg = ("EDGE_ID: sim2\nMETRIC: paper_pnl_usd\nBAR: 50.0\nMIN_FILLED_ORDERS: 10\n"
+       "MAX_DRAWDOWN_USD: 25.0\nRESOLVE_BY: 2099-01-01T00:00:00Z\nHYPOTHESIS: h\nFALSIFIED_IF: f\n")
+edge_pnl.committed_registration = lambda: (reg, None)
+edge_pnl._get = lambda url, h: {"equity": "100000"} if "/account" in url else []
+edge_pnl.main()
+fails = []
+if not os.path.exists("ledger/edge.json.sig"):
+    fails.append("edge.json.sig missing")
+else:
+    r = subprocess.run(["ssh-keygen", "-Y", "verify", "-f", "harness/allowed_signers",
+                        "-I", "verifier", "-n", "money-agent-ledger", "-s", "ledger/edge.json.sig"],
+                       input=open("ledger/edge.json", "rb").read(), capture_output=True)
+    if r.returncode != 0: fails.append("edge signature does not verify")
+print("ES_FAILS:" + ";".join(fails))
+PYEOF
+)
+  ES_FAILS="${EDGESIGN_RESULT##*ES_FAILS:}"
+  if [[ -z "$ES_FAILS" ]]; then
+    ok "edge signing: stubbed edge_pnl cycle emits a verifiable edge.json.sig"
+  else
+    bad "edge signing: $ES_FAILS"
+  fi
+  rm -rf sig_state sig_state2
+  git checkout -q -- ledger/ 2>/dev/null || true
+  git clean -qfd ledger/ 2>/dev/null || true
+  # an UNSIGNED edge.json on the armed lane is refused, and guard treats it as a HALT (an
+  # invisible VOID would otherwise hide bar-moving behind "rail idle")
+  python3 -c "
+import json; e={'computed_at':'2099-01-01T00:00:00+00:00','verdict':'VOID','verified':True,
+'registration_intact':False}
+open('ledger/edge.json','w').write(json.dumps(e, indent=2) + '\n')"
+  rm -f ledger/edge.json.sig
+  git add ledger/edge.json
+  git rm -q --cached ledger/edge.json.sig 2>/dev/null || true
+  git -c user.name=verifier -c user.email=v@sim commit -qm "unsigned edge" && git push -qf origin ledger
+  cdx "$W/agent"
+  assert_exit_grep 2 "UNSIGNED" "edge signing: unsigned edge.json refused on the armed lane" \
+    python3 bin/truth.py --file edge.json verdict
+  assert_exit_grep 1 "edge facts refused" "edge signing: guard halts rather than treating it as idle" \
+    python3 bin/guard.py
+  cdx "$W/verifier"
+  git reset -q --hard "$GOOD_TIP" && git push -qf origin ledger
 else
   skip "fact-lane signing tests (ssh-keygen not on PATH -- install openssh-client)"
 fi

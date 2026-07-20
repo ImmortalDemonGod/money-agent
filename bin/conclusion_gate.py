@@ -236,8 +236,11 @@ def main() -> int:
         if e_src in _truth.GROUNDED_SOURCES and e_facts.get("verdict") == "PENDING":
             fails.append("the verified-edge experiment is PENDING (ledger/edge.json) -- a live "
                          "pre-registered bet. Its deadline resolves it; a conclusion cannot.")
-    except RuntimeError:
-        pass  # no edge.json anywhere: rail idle, nothing pending
+    except RuntimeError as e:
+        if "SIGN" in str(e).upper():  # #36: a signature refusal is unknown state, not idle
+            fails.append(f"edge facts refused (signature): {e} -- unknown edge state cannot "
+                         "authorize a conclusion; fail-closed.")
+        # else: no edge.json anywhere -- rail idle, nothing pending
     except Exception as e:
         fails.append(f"cannot read edge facts ({type(e).__name__}: {e}) -- fail-closed.")
 

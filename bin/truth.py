@@ -78,7 +78,7 @@ def _enforce_signature(content: bytes, name: str, ref: str, facts: dict) -> None
     pub = _git(f"show", f"{ref}:harness/verifier_key.pub")
     if pub.returncode != 0 or not pub.stdout.strip():
         return  # unprovisioned: signature wall not armed
-    if name != "truth.json":
+    if name not in ("truth.json", "edge.json"):
         return
     if shutil.which("ssh-keygen") is None:
         raise RuntimeError("signature enforcement is armed (harness/verifier_key.pub committed) "
@@ -104,12 +104,16 @@ def _enforce_signature(content: bytes, name: str, ref: str, facts: dict) -> None
             raise RuntimeError(f"SIGNATURE VERIFICATION FAILED for {ref}:ledger/{name} "
                                f"({r.stderr.decode(errors='replace').strip()[:120]}) -- the file "
                                "does not match the verifier's signature; refusing as forged.")
-    # one-step hash-chain check (ledger branch only: parent commits on an agent branch are
-    # unrelated history). The declared previous_hash must equal sha256 of the PARENT commit's
-    # truth.json; an unreachable parent (first publish, or post-rotation) is a chain start.
-    if ref.startswith("origin/"):
+    # one-step hash-chain check (truth.json on the ledger branch only: edge.json carries no chain
+    # field, and parent commits on an agent branch are unrelated history). The declared
+    # previous_hash must equal sha256 of the PARENT commit's truth.json; an unreachable parent
+    # (first publish, or post-rotation) is a chain start.
+    if name == "truth.json" and ref.startswith("origin/"):
         parent = _git_bytes("show", f"{ref}~1:ledger/{name}")
-        if parent.returncode == 0 and parent.stdout:
+        if parent.returncode == 0 and parent.stdout and parent.stdout != content:
+            # identical parent bytes = the commit did not republish truth.json (e.g. a pubkey- or
+            # edge-only commit) -- no new chain link exists to check, and demanding one would
+            # false-positive on every such commit.
             import hashlib
             expect = hashlib.sha256(parent.stdout).hexdigest()
             declared = facts.get("previous_hash")
