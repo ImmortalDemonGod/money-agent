@@ -1476,6 +1476,28 @@ open('ledger/edge.json','w').write(json.dumps(e, indent=2) + '\n')"
     python3 bin/guard.py
   cdx "$W/verifier"
   git reset -q --hard "$GOOD_TIP" && git push -qf origin ledger
+
+  # --- S16: byte-fidelity. A correctly SIGNED file whose committed bytes contain CRLF must
+  # be ACCEPTED: a text-mode read newline-translates (CRLF->LF) before verifying and fails
+  # GOOD data. truth.py now reads exact bytes for the grounded paths.
+  PREVC=$(sha_of_head_truth)
+  python3 - "$PREVC" <<'PY'
+import json, sys
+t = json.load(open("ledger/truth.json"))
+t["previous_hash"] = sys.argv[1]
+raw = json.dumps(t, indent=2).replace("\n", "\r\n") + "\r\n"
+open("ledger/truth.json", "w", newline="").write(raw)
+PY
+  rm -f ledger/truth.json.sig
+  ssh-keygen -Y sign -f "$W/vkey" -n money-agent-ledger ledger/truth.json 2>/dev/null
+  git add ledger/truth.json ledger/truth.json.sig
+  git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: crlf publish" \
+    && git push -qf origin ledger
+  cdx "$W/agent"
+  assert_exit 0 "signing (S16): CRLF-formatted signed ledger verifies byte-exact" \
+    python3 bin/truth.py received_usd
+  cdx "$W/verifier"
+  git reset -q --hard "$GOOD_TIP" && git push -qf origin ledger
 else
   skip "fact-lane signing tests (ssh-keygen not on PATH -- install openssh-client)"
 fi

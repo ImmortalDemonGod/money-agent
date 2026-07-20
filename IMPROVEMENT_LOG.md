@@ -1757,3 +1757,41 @@ pins only FAIL=0, so the runbook does not rot with the next fixture added.
 **Next:** S16 -- whole-diff adversarial phase (fresh-context correctness / SoD-bypass /
 test-vacuity / doc-truthfulness lenses), mutation pass in clones, closing review entry,
 then split into stacked PRs.
+
+## Entry 036 — 2026-07-20 — S16 whole-diff hardening: queued fixes, adversarial phase, mutation table, stacking
+
+**What (planned):** (a) disposition every queued critique item BEFORE the adversarial/mutation
+phases (their fixes must be committed first — the entry-020 lesson); (b) four fresh-context
+adversarial subagents with distinct lenses (correctness / SoD-bypass / test-vacuity /
+doc-truthfulness) prompted to DEFEAT the c2ff14e..HEAD diff, every finding fixed or
+refuted-with-artifact; (c) a mutation pass in throwaway clones reintroducing the historical
+defect classes (inert guard, marker drift, prose-resolve, stale-lane read, silent truncation,
+wall removal, signature skip) with the caught-by assertion named per mutation; (d) per-stack
+verification packets; (e) split into stacked PRs bottom-up.
+
+**Queued-item dispositions (pre-phase):**
+- EDGE_FAILS no-match shape (S6 queue): NO CHANGE NEEDED — inspected sim.sh:445-452: on a
+  python crash the marker is absent, `${var##*}` returns the whole non-empty output, and the
+  fixture reports `bad` WITH the crash text. It fails loud; the only silent-green would need
+  crash output ending in the literal marker.
+- aggregate-label (S7 queue): referent no longer exists — the only "aggregate" label in the
+  matrix is S12's SHADOW_METRICS line, which is accurate. NO CHANGE NEEDED.
+- truth.py byte-fidelity (S4 queue): REAL BUG, FIXING — `load()` reads grounded content in
+  TEXT mode (locale decode + universal-newline CRLF->LF) then `.encode()`s it for signature
+  verification: a signed file with CRLF or non-UTF8 bytes would FAIL verification on GOOD
+  data (fail-closed direction, but wrong), and the chain check compares raw parent bytes
+  against re-encoded content (spurious mismatch). Fix: `_git_bytes` for both grounded reads;
+  json.loads accepts bytes. Fixture: a CRLF-formatted, correctly SIGNED truth.json on the
+  armed lane must be ACCEPTED (bites pre-change: text-mode mangling makes the sig fail).
+- bet_gate<->spine lane-join (S9/S10 queue): DEFERRED-WITH-RECORD — authorize() does not
+  join the bet's lane against spine stage (both layers config-gated OFF; the join is a
+  design question for the operator memo). Named in the S9/S10 PR body as a candidate issue.
+- received_usd-vs-gross cross-check (S7 queue): DEFERRED-WITH-RECORD — candidate issue named
+  in the S7 PR body (a tripwire comparing charge-classified customer sum against
+  balance-transaction gross).
+
+**Verified by running:** (to be filled per phase)
+
+**Critique pass:** (to be filled)
+
+**Next:** (to be filled)
