@@ -210,6 +210,157 @@ else
   bad "edge_pnl verdict machine: $EDGE_FAILS"
 fi
 git checkout -q -- ledger/ 2>/dev/null || true   # discard the stub's local edge.json edits
+
+echo "=== pnl verifier correctness: currency + coverage fail closed (issues #33/#34) ==="
+# Same import-and-monkeypatch pattern as the edge block above: pnl's _get is stubbed per-case, so
+# the full main() path (errors wiring, verified flag, sums) runs with no network and no keys.
+mkdir -p pnl_state
+echo '{"created_gt": 1, "baseline_ledger_commit": ""}' > pnl_state/baseline.json
+echo '{"emails":["op@sim.example"],"card_fingerprints":[]}' > pnl_state/operator_identity.json
+PNL_RESULT=$(python3 - 2>/dev/null <<'PYEOF'
+import sys, os, json
+sys.path.insert(0, "bin")
+# crash guard: bash's ${var##*PNL_FAILS:} returns the WHOLE string when the marker never printed,
+# so an uncaught exception here would surface as truth.json garbage instead of a named failure.
+# The excepthook guarantees the marker line exists on every exit path.
+sys.excepthook = lambda t, v, tb: print(f"PNL_FAILS:crash:{t.__name__}:{v}")
+os.environ.update({"STRIPE_READ_KEY": "rk_test_sim", "CARD_CAP_USD": "25",
+                   "MONEY_AGENT_STATE": "pnl_state", "CARD_SOURCE": "issuer_enforced"})
+os.environ.pop("PRIVACY_READ_KEY", None)
+import importlib, pnl
+importlib.reload(pnl)
+pnl.MAX_PAGES = 2   # tiny cap so truncation cases stay fast; the bound's VALUE is not the subject
+fails = []
+
+def run(stub):
+    pnl._get = stub
+    pnl.main()
+    return json.load(open("ledger/truth.json"))
+
+def charge(i, cur="usd", amt=1234, email="buyer@x.com"):
+    return {"id": f"ch_{i}", "paid": True, "status": "succeeded", "amount": amt, "currency": cur,
+            "billing_details": {"email": email},
+            "payment_method_details": {"card": {"fingerprint": f"fp{i}"}}}
+
+def bt(i, cur="usd", typ="charge", amt=1234):
+    return {"id": f"txn_{i}", "type": typ, "amount": amt, "fee": 30, "currency": cur}
+
+# 1. clean case: all usd, clean page ends -> verified true, no false positives from the new checks
+def clean(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [bt(1)], "has_more": False}
+    if "/charges" in url: return {"data": [charge(1)], "has_more": False}
+    return {}
+t = run(clean)
+if not (t["verified"] and t["errors"] == [] and t["received_usd"] == 12.34):
+    fails.append(f"clean-usd case broke: verified={t['verified']} errors={t['errors']} recv={t['received_usd']}")
+
+# 2. JPY charge on the received_usd feed -> poisoned, amount excluded (the Y500->$5 bite case)
+def jpy_charge(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [], "has_more": False}
+    if "/charges" in url: return {"data": [charge(1, cur="jpy", amt=500)], "has_more": False}
+    return {}
+t = run(jpy_charge)
+if t["verified"] or not any(e.startswith("non_usd_amount:charge:jpy") for e in t["errors"]) \
+   or t["received_usd"] != 0.0:
+    fails.append(f"jpy charge not poisoned: verified={t['verified']} errors={t['errors']} recv={t['received_usd']}")
+
+# 3. JPY balance_transaction -> poisoned, excluded from gross
+def jpy_bt(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [bt(1, cur="jpy", amt=500)], "has_more": False}
+    if "/charges" in url: return {"data": [], "has_more": False}
+    return {}
+t = run(jpy_bt)
+if t["verified"] or not any(e.startswith("non_usd_amount:balance_transaction:jpy") for e in t["errors"]) \
+   or t["received_gross_usd"] != 0.0:
+    fails.append(f"jpy balance_transaction not poisoned: {t['errors']} gross={t['received_gross_usd']}")
+
+# 4. missing currency on a counted object -> poisoned (fail-closed, unknown is not usd)
+def no_cur(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [], "has_more": False}
+    if "/charges" in url:
+        c = charge(1); del c["currency"]; return {"data": [c], "has_more": False}
+    return {}
+t = run(no_cur)
+if t["verified"] or not any(e.startswith("currency_missing:charge") for e in t["errors"]):
+    fails.append(f"missing currency not poisoned: {t['errors']}")
+
+# 5. charges truncation: has_more still true at the page cap -> coverage_incomplete, verified false
+def trunc_charges(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [], "has_more": False}
+    if "/charges" in url: return {"data": [charge(1)], "has_more": True}
+    return {}
+t = run(trunc_charges)
+if t["verified"] or not any("coverage_incomplete:stripe_charges" in e for e in t["errors"]):
+    fails.append(f"charges truncation silent: verified={t['verified']} errors={t['errors']}")
+
+# 6. balance_transactions truncation (the loop that used to be UNBOUNDED)
+def trunc_bt(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [bt(1)], "has_more": True}
+    if "/charges" in url: return {"data": [], "has_more": False}
+    return {}
+t = run(trunc_bt)
+if t["verified"] or not any("coverage_incomplete:stripe_balance_transactions" in e for e in t["errors"]):
+    fails.append(f"balance_transactions truncation silent: {t['errors']}")
+
+# 7. privacy: full pages at the cap -> coverage_incomplete; declared-EUR txn -> poisoned + excluded
+os.environ["PRIVACY_READ_KEY"] = "pk_sim"
+os.environ.pop("CARD_SOURCE", None)
+def privacy_trunc(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [], "has_more": False}
+    if "/charges" in url: return {"data": [], "has_more": False}
+    if "transactions" in url:
+        return {"data": [{"token": f"t{i}", "settled_amount": 100} for i in range(500)]}
+    return {}
+t = run(privacy_trunc)
+if t["verified"] or not any("coverage_incomplete:privacy_transactions" in e for e in t["errors"]):
+    fails.append(f"privacy truncation silent: {t['errors']}")
+def privacy_eur(url, headers, params=None):
+    if "balance_transactions" in url: return {"data": [], "has_more": False}
+    if "/charges" in url: return {"data": [], "has_more": False}
+    if "transactions" in url:
+        return {"data": [{"token": "t1", "settled_amount": 100, "currency": "EUR"},
+                         {"token": "t2", "settled_amount": 200}]}
+    return {}
+t = run(privacy_eur)
+if t["verified"] or not any(e.startswith("non_usd_amount:privacy:EUR") for e in t["errors"]) \
+   or t["spent_usd"] != 2.0:
+    fails.append(f"privacy EUR txn not poisoned/excluded: {t['errors']} spent={t['spent_usd']}")
+
+print("PNL_FAILS:" + ";".join(fails))
+PYEOF
+)
+PNL_FAILS="${PNL_RESULT##*PNL_FAILS:}"
+if [[ -z "$PNL_FAILS" ]]; then
+  ok "pnl: clean-usd passes; JPY charge/bt, missing currency, 3x truncation, EUR spend all fail closed"
+else
+  bad "pnl currency/coverage: $PNL_FAILS"
+fi
+rm -rf pnl_state
+git checkout -q -- ledger/ 2>/dev/null || true
+git clean -qfd ledger/raw/ 2>/dev/null || true
+
+echo "=== start_verifier preflight: wash-trade allowlist (issue #37, marker-extracted) ==="
+PRE="$W/preflight.sh"
+sed -n '/TEST-MARKER: preflight-opid-begin/,/TEST-MARKER: preflight-opid-end/p' bin/start_verifier.sh > "$PRE"
+PRE_OK=1
+if ! grep -q "TEST-MARKER: preflight-opid-begin" bin/start_verifier.sh \
+   || ! grep -q "TEST-MARKER: preflight-opid-end" bin/start_verifier.sh; then
+  bad "preflight: a TEST-MARKER is missing from start_verifier.sh"; PRE_OK=0
+fi
+if ! grep -q "operator_identity" "$PRE"; then
+  bad "preflight: TEST-MARKER extraction came back empty"; PRE_OK=0
+fi
+if grep -qE "set_baseline|facts lane" "$PRE"; then
+  bad "preflight: extraction overran the block (end marker drifted) -- not executing it"; PRE_OK=0
+fi
+if [[ "$PRE_OK" == "1" ]]; then
+  assert_exit 2 "preflight: missing operator_identity.json refuses the start" \
+    env MONEY_AGENT_STATE="$W/no-such-state" bash -c "set -uo pipefail; source '$PRE'"
+  mkdir -p "$W/opid-state"
+  echo '{"emails":["op@sim.example"],"card_fingerprints":[]}' > "$W/opid-state/operator_identity.json"
+  assert_exit 0 "preflight: provisioned allowlist passes" \
+    env MONEY_AGENT_STATE="$W/opid-state" bash -c "set -uo pipefail; source '$PRE'"
+fi
 cdx "$W/agent"
 
 echo "=== aiv_gate (needs the canonical CLI) ==="
@@ -248,6 +399,12 @@ PYEOF
   # shellcheck disable=SC2016  # literal '$999' is intentional test data
   replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
     "Earned \$999 this iteration." "Nothing this iteration; honest zero." || exit 1
+  # The bare-word form was how a false claim could slip past a $-only parser; pin it as well.
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Nothing this iteration; honest zero." "Earned 999 dollars this iteration." || exit 1
+  assert_exit 1 "gate: bare-word '999 dollars' overclaim fails" bash bin/aiv_gate.sh 901
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Earned 999 dollars this iteration." "Nothing this iteration; honest zero." || exit 1
   replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
     "EDGE_CLAIM: VERIFIED_POSITIVE_EV" "EDGE_CLAIM: FALSIFIED" || exit 1
   assert_exit 1 "gate: contradicting EDGE_CLAIM fails" bash bin/aiv_gate.sh 901

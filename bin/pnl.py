@@ -39,6 +39,30 @@ MANIFEST = RAW / "MANIFEST.sha256"
 STRIPE_API = "https://api.stripe.com/v1"
 PRIVACY_API = "https://api.privacy.com/v1"
 
+# #34 FIX: one shared pagination bound, and hitting it while the provider still reports more data
+# is a COVERAGE ERROR (verified=false), never a silent stop. The old code fell out of its loops at
+# 50 pages with no error -- an under-count that read as a complete, verified pull. 50*100 charges /
+# 50*500 card txns is far past any real run; the bound exists to stop a pathological history from
+# hanging the verifier, and the error exists so the bound can never silently truncate.
+MAX_PAGES = 50
+
+
+def _currency_err(kind: str, obj: dict, ident: str) -> str | None:
+    """#33 FIX: provider amounts are in the currency's MINOR unit; the /100 below is only correct
+    for two-decimal USD. A zero-decimal currency (JPY: Y500 -> "$5.00") mis-scales 100x and a
+    mixed-currency sum is meaningless -- while verified stayed true. Fail closed instead: any
+    object this verifier would COUNT must declare usd, or it poisons the pull with an error
+    (verified=false, guard halts) and its amount is excluded from every sum. Handling non-USD
+    correctly (ISO-4217 minor-unit table + per-currency segregation + a recorded conversion
+    source) is a deliberate non-goal until a run actually needs it -- a halted verifier beats a
+    silently wrong number."""
+    cur = obj.get("currency")
+    if cur is None:
+        return f"currency_missing:{kind}:{ident}"
+    if str(cur).lower() != "usd":
+        return f"non_usd_amount:{kind}:{cur}:{ident}"
+    return None
+
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -97,12 +121,15 @@ def load_baseline_ledger_commit() -> str:
     return ""
 
 
-def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
+def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path], list[str]]:
     """Every cent that moved through Stripe. balance_transactions is the canonical ledger:
-    charges alone miss refunds, fees, disputes and adjustments."""
+    charges alone miss refunds, fees, disputes and adjustments. Returns (txns, raw_files,
+    pull_errors) -- a non-empty error list means the numbers are NOT complete/clean and the
+    caller must let verified go false (#33/#34)."""
     h = {"Authorization": f"Bearer {key}"}
-    txns, starting_after, files = [], None, []
-    while True:
+    txns, starting_after, files, errs = [], None, [], []
+    complete = False
+    for _ in range(MAX_PAGES):  # #34: bounded (was unbounded -- hangable), cap-hit-with-more errors below
         params = {"limit": 100}
         if baseline:
             params["created[gt]"] = baseline   # server-side: pre-baseline money never even arrives
@@ -111,11 +138,15 @@ def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
         page = _get(f"{STRIPE_API}/balance_transactions", h, params)
         txns.extend(page.get("data", []))
         if not page.get("has_more"):
+            complete = True
             break
         starting_after = page["data"][-1]["id"]
+    if not complete:
+        errs.append("coverage_incomplete:stripe_balance_transactions: page cap "
+                    f"({MAX_PAGES}) hit while has_more=true -- the pull is an under-count")
     files.append(_write_raw("stripe_balance_transactions", txns))
     files.append(_write_raw("stripe_balance", _get(f"{STRIPE_API}/balance", h)))
-    return txns, files
+    return txns, files, errs
 
 
 # ------------------------------------------------------ customer vs self (wash-trade)
@@ -138,14 +169,17 @@ def _operator_ids() -> tuple[set, set]:
     return set(), set()
 
 
-def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
-    """Return (customer_usd, self_purchase_usd, raw_files). Classifies each paid charge by payer:
-    operator email/fingerprint -> self; anyone else -> customer."""
+def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path], list[str]]:
+    """Return (customer_usd, self_purchase_usd, raw_files, pull_errors). Classifies each paid
+    charge by payer: operator email/fingerprint -> self; anyone else -> customer. received_usd is
+    computed FROM THIS FEED, so a mis-scaled charge here is a mis-scaled received_usd (#33) and a
+    truncated page walk here is a silent under-count (#34) -- both poison the pull instead."""
     op_emails, op_fps = _operator_ids()
     h = {"Authorization": f"Bearer {key}"}
     customer = selfpay = 0.0
-    charges, starting_after = [], None
-    for _ in range(50):
+    charges, starting_after, errs = [], None, []
+    complete = False
+    for _ in range(MAX_PAGES):
         # NOTE: payment_method_details is included on charges by DEFAULT and is NOT an expandable
         # property -- passing it as expand[] makes Stripe 400 ("cannot be expanded"), which would
         # fail every verifier cycle and halt the run. So we do not expand it; the fingerprint we
@@ -159,10 +193,18 @@ def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
         data = page.get("data", [])
         charges.extend(data)
         if not page.get("has_more"):
+            complete = True
             break
         starting_after = data[-1]["id"]
+    if not complete:
+        errs.append(f"coverage_incomplete:stripe_charges: page cap ({MAX_PAGES}) hit while "
+                    "has_more=true -- received_usd would be an under-count")
     for c in charges:
         if not c.get("paid") or c.get("status") != "succeeded":
+            continue
+        cerr = _currency_err("charge", c, c.get("id", "<no-id>"))
+        if cerr:
+            errs.append(cerr)  # counted-charge in a non-usd/unknown currency: exclude + poison
             continue
         amt = c.get("amount", 0) / 100.0
         email = ((c.get("billing_details") or {}).get("email") or "").lower()
@@ -172,19 +214,20 @@ def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
             selfpay += amt
         else:
             customer += amt
-    return round(customer, 2), round(selfpay, 2), [_write_raw("stripe_charges", charges)]
+    return round(customer, 2), round(selfpay, 2), [_write_raw("stripe_charges", charges)], errs
 
 
 # ------------------------------------------------------------------ spend side
 
-def pull_privacy(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
+def pull_privacy(key: str, baseline: int = 0) -> tuple[list, list[Path], list[str]]:
     # M1 FIX: filter spend to AFTER the baseline, same as receive. Without it, ANY pre-existing
     # Privacy.com spend (any card on the account, from any date) was charged to the agent and burned
     # its cap before iteration 1. `begin` is the strict lower bound; paginate so >500 txns are not
     # silently truncated while spend_measured stays true.
     h = {"Authorization": f"api-key {key}"}
-    txns, page_token = [], None
-    for _ in range(50):  # hard bound; 50*500 = 25k txns is far past any real run
+    txns, page_token, errs = [], None, []
+    complete = False
+    for _ in range(MAX_PAGES):
         params = {"page_size": 500}
         if baseline:
             params["begin"] = _dt_iso(baseline)
@@ -194,11 +237,26 @@ def pull_privacy(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
         data = page.get("data", [])
         txns.extend(data)
         if len(data) < 500 or not data:
+            complete = True
             break
         page_token = data[-1].get("token") or data[-1].get("id")
         if not page_token:
+            # #34: a FULL page whose last item carries no continuation token means we cannot know
+            # whether more exist -- that is incomplete coverage, not a clean end. Fail closed.
+            errs.append("coverage_incomplete:privacy_transactions: full page with no continuation "
+                        "token -- cannot prove the pull is complete")
             break
-    return txns, [_write_raw("privacy_transactions", txns)]
+    if not complete and not errs:
+        errs.append(f"coverage_incomplete:privacy_transactions: page cap ({MAX_PAGES}) hit with "
+                    "full pages still arriving -- spent_usd would be an under-count")
+    # #33: Privacy.com is a US issuer and settled_amount is USD cents by API contract, so a missing
+    # currency field is the NORMAL shape here (unlike Stripe, where every object declares one). We
+    # only poison the pull when a txn explicitly declares something other than USD.
+    for t in txns:
+        cur = t.get("currency")
+        if cur is not None and str(cur).upper() not in ("USD", "840"):
+            errs.append(f"non_usd_amount:privacy:{cur}:{t.get('token', t.get('id', '<no-id>'))}")
+    return txns, [_write_raw("privacy_transactions", txns)], errs
 
 
 def _dt_iso(epoch: int) -> str:
@@ -306,15 +364,22 @@ def main() -> int:
     # ---- received (gross, from balance_transactions -- fees/refunds/net)
     received_gross = fees = refunded = 0.0
     try:
-        txns, f = pull_stripe(stripe_key, baseline)
+        txns, f, perrs = pull_stripe(stripe_key, baseline)
         pulls += f
+        errors.extend(perrs)   # #34: an under-count must fail verification, never read as $0
         for t in txns:
+            if t.get("type") not in ("charge", "payment", "refund", "payment_refund"):
+                continue
+            cerr = _currency_err("balance_transaction", t, t.get("id", "<no-id>"))
+            if cerr:
+                errors.append(cerr)  # #33: never add a known-mis-scaled amount to any sum
+                continue
             amt = t.get("amount", 0) / 100.0
             fee = t.get("fee", 0) / 100.0
             if t.get("type") in ("charge", "payment"):
                 received_gross += amt
                 fees += fee
-            elif t.get("type") in ("refund", "payment_refund"):
+            else:
                 refunded += abs(amt)
     except Exception as e:  # a failed pull must never silently read as $0 earned
         errors.append(f"stripe_pull_failed: {type(e).__name__}: {e}")
@@ -324,8 +389,9 @@ def main() -> int:
     op_emails, op_fps = _operator_ids()
     wash_guard_armed = bool(op_emails or op_fps)
     try:
-        customer_received, self_purchase, f = pull_charges(stripe_key, baseline)
+        customer_received, self_purchase, f, cerrs = pull_charges(stripe_key, baseline)
         pulls += f
+        errors.extend(cerrs)   # #33/#34: currency or coverage problems on the received_usd feed
     except Exception as e:
         errors.append(f"charge_classify_failed: {type(e).__name__}: {e}")
     # If the operator-identity allowlist is empty, every charge classifies as CUSTOMER and the
@@ -355,9 +421,13 @@ def main() -> int:
     spend_source = None
     try:
         if privacy_key:
-            txns, f = pull_privacy(privacy_key, baseline)
+            txns, f, perrs = pull_privacy(privacy_key, baseline)
             pulls += f
-            spent = sum(t.get("settled_amount", 0) / 100.0 for t in txns)
+            errors.extend(perrs)
+            # #33: a txn that explicitly declares a non-USD currency has already poisoned the pull
+            # above; its amount is also excluded here so no known-wrong number reaches a sum.
+            spent = sum(t.get("settled_amount", 0) / 100.0 for t in txns
+                        if t.get("currency") is None or str(t.get("currency")).upper() in ("USD", "840"))
             spend_source = "privacy_api"
         elif card_csv and Path(card_csv).exists():
             rows, f = pull_card_csv(Path(card_csv))

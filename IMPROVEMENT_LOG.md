@@ -937,3 +937,67 @@ packet's headings map onto the gate's BARS by substring (verified against `_sect
 
 **Next:** S2 — verifier correctness (#33 currency, #34 pagination, #37 preflight) with the pnl
 monkeypatch fixture helper, plus the queued bare-word overclaim assertion in sim.sh.
+
+---
+
+## Entry 022 — 2026-07-20 — S2 verifier correctness: currency + coverage fail closed, wash-guard preflight (issues #33, #34, #37)
+
+**What:** `bin/pnl.py` — (1) #33: every object a sum would COUNT (balance_transactions of the four
+counted types, paid+succeeded charges, privacy txns) is currency-checked; non-USD →
+`non_usd_amount:<kind>:<currency>:<id>`, undeclared → `currency_missing:<kind>:<id>`, both →
+`verified=false` and the amount excluded from every sum (never add a known-wrong number). Privacy
+is the one deliberate asymmetry: its API is USD-cents by contract and txns normally carry no
+currency field, so only an explicit non-USD declaration poisons — documented in the code. (2) #34:
+one `MAX_PAGES` constant bounds all three page walks (pull_stripe's was UNBOUNDED — hangable);
+exiting at the cap while the provider still reports more →
+`coverage_incomplete:<source>` → `verified=false`; a full Privacy page with no continuation token
+is also incomplete (cannot prove completeness → fail closed). (3) #37: `start_verifier.sh` gains a
+marker-extracted preflight refusing to start while `STATE_DIR/operator_identity.json` is
+missing/empty; SETUP.md documents it and why `setup_sandbox.sh` cannot check it (STATE_DIR is
+sandbox-unreachable by design — a fake sandbox check would be theater). (4) sim.sh: an 8-case pnl
+fixture block via the established monkeypatch pattern (with a crash-guard excepthook — see
+critique), the preflight extraction tests (both markers + overrun guard, the convergence-block
+precedent), and the queued bare-word overclaim pin from entry 021.
+
+**Why (cited):** issues #33/#34/#37 (all three surfaced by the external AURUM-spec audit;
+#38's G1 sibling lands in S6). The entire value of the ledger is that a `verified:true` number is
+trustworthy; a mis-scaled or truncated number wearing `verified:true` is the exact failure class
+the program exists to kill.
+
+**Edge cases enumerated before coding:** mixed USD+JPY must name the offender; fee/refund currency
+rides the same txn check; missing currency ≠ USD (fail closed); truncation-at-cap vs clean-end
+distinguished per source; privacy token-missing-on-full-page; declared-EUR privacy txn excluded
+from `spent_usd`; the wash-guard must be ARMED in fixtures (an empty allowlist adds
+`wash_guard_disarmed` noise the moment charges exist — hit while building the bite script);
+Stripe pagination stubs need `id` on the last item or the walk crashes (hit in the first BITE-B
+attempt — stub bug, not product bug).
+
+**Verified by running (artifacts):**
+- BITE-A (pre-change, throwaway clone @ c2ff14e): a ¥500 JPY charge produced
+  `verified:true, received_usd=5.0, made_money:true, errors=[]` — the silent 100x mis-scale, live.
+- BITE-B (pre-change): 50 pages pulled with `has_more` still true → `verified:true,
+  received_usd=5000.0, errors=[]` — silent truncation presenting as complete.
+- New fixtures against pre-change committed HEAD: `FAIL pnl currency/coverage` (the fixtures
+  bite); after the [S2] commit: `bash tests/sim.sh` → **PASS=26 FAIL=0 SKIP=0** (was 22), corpus
+  → **PASS=11 FAIL=0**. shellcheck + compileall clean.
+
+**Critique pass:**
+- Two of my own test bugs, recorded because that is what the log is for: (1) the first bare-word
+  overclaim fixture used "47 dollars" and PASSED the gate — not a gate bug: the rig's edge rail
+  carries paper_pnl 62.5 and the gate's documented residual accepts real-money claims up to the
+  paper P&L; the test amount must exceed EVERY bound (now 999). The residual itself is real and
+  stays on the books (aiv_gate.sh comments it honestly). (2) `${var##*PNL_FAILS:}` returns the
+  WHOLE string when the marker never prints (bash no-match semantics), so a crashed fixture block
+  would have surfaced as truth.json garbage — the excepthook now guarantees the marker on every
+  exit path. The pre-existing EDGE_FAILS block shares this latent shape; queued to S16's
+  test-vacuity lens rather than touched mid-S2.
+- Observed while running BITE-B, not fixed here (scope): `received_usd` (charges feed) and
+  `received_gross_usd` (balance_transactions feed) can disagree wildly and nothing cross-checks
+  them — a cheap future integrity signal (|customer+self − gross| tolerance). Candidate for a
+  follow-up issue at stacking time.
+- The sim rig clones committed HEAD, so new fixtures + code must land in the same commit and the
+  matrix goes green one commit later — the FAIL-then-commit-then-green sequence above is that
+  discipline working, not a process wobble.
+
+**Next:** S3 — #46 facts-lane side-car rescue (sim must export a temp `MONEY_AGENT_STATE` before
+executing the marker block) + supervise unpushed-counter, and #41 inference metering.
