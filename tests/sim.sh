@@ -183,6 +183,35 @@ assert_exit 0 "pace: a due bet unblocks lever-less iterations" \
   env PACE_ENFORCE=1 python3 bin/iter.py new
 assert_exit 0 "pace: default-off leaves iteration-opening untouched" python3 bin/iter.py new
 
+echo "=== human-actuation queue (#31) ==="
+assert_exit_grep 2 "kind" "human: free-text kind rejected (actuator, never oracle)" \
+  python3 bin/human.py request --kind "write-my-pitch" --gate "reach wall" \
+  --test "iter 001 packet" --ev "would help a lot"
+assert_exit_grep 2 "test" "human: uncited gate-hit rejected (falsify before requesting)" \
+  python3 bin/human.py request --kind captcha --gate "mastodon.nu signup step 3" \
+  --test "x" --ev "unlocks a federated posting channel"
+if python3 bin/human.py request --kind captcha --gate "mastodon.nu signup step 3" \
+     --test "iter-043 packet: Turnstile wall hit from the sandbox IP" \
+     --ev "unlocks a federated posting channel worth minutes of operator time" >/dev/null 2>&1; then
+  ok "human: cited mechanical request registered"; else bad "human: request path"; fi
+assert_exit_grep 1 "human actuation hum-001" \
+  "human: open request blocks an impossible conclusion (companion bet)" \
+  python3 bin/conclusion_gate.py
+if python3 bin/human.py fulfill hum-001 --minutes 3 --evidence "operator completed the captcha on their own account" >/dev/null 2>&1 \
+   && grep -q '"human_minutes_total": 3' run/human_tasks.json; then
+  ok "human: fulfillment meters human_minutes and resolves the companion bet"
+else bad "human: fulfill path"; fi
+python3 bin/human.py request --kind approval-click --gate "mastodon.nu staff approval" \
+  --test "iter-079 packet: account stuck at human staff approval" \
+  --ev "the account exists; one click activates it" >/dev/null 2>&1
+assert_grep "1 open actuation request" "supervise: human queue surfaced on the one-screen status" \
+  bash bin/supervise.sh
+if python3 bin/human.py decline hum-002 --reason "not worth operator identity exposure this run" >/dev/null 2>&1 \
+   && grep -q '"status": "declined"' run/human_tasks.json; then
+  ok "human: decline recorded (the operator's REFUSALS mirror)"
+else bad "human: decline path"; fi
+assert_grep "human_minutes_total: 3" "human: metering surfaced in list" python3 bin/human.py list
+
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'

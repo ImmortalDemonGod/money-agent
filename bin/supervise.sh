@@ -71,6 +71,25 @@ if [[ "$(git branch --show-current 2>/dev/null)" == "$LEDGER_BRANCH" ]] \
   fi
 fi
 
+# 3d. #31: open human-actuation requests -- the one queue where the AGENT is waiting on the
+# OPERATOR; invisible here, it would defeat its own purpose. Reads the working-tree file (this
+# screen runs wherever the operator looks; on the verifier's ledger checkout the file is absent
+# and the line stays silent).
+if [[ -f "$R/run/human_tasks.json" ]]; then
+  HQ=$(python3 - "$R/run/human_tasks.json" <<'PY' 2>/dev/null
+import json, sys, datetime as dt
+ts = json.load(open(sys.argv[1])).get("tasks", [])
+op = [t for t in ts if t.get("status") == "open"]
+if op:
+    oldest = min(t["requested_at"] for t in op)
+    age_h = (dt.datetime.now(dt.timezone.utc)
+             - dt.datetime.fromisoformat(oldest.replace("Z", "+00:00"))).total_seconds() / 3600
+    print(f"{len(op)} open actuation request(s), oldest {age_h:.1f}h -- fulfill or decline (bin/human.py)")
+PY
+)
+  [[ -n "$HQ" ]] && echo "human queue: $HQ"
+fi
+
 # 4. recent push activity from the log
 echo "last log   : $(tail -1 "$R/verifier.log" 2>/dev/null || echo '(no log)')"
 

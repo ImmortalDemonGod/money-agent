@@ -1280,3 +1280,54 @@ lowercased both sides.
 
 **Next:** S8 — the human-actuation queue (#31): bin/human.py + the atomic PROMPT.md autonomy
 amendment.
+
+---
+
+## Entry 028 — 2026-07-20 — S8 human-actuation queue: request-don't-wait, metered, conclusion-blocking (issue #31)
+
+**What:** `bin/human.py` — the third road past the identity wall (defeating gates is
+constitution-forbidden; provisioning-time gate-guessing was wrong as often as right in run 1):
+the agent requests mechanical actuation of a gate it has EMPIRICALLY hit, and keeps working.
+Guardrails structural where possible: kind allowlist
+(`captcha|approval-click|kyc-step|signup-complete|claim-host`) rejects free-text asks (actuator,
+never oracle); `--test` requires the cited empirical gate-hit (falsify before requesting);
+`--ev` requires the worth-operator-minutes case; fulfillment meters `human_minutes`
+(`human_minutes_total` aggregated — the "autonomous with metered human actuation" number no
+experiment in the field has); declines are recorded, the operator's REFUSALS mirror. Every
+request registers a companion `approval`-clock bet through the existing registry, so the
+due-bets agenda surfaces it every iteration and an open request mechanically blocks "impossible"
+conclusions. `supervise.sh` surfaces the open queue with oldest-age. **Atomic in the same
+commit, as the issue requires:** PROMPT.md's autonomy clause narrows from never-ask to
+never-ask-for-STRATEGY, with mechanical actuation carved out as requesting ≠ waiting — without
+this the tool and the prompt would contradict and the agent would (correctly, per its
+instructions) refuse to use the queue. Operator-negotiated wording: flagged for review.
+
+**Edge cases enumerated before coding:** the companion bet is what makes an open request
+conclusion-blocking (no new gate logic needed — and if the bet registration fails, the request
+REFUSES rather than existing invisibly); fulfill/decline must resolve the companion (won/lost)
+or the gate stays blocked after the human acted — a failed companion-resolve warns loudly;
+minutes are required at fulfill time (metering is the point, not an afterthought);
+`--resolve-by` defaults to +7 days so a forgotten request eventually surfaces as OVERDUE in the
+agenda; supervise reads the working-tree file and stays silent where it is absent (the
+verifier's ledger checkout).
+
+**Verified by running (artifacts):** `bash tests/sim.sh` → **PASS=57 FAIL=0 SKIP=0** (was 49):
+free-text kind rejected; uncited gate-hit rejected; cited request registered; open request
+blocks conclusion_gate naming `human actuation hum-001`; fulfillment meters minutes + resolves
+the companion; supervise surfaces "1 open actuation request"; decline recorded; list totals.
+Corpus **11/0**; shellcheck + compileall clean. Bite is definitional this stack: `bin/human.py`
+did not exist at HEAD~1 (every fixture fails on file-absence) and the OLD prompt forbade the ask
+outright — the behavior change IS the amendment, which is why the issue demands atomicity.
+
+**Critique pass:**
+- The kind allowlist is a tripwire against DRIFT, not a wall against a determined mis-framing
+  (a strategy ask worded as a "captcha" request); the operator sees the gate/test/ev text at
+  fulfillment time and the decline path exists precisely for that. Boundary case from the issue
+  (creative/copyright lending) stays outside the queue by construction — no kind admits it.
+- `human_minutes` are operator-reported at fulfill time — honest-reporting, not measurement;
+  stated here rather than dressed up.
+- The companion-bet linkage derives the bet id from registry length — correct while bets.py
+  allocates sequentially (it does; documented assumption the S16 sweep can challenge).
+
+**Next:** S9 — V3 bet-spec + bet_gate.py (typed conditions, action authorization,
+BET_GATE_ENFORCE default off).
