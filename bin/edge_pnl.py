@@ -68,10 +68,18 @@ FROZEN = STATE_DIR / "edge_registration.json"
 
 ALPACA_BASE = os.environ.get("ALPACA_PAPER_BASE", "https://paper-api.alpaca.markets")
 
-# registration fields the agent must pre-commit (parsed as `KEY: value` lines)
-REQUIRED_FIELDS = ("EDGE_ID", "METRIC", "BAR", "MIN_FILLED_ORDERS", "RESOLVE_BY", "HYPOTHESIS",
-                   "FALSIFIED_IF")
+# registration fields the agent must pre-commit (parsed as `KEY: value` lines).
+# #38: MAX_DRAWDOWN_USD is REQUIRED -- a raw P&L level admits a negative-skew/martingale strategy
+# that clears the bar right up to its tail event; the declared risk cap is frozen with everything
+# else and a breach FALSIFIES even if the bar is later cleared. BENCHMARK is optional and
+# recorded-only (excess-over-benchmark enforcement is a documented data-feed-gated follow-up;
+# an unenforced field is stated as such, never silently graded).
+REQUIRED_FIELDS = ("EDGE_ID", "METRIC", "BAR", "MIN_FILLED_ORDERS", "MAX_DRAWDOWN_USD",
+                   "RESOLVE_BY", "HYPOTHESIS", "FALSIFIED_IF")
+OPTIONAL_FIELDS = ("BENCHMARK",)
 SUPPORTED_METRICS = ("paper_pnl_usd",)
+RUNTIME = STATE_DIR / "edge_runtime.json"  # peak-equity tracking; SEPARATE from the frozen file
+# so the registration's hash stays immutable while runtime state moves
 
 
 def _now() -> str:
@@ -103,7 +111,7 @@ def parse_registration(text: str) -> tuple[dict | None, str | None]:
     """Parse `KEY: value` lines. Returns (fields, error)."""
     fields: dict[str, str] = {}
     for line in text.splitlines():
-        for key in REQUIRED_FIELDS:
+        for key in REQUIRED_FIELDS + OPTIONAL_FIELDS:
             if line.upper().startswith(key + ":"):
                 fields[key] = line.split(":", 1)[1].strip()
     missing = [k for k in REQUIRED_FIELDS if not fields.get(k)]
@@ -114,6 +122,7 @@ def parse_registration(text: str) -> tuple[dict | None, str | None]:
     try:
         float(fields["BAR"])
         int(fields["MIN_FILLED_ORDERS"])
+        float(fields["MAX_DRAWDOWN_USD"])
         deadline = dt.datetime.fromisoformat(fields["RESOLVE_BY"].replace("Z", "+00:00"))
     except ValueError as e:
         return None, f"registration field unparseable: {e}"
@@ -243,23 +252,51 @@ def main() -> int:
     equity = float(acct["equity"])
     filled = [o for o in orders if o.get("status") == "filled"]
     pnl = round(equity - frozen["baseline_equity_usd"], 2)
+
+    # ---- #38: peak-equity tracking in the SEPARATE runtime file (the frozen registration stays
+    # hash-immutable). Peak initializes to max(baseline, first observed equity); drawdown is
+    # peak-to-current -- the quantity a martingale hides from a raw P&L level.
+    try:
+        peak = float(json.loads(RUNTIME.read_text()).get("peak_equity_usd"))
+    except Exception:
+        peak = frozen["baseline_equity_usd"]
+    peak = max(peak, equity)
+    RUNTIME.write_text(json.dumps({"peak_equity_usd": peak, "updated_at": _now(),
+                                   "_note": "runtime state, deliberately outside the frozen "
+                                            "registration so its hash never moves"}, indent=2))
+    drawdown = round(peak - equity, 2)
+
     out.update({
         "equity_usd": equity,
         "paper_pnl_usd": pnl,
         "filled_orders_since_freeze": len(filled),
         "open_positions": len(positions),
+        "unrealized_positions_at_verdict": bool(positions),
+        "peak_equity_usd": peak,
+        "max_drawdown_usd_observed": drawdown,
         "pulls_this_cycle": [p.name for p in pulls],
     })
 
-    # ---- the mechanical verdict against the FROZEN bar
+    # ---- the mechanical verdict against the FROZEN bars (P&L bar AND risk bar)
     bar = float(fields["BAR"])
     min_fills = int(fields["MIN_FILLED_ORDERS"])
+    dd_bar = float(fields["MAX_DRAWDOWN_USD"]) if fields.get("MAX_DRAWDOWN_USD") else None
     deadline = dt.datetime.fromisoformat(fields["RESOLVE_BY"].replace("Z", "+00:00"))
     now = dt.datetime.now(dt.timezone.utc)
-    if pnl >= bar and len(filled) >= min_fills:
+    if dd_bar is not None and drawdown > dd_bar:
+        # #38: breaching the declared risk cap FALSIFIES -- even when pnl >= bar. A strategy that
+        # crossed its own risk line and recovered is the martingale shape the level-check missed;
+        # the registration said what risk verifies the edge, and this was not it. (A pre-upgrade
+        # freeze without the field skips this leg -- legacy, and a new run re-registers anyway.)
+        out["verdict"] = "FALSIFIED"
+        out["falsified_reason"] = (f"max drawdown breached: {drawdown} > {dd_bar} (peak "
+                                   f"{peak} -> equity {equity}); the risk cap is part of the "
+                                   "frozen registration")
+    elif pnl >= bar and len(filled) >= min_fills:
         out["verdict"] = "VERIFIED_POSITIVE_EV"
     elif now > deadline:
         out["verdict"] = "FALSIFIED"   # the deadline was part of the registration; missing it IS
+        out["falsified_reason"] = "deadline passed without clearing the bar"
         # the falsification (fp_predict discipline: 2.20x < 2.5x was an answer, not a delay)
     else:
         out["verdict"] = "PENDING"
@@ -283,6 +320,18 @@ def main() -> int:
 def _publish(out: dict) -> None:
     EDGE.parent.mkdir(parents=True, exist_ok=True)
     EDGE.write_text(json.dumps(out, indent=2) + "\n")
+    # #36 (the S4 deferral, closed here): edge facts sign like money facts when the key is
+    # provisioned. truth.py refuses an unsigned edge.json whenever the pubkey is committed, and
+    # guard treats that refusal as a HALT (an invisible VOID would otherwise hide bar-moving).
+    sign_key = STATE_DIR / "verifier_signing_key"
+    if sign_key.exists():
+        (EDGE.parent / (EDGE.name + ".sig")).unlink(missing_ok=True)
+        r = subprocess.run(["ssh-keygen", "-Y", "sign", "-f", str(sign_key),
+                            "-n", "money-agent-ledger", str(EDGE)],
+                           capture_output=True, text=True, timeout=30)
+        if r.returncode != 0:
+            print(f"warn: edge signing failed ({r.stderr.strip()[:120]}) -- agents will "
+                  "fail-closed on the unsigned file", file=sys.stderr)
 
 
 if __name__ == "__main__":
