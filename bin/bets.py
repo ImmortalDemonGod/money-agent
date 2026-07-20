@@ -121,6 +121,39 @@ def cmd_add(a) -> int:
     if resolve_by <= _now():
         print("FATAL: --resolve-by must be in the future.", file=sys.stderr)
         return 1
+    # V3 typed fields (S9): optional -- untyped bets keep the registry's original job (not
+    # forgetting). When present, bet_gate's schema validates FAIL-CLOSED before anything saves.
+    typed: dict = {}
+    if getattr(a, "type", ""):
+        typed["type"] = a.type
+        typed["lane"] = getattr(a, "lane", "")
+        for nm, raw in (("success_condition", getattr(a, "success", "")),
+                        ("kill_condition", getattr(a, "kill", ""))):
+            if raw:
+                try:
+                    typed[nm] = json.loads(raw)
+                except json.JSONDecodeError as e:
+                    print(f"FATAL: --{nm.split('_')[0]} is not valid JSON: {e}", file=sys.stderr)
+                    return 1
+        if getattr(a, "authorizes", ""):
+            try:
+                typed["authorizes"] = {k.strip(): int(v) for k, v in
+                                       (p.split(":") for p in a.authorizes.split(","))}
+            except ValueError:
+                print("FATAL: --authorizes must look like 'send:2,publish:1'", file=sys.stderr)
+                return 1
+        if getattr(a, "max_spend_usd", None) is not None:
+            typed["max_spend_usd"] = a.max_spend_usd
+        if getattr(a, "bounds_note", ""):
+            typed["bounds_note"] = a.bounds_note
+        if getattr(a, "repro", ""):
+            typed["reproduction_protocol"] = a.repro
+        import bet_gate
+        errs = bet_gate.validate_bet(typed)
+        if errs:
+            for e in errs:
+                print(f"FATAL: {e}", file=sys.stderr)
+            return 1
     bets = _load()
     bid = f"bet-{len(bets) + 1:03d}"
     bets.append({
@@ -128,6 +161,7 @@ def cmd_add(a) -> int:
         "check": a.check, "oracle": a.oracle, "poll_after_h": a.poll_after_h,
         "resolve_by": a.resolve_by,
         "status": "open", "last_checked": None, "checks": [], "resolution": None,
+        **typed,
     })
     _save(bets, f"bets: place {bid} ({a.clock}): {a.what[:50]}")
     print(f"{bid} placed ({a.clock} clock, poll every {a.poll_after_h}h, resolve by "
@@ -254,6 +288,15 @@ def main() -> int:
                          "EXECUTE the recorded --check and store its output")
     pa.add_argument("--poll-after-h", type=float, required=True, dest="poll_after_h")
     pa.add_argument("--resolve-by", required=True, dest="resolve_by")
+    # V3 typed bet-spec (S9; schema in bin/bet_gate.py, validated fail-closed when --type given)
+    pa.add_argument("--type", default="")
+    pa.add_argument("--lane", default="")
+    pa.add_argument("--success", default="", help='JSON: {"oracle_id","metric","comparator","threshold","window_h"}')
+    pa.add_argument("--kill", default="")
+    pa.add_argument("--authorizes", default="", help="'send:2,publish:1' action reservations")
+    pa.add_argument("--max-spend-usd", type=float, default=None, dest="max_spend_usd")
+    pa.add_argument("--bounds-note", default="", dest="bounds_note")
+    pa.add_argument("--reproduction-protocol", default="", dest="repro")
     pa.set_defaults(fn=cmd_add)
     sub.add_parser("list").set_defaults(fn=cmd_list)
     sub.add_parser("due").set_defaults(fn=cmd_due)

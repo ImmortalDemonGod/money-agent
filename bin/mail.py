@@ -154,6 +154,22 @@ def search(q):
 
 
 def send(to, subj, body):
+    # V3 (S9, BET_GATE_ENFORCE=1 only): a send is an external-effect action and needs a live
+    # typed bet's reservation -- the hypothesis-first discipline, consumed atomically so one bet
+    # never authorizes unbounded sends. Inert by default; fail-closed when armed.
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import bet_gate
+        ok_bg, why_bg = bet_gate.authorize("send", consume=True)
+    except Exception as e:
+        if os.environ.get("BET_GATE_ENFORCE", "0") == "1":
+            ok_bg, why_bg = False, f"bet gate could not run ({e}); fail-closed while armed"
+        else:
+            ok_bg, why_bg = True, "bet gate unavailable and unarmed"
+    if not ok_bg:
+        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
+        sys.exit(1)
+
     if "—" in body or "—" in subj:
         print("REFUSING: em-dash present. Use commas or rewrite.", file=sys.stderr)
         sys.exit(1)
