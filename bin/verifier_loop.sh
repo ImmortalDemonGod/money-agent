@@ -176,6 +176,18 @@ print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
   fi
   [[ -n "$SIG" && -n "$EDGE_SIG" ]] && SIG="$SIG | edge $EDGE_SIG"
 
+  # 2c. P5 obligation watchdog (S11) -- after pnl for the same raw-purge/commit-cycle reasons.
+  # Empty register publishes an affirmative empty fact; a breach makes guard halt the agent side.
+  if python3 bin/obligation_watch.py > "$TMPD/obl_out" 2>"$TMPD/obl_err"; then
+    OBL_BREACH=$(python3 -c "
+import json
+d=json.load(open('ledger/obligations.json'))
+print(len(d.get('breached', [])))" 2>/dev/null)
+    [[ -n "$OBL_BREACH" && "$OBL_BREACH" != "0" ]] && { SIG="$SIG | BREACH:$OBL_BREACH"; say "OBLIGATION BREACH x$OBL_BREACH"; }
+  else
+    say "obligation_watch FAILED: $(head -1 "$TMPD/obl_err")"
+  fi
+
   # 3. publish to the facts lane -- on meaningful change, or as a liveness heartbeat. The agent's
   #    staleness guard (H2) halts on a ledger older than ~30min, so heartbeats must outpace it.
   HEARTBEAT_S="${HEARTBEAT_S:-300}"
@@ -191,7 +203,8 @@ print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
       # Stage only artifacts actually emitted this cycle; an absent optional signature must not
       # make `git add` fail while leaving unrelated staged facts to be committed implicitly.
       for fact_artifact in ledger/truth.json.sig ledger/attestation.json ledger/attestation.json.sig \
-                           harness/verifier_key.pub harness/allowed_signers; do
+                           harness/verifier_key.pub harness/allowed_signers \
+                           ledger/obligations.json ledger/edge.json.sig; do
         [[ -e "$fact_artifact" ]] && git add -- "$fact_artifact"
       done
     } 2>>"$LOG"

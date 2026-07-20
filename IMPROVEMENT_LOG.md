@@ -1428,3 +1428,49 @@ new behavior) — the flag-off assertions are the compatibility half of the proo
 
 **Next:** S11 — P-generalizations (P2 prereg module, P3 decision-gate, P5 obligations+watchdog,
 P6 probe registry, P7 exposure caps).
+
+---
+
+## Entry 031 — 2026-07-20 — S11 P-generalizations: prereg, decision gate, obligations + watchdog, probe registry, exposure caps
+
+**What (five primitives, each with the same shape: mechanism where prose was):**
+- **P2 `bin/prereg.py`:** edge_pnl's freeze/VOID lifted generic (freeze-on-first-sight that
+  REFUSES to re-freeze, hash-intact check, archive-aside clear = set_baseline's stale-freeze
+  rule generalized); edge_pnl is the first client with the SAME state file/record shape — the
+  existing verdict walk passing unchanged IS the behavior-identical proof.
+- **P3 `bin/decision_gate.py`:** recorded-decision gate for publish/listing/data-acquisition:
+  fail-closed on ABSENCE, never grades content; a rubber stamp (thin decision/rationale) blocks;
+  acquisitions must pin a committed provenance manifest by sha256 that actually exists in-tree.
+  disclosure_gate stays the specialized send instance, regexes untouched (the JA lesson).
+- **P5 `bin/obligations.py` + `bin/obligation_watch.py`:** post-payment promises as typed records
+  (what/oracle/deadline/value/charge_id); the verifier watchdog publishes breaches to the facts
+  lane; guard HALTS on any breach (a dispute-in-waiting on a real name outranks everything);
+  with STRIPE_REFUND_KEY provisioned the watchdog issues the refund itself, else refund_status
+  says the halt is the only guarantee. verifier_loop runs it each cycle and publishes.
+- **P7 exposure caps at registration, ALL DEFAULT ZERO:** max open / max single / cumulative as
+  a fraction of VERIFIED received_usd — rule 3 stays absolute until the memo raises them
+  together with the watchdog provisioning; "you may never owe more than a fraction of what real
+  customers have actually paid" is now arithmetic, not prose.
+- **P6 `bin/probes.py`:** the substrate-probe registry (claim type → probe → the gate that
+  re-runs it), plus a built-in mail-roundtrip probe (the M5 propagation test as a named probe).
+
+**Verified by running:** sim → **PASS=92 FAIL=0 SKIP=0** (was 77; 15 new), corpus **11/0**,
+shellcheck+compileall clean. Three first-run failures, each a FIXTURE-OR-TOOL bug the matrix
+caught and worth banking: (1) sed with `|` delimiter around content containing ` | ` silently
+broke the P3 fixture — restructured to two bodies, no sed; (2) **`obligation_watch` read a STALE
+`origin/<agent-branch>`** — it never fetched (the loop fetches for it in production, but a
+standalone run must not read a stale promise-book); it fetches itself now — a REAL tool bug the
+rig caught; (3) the mail-probe fixture assumed creds absent, but this sandbox exports
+GMAIL_ADDRESS — `env -u` makes the fixture deterministic (and en route proved the probe's
+fall-through order: with creds present the send died at the DISCLOSURE gate, i.e. the gate
+chain held).
+
+**Critique pass:** decision_gate's provenance check rglobs the tree per call (fine at repo
+scale); the acquisition manifest is pinned-by-hash but its CONTENT quality is judgment (the P3
+contract: prove the judgment happened, never grade it); obligations' completion oracle cmd is
+recorded but only deadline-vs-status is watched (running agent-authored shell on the verifier is
+deliberately NOT done — stated); probes' mail-roundtrip sends real mail when creds exist — it is
+an operator-acceptance probe, not a sim fixture, and the sim only exercises its refusal path.
+
+**Next:** S12 shadow-run mode, then S13 probes research, S14 governance docs + memo, S15
+runbook, S16 adversarial+mutation+stacking.
