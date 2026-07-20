@@ -1710,3 +1710,50 @@ the PR body at split time.
 
 **Next:** S15 operator runbook (owns every probe next_falsifier + #20/#26/#30/P5 steps),
 then S16 adversarial+mutation+stacking.
+
+## Entry 035 — 2026-07-20 — S15 the run-2 operator runbook (#20 gates 1-6, #26 beacon, #30 wallet, P5 key scope, #32 signup slice)
+
+**What (planned; accuracy rules enumerated before writing):**
+- One document, docs/runbooks/RUN2_OPERATOR_RUNBOOK.md, command-by-command with EXPECTED
+  OUTPUT and FAILURE MODES per step, covering exactly the operator-side surface: #20's six
+  acceptance gates, #26's beacon deploy checklist, #30's wallet provisioning (recommended
+  OFF, citing the probe records), P5's STRIPE_REFUND_KEY scope widening, the S12 shadow
+  rehearsal, and the #32 step-4 signup slice (the runbooked half of S13, priority-ordered,
+  each probe carrying its bounds notes).
+- **Accuracy rules that bind every line:** (1) every command cross-checked against the
+  script/doc that implements it (start_verifier.sh's actual echo lines; SETUP.md §4b's
+  five steps verbatim-consistent; harness/beacon/README.md's wrangler sequence incl. BOTH
+  secrets; setup_sandbox.sh:54-58 sed-repair + TEMPLATE.md E010 note as the two #20-3
+  deletion targets); (2) automate-over-operator: each step NAMES its mechanical preflight
+  where one exists (opid preflight #37, ssh-keygen preflight, shadow walls, host_check,
+  delivery_check) and says "no automated check -- this line is the control" where none
+  does; (3) no invented expected outputs -- quoted strings come from the scripts;
+  (4) the #32 slice repeats the probe guardrails (no captcha defeat, no fabricated
+  identities, ToS-ban = stop; ClawTasks' Moltbook PUBLIC post routes through
+  disclosure_gate + bin/human.py); (5) the runbook decides nothing -- decisions live in
+  RUN2_DECISIONS.md and are referenced, not duplicated.
+
+**Verified by running:** every quoted expected-output string was grepped against its source
+before landing: `✓ verifier up (pid ...)` (start_verifier.sh:100), `registration FROZEN`
+(edge_pnl.py:216), the rotation-refused line corrected mid-write to the ACTUAL log text
+`rotation push REFUSED (branch protection?) -- rotation skipped, history keeps growing`
+(verifier_loop.sh:233 -- the first draft said "rotation push failed", which exists nowhere;
+the cross-check rule caught it), the #20-3 deletion targets located at setup_sandbox.sh:54-58
+(sed-repair) and TEMPLATE.md's E010 line, SETUP.md §4b's five steps mirrored
+verbatim-consistent, beacon commands matched to harness/beacon/README.md including BOTH
+secrets (STATS_SECRET + HASH_SALT). Matrix at the boundary: sim PASS=118/0/0, corpus 11/0,
+shellcheck + compileall + readme-check clean.
+
+**Critique pass:** a runbook is prose about other people's keystrokes -- the steps with
+mechanical preflights are labeled, and the five steps that have NONE ([no automated check])
+are labeled as being their own control; that honesty is the best available substitute for
+enforcement at seams the repo cannot reach (remote branch settings, wrangler, upstream
+merges, wallet funding). The #32 slice's probe list restates the issue's guardrails and
+routes the two identity-touching actions (Superteam claim, ClawTasks Moltbook post) through
+bin/human.py + disclosure_gate rather than leaving them to improvisation. The expected sim
+counts quoted in step 0 will drift as the matrix grows -- the line says counts grow and
+pins only FAIL=0, so the runbook does not rot with the next fixture added.
+
+**Next:** S16 -- whole-diff adversarial phase (fresh-context correctness / SoD-bypass /
+test-vacuity / doc-truthfulness lenses), mutation pass in clones, closing review entry,
+then split into stacked PRs.
