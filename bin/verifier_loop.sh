@@ -173,6 +173,9 @@ print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
     { git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json
       git add ledger/edge.json ledger/raw/EDGE_MANIFEST.sha256
       git add ledger/raw/*.json
+      # #36/#42: signature + attestation artifacts (present only when signing is provisioned)
+      git add ledger/truth.json.sig ledger/attestation.json ledger/attestation.json.sig
+      git add harness/verifier_key.pub harness/allowed_signers
     } 2>>"$LOG"
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then

@@ -10,6 +10,7 @@
 #   2. Modifications to CONSTITUTION.md         -> the agent editing its own bounds.
 #   3. Modifications to PREDICTION.md           -> post-hoc rationalization of a frozen prediction.
 #   4. bin/pnl.py or bin/guard.py               -> the agent editing its own verifier.
+#   5. harness/verifier_key.pub + allowed_signers -> the agent minting its own signatures (#36).
 #
 # The verifier bypasses this with AIV_VERIFIER=1, which is set only in the verifier's environment --
 # not the sandbox's. That env var IS the boundary. In strong mode the verifier runs on a different
@@ -38,6 +39,10 @@ while IFS= read -r f; do
     # (the v1 blocklist covered only pnl.py+guard.py, which was the migration hole the audit found).
     bin/pnl.py|bin/guard.py|bin/truth.py|bin/aiv_gate.sh|bin/conclusion_gate.py|bin/disclosure_gate.py|bin/iter.py|bin/host_check.py|bin/append_log.py|bin/verifier_loop.sh|bin/set_baseline.py|bin/sod_hook.sh|bin/mail.py|bin/outcome.py|bin/edge_pnl.py|bin/edge.py|bin/bets.py|bin/exhaustion_gate.py|bin/new_run.sh|bin/run_weak.sh|bin/supervise.sh|bin/start_verifier.sh|bin/verifier_daemon.sh|tests/*) \
         block "the agent may not edit its own verifier/gate/sender: $f" ;;
+    # #36: the signature trust anchors. An agent that could commit a swapped pubkey could mint its
+    # own "verifier" signatures -- same class as editing truth.py itself.
+    harness/verifier_key.pub|harness/allowed_signers) \
+        block "the signature trust anchor is verifier-owned: $f" ;;
     # the edge rail's one agent-owned INPUT is EDGE_REGISTRATION.md -- writable exactly once.
     # After the verifier freezes it, edits flip registration_intact=false (verdict VOID), so this
     # hook does not need to block it; the freeze does. Listed here so the boundary is legible.

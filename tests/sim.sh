@@ -513,6 +513,121 @@ if [[ "$CONV_OK" == "1" ]]; then
   git reset -q --hard origin/ledger
 fi
 
+echo "=== fact-lane signing: sign/verify/tamper/chain (#36) + attestation (#42) ==="
+# The rig generates a THROWAWAY keypair -- the real repo never carries harness/verifier_key.pub;
+# provisioning adds it per run (ledger/README.md). So enforcement stays un-armed everywhere else.
+if command -v ssh-keygen >/dev/null 2>&1; then
+  cdx "$W/verifier"
+  git checkout -q ledger 2>/dev/null || git checkout -q -B ledger origin/ledger
+  git fetch -q origin ledger && git reset -q --hard origin/ledger
+  ssh-keygen -t ed25519 -N "" -q -f "$W/vkey" -C verifier
+  mkdir -p harness
+  cp "$W/vkey.pub" harness/verifier_key.pub
+  echo "verifier $(cat "$W/vkey.pub")" > harness/allowed_signers
+  sign_and_push() { # sign_and_push <previous_hash> [received] -- publish a signed truth.json
+    python3 - "$1" "${2:-}" <<'PY'
+import json, sys
+t = json.load(open("ledger/truth.json"))
+t["previous_hash"] = sys.argv[1]
+if sys.argv[2]:
+    t["received_usd"] = float(sys.argv[2])
+open("ledger/truth.json", "w").write(json.dumps(t, indent=2) + "\n")
+PY
+    rm -f ledger/truth.json.sig
+    ssh-keygen -Y sign -f "$W/vkey" -n money-agent-ledger ledger/truth.json 2>/dev/null
+    git add harness ledger/truth.json ledger/truth.json.sig
+    git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: signed publish" \
+      && git push -qf origin ledger
+  }
+  sha_of_head_truth() { git show HEAD:ledger/truth.json | python3 -c \
+    "import sys,hashlib;print(hashlib.sha256(sys.stdin.buffer.read()).hexdigest())"; }
+  GOOD_PREV=$(sha_of_head_truth)
+  sign_and_push "$GOOD_PREV"
+  GOOD_TIP=$(git rev-parse HEAD)
+  cdx "$W/agent"
+  assert_exit 0 "signing: valid signed ledger accepted as grounded" python3 bin/truth.py received_usd
+  # tamper: content changed, stale signature kept
+  cdx "$W/verifier"
+  python3 -c "
+import json; t=json.load(open('ledger/truth.json')); t['received_usd']=7.77
+open('ledger/truth.json','w').write(json.dumps(t, indent=2) + '\n')"
+  git add ledger/truth.json && git -c user.name=verifier -c user.email=v@sim commit -qm "tampered" \
+    && git push -qf origin ledger
+  cdx "$W/agent"
+  assert_exit_grep 2 "SIGNATURE VERIFICATION FAILED" "signing: tampered content refused" \
+    python3 bin/truth.py received_usd
+  assert_exit_grep 1 "cannot load the ledger" "signing: guard halts on the refused ledger" \
+    python3 bin/guard.py
+  # unsigned while the key is armed
+  cdx "$W/verifier"
+  git reset -q --hard "$GOOD_TIP" && git push -qf origin ledger
+  PREV2=$(sha_of_head_truth)
+  python3 -c "
+import json; t=json.load(open('ledger/truth.json')); t['previous_hash']='$PREV2'
+open('ledger/truth.json','w').write(json.dumps(t, indent=2) + '\n')"
+  git rm -q --cached ledger/truth.json.sig 2>/dev/null; rm -f ledger/truth.json.sig
+  git add ledger/truth.json && git -c user.name=verifier -c user.email=v@sim commit -qm "unsigned" \
+    && git push -qf origin ledger
+  cdx "$W/agent"
+  assert_exit_grep 2 "UNSIGNED" "signing: unsigned file refused while key is committed" \
+    python3 bin/truth.py received_usd
+  # chain break: valid signature over a file whose previous_hash lies
+  cdx "$W/verifier"
+  git reset -q --hard "$GOOD_TIP" && git push -qf origin ledger
+  sign_and_push "$(printf '0%.0s' {1..64})"
+  cdx "$W/agent"
+  assert_exit_grep 2 "HASH CHAIN BROKEN" "signing: forged previous_hash refused" \
+    python3 bin/truth.py received_usd
+  cdx "$W/verifier"
+  git reset -q --hard "$GOOD_TIP" && git push -qf origin ledger
+  # pnl end-to-end: with the signing key provisioned, main() signs truth, chains it, and emits a
+  # verifiable attestation (AGENT_BRANCH set -> refusals provenance from the committed branch)
+  mkdir -p sig_state && cp "$W/vkey" sig_state/verifier_signing_key
+  echo '{"created_gt": 1, "baseline_ledger_commit": ""}' > sig_state/baseline.json
+  echo '{"emails":["op@sim.example"],"card_fingerprints":[]}' > sig_state/operator_identity.json
+  SIGN_RESULT=$(python3 - 2>/dev/null <<PYEOF
+import sys, os, json, hashlib, subprocess
+sys.path.insert(0, "bin")
+sys.excepthook = lambda t, v, tb: print(f"SIGN_FAILS:crash:{t.__name__}:{v}")
+os.environ.update({"STRIPE_READ_KEY": "rk", "CARD_CAP_USD": "25", "CARD_SOURCE": "issuer_enforced",
+                   "MONEY_AGENT_STATE": "sig_state", "AGENT_BRANCH": "$BRANCH"})
+os.environ.pop("PRIVACY_READ_KEY", None)
+import importlib, pnl
+importlib.reload(pnl)
+pnl._get = lambda url, h, params=None: {"data": [], "has_more": False} if "transactions" in url or "charges" in url else {}
+expected_prev = hashlib.sha256(subprocess.run(
+    ["git", "show", "HEAD:ledger/truth.json"], capture_output=True).stdout).hexdigest()
+pnl.main()
+fails = []
+t = json.load(open("ledger/truth.json"))
+if t.get("previous_hash") != expected_prev:
+    fails.append(f"previous_hash wrong: {t.get('previous_hash')} != {expected_prev[:12]}")
+for f in ("ledger/truth.json.sig", "ledger/attestation.json", "ledger/attestation.json.sig"):
+    if not os.path.exists(f): fails.append(f"missing {f}")
+for target in ("ledger/truth.json", "ledger/attestation.json"):
+    r = subprocess.run(["ssh-keygen", "-Y", "verify", "-f", "harness/allowed_signers",
+                        "-I", "verifier", "-n", "money-agent-ledger", "-s", target + ".sig"],
+                       input=open(target, "rb").read(), capture_output=True)
+    if r.returncode != 0: fails.append(f"verify failed for {target}")
+att = json.load(open("ledger/attestation.json"))
+if att.get("received_usd") != t.get("received_usd"): fails.append("attestation/truth mismatch")
+if not att.get("refusals_lines"): fails.append("attestation missing refusals provenance")
+print("SIGN_FAILS:" + ";".join(fails))
+PYEOF
+)
+  SIGN_FAILS="${SIGN_RESULT##*SIGN_FAILS:}"
+  if [[ -z "$SIGN_FAILS" ]]; then
+    ok "pnl signing: sig + chain + verifiable attestation with refusals provenance"
+  else
+    bad "pnl signing: $SIGN_FAILS"
+  fi
+  rm -rf sig_state
+  git checkout -q -- ledger/ 2>/dev/null || true
+  git clean -qfd ledger/ 2>/dev/null || true
+else
+  skip "fact-lane signing tests (ssh-keygen not on PATH -- install openssh-client)"
+fi
+
 echo
 echo "=============================================="
 echo "  PASS=$PASS  FAIL=$FAIL  SKIP=$SKIP"
