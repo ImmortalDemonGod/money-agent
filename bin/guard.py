@@ -306,7 +306,8 @@ def main() -> int:
         _open = _bets.open_bets()
         if _open and not any(_bets.is_due(b) for b in _open):
             print("   pacing: open bets exist and none is due -- if there is no NEW lever this "
-                  "iteration, this should be a watch tick (bin/iter.py watch), not an iteration.")
+                  "iteration, this should be a watch tick (bin/iter.py watch), not an iteration."
+                  " (PACE_ENFORCE=1 makes this mechanical: iter.py new then requires --lever.)")
     except Exception:
         pass  # registry optional; its absence must never block the money rail
 

@@ -37,6 +37,12 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 BETS = REPO / "run" / "bets.json"
 CLOCKS = ("indexation", "approval", "reputation", "reply", "other")
+# #40: how a bet's resolution is grounded. deterministic/instrumented clocks have an observable
+# primary source, so resolving them EXECUTES the recorded --check command and stores its output --
+# prose alone is refused (a resolution is an outcome claim; run 1's lesson is that outcome claims
+# want grounding proportional to their load: resolutions feed knowledge/ and unblock conclusions).
+# judgment stays the default so the registry never blocks a bet whose only oracle is the agent.
+ORACLES = ("deterministic", "instrumented", "judgment")
 
 
 def _now() -> dt.datetime:
@@ -108,6 +114,9 @@ def cmd_add(a) -> int:
     if a.clock not in CLOCKS:
         print(f"FATAL: --clock must be one of {CLOCKS}", file=sys.stderr)
         return 1
+    if a.oracle not in ORACLES:
+        print(f"FATAL: --oracle must be one of {ORACLES}", file=sys.stderr)
+        return 1
     resolve_by = _parse_iso(a.resolve_by)
     if resolve_by <= _now():
         print("FATAL: --resolve-by must be in the future.", file=sys.stderr)
@@ -116,7 +125,8 @@ def cmd_add(a) -> int:
     bid = f"bet-{len(bets) + 1:03d}"
     bets.append({
         "id": bid, "placed_at": _iso(_now()), "clock": a.clock, "what": a.what,
-        "check": a.check, "poll_after_h": a.poll_after_h, "resolve_by": a.resolve_by,
+        "check": a.check, "oracle": a.oracle, "poll_after_h": a.poll_after_h,
+        "resolve_by": a.resolve_by,
         "status": "open", "last_checked": None, "checks": [], "resolution": None,
     })
     _save(bets, f"bets: place {bid} ({a.clock}): {a.what[:50]}")
@@ -137,7 +147,8 @@ def cmd_list(_a) -> int:
             flag = " DUE" if is_due(b, now) else ""
             if _parse_iso(b["resolve_by"]) < now:
                 flag += " OVERDUE-RESOLVE"
-        print(f"{b['id']} [{b['status']}{flag}] {b['clock']:<10} {b['what']}\n"
+        print(f"{b['id']} [{b['status']}{flag}] {b['clock']:<10} "
+              f"(oracle: {b.get('oracle', 'judgment')}) {b['what']}\n"
               f"    check: {b['check']} | poll {b['poll_after_h']}h | by {b['resolve_by']} "
               f"| last_checked {b.get('last_checked') or 'never'}")
         if b.get("resolution"):
@@ -181,8 +192,33 @@ def cmd_resolve(a) -> int:
     if not b or b["status"] != "open":
         print(f"FATAL: no open bet {a.id!r}", file=sys.stderr)
         return 1
+    # #40: a deterministic/instrumented clock has an observable primary source, so its resolution
+    # must SHOW the observation -- the recorded --check command is executed here and its output
+    # stored with the resolution. The command's exit code is EVIDENCE (a check that returns
+    # nonzero may be exactly what "lost" looks like), never a refusal; refusal is reserved for a
+    # check that cannot RUN at all (not found / not executable / timeout) -- an unrunnable oracle
+    # grounds nothing. --downgrade-judgment relabels the resolution, visibly, as the escape hatch.
+    oracle = b.get("oracle", "judgment")
+    check_output = None
+    if oracle in ("deterministic", "instrumented") and not a.downgrade_judgment:
+        try:
+            r = subprocess.run(["bash", "-c", b["check"]], capture_output=True, text=True,
+                               timeout=120)
+            if r.returncode in (126, 127):
+                raise OSError(f"check command not runnable (exit {r.returncode}): {b['check']!r}")
+            check_output = {"cmd": b["check"], "rc": r.returncode,
+                            "output": (r.stdout + r.stderr)[:2000]}
+        except Exception as e:
+            print(f"FATAL: this bet's oracle is {oracle!r} but its check could not EXECUTE "
+                  f"({type(e).__name__}: {e}). Prose alone does not resolve a machine-checkable "
+                  "clock -- fix the check, or re-run with --downgrade-judgment to relabel this "
+                  "resolution (visible in the record).", file=sys.stderr)
+            return 1
+    if a.downgrade_judgment and oracle != "judgment":
+        oracle = f"{oracle}-downgraded-to-judgment"
     b["status"] = a.outcome
-    b["resolution"] = {"at": _iso(_now()), "outcome": a.outcome, "evidence": a.evidence}
+    b["resolution"] = {"at": _iso(_now()), "outcome": a.outcome, "evidence": a.evidence,
+                       "oracle": oracle, "check_output": check_output}
     _save(bets, f"bets: resolve {a.id} {a.outcome}")
     # B9: a resolved day-scale bet IS a channel outcome -- the richest record the compounding
     # layer gets. Feed knowledge/outcomes.jsonl automatically so run N+1 inherits the resolution
@@ -213,6 +249,9 @@ def main() -> int:
     pa.add_argument("--what", required=True)
     pa.add_argument("--clock", required=True)
     pa.add_argument("--check", required=True)
+    pa.add_argument("--oracle", default="judgment",
+                    help="deterministic|instrumented|judgment (#40): non-judgment resolutions "
+                         "EXECUTE the recorded --check and store its output")
     pa.add_argument("--poll-after-h", type=float, required=True, dest="poll_after_h")
     pa.add_argument("--resolve-by", required=True, dest="resolve_by")
     pa.set_defaults(fn=cmd_add)
@@ -226,6 +265,9 @@ def main() -> int:
     pr.add_argument("id")
     pr.add_argument("outcome")
     pr.add_argument("evidence")
+    pr.add_argument("--downgrade-judgment", action="store_true", dest="downgrade_judgment",
+                    help="resolve a machine-checkable bet on prose anyway; the relabel is "
+                         "recorded in the resolution (visible escape hatch, not a silent one)")
     pr.set_defaults(fn=cmd_resolve)
     a = p.parse_args()
     return a.fn(a)

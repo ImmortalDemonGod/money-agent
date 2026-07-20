@@ -1118,3 +1118,63 @@ move (chain aligns with commits, not cycles).
 
 **Next:** S5 — gates & probes (#39 delivery_check + #35 link-limit fold-in, #40 oracle-classed
 resolutions, #45 PACE_ENFORCE in iter.py).
+
+---
+
+## Entry 025 — 2026-07-20 — S5 gates & probes: the delivery seam, oracle-classed resolutions, mechanical pacing (issues #39, #35, #40, #45)
+
+**What:** (1) `bin/delivery_check.py` (#39/G4, "the headline residual"): verifies the pay→deliver
+seam against the LIVE success-redirect target — status, artifact size floor, placeholder scan,
+optional exact sha256 — reusing host_check's SSRF guard/redirect-vetted opener (consumed, not
+reimplemented). #35 folds in: with `--payment-link`, the link is read back via the Stripe API and
+`restrictions[completed_sessions][limit]` MUST be 1 — the provider-level atomic cap the ~120s
+polling window cannot provide; no key → `unverified` → FAIL (the agent that created the link holds
+the key, so unverifiable = misconfigured, never exempt). (2) `aiv_gate.sh` stage 2c: a packet
+carrying a buy/checkout.stripe.com URL claims a paid offer → must carry `DELIVERY_CHECK_URL:`,
+which the gate re-runs itself (self-typed verdicts untrusted — the 2b precedent). (3) `bets.py
+--oracle deterministic|instrumented|judgment` (#40): non-judgment resolutions EXECUTE the recorded
+`--check`, storing cmd+rc+output in the resolution; rc is EVIDENCE (nonzero may be what "lost"
+looks like), refusal is reserved for an unrunnable oracle (127/126/timeout), with a visible
+`--downgrade-judgment` relabel as the escape hatch; `conclusion_gate` names the oracle class in
+open-bet refusals; `bets.py list` shows it. (4) `iter.py new --lever` + `PACE_ENFORCE` (#45,
+default off): quiet open bets (open, none due) block a lever-less NEW iteration; the declared
+lever lands in the MONEY_LOG skeleton as a committed, auditable line. Enforcement deliberately
+lives at iteration-open, NOT guard — guard runs before a lever could exist; deviation to be noted
+on #45 at PR time. guard's B7 advisory now names the flag. One flagged PROMPT.md line (create
+links with the provider cap) + SETUP rule + TEMPLATE trap note; delivery_check joins the sod_hook
+blocklist.
+
+**Edge cases enumerated before coding:** the EDGE_CLAIM line must be restored before the 2c sim
+tests or the missing-claim failure would make them pass for the wrong reason; the 2c trigger is a
+URL-shaped match (not prose like "stripe"), so ordinary packets never trip it; `.invalid` TLD
+gives an offline-deterministic failing fetch through the real SSRF guard; a check command that
+EXITS nonzero is evidence while one that cannot RUN grounds nothing; PACE must never block watch
+ticks or resolutions; the due-bet case and default-off case both stay unblocked; the delivery
+body read is bounded (5MB) and the size floor (256B) sits below every real deliverable.
+
+**Verified by running (artifacts):**
+- `bash tests/sim.sh` → **PASS=46 FAIL=0 SKIP=0** (was 35): delivery unit walk
+  (pass/placeholder/size/uncapped/unverified/sha), gate-2c wiring (URL without DELIVERY_CHECK_URL
+  fails; failing fresh re-run fails), oracle trio (unrunnable refused / downgrade relabels /
+  executed rc stored), pacing trio (+ default-off untouched), conclusion-gate oracle labeling.
+  Corpus **11/0**; shellcheck + compileall clean.
+- **Retro-bite @ HEAD~1:** old gate has zero delivery references (a paid-offer packet passed with
+  no seam check); old `iter.py new()` has no lever/pacing; old bets ACCEPTED a prose resolve of a
+  deterministic-shaped bet.
+
+**Critique pass:**
+- The positive gate-2c path (packet passing WITH a live delivery URL) is untestable offline by
+  design (SSRF guard blocks a local rig) — covered at the unit layer via monkeypatched fetch, the
+  same honest posture host_check has always had; the live seam belongs to the operator acceptance
+  gates.
+- `_link_limit` lists the first 100 payment links; a run creating more would need pagination —
+  far past run scale, noted rather than built.
+- The PROMPT.md line is operator-negotiated wording changed by this stack: flagged for explicit
+  review in the PR body (plan ground rule).
+- bets.py's executed check runs under `bash -c` with a 120s timeout in the agent's own
+  environment — no new privilege (the agent already runs arbitrary shell), but the timeout keeps
+  a hung oracle from wedging a resolution.
+
+**Next:** S6 — edge-verdict quality (#38): MAX_DRAWDOWN_USD frozen with the registration, runtime
+peak tracking in a separate state file, drawdown breach → FALSIFIED, BENCHMARK recorded; plus
+edge.json signing (the S4 deferral) if it fits the stack cleanly.

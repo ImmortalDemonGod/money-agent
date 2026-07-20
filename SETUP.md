@@ -116,6 +116,12 @@ export STRIPE_WRITE_KEY=rk_live_...    # products/prices/links/checkout ONLY
 # GMAIL_ADDRESS / GMAIL_APP_PASSWORD if using read+send email
 ```
 
+**Provider-level first-sale cap (issue #35).** The first-dollar stop is enforced by ~120s verifier
+polling; nothing in that loop atomically stops a SECOND payment landing inside the window. The run
+rule (in PROMPT.md, gate-checked by `bin/delivery_check.py` via aiv_gate stage 2c): every Stripe
+payment link is created with `restrictions[completed_sessions][limit]=1`, so the provider itself
+refuses a second completed checkout.
+
 **The wash-trade allowlist (required before any offer goes live).** `pnl.py` classifies every
 charge's payer against `$MONEY_AGENT_STATE/operator_identity.json` (default
 `~/.money-agent-verifier/operator_identity.json`) so an operator self-purchase can never trip the
