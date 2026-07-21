@@ -41,6 +41,17 @@ const BOT_RE = /bot\b|crawl|spider|slurp|bing|googlebot|yandex|baidu|duckduck|ar
 // without losing data.
 const DATACENTER_RE = /google|amazon|aws\b|microsoft|azure|digitalocean|linode|akamai|fastly|hetzner|ovh|vultr|scaleway|contabo|leaseweb|choopa|equinix|oracle|alibaba|tencent|cloudflare|m247|datacamp|hostinger|namecheap|godaddy|blix/i;
 
+// Some brands above ALSO run a consumer ISP on a different ASN (Google Fiber vs Google Cloud, etc.).
+// A bare substring match on as_org flags those real humans as bots -- the mirror of the over-counting
+// this fixes. Exclude known consumer arms first so DATACENTER_RE only fires on the hosting side.
+const CONSUMER_ISP_RE = /\b(google fiber|starlink|t-mobile|at&t|comcast|xfinity|verizon|spectrum|charter|cox communications|centurylink|frontier|telekom|vodafone|orange|telefonica|movistar|virgin media|sky broadband)\b/i;
+
+function isDatacenterOrg(org) {
+  if (!org) return false;
+  if (CONSUMER_ISP_RE.test(org)) return false;   // consumer traffic, even if the parent brand sells cloud
+  return DATACENTER_RE.test(org);
+}
+
 // Browsers fetch these automatically alongside a page. Counting them as visits double-counts a
 // real visitor and, worse, manufactures a "visit" out of a bare crawler asset fetch.
 const ASSET_RE = /^\/(favicon\.ico|apple-touch-icon[^/]*|robots\.txt|sitemap\.xml|.*\.(png|jpe?g|gif|svg|webp|ico|css|js|mjs|map|woff2?|ttf))$/i;
@@ -54,7 +65,7 @@ function classifyBot(ua, req, cf) {
   if (!/mozilla|applewebkit|gecko|chrome|safari|firefox|edge/i.test(ua)) return 1; // no browser engine token
   // Caught live 2026-07-20: two /favicon.ico fetches from Google LLC and a NO hosting network,
   // both wearing full browser UAs with Accept-Language, were being counted as HUMAN.
-  if (cf && DATACENTER_RE.test(cf.asOrganization || "")) return 1;
+  if (cf && isDatacenterOrg(cf.asOrganization)) return 1;
   return 0;
 }
 
@@ -154,7 +165,9 @@ async function stats(env) {
   // ASSET_SQL must mirror ASSET_RE. Asset fetches are logged (they are evidence) but never counted
   // as visits: the headline number has to mean "a page was opened".
   const ASSET_SQL = "(path='/favicon.ico' OR path='/robots.txt' OR path='/sitemap.xml' OR path LIKE '/apple-touch-icon%' OR path LIKE '%.png' OR path LIKE '%.jpg' OR path LIKE '%.jpeg' OR path LIKE '%.gif' OR path LIKE '%.svg' OR path LIKE '%.webp' OR path LIKE '%.ico' OR path LIKE '%.css' OR path LIKE '%.js' OR path LIKE '%.mjs' OR path LIKE '%.map' OR path LIKE '%.woff' OR path LIKE '%.woff2' OR path LIKE '%.ttf')";
-  const [tot] = await q(`SELECT COUNT(*) n_all, SUM(CASE WHEN NOT ${ASSET_SQL} THEN 1 ELSE 0 END) page_views, SUM(CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END) humans, SUM(CASE WHEN bot=1 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END) bots, SUM(CASE WHEN ${ASSET_SQL} THEN 1 ELSE 0 END) assets_excluded, COUNT(DISTINCT CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN ip_hash END) distinct_human_ips FROM hits`);
+  // COALESCE so an empty hits table returns 0, not NULL. NULLIF(ip_hash,'') so requests with no
+  // cf-connecting-ip (stored as '') do not collapse into a single phantom "distinct human".
+  const [tot] = await q(`SELECT COUNT(*) n_all, COALESCE(SUM(CASE WHEN NOT ${ASSET_SQL} THEN 1 ELSE 0 END),0) page_views, COALESCE(SUM(CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END),0) humans, COALESCE(SUM(CASE WHEN bot=1 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END),0) bots, COALESCE(SUM(CASE WHEN ${ASSET_SQL} THEN 1 ELSE 0 END),0) assets_excluded, COUNT(DISTINCT CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN NULLIF(ip_hash,'') END) distinct_human_ips FROM hits`);
   const humansByCountry = await q(`SELECT country, COUNT(*) n FROM hits WHERE bot=0 AND NOT ${ASSET_SQL} GROUP BY country ORDER BY n DESC LIMIT 15`);
   const clicks = await q("SELECT dest, COUNT(*) n, SUM(CASE WHEN bot=0 THEN 1 ELSE 0 END) human_clicks FROM hits WHERE path='/go' GROUP BY dest ORDER BY n DESC");
   const recentHumans = await q(`SELECT ts,path,dest,country,as_org,ref,substr(ua,1,80) ua FROM hits WHERE bot=0 AND NOT ${ASSET_SQL} ORDER BY id DESC LIMIT 30`);
