@@ -27,12 +27,15 @@
    while ahead of origin, but a persistently unreachable remote is still a raw-pull hazard until
    fully resolved. On any v1-topology repo: commit+push in the same breath as every write.
 
-## Cloudflare Workers responses are edge-cached; verify deploys with a unique cache-buster
+## Cloudflare Workers responses are edge-cached; a stale read is not a failed deploy
 Twice on 2026-07-20 a fresh `curl` of a just-deployed Worker returned the PREVIOUS build -- once
 reading as "the fix did not deploy", once as "the new route 404s to the hub". Both deploys were
-fine; the read was stale. `curl "https://<worker>/path?v=$(date +%s%N)"` returns the real build.
-Cost: two false diagnoses. Same family as every other trap here -- a description layer standing in
-for the artifact.
+fine; the read was stale. Cost: two false diagnoses. Same family as every other trap here -- a
+description layer standing in for the artifact.
+Verify against the deploy itself, not a guessed cache key: `wrangler deployments list` (or a build
+marker the worker echoes) confirms the live version. A `?v=$(date +%s%N)` cache-buster USUALLY
+dodges the edge cache, but only when the active cache key includes the query string -- a custom
+cache key can ignore it and still serve the old body, so a nonce is a convenience, not proof.
 
 ## `git` answers from your last fetch, not from the remote
 A local `main` that had not been fetched was **85 commits behind**. Reasoning from it produced a

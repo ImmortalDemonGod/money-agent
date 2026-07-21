@@ -122,17 +122,30 @@ def nostr() -> dict:
 
 
 def delta_vs_baseline(tg: dict, hn: dict) -> dict:
-    """Compute external traffic since the frozen baseline. NOTHING here is asserted."""
-    per_page = {k: (tg.get(k) or 0) - BASELINE_TELEGRAPH.get(k, 0) for k in BASELINE_TELEGRAPH}
-    tg_delta = sum(per_page.values())
+    """Compute external traffic since the frozen baseline. NOTHING here is asserted.
+
+    A page whose fetch FAILED is None (UNAVAILABLE), never 0. Collapsing None to 0 is exactly the
+    false-zero this file exists to stop: on a total telegra.ph outage every page reads None, and
+    `None or 0` would silently print 'now 0 vs baseline 80 -> no external traffic'. Unavailable
+    telemetry is not a zero-traffic finding. So None propagates: per-page None marks an unreadable
+    page, and telegraph_delta_total is None only when EVERY page failed."""
+    per_page = {k: (None if tg.get(k) is None else tg[k] - BASELINE_TELEGRAPH.get(k, 0))
+                for k in BASELINE_TELEGRAPH}
+    unavailable = sorted(k for k, v in per_page.items() if v is None)
+    available = [k for k in BASELINE_TELEGRAPH if k not in unavailable]
+    all_down = not available
     pts = hn.get("points")
     hn_delta = None if pts is None else pts - BASELINE_HN_POINTS
     return {
         "frozen_at": BASELINE_FROZEN_AT,
         "telegraph_baseline_total": sum(BASELINE_TELEGRAPH.values()),
-        "telegraph_now_total": sum((tg.get(k) or 0) for k in BASELINE_TELEGRAPH),
-        "telegraph_delta_total": tg_delta,
-        "telegraph_delta_per_page": per_page,
+        # baseline/now restricted to the pages we could actually read, so the comparison is apples-to-apples
+        "telegraph_baseline_available": None if all_down else sum(BASELINE_TELEGRAPH[k] for k in available),
+        "telegraph_now_available": None if all_down else sum(tg[k] for k in available),
+        # None ONLY when every page fetch failed; otherwise the summed delta over readable pages
+        "telegraph_delta_total": None if all_down else sum(per_page[k] for k in available),
+        "telegraph_delta_per_page": per_page,        # per-page None == unavailable, not zero
+        "telegraph_pages_unavailable": unavailable,  # which pages could not be read this run
         "hn_points_delta": hn_delta,
     }
 
@@ -149,17 +162,26 @@ def received_usd() -> float | None:
 def bottom_line(d: dict, usd: float | None) -> str:
     """COMPUTED, not a literal. The previous hardcoded string outlived its own evidence:
     it asserted 'reach is ZERO' and 'a reply is still zero' after both had been falsified
-    (external traffic accrued past the baseline; Fabio Rizzo replied 2026-07-18), and it
-    asserted 'all telegraph views are self-traffic', which iter-098 retracted as unprovable."""
+    (external traffic accrued past the baseline; a correction-sweep recipient replied 2026-07-18),
+    and it asserted 'all telegraph views are self-traffic', which iter-098 retracted as unprovable."""
     tg, hn = d["telegraph_delta_total"], d["hn_points_delta"]
+    unavail = d.get("telegraph_pages_unavailable") or []
+    n_pages = len(BASELINE_TELEGRAPH)
     parts = []
-    if tg <= 0 and not hn:
-        parts.append(f"No external traffic measured since {d['frozen_at']} "
-                     f"(telegra.ph {d['telegraph_now_total']} vs baseline "
-                     f"{d['telegraph_baseline_total']}).")
+    if tg is None:
+        # every telegra.ph page fetch failed -> telemetry UNAVAILABLE, which is NOT a no-traffic result.
+        parts.append(f"telegra.ph telemetry UNAVAILABLE this run (all {n_pages} page fetches failed) "
+                     f"-- NO reach conclusion can be drawn; this is expressly NOT a zero-traffic "
+                     f"result. Frozen baseline was {d['telegraph_baseline_total']}.")
+    elif tg <= 0 and not hn:
+        note = (f" [{len(unavail)}/{n_pages} pages unavailable -> lower bound]" if unavail else "")
+        parts.append(f"No external traffic measured on the readable pages since {d['frozen_at']} "
+                     f"(telegra.ph {d['telegraph_now_available']} vs baseline "
+                     f"{d['telegraph_baseline_available']}){note}.")
     else:
+        note = (f" [{len(unavail)}/{n_pages} pages unavailable -> lower bound]" if unavail else "")
         parts.append(f"EXTERNAL traffic since {d['frozen_at']}: telegra.ph +{tg} page loads "
-                     f"({d['telegraph_baseline_total']} -> {d['telegraph_now_total']})"
+                     f"({d['telegraph_baseline_available']} -> {d['telegraph_now_available']}){note}"
                      + (f", HN +{hn} point(s)." if hn else "."))
         parts.append("Post-baseline hits are external BY CONSTRUCTION (the agent stopped touching "
                      "the pages at the cutoff), but telegra.ph exposes no referrer/UA, so "
