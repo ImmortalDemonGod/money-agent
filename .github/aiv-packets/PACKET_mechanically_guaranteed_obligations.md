@@ -4,7 +4,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Repository** | github.com/ImmortalDemonGod/aiv-protocol |
+| **Repository** | github.com/ImmortalDemonGod/money-agent |
 | **Change ID** | mechanically-guaranteed-obligations |
 | **Commits** | `d859a60`, `a024bb0`, `512f388`, `6763b83`, `d8adf3b`, `bcf1f1a`, `9d56125`, `7f3be9e`, `f6084e3`, `c085827`, `55dc2f1`, `167bd21`, `72b8c7c`, `bd1e7a8`, `6cc1a28`, `3b8b421` |
 | **Head SHA** | `3b8b421` |
@@ -15,33 +15,29 @@
 
 ```yaml
 classification:
-  risk_tier: R1
-  sod_mode: S0
-  critical_surfaces: []
+  risk_tier: R3
+  sod_mode: S1-with-section-10-waiver
+  critical_surfaces: [payments, refunds, operator authorization, verifier trust boundary, audit logging]
   blast_radius: component
-  classification_rationale: "TODO: Describe why this tier was chosen"
-  classified_by: "Miguel Ingram"
+  classification_rationale: >
+    AIV section 5.2 makes this R3 because it changes when the agent may create post-payment
+    liability, how a verifier-held refund credential authorizes that behavior, and which protected
+    facts cross the privilege boundary. The repository's PR-51 packet establishes the section 10
+    operator-plus-AI waiver convention; independent human merge review remains required.
+  classified_by: "Miguel Ingram (Author) + Codex (AI Verifier, section 10 waiver)"
   classified_at: "2026-07-22T23:22:46Z"
 ```
 
 ## Claims
 
-1. cmd_register refuses every mechanically guaranteed obligation without a concrete Stripe charge identifier
-2. Persisted obligations retain the exact charge identifier the verifier will use for an overdue refund
-3. No existing tests were modified or deleted during this change.
-4. _authorization enables obligations only when operator enablement, refund authority, positive exposure caps, and a positive deadline cap are all present
-5. main independently checks open obligations and removes verifier-confirmed deliveries from the open count
-6. The focused obligation test refuses authorized registration when charge_id is empty
-7. The same test permits the bounded record after a concrete ch_ identifier is supplied
-8. The enabled two-lane registration fixture supplies a concrete refundable Stripe charge identifier
-9. The fixture still reaches the grounded received-funds cap rather than failing authorization
-10. The adopted P5 conjunction requires every liability to identify its concrete refundable charge
-11. The environment template keeps obligation authorization default-off and places every enabling value in the verifier-only section
-12. The template identifies the refund key, exposure caps, and deadline cap required for authorization
-13. The mechanically guaranteed exception requires every liability to bind a concrete refundable charge
-14. Setup requires every mechanically guaranteed obligation to bind a ch_ charge identifier
-15. Setup explains that refund credentials without a refund target do not constitute a guarantee
-16. The S11 implementation record states each authorized liability binds its refundable charge
+1. Deferred fulfillment is permitted only when a fresh grounded verifier fact proves explicit
+   enablement, refund authority, positive exposure caps, and a maximum deadline.
+2. Agent-local environment variables cannot activate or widen obligation authority.
+3. Concurrent registrations cannot jointly exceed verifier-published caps.
+4. Every accepted liability binds a concrete refundable Stripe charge, and agent fulfillment
+   evidence remains unverified until the restricted verifier oracle passes.
+5. The constitution preserves instant delivery as the default while expressly authorizing only
+   this mechanically guaranteed exception.
 
 ---
 
@@ -65,6 +61,27 @@ classification:
 | 14 | EVIDENCE_SETUP.MD.md | `bd1e7a8` | A, B, C, E, F |
 | 15 | EVIDENCE_DOCS_V2_HARNESS_DESIGN.MD.md | `6cc1a28` | A, B, C, E, F |
 | 16 | EVIDENCE_IMPROVEMENT_LOG.MD.md | `3b8b421` | A, B, C, E, F |
+
+### Class A (Execution Evidence)
+
+Executed against committed head `3b8b421be79789fcf956cfc769bb13cbbc1a6bbb` on macOS/Python 3:
+
+| Command | Pass | Fail | Skip | Result |
+|---|---:|---:|---:|---|
+| `pytest -q tests/test_v3_hardening.py` | 17 | 0 | 0 | PASS |
+| `bash tests/sim.sh` | 114 | 0 | 0 | PASS |
+| `bash tests/corpus.sh` | 11 | 0 | 0 | PASS |
+| `python3 -m compileall -q bin tests/test_v3_hardening.py` | 1 | 0 | 0 | PASS |
+| scoped Ruff | 1 | 0 | 0 | PASS |
+| `shellcheck tests/sim.sh bin/*.sh` | 1 | 0 | 0 | PASS |
+| `git diff --check` | 1 | 0 | 0 | PASS |
+
+Focused obligation tests: `test_obligation_authorization_requires_fresh_grounded_verifier_fact`,
+`test_obligation_watch_authorization_requires_every_safeguard`,
+`test_obligation_watch_checks_open_records_without_agent_claim`,
+`test_obligation_registration_uses_verifier_caps_and_serializes`,
+`test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`, and
+`test_obligation_watch_rejects_shell_and_idempotently_refunds`.
 
 
 
@@ -92,6 +109,47 @@ classification:
 - `SETUP.md#L129-L130`
 - `IMPROVEMENT_LOG.md#L1448-L1450`
 
+### Class C (Negative Evidence)
+
+- `rg -n 'os\.environ|getenv\(' bin/obligations.py` returns no matches: authorization cannot fall
+  back to agent-local environment state.
+- Focused tests reject ungrounded, stale, disabled, unprovisioned, non-finite, deadline-exceeding,
+  and charge-unbound registrations.
+- The restricted completion oracle rejects arbitrary shell text; refund requests use a stable
+  obligation-scoped idempotency key.
+
+### Class D (Differential Evidence)
+
+| Boundary | Parent `29226cc` | Final behavior |
+|---|---|---|
+| Authorization | Refused every post-payment obligation. | Fresh verifier enablement plus every safeguard permits bounded registration. |
+| Config ownership | Original PR read caps from the agent process. | Verifier publishes the only accepted caps and deadline. |
+| Concurrency | Unlocked load/check/save could overrun caps. | One file-lock transaction covers evaluation and append. |
+| Fulfillment | Hardening disabled all claims. | Claims are allowed but never self-certify; verifier checks open records independently. |
+| Refund target | `charge_id` could be absent. | Registration requires a concrete `ch_...` target. |
+
+The first differential run executed the new simulation assertions against parent `29226cc`: 111
+passed and exactly the three new authorization assertions failed. Against the committed runtime,
+the same matrix passed 114/114.
+
+### Class E (Intent Alignment)
+
+- Immutable intent: [V2 design §15.2 at parent `29226cc`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/docs/V2_HARNESS_DESIGN.md#L791-L810)
+  preregistered the exact amendment: delivery is instant or mechanically guaranteed by an
+  out-of-band watchdog holding refund authority.
+- [PR 51](https://github.com/ImmortalDemonGod/money-agent/pull/51) received the operator's explicit
+  2026-07-22 direction to adopt that amendment rather than leave its safety layer inert.
+
+### Class F (Provenance Evidence)
+
+- Runtime: `d859a60`, `a024bb0`, `c085827`.
+- Focused regressions: `512f388`, `55dc2f1`.
+- Protected two-lane regressions: `6763b83`, `167bd21`.
+- Policy and provisioning: `d8adf3b`, `bcf1f1a`, `9d56125`, `7f3be9e`, `f6084e3`, `72b8c7c`,
+  `bd1e7a8`, `6cc1a28`, `3b8b421`.
+- No test was deleted or skipped. Class G is omitted because no black-box prediction was
+  preregistered; reconstructing one post hoc would be verification theater.
+
 ---
 
 ## Verification Methodology
@@ -106,9 +164,18 @@ Packet generated by `aiv close`.
 
 - Evidence references point to Layer 1 evidence files at specific commit SHAs.
   Use `git show <sha>:.github/aiv-evidence/<file>` to retrieve.
+- Presence of a refund credential proves provisioning, not provider availability. A failed live
+  refund remains a breach/halt requiring manual remediation.
+- Protected-ledger provisioning is the privilege wall; weak-mode committed facts remain a
+  tripwire. Independent natural-person S1 review remains required before merge.
+- Repository-wide mypy reports pre-existing findings in `bin/spine.py`, `bin/bets.py`, and
+  `bin/bet_gate.py`, plus a missing local pytest stub. Scoped mypy for both runtime modules passed;
+  Ruff, compilation, ShellCheck, and every behavioral suite are clean.
 
 ---
 
 ## Summary
 
-Change 'mechanically-guaranteed-obligations': 16 commit(s) across 9 file(s).
+R3 change `mechanically-guaranteed-obligations`: 16 atomic AIV commits across nine files. Deferred
+delivery is useful only inside a fresh verifier-owned, bounded, charge-bound, refund-backed
+exception, and fulfillment remains independently verified.
