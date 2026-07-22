@@ -74,6 +74,7 @@ FOUND = re.compile(r"^VERDICT:\s*FOUND:\s*(.+)$", re.MULTILINE)
 
 
 def _read(p: Path) -> str:
+    all_bets = []
     try:
         return p.read_text(errors="replace")
     except Exception:
@@ -236,6 +237,7 @@ def main() -> int:
     # operator actuation is still outstanding. Only `human.py sync`, after a facts-lane resolution,
     # changes this status.
     human_tasks = REPO / "run" / "human_tasks.json"
+    task_bets = {}
     if human_tasks.exists():
         try:
             import json
@@ -258,16 +260,16 @@ def main() -> int:
                     fails.append(f"human actuation {task.get('id')} is not grounded "
                                  f"({type(e).__name__}: {e}) -- agent-written task status cannot "
                                  "authorize a conclusion.")
-            # A removed task must not make its still-visible companion bet meaningless. This catches
-            # the common tamper path (delete/rename the task while retaining the agenda registry).
-            for bet in all_bets:
-                if str(bet.get("what", "")).startswith("human actuation ") \
-                        and bet.get("id") not in task_bets:
-                    fails.append(f"human companion {bet.get('id')} has no task record -- "
-                                 "deleted actuation state cannot authorize a conclusion.")
         except Exception as e:
             fails.append(f"cannot read human task registry ({type(e).__name__}: {e}) -- "
                          "fail-closed: unknown actuation state is not resolved state.")
+    # A removed task file or entry must not make its still-visible companion bet meaningless.
+    # Keep this outside the file-exists guard so deleting the entire registry also fails closed.
+    for bet in all_bets:
+        if str(bet.get("what", "")).startswith("human actuation ") \
+                and bet.get("id") not in task_bets:
+            fails.append(f"human companion {bet.get('id')} has no task record -- "
+                         "deleted actuation state cannot authorize a conclusion.")
     try:
         import truth as _truth
         e_facts, e_src = _truth.load("edge.json")

@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/conclusion_gate.py`
-**Commit:** `e7a1091`
-**Previous:** `09399f5`
-**Generated:** 2026-07-22T23:01:35Z
+**Commit:** `408857c`
+**Previous:** `2382040`
+**Generated:** 2026-07-22T23:32:13Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/conclusion_gate.py"
-  classification_rationale: "Trusting mutable run state would let the agent forge task completion"
+  classification_rationale: "Deleting the registry must not erase a conclusion-authorizing obligation"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:01:35Z"
+  classified_at: "2026-07-22T23:32:13Z"
 ```
 
 ## Claim(s)
 
-1. Conclusion eligibility recomputes every terminal human task from the signed verifier resolution and rejects orphaned companion bets
+1. A human companion bet without a task record blocks conclusions even when the entire human_tasks.json file is absent
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,29 +32,30 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
-- **Requirements Verified:** Issue #31 requires pending human work to block conclusion and only grounded outcomes to unblock it
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578647](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578647)
+- **Requirements Verified:** CodeRabbit requires orphan detection to run independently of task-registry existence
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`e7a1091`](https://github.com/ImmortalDemonGod/money-agent/tree/e7a10911fae283992772a56c7f200a850b1107ce))
+**Scope Inventory** (SHA: [`408857c`](https://github.com/ImmortalDemonGod/money-agent/tree/408857ca71c92f9df429961814babfc09f33ecce))
 
-- [`bin/conclusion_gate.py#L225-L226`](https://github.com/ImmortalDemonGod/money-agent/blob/e7a10911fae283992772a56c7f200a850b1107ce/bin/conclusion_gate.py#L225-L226)
-- [`bin/conclusion_gate.py#L242-L245`](https://github.com/ImmortalDemonGod/money-agent/blob/e7a10911fae283992772a56c7f200a850b1107ce/bin/conclusion_gate.py#L242-L245)
-- [`bin/conclusion_gate.py#L250-L267`](https://github.com/ImmortalDemonGod/money-agent/blob/e7a10911fae283992772a56c7f200a850b1107ce/bin/conclusion_gate.py#L250-L267)
+- [`bin/conclusion_gate.py#L77`](https://github.com/ImmortalDemonGod/money-agent/blob/408857ca71c92f9df429961814babfc09f33ecce/bin/conclusion_gate.py#L77)
+- [`bin/conclusion_gate.py#L240`](https://github.com/ImmortalDemonGod/money-agent/blob/408857ca71c92f9df429961814babfc09f33ecce/bin/conclusion_gate.py#L240)
+- [`bin/conclusion_gate.py#L266-L272`](https://github.com/ImmortalDemonGod/money-agent/blob/408857ca71c92f9df429961814babfc09f33ecce/bin/conclusion_gate.py#L266-L272)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L225-L226): FAIL -- WARNING: No tests import or call `main`
+- **`_read`** (L77): FAIL -- WARNING: No tests import or call `_read`
+- **`main`** (L240): FAIL -- WARNING: No tests import or call `main`
 
-**Coverage summary:** 0/1 symbols verified by tests.
+**Coverage summary:** 0/2 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** All checks passed
-- **mypy:** Found 1 error in 1 file (checked 1 source file)
+- **ruff:** 13 error(s)
+- **mypy:** Found 2 errors in 1 file (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -74,18 +75,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-bc601c3 test(rails): expose registry contract to verification
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
-8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
+dfe3ff8 test(pr50): pin final review failure modes
+d52a400 test(rails): expand fail-closed registry catalog
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
+618e3eb merge(stack): integrate reviewed stack 3 advances
+4ff597e test(delivery): cover content-type refusal
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Conclusion eligibility recomputes every terminal human task ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | A human companion bet without a task record blocks conclusio... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -94,11 +95,11 @@ c5fd8f6 docs(tests): normalize bug-catalog whitespace
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/2 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Make the conclusion gate independently revalidate human outcomes
+Move human companion orphan detection outside the file guard
