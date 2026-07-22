@@ -601,12 +601,12 @@ BASE_ENV=(BASE_RPC_URL=http://rpc.sim BASE_SETTLEMENT_ADDRESS=0xabc \
   BASE_SETTLEMENT_PAYER_TOPIC=1 BASE_SETTLEMENT_PAYEE_TOPIC=2 \
   BASE_SETTLEMENT_AMOUNT_WORD=0)
 assert_exit 2 "preflight: armed Base rail requires operator wallet addresses" \
-  env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" \
+  env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" OPID="$W/opid-state/operator_identity.json" \
     bash -c "set -uo pipefail; source '$BASE_PRE'"
 echo '{"emails":["op@sim.example"],"addresses":["0x777"]}' > \
   "$W/opid-state/operator_identity.json"
 assert_exit 0 "preflight: fully provisioned Base binding + wallet allowlist passes" \
-  env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" \
+  env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" OPID="$W/opid-state/operator_identity.json" \
     bash -c "set -uo pipefail; source '$BASE_PRE'"
 cdx "$W/agent"
 
