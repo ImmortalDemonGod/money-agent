@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/edge_pnl.py`
-**Commit:** `de7d1e8`
-**Previous:** `ef92b16`
-**Generated:** 2026-07-22T22:37:52Z
+**Commit:** `46f3125`
+**Previous:** `994cd6f`
+**Generated:** 2026-07-22T22:45:13Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/edge_pnl.py"
-  classification_rationale: "R3 verifier verdict integrity"
+  classification_rationale: "R3 because this changes verifier-owned risk and verdict calculations"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:37:52Z"
+  classified_at: "2026-07-22T22:45:13Z"
 ```
 
 ## Claim(s)
 
-1. A new registration initializes its own peak without discarding recorded peaks for prior registrations
+1. Edge verification requires a frozen benchmark and grants VERIFIED_POSITIVE_EV only when excess return clears the registered bar, fill floor, and drawdown cap
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -33,26 +33,42 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/38](https://github.com/ImmortalDemonGod/money-agent/issues/38)
-- **Requirements Verified:** Issue #38 requires durable frozen risk accounting
+- **Requirements Verified:** Issue #38 requires benchmark-relative mechanical edge verification
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`de7d1e8`](https://github.com/ImmortalDemonGod/money-agent/tree/de7d1e866507a65d20bbd1285c6f8abcc3bc7de6))
+**Scope Inventory** (SHA: [`46f3125`](https://github.com/ImmortalDemonGod/money-agent/tree/46f31253e62820aa778c9d151ce36768cfe05f53))
 
-- [`bin/edge_pnl.py#L271-L272`](https://github.com/ImmortalDemonGod/money-agent/blob/de7d1e866507a65d20bbd1285c6f8abcc3bc7de6/bin/edge_pnl.py#L271-L272)
+- [`bin/edge_pnl.py#L59`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L59)
+- [`bin/edge_pnl.py#L72`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L72)
+- [`bin/edge_pnl.py#L77-L78`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L77-L78)
+- [`bin/edge_pnl.py#L80-L82`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L80-L82)
+- [`bin/edge_pnl.py#L112-L125`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L112-L125)
+- [`bin/edge_pnl.py#L151-L152`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L151-L152)
+- [`bin/edge_pnl.py#L222-L225`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L222-L225)
+- [`bin/edge_pnl.py#L233`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L233)
+- [`bin/edge_pnl.py#L236`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L236)
+- [`bin/edge_pnl.py#L239`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L239)
+- [`bin/edge_pnl.py#L275-L276`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L275-L276)
+- [`bin/edge_pnl.py#L285-L287`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L285-L287)
+- [`bin/edge_pnl.py#L310-L314`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L310-L314)
+- [`bin/edge_pnl.py#L338`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L338)
+- [`bin/edge_pnl.py#L346-L347`](https://github.com/ImmortalDemonGod/money-agent/blob/46f31253e62820aa778c9d151ce36768cfe05f53/bin/edge_pnl.py#L346-L347)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L271-L272): FAIL -- WARNING: No tests import or call `main`
+- **`_benchmark_price`** (L59): FAIL -- WARNING: No tests import or call `_benchmark_price`
+- **`parse_registration`** (L72): FAIL -- WARNING: No tests import or call `parse_registration`
+- **`main`** (L77-L78): FAIL -- WARNING: No tests import or call `main`
 
-**Coverage summary:** 0/1 symbols verified by tests.
+**Coverage summary:** 0/3 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
 - **ruff:** All checks passed
-- **mypy:** Found 13 errors in 1 file (checked 1 source file)
+- **mypy:** Found 16 errors in 1 file (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -83,7 +99,7 @@ fe0427a [S5] gates & probes: delivery seam + provider cap, oracle-classed resolu
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | A new registration initializes its own peak without discardi... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Edge verification requires a frozen benchmark and grants VER... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -92,11 +108,11 @@ fe0427a [S5] gates & probes: delivery seam + provider cap, oracle-classed resolu
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/3 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Preserve registration-scoped runtime peak history
+Replace raw PnL verdicts with frozen benchmark-relative excess return
