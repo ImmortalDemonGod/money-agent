@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `IMPROVEMENT_LOG.md`
-**Commit:** `5859e77`
-**Generated:** 2026-07-22T22:40:55Z
+**Commit:** `7f3be9e`
+**Previous:** `20fe69c`
+**Generated:** 2026-07-22T23:11:52Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "IMPROVEMENT_LOG.md"
-  classification_rationale: "Documentation governs a payment and refund critical boundary under AIV section 5.2"
+  classification_rationale: "R3 because the record describes a payment/refund authority boundary and must not contradict runtime policy"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:40:55Z"
+  classified_at: "2026-07-22T23:11:52Z"
 ```
 
 ## Claim(s)
 
-1. The improvement record states that environment caps cannot relax deliver-in-full-at-payment
-2. No existing tests were modified or deleted during this change.
+1. The S11 record states that deferred fulfillment requires fresh verifier-owned authorization and independent completion checking
+2. The S11 record states agent-local environment variables cannot activate or widen obligation authority
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -31,14 +33,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51#discussion_r3634224788](https://github.com/ImmortalDemonGod/money-agent/pull/51#discussion_r3634224788)
-- **Requirements Verified:** CodeRabbit requires P5 documentation to reject post-payment work rather than present watchdog refunds as permission
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
+- **Requirements Verified:** The implementation history must reflect the operator's adoption of mechanically guaranteed obligations rather than the superseded refusal-only correction
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`5859e77`](https://github.com/ImmortalDemonGod/money-agent/tree/5859e77f65be548106b457bc3a91432abd5abf95))
+**Scope Inventory** (SHA: [`7f3be9e`](https://github.com/ImmortalDemonGod/money-agent/tree/7f3be9e303aa81093cf1562465e6a2efdd3e8e66))
 
-- [`IMPROVEMENT_LOG.md#L1445-L1451`](https://github.com/ImmortalDemonGod/money-agent/blob/5859e77f65be548106b457bc3a91432abd5abf95/IMPROVEMENT_LOG.md#L1445-L1451)
+- [`IMPROVEMENT_LOG.md#L1445-L1452`](https://github.com/ImmortalDemonGod/money-agent/blob/7f3be9e303aa81093cf1562465e6a2efdd3e8e66/IMPROVEMENT_LOG.md#L1445-L1452)
 
 ### Class A (Execution Evidence)
 
@@ -68,21 +70,22 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-5859e77 test(sim): exercise CodeRabbit review invariants
-8e1e2ed test(v3): cover CodeRabbit hardening findings
-1c0d6f2 test(sim): adversarially cover PR 51 hardening
-a3d4a5a test(v3): cover adversarial enforcement seams
-937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
+6763b83 test(sim): exercise verifier-authorized obligations
+512f388 test(obligations): cover guarded authorization contract
+30612e5 test(sim): exercise CodeRabbit review invariants
+76c1bec test(v3): cover CodeRabbit hardening findings
+bb5cbed test(sim): adversarially cover PR 51 hardening
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The improvement record states that environment caps cannot r... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The S11 record states that deferred fulfillment requires fre... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | The S11 record states agent-local environment variables cann... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
 ---
 
 ## Verification Methodology
@@ -95,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Align the P5 record with the compaction-durable delivery constitution
+Replace the superseded refusal-only S11 record with the adopted guarded contract

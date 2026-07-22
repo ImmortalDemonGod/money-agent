@@ -1442,13 +1442,14 @@ P6 probe registry, P7 exposure caps).
   fail-closed on ABSENCE, never grades content; a rubber stamp (thin decision/rationale) blocks;
   acquisitions must pin a committed provenance manifest by sha256 that actually exists in-tree.
   disclosure_gate stays the specialized send instance, regexes untouched (the JA lesson).
-- **P5 `bin/obligations.py` + `bin/obligation_watch.py`:** the current constitution permits no
-  post-payment promises. Registration and agent fulfillment are therefore refusal-only and every
-  proposed deliver-later offer is durably recorded in `REFUSALS.md`. The verifier watchdog remains
-  solely as fail-safe cleanup for historical or externally introduced records; refund authority
-  does not make deferred work permissible.
-- **P7 exposure caps:** retained as a future design note, not an authorization switch. Raising
-  environment caps cannot relax CLAUDE.md's deliver-in-full-at-payment boundary.
+- **P5 `bin/obligations.py` + `bin/obligation_watch.py`:** the operator adopted the designed
+  mechanically-guaranteed exception. Instant delivery remains the default; post-payment work is
+  permitted only from a fresh verifier-owned authorization fact proving explicit enablement,
+  refund authority, positive P7 caps, and a maximum deadline. The verifier checks the restricted
+  completion oracle independently, refunds an overdue failure, and halts.
+- **P7 exposure caps:** verifier-owned and published on the protected facts lane. Agent-local
+  environment variables cannot activate or widen the obligation class, and registration holds one
+  cross-process lock across cap evaluation and append.
 - **P6 `bin/probes.py`:** the substrate-probe registry (claim type → probe → the gate that
   re-runs it), plus a built-in mail-roundtrip probe (the M5 propagation test as a named probe).
 
