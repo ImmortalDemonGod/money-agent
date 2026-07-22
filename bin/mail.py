@@ -33,6 +33,7 @@ import imaplib
 import os
 import smtplib
 import socket
+import subprocess
 import sys
 import urllib.parse
 from datetime import datetime, timezone
@@ -192,11 +193,27 @@ def send(to, subj, body, *, bet_id=None, lane=None):
         print(f"REFUSING (disclosure EV gate): {why}", file=sys.stderr)
         sys.exit(1)
 
-    # Log BEFORE sending: a send that fails halfway still happened as an attempt.
-    SENT_LOG.write_text(
-        (SENT_LOG.read_text() if SENT_LOG.exists() else "# SENT_LOG\n\nEvery message that left under a real person's name.\n\n---\n")
-        + f"\n## {datetime.now(timezone.utc).isoformat()}\n- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
-    )
+    # Construct the complete SMTP payload before consuming authorization. Failures before the
+    # external-attempt boundary must leave the reservation available.
+    msg = EmailMessage()
+    msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
+    msg.set_content(body)
+
+    # Reserve before persisting the attempt record. The bet registry serializes this consume
+    # across processes. If the durable audit write fails, compensate before refusing.
+    ok_bg, why_bg = _bet_gate(consume=True)
+    if not ok_bg:
+        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
+        sys.exit(1)
+
+    def _rollback_reservation():
+        try:
+            import bet_gate
+            ok, why = bet_gate.rollback("send", bet_id=bet_id, lane=lane)
+            if not ok:
+                print(f"FATAL: send reservation rollback failed: {why}", file=sys.stderr)
+        except Exception as e:
+            print(f"FATAL: send reservation rollback crashed ({e})", file=sys.stderr)
 
     # PERSIST the log before the send leaves (run-1 lesson: SENT_LOG entries were repeatedly wiped
     # between write and commit, and the audit trail of what left under a real person's name ended
@@ -204,8 +221,14 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     # Commit is FAIL-CLOSED: if the log cannot be committed, the message does not leave. Push is
     # best-effort -- with the v2 two-lane design nothing resets the claims branch, so a local
     # commit is already durable; the push just makes it visible off-box sooner.
-    import subprocess
     try:
+        SENT_LOG.write_text(
+            (SENT_LOG.read_text() if SENT_LOG.exists()
+             else "# SENT_LOG\n\nEvery SMTP attempt under a real person's name.\n\n---\n")
+            + f"\n## {datetime.now(timezone.utc).isoformat()}\n"
+              "- **Status:** authorized SMTP attempt; delivery not yet confirmed\n"
+              f"- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
+        )
         subprocess.run(["git", "add", str(SENT_LOG)], cwd=REPO, check=True,
                        capture_output=True, timeout=15)
         diff = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(SENT_LOG)],
@@ -216,6 +239,7 @@ def send(to, subj, body, *, bet_id=None, lane=None):
                             f"sent-log: {to} | {subj[:60]}", "--", str(SENT_LOG)],
                            cwd=REPO, check=True, capture_output=True, timeout=30)
     except Exception as e:
+        _rollback_reservation()
         print(f"REFUSING: could not commit SENT_LOG before sending ({e}). "
               "An unpersisted audit trail is how run 1 lost its send record.", file=sys.stderr)
         sys.exit(1)
@@ -231,16 +255,8 @@ def send(to, subj, body, *, bet_id=None, lane=None):
         print(f"warn: SENT_LOG push failed ({e}); the commit is local -- push when possible.",
               file=sys.stderr)
 
-    # The external attempt starts after this point. A content/log refusal above must not consume a
-    # reservation; a network attempt does consume one even if the remote server later rejects it.
-    ok_bg, why_bg = _bet_gate(consume=True)
-    if not ok_bg:
-        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
-        sys.exit(1)
-
-    msg = EmailMessage()
-    msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
-    msg.set_content(body)
+    # The external attempt starts after this point. A network attempt consumes the reservation
+    # even if the remote server rejects it; the durable record above says attempt, never delivery.
     with _ProxySMTP("smtp.gmail.com", 587, timeout=30) as s:
         s.starttls()
         s.login(ADDR, PW)

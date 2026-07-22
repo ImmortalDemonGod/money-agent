@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/mail.py`
-**Commit:** `a3d4a5a`
-**Generated:** 2026-07-22T22:07:17Z
+**Commit:** `91117d1`
+**Previous:** `bcd3ccf`
+**Generated:** 2026-07-22T22:39:41Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +16,15 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/mail.py"
-  classification_rationale: "Touches PII-bearing external email, real-name reputation, and audit logging under AIV section 5.2"
+  classification_rationale: "Outbound PII-bearing email and its durable audit trail are AIV section 5.2 critical surfaces"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:07:17Z"
+  classified_at: "2026-07-22T22:39:41Z"
 ```
 
 ## Claim(s)
 
-1. A message rejected by content, disclosure, or audit-log gates does not consume its send reservation
-2. Armed sends bind authorization to the caller-supplied bet and lane before SMTP begins
+1. Audit persistence failures roll back a just-consumed bound send reservation
+2. SENT_LOG records an unconfirmed SMTP attempt rather than claiming delivery
 3. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,38 +33,35 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** PR 51 wires typed action authorization into outbound email without starving valid bets on refused attempts
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51#discussion_r3634224782](https://github.com/ImmortalDemonGod/money-agent/pull/51#discussion_r3634224782)
+- **Requirements Verified:** CodeRabbit requires reservation consumption before audit persistence with compensation before SMTP
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`a3d4a5a`](https://github.com/ImmortalDemonGod/money-agent/tree/a3d4a5a1fb551de83d1f15690217c714a6d4ec83))
+**Scope Inventory** (SHA: [`91117d1`](https://github.com/ImmortalDemonGod/money-agent/tree/91117d1bea44930d5175a20f190fa0c3df87712b))
 
-- [`bin/mail.py#L17`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L17)
-- [`bin/mail.py#L133-L134`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L133-L134)
-- [`bin/mail.py#L157`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L157)
-- [`bin/mail.py#L161-L172`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L161-L172)
-- [`bin/mail.py#L234-L240`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L234-L240)
-- [`bin/mail.py#L255-L256`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L255-L256)
-- [`bin/mail.py#L266-L268`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L266-L268)
-- [`bin/mail.py#L270-L271`](https://github.com/ImmortalDemonGod/money-agent/blob/a3d4a5a1fb551de83d1f15690217c714a6d4ec83/bin/mail.py#L270-L271)
+- [`bin/mail.py#L36`](https://github.com/ImmortalDemonGod/money-agent/blob/91117d1bea44930d5175a20f190fa0c3df87712b/bin/mail.py#L36)
+- [`bin/mail.py#L196-L216`](https://github.com/ImmortalDemonGod/money-agent/blob/91117d1bea44930d5175a20f190fa0c3df87712b/bin/mail.py#L196-L216)
+- [`bin/mail.py#L225-L231`](https://github.com/ImmortalDemonGod/money-agent/blob/91117d1bea44930d5175a20f190fa0c3df87712b/bin/mail.py#L225-L231)
+- [`bin/mail.py#L242`](https://github.com/ImmortalDemonGod/money-agent/blob/91117d1bea44930d5175a20f190fa0c3df87712b/bin/mail.py#L242)
+- [`bin/mail.py#L258-L259`](https://github.com/ImmortalDemonGod/money-agent/blob/91117d1bea44930d5175a20f190fa0c3df87712b/bin/mail.py#L258-L259)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`read`** (L17): FAIL -- WARNING: No tests import or call `read`
-- **`send`** (L133-L134): PASS -- 1 test(s) call `send` directly
+- **`send`** (L36): PASS -- 3 test(s) call `send` directly
   - `tests/test_v3_hardening.py::test_mail_refusal_does_not_consume_reservation`
-- **`_bet_gate`** (L157): FAIL -- WARNING: No tests import or call `_bet_gate`
-- **`option`** (L161-L172): FAIL -- WARNING: No tests import or call `option`
+  - `tests/test_v3_hardening.py::test_mail_audit_failure_rolls_back_consumed_reservation`
+  - `tests/test_v3_hardening.py::test_mail_attempt_is_bound_consumed_and_honestly_logged`
+- **`_rollback_reservation`** (L196-L216): FAIL -- WARNING: No tests import or call `_rollback_reservation`
 
-**Coverage summary:** 1/4 symbols verified by tests.
+**Coverage summary:** 1/2 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
 - **ruff:** All checks passed
-- **mypy:** Found 10 errors in 4 files (checked 1 source file)
+- **mypy:** Found 11 errors in 4 files (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -80,37 +78,37 @@ classification:
 
 | File | Commits | Created By | Last Modified By | Assertions |
 |------|---------|------------|------------------|------------|
-| `tests/test_v3_hardening.py` | 1 | Miguel Ingram (a3d4a5a) | Miguel Ingram (a3d4a5a) | 16 |
+| `tests/test_v3_hardening.py` | 1 | Miguel Ingram (a3d4a5a) | Miguel Ingram (a3d4a5a) | 25 |
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+1c0d6f2 test(sim): adversarially cover PR 51 hardening
 a3d4a5a test(v3): cover adversarial enforcement seams
 937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
 7b7a7fe [S10] V3 spine: per-lane stage ordering, config-gated off (the contested layer, by explicit switch)
 644f13c [S9] V3 typed bet-spec + action authorization, config-gated off (bet-ledger layer)
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | A message rejected by content, disclosure, or audit-log gate... | symbol | 1 test(s) call `send` | PASS VERIFIED |
-| 2 | Armed sends bind authorization to the caller-supplied bet an... | symbol | 1 test(s) call `send` | PASS VERIFIED |
+| 1 | Audit persistence failures roll back a just-consumed bound s... | symbol | 3 test(s) call `send` | PASS VERIFIED |
+| 2 | SENT_LOG records an unconfirmed SMTP attempt rather than cla... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 3 verified, 0 unverified, 0 manual review.
+**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (1/4 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (1/2 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Bind email sends to explicit bets and delay consumption until the wire boundary
+Order send authorization, attempt logging, rollback, and SMTP honestly
