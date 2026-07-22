@@ -22,7 +22,7 @@ classification:
 
 ## Claim(s)
 
-1. The aggregate PR50 packet validates with explicit Class A counts, Class D before-after evidence, Class F provenance, and honest S1/live-seam limitations
+1. The aggregate PR50 packet records explicit execution counts, differential evidence, provenance, and honest S1/live-seam limitations; this sidecar retains a manual-review verdict.
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -61,8 +61,8 @@ This file has no claim-specific execution evidence.
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The aggregate PR50 packet validates with explicit Class A co... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
+| 1 | Claim 1 (see Claim(s)) | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | Claim 2 (see Claim(s)) | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
 **Verdict summary:** 0 verified, 0 unverified, 2 manual review.
 ---
