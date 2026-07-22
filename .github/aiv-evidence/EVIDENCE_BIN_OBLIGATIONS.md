@@ -77,7 +77,9 @@ classification:
 
 **Test file chain-of-custody:**
 
-No covering test files found.
+| File | Commits | Created By | Last Modified By | Assertions |
+|------|---------|------------|------------------|------------|
+| `tests/test_v3_hardening.py` | 2 | Miguel Ingram (a3d4a5a) | Miguel Ingram (8e1e2ed) | 25 |
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
