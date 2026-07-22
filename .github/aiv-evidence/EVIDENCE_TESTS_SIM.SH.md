@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `5e5450f`
-**Previous:** `88a6899`
-**Generated:** 2026-07-22T22:45:41Z
+**Commit:** `8aaa5e5`
+**Previous:** `aa80a5d`
+**Generated:** 2026-07-22T23:03:21Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "R3 verifier verdict regression coverage"
+  classification_rationale: "bash tests/sim.sh"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:45:41Z"
+  classified_at: "2026-07-22T23:03:21Z"
 ```
 
 ## Claim(s)
 
-1. The simulation freezes a benchmark price and verifies edge verdicts use excess return with drawdown and fill constraints
+1. The delivery simulation proves a complete artifact with an unsupported content type is refused.
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,19 +32,16 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/38](https://github.com/ImmortalDemonGod/money-agent/issues/38)
-- **Requirements Verified:** Issue #38 requires a benchmark-relative verifier test
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/39](https://github.com/ImmortalDemonGod/money-agent/issues/39)
+- **Requirements Verified:** A paid-offer delivery check must fail closed for an absent or non-deliverable content type.
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`5e5450f`](https://github.com/ImmortalDemonGod/money-agent/tree/5e5450f0ff14f431327dce2f5a42de6bae46e396))
+**Scope Inventory** (SHA: [`8aaa5e5`](https://github.com/ImmortalDemonGod/money-agent/tree/8aaa5e561a50e18c842fdbc6e17a0f86e386a1d2))
 
-- [`tests/sim.sh#L206`](https://github.com/ImmortalDemonGod/money-agent/blob/5e5450f0ff14f431327dce2f5a42de6bae46e396/tests/sim.sh#L206)
-- [`tests/sim.sh#L210`](https://github.com/ImmortalDemonGod/money-agent/blob/5e5450f0ff14f431327dce2f5a42de6bae46e396/tests/sim.sh#L210)
-- [`tests/sim.sh#L213-L214`](https://github.com/ImmortalDemonGod/money-agent/blob/5e5450f0ff14f431327dce2f5a42de6bae46e396/tests/sim.sh#L213-L214)
-- [`tests/sim.sh#L218`](https://github.com/ImmortalDemonGod/money-agent/blob/5e5450f0ff14f431327dce2f5a42de6bae46e396/tests/sim.sh#L218)
-- [`tests/sim.sh#L856-L857`](https://github.com/ImmortalDemonGod/money-agent/blob/5e5450f0ff14f431327dce2f5a42de6bae46e396/tests/sim.sh#L856-L857)
-- [`tests/sim.sh#L859`](https://github.com/ImmortalDemonGod/money-agent/blob/5e5450f0ff14f431327dce2f5a42de6bae46e396/tests/sim.sh#L859)
+- [`tests/sim.sh#L582`](https://github.com/ImmortalDemonGod/money-agent/blob/8aaa5e561a50e18c842fdbc6e17a0f86e386a1d2/tests/sim.sh#L582)
+- [`tests/sim.sh#L585`](https://github.com/ImmortalDemonGod/money-agent/blob/8aaa5e561a50e18c842fdbc6e17a0f86e386a1d2/tests/sim.sh#L585)
+- [`tests/sim.sh#L587-L589`](https://github.com/ImmortalDemonGod/money-agent/blob/8aaa5e561a50e18c842fdbc6e17a0f86e386a1d2/tests/sim.sh#L587-L589)
 
 ### Class A (Execution Evidence)
 
@@ -74,18 +71,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+aa80a5d test(edge): cover benchmark-relative verdicts
 88a6899 test(edge): cover finite caps and scoped peaks
 e53b606 test(delivery): reject unrelated Stripe success URLs
 aa1dc15 [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
 fe0427a [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-655bb5b test(verifier): cover initial truth signing failure
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The simulation freezes a benchmark price and verifies edge v... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The delivery simulation proves a complete artifact with an u... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -101,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Exercise frozen benchmark and excess-return adjudication
+The regression test is hermetic: it monkeypatches the SSRF-protected fetch seam and exercises only verifier policy.
