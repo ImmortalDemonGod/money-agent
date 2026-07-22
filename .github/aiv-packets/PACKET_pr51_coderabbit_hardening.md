@@ -4,7 +4,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Repository** | github.com/ImmortalDemonGod/aiv-protocol |
+| **Repository** | github.com/ImmortalDemonGod/money-agent |
 | **Change ID** | pr51-coderabbit-hardening |
 | **Commits** | `6094793`, `91117d1`, `633a768`, `e620ea8`, `6e00c83`, `5df105e`, `8e1e2ed`, `5859e77`, `503246e`, `0c4e5b8`, `50bd5ea` |
 | **Head SHA** | `50bd5ea` |
@@ -17,10 +17,10 @@
 classification:
   risk_tier: R3
   sod_mode: S1
-  critical_surfaces: []
+  critical_surfaces: [payments, refunds, PII-bearing email, verifier trust boundary, audit logging]
   blast_radius: component
   classification_rationale: "The logical unit changes payment obligations, refund cleanup, outbound PII authorization, durable audit logging, and verifier trust controls; AIV section 5.2 requires R3"
-  classified_by: "Miguel Ingram"
+  classified_by: "Miguel Ingram (Author) + Codex (AI Verifier, AIV section 10 S1 waiver)"
   classified_at: "2026-07-22T22:43:40Z"
 ```
 
@@ -67,6 +67,7 @@ classification:
 
 ### Class E (Intent Alignment)
 
+- **Intent:** [CodeRabbit review 4759249208](https://github.com/ImmortalDemonGod/money-agent/pull/51#pullrequestreview-4759249208)
 - **Requirement:** Resolve every actionable finding from CodeRabbit review 4759249208 on PR 51
 
 ### Class B (Referential Evidence)
@@ -124,6 +125,52 @@ classification:
 - `.github/aiv-evidence/EVIDENCE_BIN_SPINE.md#L70-L72`
 - `.github/aiv-evidence/EVIDENCE_BIN_OBLIGATIONS.md#L80-L82`
 
+### Class A (Execution Evidence)
+
+Executed against committed HEAD after all 11 atomic commits:
+
+| Command | Pass | Fail | Skip | Result |
+|---------|-----:|-----:|-----:|--------|
+| `bash tests/sim.sh` | 107 | 0 | 0 | PASS |
+| `bash tests/corpus.sh` | 11 | 0 | 0 | PASS |
+| `pytest -q tests/test_v3_hardening.py` | 13 | 0 | 0 | PASS |
+| `python3 -m compileall -q bin tests/test_v3_hardening.py` | 1 | 0 | 0 | PASS |
+| `ruff check <changed Python files>` | 1 | 0 | 0 | PASS |
+| `shellcheck bin/*.sh tests/*.sh` | 1 | 0 | 0 | PASS |
+| `git diff --check HEAD` | 1 | 0 | 0 | PASS |
+
+Focused test list: `test_bet_gate_serializes_reservation_consumption`,
+`test_typed_resolution_evaluates_declared_metric`,
+`test_mail_audit_failure_rolls_back_consumed_reservation`,
+`test_mail_attempt_is_bound_consumed_and_honestly_logged`,
+`test_decision_gate_requires_exact_parsed_fields`, and
+`test_deferred_obligations_are_refused_and_recorded`, plus seven retained PR-51 regressions.
+
+### Class D (Differential Evidence)
+
+| Boundary | Before | After | Falsifier |
+|----------|--------|-------|-----------|
+| Reservation consumption | Separate processes could load the same remaining count and both authorize | One `flock`-guarded transaction spans load, validate, decrement, save, and push | Two concurrent consumers both return authorized for a one-count bet |
+| Typed resolution | A typed bet could retain legacy `oracle=judgment` and resolve from prose | The recorded check must emit the declared metric; comparator evaluation is persisted and must support the outcome | A typed win is recorded without a passing declared success condition |
+| Mail audit ordering | SENT_LOG could be committed before the final reservation consume, creating a false send record on a race | Consume precedes an explicitly unconfirmed attempt record; audit failure compensates before SMTP | Audit failure leaves the reservation consumed or an unsent record claims delivery |
+| Decision matching | Matching tokens anywhere in a line could authorize malformed records | Parsed `class` and `body` fields must equal the request | Tokens hidden in `rationale` authorize the action |
+| Preregistration publication | `exists` followed by `write_text` allowed overwrite and truncated-reader races | Complete fsynced temp content is atomically hard-linked once | A reader observes partial JSON or two first writers overwrite each other |
+| Deferred paid work | Raising exposure caps could register and later claim fulfillment | Registration always refuses and records `REFUSALS.md`; agent fulfillment is disabled | Raised caps create any new obligation record |
+
+### Class F (Provenance Evidence)
+
+**Claim 3: No existing tests were modified or deleted during this change.**
+
+The Layer 1 evidence files listed above bind every functional commit to its exact SHA. The focused
+test file was created at `a3d4a5a`, updated at `8e1e2ed`, and contains 25 assertions. The integration
+matrix was updated at `5859e77`. The two corrected chain-of-custody records are independently
+committed at `0c4e5b8` and `50bd5ea`; no test files were deleted or skipped.
+
+- **Test preservation claim:** No existing tests were deleted, no skip markers were added, and the
+  changed-test diff is pinned at [commit 8e1e2ed](https://github.com/ImmortalDemonGod/money-agent/commit/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0).
+- **Execution provenance:** the committed-HEAD local runs are enumerated in Class A; the post-push
+  GitHub Actions URL is intentionally pending until CI exists for this packet commit.
+
 ---
 
 ## Verification Methodology
@@ -138,6 +185,10 @@ Packet generated by `aiv close`.
 
 - Evidence references point to Layer 1 evidence files at specific commit SHAs.
   Use `git show <sha>:.github/aiv-evidence/<file>` to retrieve.
+- Repository-wide `ruff check bin` has 11 pre-existing findings outside the changed files; scoped
+  lint for every changed Python file is clean.
+- The lock is POSIX `flock`-based and therefore targets the Linux/macOS runtime used by this
+  harness; it is not a Windows portability claim.
 
 ---
 
