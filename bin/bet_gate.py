@@ -35,6 +35,7 @@ from __future__ import annotations
 import math
 import os
 import sys
+from contextlib import nullcontext
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -123,34 +124,58 @@ def authorize(action: str, consume: bool = False, *, bet_id: str | None = None,
     if action == "spend" and amount_usd is None:
         return False, "spend authorization requires amount_usd so max_spend_usd can be enforced"
     import bets as _bets
-    all_bets = _bets._load()
-    for b in all_bets:
-        if b.get("id") != bet_id or b.get("status") != "open" or "type" not in b:
-            continue
-        schema_errors = validate_bet(b)
-        if schema_errors:
-            return False, f"bet {bet_id} is invalid: {'; '.join(schema_errors)}"
-        if lane is not None and b.get("lane") != lane:
-            return False, (f"bet {bet_id} belongs to lane {b.get('lane')!r}, not requested lane "
-                           f"{lane!r}; lane relabeling grants no permission")
-        remaining = (b.get("authorizes") or {}).get(action, 0)
-        if isinstance(remaining, int) and remaining > 0:
-            if action == "spend":
-                after = float(b.get("spent_usd", 0)) + float(amount_usd)
-                if after > float(b["max_spend_usd"]):
-                    return False, (f"bet {bet_id} spend cap exceeded: ${after:.2f} cumulative > "
-                                   f"max_spend_usd=${float(b['max_spend_usd']):.2f}")
-            if consume:
-                b["authorizes"][action] = remaining - 1
+    context = (_bets._transaction(f"bet_gate: consume {action} reservation of {bet_id}")
+               if consume else nullcontext(_bets._load()))
+    with context as all_bets:
+        for b in all_bets:
+            if b.get("id") != bet_id or b.get("status") != "open" or "type" not in b:
+                continue
+            schema_errors = validate_bet(b)
+            if schema_errors:
+                return False, f"bet {bet_id} is invalid: {'; '.join(schema_errors)}"
+            if lane is not None and b.get("lane") != lane:
+                return False, (f"bet {bet_id} belongs to lane {b.get('lane')!r}, not requested lane "
+                               f"{lane!r}; lane relabeling grants no permission")
+            remaining = (b.get("authorizes") or {}).get(action, 0)
+            if isinstance(remaining, int) and remaining > 0:
                 if action == "spend":
-                    b["spent_usd"] = after
-                _bets._save(all_bets, f"bet_gate: consume {action} reservation of {b['id']} "
-                                      f"({remaining - 1} left)")
-            return True, (f"authorized by {b['id']} ({b.get('type')}, lane {b.get('lane')!r}); "
-                          f"{remaining - (1 if consume else 0)} {action} reservation(s) remain")
+                    after = float(b.get("spent_usd", 0)) + float(amount_usd)
+                    if after > float(b["max_spend_usd"]):
+                        return False, (f"bet {bet_id} spend cap exceeded: ${after:.2f} cumulative > "
+                                       f"max_spend_usd=${float(b['max_spend_usd']):.2f}")
+                if consume:
+                    b["authorizes"][action] = remaining - 1
+                    if action == "spend":
+                        b["spent_usd"] = after
+                return True, (f"authorized by {b['id']} ({b.get('type')}, lane {b.get('lane')!r}); "
+                              f"{remaining - (1 if consume else 0)} {action} reservation(s) remain")
     return False, (f"OPEN typed bet {bet_id!r} carries no unconsumed {action!r} reservation. An "
                    "external-effect action needs a live hypothesis: place one with bin/bets.py "
                    f"add --type ... --authorizes '{action}:N' first (BET_GATE_ENFORCE=1).")
+
+
+def rollback(action: str, *, bet_id: str, lane: str | None = None,
+             amount_usd: float | None = None) -> tuple[bool, str]:
+    """Compensate a just-consumed reservation when the external attempt never became durable."""
+    if not enforced():
+        return True, "BET_GATE_ENFORCE is off -- nothing to roll back"
+    if action not in ACTIONS:
+        return False, f"unknown action {action!r}"
+    if action == "spend" and (amount_usd is None or not _finite_number(amount_usd)):
+        return False, "spend rollback requires the finite amount_usd that was consumed"
+    import bets as _bets
+    with _bets._transaction(f"bet_gate: rollback {action} reservation of {bet_id}") as all_bets:
+        b = next((x for x in all_bets if x.get("id") == bet_id and x.get("status") == "open"),
+                 None)
+        if b is None or "type" not in b or (lane is not None and b.get("lane") != lane):
+            return False, f"cannot roll back {action}: bound open bet {bet_id!r} was not found"
+        auth = b.get("authorizes") or {}
+        if action not in auth:
+            return False, f"cannot roll back {action}: bet {bet_id!r} has no such reservation"
+        auth[action] += 1
+        if action == "spend":
+            b["spent_usd"] = max(0.0, float(b.get("spent_usd", 0)) - float(amount_usd))
+        return True, f"rolled back {action} reservation of {bet_id}"
 
 
 def main() -> int:
