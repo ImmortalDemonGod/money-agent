@@ -235,6 +235,12 @@ if v != "FALSIFIED" or "drawdown" not in _e.get("falsified_reason", ""):
     fails.append(f"drawdown breach not FALSIFIED-with-reason: {v} / {_e.get('falsified_reason')}")
 nofield_f, nofield_e = edge_pnl.parse_registration(reg.replace("MAX_DRAWDOWN_USD: 25.0\n", ""))
 if not nofield_e: fails.append("registration without MAX_DRAWDOWN_USD accepted")
+for bad in ("MAX_DRAWDOWN_USD: nan", "MAX_DRAWDOWN_USD: inf", "MIN_FILLED_ORDERS: 0"):
+    candidate = reg.replace("MAX_DRAWDOWN_USD: 25.0", bad) if bad.startswith("MAX") else reg.replace("MIN_FILLED_ORDERS: 10", bad)
+    if not edge_pnl.parse_registration(candidate)[1]: fails.append(f"invalid registration accepted: {bad}")
+runtime = json.load(open("state/edge_runtime.json"))
+if list((runtime.get("registrations") or {})) != [json.load(open("state/edge_registration.json"))["sha256"]]:
+    fails.append("runtime peak is not scoped to the frozen registration")
 frozen = json.load(open("state/edge_registration.json"))
 frozen["fields"]["RESOLVE_BY"] = "2000-01-01T00:00:00Z"
 json.dump(frozen, open("state/edge_registration.json","w"))
