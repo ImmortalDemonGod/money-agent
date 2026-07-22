@@ -126,7 +126,8 @@ Grant the refund key only the minimum refund permission supported by the provide
 missing, zero, malformed, stale, or the watchdog cannot read the committed obligation book, the
 published authorization is disabled and registration fails closed. Presence of a key proves
 provisioning, not provider availability; a failed refund remains a breach and halts for manual
-remediation.
+remediation. Every obligation must also bind `--charge-id ch_...`; unbound liabilities are refused
+because a refund credential without a concrete refund target is not a mechanical guarantee.
 
 Agent's sandbox:
 ```bash

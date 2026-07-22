@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `SETUP.md`
-**Commit:** `9d56125`
-**Previous:** `4f7a8e4`
-**Generated:** 2026-07-22T23:11:29Z
+**Commit:** `72b8c7c`
+**Previous:** `7f3be9e`
+**Generated:** 2026-07-22T23:15:09Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,17 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "SETUP.md"
-  classification_rationale: "R3 because these instructions control refund-key custody and payment liability limits"
+  classification_rationale: "R3 because this is payment-remediation provisioning guidance"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:11:29Z"
+  classified_at: "2026-07-22T23:15:09Z"
 ```
 
 ## Claim(s)
 
-1. Setup keeps all obligation enablement and refund inputs on the verifier side
-2. Setup states malformed, missing, stale, or unverified safeguards disable authorization
-3. Setup names failed refunds as breaches requiring halt and manual remediation
-4. No existing tests were modified or deleted during this change.
+1. Setup requires every mechanically guaranteed obligation to bind a ch_ charge identifier
+2. Setup explains that refund credentials without a refund target do not constitute a guarantee
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -35,13 +34,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** Operators must be able to provision and audit the complete mechanically guaranteed delivery boundary
+- **Requirements Verified:** Operators must provision obligations with actionable refund targets, not merely refund credentials
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`9d56125`](https://github.com/ImmortalDemonGod/money-agent/tree/9d561253959e574f40ed75d8ec0b3fc86a455781))
+**Scope Inventory** (SHA: [`72b8c7c`](https://github.com/ImmortalDemonGod/money-agent/tree/72b8c7caf44f943d3175946d28056ba8fdad1006))
 
-- [`SETUP.md#L112-L130`](https://github.com/ImmortalDemonGod/money-agent/blob/9d561253959e574f40ed75d8ec0b3fc86a455781/SETUP.md#L112-L130)
+- [`SETUP.md#L129-L130`](https://github.com/ImmortalDemonGod/money-agent/blob/72b8c7caf44f943d3175946d28056ba8fdad1006/SETUP.md#L129-L130)
 
 ### Class A (Execution Evidence)
 
@@ -71,23 +70,22 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+167bd21 test(sim): bind obligation fixture to charge
+55dc2f1 test(obligations): reject unbound refund liabilities
 6763b83 test(sim): exercise verifier-authorized obligations
 512f388 test(obligations): cover guarded authorization contract
 30612e5 test(sim): exercise CodeRabbit review invariants
-76c1bec test(v3): cover CodeRabbit hardening findings
-bb5cbed test(sim): adversarially cover PR 51 hardening
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Setup keeps all obligation enablement and refund inputs on t... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Setup states malformed, missing, stale, or unverified safegu... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | Setup names failed refunds as breaches requiring halt and ma... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 4 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Setup requires every mechanically guaranteed obligation to b... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | Setup explains that refund credentials without a refund targ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 3 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
 ---
 
 ## Verification Methodology
@@ -100,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Document safe verifier provisioning for the adopted delivery exception
+Document mandatory charge binding for guaranteed obligations
