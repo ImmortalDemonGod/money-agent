@@ -179,13 +179,18 @@ print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
   # 2c. P5 obligation watchdog (S11) -- after pnl for the same raw-purge/commit-cycle reasons.
   # Empty register publishes an affirmative empty fact; a breach makes guard halt the agent side.
   if python3 bin/obligation_watch.py > "$TMPD/obl_out" 2>"$TMPD/obl_err"; then
-    OBL_BREACH=$(python3 -c "
+    OBL_SIG=$(python3 -c "
 import json
 d=json.load(open('ledger/obligations.json'))
-print(len(d.get('breached', [])))" 2>/dev/null)
-    [[ -n "$OBL_BREACH" && "$OBL_BREACH" != "0" ]] && { SIG="$SIG | BREACH:$OBL_BREACH"; say "OBLIGATION BREACH x$OBL_BREACH"; }
+print(d.get('verified'), d.get('open'), len(d.get('fulfilled', [])), len(d.get('breached', [])))" 2>/dev/null)
+    if [[ -n "$OBL_SIG" ]]; then
+      SIG="$SIG | obligations:$OBL_SIG"
+      [[ "$OBL_SIG" == *" False "* || "$OBL_SIG" == False* ]] && say "OBLIGATION WATCHDOG UNVERIFIED"
+      [[ "$OBL_SIG" != *" 0" ]] && say "OBLIGATION BREACH (${OBL_SIG})"
+    fi
   else
     say "obligation_watch FAILED: $(head -1 "$TMPD/obl_err")"
+    SIG=""  # do not publish a fresh money heartbeat over a stale promise-book
   fi
 
   # 3. publish to the facts lane -- on meaningful change, or as a liveness heartbeat. The agent's
