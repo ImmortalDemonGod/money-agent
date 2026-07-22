@@ -295,6 +295,9 @@ def test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying(m
 
     soon = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=30)).isoformat()
     args.deadline = soon
+    args.charge_id = ""
+    assert obligations.cmd_register(args) == 1
+    args.charge_id = "ch_1"
     assert obligations.cmd_register(args) == 0
     assert obligations.cmd_fulfill(SimpleNamespace(id="obl-001", evidence="report is at URL")) == 0
     record = json.loads(registry.read_text())["obligations"][0]
