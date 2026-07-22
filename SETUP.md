@@ -127,7 +127,7 @@ charge's payer against `$MONEY_AGENT_STATE/operator_identity.json` (default
 `~/.money-agent-verifier/operator_identity.json`) so an operator self-purchase can never trip the
 first-dollar success condition. Provision it on the verifier machine:
 ```json
-{"emails": ["<operator email>"], "card_fingerprints": ["<stripe card fingerprint>"]}
+{"emails": ["<operator email>"], "card_fingerprints": ["<stripe card fingerprint>"], "addresses": []}
 ```
 `bin/start_verifier.sh` refuses to start while it is missing or empty (issue #37) -- an inert
 wash-trade guard only surfaces at the first charge, where it halts the run as unverifiable instead
@@ -186,7 +186,63 @@ this program exists to kill.
 
 ---
 
-## 4c. Optional: standing-presence posture (issue #4)
+## 4c. Optional: Base/USDC receive rail (issue #30)
+
+This rail is inert unless `BASE_RPC_URL` is present in the verifier's `.env`. Copy the complete
+block from `.env.example`; the marketplace contract's ABI determines the settlement event topic
+and the indexed payer/payee plus amount-word positions. Do not guess them. Add every operator
+wallet to the same verifier-private identity file used for Stripe:
+
+```json
+{
+  "emails": ["operator@example.com"],
+  "card_fingerprints": ["stripe-fingerprint"],
+  "addresses": ["0xoperator-wallet"]
+}
+```
+
+`start_verifier.sh` fails before baseline creation if any binding field or wallet allowlist is
+missing. It then freezes the run boundary at the RPC's `safe` block (`finalized` is also accepted).
+Every subsequent pull ends at a new safe/finalized block; `latest` is never scored because a reorg
+after the first-dollar stop would make the experiment's terminal fact disappear.
+
+**Live acceptance — required before arming the rail:**
+
+1. Decode the deployed marketplace ABI and independently confirm the settlement event's topic0,
+   payer topic, payee topic, and USDC amount word.
+2. Start a throwaway run and confirm `$MONEY_AGENT_STATE/base_usdc_baseline.json` records the
+   current finality tag, block number, and block hash.
+3. Send a bare USDC transfer: the next `truth.json` must show it only as `unbound_usd`.
+4. Complete one operator-funded marketplace settlement: it must appear as `self_usd`, never
+   `customer_usd`, even though the ERC-20 sender is the escrow contract.
+5. Complete one independent-customer settlement and confirm payer, payee, and amount match the raw
+   receipt before `customer_usd` increases.
+6. Start a second throwaway run with the same wallet. Its initial Base `customer_usd` must be zero;
+   the archived prior baseline must not be reused.
+
+Until all six pass against the live RPC and deployed contract, the adapter remains simulation-tested
+only and must not participate in a scored run.
+
+### Human actuation queue (issue #31)
+
+The agent creates a request with `bin/human.py request` and keeps working. The operator resolves it
+from the verifier's **ledger checkout**, not from the agent sandbox:
+
+```bash
+AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> \
+  python3 bin/human.py fulfill hum-001 --minutes 3 --evidence "completed account CAPTCHA"
+# or: python3 bin/human.py decline hum-001 --reason "identity exposure exceeds this run's bound"
+```
+
+This publishes the resolution to `ledger/human_resolutions.json`; the agent then runs
+`python3 bin/human.py sync hum-001`. Directly resolving the companion bet does not close the human
+request. Supervision must name the claims lane so requests are visible from the verifier checkout:
+
+```bash
+bin/supervise.sh <run-branch>
+```
+
+## 4d. Optional: standing-presence posture (issue #4)
 
 Run 1 proved a minutes-cadence loop cannot harvest day-scale clocks (indexation, approvals,
 reputation). A standing run is CONFIG, not new machinery — see `docs/STANDING_RUN.md` for the
