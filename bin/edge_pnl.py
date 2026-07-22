@@ -56,6 +56,7 @@ import math
 import os
 import subprocess
 import sys
+import urllib.parse
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -68,17 +69,17 @@ STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-a
 FROZEN = STATE_DIR / "edge_registration.json"
 
 ALPACA_BASE = os.environ.get("ALPACA_PAPER_BASE", "https://paper-api.alpaca.markets")
+ALPACA_DATA_BASE = os.environ.get("ALPACA_DATA_BASE", "https://data.alpaca.markets")
 
 # registration fields the agent must pre-commit (parsed as `KEY: value` lines).
 # #38: MAX_DRAWDOWN_USD is REQUIRED -- a raw P&L level admits a negative-skew/martingale strategy
 # that clears the bar right up to its tail event; the declared risk cap is frozen with everything
-# else and a breach FALSIFIES even if the bar is later cleared. BENCHMARK is optional and
-# recorded-only (excess-over-benchmark enforcement is a documented data-feed-gated follow-up;
-# an unenforced field is stated as such, never silently graded).
+# else and a breach FALSIFIES even if the bar is later cleared. A raw P&L level is not an edge:
+# every registration therefore freezes a benchmark ticker and an excess-return percentage bar.
 REQUIRED_FIELDS = ("EDGE_ID", "METRIC", "BAR", "MIN_FILLED_ORDERS", "MAX_DRAWDOWN_USD",
-                   "RESOLVE_BY", "HYPOTHESIS", "FALSIFIED_IF")
-OPTIONAL_FIELDS = ("BENCHMARK",)
-SUPPORTED_METRICS = ("paper_pnl_usd",)
+                   "BENCHMARK", "RESOLVE_BY", "HYPOTHESIS", "FALSIFIED_IF")
+OPTIONAL_FIELDS = ()
+SUPPORTED_METRICS = ("excess_return_pct",)
 RUNTIME = STATE_DIR / "edge_runtime.json"  # peak-equity tracking; SEPARATE from the frozen file
 # so the registration's hash stays immutable while runtime state moves
 
@@ -108,6 +109,20 @@ def _sha256_file(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
+def _benchmark_price(symbol: str, headers: dict, at: str) -> tuple[float, object]:
+    """Latest daily close at or before `at`; unavailable/stale data is an adjudication failure."""
+    url = (f"{ALPACA_DATA_BASE}/v2/stocks/{urllib.parse.quote(symbol, safe='')}/bars"
+           f"?timeframe=1Day&end={urllib.parse.quote(at)}&limit=1&feed=iex")
+    payload = _get(url, headers)
+    bars = payload.get("bars", []) if isinstance(payload, dict) else []
+    if not bars:
+        raise RuntimeError(f"no benchmark bar returned for {symbol}")
+    price = float(bars[-1]["c"])
+    if not math.isfinite(price) or price <= 0:
+        raise RuntimeError(f"invalid benchmark price for {symbol}")
+    return price, payload
+
+
 def parse_registration(text: str) -> tuple[dict | None, str | None]:
     """Parse `KEY: value` lines. Returns (fields, error)."""
     fields: dict[str, str] = {}
@@ -133,6 +148,8 @@ def parse_registration(text: str) -> tuple[dict | None, str | None]:
         return None, "MIN_FILLED_ORDERS must be positive"
     if not math.isfinite(drawdown) or drawdown < 0:
         return None, "MAX_DRAWDOWN_USD must be a finite non-negative number"
+    if not fields["BENCHMARK"].isalnum() or not fields["BENCHMARK"].isupper():
+        return None, "BENCHMARK must be an uppercase ticker symbol"
     # ROUND-4 FIX: fromisoformat accepts a timezone-NAIVE value, which would freeze a bet whose
     # deadline can never be compared to aware now() -- every later verdict cycle then crashes into
     # the fail-closed handler and an active registration masquerades as an idle rail (verdict NONE,
@@ -202,8 +219,10 @@ def main() -> int:
             _publish(out)
             return 2
         try:
-            acct = _get(f"{ALPACA_BASE}/v2/account",
-                        {"APCA-API-KEY-ID": key_id, "APCA-API-SECRET-KEY": secret})
+            headers = {"APCA-API-KEY-ID": key_id, "APCA-API-SECRET-KEY": secret}
+            acct = _get(f"{ALPACA_BASE}/v2/account", headers)
+            frozen_at = _now()
+            benchmark_price, benchmark_pull = _benchmark_price(fields["BENCHMARK"], headers, frozen_at)
         except Exception as e:
             out["errors"].append(f"alpaca_account_pull_failed_at_freeze: {type(e).__name__}: {e}")
             _publish(out)
@@ -211,11 +230,13 @@ def main() -> int:
         STATE_DIR.mkdir(parents=True, exist_ok=True)
         FROZEN.write_text(json.dumps({
             "sha256": hashlib.sha256(reg_text.encode()).hexdigest(),
-            "frozen_at": _now(),
+            "frozen_at": frozen_at,
             "fields": fields,
             "baseline_equity_usd": float(acct["equity"]),
+            "baseline_benchmark_price": benchmark_price,
             "_note": "AUTHORITATIVE. Outside the repo, unreachable by the sandbox agent.",
         }, indent=2))
+        _write_raw("alpaca_benchmark", benchmark_pull)
         print(f"edge: registration FROZEN (bar={fields['BAR']} {fields['METRIC']}, "
               f"baseline equity ${float(acct['equity']):.2f})", file=sys.stderr)
 
@@ -251,6 +272,8 @@ def main() -> int:
         pulls.append(_write_raw("alpaca_orders", orders))
         positions = _get(f"{ALPACA_BASE}/v2/positions", h)
         pulls.append(_write_raw("alpaca_positions", positions))
+        benchmark_price, benchmark_pull = _benchmark_price(fields["BENCHMARK"], h, _now())
+        pulls.append(_write_raw("alpaca_benchmark", benchmark_pull))
     except Exception as e:
         out["errors"].append(f"alpaca_pull_failed: {type(e).__name__}: {e}")
         _publish(out)
@@ -259,6 +282,9 @@ def main() -> int:
     equity = float(acct["equity"])
     filled = [o for o in orders if o.get("status") == "filled"]
     pnl = round(equity - frozen["baseline_equity_usd"], 2)
+    account_return_pct = (equity / frozen["baseline_equity_usd"] - 1) * 100
+    benchmark_return_pct = (benchmark_price / frozen["baseline_benchmark_price"] - 1) * 100
+    excess_return_pct = account_return_pct - benchmark_return_pct
 
     # ---- #38: peak-equity tracking in the SEPARATE runtime file (the frozen registration stays
     # hash-immutable). Peak initializes to max(baseline, first observed equity); drawdown is
@@ -266,11 +292,10 @@ def main() -> int:
     registration_sha = frozen["sha256"]
     try:
         runtime = json.loads(RUNTIME.read_text())
-        peak = float((runtime.get("registrations") or {}).get(registration_sha, {})
-                     .get("peak_equity_usd"))
     except Exception:
         runtime = {}
-        peak = frozen["baseline_equity_usd"]
+    previous = (runtime.get("registrations") or {}).get(registration_sha, {})
+    peak = float(previous.get("peak_equity_usd", frozen["baseline_equity_usd"]))
     peak = max(peak, equity)
     registrations = runtime.get("registrations") or {}
     registrations[registration_sha] = {"peak_equity_usd": peak, "updated_at": _now()}
@@ -282,6 +307,11 @@ def main() -> int:
     out.update({
         "equity_usd": equity,
         "paper_pnl_usd": pnl,
+        "benchmark": fields["BENCHMARK"],
+        "benchmark_price": benchmark_price,
+        "account_return_pct": account_return_pct,
+        "benchmark_return_pct": benchmark_return_pct,
+        "excess_return_pct": excess_return_pct,
         "filled_orders_since_freeze": len(filled),
         "open_positions": len(positions),
         "unrealized_positions_at_verdict": bool(positions),
@@ -305,7 +335,7 @@ def main() -> int:
         out["falsified_reason"] = (f"max drawdown breached: {drawdown} > {dd_bar} (peak "
                                    f"{peak} -> equity {equity}); the risk cap is part of the "
                                    "frozen registration")
-    elif pnl >= bar and len(filled) >= min_fills:
+    elif excess_return_pct >= bar and len(filled) >= min_fills:
         out["verdict"] = "VERIFIED_POSITIVE_EV"
     elif now > deadline:
         out["verdict"] = "FALSIFIED"   # the deadline was part of the registration; missing it IS
@@ -313,8 +343,8 @@ def main() -> int:
         # the falsification (fp_predict discipline: 2.20x < 2.5x was an answer, not a delay)
     else:
         out["verdict"] = "PENDING"
-        if pnl >= bar:
-            out["pending_reason"] = (f"bar cleared but only {len(filled)}/{min_fills} fills -- "
+        if excess_return_pct >= bar:
+            out["pending_reason"] = (f"excess-return bar cleared but only {len(filled)}/{min_fills} fills -- "
                                      "a small sample clearing a bar is variance, not an edge")
 
     # ---- edge manifest: every pull hashed so a packet can cite one (pnl.py owns MANIFEST.sha256;

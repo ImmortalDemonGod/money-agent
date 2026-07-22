@@ -275,8 +275,8 @@ def main() -> int:
             fails.append("the verified-edge experiment is PENDING (ledger/edge.json) -- a live "
                          "pre-registered bet. Its deadline resolves it; a conclusion cannot.")
     except RuntimeError as e:
-        if "SIGN" in str(e).upper():  # #36: a signature refusal is unknown state, not idle
-            fails.append(f"edge facts refused (signature): {e} -- unknown edge state cannot "
+        if "no ledger found" not in str(e).lower():
+            fails.append(f"edge facts refused: {e} -- unknown edge state cannot "
                          "authorize a conclusion; fail-closed.")
         # else: no edge.json anywhere -- rail idle, nothing pending
     except Exception as e:

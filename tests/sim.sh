@@ -282,18 +282,19 @@ assert_grep "human_minutes_total: 3.25" "human: fulfillment + decline minutes ar
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'
-import sys, json, os
+import sys, json, os, shutil
 sys.path.insert(0, "bin")
 os.environ.update({"MONEY_AGENT_STATE": "state", "AGENT_BRANCH": "sim-agent",
                    "ALPACA_PAPER_KEY_ID": "k", "ALPACA_PAPER_SECRET_KEY": "s"})
+shutil.rmtree("state", ignore_errors=True)
 import importlib, edge_pnl
 importlib.reload(edge_pnl)
-reg = ("EDGE_ID: sim\nMETRIC: paper_pnl_usd\nBAR: 50.0\nMIN_FILLED_ORDERS: 10\n"
-       "MAX_DRAWDOWN_USD: 25.0\n"
+reg = ("EDGE_ID: sim\nMETRIC: excess_return_pct\nBAR: 0.05\nMIN_FILLED_ORDERS: 10\n"
+       "MAX_DRAWDOWN_USD: 25.0\nBENCHMARK: SPY\n"
        "RESOLVE_BY: 2099-01-01T00:00:00Z\nHYPOTHESIS: h\nFALSIFIED_IF: f\n")
 edge_pnl.committed_registration = lambda: (reg, None)
 state = {"equity": "100000", "orders": []}
-edge_pnl._get = lambda url, h: ({"equity": state["equity"]} if "/account" in url
+edge_pnl._get = lambda url, h: ({"bars": [{"c": 100}]} if "/stocks/" in url else {"equity": state["equity"]} if "/account" in url
                                 else state["orders"] if "/orders" in url else [])
 def verdict():
     edge_pnl.main(); return json.load(open("ledger/edge.json"))["verdict"]
@@ -853,12 +854,14 @@ def case(label, want_rc, fetch, limit, argv, redirect="https://example.com/unloc
     rc = dc.main()
     if rc != want_rc:
         fails.append(f"{label}: rc={rc} want {want_rc}")
-GOOD = lambda u: (200, b"X" * 400)
+GOOD = lambda u: (200, b"X" * 400, "text/plain")
 case("complete artifact + capped link passes", 0, GOOD, "1",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
-case("placeholder body fails", 1, lambda u: (200, b"deliverable <fill> pending" + b"x" * 400), "1",
+case("placeholder body fails", 1, lambda u: (200, b"deliverable <fill> pending" + b"x" * 400, "text/plain"), "1",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
-case("stub-sized body fails", 1, lambda u: (200, b"ok"), "1",
+case("stub-sized body fails", 1, lambda u: (200, b"ok", "text/plain"), "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("missing or non-document content type fails", 1, lambda u: (200, b"X" * 400, "image/png"), "1",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
 case("uncapped link fails (#35)", 1, GOOD, "none",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
@@ -1127,10 +1130,10 @@ shutil.copy(os.environ["SIM_VKEY"], "sig_state2/verifier_signing_key")
 os.chmod("sig_state2/verifier_signing_key", 0o600)
 import importlib, edge_pnl
 importlib.reload(edge_pnl)
-reg = ("EDGE_ID: sim2\nMETRIC: paper_pnl_usd\nBAR: 50.0\nMIN_FILLED_ORDERS: 10\n"
-       "MAX_DRAWDOWN_USD: 25.0\nRESOLVE_BY: 2099-01-01T00:00:00Z\nHYPOTHESIS: h\nFALSIFIED_IF: f\n")
+reg = ("EDGE_ID: sim2\nMETRIC: excess_return_pct\nBAR: 0.05\nMIN_FILLED_ORDERS: 10\n"
+       "MAX_DRAWDOWN_USD: 25.0\nBENCHMARK: SPY\nRESOLVE_BY: 2099-01-01T00:00:00Z\nHYPOTHESIS: h\nFALSIFIED_IF: f\n")
 edge_pnl.committed_registration = lambda: (reg, None)
-edge_pnl._get = lambda url, h: {"equity": "100000"} if "/account" in url else []
+edge_pnl._get = lambda url, h: {"bars": [{"c": 100}]} if "/stocks/" in url else {"equity": "100000"} if "/account" in url else []
 edge_pnl.main()
 fails = []
 if not os.path.exists("ledger/edge.json.sig"):

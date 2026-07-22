@@ -193,7 +193,11 @@ fi
 # rule 3 makes that claim false unless the deliverable is already complete AT the success
 # redirect. Same trust posture as 2b: the gate re-RUNS delivery_check.py and believes only its
 # own fresh result; a self-typed verdict line is not evidence.
-PAY_URL=$(grep -oE 'https://(buy|checkout)\.stripe\.com/[^[:space:])`"]+' "$PACKET" | head -1)
+PAY_URLS=$(grep -oE 'https://(buy|checkout)\.stripe\.com/[^[:space:])`"]+' "$PACKET" | sort -u)
+PAY_URL=$(head -1 <<<"$PAY_URLS")
+if [[ $(grep -c . <<<"$PAY_URLS") -gt 1 ]]; then
+  fail "packet carries multiple distinct payment URLs; verify one paid offer per packet"
+fi
 if [[ -n "$PAY_URL" ]]; then
   DC_URL=$(grep -oiE 'DELIVERY_CHECK_URL:[[:space:]]*https?://[^[:space:]]+' "$PACKET" | head -1 \
            | sed -E 's/.*(https?:\/\/[^ ]+)/\1/')
