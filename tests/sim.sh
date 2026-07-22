@@ -197,19 +197,34 @@ if python3 bin/human.py request --kind captcha --gate "mastodon.nu signup step 3
 assert_exit_grep 1 "human actuation hum-001" \
   "human: open request blocks an impossible conclusion (companion bet)" \
   python3 bin/conclusion_gate.py
-if python3 bin/human.py fulfill hum-001 --minutes 3 --evidence "operator completed the captcha on their own account" >/dev/null 2>&1 \
+assert_exit 1 "human: agent checkout cannot self-certify operator fulfillment" \
+  python3 bin/human.py fulfill hum-001 --minutes 3 \
+    --evidence "operator completed the captcha on their own account"
+cdx "$W/verifier"
+if env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH=ledger python3 bin/human.py fulfill hum-001 \
+     --minutes 3 --evidence "operator completed the captcha on their own account" >/dev/null 2>&1; then
+  ok "human: operator resolution published on facts lane"; else bad "human: operator fulfill"; fi
+cdx "$W/agent"
+if python3 bin/human.py sync hum-001 >/dev/null 2>&1 \
    && grep -q '"human_minutes_total": 3' run/human_tasks.json; then
-  ok "human: fulfillment meters human_minutes and resolves the companion bet"
-else bad "human: fulfill path"; fi
+  ok "human: grounded fulfillment sync meters minutes and resolves companion"
+else bad "human: grounded sync"; fi
 python3 bin/human.py request --kind approval-click --gate "mastodon.nu staff approval" \
   --test "iter-079 packet: account stuck at human staff approval" \
   --ev "the account exists; one click activates it" >/dev/null 2>&1
-assert_grep "1 open actuation request" "supervise: human queue surfaced on the one-screen status" \
-  bash bin/supervise.sh
-if python3 bin/human.py decline hum-002 --reason "not worth operator identity exposure this run" >/dev/null 2>&1 \
+cdx "$W/verifier"
+assert_grep "1 awaiting operator" "supervise: reads queue from agent branch in verifier checkout" \
+  bash bin/supervise.sh "$BRANCH"
+if env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH=ledger python3 bin/human.py decline hum-002 \
+     --reason "not worth operator identity exposure this run" >/dev/null 2>&1; then
+  ok "human: operator decline published on facts lane"; else bad "human: operator decline"; fi
+assert_grep "1 resolved-awaiting-agent-sync" "supervise: distinguishes published resolution" \
+  bash bin/supervise.sh "$BRANCH"
+cdx "$W/agent"
+if python3 bin/human.py sync hum-002 >/dev/null 2>&1 \
    && grep -q '"status": "declined"' run/human_tasks.json; then
-  ok "human: decline recorded (the operator's REFUSALS mirror)"
-else bad "human: decline path"; fi
+  ok "human: grounded decline synced (operator REFUSALS mirror)"
+else bad "human: decline sync"; fi
 assert_grep "human_minutes_total: 3" "human: metering surfaced in list" python3 bin/human.py list
 
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
@@ -435,54 +450,79 @@ t = run(clean)
 if "rails" in t:
     fails.append("stripe-only run leaked a rails breakdown (parity broken)")
 
-# 13. #30: the Base/USDC adapter -- settlement-BOUND transfers count, unbound are visible and
-# never counted, operator addresses classify as self, the baseline block freezes once, and both
-# misprovisioning and a dead chain fail closed
+# 13. #30: the Base/USDC adapter -- exact payer/payee/amount binding, facts-lane operator identity,
+# safe-block reads, and a fresh run baseline that cannot recount the previous run.
 os.environ.update({"BASE_RPC_URL": "http://rpc.sim",
                    "BASE_SETTLEMENT_ADDRESS": "0x" + "ab" * 20,
                    "BASE_MARKETPLACE_ADDRESS": "0x" + "cd" * 20,
-                   "BASE_SETTLEMENT_EVENT_TOPIC0": "0x" + "ee" * 32})
+                   "BASE_SETTLEMENT_EVENT_TOPIC0": "0x" + "ee" * 32,
+                   "BASE_SETTLEMENT_PAYER_TOPIC": "1",
+                   "BASE_SETTLEMENT_PAYEE_TOPIC": "2",
+                   "BASE_SETTLEMENT_AMOUNT_WORD": "0",
+                   "BASE_FINALITY_TAG": "safe"})
 import rails.base_usdc as bu
 importlib.reload(bu)
 OP_ADDR = "0x" + "77" * 20
 calls = []
+safe_head = [1000]
 def rpc_stub(url, method, params):
     calls.append((method, params))
-    if method == "eth_blockNumber":
-        return hex(1000)
+    if method == "eth_getBlockByNumber":
+        return {"number": hex(safe_head[0]), "hash": "0x" + f"{safe_head[0]:064x}"}
     if method == "eth_getLogs":
+        if int(params[0]["fromBlock"], 16) >= 2001:
+            return []
         def lg(sender, amt, tx):
             return {"data": hex(amt), "transactionHash": tx,
                     "topics": [bu.TRANSFER_TOPIC0, bu._addr_topic(sender), params[0]["topics"][2]]}
         return [lg("0x" + "11" * 20, 12_340_000, "0xbound"),
                 lg("0x" + "22" * 20, 5_000_000, "0xunbound"),
-                lg(OP_ADDR, 9_000_000, "0xself")]
+                lg("0x" + "cd" * 20, 9_000_000, "0xself")]
     if method == "eth_getTransactionReceipt":
-        if params[0] == "0xbound":
-            return {"logs": [{"address": "0x" + "cd" * 20, "topics": ["0x" + "ee" * 32]}]}
+        payer = OP_ADDR if params[0] == "0xself" else "0x" + "11" * 20
+        amount = 9_000_000 if params[0] == "0xself" else 12_340_000
+        if params[0] in ("0xbound", "0xself"):
+            return {"logs": [{"address": "0x" + "cd" * 20,
+                              "topics": ["0x" + "ee" * 32, bu._addr_topic(payer),
+                                         bu._addr_topic("0x" + "ab" * 20)],
+                              "data": "0x" + f"{amount:064x}"}]}
         return {"logs": []}
     raise RuntimeError("unexpected rpc " + method)
 bu._rpc = rpc_stub
 opid = json.load(open("pnl_state/operator_identity.json"))
 opid["addresses"] = [OP_ADDR]
 json.dump(opid, open("pnl_state/operator_identity.json", "w"))
+bu.freeze_baseline(pathlib.Path("pnl_state"))
+safe_head[0] = 1010
 t = run(clean)
 b = t.get("rails", {}).get("base_usdc", {})
 if not t["verified"] or t["received_usd"] != 24.68 \
    or b != {"customer_usd": 12.34, "self_usd": 9.0, "unbound_usd": 5.0}:
     fails.append(f"base adapter classification wrong: recv={t['received_usd']} rails={t.get('rails')} "
                  f"errors={t['errors']}")
+# A new run freezes a new boundary. Old run-1 receipts must disappear from run-2 received_usd.
+safe_head[0] = 2000
+bu.freeze_baseline(pathlib.Path("pnl_state"))
+safe_head[0] = 2010
 calls.clear()
-t = run(clean)
-if any(m == "eth_blockNumber" for m, _ in calls):
-    fails.append("baseline block re-frozen on the second run")
-if not any(m == "eth_getLogs" and p[0]["fromBlock"] == hex(1001) for m, p in calls):
-    fails.append("frozen fromBlock not used on the second run")
+t2 = run(clean)
+if t2["received_usd"] != 12.34 or t2.get("rails", {}).get("base_usdc", {}).get("customer_usd") != 0:
+    fails.append(f"run-2 recounted run-1 Base revenue: {t2.get('rails')} recv={t2['received_usd']}")
+if not any(m == "eth_getLogs" and p[0]["fromBlock"] == hex(2001)
+           and p[0]["toBlock"] == hex(2010) for m, p in calls):
+    fails.append("run-scoped baseline/finalized toBlock not used")
 os.environ.pop("BASE_SETTLEMENT_EVENT_TOPIC0")
 t = run(clean)
 if t["verified"] or not any("base_usdc_misprovisioned" in e for e in t["errors"]):
     fails.append(f"missing binding config not fail-closed: {t['errors']}")
 os.environ["BASE_SETTLEMENT_EVENT_TOPIC0"] = "0x" + "ee" * 32
+opid["addresses"] = []
+json.dump(opid, open("pnl_state/operator_identity.json", "w"))
+t = run(clean)
+if t["verified"] or not any("wallet allowlist is empty" in e for e in t["errors"]):
+    fails.append(f"empty Base operator allowlist did not fail closed: {t['errors']}")
+opid["addresses"] = [OP_ADDR]
+json.dump(opid, open("pnl_state/operator_identity.json", "w"))
 bu._rpc = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("chain down"))
 t = run(clean)
 if t["verified"] or not any("base_usdc_pull_failed" in e for e in t["errors"]):
@@ -501,6 +541,34 @@ fi
 rm -rf pnl_state inf.csv inf_bad.csv inf_zero.csv
 git checkout -q -- ledger/ 2>/dev/null || true
 git clean -qfd ledger/raw/ 2>/dev/null || true
+
+BASELINE_RESULT=$(python3 - 2>/dev/null <<'PYEOF'
+import json, os, pathlib, runpy, sys
+sys.path.insert(0, "bin")
+state = pathlib.Path("base-run-state"); state.mkdir(exist_ok=True)
+(state / "base_usdc_baseline.json").write_text('{"baseline_block": 111}\n')
+os.environ.update({"MONEY_AGENT_STATE": str(state), "BASE_RPC_URL": "http://rpc.sim",
+                   "LEDGER_BRANCH": "ledger"})
+import rails.base_usdc as bu
+def freeze(target):
+    payload = {"baseline_block": 222, "baseline_hash": "0xsafe", "finality_tag": "safe"}
+    (target / "base_usdc_baseline.json").write_text(json.dumps(payload))
+    return payload
+bu.freeze_baseline = freeze
+runpy.run_path("bin/set_baseline.py", run_name="set_baseline_sim")
+archived = list(state.glob("base_usdc_baseline.*.archived.json"))
+current = json.load(open(state / "base_usdc_baseline.json"))
+print("OK" if archived and current["baseline_block"] == 222 else
+      f"FAIL archived={archived} current={current}")
+PYEOF
+)
+if [[ "$BASELINE_RESULT" == *"OK" ]]; then
+  ok "baseline: new run archives and replaces the prior Base boundary"
+else
+  bad "baseline: Base boundary lifecycle ($BASELINE_RESULT)"
+fi
+rm -rf base-run-state
+git checkout -q -- ledger/baseline.json 2>/dev/null || true
 
 echo "=== start_verifier preflight: wash-trade allowlist (issue #37, marker-extracted) ==="
 PRE="$W/preflight.sh"
@@ -524,6 +592,22 @@ if [[ "$PRE_OK" == "1" ]]; then
   assert_exit 0 "preflight: provisioned allowlist passes" \
     env MONEY_AGENT_STATE="$W/opid-state" bash -c "set -uo pipefail; source '$PRE'"
 fi
+
+BASE_PRE="$W/preflight-base.sh"
+sed -n '/TEST-MARKER: preflight-base-begin/,/TEST-MARKER: preflight-base-end/p' \
+  bin/start_verifier.sh > "$BASE_PRE"
+BASE_ENV=(BASE_RPC_URL=http://rpc.sim BASE_SETTLEMENT_ADDRESS=0xabc \
+  BASE_MARKETPLACE_ADDRESS=0xdef BASE_SETTLEMENT_EVENT_TOPIC0=0x123 \
+  BASE_SETTLEMENT_PAYER_TOPIC=1 BASE_SETTLEMENT_PAYEE_TOPIC=2 \
+  BASE_SETTLEMENT_AMOUNT_WORD=0)
+assert_exit 2 "preflight: armed Base rail requires operator wallet addresses" \
+  env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" \
+    bash -c "set -uo pipefail; source '$BASE_PRE'"
+echo '{"emails":["op@sim.example"],"addresses":["0x777"]}' > \
+  "$W/opid-state/operator_identity.json"
+assert_exit 0 "preflight: fully provisioned Base binding + wallet allowlist passes" \
+  env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" \
+    bash -c "set -uo pipefail; source '$BASE_PRE'"
 cdx "$W/agent"
 
 echo "=== aiv_gate (needs the canonical CLI) ==="
