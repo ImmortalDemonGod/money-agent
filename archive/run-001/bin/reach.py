@@ -33,8 +33,11 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent.parent
-OUT = REPO / "iterations" / "088" / "reach_baseline.json"
+# This executable lives under archive/run-001/bin. Keep its generated run-1 report in that
+# archive, but read the current verifier-owned ledger from the repository root.
+RUN_ARCHIVE = Path(__file__).resolve().parent.parent
+REPO = Path(__file__).resolve().parents[3]
+OUT = RUN_ARCHIVE / "iterations" / "088" / "reach_baseline.json"
 
 TELEGRAPH = {
     "hub": "An-AI-agent-25-and-one-job-earn-a-single-honest-dollar-07-16",
