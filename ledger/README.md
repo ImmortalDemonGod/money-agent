@@ -14,6 +14,7 @@ you see in this directory on a claims branch are a possibly-stale transparency c
 | `truth.json.sig` | `bin/pnl.py` | detached verifier signature over `truth.json` (present when signing is provisioned, issue #36) |
 | `attestation.json` (+`.sig`) | `bin/pnl.py` | the customer-facing signed summary: verified revenue, policy, provenance hashes (issue #42) |
 | `edge.json` | `bin/edge_pnl.py` | the edge-rail facts: frozen bar, paper P&L, verdict |
+| `human_resolutions.json` | operator via `bin/human.py` | append-only fulfillment/decline facts bound to claims-lane request hashes |
 | `baseline.json` | `bin/set_baseline.py` | transparency copy of run-start (authoritative copy is off-repo, verifier-side) |
 | `raw/` | both verifiers | immutable timestamped API pulls — the evidence behind every number |
 | `raw/MANIFEST.sha256`, `raw/EDGE_MANIFEST.sha256` | verifiers | per-pull hashes; packets must cite one to make a money/edge claim |
