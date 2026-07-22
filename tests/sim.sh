@@ -579,12 +579,14 @@ def case(label, want_rc, fetch, limit, argv, redirect="https://example.com/unloc
     rc = dc.main()
     if rc != want_rc:
         fails.append(f"{label}: rc={rc} want {want_rc}")
-GOOD = lambda u: (200, b"X" * 400)
+GOOD = lambda u: (200, b"X" * 400, "text/plain")
 case("complete artifact + capped link passes", 0, GOOD, "1",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
-case("placeholder body fails", 1, lambda u: (200, b"deliverable <fill> pending" + b"x" * 400), "1",
+case("placeholder body fails", 1, lambda u: (200, b"deliverable <fill> pending" + b"x" * 400, "text/plain"), "1",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
-case("stub-sized body fails", 1, lambda u: (200, b"ok"), "1",
+case("stub-sized body fails", 1, lambda u: (200, b"ok", "text/plain"), "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("missing or non-document content type fails", 1, lambda u: (200, b"X" * 400, "image/png"), "1",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
 case("uncapped link fails (#35)", 1, GOOD, "none",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
