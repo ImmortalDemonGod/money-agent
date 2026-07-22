@@ -114,6 +114,16 @@ git rev-parse -q --verify prediction-frozen >/dev/null 2>&1 \
   && ok "tag prediction-frozen -> $(git rev-list -n1 --abbrev-commit prediction-frozen)" \
   || echo "  ⚠ tag prediction-frozen missing. Run: git fetch --tags"
 
+# #36: when signature enforcement is armed (committed verifier pubkey), the sandbox must be able
+# to VERIFY -- an unverifiable signed ledger fails closed in truth.py and the loop never starts.
+if [[ -f harness/verifier_key.pub ]]; then
+  if command -v ssh-keygen >/dev/null 2>&1; then
+    ok "signature enforcement armed and ssh-keygen present (truth.py can verify)"
+  else
+    bad "harness/verifier_key.pub is committed but ssh-keygen is missing -- install openssh-client or truth.py fails closed"
+  fi
+fi
+
 for v in STRIPE_READ_KEY PRIVACY_READ_KEY; do
   [[ -f .env ]] && grep -q "^${v}=" .env 2>/dev/null \
     && bad "FATAL: .env present and contains $v -- the agent can compute (and forge) its own P&L. Only .env.agent belongs here."
