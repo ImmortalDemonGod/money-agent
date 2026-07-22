@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import datetime as dt
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -23,6 +24,7 @@ import mail
 import obligation_watch
 import obligations
 import spine
+import truth
 
 
 def typed_bet(**updates):
@@ -177,15 +179,127 @@ def test_mail_attempt_is_bound_consumed_and_honestly_logged(monkeypatch, tmp_pat
     assert "delivery not yet confirmed" in mail.SENT_LOG.read_text()
 
 
-def test_deferred_obligations_are_refused_and_recorded(monkeypatch):
-    refusals = []
-    monkeypatch.setattr(obligations, "_record_refusal", refusals.append)
-    args = SimpleNamespace(value_usd=float("nan"), what="x", check="delivery-url:https://x.test",
-                           deadline="2099-01-01T00:00:00Z", charge_id="")
+def obligation_auth(**updates):
+    auth = {"enabled": True, "refund_authority": True, "max_open": 1,
+            "max_single_usd": 25.0, "max_total_fraction": 1.0,
+            "max_deadline_hours": 24.0}
+    auth.update(updates)
+    return auth
+
+
+def test_obligation_authorization_requires_fresh_grounded_verifier_fact(monkeypatch):
+    now = dt.datetime(2026, 7, 22, 12, tzinfo=dt.timezone.utc)
+    monkeypatch.setattr(obligations, "_now", lambda: now)
+    facts = {"verified": True, "computed_at": now.isoformat(),
+             "authorization": obligation_auth()}
+    monkeypatch.setattr(truth, "load", lambda _name="truth.json": (facts, "ledger-branch"))
+    assert obligations._authorization()["max_open"] == 1
+
+    monkeypatch.setattr(truth, "load",
+                        lambda _name="truth.json": (facts, "working-tree-uncommitted"))
+    with pytest.raises(RuntimeError, match="not verifier-grounded"):
+        obligations._authorization()
+
+    stale = {**facts, "computed_at": (now - dt.timedelta(hours=1)).isoformat()}
+    monkeypatch.setattr(truth, "load", lambda _name="truth.json": (stale, "ledger-branch"))
+    with pytest.raises(RuntimeError, match="stale"):
+        obligations._authorization()
+
+
+def test_obligation_watch_authorization_requires_every_safeguard(monkeypatch):
+    monkeypatch.setenv("OBLIGATION_CLASS_ENABLE", "1")
+    monkeypatch.setenv("EXPOSURE_MAX_OPEN", "2")
+    monkeypatch.setenv("EXPOSURE_MAX_SINGLE_USD", "25")
+    monkeypatch.setenv("EXPOSURE_MAX_TOTAL_FRACTION", "0.5")
+    monkeypatch.setenv("OBLIGATION_MAX_DEADLINE_H", "48")
+    assert obligation_watch._authorization("rk_refund")["enabled"] is True
+    assert obligation_watch._authorization("")["enabled"] is False
+    monkeypatch.setenv("EXPOSURE_MAX_SINGLE_USD", "nan")
+    assert obligation_watch._authorization("rk_refund")["enabled"] is False
+
+
+def test_obligation_watch_checks_open_records_without_agent_claim(monkeypatch, tmp_path):
+    out = tmp_path / "ledger" / "obligations.json"
+    obligation = {"id": "obl-001", "status": "open", "what": "hosted report",
+                  "check": "delivery-url:https://example.test/report",
+                  "deadline": "2099-01-01T00:00:00Z", "value_usd": 10.0,
+                  "charge_id": "ch_1"}
+
+    def run(args, **_kwargs):
+        if args[1:3] == ["show", "origin/agent:run/obligations.json"]:
+            return SimpleNamespace(returncode=0,
+                                   stdout=json.dumps({"obligations": [obligation]}), stderr="")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    monkeypatch.setenv("AGENT_BRANCH", "agent")
+    monkeypatch.setattr(obligation_watch, "REPO", tmp_path)
+    monkeypatch.setattr(obligation_watch, "OUT", out)
+    monkeypatch.setattr(obligation_watch.subprocess, "run", run)
+    monkeypatch.setattr(obligation_watch, "_authorization",
+                        lambda _key: obligation_auth())
+    monkeypatch.setattr(obligation_watch, "_completion_oracle",
+                        lambda _spec: (True, {"kind": "delivery-url", "rc": 0}))
+    assert obligation_watch.main() == 0
+    facts = json.loads(out.read_text())
+    assert facts["open"] == 0
+    assert facts["fulfilled"][0]["id"] == "obl-001"
+
+
+def test_obligation_registration_uses_verifier_caps_and_serializes(monkeypatch, tmp_path):
+    registry = tmp_path / "run" / "obligations.json"
+    registry.parent.mkdir()
+    registry.write_text('{"obligations": []}\n')
+    monkeypatch.setattr(obligations, "OBL", registry)
+    monkeypatch.setattr(obligations, "LOCK", registry.with_suffix(".lock"))
+    monkeypatch.setattr(obligations, "_authorization", lambda: obligation_auth())
+    monkeypatch.setattr(truth, "load",
+                        lambda _name="truth.json": ({"received_usd": 100}, "ledger-branch"))
+
+    def save(records, _message):
+        time.sleep(0.05)
+        registry.write_text(json.dumps({"obligations": records}) + "\n")
+
+    monkeypatch.setattr(obligations, "_save_unlocked", save)
+    deadline = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=1)).isoformat()
+    args = SimpleNamespace(value_usd=10.0, what="deliver hosted report",
+                           check="delivery-url:https://example.test/report", deadline=deadline,
+                           charge_id="ch_1")
+    # Agent-local variables are deliberately irrelevant; the verifier fact above is authoritative.
+    monkeypatch.setenv("EXPOSURE_MAX_OPEN", "999")
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(lambda _: obligations.cmd_register(args), range(2)))
+    assert results.count(0) == 1
+    records = json.loads(registry.read_text())["obligations"]
+    assert len(records) == 1
+
+
+def test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying(monkeypatch,
+                                                                                tmp_path):
+    registry = tmp_path / "run" / "obligations.json"
+    registry.parent.mkdir()
+    registry.write_text('{"obligations": []}\n')
+    monkeypatch.setattr(obligations, "OBL", registry)
+    monkeypatch.setattr(obligations, "LOCK", registry.with_suffix(".lock"))
+    monkeypatch.setattr(obligations, "_authorization",
+                        lambda: obligation_auth(max_deadline_hours=1))
+    monkeypatch.setattr(truth, "load",
+                        lambda _name="truth.json": ({"received_usd": 100}, "ledger-branch"))
+    monkeypatch.setattr(obligations, "_save_unlocked",
+                        lambda records, _message: registry.write_text(
+                            json.dumps({"obligations": records}) + "\n"))
+    too_late = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=2)).isoformat()
+    args = SimpleNamespace(value_usd=10.0, what="deliver hosted report",
+                           check="delivery-url:https://example.test/report", deadline=too_late,
+                           charge_id="ch_1")
     assert obligations.cmd_register(args) == 1
-    assert refusals == ["x"]
-    claim = SimpleNamespace(id="obl-x", evidence="delivered at URL")
-    assert obligations.cmd_fulfill(claim) == 1
+
+    soon = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=30)).isoformat()
+    args.deadline = soon
+    assert obligations.cmd_register(args) == 0
+    assert obligations.cmd_fulfill(SimpleNamespace(id="obl-001", evidence="report is at URL")) == 0
+    record = json.loads(registry.read_text())["obligations"][0]
+    assert record["status"] == "fulfillment-claimed"
+    assert record["resolution"]["verified"] is False
 
 
 def test_obligation_watch_rejects_shell_and_idempotently_refunds(monkeypatch):

@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/test_v3_hardening.py`
-**Commit:** `5df105e`
-**Previous:** `a3d4a5a`
-**Generated:** 2026-07-22T22:40:30Z
+**Commit:** `a024bb0`
+**Previous:** `76c1bec`
+**Generated:** 2026-07-22T23:07:48Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,17 +16,18 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/test_v3_hardening.py"
-  classification_rationale: "Tests inherit R3 from the payment, PII, refund, and audit controls they verify"
+  classification_rationale: "R3 evidence because these regressions protect payment liability, refund authority, and verifier separation-of-duties"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:40:30Z"
+  classified_at: "2026-07-22T23:07:48Z"
 ```
 
 ## Claim(s)
 
-1. Focused tests reproduce and prevent double reservation consumption
-2. Focused tests bind mail consume, rollback, lane, bet, and audit ordering
-3. Focused tests reject substring decisions, self-graded typed outcomes, and deferred paid work
-4. No existing tests were modified or deleted during this change.
+1. Focused tests reject ungrounded and stale obligation authorization facts
+2. Focused tests prove every verifier safeguard is required before authorization enables
+3. Focused tests prove concurrent registrations admit only one obligation when max_open is one
+4. Focused tests prove agent fulfillment claims remain unverified and open records are checked independently
+5. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -34,52 +35,41 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51#pullrequestreview-4759249208](https://github.com/ImmortalDemonGod/money-agent/pull/51#pullrequestreview-4759249208)
-- **Requirements Verified:** CodeRabbit requires claim-specific execution evidence for the corrected critical boundaries
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
+- **Requirements Verified:** PR 51 must permit the intended mechanically guaranteed obligation behavior without weakening its payment and refund boundaries
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`5df105e`](https://github.com/ImmortalDemonGod/money-agent/tree/5df105e687bf5d0ce912e2e5399bd2b72db0ed32))
+**Scope Inventory** (SHA: [`a024bb0`](https://github.com/ImmortalDemonGod/money-agent/tree/a024bb096270addf43546d32f3cb0ca6b69488ba))
 
-- [`tests/test_v3_hardening.py#L7-L9`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L7-L9)
-- [`tests/test_v3_hardening.py#L21`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L21)
-- [`tests/test_v3_hardening.py#L63-L68`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L63-L68)
-- [`tests/test_v3_hardening.py#L77`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L77)
-- [`tests/test_v3_hardening.py#L91-L110`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L91-L110)
-- [`tests/test_v3_hardening.py#L126-L182`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L126-L182)
-- [`tests/test_v3_hardening.py#L186`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L186)
-- [`tests/test_v3_hardening.py#L188`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L188)
-- [`tests/test_v3_hardening.py#L238-L266`](https://github.com/ImmortalDemonGod/money-agent/blob/5df105e687bf5d0ce912e2e5399bd2b72db0ed32/tests/test_v3_hardening.py#L238-L266)
+- [`tests/test_v3_hardening.py#L6`](https://github.com/ImmortalDemonGod/money-agent/blob/a024bb096270addf43546d32f3cb0ca6b69488ba/tests/test_v3_hardening.py#L6)
+- [`tests/test_v3_hardening.py#L27`](https://github.com/ImmortalDemonGod/money-agent/blob/a024bb096270addf43546d32f3cb0ca6b69488ba/tests/test_v3_hardening.py#L27)
+- [`tests/test_v3_hardening.py#L182-L293`](https://github.com/ImmortalDemonGod/money-agent/blob/a024bb096270addf43546d32f3cb0ca6b69488ba/tests/test_v3_hardening.py#L182-L293)
+- [`tests/test_v3_hardening.py#L295-L302`](https://github.com/ImmortalDemonGod/money-agent/blob/a024bb096270addf43546d32f3cb0ca6b69488ba/tests/test_v3_hardening.py#L295-L302)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`test_bet_gate_enforces_cumulative_spend`** (L7-L9): FAIL -- WARNING: No tests import or call `test_bet_gate_enforces_cumulative_spend`
-- **`transaction`** (L21): FAIL -- WARNING: No tests import or call `transaction`
-- **`test_bets_save_path_limits_commit`** (L63-L68): FAIL -- WARNING: No tests import or call `test_bets_save_path_limits_commit`
-- **`test_bet_gate_serializes_reservation_consumption`** (L77): FAIL -- WARNING: No tests import or call `test_bet_gate_serializes_reservation_consumption`
-- **`save`** (L91-L110): FAIL -- WARNING: No tests import or call `save`
-- **`test_mail_audit_failure_rolls_back_consumed_reservation`** (L126-L182): FAIL -- WARNING: No tests import or call `test_mail_audit_failure_rolls_back_consumed_reservation`
-- **`test_mail_attempt_is_bound_consumed_and_honestly_logged`** (L186): FAIL -- WARNING: No tests import or call `test_mail_attempt_is_bound_consumed_and_honestly_logged`
-- **`test_deferred_obligations_are_refused_and_recorded`** (L188): FAIL -- WARNING: No tests import or call `test_deferred_obligations_are_refused_and_recorded`
-- **`run`** (L238-L266): FAIL -- WARNING: No tests import or call `run`
-- **`SMTP`** (unknown): FAIL -- WARNING: No tests import or call `SMTP`
-- **`SMTP.__init__`** (unknown): FAIL -- WARNING: No tests import or call `__init__`
-- **`SMTP.__enter__`** (unknown): FAIL -- WARNING: No tests import or call `__enter__`
-- **`SMTP.__exit__`** (unknown): FAIL -- WARNING: No tests import or call `__exit__`
-- **`SMTP.starttls`** (unknown): FAIL -- WARNING: No tests import or call `starttls`
-- **`SMTP.login`** (unknown): FAIL -- WARNING: No tests import or call `login`
-- **`SMTP.send_message`** (unknown): FAIL -- WARNING: No tests import or call `send_message`
-- **`test_decision_gate_requires_exact_parsed_fields`** (unknown): FAIL -- WARNING: No tests import or call `test_decision_gate_requires_exact_parsed_fields`
-- **`test_typed_resolution_evaluates_declared_metric`** (unknown): FAIL -- WARNING: No tests import or call `test_typed_resolution_evaluates_declared_metric`
+- **`obligation_auth`** (L6): PASS -- 4 test(s) call `obligation_auth` directly
+  - `tests/test_v3_hardening.py::test_obligation_authorization_requires_fresh_grounded_verifier_fact`
+  - `tests/test_v3_hardening.py::test_obligation_watch_checks_open_records_without_agent_claim`
+  - `tests/test_v3_hardening.py::test_obligation_registration_uses_verifier_caps_and_serializes`
+  - `tests/test_v3_hardening.py::test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`
+- **`test_obligation_authorization_requires_fresh_grounded_verifier_fact`** (L27): FAIL -- WARNING: No tests import or call `test_obligation_authorization_requires_fresh_grounded_verifier_fact`
+- **`test_obligation_watch_authorization_requires_every_safeguard`** (L182-L293): FAIL -- WARNING: No tests import or call `test_obligation_watch_authorization_requires_every_safeguard`
+- **`test_obligation_watch_checks_open_records_without_agent_claim`** (L295-L302): FAIL -- WARNING: No tests import or call `test_obligation_watch_checks_open_records_without_agent_claim`
+- **`test_obligation_registration_uses_verifier_caps_and_serializes`** (unknown): FAIL -- WARNING: No tests import or call `test_obligation_registration_uses_verifier_caps_and_serializes`
+- **`test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`** (unknown): FAIL -- WARNING: No tests import or call `test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`
+- **`run`** (unknown): FAIL -- WARNING: No tests import or call `run`
+- **`save`** (unknown): FAIL -- WARNING: No tests import or call `save`
 
-**Coverage summary:** 0/18 symbols verified by tests.
+**Coverage summary:** 1/8 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
 - **ruff:** All checks passed
-- **mypy:** Found 9 errors in 1 file (checked 1 source file)
+- **mypy:** Found 10 errors in 1 file (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -99,33 +89,34 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-1c0d6f2 test(sim): adversarially cover PR 51 hardening
-a3d4a5a test(v3): cover adversarial enforcement seams
-937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
-7b7a7fe [S10] V3 spine: per-lane stage ordering, config-gated off (the contested layer, by explicit switch)
-644f13c [S9] V3 typed bet-spec + action authorization, config-gated off (bet-ledger layer)
+30612e5 test(sim): exercise CodeRabbit review invariants
+76c1bec test(v3): cover CodeRabbit hardening findings
+bb5cbed test(sim): adversarially cover PR 51 hardening
+d90785d test(v3): cover adversarial enforcement seams
+1529ea1 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Focused tests reproduce and prevent double reservation consu... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Focused tests bind mail consume, rollback, lane, bet, and au... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | Focused tests reject substring decisions, self-graded typed ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 4 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Focused tests reject ungrounded and stale obligation authori... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | Focused tests prove every verifier safeguard is required bef... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 3 | Focused tests prove concurrent registrations admit only one ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 4 | Focused tests prove agent fulfillment claims remain unverifi... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 5 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 3 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 4 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/18 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (1/8 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Add thirteen focused regressions for the completed CodeRabbit review
+Cover the complete mechanically guaranteed obligation authorization matrix
