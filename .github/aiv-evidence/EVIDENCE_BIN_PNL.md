@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/pnl.py`
-**Commit:** `c4cc1c3`
-**Previous:** `d131f6e`
-**Generated:** 2026-07-22T23:01:08Z
+**Commit:** `6c6c0b2`
+**Previous:** `6ebea50`
+**Generated:** 2026-07-22T23:32:01Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/pnl.py"
-  classification_rationale: "This is the central verified P&L aggregation path"
+  classification_rationale: "Incorrect normalization could count a self-funded settlement as customer revenue"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:01:08Z"
+  classified_at: "2026-07-22T23:32:01Z"
 ```
 
 ## Claim(s)
 
-1. truth.json receive and spend totals are derived from the registered Stripe, card, and optional Base contributions while preserving Stripe-only parity
+1. Operator wallet addresses with or without a 0x prefix normalize to lowercase 20-byte hex and malformed addresses fail closed
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,31 +32,27 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/30](https://github.com/ImmortalDemonGod/money-agent/issues/30)
-- **Requirements Verified:** Issue #30 requires verifier-owned per-rail aggregation for received_usd and spent_usd
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578676](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578676)
+- **Requirements Verified:** CodeRabbit requires operator identity comparison to use the same canonical address form as settlement events
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`c4cc1c3`](https://github.com/ImmortalDemonGod/money-agent/tree/c4cc1c35e94884ec11d9f254939e50668cd3bc9f))
+**Scope Inventory** (SHA: [`6c6c0b2`](https://github.com/ImmortalDemonGod/money-agent/tree/6c6c0b2ac8414f2c1f8fecdad8eb8e3d12ac960b))
 
-- [`bin/pnl.py#L283-L370`](https://github.com/ImmortalDemonGod/money-agent/blob/c4cc1c35e94884ec11d9f254939e50668cd3bc9f/bin/pnl.py#L283-L370)
-- [`bin/pnl.py#L493-L504`](https://github.com/ImmortalDemonGod/money-agent/blob/c4cc1c35e94884ec11d9f254939e50668cd3bc9f/bin/pnl.py#L493-L504)
-- [`bin/pnl.py#L506-L534`](https://github.com/ImmortalDemonGod/money-agent/blob/c4cc1c35e94884ec11d9f254939e50668cd3bc9f/bin/pnl.py#L506-L534)
+- [`bin/pnl.py#L178-L185`](https://github.com/ImmortalDemonGod/money-agent/blob/6c6c0b2ac8414f2c1f8fecdad8eb8e3d12ac960b/bin/pnl.py#L178-L185)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`_stripe_receive_adapter`** (L283-L370): FAIL -- WARNING: No tests import or call `_stripe_receive_adapter`
-- **`_card_spend_adapter`** (L493-L504): FAIL -- WARNING: No tests import or call `_card_spend_adapter`
-- **`main`** (L506-L534): FAIL -- WARNING: No tests import or call `main`
+- **`_operator_addresses`** (L178-L185): FAIL -- WARNING: No tests import or call `_operator_addresses`
 
-**Coverage summary:** 0/3 symbols verified by tests.
+**Coverage summary:** 0/1 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
 - **ruff:** All checks passed
-- **mypy:** Found 14 errors in 2 files (checked 1 source file)
+- **mypy:** Found 15 errors in 2 files (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -76,18 +72,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-bc601c3 test(rails): expose registry contract to verification
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
-8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
+dfe3ff8 test(pr50): pin final review failure modes
+d52a400 test(rails): expand fail-closed registry catalog
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
+618e3eb merge(stack): integrate reviewed stack 3 advances
+4ff597e test(delivery): cover content-type refusal
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | truth.json receive and spend totals are derived from the reg... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Operator wallet addresses with or without a 0x prefix normal... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -96,11 +92,11 @@ c5fd8f6 docs(tests): normalize bug-catalog whitespace
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/3 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Route legacy and Base fact sources through RailRegistry
+Normalize and validate on-chain operator identities

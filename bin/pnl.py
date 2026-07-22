@@ -175,7 +175,14 @@ def _operator_addresses() -> set:
     transfers classify as SELF on chain rails, exactly as emails/fingerprints do on Stripe."""
     if OPERATOR_ID.exists():
         d = json.loads(OPERATOR_ID.read_text())
-        return set(a.lower() for a in d.get("addresses", []))
+        normalized = set()
+        for configured in d.get("addresses", []):
+            address = str(configured).strip().lower()
+            body = address[2:] if address.startswith("0x") else address
+            if len(body) != 40 or any(c not in "0123456789abcdef" for c in body):
+                raise ValueError(f"operator wallet address is not 20-byte hex: {configured!r}")
+            normalized.add("0x" + body)
+        return normalized
     return set()
 
 
