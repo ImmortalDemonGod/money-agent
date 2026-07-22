@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/test_rails_registry.py`
-**Commit:** `86e664c`
-**Generated:** 2026-07-22T23:00:12Z
+**Commit:** `adfd48f`
+**Previous:** `bc601c3`
+**Generated:** 2026-07-22T23:28:32Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/test_rails_registry.py"
-  classification_rationale: "Direct discoverable coverage is required for a payment-fact critical surface"
+  classification_rationale: "These tests protect a payment-fact critical surface"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:00:12Z"
+  classified_at: "2026-07-22T23:28:32Z"
 ```
 
 ## Claim(s)
 
-1. Direct tests call registry registration, aggregation, and fail-closed validation paths
+1. Registry contract tests cover adapter exceptions, identity and direction mismatches, negative and boolean money, and unmeasured spend semantics
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,25 +32,37 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/30](https://github.com/ImmortalDemonGod/money-agent/issues/30)
-- **Requirements Verified:** Issue #30 requires an executable verifier-side registry for both received_usd and spent_usd
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578618](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578618)
+- **Requirements Verified:** CodeRabbit requires the payment registry evidence to cover each fail-closed validation path directly
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`86e664c`](https://github.com/ImmortalDemonGod/money-agent/tree/86e664c2a3221b0ce7e48eb1d6e2f0982ea742a4))
+**Scope Inventory** (SHA: [`adfd48f`](https://github.com/ImmortalDemonGod/money-agent/tree/adfd48fa8285e5416a5c472338fef6d645c7ce7f))
 
-- [`tests/test_rails_registry.py#L1-L81`](https://github.com/ImmortalDemonGod/money-agent/blob/86e664c2a3221b0ce7e48eb1d6e2f0982ea742a4/tests/test_rails_registry.py#L1-L81)
+- [`tests/test_rails_registry.py#L15-L22`](https://github.com/ImmortalDemonGod/money-agent/blob/adfd48fa8285e5416a5c472338fef6d645c7ce7f/tests/test_rails_registry.py#L15-L22)
+- [`tests/test_rails_registry.py#L69`](https://github.com/ImmortalDemonGod/money-agent/blob/adfd48fa8285e5416a5c472338fef6d645c7ce7f/tests/test_rails_registry.py#L69)
+- [`tests/test_rails_registry.py#L81-L83`](https://github.com/ImmortalDemonGod/money-agent/blob/adfd48fa8285e5416a5c472338fef6d645c7ce7f/tests/test_rails_registry.py#L81-L83)
+- [`tests/test_rails_registry.py#L85-L136`](https://github.com/ImmortalDemonGod/money-agent/blob/adfd48fa8285e5416a5c472338fef6d645c7ce7f/tests/test_rails_registry.py#L85-L136)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`RailRegistryTests`** (L1-L81): FAIL -- WARNING: No tests import or call `RailRegistryTests`
-- **`RailRegistryTests.test_aggregates_receive_and_spend_contributions`** (unknown): FAIL -- WARNING: No tests import or call `test_aggregates_receive_and_spend_contributions`
-- **`RailRegistryTests.test_rejects_duplicate_adapter_names`** (unknown): FAIL -- WARNING: No tests import or call `test_rejects_duplicate_adapter_names`
-- **`RailRegistryTests.test_non_finite_contribution_fails_closed`** (unknown): FAIL -- WARNING: No tests import or call `test_non_finite_contribution_fails_closed`
+- **`RailRegistryTests`** (L15-L22): FAIL -- WARNING: No tests import or call `RailRegistryTests`
+- **`RailRegistryTests._invalid_contribution`** (L69): PASS -- 5 test(s) call `_invalid_contribution` directly
+  - `tests/test_rails_registry.py::test_non_finite_contribution_fails_closed`
+  - `tests/test_rails_registry.py::test_adapter_exception_fails_closed`
+  - `tests/test_rails_registry.py::test_contribution_identity_and_direction_mismatch_fail_closed`
+  - `tests/test_rails_registry.py::test_negative_and_boolean_money_fail_closed`
+  - `tests/test_rails_registry.py::test_boolean_measured_spend_and_non_null_unmeasured_spend_fail_closed`
+- **`RailRegistryTests.test_non_finite_contribution_fails_closed`** (L81-L83): FAIL -- WARNING: No tests import or call `test_non_finite_contribution_fails_closed`
+- **`RailRegistryTests.test_adapter_exception_fails_closed`** (L85-L136): FAIL -- WARNING: No tests import or call `test_adapter_exception_fails_closed`
+- **`explode`** (unknown): FAIL -- WARNING: No tests import or call `explode`
+- **`RailRegistryTests.test_contribution_identity_and_direction_mismatch_fail_closed`** (unknown): FAIL -- WARNING: No tests import or call `test_contribution_identity_and_direction_mismatch_fail_closed`
+- **`RailRegistryTests.test_negative_and_boolean_money_fail_closed`** (unknown): FAIL -- WARNING: No tests import or call `test_negative_and_boolean_money_fail_closed`
+- **`RailRegistryTests.test_boolean_measured_spend_and_non_null_unmeasured_spend_fail_closed`** (unknown): FAIL -- WARNING: No tests import or call `test_boolean_measured_spend_and_non_null_unmeasured_spend_fail_closed`
 
-**Coverage summary:** 0/4 symbols verified by tests.
+**Coverage summary:** 1/8 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
@@ -74,18 +87,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
-8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
-0dfb70b test(sim): make packet mutations portable and fail closed
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
+618e3eb merge(stack): integrate reviewed stack 3 advances
+4ff597e test(delivery): cover content-type refusal
+85d4db3 test(edge): cover benchmark-relative verdicts
+bd2321b test(edge): cover finite caps and scoped peaks
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Direct tests call registry registration, aggregation, and fa... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Registry contract tests cover adapter exceptions, identity a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -94,11 +107,11 @@ c5fd8f6 docs(tests): normalize bug-catalog whitespace
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/4 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (1/8 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Add a standard-library unit test for the rail registry contract
+Add direct adversarial coverage before the registry fix
