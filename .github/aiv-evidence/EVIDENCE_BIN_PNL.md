@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/pnl.py`
-**Commit:** `42280fd`
-**Previous:** `0ad5b46`
-**Generated:** 2026-07-22T21:09:31Z
+**Commit:** `4c2cc7b`
+**Previous:** `35217cf`
+**Generated:** 2026-07-22T21:15:10Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/pnl.py"
-  classification_rationale: "R3 because a stale or missing signature changes whether payment facts are grounded"
+  classification_rationale: "R3 because this controls the verified status of signed payment facts"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:09:31Z"
+  classified_at: "2026-07-22T21:15:10Z"
 ```
 
 ## Claim(s)
 
-1. pnl.py replaces the prior truth signature before re-signing the unverified record produced by an attestation signing failure
+1. pnl.py marks truth unverified on an initial signing failure or missing signing key even though truth errors share the verifier error list
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,20 +32,21 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/42](https://github.com/ImmortalDemonGod/money-agent/issues/42)
-- **Requirements Verified:** Issue #42 requires a failed attestation signature to fail closed without invalidating the signed truth evidence
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
+- **Requirements Verified:** Issue #36 requires an armed unsigned or unverified fact record to fail closed
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`42280fd`](https://github.com/ImmortalDemonGod/money-agent/tree/42280fd03af5c4e764cf2464e8fb716604591171))
+**Scope Inventory** (SHA: [`4c2cc7b`](https://github.com/ImmortalDemonGod/money-agent/tree/4c2cc7b83b029afe3ca11c990c2b24bb8761a113))
 
-- [`bin/pnl.py#L644-L646`](https://github.com/ImmortalDemonGod/money-agent/blob/42280fd03af5c4e764cf2464e8fb716604591171/bin/pnl.py#L644-L646)
+- [`bin/pnl.py#L582-L584`](https://github.com/ImmortalDemonGod/money-agent/blob/4c2cc7b83b029afe3ca11c990c2b24bb8761a113/bin/pnl.py#L582-L584)
+- [`bin/pnl.py#L600`](https://github.com/ImmortalDemonGod/money-agent/blob/4c2cc7b83b029afe3ca11c990c2b24bb8761a113/bin/pnl.py#L600)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L644-L646): FAIL -- WARNING: No tests import or call `main`
+- **`main`** (L582-L584): FAIL -- WARNING: No tests import or call `main`
 
 **Coverage summary:** 0/1 symbols verified by tests.
 
@@ -83,7 +84,7 @@ abe8811 test(corpus): fail closed on fixture probe crashes
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | pnl.py replaces the prior truth signature before re-signing ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | pnl.py marks truth unverified on an initial signing failure ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -99,4 +100,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Re-sign the unverified truth record after attestation failure
+Persist initial truth signing failures as unverified facts

@@ -579,6 +579,9 @@ def main() -> int:
     # the facts lane. truth.py refuses the grounded label for an unsigned/tampered file whenever
     # a committed pubkey exists. The signature covers truth.json, which embeds manifest_sha256 --
     # so the raw-pull manifest is integrity-covered transitively. Namespace must match truth.py.
+    # `truth["errors"]` aliases `errors`, so preserve the pre-signing state independently: an
+    # append from signing must force the persisted fact record to become unverified.
+    errors_before_signing = list(errors)
     sign_key = STATE_DIR / "verifier_signing_key"
     pubkey_committed = (REPO / "harness" / "verifier_key.pub").exists()
     if sign_key.exists():
@@ -594,7 +597,7 @@ def main() -> int:
         errors.append("signing_key_missing: harness/verifier_key.pub is committed but "
                       f"{sign_key} does not exist -- generate it (see ledger/README.md) or "
                       "remove the pubkey to run unsigned.")
-    if errors != truth["errors"]:
+    if errors != errors_before_signing:
         # a signing error must ride IN the signed-about file's verified flag: rewrite (and re-sign
         # attempts are pointless -- the error is precisely that signing is broken)
         truth["errors"], truth["verified"] = errors, False
