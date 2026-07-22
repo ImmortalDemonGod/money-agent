@@ -13,7 +13,6 @@ and an out-of-sandbox verifier are actually load-bearing.
 """
 
 from __future__ import annotations
-import json
 import os
 import subprocess
 import sys
@@ -307,12 +306,27 @@ def main() -> int:
         ob, ob_src = None, None
     except Exception as e:
         return fail(f"cannot read the obligation facts ({type(e).__name__}: {e}) -- fail-closed.")
-    if ob is not None and ob_src in _truth.GROUNDED_SOURCES and ob.get("breached"):
-        b0 = ob["breached"][0]
-        return fail(f"OBLIGATION BREACHED: {b0.get('id')} ({b0.get('breach')}; "
-                    f"refund: {b0.get('refund_status')}). A paid-for thing not delivered by its "
-                    "deadline is the harm rule 3 exists to prevent -- resolve it before anything "
-                    "else.")
+    if ob is not None:
+        if ob_src not in _truth.GROUNDED_SOURCES:
+            return fail(f"obligation facts source is {ob_src!r}, not verifier-grounded")
+        if not ob.get("verified"):
+            return fail(f"obligation watchdog is unverified ({ob.get('errors')}); an unreadable "
+                        "promise-book is not an empty one")
+        try:
+            ob_age = (_dt.datetime.now(_dt.timezone.utc)
+                      - _dt.datetime.fromisoformat(
+                          str(ob["computed_at"]).replace("Z", "+00:00"))).total_seconds()
+        except Exception as e:
+            return fail(f"obligation facts have no parseable computed_at: {e}")
+        if ob_age > MAX_AGE_S:
+            return fail(f"obligation watchdog fact is {int(ob_age)}s old (> {MAX_AGE_S}s); a "
+                        "stale promise-book is not an all-clear")
+        if ob.get("breached"):
+            b0 = ob["breached"][0]
+            return fail(f"OBLIGATION BREACHED: {b0.get('id')} ({b0.get('breach')}; "
+                        f"refund: {b0.get('refund_status')}). A paid-for thing not delivered by "
+                        "its deadline is the harm rule 3 exists to prevent -- resolve it before "
+                        "anything else.")
 
     # --- V3 DEMAND-REFUTED checkpoint (S10; armed by DEMAND_REFUTED_K>0, default off -- the
     # closed terminal set {verified dollar, cap, operator} is UNCHANGED until the operator flips

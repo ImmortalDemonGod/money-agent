@@ -1,8 +1,8 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/guard.py`
-**Commit:** `994cd6f`
-**Generated:** 2026-07-22T22:37:58Z
+**Commit:** `09685db`
+**Generated:** 2026-07-22T22:08:09Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +15,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/guard.py"
-  classification_rationale: "R3 integrity gate"
+  classification_rationale: "Controls run termination at a payment-obligation safety boundary, an AIV section 5.2 critical surface"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:37:58Z"
+  classified_at: "2026-07-22T22:08:09Z"
 ```
 
 ## Claim(s)
 
-1. Guard treats every edge integrity error other than genuine absence as a halt
+1. Guard halts when obligation facts are ungrounded, unverified, malformed, stale, or breached
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,27 +31,27 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/38](https://github.com/ImmortalDemonGod/money-agent/issues/38)
-- **Requirements Verified:** Edge facts must not silently become idle when unreadable
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
+- **Requirements Verified:** PR 51 promise-book safety must not inherit freshness from an unrelated money heartbeat
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`994cd6f`](https://github.com/ImmortalDemonGod/money-agent/tree/994cd6fa05aa8bfdf56bf9639a5deb782fad7bcc))
+**Scope Inventory** (SHA: [`09685db`](https://github.com/ImmortalDemonGod/money-agent/tree/09685dba4fe49736f7c477d65df42057500c69f2))
 
-- [`bin/guard.py#L263`](https://github.com/ImmortalDemonGod/money-agent/blob/994cd6fa05aa8bfdf56bf9639a5deb782fad7bcc/bin/guard.py#L263)
+- [`bin/guard.py#L309-L329`](https://github.com/ImmortalDemonGod/money-agent/blob/09685dba4fe49736f7c477d65df42057500c69f2/bin/guard.py#L309-L329)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L263): FAIL -- WARNING: No tests import or call `main`
+- **`main`** (L309-L329): FAIL -- WARNING: No tests import or call `main`
 
 **Coverage summary:** 0/1 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 13 error(s)
-- **mypy:** Found 3 errors in 1 file (checked 1 source file)
+- **ruff:** All checks passed
+- **mypy:** Found 12 errors in 4 files (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -71,18 +71,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-88a6899 test(edge): cover finite caps and scoped peaks
-e53b606 test(delivery): reject unrelated Stripe success URLs
-aa1dc15 [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-fe0427a [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-655bb5b test(verifier): cover initial truth signing failure
+a3d4a5a test(v3): cover adversarial enforcement seams
+937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
+7b7a7fe [S10] V3 spine: per-lane stage ordering, config-gated off (the contested layer, by explicit switch)
+644f13c [S9] V3 typed bet-spec + action authorization, config-gated off (bet-ledger layer)
+e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Guard treats every edge integrity error other than genuine a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Guard halts when obligation facts are ungrounded, unverified... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -98,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Fail closed for malformed or mismatched edge facts
+Require independently fresh and verified obligation facts before continuing
