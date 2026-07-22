@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `c1f54f4`
-**Generated:** 2026-07-22T21:08:16Z
+**Commit:** `d131f6e`
+**Previous:** `4c0df17`
+**Generated:** 2026-07-22T21:15:44Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "R3 because this regression exercises the verifier payment-fact trust boundary"
+  classification_rationale: "R3 because this regression verifies the payment-fact signature boundary"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:08:16Z"
+  classified_at: "2026-07-22T21:15:44Z"
 ```
 
 ## Claim(s)
 
-1. the signing simulation proves an attestation signing failure returns nonzero, removes both attestation artifacts, and leaves a valid but unverified truth record
+1. the signing simulation proves an initial truth-signature failure persists verified=false and leaves no truth signature or attestation artifact
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,14 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/42](https://github.com/ImmortalDemonGod/money-agent/issues/42)
-- **Requirements Verified:** Issue #42 requires a signed attestation; a failed signature must not publish an unsigned customer artifact
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
+- **Requirements Verified:** Issue #36 requires signing failures to fail closed before facts are grounded
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`c1f54f4`](https://github.com/ImmortalDemonGod/money-agent/tree/c1f54f4b0a8d4d3add4eebf980de4adfb2033fe4))
+**Scope Inventory** (SHA: [`d131f6e`](https://github.com/ImmortalDemonGod/money-agent/tree/d131f6e776080914d547e614d41fa2016a33037b))
 
-- [`tests/sim.sh#L576-L713`](https://github.com/ImmortalDemonGod/money-agent/blob/c1f54f4b0a8d4d3add4eebf980de4adfb2033fe4/tests/sim.sh#L576-L713)
+- [`tests/sim.sh#L698-L713`](https://github.com/ImmortalDemonGod/money-agent/blob/d131f6e776080914d547e614d41fa2016a33037b/tests/sim.sh#L698-L713)
 
 ### Class A (Execution Evidence)
 
@@ -68,18 +69,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+4c0df17 test(verifier): reject unsigned attestation output
 46c2a41 docs(tests): record verifier hardening bug catalog
 54ef777 test(verifier): cover raw paths and inference CSV validation
 abe8811 test(corpus): fail closed on fixture probe crashes
 93a3e7d test(verifier): cover raw quarantine move failure
-b2dcae1 [S3] durability + metering: raw-pull side-car/quarantine, unpushed counter, inference cost (#46 #41)
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | the signing simulation proves an attestation signing failure... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | the signing simulation proves an initial truth-signature fai... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -95,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Cover fail-closed handling of attestation signing failures
+Cover fail-closed initial truth signing failure

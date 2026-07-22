@@ -695,6 +695,22 @@ r = subprocess.run(["ssh-keygen", "-Y", "verify", "-f", "harness/allowed_signers
                    input=open("ledger/truth.json", "rb").read(), capture_output=True)
 if r.returncode != 0:
     fails.append("truth signature was not refreshed after attestation signing failure")
+# Initial truth signing failure takes a different path: no signed truth or attestation may survive,
+# and the persisted fact must record verified=false rather than retaining the pre-sign verdict.
+def reject_truth_sign(args, **kwargs):
+    if (args[:3] == ["ssh-keygen", "-Y", "sign"]
+            and str(args[-1]).endswith("truth.json")):
+        return subprocess.CompletedProcess(args, 1, stdout="", stderr="simulated truth failure")
+    return real_run(args, **kwargs)
+pnl.subprocess.run = reject_truth_sign
+initial_rc = pnl.main()
+pnl.subprocess.run = real_run
+initial_truth = json.load(open("ledger/truth.json"))
+if initial_rc == 0 or initial_truth.get("verified") or not any(
+        e.startswith("signing_failed") for e in initial_truth.get("errors", [])):
+    fails.append(f"truth signing failure did not persist unverified verdict: rc={initial_rc} truth={initial_truth}")
+if os.path.exists("ledger/truth.json.sig") or os.path.exists("ledger/attestation.json"):
+    fails.append("truth signing failure left signed-looking public artifacts")
 print("SIGN_FAILS:" + ";".join(fails))
 PYEOF
 )
