@@ -280,6 +280,94 @@ def pull_card_csv(path: Path) -> tuple[list, list[Path]]:
     return rows, [_write_raw("card_manual_csv", rows)]
 
 
+def _stripe_receive_adapter(key: str, baseline: int):
+    """The legacy Stripe path expressed as the same registered contribution as every new rail."""
+    from rails import RailContribution
+    pulls: list[Path] = []
+    errors: list[str] = []
+    received_gross = fees = refunded = 0.0
+    try:
+        txns, files, pull_errors = pull_stripe(key, baseline)
+        pulls += files
+        errors.extend(pull_errors)
+        for txn in txns:
+            if txn.get("type") not in ("charge", "payment", "refund", "payment_refund"):
+                continue
+            currency_error = _currency_err("balance_transaction", txn,
+                                           txn.get("id", "<no-id>"))
+            if currency_error:
+                errors.append(currency_error)
+                continue
+            amount = txn.get("amount", 0) / 100.0
+            fee = txn.get("fee", 0) / 100.0
+            if txn.get("type") in ("charge", "payment"):
+                received_gross += amount
+                fees += fee
+            else:
+                refunded += abs(amount)
+    except Exception as exc:
+        errors.append(f"stripe_pull_failed: {type(exc).__name__}: {exc}")
+
+    customer = self_purchase = 0.0
+    operator_emails, operator_fingerprints = _operator_ids()
+    try:
+        customer, self_purchase, files, classify_errors = pull_charges(key, baseline)
+        pulls += files
+        errors.extend(classify_errors)
+    except Exception as exc:
+        errors.append(f"charge_classify_failed: {type(exc).__name__}: {exc}")
+    if not (operator_emails or operator_fingerprints) and received_gross > 0:
+        errors.append("wash_guard_disarmed: operator_identity.json is empty/absent AND charges "
+                      "exist -- self-purchases cannot be excluded. Provision the allowlist "
+                      "(email + card fingerprint) before trusting received_usd.")
+    return RailContribution(
+        name="stripe", directions=frozenset({"receive"}), customer_usd=customer,
+        self_usd=self_purchase, gross_usd=round(received_gross, 2),
+        refunded_usd=round(refunded, 2), fees_usd=round(fees, 2), raw_files=pulls,
+        errors=errors,
+    )
+
+
+def _card_spend_adapter(privacy_key: str, card_csv: str, baseline: int):
+    """Privacy/CSV/issuer modes behind the spend side of the common rail contract."""
+    from rails import RailContribution
+    pulls: list[Path] = []
+    errors: list[str] = []
+    spent: float | None
+    source: str | None
+    try:
+        if privacy_key:
+            txns, files, pull_errors = pull_privacy(privacy_key, baseline)
+            pulls += files
+            errors.extend(pull_errors)
+            spent = sum(txn.get("settled_amount", 0) / 100.0 for txn in txns
+                        if txn.get("currency") is None
+                        or str(txn.get("currency")).upper() in ("USD", "840"))
+            source = "privacy_api"
+        elif card_csv and Path(card_csv).exists():
+            rows, files = pull_card_csv(Path(card_csv))
+            pulls += files
+            spent = sum(float(row["amount"]) for row in rows if row.get("amount"))
+            source = "manual_csv"
+        elif os.environ.get("CARD_SOURCE") == "issuer_enforced":
+            spent = None
+            source = "issuer_enforced_uncounted"
+        else:
+            spent = None
+            source = None
+            errors.append("no_card_source: set PRIVACY_READ_KEY, CARD_CSV, or "
+                          "CARD_SOURCE=issuer_enforced")
+    except Exception as exc:
+        spent = None
+        source = None
+        errors.append(f"card_pull_failed: {type(exc).__name__}: {exc}")
+    return RailContribution(
+        name="card", directions=frozenset({"spend"}), spent_usd=spent,
+        spend_measured=spent is not None, raw_files=pulls, errors=errors,
+        details={"spend_source": source},
+    )
+
+
 # ---------------------------------------------------------------------- verify
 
 def main() -> int:
@@ -402,110 +490,48 @@ def main() -> int:
     pulls: list[Path] = []
     # errors initialized earlier (constitution check appends to it)
 
-    # ---- received (gross, from balance_transactions -- fees/refunds/net)
-    received_gross = fees = refunded = 0.0
-    try:
-        txns, f, perrs = pull_stripe(stripe_key, baseline)
-        pulls += f
-        errors.extend(perrs)   # #34: an under-count must fail verification, never read as $0
-        for t in txns:
-            if t.get("type") not in ("charge", "payment", "refund", "payment_refund"):
-                continue
-            cerr = _currency_err("balance_transaction", t, t.get("id", "<no-id>"))
-            if cerr:
-                errors.append(cerr)  # #33: never add a known-mis-scaled amount to any sum
-                continue
-            amt = t.get("amount", 0) / 100.0
-            fee = t.get("fee", 0) / 100.0
-            if t.get("type") in ("charge", "payment"):
-                received_gross += amt
-                fees += fee
-            else:
-                refunded += abs(amt)
-    except Exception as e:  # a failed pull must never silently read as $0 earned
-        errors.append(f"stripe_pull_failed: {type(e).__name__}: {e}")
-
-    # ---- CUSTOMER vs SELF: received_usd = customer revenue only (wash-trade guard)
-    customer_received = self_purchase = 0.0
-    op_emails, op_fps = _operator_ids()
-    wash_guard_armed = bool(op_emails or op_fps)
-    try:
-        customer_received, self_purchase, f, cerrs = pull_charges(stripe_key, baseline)
-        pulls += f
-        errors.extend(cerrs)   # #33/#34: currency or coverage problems on the received_usd feed
-    except Exception as e:
-        errors.append(f"charge_classify_failed: {type(e).__name__}: {e}")
-    # If the operator-identity allowlist is empty, every charge classifies as CUSTOMER and the
-    # wash-trade guard enforces nothing. That must be LOUD, not silent (the operator paying his own
-    # link would then flip the first-dollar success condition on a fabricated sale). Surface it in
-    # truth.json so guard/readers see the guard was inert; only a real customer charge escalates it.
-    if not wash_guard_armed and received_gross > 0:
-        errors.append("wash_guard_disarmed: operator_identity.json is empty/absent AND charges "
-                      "exist -- self-purchases cannot be excluded. Provision the allowlist "
-                      "(email + card fingerprint) before trusting received_usd.")
-    # received_usd is now CUSTOMER-only. A self-purchase raises received_gross but NOT received_usd,
-    # so guard's first-dollar halt never fires on the operator paying his own link.
-    received = customer_received
-
-    # ---- spent
-    #
-    # Three modes, and the distinction is the whole point:
-    #   privacy/csv  -> spend is MEASURED. Full net P&L.
-    #   issuer       -> spend is UNKNOWN and stays null. The card's own hard limit enforces the cap,
-    #                   so the loop is still safe, but net is NOT computable and must not be faked.
-    #   (none)       -> unverified. Halt.
-    #
-    # `spent = 0.0` when nothing was measured is the trap this exists to avoid: it makes
-    # `net = received - 0` look like pure profit. Unknown is not zero. An unmeasured cost that
-    # defaults to 0 is how a losing run reports a win.
-    spent: float | None = 0.0
-    spend_source = None
-    try:
-        if privacy_key:
-            txns, f, perrs = pull_privacy(privacy_key, baseline)
-            pulls += f
-            errors.extend(perrs)
-            # #33: a txn that explicitly declares a non-USD currency has already poisoned the pull
-            # above; its amount is also excluded here so no known-wrong number reaches a sum.
-            spent = sum(t.get("settled_amount", 0) / 100.0 for t in txns
-                        if t.get("currency") is None or str(t.get("currency")).upper() in ("USD", "840"))
-            spend_source = "privacy_api"
-        elif card_csv and Path(card_csv).exists():
-            rows, f = pull_card_csv(Path(card_csv))
-            pulls += f
-            spent = sum(float(r["amount"]) for r in rows if r.get("amount"))
-            spend_source = "manual_csv"
-        elif os.environ.get("CARD_SOURCE") == "issuer_enforced":
-            # No feed exists. The card declines at its own limit regardless of what we think, so
-            # the CAP is still hard -- it is enforced by the issuer, not by this script. But spend
-            # is genuinely unknown until a statement is exported, so we refuse to invent it.
-            spent = None
-            spend_source = "issuer_enforced_uncounted"
-        else:
-            errors.append("no_card_source: set PRIVACY_READ_KEY, CARD_CSV, or CARD_SOURCE=issuer_enforced")
-    except Exception as e:
-        errors.append(f"card_pull_failed: {type(e).__name__}: {e}")
-
-    # ---- #30 Part 1: additional receive rails, each satisfying the adapter contract in
-    # bin/rails/__init__.py (primary source, agent-unwritable inputs, hashed raws, identity-
-    # classified, fail-closed). received_usd is the SUM of customer revenue across armed rails;
-    # the per-rail breakdown is published only when a second rail is armed, so a stripe-only run
-    # emits a byte-stable truth.json shape (the S7 parity guarantee).
-    rails_breakdown = {"stripe": {"customer_usd": round(customer_received, 2),
-                                  "self_usd": round(self_purchase, 2)}}
+    # ---- registered receive + spend rails (#30 Part 1)
+    # Every source now crosses one executable contract. This is deliberately a registry even for
+    # the original Stripe/card paths: onboarding the next rail cannot create another bespoke sum.
+    sys.path.insert(0, str(REPO / "bin"))
+    from rails import RailAdapter, RailRegistry
+    registry = RailRegistry()
+    registry.register(RailAdapter(
+        name="stripe", directions=frozenset({"receive"}),
+        pull=lambda: _stripe_receive_adapter(stripe_key, baseline)))
+    registry.register(RailAdapter(
+        name="card", directions=frozenset({"spend"}),
+        pull=lambda: _card_spend_adapter(privacy_key, card_csv, baseline)))
     if os.environ.get("BASE_RPC_URL"):
-        sys.path.insert(0, str(REPO / "bin"))
-        try:
-            from rails import base_usdc as _bu
-            r = _bu.pull(STATE_DIR, _operator_addresses())
-            for nm, payload in r["raws"]:
-                pulls.append(_write_raw(nm, payload))
-            errors.extend(r["errors"])
-            received = round(received + r["customer_usd"], 2)
-            rails_breakdown["base_usdc"] = {k: r[k] for k in
-                                            ("customer_usd", "self_usd", "unbound_usd")}
-        except Exception as e:
-            errors.append(f"base_usdc_adapter_failed: {type(e).__name__}: {e}")
+        from rails import base_usdc
+        registry.register(base_usdc.registered_adapter(STATE_DIR, _operator_addresses()))
+
+    contributions = registry.pull_all()
+    for contribution in contributions:
+        pulls.extend(contribution.raw_files)
+        for raw_name, payload in contribution.raw_payloads:
+            pulls.append(_write_raw(raw_name, payload))
+        errors.extend(contribution.errors)
+
+    receives = [c for c in contributions if "receive" in c.directions]
+    spends = [c for c in contributions if "spend" in c.directions]
+    received = round(sum(c.customer_usd for c in receives), 2)
+    received_gross = round(sum(c.gross_usd for c in receives), 2)
+    self_purchase = round(sum(c.self_usd for c in receives), 2)
+    refunded = round(sum(c.refunded_usd for c in receives), 2)
+    fees = round(sum(c.fees_usd for c in receives), 2)
+    spend_measured = all(c.spend_measured for c in spends)
+    spent = round(sum(c.spent_usd or 0.0 for c in spends), 2) if spend_measured else None
+    spend_sources = [str(c.details.get("spend_source")) for c in spends
+                     if c.details.get("spend_source")]
+    spend_source = "+".join(spend_sources) or None
+    rails_breakdown = {
+        c.name: {"customer_usd": round(c.customer_usd, 2),
+                 "self_usd": round(c.self_usd, 2),
+                 **({"unbound_usd": round(c.unbound_usd, 2)}
+                    if c.name != "stripe" else {})}
+        for c in receives
+    }
 
     # ---- #41: the run's OWN cost (inference), so a retro can state full economics from the
     # ledger alone. Run 1's true P&L was "negative by an unrecorded amount" (archived README);

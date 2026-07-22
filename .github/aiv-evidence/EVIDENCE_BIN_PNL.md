@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/pnl.py`
-**Commit:** `4c2cc7b`
-**Previous:** `35217cf`
-**Generated:** 2026-07-22T21:15:10Z
+**Commit:** `c4cc1c3`
+**Previous:** `d131f6e`
+**Generated:** 2026-07-22T23:01:08Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/pnl.py"
-  classification_rationale: "R3 because this controls the verified status of signed payment facts"
+  classification_rationale: "This is the central verified P&L aggregation path"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:15:10Z"
+  classified_at: "2026-07-22T23:01:08Z"
 ```
 
 ## Claim(s)
 
-1. pnl.py marks truth unverified on an initial signing failure or missing signing key even though truth errors share the verifier error list
+1. truth.json receive and spend totals are derived from the registered Stripe, card, and optional Base contributions while preserving Stripe-only parity
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,28 +32,31 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
-- **Requirements Verified:** Issue #36 requires an armed unsigned or unverified fact record to fail closed
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/30](https://github.com/ImmortalDemonGod/money-agent/issues/30)
+- **Requirements Verified:** Issue #30 requires verifier-owned per-rail aggregation for received_usd and spent_usd
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`4c2cc7b`](https://github.com/ImmortalDemonGod/money-agent/tree/4c2cc7b83b029afe3ca11c990c2b24bb8761a113))
+**Scope Inventory** (SHA: [`c4cc1c3`](https://github.com/ImmortalDemonGod/money-agent/tree/c4cc1c35e94884ec11d9f254939e50668cd3bc9f))
 
-- [`bin/pnl.py#L582-L584`](https://github.com/ImmortalDemonGod/money-agent/blob/4c2cc7b83b029afe3ca11c990c2b24bb8761a113/bin/pnl.py#L582-L584)
-- [`bin/pnl.py#L600`](https://github.com/ImmortalDemonGod/money-agent/blob/4c2cc7b83b029afe3ca11c990c2b24bb8761a113/bin/pnl.py#L600)
+- [`bin/pnl.py#L283-L370`](https://github.com/ImmortalDemonGod/money-agent/blob/c4cc1c35e94884ec11d9f254939e50668cd3bc9f/bin/pnl.py#L283-L370)
+- [`bin/pnl.py#L493-L504`](https://github.com/ImmortalDemonGod/money-agent/blob/c4cc1c35e94884ec11d9f254939e50668cd3bc9f/bin/pnl.py#L493-L504)
+- [`bin/pnl.py#L506-L534`](https://github.com/ImmortalDemonGod/money-agent/blob/c4cc1c35e94884ec11d9f254939e50668cd3bc9f/bin/pnl.py#L506-L534)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L582-L584): FAIL -- WARNING: No tests import or call `main`
+- **`_stripe_receive_adapter`** (L283-L370): FAIL -- WARNING: No tests import or call `_stripe_receive_adapter`
+- **`_card_spend_adapter`** (L493-L504): FAIL -- WARNING: No tests import or call `_card_spend_adapter`
+- **`main`** (L506-L534): FAIL -- WARNING: No tests import or call `main`
 
-**Coverage summary:** 0/1 symbols verified by tests.
+**Coverage summary:** 0/3 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
 - **ruff:** All checks passed
-- **mypy:** Found 3 errors in 1 file (checked 1 source file)
+- **mypy:** Found 14 errors in 2 files (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -73,18 +76,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-4c0df17 test(verifier): reject unsigned attestation output
-46c2a41 docs(tests): record verifier hardening bug catalog
-54ef777 test(verifier): cover raw paths and inference CSV validation
-abe8811 test(corpus): fail closed on fixture probe crashes
-93a3e7d test(verifier): cover raw quarantine move failure
+bc601c3 test(rails): expose registry contract to verification
+86e664c test(pr50): exercise executable rail and queue contracts
+67e9adb test(pr50): pin issue-closure trust boundaries
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
+8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | pnl.py marks truth unverified on an initial signing failure ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | truth.json receive and spend totals are derived from the reg... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -93,11 +96,11 @@ abe8811 test(corpus): fail closed on fixture probe crashes
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/3 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Persist initial truth signing failures as unverified facts
+Route legacy and Base fact sources through RailRegistry
