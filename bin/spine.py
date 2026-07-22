@@ -172,17 +172,16 @@ def check_placement(bet_type: str, lane: str, bets: list[dict] | None = None) ->
         errs.append(f"ordering: a {bet_type!r} bet needs lane stage >= {need}, but lane "
                     f"{lane!r} is at stage {cur} (a new lane starts at 0 -- relabeling only "
                     "loses permissions). Clear the earlier exits first (spine.py status).")
-    if lane not in all_lanes:
+    # Every newly placed bet is immediately due (last_checked=None), hence active. Enforce the
+    # post-placement transition even for a historical lane that currently exists but is closed or
+    # watching; checking only `lane not in all_lanes` let closed lanes reopen past the cap.
+    current_status = all_lanes.get(lane, {}).get("status")
+    if current_status != "active":
         active = sum(1 for d in all_lanes.values() if d["status"] == "active")
-        watching = sum(1 for d in all_lanes.values() if d["status"] == "watching")
         if active >= int(cfg["lane_caps"]["active"]):
             errs.append(f"lane cap: {active} active lanes >= cap "
                         f"{cfg['lane_caps']['active']} -- close one WITH A VERDICT before "
                         "opening a new lane (E1: watching lanes are counted separately).")
-        elif watching >= int(cfg["lane_caps"]["watching"]):
-            errs.append(f"lane cap: {watching} watching lanes >= cap "
-                        f"{cfg['lane_caps']['watching']} -- resolve or expire a quiet lane "
-                        "before opening another.")
     return errs
 
 
