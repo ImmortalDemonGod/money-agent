@@ -63,9 +63,10 @@ def _save(bets: list[dict], msg: str) -> None:
     BETS.parent.mkdir(parents=True, exist_ok=True)
     BETS.write_text(json.dumps({"bets": bets}, indent=2) + "\n")
     subprocess.run(["git", "add", str(BETS)], cwd=REPO, check=True)
-    staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=REPO)
+    staged = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(BETS)], cwd=REPO)
     if staged.returncode != 0:
-        subprocess.run(["git", "-c", "commit.gpgsign=false", "commit", "-m", msg],
+        subprocess.run(["git", "-c", "commit.gpgsign=false", "commit", "-m", msg,
+                        "--", str(BETS)],
                        cwd=REPO, check=True)
     branch = subprocess.run(["git", "branch", "--show-current"], cwd=REPO,
                             capture_output=True, text=True).stdout.strip()
@@ -144,6 +145,7 @@ def cmd_add(a) -> int:
                 return 1
         if getattr(a, "max_spend_usd", None) is not None:
             typed["max_spend_usd"] = a.max_spend_usd
+        typed["spent_usd"] = 0.0
         if getattr(a, "bounds_note", ""):
             typed["bounds_note"] = a.bounds_note
         if getattr(a, "repro", ""):
