@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `ledger/README.md`
-**Commit:** `4c0df17`
-**Generated:** 2026-07-22T21:08:30Z
+**Commit:** `655bb5b`
+**Previous:** `42280fd`
+**Generated:** 2026-07-22T21:16:00Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -11,18 +12,18 @@
 
 ```yaml
 classification:
-  risk_tier: R1
+  risk_tier: R0
   sod_mode: S0
   critical_surfaces: []
   blast_radius: "ledger/README.md"
-  classification_rationale: "R1 because this documents an existing verification interface without changing verifier behavior"
+  classification_rationale: "R0 because this clarifies an existing documented verification procedure without changing behavior"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:08:30Z"
+  classified_at: "2026-07-22T21:16:00Z"
 ```
 
 ## Claim(s)
 
-1. ledger documentation provides a credential-free procedure to verify truth and attestation signatures from a bare clone
+1. the manual verification recipe tells an auditor to skip parent-hash comparison at a documented ledger rotation boundary
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,14 +33,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
-- **Requirements Verified:** Issue #36 requires verifiable signed facts and issue #42 requires independent verification guidance
+- **Requirements Verified:** Issue #36 requires the signed fact chain to remain independently verifiable across ledger rotation
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`4c0df17`](https://github.com/ImmortalDemonGod/money-agent/tree/4c0df178e4835851e723d4f5d56e81418efb48bf))
+**Scope Inventory** (SHA: [`655bb5b`](https://github.com/ImmortalDemonGod/money-agent/tree/655bb5b02a13b957f4d2f37e002b531e37d4bc8d))
 
-- [`ledger/README.md#L14-L15`](https://github.com/ImmortalDemonGod/money-agent/blob/4c0df178e4835851e723d4f5d56e81418efb48bf/ledger/README.md#L14-L15)
-- [`ledger/README.md#L20-L50`](https://github.com/ImmortalDemonGod/money-agent/blob/4c0df178e4835851e723d4f5d56e81418efb48bf/ledger/README.md#L20-L50)
+- [`ledger/README.md#L46-L47`](https://github.com/ImmortalDemonGod/money-agent/blob/655bb5b02a13b957f4d2f37e002b531e37d4bc8d/ledger/README.md#L46-L47)
 
 ### Class A (Execution Evidence)
 
@@ -55,7 +55,7 @@ This file has no claim-specific execution evidence.
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | ledger documentation provides a credential-free procedure to... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | the manual verification recipe tells an auditor to skip pare... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
 **Verdict summary:** 0 verified, 0 unverified, 2 manual review.
@@ -71,4 +71,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Document independent verification of signed fact-lane records
+Document the chain-start rule after ledger rotation
