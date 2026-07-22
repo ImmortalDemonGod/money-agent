@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `SETUP.md`
-**Commit:** `d060b27`
-**Previous:** `ae81911`
-**Generated:** 2026-07-22T23:36:45Z
+**File:** `.github/aiv-evidence/EVIDENCE_SETUP.MD.md`
+**Commit:** `201c610`
+**Generated:** 2026-07-22T23:40:43Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +14,15 @@ classification:
   risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
-  blast_radius: "SETUP.md"
-  classification_rationale: "The marker is part of the payment rail go/no-go procedure"
+  blast_radius: ".github/aiv-evidence/EVIDENCE_SETUP.MD.md"
+  classification_rationale: "Verification metadata on payment and conclusion surfaces must remain auditably accurate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:36:45Z"
+  classified_at: "2026-07-22T23:40:43Z"
 ```
 
 ## Claim(s)
 
-1. The runbook provides the exact seven-check marker schema bound to current Base settlement configuration
+1. The setup evidence matrix uses stable claim IDs without truncated identities
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,15 +31,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703)
-- **Requirements Verified:** Operators need an enforceable handoff from live acceptance to scored-run enablement
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532](https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532)
+- **Requirements Verified:** Address final CodeRabbit evidence-integrity findings without overstating collected proof
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`d060b27`](https://github.com/ImmortalDemonGod/money-agent/tree/d060b27cd13984b2d1cec1e03952294cadd05f98))
+**Scope Inventory** (SHA: [`201c610`](https://github.com/ImmortalDemonGod/money-agent/tree/201c610e32f79542d09167c3b41545c7c5464380))
 
-- [`SETUP.md#L129`](https://github.com/ImmortalDemonGod/money-agent/blob/d060b27cd13984b2d1cec1e03952294cadd05f98/SETUP.md#L129)
-- [`SETUP.md#L237-L254`](https://github.com/ImmortalDemonGod/money-agent/blob/d060b27cd13984b2d1cec1e03952294cadd05f98/SETUP.md#L237-L254)
+- [`.github/aiv-evidence/EVIDENCE_SETUP.MD.md#L84-L85`](https://github.com/ImmortalDemonGod/money-agent/blob/201c610e32f79542d09167c3b41545c7c5464380/.github/aiv-evidence/EVIDENCE_SETUP.MD.md#L84-L85)
 
 ### Class A (Execution Evidence)
 
@@ -81,8 +79,8 @@ d52a400 test(rails): expand fail-closed registry catalog
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Claim 1 (see Claim(s)) | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Claim 2 (see Claim(s)) | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The setup evidence matrix uses stable claim IDs without trun... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
@@ -97,4 +95,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Document the enforced Base acceptance artifact
+docs(aiv): stabilize setup claim IDs
