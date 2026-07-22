@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md`
-**Commit:** `44b4876`
-**Generated:** 2026-07-22T22:52:27Z
+**Commit:** `15b5591`
+**Previous:** `0651d66`
+**Generated:** 2026-07-22T23:09:13Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: ".github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md"
-  classification_rationale: "R3 payment-delivery verification evidence"
+  classification_rationale: "Stripe API checkout session shows status=complete and payment_status=paid; python3 bin/delivery_check.py https://money-agent-test-delivery.cloud-pyramid.workers.dev --payment-link <test-link-url>"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:52:27Z"
+  classified_at: "2026-07-22T23:09:13Z"
 ```
 
 ## Claim(s)
 
-1. The PR records a real test-mode Stripe delivery probe with a one-session cap and matching success redirect
+1. Records the completed test-mode checkout, provider one-session cap, configured redirect, explicit content type, and passing delivery verdict for issue 39.
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,13 +33,19 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/39](https://github.com/ImmortalDemonGod/money-agent/issues/39)
-- **Requirements Verified:** Issue #39 requires a real test-mode delivery-seam acceptance check
+- **Requirements Verified:** A real test-mode checkout must complete and redirect only to a complete, explicitly typed public deliverable under a provider-level first-sale cap.
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`44b4876`](https://github.com/ImmortalDemonGod/money-agent/tree/44b48766912a23b8174e4cf57448d5838cc58c28))
+**Scope Inventory** (SHA: [`15b5591`](https://github.com/ImmortalDemonGod/money-agent/tree/15b55914a7fc499aff93db8e9a58b60dedfaaa43))
 
-- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L1-L57`](https://github.com/ImmortalDemonGod/money-agent/blob/44b48766912a23b8174e4cf57448d5838cc58c28/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L1-L57)
+- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L10-L11`](https://github.com/ImmortalDemonGod/money-agent/blob/15b55914a7fc499aff93db8e9a58b60dedfaaa43/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L10-L11)
+- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L28-L32`](https://github.com/ImmortalDemonGod/money-agent/blob/15b55914a7fc499aff93db8e9a58b60dedfaaa43/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L28-L32)
+- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L36`](https://github.com/ImmortalDemonGod/money-agent/blob/15b55914a7fc499aff93db8e9a58b60dedfaaa43/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L36)
+- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L39-L43`](https://github.com/ImmortalDemonGod/money-agent/blob/15b55914a7fc499aff93db8e9a58b60dedfaaa43/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L39-L43)
+- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L45-L48`](https://github.com/ImmortalDemonGod/money-agent/blob/15b55914a7fc499aff93db8e9a58b60dedfaaa43/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L45-L48)
+- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L56-L58`](https://github.com/ImmortalDemonGod/money-agent/blob/15b55914a7fc499aff93db8e9a58b60dedfaaa43/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L56-L58)
+- [`.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L65`](https://github.com/ImmortalDemonGod/money-agent/blob/15b55914a7fc499aff93db8e9a58b60dedfaaa43/.github/aiv-packets/VERIFICATION_PACKET_PR49_STRIPE_TEST_DELIVERY.md#L65)
 
 ### Class A (Execution Evidence)
 
@@ -68,18 +75,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+15b5591 test(delivery): cover content-type refusal
 aa80a5d test(edge): cover benchmark-relative verdicts
 88a6899 test(edge): cover finite caps and scoped peaks
 e53b606 test(delivery): reject unrelated Stripe success URLs
 aa1dc15 [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-fe0427a [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The PR records a real test-mode Stripe delivery probe with a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Records the completed test-mode checkout, provider one-sessi... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -95,4 +102,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Record the Stripe test-mode delivery acceptance result
+The completed test link is inactive by design after one session; its identifiers and credentials are not recorded.
