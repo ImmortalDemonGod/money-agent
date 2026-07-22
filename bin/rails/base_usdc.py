@@ -43,6 +43,40 @@ USDC_DEFAULT = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
 TRANSFER_TOPIC0 = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 USDC_DECIMALS = 6
 BASE_MAINNET_CHAIN_ID = 8453
+LIVE_ACCEPTANCE_FILE = "base_usdc_live_acceptance.json"
+LIVE_ACCEPTANCE_CHECKS = list(range(1, 8))
+
+
+def validate_live_acceptance(state_dir: Path) -> dict:
+    """Require operator-persisted proof that the seven live runbook checks passed.
+
+    BASE_RPC_URL is otherwise enough to arm scoring, so a prose-only warning can be skipped by
+    accident. The private marker binds the accepted chain/contract/event tuple to current config;
+    changing any binding requires repeating acceptance rather than inheriting an obsolete proof.
+    """
+    marker = state_dir / LIVE_ACCEPTANCE_FILE
+    try:
+        payload = json.loads(marker.read_text())
+    except Exception as exc:
+        raise RuntimeError(f"live acceptance marker missing/unreadable: {marker}: {exc}") from exc
+    expected = {
+        "chain_id": BASE_MAINNET_CHAIN_ID,
+        "settlement_address": os.environ.get("BASE_SETTLEMENT_ADDRESS", "").lower(),
+        "marketplace_address": os.environ.get("BASE_MARKETPLACE_ADDRESS", "").lower(),
+        "settlement_event_topic0": os.environ.get("BASE_SETTLEMENT_EVENT_TOPIC0", "").lower(),
+    }
+    if payload.get("status") != "passed" or payload.get("checks_passed") != LIVE_ACCEPTANCE_CHECKS:
+        raise RuntimeError("live acceptance marker must record status=passed and checks_passed=1..7")
+    if not payload.get("accepted_at") or not payload.get("operator"):
+        raise RuntimeError("live acceptance marker requires accepted_at and operator")
+    for field, value in expected.items():
+        actual = payload.get(field)
+        if isinstance(actual, str):
+            actual = actual.lower()
+        if actual != value:
+            raise RuntimeError(f"live acceptance marker {field}={actual!r} does not match "
+                               f"current config {value!r}")
+    return payload
 
 
 def _rpc(url: str, method: str, params: list) -> object:
@@ -101,6 +135,7 @@ def freeze_baseline(state_dir: Path) -> dict:
     url = os.environ.get("BASE_RPC_URL", "")
     if not url:
         raise ValueError("BASE_RPC_URL is required to freeze the Base baseline")
+    validate_live_acceptance(state_dir)
     anchor = _finality_anchor(url)
     payload = {"chain_id": anchor["chain_id"], "baseline_block": anchor["number"],
                "baseline_hash": anchor["hash"],
@@ -136,6 +171,11 @@ def pull(state_dir: Path, operator_addresses: set[str]) -> dict:
         return out
     if not operator_addresses:
         out["errors"].append("base_usdc_misprovisioned: operator wallet allowlist is empty")
+        return out
+    try:
+        validate_live_acceptance(state_dir)
+    except Exception as e:
+        out["errors"].append(f"base_usdc_acceptance_failed: {type(e).__name__}: {e}")
         return out
 
     try:
