@@ -19,27 +19,31 @@ The three guardrails that keep the experiment meaningful, enforced structurally 
      identity wall) into "autonomous with METERED human actuation" -- a number no experiment in
      the field has.
 
-Every request registers a companion `approval`-clock bet via bin/bets.py, so the agenda surfaces
-it each iteration and an open request BLOCKS "impossible" conclusions -- requesting is a bet on
-the operator's clock, and the whole standing-presence machinery rides along for free.
+Every request registers a companion `approval`-clock bet via bin/bets.py. Fulfillment/decline is
+published by the operator to `ledger/human_resolutions.json` on the facts lane and is bound to the
+request hash; the agent consumes it with `sync`. An open task independently blocks conclusions,
+so resolving the companion bet directly cannot self-certify that a human acted.
 
 Commands:
   human.py request --kind <allowlisted> --gate "<what gate>" --test "<empirical hit, iter/packet
                    cited>" --ev "<why worth it>" [--resolve-by ISO8601]
-  human.py fulfill <id> --minutes <n> --evidence "<what was done>"     (operator side)
-  human.py decline <id> --reason "<why not>"                           (operator side)
+  human.py fulfill <id> --minutes <n> --evidence "<what was done>"     (facts lane/operator)
+  human.py decline <id> --reason "<why not>"                           (facts lane/operator)
+  human.py sync <id>                                                    (agent consumes resolution)
   human.py list
 """
 from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 TASKS = REPO / "run" / "human_tasks.json"
+RESOLUTIONS = REPO / "ledger" / "human_resolutions.json"
 KINDS = ("captcha", "approval-click", "kyc-step", "signup-complete", "claim-host")
 
 sys.path.insert(0, str(REPO / "bin"))
@@ -53,6 +57,78 @@ def _load() -> list[dict]:
     if TASKS.exists():
         return json.loads(TASKS.read_text()).get("tasks", [])
     return []
+
+
+def _task_hash(task: dict) -> str:
+    import hashlib
+    stable = {k: task.get(k) for k in ("id", "requested_at", "kind", "gate", "test_citation",
+                                       "ev_rationale", "companion_bet", "resolve_by")}
+    return hashlib.sha256(json.dumps(stable, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def _git(*args: str, check: bool = False) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True,
+                          timeout=90, check=check)
+
+
+def _operator_task(task_id: str) -> dict:
+    agent_branch = os.environ.get("AGENT_BRANCH", "")
+    if not agent_branch:
+        raise RuntimeError("AGENT_BRANCH is required on the operator side")
+    _git("fetch", "-q", "origin", agent_branch, check=True)
+    r = _git("show", f"origin/{agent_branch}:run/human_tasks.json")
+    if r.returncode != 0:
+        raise RuntimeError(f"cannot read requests from origin/{agent_branch}")
+    tasks = json.loads(r.stdout).get("tasks", [])
+    task = next((t for t in tasks if t.get("id") == task_id), None)
+    if not task or task.get("status") != "open":
+        raise RuntimeError(f"no open request {task_id!r} on origin/{agent_branch}")
+    return task
+
+
+def _facts_resolutions() -> dict:
+    if RESOLUTIONS.exists():
+        return json.loads(RESOLUTIONS.read_text()).get("resolutions", {})
+    return {}
+
+
+def _publish_resolution(task_id: str, resolution: dict) -> None:
+    ledger_branch = os.environ.get("LEDGER_BRANCH", "ledger")
+    current = _git("branch", "--show-current").stdout.strip()
+    if current != ledger_branch:
+        raise RuntimeError(f"operator resolutions must be published from {ledger_branch!r}, "
+                           f"not {current or 'detached HEAD'!r}")
+    task = _operator_task(task_id)
+    resolutions = _facts_resolutions()
+    if task_id in resolutions:
+        raise RuntimeError(f"resolution for {task_id} already exists; facts are append-only")
+    resolutions[task_id] = {**resolution, "task_sha256": _task_hash(task), "at": _now(),
+                            "agent_branch": os.environ["AGENT_BRANCH"]}
+    RESOLUTIONS.parent.mkdir(parents=True, exist_ok=True)
+    RESOLUTIONS.write_text(json.dumps({"resolutions": resolutions}, indent=2) + "\n")
+    _git("add", str(RESOLUTIONS), check=True)
+    commit = subprocess.run(
+        ["git", "-c", "user.name=verifier", "-c", "user.email=verifier@local",
+         "-c", "commit.gpgsign=false", "commit", "-m", f"verifier: resolve human task {task_id}",
+         "--", str(RESOLUTIONS)], cwd=REPO, capture_output=True, text=True, timeout=90,
+        env={**os.environ, "AIV_VERIFIER": "1"})
+    if commit.returncode != 0:
+        raise RuntimeError(f"could not commit operator resolution: {commit.stderr.strip()[:160]}")
+    push = _git("push", "origin", f"HEAD:{ledger_branch}")
+    if push.returncode != 0:
+        raise RuntimeError(f"could not publish operator resolution: {push.stderr.strip()[:160]}")
+
+
+def _grounded_resolution(task: dict) -> dict | None:
+    ledger_branch = os.environ.get("LEDGER_BRANCH", "ledger")
+    _git("fetch", "-q", "origin", ledger_branch, check=True)
+    r = _git("show", f"origin/{ledger_branch}:ledger/human_resolutions.json")
+    if r.returncode != 0:
+        return None
+    resolution = json.loads(r.stdout).get("resolutions", {}).get(task["id"])
+    if resolution and resolution.get("task_sha256") != _task_hash(task):
+        raise RuntimeError(f"resolution for {task['id']} is bound to different request content")
+    return resolution
 
 
 def _save(tasks: list[dict], msg: str) -> None:
@@ -110,27 +186,6 @@ def cmd_request(a) -> int:
     return 0
 
 
-def _close(a, outcome: str, resolution: dict, bet_evidence: str) -> int:
-    tasks = _load()
-    t = next((x for x in tasks if x["id"] == a.id), None)
-    if not t or t["status"] != "open":
-        print(f"FATAL: no open task {a.id!r}", file=sys.stderr)
-        return 1
-    t["status"] = outcome
-    t["resolution"] = {**resolution, "at": _now()}
-    if "minutes" in resolution:
-        t["human_minutes"] = resolution["minutes"]
-    import bets as _bets
-    ns = argparse.Namespace(id=t["companion_bet"], outcome="won" if outcome == "fulfilled"
-                            else "lost", evidence=bet_evidence, downgrade_judgment=False)
-    if _bets.cmd_resolve(ns) != 0:
-        print(f"warn: companion bet {t['companion_bet']} did not resolve cleanly -- resolve it "
-              "manually (bin/bets.py resolve) or the conclusion gate stays blocked.",
-              file=sys.stderr)
-    _save(tasks, f"human: {outcome} {a.id}")
-    return 0
-
-
 def cmd_fulfill(a) -> int:
     if a.minutes is None or a.minutes < 0:
         print("FATAL: --minutes required (the metering IS the point).", file=sys.stderr)
@@ -138,11 +193,15 @@ def cmd_fulfill(a) -> int:
     if len(a.evidence.strip()) < 8:
         print("FATAL: --evidence required (what was actually done).", file=sys.stderr)
         return 2
-    rc = _close(a, "fulfilled", {"minutes": a.minutes, "evidence": a.evidence},
-                f"operator fulfilled in {a.minutes} min: {a.evidence}")
-    if rc == 0:
-        print(f"{a.id} fulfilled ({a.minutes} human-minutes metered).")
-    return rc
+    try:
+        _publish_resolution(a.id, {"status": "fulfilled", "human_minutes": a.minutes,
+                                   "evidence": a.evidence})
+    except Exception as e:
+        print(f"FATAL: {e}", file=sys.stderr)
+        return 1
+    print(f"{a.id} fulfilled on the verifier facts lane ({a.minutes} human-minutes). "
+          f"Agent must run bin/human.py sync {a.id}.")
+    return 0
 
 
 def cmd_decline(a) -> int:
@@ -150,10 +209,54 @@ def cmd_decline(a) -> int:
         print("FATAL: --reason required (declines are the operator's REFUSALS mirror).",
               file=sys.stderr)
         return 2
-    rc = _close(a, "declined", {"reason": a.reason}, f"operator declined: {a.reason}")
-    if rc == 0:
-        print(f"{a.id} declined, on the record.")
-    return rc
+    try:
+        _publish_resolution(a.id, {"status": "declined", "reason": a.reason})
+    except Exception as e:
+        print(f"FATAL: {e}", file=sys.stderr)
+        return 1
+    print(f"{a.id} declined on the verifier facts lane. Agent must run bin/human.py sync {a.id}.")
+    return 0
+
+
+def cmd_sync(a) -> int:
+    tasks = _load()
+    task = next((t for t in tasks if t.get("id") == a.id), None)
+    if not task:
+        print(f"FATAL: no task {a.id!r}", file=sys.stderr)
+        return 1
+    if task.get("status") != "open":
+        print(f"{a.id} already synced as {task['status']}")
+        return 0
+    try:
+        resolution = _grounded_resolution(task)
+    except Exception as e:
+        print(f"FATAL: cannot verify operator resolution: {e}", file=sys.stderr)
+        return 1
+    if not resolution:
+        print(f"FATAL: no verifier-published resolution for {a.id}", file=sys.stderr)
+        return 1
+    outcome = resolution.get("status")
+    if outcome not in ("fulfilled", "declined"):
+        print(f"FATAL: invalid grounded resolution status {outcome!r}", file=sys.stderr)
+        return 1
+    task["status"] = outcome
+    task["resolution"] = resolution
+    task["human_minutes"] = resolution.get("human_minutes")
+    # Persist the grounded task state first. If companion resolution fails, the still-open bet
+    # continues blocking conclusions; the unsafe inverse (bet closed, task not durable) is absent.
+    _save(tasks, f"human: sync grounded {outcome} {a.id}")
+    import bets as _bets
+    evidence = (f"verifier facts-lane resolution: {resolution.get('evidence')}"
+                if outcome == "fulfilled"
+                else f"verifier facts-lane decline: {resolution.get('reason')}")
+    ns = argparse.Namespace(id=task["companion_bet"], outcome="won" if outcome == "fulfilled"
+                            else "lost", evidence=evidence, downgrade_judgment=False)
+    if _bets.cmd_resolve(ns) != 0:
+        print(f"FATAL: task synced but companion bet {task['companion_bet']} remains open; "
+              "retry its resolution before concluding.", file=sys.stderr)
+        return 1
+    print(f"{a.id} synced from verifier facts: {outcome}.")
+    return 0
 
 
 def cmd_list(_a) -> int:
@@ -193,6 +296,9 @@ def main() -> int:
     pd.add_argument("id")
     pd.add_argument("--reason", required=True)
     pd.set_defaults(fn=cmd_decline)
+    ps = sub.add_parser("sync")
+    ps.add_argument("id")
+    ps.set_defaults(fn=cmd_sync)
     sub.add_parser("list").set_defaults(fn=cmd_list)
     a = p.parse_args()
     return a.fn(a)
