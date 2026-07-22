@@ -520,8 +520,21 @@ def main() -> int:
     net = None if spent is None else round(received - refunded - fees - spent, 2)
     verified = not errors
 
+    # #36: the fact stream is a hash CHAIN independent of git history. previous_hash = sha256 of
+    # the LAST PUBLISHED truth.json (HEAD of the facts-lane checkout this process runs in), so for
+    # every consecutive pair of ledger commits, child.previous_hash == sha256(parent's file).
+    # Content-based, so it survives LEDGER_MAX_COMMITS rotation (the rotated commit's field points
+    # at a pre-rotation blob; verifiers treat an unreachable parent as chain start). Cycles that
+    # publish nothing keep HEAD unchanged, so the eventually-committed file still names its true
+    # parent. Null on the first-ever publish.
+    prev = subprocess.run(["git", "show", "HEAD:ledger/truth.json"], cwd=REPO,
+                          capture_output=True, timeout=15)
+    previous_hash = (hashlib.sha256(prev.stdout).hexdigest()
+                     if prev.returncode == 0 and prev.stdout else None)
+
     truth = {
         "computed_at": _now(),
+        "previous_hash": previous_hash,
         "baseline_created_gt": baseline,
         "baseline_ledger_commit": load_baseline_ledger_commit(),  # verifier-signed; guard scopes SoD by it
         "ledger_branch": os.environ.get("LEDGER_BRANCH", "ledger"),  # self-declared lane; truth.py cross-checks
@@ -559,6 +572,80 @@ def main() -> int:
                  "verified=false means a pull failed: net is NOT trustworthy and no claim may cite it.",
     }
     TRUTH.write_text(json.dumps(truth, indent=2) + "\n")
+
+    # ---- #36: detached signature with the VERIFIER-ONLY key (opt-in by provisioning). The key
+    # lives in the agent-unreachable state dir; the public half + allowed_signers are committed
+    # under harness/ (NOT ledger/ -- keeping the SoD authorship surface clean) and published on
+    # the facts lane. truth.py refuses the grounded label for an unsigned/tampered file whenever
+    # a committed pubkey exists. The signature covers truth.json, which embeds manifest_sha256 --
+    # so the raw-pull manifest is integrity-covered transitively. Namespace must match truth.py.
+    sign_key = STATE_DIR / "verifier_signing_key"
+    pubkey_committed = (REPO / "harness" / "verifier_key.pub").exists()
+    if sign_key.exists():
+        (TRUTH.parent / (TRUTH.name + ".sig")).unlink(missing_ok=True)
+        r = subprocess.run(["ssh-keygen", "-Y", "sign", "-f", str(sign_key),
+                            "-n", "money-agent-ledger", str(TRUTH)],
+                           capture_output=True, text=True, timeout=30)
+        if r.returncode != 0:
+            errors.append(f"signing_failed: {r.stderr.strip()[:120]}")
+    elif pubkey_committed:
+        # provisioning promised signatures (pubkey committed) but this machine cannot sign --
+        # agents will fail-closed on the unsigned file; say WHY on the verifier side too.
+        errors.append("signing_key_missing: harness/verifier_key.pub is committed but "
+                      f"{sign_key} does not exist -- generate it (see ledger/README.md) or "
+                      "remove the pubkey to run unsigned.")
+    if errors != truth["errors"]:
+        # a signing error must ride IN the signed-about file's verified flag: rewrite (and re-sign
+        # attempts are pointless -- the error is precisely that signing is broken)
+        truth["errors"], truth["verified"] = errors, False
+        TRUTH.write_text(json.dumps(truth, indent=2) + "\n")
+
+    # ---- #42: the customer-facing attestation, produced only when signing is live. An unsigned
+    # attestation is a claim wearing a costume, so a signing failure removes it and turns the
+    # already-signed truth record into an explicit unverified verifier error.
+    if sign_key.exists() and not any(e.startswith("signing_failed") for e in errors):
+        ref_txt = None
+        agent_branch = os.environ.get("AGENT_BRANCH", "")
+        if agent_branch:
+            rr = subprocess.run(["git", "show", f"origin/{agent_branch}:REFUSALS.md"],
+                                cwd=REPO, capture_output=True, timeout=15)
+            if rr.returncode == 0:
+                ref_txt = rr.stdout
+        att = {
+            "schema": "money-agent-attestation@1",
+            "computed_at": truth["computed_at"],
+            "received_usd": truth["received_usd"],
+            "verified": truth["verified"],
+            "cap_usd": truth["cap_usd"],
+            "policy": ("deliver-in-full at the instant of payment; the first verified customer "
+                       "dollar ends the run for operator review"),
+            "manifest_sha256": truth["manifest_sha256"],
+            "truth_sha256": hashlib.sha256(TRUTH.read_bytes()).hexdigest(),
+            "refusals_sha256": (hashlib.sha256(ref_txt).hexdigest() if ref_txt else None),
+            "refusals_lines": (len(ref_txt.splitlines()) if ref_txt else None),
+            "_verify": ("independently verifiable from a bare clone: ledger/README.md, "
+                        "'Signed facts and the attestation'"),
+        }
+        ATT = REPO / "ledger" / "attestation.json"
+        ATT.write_text(json.dumps(att, indent=2) + "\n")
+        (ATT.parent / (ATT.name + ".sig")).unlink(missing_ok=True)
+        ra = subprocess.run(["ssh-keygen", "-Y", "sign", "-f", str(sign_key),
+                             "-n", "money-agent-ledger", str(ATT)],
+                            capture_output=True, text=True, timeout=30)
+        if ra.returncode != 0:
+            # Never leave an unsigned public summary for verifier_loop.sh to publish. The money
+            # facts must also say the attestation run was incomplete; re-sign that changed truth
+            # record, or remove its old signature so truth.py fails closed as well.
+            ATT.unlink(missing_ok=True)
+            (ATT.parent / (ATT.name + ".sig")).unlink(missing_ok=True)
+            errors.append(f"attestation_signing_failed: {ra.stderr.strip()[:120]}")
+            truth["errors"], truth["verified"] = errors, False
+            TRUTH.write_text(json.dumps(truth, indent=2) + "\n")
+            retry = subprocess.run(["ssh-keygen", "-Y", "sign", "-f", str(sign_key),
+                                    "-n", "money-agent-ledger", str(TRUTH)],
+                                   capture_output=True, text=True, timeout=30)
+            if retry.returncode != 0:
+                (TRUTH.parent / (TRUTH.name + ".sig")).unlink(missing_ok=True)
 
     print(json.dumps(truth, indent=2))
     if errors:
