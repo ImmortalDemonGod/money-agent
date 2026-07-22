@@ -461,7 +461,8 @@ cdx "$W/agent"
 assert_exit_grep 1 "cumulative open" "obligations (P5): grounded authorization passes but received-funds cap remains binding" \
   env EXPOSURE_MAX_OPEN=999 EXPOSURE_MAX_SINGLE_USD=999 EXPOSURE_MAX_TOTAL_FRACTION=999 \
   python3 bin/obligations.py register --what "ship later" --check delivery-url:https://example.com \
-  --deadline "$(python3 -c 'import datetime as d;print((d.datetime.now(d.timezone.utc)+d.timedelta(hours=1)).isoformat())')" --value-usd=1
+  --deadline "$(python3 -c 'import datetime as d;print((d.datetime.now(d.timezone.utc)+d.timedelta(hours=1)).isoformat())')" \
+  --value-usd=1 --charge-id ch_sim
 assert_exit 0 "obligation watchdog: arbitrary shell is not a completion oracle" \
   python3 -c "import sys;sys.path.insert(0,'bin');import obligation_watch as o; ok,e=o._completion_oracle('true'); assert not ok and 'unsupported' in e['error']"
 assert_exit 0 "obligation watchdog: refund requests carry a stable idempotency key" \
