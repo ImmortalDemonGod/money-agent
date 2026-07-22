@@ -46,6 +46,14 @@ classification:
 
    **Falsifiable by:** the convergence path resets the facts lane after a side-car failure.
 
+4. **CLM-004 — raw quarantine preserves Git-valid paths and inference totals remain finite.**
+   Quarantine consumes NUL-delimited Git paths and preserves their relative directory structure;
+   an inference CSV must declare `usd`, and non-finite values fail closed. A header-only CSV
+   remains the documented measured-zero input.
+
+   **Falsifiable by:** a whitespace/nested raw filename is split or collides during rescue, a CSV
+   without `usd` is accepted, or `NaN`/infinity reaches `truth.json`.
+
 ## Evidence
 
 ### Class A (Execution)
@@ -63,6 +71,9 @@ classification:
 - CLM-001: `bin/pnl.py` raw-file detection and quarantine path; `tests/sim.sh` PnL fixture block.
 - CLM-002: `tests/corpus.sh` fixture 3 marker handling.
 - CLM-003: `bin/verifier_loop.sh` divergence branch.
+- CLM-004: `bin/pnl.py` NUL-delimited raw discovery, nested rescue destinations, and
+  `INFERENCE_CSV` schema/finite-number checks. Targeted simulation coverage follows in the next
+  atomic commit in this logical unit.
 
 ### Class C (Negative)
 
@@ -95,6 +106,9 @@ checks for the new behavior.
 
 - The simulation exercises filesystem failures by monkeypatching `Path.rename`; live verifier-host
   acceptance still needs an operator-owned filesystem test.
+- This first atomic commit establishes CLM-004's implementation. Its regression cases are recorded
+  only after their following atomic test commit; this packet does not treat future test evidence as
+  evidence for the current commit.
 - Independent human S1 review is required before merge; no claim here treats automated review as a
   substitute.
 - Class G is omitted: no pre-implementation prediction was recorded.
@@ -120,3 +134,5 @@ states. Its tests are designed to fail on the old warning-only and vacuous-pass 
 - `tests/sim.sh`: adds the cross-device-equivalent move-failure regression for CLM-001.
 - `tests/corpus.sh`: emits an explicit failure marker when fixture 3's Python probe crashes.
 - `bin/verifier_loop.sh`: preserves the facts lane for retry if divergence side-car capture fails.
+- `bin/pnl.py` (follow-up): uses NUL-delimited, checked Git output for raw quarantine and rejects
+  malformed/non-finite inference CSV amounts while retaining intentional header-only zero semantics.

@@ -21,6 +21,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -358,16 +359,25 @@ def main() -> int:
         # Do NOT apply ignore rules here. A global `*.json` ignore made planted raw pulls invisible
         # to the previous command in a real verifier environment; every untracked file beneath this
         # verifier-owned directory is untrusted input regardless of a developer's Git preferences.
-        untracked = subprocess.run(
-            ["git", "ls-files", "-o", "--", "ledger/raw/"],
-            cwd=REPO, capture_output=True, text=True, timeout=10).stdout.split()
+        # `-z` makes this safe for every Git-valid filename (including spaces and newlines).
+        # Keep bytes until after splitting: text-mode whitespace splitting both corrupts names and
+        # conflates two distinct paths into one quarantine destination.
+        raw_untracked = subprocess.run(
+            ["git", "ls-files", "-o", "-z", "--", "ledger/raw/"],
+            cwd=REPO, capture_output=True, check=True, timeout=10).stdout
+        untracked = [Path(rel.decode("utf-8", errors="surrogateescape"))
+                     for rel in raw_untracked.split(b"\0") if rel]
         if untracked:
             qdir = STATE_DIR / "raw-rescue" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
             qdir.mkdir(parents=True, exist_ok=True)
             for rel in untracked:
                 src = REPO / rel
                 if src.exists():
-                    src.rename(qdir / src.name)
+                    # Preserve the path below ledger/raw so equal basenames in different source
+                    # directories cannot collide in rescue storage.
+                    dest = qdir / rel
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    src.rename(dest)
             print(f"C3: quarantined {len(untracked)} untracked raw file(s) -> {qdir} "
                   "(agent plant or orphan of a failed commit -- preserved, not trusted)",
                   file=sys.stderr)
@@ -483,10 +493,18 @@ def main() -> int:
             if not text.strip():
                 raise ValueError("empty file -- for a genuine zero, provide the 'date,usd' "
                                  "header (a header-only file reads as measured 0)")
-            rows = list(csv.DictReader(text.splitlines()))
+            reader = csv.DictReader(text.splitlines())
+            if not reader.fieldnames or "usd" not in reader.fieldnames:
+                raise ValueError("missing required 'usd' column (need date,usd columns)")
+            # Header-only deliberately remains a measured zero: it is an explicit operator
+            # assertion of no inference cost, unlike a completely empty file above.
+            rows = list(reader)
             if any("usd" not in r or r["usd"] in (None, "") for r in rows):
                 raise ValueError("rows missing a 'usd' value (need date,usd columns)")
-            inference = round(sum(float(r["usd"]) for r in rows), 2)
+            values = [float(r["usd"]) for r in rows]
+            if not all(math.isfinite(value) for value in values):
+                raise ValueError("rows contain a non-finite 'usd' value")
+            inference = round(sum(values), 2)
             inference_source = "manual_csv"
         except Exception as e:
             errors.append(f"inference_feed_failed: {type(e).__name__}: {e}")
