@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `docs/V2_HARNESS_DESIGN.md`
-**Commit:** `6763b83`
-**Generated:** 2026-07-22T23:10:12Z
+**Commit:** `bd1e7a8`
+**Previous:** `d8adf3b`
+**Generated:** 2026-07-22T23:15:40Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,16 +16,15 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "docs/V2_HARNESS_DESIGN.md"
-  classification_rationale: "R3 because this adopts the governing contract for post-payment liability and refund authority"
+  classification_rationale: "R3 because this tightens the payment/refund design contract"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:10:12Z"
+  classified_at: "2026-07-22T23:15:40Z"
 ```
 
 ## Claim(s)
 
-1. The V3 design defines mechanically guaranteed delivery as verifier enablement, refund authority, positive caps, and a maximum deadline
-2. The design states agent-local configuration cannot activate or widen obligation authority
-3. No existing tests were modified or deleted during this change.
+1. The adopted P5 conjunction requires every liability to identify its concrete refundable charge
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -33,14 +33,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** The operator explicitly adopted the P5 amendment that PR 51 was built to implement
+- **Requirements Verified:** Mechanically guaranteed delivery requires both refund authority and an actionable refund target
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`6763b83`](https://github.com/ImmortalDemonGod/money-agent/tree/6763b83d45c1b434cc3a44ed3a94cadd7ac85997))
+**Scope Inventory** (SHA: [`bd1e7a8`](https://github.com/ImmortalDemonGod/money-agent/tree/bd1e7a81215eadc0a45e0005ff8bb4aa53d8cd09))
 
-- [`docs/V2_HARNESS_DESIGN.md#L797-L798`](https://github.com/ImmortalDemonGod/money-agent/blob/6763b83d45c1b434cc3a44ed3a94cadd7ac85997/docs/V2_HARNESS_DESIGN.md#L797-L798)
-- [`docs/V2_HARNESS_DESIGN.md#L803-L808`](https://github.com/ImmortalDemonGod/money-agent/blob/6763b83d45c1b434cc3a44ed3a94cadd7ac85997/docs/V2_HARNESS_DESIGN.md#L803-L808)
+- [`docs/V2_HARNESS_DESIGN.md#L805-L807`](https://github.com/ImmortalDemonGod/money-agent/blob/bd1e7a81215eadc0a45e0005ff8bb4aa53d8cd09/docs/V2_HARNESS_DESIGN.md#L805-L807)
 
 ### Class A (Execution Evidence)
 
@@ -70,22 +69,21 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+167bd21 test(sim): bind obligation fixture to charge
+55dc2f1 test(obligations): reject unbound refund liabilities
 6763b83 test(sim): exercise verifier-authorized obligations
 512f388 test(obligations): cover guarded authorization contract
 30612e5 test(sim): exercise CodeRabbit review invariants
-76c1bec test(v3): cover CodeRabbit hardening findings
-bb5cbed test(sim): adversarially cover PR 51 hardening
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The V3 design defines mechanically guaranteed delivery as ve... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | The design states agent-local configuration cannot activate ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The adopted P5 conjunction requires every liability to ident... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -98,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Adopt and precisely define the guarded deferred-delivery exception
+Add refundable charge binding to the adopted P5 design

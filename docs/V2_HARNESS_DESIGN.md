@@ -802,9 +802,9 @@ that the classes are cut right.
 
   “Mechanically guaranteed” is a runtime conjunction, not an aspiration: the verifier facts lane
   must publish explicit obligation-class enablement, presence of its refund credential, positive
-  exposure caps, and a maximum deadline. Registration accepts only that fresh grounded fact; the
-  agent's own environment cannot activate or widen the class. Missing any conjunct preserves the
-  old refusal behavior.
+  exposure caps, and a maximum deadline. Each liability must bind the concrete refundable charge.
+  Registration accepts only that fresh grounded fact; the agent's own environment cannot activate
+  or widen the class. Missing any conjunct preserves the old refusal behavior.
 
   Why the guarantee is real: the verifier-issued refund fires on a deadline the
   harness controls, *before* any chargeback window matters — collapsing the
