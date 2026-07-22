@@ -1,6 +1,6 @@
 # AIV Verification Packet (v2.1): portable simulation fixture mutation
 
-**Author:** Miguel Ingram (Author)  
+**Author:** Miguel Ingram (Author)
 **Verifier:** Codex (Verifier)
 
 ## Logical unit of work
