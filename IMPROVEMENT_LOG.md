@@ -1054,3 +1054,67 @@ misconfiguration); supervise counter only speaks when the checkout is the facts 
 
 **Next:** S4 — fact-lane signing (#36 ssh-keygen -Y + previous_hash chain; pubkey location
 decision) + #42 signed attestation.
+
+---
+
+## Entry 024 — 2026-07-20 — S4 fact-lane signing: verifier signatures, hash chain, customer attestation (issues #36, #42)
+
+**What:** (1) `pnl.py` signs `truth.json` with a verifier-only ed25519 key (`ssh-keygen -Y`,
+detached `ledger/truth.json.sig`; key at `STATE_DIR/verifier_signing_key`) and embeds
+`previous_hash` = sha256 of the last PUBLISHED truth.json (HEAD of the facts-lane checkout) — a
+content-based chain that survives `LEDGER_MAX_COMMITS` rotation. (2) `truth.py` refuses the
+grounded label for any unsigned/tampered/chain-broken `truth.json` whenever the ref it reads
+carries `harness/verifier_key.pub` (fail-closed; no pubkey → legacy, so bare clones keep working).
+(3) When signing is live, `pnl.py` emits the signed customer-facing `ledger/attestation.json`
+(verified revenue, policy line, truth/manifest hashes, refusals provenance from the agent
+branch); independent bare-clone verification procedure in `ledger/README.md`. (4) Wiring:
+sod_hook blocks the trust anchors, verifier_loop publishes the new artifacts, setup_sandbox
+preflights ssh-keygen when armed.
+
+**Decisions recorded (the §0 open question):** pubkey + allowed_signers live under **`harness/`**
+— operator-owned per CONTRIBUTING's table and OUTSIDE `ledger/`, so the SoD authorship checks
+(guard's ancestry scope, sod_hook's ledger/ block) never have to carve exceptions for
+verifier-key commits. The key is read from the SAME ref as the facts: on the protected ledger
+branch the agent can write neither (wall under full provisioning); in weak mode a swapped
+key+sig pair is a visible commit (tripwire) — the labels stay honest. The signature covers
+truth.json only; the raw manifest is covered transitively via the embedded `manifest_sha256`
+(deviation from #36's literal "sign both", equivalent coverage, one fewer artifact).
+`edge.json` signing is DEFERRED to S6 (its verifier is being reworked there anyway) — until
+then a weak-mode edge verdict stays exactly as forgeable as it was yesterday; no regression,
+noted as the open half.
+
+**Edge cases enumerated before coding:** enforcement keyed on an agent-writable file would be a
+downgrade attack (delete pubkey → unsigned accepted) — hence key-from-the-ref-being-read, never
+the working tree; ssh-keygen absent on the agent side with enforcement armed → refuse grounded
+(+ setup_sandbox preflight names the fix); signing key missing while pubkey committed → verifier
+writes the error INTO truth.json (verified=false) so the halt explains itself; chain check is
+ledger-branch-only (agent-branch parents are unrelated history) and treats an unreachable parent
+as chain start (rotation); attestation only exists signed (an unsigned attestation is a claim in
+a costume); multiple pnl cycles between commits keep previous_hash stable because HEAD does not
+move (chain aligns with commits, not cycles).
+
+**Verified by running (artifacts):**
+- `bash tests/sim.sh` → **PASS=35 FAIL=0 SKIP=0** (was 29): valid-signed accepted; tampered
+  refused with "SIGNATURE VERIFICATION FAILED" + guard halt; unsigned refused; forged
+  previous_hash refused with "HASH CHAIN BROKEN"; pnl end-to-end asserts sig + correct chain
+  hash + ssh-keygen-verified attestation carrying refusals provenance. Corpus **11/0**;
+  shellcheck + compileall clean. The rig's key is throwaway — the real repo carries none.
+- **Retro-bite @ HEAD~1:** committed pubkey + UNSIGNED truth.json with received=47.0 → old
+  truth.py returned it as grounded `ledger-branch`, exit 0, value 47.0. The new code refuses the
+  same state ("UNSIGNED ... refusing the grounded label").
+
+**Critique pass:**
+- `truth.py` re-encodes git-show text output before verifying; exact for the \n-only JSON this
+  repo writes, but byte-fidelity would prefer `_git_bytes` end-to-end — queued to S16's
+  correctness lens rather than reworking load()'s text plumbing mid-stack.
+- Key CUSTODY is out of scope and said so in ledger/README: the signature proves
+  "same key as provisioned", not "honest verifier" — the operator's key hygiene is a runbook
+  item (S15).
+- The attestation's refusals_lines is a raw line count (headers included), deliberately not a
+  parsed entry count — parsing REFUSALS prose would be fragile theater; the sha256 is the real
+  anchor.
+- The one-step chain check verifies parent linkage only; a full-history walk is an operator
+  audit tool, not a per-read cost — documented in ledger/README's procedure.
+
+**Next:** S5 — gates & probes (#39 delivery_check + #35 link-limit fold-in, #40 oracle-classed
+resolutions, #45 PACE_ENFORCE in iter.py).

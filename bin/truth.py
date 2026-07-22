@@ -50,10 +50,74 @@ LEDGER_BRANCH = os.environ.get("LEDGER_BRANCH", "ledger")
 # working-tree file is NOT here: it is agent-writable and invisible to every commit-based tripwire.
 GROUNDED_SOURCES = {"ledger-branch", "working-tree-committed"}
 
+# #36: the signing namespace -- must match bin/pnl.py's `ssh-keygen -Y sign -n` value.
+SIGN_NAMESPACE = "money-agent-ledger"
+
 
 def _git(*args: str, timeout: int = 30) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True,
                           timeout=timeout)
+
+
+def _git_bytes(*args: str, timeout: int = 30) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", *args], cwd=REPO, capture_output=True, timeout=timeout)
+
+
+def _enforce_signature(content: bytes, name: str, ref: str, facts: dict) -> None:
+    """#36: the opt-in signature wall. When the ref carries harness/verifier_key.pub, the fact
+    file MUST verify against it (detached ssh signature, ledger/<name>.sig) or it is refused --
+    fail-closed, RuntimeError. The key is read from the SAME ref as the facts: on the ledger
+    branch the agent cannot write either (remote-protected under full provisioning -- a wall); in
+    weak mode both live in agent-committable HEAD, so a swapped key+sig pair is a VISIBLE COMMIT
+    -- a tripwire, exactly like every other weak-mode control. No pubkey on the ref -> legacy
+    behavior, so bare clones keep working. Currently enforced for truth.json (whose embedded
+    manifest_sha256 transitively covers the raw manifest); edge.json signing lands with the edge
+    work and is not yet required here."""
+    import shutil
+    import tempfile
+    pub = _git(f"show", f"{ref}:harness/verifier_key.pub")
+    if pub.returncode != 0 or not pub.stdout.strip():
+        return  # unprovisioned: signature wall not armed
+    if name != "truth.json":
+        return
+    if shutil.which("ssh-keygen") is None:
+        raise RuntimeError("signature enforcement is armed (harness/verifier_key.pub committed) "
+                           "but ssh-keygen is missing -- install openssh-client; refusing to "
+                           "treat an unverifiable ledger as grounded.")
+    sig = _git_bytes("show", f"{ref}:ledger/{name}.sig")
+    if sig.returncode != 0 or not sig.stdout.strip():
+        raise RuntimeError(f"{ref}:ledger/{name} is UNSIGNED while a verifier pubkey is committed "
+                           "-- refusing the grounded label (forged or misprovisioned).")
+    allowed = _git(f"show", f"{ref}:harness/allowed_signers")
+    if allowed.returncode != 0 or not allowed.stdout.strip():
+        raise RuntimeError("harness/verifier_key.pub is committed but harness/allowed_signers is "
+                           "not readable from the same ref -- cannot verify; refusing.")
+    with tempfile.TemporaryDirectory() as td:
+        d = Path(td)
+        (d / "content").write_bytes(content)
+        (d / "sig").write_bytes(sig.stdout)
+        (d / "allowed_signers").write_text(allowed.stdout)
+        r = subprocess.run(["ssh-keygen", "-Y", "verify", "-f", str(d / "allowed_signers"),
+                            "-I", "verifier", "-n", SIGN_NAMESPACE, "-s", str(d / "sig")],
+                           input=content, capture_output=True, timeout=30)
+        if r.returncode != 0:
+            raise RuntimeError(f"SIGNATURE VERIFICATION FAILED for {ref}:ledger/{name} "
+                               f"({r.stderr.decode(errors='replace').strip()[:120]}) -- the file "
+                               "does not match the verifier's signature; refusing as forged.")
+    # one-step hash-chain check (ledger branch only: parent commits on an agent branch are
+    # unrelated history). The declared previous_hash must equal sha256 of the PARENT commit's
+    # truth.json; an unreachable parent (first publish, or post-rotation) is a chain start.
+    if ref.startswith("origin/"):
+        parent = _git_bytes("show", f"{ref}~1:ledger/{name}")
+        if parent.returncode == 0 and parent.stdout:
+            import hashlib
+            expect = hashlib.sha256(parent.stdout).hexdigest()
+            declared = facts.get("previous_hash")
+            if declared != expect:
+                raise RuntimeError(f"HASH CHAIN BROKEN for {ref}:ledger/{name}: declares "
+                                   f"previous_hash={str(declared)[:12]}..., parent commit's file "
+                                   f"hashes {expect[:12]}... -- history was rewritten or a cycle "
+                                   "was forged; refusing.")
 
 
 def load(name: str = "truth.json") -> tuple[dict, str]:
@@ -81,6 +145,7 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
             raise RuntimeError(
                 f"ledger read from origin/{LEDGER_BRANCH} declares ledger_branch={declared!r} -- "
                 "lane mismatch; refusing to treat as grounded.")
+        _enforce_signature(show.stdout.encode(), name, f"origin/{LEDGER_BRANCH}", d)
         return d, "ledger-branch"
     # 2. weak mode: read the COMMITTED copy via git show, never the raw working-tree file. An
     #    uncommitted working-tree truth.json is agent-forgeable and would bypass the whole SoD
@@ -89,9 +154,11 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
     show_local = _git("show", f"HEAD:ledger/{name}")
     if show_local.returncode == 0 and show_local.stdout.strip():
         try:
-            return json.loads(show_local.stdout), "working-tree-committed"
+            dl = json.loads(show_local.stdout)
         except json.JSONDecodeError as e:
             raise RuntimeError(f"committed ledger/{name} is not valid JSON: {e}")
+        _enforce_signature(show_local.stdout.encode(), name, "HEAD", dl)
+        return dl, "working-tree-committed"
     # 3. last resort: the raw uncommitted file, labeled UNTRUSTED. GROUNDED_SOURCES excludes it, so
     #    money-adjudicating consumers (guard first-dollar, aiv_gate) refuse it by construction.
     if local.exists():

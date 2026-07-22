@@ -187,6 +187,13 @@ print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
     { git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json
       git add ledger/edge.json ledger/raw/EDGE_MANIFEST.sha256
       git add ledger/raw/*.json
+      # #36/#42: signature + attestation artifacts are optional until provisioning arms signing.
+      # Stage only artifacts actually emitted this cycle; an absent optional signature must not
+      # make `git add` fail while leaving unrelated staged facts to be committed implicitly.
+      for fact_artifact in ledger/truth.json.sig ledger/attestation.json ledger/attestation.json.sig \
+                           harness/verifier_key.pub harness/allowed_signers; do
+        [[ -e "$fact_artifact" ]] && git add -- "$fact_artifact"
+      done
     } 2>>"$LOG"
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then
