@@ -50,9 +50,13 @@ classification:
 
 ### Class A (Execution)
 
-Evidence will be recorded from the post-commit matrix: `tests/sim.sh`, `tests/corpus.sh`,
-ShellCheck, Python compilation, and the canonical AIV check. The simulation includes the
-cross-device-equivalent quarantine failure fixture; the corpus includes the real iter-086 seam.
+- `bash tests/sim.sh` on macOS/Python 3: **29 PASS, 0 FAIL, 0 SKIP**. This includes both the
+  successful quarantine and the forced cross-device-equivalent move failure for CLM-001, plus
+  the portable AIV-gate negative checks.
+- `bash tests/corpus.sh`: **11 PASS, 0 FAIL**. It replays the archived iter-095 false stop and
+  the iter-086 empty-commit seam for CLM-002.
+- `shellcheck bin/*.sh tests/*.sh`, `python3 -m compileall -q bin`, `git diff --check`, and
+  `aiv check .github/aiv-packets/VERIFICATION_PACKET_PR47_FAIL_CLOSED.md`: all exit 0.
 
 ### Class B (Referential)
 
