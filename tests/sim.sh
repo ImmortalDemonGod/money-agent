@@ -770,6 +770,12 @@ cdx "$W/agent"
 
 echo "=== aiv_gate (needs the canonical CLI) ==="
 if command -v aiv >/dev/null 2>&1; then
+  # This fixture claims the verified edge explicitly; do not inherit the PENDING state that the
+  # earlier human-queue supervisor fixture publishes to exercise its own VERDICT precedence.
+  cdx "$W/verifier"
+  publish "
+import json; e=json.load(open('ledger/edge.json')); e.update({'verdict':'VERIFIED_POSITIVE_EV','registration_intact':True}); json.dump(e,open('ledger/edge.json','w'))"
+  cdx "$W/agent"
   git fetch -q origin ledger
   H=$(git show origin/ledger:ledger/raw/MANIFEST.sha256 | head -1 | awk '{print $1}')
   mkdir -p .github/aiv-packets iterations
