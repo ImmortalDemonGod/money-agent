@@ -53,9 +53,11 @@ classification:
   - `tests/test_rails_registry.py::test_contribution_identity_and_direction_mismatch_fail_closed`
   - `tests/test_rails_registry.py::test_negative_and_boolean_money_fail_closed`
   - `tests/test_rails_registry.py::test_boolean_measured_spend_and_non_null_unmeasured_spend_fail_closed`
-- **`RailContribution.validate`** (L44-L45): FAIL -- WARNING: No tests import or call `validate`
+- **`RailContribution.validate`** (L44-L45): PASS -- called directly by
+  `tests/test_rails_registry.py::test_validate_directly_rejects_boolean_money` at commit
+  `d060b27`, and exercised through `RailRegistry.pull_all` by the invalid-adapter catalog.
 
-**Coverage summary:** 1/2 symbols verified by tests.
+**Coverage summary:** 2/2 changed symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
@@ -75,7 +77,7 @@ classification:
 
 **Test file chain-of-custody:**
 
-No covering test files found.
+Covering test: [`tests/test_rails_registry.py` at `d060b27`](https://github.com/ImmortalDemonGod/money-agent/blob/d060b27cd13984b2d1cec1e03952294cadd05f98/tests/test_rails_registry.py).
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
@@ -91,8 +93,8 @@ d52a400 test(rails): expand fail-closed registry catalog
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | RailContribution.validate rejects boolean receive and measur... | symbol | 6 test(s) call `RailContribution.validate`, `RailContribution` | PASS VERIFIED |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Claim 1 (see Claim(s)) | symbol | Direct validate test plus six RailContribution callers | PASS VERIFIED |
+| 2 | Claim 2 (see Claim(s)) | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 2 verified, 0 unverified, 0 manual review.
 ---
@@ -100,7 +102,8 @@ d52a400 test(rails): expand fail-closed registry catalog
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (1/2 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` plus the SHA-pinned direct validator test above: git diff
+(scope inventory), AST symbol-to-test binding, and anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
