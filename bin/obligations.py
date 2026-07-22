@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import math
 import os
 import subprocess
 import sys
@@ -63,10 +64,22 @@ def _save(obls: list[dict], msg: str) -> None:
 
 
 def cmd_register(a) -> int:
-    max_open = int(os.environ.get("EXPOSURE_MAX_OPEN", "0") or "0")
-    max_single = float(os.environ.get("EXPOSURE_MAX_SINGLE_USD", "0") or "0")
-    max_frac = float(os.environ.get("EXPOSURE_MAX_TOTAL_FRACTION", "0") or "0")
-    open_obls = [o for o in _load() if o["status"] == "open"]
+    if not math.isfinite(a.value_usd) or a.value_usd < 0:
+        print(f"FATAL: --value-usd must be finite and non-negative (got {a.value_usd!r}).",
+              file=sys.stderr)
+        return 1
+    try:
+        max_open = int(os.environ.get("EXPOSURE_MAX_OPEN", "0") or "0")
+        max_single = float(os.environ.get("EXPOSURE_MAX_SINGLE_USD", "0") or "0")
+        max_frac = float(os.environ.get("EXPOSURE_MAX_TOTAL_FRACTION", "0") or "0")
+    except ValueError as e:
+        print(f"FATAL: exposure cap configuration is not numeric: {e}", file=sys.stderr)
+        return 1
+    if (max_open < 0 or not math.isfinite(max_single) or max_single < 0
+            or not math.isfinite(max_frac) or max_frac < 0):
+        print("FATAL: exposure caps must be finite and non-negative.", file=sys.stderr)
+        return 1
+    open_obls = [o for o in _load() if o.get("status") in ("open", "fulfillment-claimed")]
     if len(open_obls) + 1 > max_open:
         print(f"REFUSING (P7 exposure cap): {len(open_obls)} open + this one > "
               f"EXPOSURE_MAX_OPEN={max_open}. Rule 3 stands: deliver in full at the instant of "
@@ -89,7 +102,16 @@ def cmd_register(a) -> int:
               f"{max_frac} x verified received ${received} -- you may never owe more than a "
               "fraction of what real customers have actually paid.", file=sys.stderr)
         return 1
-    deadline = dt.datetime.fromisoformat(a.deadline.replace("Z", "+00:00"))
+    if not a.check.startswith("delivery-url:") or not a.check.removeprefix("delivery-url:").strip():
+        print("FATAL: --check must be 'delivery-url:<https-url>'. Arbitrary shell commands are "
+              "not allowed on the verifier; completion must use a reviewed typed oracle.",
+              file=sys.stderr)
+        return 1
+    try:
+        deadline = dt.datetime.fromisoformat(a.deadline.replace("Z", "+00:00"))
+    except ValueError as e:
+        print(f"FATAL: --deadline is not valid ISO-8601: {e}", file=sys.stderr)
+        return 1
     if deadline.tzinfo is None or deadline <= _now():
         print("FATAL: --deadline must be a future, timezone-aware ISO-8601 instant.",
               file=sys.stderr)
@@ -115,10 +137,12 @@ def cmd_fulfill(a) -> int:
     if len(a.evidence.strip()) < 8:
         print("FATAL: --evidence required (what was delivered, where).", file=sys.stderr)
         return 1
-    o["status"] = "fulfilled"
-    o["resolution"] = {"at": _now().strftime("%Y-%m-%dT%H:%M:%SZ"), "evidence": a.evidence}
-    _save(obls, f"obligations: fulfill {a.id}")
-    print(f"{a.id} fulfilled.")
+    o["status"] = "fulfillment-claimed"
+    o["resolution"] = {"claimed_at": _now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                       "evidence": a.evidence}
+    _save(obls, f"obligations: claim fulfillment {a.id}")
+    print(f"{a.id} fulfillment claimed. It remains exposure until the verifier's typed "
+          "completion oracle independently passes.")
     return 0
 
 
