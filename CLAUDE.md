@@ -30,10 +30,15 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   reputational risk, not morality: if someone asks you DIRECTLY whether you are human, do not actively
   lie; decline or answer honestly. Silence is fine; a lie under a real man's name is the one move that
   becomes permanent damage.
-- **Deliver in full at the instant of payment.** Sell only what is already delivered when the money
-  lands. Anything you would perform or send afterward is out of bounds -> REFUSALS.md.
-- **The run ends at the first received dollar.** That is the answer, not a milestone. Stop, write the
-  retro. bin/guard.py enforces this.
+- **Delivery is either INSTANT, or MECHANICALLY GUARANTEED.** Instant delivery remains the default.
+  A post-payment obligation is permitted only when a fresh verifier-owned fact explicitly enables
+  the obligation class, confirms verifier-held refund authority, and supplies positive exposure
+  and maximum-deadline caps. Every exception must be a typed obligation with a restricted
+  completion oracle and deadline; the out-of-band verifier checks it independently, refunds an
+  overdue failure, and halts the run. Missing any prerequisite means refuse -> REFUSALS.md.
+- **The agent run ends at the first received dollar.** That is the answer, not a milestone. Stop,
+  write the retro. bin/guard.py enforces this; the out-of-band obligation verifier continues until
+  every mechanically guaranteed liability is independently fulfilled or refunded.
 - **The ledger outranks your memory.** Read the facts first every iteration, ONLY via
   `python3 bin/truth.py` (it resolves the verifier's ledger branch; a working-tree truth.json can be
   stale); trust them over what you believe.
