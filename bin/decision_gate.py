@@ -31,6 +31,7 @@ already calls its specialized sibling.
 """
 from __future__ import annotations
 import hashlib
+import subprocess
 import sys
 from pathlib import Path
 
@@ -67,7 +68,8 @@ def check(risk_class: str, body: str) -> tuple[bool, str]:
         return False, (f"no decision recorded for this {risk_class} body (hash {h}). Decide,"
                        f" then add ONE line to DECISION_LOG.md:\n  - class:{risk_class} | "
                        f"body:{h} | decision:<what you decided> | rationale:<why>"
-                       + (" | provenance:<sha256 of the committed provenance manifest>"
+                       + (" | manifest:<repo-relative path> | provenance:<sha256 of that "
+                          "committed manifest>"
                           if risk_class == "data-acquisition" else ""))
     if len(dec.get("decision", "")) < 3 or len(dec.get("rationale", "")) < 8:
         return False, (f"decision record for {h} is a stamp, not a decision -- 'decision' and a "
@@ -78,12 +80,17 @@ def check(risk_class: str, body: str) -> tuple[bool, str]:
             return False, (f"data-acquisition decision for {h} carries no provenance sha256 -- "
                            "an acquisition without a pinned input manifest is untraceable by "
                            "construction.")
-        hits = [p for p in REPO.rglob("*")
-                if p.is_file() and not p.is_symlink() and ".git" not in p.parts
-                and hashlib.sha256(p.read_bytes()).hexdigest() == prov.lower()]
-        if not hits:
-            return False, (f"provenance {prov[:12]}... matches no committed file in the repo -- "
-                           "the manifest must exist where the record points.")
+        manifest = dec.get("manifest", "")
+        if not manifest or Path(manifest).is_absolute() or ".." in Path(manifest).parts:
+            return False, "data-acquisition decision must name a safe repo-relative manifest path"
+        committed = subprocess.run(["git", "show", f"HEAD:{manifest}"], cwd=REPO,
+                                   capture_output=True, timeout=30)
+        if committed.returncode != 0:
+            return False, f"manifest {manifest!r} is not committed at HEAD"
+        actual = hashlib.sha256(committed.stdout).hexdigest()
+        if actual != prov.lower():
+            return False, (f"committed manifest {manifest!r} hashes {actual[:12]}..., not "
+                           f"declared provenance {prov[:12]}...")
     return True, f"OK: {risk_class} decision on record for {h} (rationale recorded)"
 
 
