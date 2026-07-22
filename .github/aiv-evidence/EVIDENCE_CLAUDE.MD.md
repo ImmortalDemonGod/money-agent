@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `CLAUDE.md`
-**Commit:** `bcf1f1a`
-**Generated:** 2026-07-22T23:11:02Z
+**Commit:** `167bd21`
+**Previous:** `9d56125`
+**Generated:** 2026-07-22T23:14:47Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,16 +16,15 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "CLAUDE.md"
-  classification_rationale: "R3 because this changes the highest-priority policy governing payment acceptance and post-payment liability"
+  classification_rationale: "R3 because this tightens the constitutional payment and refund boundary"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:11:02Z"
+  classified_at: "2026-07-22T23:14:47Z"
 ```
 
 ## Claim(s)
 
-1. The constitution permits deferred delivery only with a fresh verifier enablement fact, refund authority, positive caps, a typed restricted oracle, and a bounded deadline
-2. The agent still stops at first dollar while the out-of-band verifier continues until every liability is fulfilled or refunded
-3. No existing tests were modified or deleted during this change.
+1. The mechanically guaranteed exception requires every liability to bind a concrete refundable charge
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -33,13 +33,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** The operator explicitly authorized the constitutional amendment that the PR 51 safety layer was designed to support
+- **Requirements Verified:** A refund-backed delivery guarantee cannot exist without a concrete charge the verifier can refund
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`bcf1f1a`](https://github.com/ImmortalDemonGod/money-agent/tree/bcf1f1a03f4276eef6df0be44b53f058fa5b96ec))
+**Scope Inventory** (SHA: [`167bd21`](https://github.com/ImmortalDemonGod/money-agent/tree/167bd21af20e49a9cd45aff75dc70267b0a3b258))
 
-- [`CLAUDE.md#L33-L41`](https://github.com/ImmortalDemonGod/money-agent/blob/bcf1f1a03f4276eef6df0be44b53f058fa5b96ec/CLAUDE.md#L33-L41)
+- [`CLAUDE.md#L37-L39`](https://github.com/ImmortalDemonGod/money-agent/blob/167bd21af20e49a9cd45aff75dc70267b0a3b258/CLAUDE.md#L37-L39)
 
 ### Class A (Execution Evidence)
 
@@ -69,22 +69,21 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+167bd21 test(sim): bind obligation fixture to charge
+55dc2f1 test(obligations): reject unbound refund liabilities
 6763b83 test(sim): exercise verifier-authorized obligations
 512f388 test(obligations): cover guarded authorization contract
 30612e5 test(sim): exercise CodeRabbit review invariants
-76c1bec test(v3): cover CodeRabbit hardening findings
-bb5cbed test(sim): adversarially cover PR 51 hardening
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The constitution permits deferred delivery only with a fresh... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | The agent still stops at first dollar while the out-of-band ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The mechanically guaranteed exception requires every liabili... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -97,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Adopt the mechanically guaranteed delivery exception without weakening default-off behavior
+Add charge binding to the mechanically guaranteed delivery prerequisites

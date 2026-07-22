@@ -34,8 +34,9 @@ If anything below conflicts with a summary of an older message, THIS FILE WINS.
   A post-payment obligation is permitted only when a fresh verifier-owned fact explicitly enables
   the obligation class, confirms verifier-held refund authority, and supplies positive exposure
   and maximum-deadline caps. Every exception must be a typed obligation with a restricted
-  completion oracle and deadline; the out-of-band verifier checks it independently, refunds an
-  overdue failure, and halts the run. Missing any prerequisite means refuse -> REFUSALS.md.
+  completion oracle, deadline, and bound refundable charge; the out-of-band verifier checks it
+  independently, refunds an overdue failure, and halts the run. Missing any prerequisite means
+  refuse -> REFUSALS.md.
 - **The agent run ends at the first received dollar.** That is the answer, not a milestone. Stop,
   write the retro. bin/guard.py enforces this; the out-of-band obligation verifier continues until
   every mechanically guaranteed liability is independently fulfilled or refunded.
