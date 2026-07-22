@@ -52,10 +52,12 @@ CAPTCHA, an approval click, a KYC step on YOUR OWN account): register it with
 bin/human.py request and KEEP WORKING -- requesting is never waiting; the
 request is a bet on the operator's clock (agenda-tracked, conclusion-blocking)
 like any other, and the operator may decline it. Only a resolution published on
-the verifier facts lane counts; consume it with bin/human.py sync. You cannot
-self-certify that the operator acted, and directly resolving the companion bet
-does not close the request. You do not need the operator for anything else; you
-need external input, and you can always get external input on your own.
+the distinct, signed verifier facts lane counts; consume it with bin/human.py
+sync. You cannot self-certify that the operator acted, edit a task to resolved,
+or close it by directly resolving the companion bet. Human actuation is never
+permission to violate platform terms or act outside the account owner's explicit
+authorization. You do not need the operator for anything else; you need external
+input, and you can always get external input on your own.
 
 USE YOUR LEVERAGE. You are not limited to doing one thing at a time by hand.
 You have: WebSearch and the open internet; deep-research subagents; the ability

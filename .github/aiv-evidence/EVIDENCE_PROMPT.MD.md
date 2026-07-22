@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `PROMPT.md`
-**Commit:** `8f307cf`
-**Generated:** 2026-07-22T22:06:03Z
+**Commit:** `2b080a4`
+**Previous:** `c7bb903`
+**Generated:** 2026-07-22T23:06:33Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "PROMPT.md"
-  classification_rationale: "R3 because this prompt governs unsupervised privilege boundaries and conclusion behavior under a real identity"
+  classification_rationale: "The prompt is an operator-negotiated safety boundary"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:06:03Z"
+  classified_at: "2026-07-22T23:06:33Z"
 ```
 
 ## Claim(s)
 
-1. The run agent is instructed that only facts-lane human resolutions count and direct companion-bet resolution cannot close a request
+1. The run prompt forbids self-certification and using human actuation to bypass platform terms or owner authorization
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,14 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Keep the autonomy prompt aligned with the mechanically enforced actuation boundary
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
+- **Requirements Verified:** The autonomy amendment permits mechanical actuation only, never strategy or policy exceptions
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`8f307cf`](https://github.com/ImmortalDemonGod/money-agent/tree/8f307cf8c950e7e485ba355de9d8d33dded8bde1))
+**Scope Inventory** (SHA: [`2b080a4`](https://github.com/ImmortalDemonGod/money-agent/tree/2b080a4bd131af680d8f21a2f24ce3eb3a20a3a2))
 
-- [`PROMPT.md#L54-L58`](https://github.com/ImmortalDemonGod/money-agent/blob/8f307cf8c950e7e485ba355de9d8d33dded8bde1/PROMPT.md#L54-L58)
+- [`PROMPT.md#L55-L60`](https://github.com/ImmortalDemonGod/money-agent/blob/2b080a4bd131af680d8f21a2f24ce3eb3a20a3a2/PROMPT.md#L55-L60)
 
 ### Class A (Execution Evidence)
 
@@ -68,18 +69,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
-aa601ba [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-b36b966 [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-2a5f010 [S4] fact-lane signing: verifier signatures + hash chain + customer attestation (#36 #42)
+68b46db test(sim): isolate AIV edge fixture state
+bc601c3 test(rails): expose registry contract to verification
+86e664c test(pr50): exercise executable rail and queue contracts
+67e9adb test(pr50): pin issue-closure trust boundaries
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The run agent is instructed that only facts-lane human resol... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The run prompt forbids self-certification and using human ac... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -95,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Align agent instructions with facts-lane actuation resolution
+Clarify signed lane and authorization limits
