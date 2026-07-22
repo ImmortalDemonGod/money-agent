@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `bin/start_verifier.sh`
-**Commit:** `34146a3`
-**Previous:** `d93be03`
-**Generated:** 2026-07-22T23:33:34Z
+**File:** `.github/aiv-evidence/EVIDENCE_BIN_START_VERIFIER.SH.md`
+**Commit:** `8b34caa`
+**Generated:** 2026-07-22T23:40:27Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +14,15 @@ classification:
   risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
-  blast_radius: "bin/start_verifier.sh"
-  classification_rationale: "Startup is the final operator-side payment-rail provisioning gate"
+  blast_radius: ".github/aiv-evidence/EVIDENCE_BIN_START_VERIFIER.SH.md"
+  classification_rationale: "Verification metadata on payment and conclusion surfaces must remain auditably accurate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:33:34Z"
+  classified_at: "2026-07-22T23:40:27Z"
 ```
 
 ## Claim(s)
 
-1. Verifier startup refuses an armed Base rail until the persisted acceptance marker matches current bindings
+1. The verifier-preflight evidence matrix uses stable claim IDs without truncated identities
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,14 +31,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703)
-- **Requirements Verified:** The operator must not enter baseline creation with an unaccepted live rail
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532](https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532)
+- **Requirements Verified:** Address final CodeRabbit evidence-integrity findings without overstating collected proof
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`34146a3`](https://github.com/ImmortalDemonGod/money-agent/tree/34146a3d9cebf59f48a94c799577b38341268e09))
+**Scope Inventory** (SHA: [`8b34caa`](https://github.com/ImmortalDemonGod/money-agent/tree/8b34caa5526f011ee9d665e0983d9db2dd6eee5f))
 
-- [`bin/start_verifier.sh#L85-L96`](https://github.com/ImmortalDemonGod/money-agent/blob/34146a3d9cebf59f48a94c799577b38341268e09/bin/start_verifier.sh#L85-L96)
+- [`.github/aiv-evidence/EVIDENCE_BIN_START_VERIFIER.SH.md#L83-L84`](https://github.com/ImmortalDemonGod/money-agent/blob/8b34caa5526f011ee9d665e0983d9db2dd6eee5f/.github/aiv-evidence/EVIDENCE_BIN_START_VERIFIER.SH.md#L83-L84)
 
 ### Class A (Execution Evidence)
 
@@ -48,7 +47,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 2369 error(s)
+- **ruff:** All checks passed
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -69,19 +68,19 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+d060b27 test(rails): call monetary validator directly
+5f37af2 test(supervisor): model live verifier process explicitly
 dfe3ff8 test(pr50): pin final review failure modes
 d52a400 test(rails): expand fail-closed registry catalog
 710e1c0 merge(stack): sync rewritten stack 3 ancestry
-618e3eb merge(stack): integrate reviewed stack 3 advances
-4ff597e test(delivery): cover content-type refusal
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Claim 1 (see Claim(s)) | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Claim 2 (see Claim(s)) | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The verifier-preflight evidence matrix uses stable claim IDs... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
@@ -96,4 +95,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Add acceptance validation to Base preflight
+docs(aiv): stabilize preflight claim IDs
