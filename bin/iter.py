@@ -158,7 +158,7 @@ def new(lever: str = "") -> int:
         (MONEY_LOG.read_text() if MONEY_LOG.exists() else "# MONEY_LOG\n\n---\n")
         + f"\n## Iteration {nnn} — {_now()} (ledger @ {t.get('computed_at')})\n\n"
         + lever_line
-        + f"**Tried:** <fill>\n\n**Cost:** <fill>\n\n**Actually happened:** <fill>\n\n"
+        + "**Tried:** <fill>\n\n**Cost:** <fill>\n\n**Actually happened:** <fill>\n\n"
           f"**Learned:** <fill>\n\n**Next:** <fill>\n")
 
     # commit the ALLOCATION immediately: numbering must survive any interruption
