@@ -28,7 +28,8 @@ classification:
 
 1. Base USDC scoring counts only safe-or-finalized transfers whose marketplace event binds payer, payee, and amount
 2. Operator-funded escrow payouts classify as self revenue even when the ERC-20 sender is the escrow contract
-3. Every armed Base run archives the prior block boundary and freezes a new safe-or-finalized baseline before verifier polling begins
+3. `tests/sim.sh` was intentionally extended during this change; no test file was deleted
+4. Every armed Base run archives the prior block boundary and freezes a new safe-or-finalized baseline before verifier polling begins
 5. An armed Base rail cannot start unless all settlement binding fields and at least one operator wallet address are provisioned before baseline creation
 6. Verifier environment is loaded before the Base baseline is frozen
 7. The agent cannot mark a human request fulfilled or declined without a request-bound resolution published on the verifier-owned ledger branch

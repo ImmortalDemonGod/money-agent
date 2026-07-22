@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `.github/aiv-packets/PACKET_pr50_trust_boundaries.md`
-**Commit:** `6fa377d`
-**Generated:** 2026-07-22T22:13:35Z
+**Commit:** `4a1c283`
+**Previous:** `85f08cb`
+**Generated:** 2026-07-22T23:40:59Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -11,18 +12,18 @@
 
 ```yaml
 classification:
-  risk_tier: R1
-  sod_mode: S0
+  risk_tier: R3
+  sod_mode: S1
   critical_surfaces: []
   blast_radius: ".github/aiv-packets/PACKET_pr50_trust_boundaries.md"
-  classification_rationale: "R1 because this corrects verification metadata only; committed runtime behavior is unchanged"
+  classification_rationale: "Verification metadata on payment and conclusion surfaces must remain auditably accurate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:13:35Z"
+  classified_at: "2026-07-22T23:40:59Z"
 ```
 
 ## Claim(s)
 
-1. The aggregate PR50 packet records explicit execution counts, differential evidence, provenance, and honest S1/live-seam limitations; this sidecar retains a manual-review verdict.
+1. The trust-boundary packet restores Claim 4 and keeps a truthful explicit test-change Claim 3
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,21 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Repair the Layer 2 packet omissions reported by aiv close
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532](https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532)
+- **Requirements Verified:** Address final CodeRabbit evidence-integrity findings without overstating collected proof
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`6fa377d`](https://github.com/ImmortalDemonGod/money-agent/tree/6fa377dd5f629335349c8e0faccd16e599512c76))
+**Scope Inventory** (SHA: [`4a1c283`](https://github.com/ImmortalDemonGod/money-agent/tree/4a1c2832f990831ac2c60068627bba7dd4f3cb25))
 
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L7`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L7)
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L20`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L20)
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L31`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L31)
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L47`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L47)
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L71-L108`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L71-L108)
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L111-L112`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L111-L112)
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L157-L170`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L157-L170)
-- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L185-L190`](https://github.com/ImmortalDemonGod/money-agent/blob/6fa377dd5f629335349c8e0faccd16e599512c76/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L185-L190)
+- [`.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L31-L32`](https://github.com/ImmortalDemonGod/money-agent/blob/4a1c2832f990831ac2c60068627bba7dd4f3cb25/.github/aiv-packets/PACKET_pr50_trust_boundaries.md#L31-L32)
 
 ### Class A (Execution Evidence)
 
@@ -57,24 +51,49 @@ This file has no claim-specific execution evidence.
 - **ruff:** All checks passed
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
+### Class C (Negative Evidence)
+
+**Search methodology:** Ran `git diff --cached` and scanned for regression indicators.
+
+- Test file deletions: **none**
+- Test file modifications: **none**
+- Deleted assertions (`assert` removals in diff): **none found**
+- Added skip markers (`@pytest.mark.skip`, `@unittest.skip`): **none found**
+
+### Class F (Provenance Evidence)
+
+**Test file chain-of-custody:**
+
+No covering test files found.
+
+**Recent test directory history** (`git log --oneline -5 -- tests/`):
+
+```
+d060b27 test(rails): call monetary validator directly
+5f37af2 test(supervisor): model live verifier process explicitly
+dfe3ff8 test(pr50): pin final review failure modes
+d52a400 test(rails): expand fail-closed registry catalog
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
+```
+
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Claim 1 (see Claim(s)) | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Claim 2 (see Claim(s)) | structural | Class C not collected | REVIEW MANUAL REVIEW |
+| 1 | The trust-boundary packet restores Claim 4 and keeps a truth... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 0 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found).
+Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Make the aggregate PR50 AIV packet validator-complete
+docs(aiv): restore trust packet claim numbering
