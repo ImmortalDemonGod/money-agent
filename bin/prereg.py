@@ -21,6 +21,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import tempfile
 import time
 from pathlib import Path
 
@@ -45,8 +46,6 @@ def freeze(name: str, text: str, extra: dict | None = None) -> dict:
     """Freeze on first sight; a later call with a DIFFERENT text does NOT re-freeze (that is the
     entire point) -- callers detect via intact()."""
     p = _path(name)
-    if p.exists():
-        return json.loads(p.read_text())
     rec = {"sha256": hashlib.sha256(text.encode()).hexdigest(),
            "frozen_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
            **(extra or {}),
@@ -54,8 +53,24 @@ def freeze(name: str, text: str, extra: dict | None = None) -> dict:
                     "the sandbox agent. Editing the registered text after this reads as "
                     "bar-moving."}
     STATE_DIR.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(rec, indent=2))
-    return rec
+    # Publish a complete file with an atomic hard link. O_EXCL alone would prevent two writers
+    # from winning but would expose the winning writer's partially written JSON to readers.
+    tmp_name = None
+    try:
+        with tempfile.NamedTemporaryFile("w", dir=STATE_DIR, prefix=f".{name}.",
+                                         suffix=".tmp", delete=False) as tmp:
+            tmp_name = tmp.name
+            json.dump(rec, tmp, indent=2)
+            tmp.flush()
+            os.fsync(tmp.fileno())
+        try:
+            os.link(tmp_name, p)
+            return rec
+        except FileExistsError:
+            return json.loads(p.read_text())
+    finally:
+        if tmp_name is not None:
+            Path(tmp_name).unlink(missing_ok=True)
 
 
 def intact(name: str, text: str) -> bool | None:
