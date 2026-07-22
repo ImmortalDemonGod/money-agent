@@ -37,14 +37,20 @@ import argparse
 import datetime as dt
 import json
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 TASKS = REPO / "run" / "human_tasks.json"
 RESOLUTIONS = REPO / "ledger" / "human_resolutions.json"
+RESOLUTION_SIG = REPO / "ledger" / "human_resolutions.json.sig"
 KINDS = ("captcha", "approval-click", "kyc-step", "signup-complete", "claim-host")
+SIGN_NAMESPACE = "money-agent-ledger"
+STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-agent-verifier")))
+SIGN_KEY = STATE_DIR / "verifier_signing_key"
 
 sys.path.insert(0, str(REPO / "bin"))
 
@@ -62,7 +68,8 @@ def _load() -> list[dict]:
 def _task_hash(task: dict) -> str:
     import hashlib
     stable = {k: task.get(k) for k in ("id", "requested_at", "kind", "gate", "test_citation",
-                                       "ev_rationale", "companion_bet", "resolve_by")}
+                                       "ev_rationale", "companion_bet", "resolve_by",
+                                       "agent_branch")}
     return hashlib.sha256(json.dumps(stable, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
@@ -92,8 +99,59 @@ def _facts_resolutions() -> dict:
     return {}
 
 
+def _sign_resolution_document() -> None:
+    """Sign the entire append-only resolution map with the verifier-private key.
+
+    Branch naming is configuration, not provenance: an agent can name its own branch `ledger` or
+    point LEDGER_BRANCH at any ref it controls. Requiring a signature made by the verifier-private
+    key turns operator attribution into a cryptographic property instead of an environment-variable
+    convention.
+    """
+    if not SIGN_KEY.exists():
+        raise RuntimeError(f"verifier signing key missing: {SIGN_KEY}; human resolutions cannot "
+                           "be published unsigned")
+    if shutil.which("ssh-keygen") is None:
+        raise RuntimeError("ssh-keygen missing; cannot sign a human resolution")
+    RESOLUTION_SIG.unlink(missing_ok=True)
+    signed = subprocess.run(["ssh-keygen", "-Y", "sign", "-f", str(SIGN_KEY),
+                             "-n", SIGN_NAMESPACE, str(RESOLUTIONS)],
+                            cwd=REPO, capture_output=True, text=True, timeout=30)
+    if signed.returncode != 0 or not RESOLUTION_SIG.exists():
+        RESOLUTION_SIG.unlink(missing_ok=True)
+        raise RuntimeError(f"could not sign human resolutions: {signed.stderr.strip()[:160]}")
+
+
+def _verify_resolution_document(ref: str, content: str) -> None:
+    """Verify a resolution map against the signer pinned in the agent's committed harness."""
+    if shutil.which("ssh-keygen") is None:
+        raise RuntimeError("ssh-keygen missing; cannot verify operator resolution")
+    allowed = _git("show", "HEAD:harness/allowed_signers")
+    if allowed.returncode != 0 or not allowed.stdout.strip():
+        raise RuntimeError("committed harness/allowed_signers missing; unsigned branch identity "
+                           "cannot ground human actuation")
+    sig = _git("show", f"{ref}:ledger/human_resolutions.json.sig")
+    if sig.returncode != 0 or not sig.stdout.strip():
+        raise RuntimeError(f"{ref}:ledger/human_resolutions.json is UNSIGNED")
+    with tempfile.TemporaryDirectory() as td:
+        d = Path(td)
+        (d / "allowed_signers").write_text(allowed.stdout)
+        (d / "resolution.sig").write_text(sig.stdout)
+        verified = subprocess.run(
+            ["ssh-keygen", "-Y", "verify", "-f", str(d / "allowed_signers"),
+             "-I", "verifier", "-n", SIGN_NAMESPACE, "-s", str(d / "resolution.sig")],
+            input=content.encode(), capture_output=True, timeout=30)
+    if verified.returncode != 0:
+        raise RuntimeError(f"SIGNATURE VERIFICATION FAILED for {ref}:ledger/human_resolutions.json")
+
+
 def _publish_resolution(task_id: str, resolution: dict) -> None:
     ledger_branch = os.environ.get("LEDGER_BRANCH", "ledger")
+    agent_branch = os.environ.get("AGENT_BRANCH", "")
+    if not agent_branch:
+        raise RuntimeError("AGENT_BRANCH is required on the operator side")
+    if ledger_branch == agent_branch:
+        raise RuntimeError("LEDGER_BRANCH and AGENT_BRANCH must differ; a claims lane cannot "
+                           "self-certify operator actuation")
     current = _git("branch", "--show-current").stdout.strip()
     if current != ledger_branch:
         raise RuntimeError(f"operator resolutions must be published from {ledger_branch!r}, "
@@ -105,12 +163,27 @@ def _publish_resolution(task_id: str, resolution: dict) -> None:
     resolutions[task_id] = {**resolution, "task_sha256": _task_hash(task), "at": _now(),
                             "agent_branch": os.environ["AGENT_BRANCH"]}
     RESOLUTIONS.parent.mkdir(parents=True, exist_ok=True)
+    previous_doc = RESOLUTIONS.read_bytes() if RESOLUTIONS.exists() else None
+    previous_sig = RESOLUTION_SIG.read_bytes() if RESOLUTION_SIG.exists() else None
     RESOLUTIONS.write_text(json.dumps({"resolutions": resolutions}, indent=2) + "\n")
-    _git("add", str(RESOLUTIONS), check=True)
+    try:
+        _sign_resolution_document()
+    except Exception:
+        if previous_doc is None:
+            RESOLUTIONS.unlink(missing_ok=True)
+        else:
+            RESOLUTIONS.write_bytes(previous_doc)
+        if previous_sig is None:
+            RESOLUTION_SIG.unlink(missing_ok=True)
+        else:
+            RESOLUTION_SIG.write_bytes(previous_sig)
+        raise
+    _git("add", str(RESOLUTIONS), str(RESOLUTION_SIG), check=True)
     commit = subprocess.run(
         ["git", "-c", "user.name=verifier", "-c", "user.email=verifier@local",
          "-c", "commit.gpgsign=false", "commit", "-m", f"verifier: resolve human task {task_id}",
-         "--", str(RESOLUTIONS)], cwd=REPO, capture_output=True, text=True, timeout=90,
+         "--", str(RESOLUTIONS), str(RESOLUTION_SIG)], cwd=REPO,
+        capture_output=True, text=True, timeout=90,
         env={**os.environ, "AIV_VERIFIER": "1"})
     if commit.returncode != 0:
         raise RuntimeError(f"could not commit operator resolution: {commit.stderr.strip()[:160]}")
@@ -121,13 +194,22 @@ def _publish_resolution(task_id: str, resolution: dict) -> None:
 
 def _grounded_resolution(task: dict) -> dict | None:
     ledger_branch = os.environ.get("LEDGER_BRANCH", "ledger")
+    current = _git("branch", "--show-current").stdout.strip()
+    task_branch = task.get("agent_branch") or current
+    if ledger_branch in {current, task_branch}:
+        raise RuntimeError("LEDGER_BRANCH must differ from the claims branch; refusing a "
+                           "self-authored human resolution")
     _git("fetch", "-q", "origin", ledger_branch, check=True)
-    r = _git("show", f"origin/{ledger_branch}:ledger/human_resolutions.json")
+    ref = f"origin/{ledger_branch}"
+    r = _git("show", f"{ref}:ledger/human_resolutions.json")
     if r.returncode != 0:
         return None
+    _verify_resolution_document(ref, r.stdout)
     resolution = json.loads(r.stdout).get("resolutions", {}).get(task["id"])
     if resolution and resolution.get("task_sha256") != _task_hash(task):
         raise RuntimeError(f"resolution for {task['id']} is bound to different request content")
+    if resolution and resolution.get("agent_branch") != task_branch:
+        raise RuntimeError(f"resolution for {task['id']} names a different claims branch")
     return resolution
 
 
@@ -175,10 +257,15 @@ def cmd_request(a) -> int:
               "be exactly the invisible-wait this tool exists to kill.", file=sys.stderr)
         return 1
     bet_id = f"bet-{len(_bets._load()):03d}"
+    agent_branch = _git("branch", "--show-current").stdout.strip()
+    if not agent_branch:
+        print("FATAL: human requests require a named claims branch.", file=sys.stderr)
+        return 2
     tasks.append({"id": hid, "requested_at": _now(), "kind": a.kind, "gate": a.gate,
                   "test_citation": a.test, "ev_rationale": a.ev, "status": "open",
                   "companion_bet": bet_id, "resolve_by": resolve_by,
-                  "human_minutes": None, "resolution": None})
+                  "agent_branch": agent_branch, "human_minutes": None,
+                  "resolution_latency_seconds": None, "resolution": None})
     _save(tasks, f"human: request {hid} ({a.kind}): {a.gate[:50]}")
     print(f"{hid} requested ({a.kind}), companion {bet_id} placed. KEEP WORKING -- requesting is "
           "never waiting; the agenda tracks it and an open request blocks any 'impossible' "
@@ -205,12 +292,17 @@ def cmd_fulfill(a) -> int:
 
 
 def cmd_decline(a) -> int:
+    if a.minutes is None or a.minutes < 0:
+        print("FATAL: --minutes required; assessing a declined request is still human work.",
+              file=sys.stderr)
+        return 2
     if len(a.reason.strip()) < 8:
         print("FATAL: --reason required (declines are the operator's REFUSALS mirror).",
               file=sys.stderr)
         return 2
     try:
-        _publish_resolution(a.id, {"status": "declined", "reason": a.reason})
+        _publish_resolution(a.id, {"status": "declined", "human_minutes": a.minutes,
+                                   "reason": a.reason})
     except Exception as e:
         print(f"FATAL: {e}", file=sys.stderr)
         return 1
@@ -242,6 +334,13 @@ def cmd_sync(a) -> int:
     task["status"] = outcome
     task["resolution"] = resolution
     task["human_minutes"] = resolution.get("human_minutes")
+    try:
+        requested = dt.datetime.fromisoformat(task["requested_at"].replace("Z", "+00:00"))
+        resolved = dt.datetime.fromisoformat(resolution["at"].replace("Z", "+00:00"))
+        task["resolution_latency_seconds"] = max(0.0, (resolved - requested).total_seconds())
+    except Exception as e:
+        print(f"FATAL: invalid resolution latency timestamps: {e}", file=sys.stderr)
+        return 1
     # Persist the grounded task state first. If companion resolution fails, the still-open bet
     # continues blocking conclusions; the unsafe inverse (bet closed, task not durable) is absent.
     _save(tasks, f"human: sync grounded {outcome} {a.id}")
@@ -268,7 +367,9 @@ def cmd_list(_a) -> int:
         print(f"{t['id']} [{t['status']}] {t['kind']:<16} {t['gate']}\n"
               f"    test: {t['test_citation']} | ev: {t['ev_rationale']}\n"
               f"    bet: {t['companion_bet']} | by {t['resolve_by']}"
-              + (f" | {t['human_minutes']} min" if t.get("human_minutes") is not None else ""))
+              + (f" | {t['human_minutes']} min" if t.get("human_minutes") is not None else "")
+              + (f" | latency {t['resolution_latency_seconds']:.1f}s"
+                 if t.get("resolution_latency_seconds") is not None else ""))
         if t.get("resolution"):
             print(f"    resolution: {t['resolution']}")
     total = sum(t.get("human_minutes") or 0 for t in tasks)
@@ -294,6 +395,7 @@ def main() -> int:
     pf.set_defaults(fn=cmd_fulfill)
     pd = sub.add_parser("decline")
     pd.add_argument("id")
+    pd.add_argument("--minutes", type=float, required=True)
     pd.add_argument("--reason", required=True)
     pd.set_defaults(fn=cmd_decline)
     ps = sub.add_parser("sync")
