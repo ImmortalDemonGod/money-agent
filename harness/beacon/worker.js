@@ -49,7 +49,7 @@ const DATACENTER_RE = /google|amazon|aws\b|microsoft|azure|digitalocean|linode|a
 // fires on the hosting side. (Proper fix later: gate on datacenter ASN numbers, which we now store.)
 const CONSUMER_ISP_RE = /\b(google fiber|starlink|t-mobile|at&t|comcast|xfinity|verizon|spectrum|charter|cox communications|centurylink|frontier|telekom|vodafone|orange|telefonica|movistar|virgin media|sky broadband)\b/i;
 
-function isDatacenterOrg(org) {
+export function isDatacenterOrg(org) {
   if (!org) return false;
   if (CONSUMER_ISP_RE.test(org)) return false;   // consumer traffic, even if the parent brand sells cloud
   return DATACENTER_RE.test(org);
@@ -78,7 +78,7 @@ export function assetSql() {
   ].join(" OR ") + ")";
 }
 
-function classifyBot(ua, req, cf) {
+export function classifyBot(ua, req, cf) {
   if (!ua) return 1;                                   // no UA at all -> bot
   if (BOT_RE.test(ua)) return 1;                       // known bot signature
   if (!req.headers.get("accept-language")) return 1;   // real browsers send Accept-Language
@@ -191,7 +191,7 @@ identifies a person, the honest answer is usually that there is nothing to retur
 </body></html>`;
 }
 
-async function stats(env) {
+export async function stats(env) {
   if (!env.DB) return new Response("no DB bound", { status: 500 });
   const q = async (sql) => (await env.DB.prepare(sql).all()).results;
   // ASSET_SQL must mirror ASSET_RE. Asset fetches are still logged (they are evidence) but never
