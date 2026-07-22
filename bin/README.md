@@ -44,6 +44,7 @@ remote branch protection.
 | `bets.py` | day-scale bet registry: `add` / `due` / `checked` / `resolve` — open bets block conclusions |
 | `edge.py` | edge rail claims side: `register` (commit the pre-registered bar), `status` (grounded verdict) |
 | `mail.py` | email under the real name: inbox/read/search/send, disclosure-gated, SENT_LOG fail-closed |
+| `human.py` | request mechanical operator actuation; operator publishes resolution on the facts lane, agent syncs it |
 | `outcome.py` | append structured outcomes to `knowledge/` (strategy-denylisted) |
 | `append_log.py` | durable append: commit-before-action so no reset can eat a log line |
 
