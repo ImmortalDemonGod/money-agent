@@ -201,6 +201,10 @@ assert_exit 0 "pace: a due bet unblocks lever-less iterations" \
 assert_exit 0 "pace: default-off leaves iteration-opening untouched" python3 bin/iter.py new
 
 echo "=== human-actuation queue (#31) ==="
+cdx "$W/verifier"
+publish "
+import json; e=json.load(open('ledger/edge.json')); e.update({'verdict':'PENDING','registration_intact':True}); json.dump(e,open('ledger/edge.json','w'))"
+cdx "$W/agent"
 HUMAN_STATE="$W/human-state"
 mkdir -p "$HUMAN_STATE" harness
 ssh-keygen -q -t ed25519 -N "" -f "$HUMAN_STATE/verifier_signing_key"
@@ -272,7 +276,8 @@ if python3 bin/human.py sync hum-002 >/dev/null 2>&1 \
    && grep -q '"status": "declined"' run/human_tasks.json; then
   ok "human: grounded decline synced (operator REFUSALS mirror)"
 else bad "human: decline sync"; fi
-assert_grep "human_minutes_total: 3" "human: metering surfaced in list" python3 bin/human.py list
+assert_grep "human_minutes_total: 3.25" "human: fulfillment + decline minutes are metered" \
+  python3 bin/human.py list
 
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
@@ -341,6 +346,38 @@ fi
 git checkout -q -- ledger/ 2>/dev/null || true   # discard the stub's local edge.json edits
 
 echo "=== pnl verifier correctness: currency + coverage fail closed (issues #33/#34) ==="
+REGISTRY_RESULT=$(python3 - <<'PYEOF'
+import math, sys
+sys.path.insert(0, "bin")
+from rails import RailAdapter, RailContribution, RailRegistry
+r = RailRegistry()
+r.register(RailAdapter("recv", frozenset({"receive"}), lambda: RailContribution(
+    name="recv", directions=frozenset({"receive"}), customer_usd=2.5)))
+r.register(RailAdapter("spend", frozenset({"spend"}), lambda: RailContribution(
+    name="spend", directions=frozenset({"spend"}), spent_usd=1.25)))
+out = r.pull_all()
+errors = []
+if r.names() != ("recv", "spend") or sum(x.customer_usd for x in out) != 2.5 \
+        or sum(x.spent_usd or 0 for x in out) != 1.25:
+    errors.append(f"aggregation={r.names()}/{out}")
+try:
+    r.register(RailAdapter("recv", frozenset({"receive"}), lambda: out[0]))
+    errors.append("duplicate registration accepted")
+except ValueError:
+    pass
+bad = RailRegistry()
+bad.register(RailAdapter("nan", frozenset({"receive"}), lambda: RailContribution(
+    name="nan", directions=frozenset({"receive"}), customer_usd=math.nan)))
+if not bad.pull_all()[0].errors:
+    errors.append("non-finite contribution accepted")
+print(";".join(errors))
+PYEOF
+)
+if [[ -z "$REGISTRY_RESULT" ]]; then
+  ok "rails: registry aggregates receive/spend and rejects duplicate/non-finite contributions"
+else
+  bad "rails registry contract: $REGISTRY_RESULT"
+fi
 # Same import-and-monkeypatch pattern as the edge block above: pnl's _get is stubbed per-case, so
 # the full main() path (errors wiring, verified flag, sums) runs with no network and no keys.
 mkdir -p pnl_state
