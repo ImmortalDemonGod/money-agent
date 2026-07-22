@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `.env.example`
-**Commit:** `8204315`
-**Generated:** 2026-07-22T22:05:44Z
+**Commit:** `ae81911`
+**Previous:** `8f307cf`
+**Generated:** 2026-07-22T23:06:07Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -11,18 +12,18 @@
 
 ```yaml
 classification:
-  risk_tier: R2
+  risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
   blast_radius: ".env.example"
-  classification_rationale: "R2 because this changes the operator-facing configuration contract while leaving the rail opt-in"
+  classification_rationale: "Configuration is part of the payment verification boundary"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:05:44Z"
+  classified_at: "2026-07-22T23:06:07Z"
 ```
 
 ## Claim(s)
 
-1. The verifier environment template names every Base settlement binding and finality input required by startup preflight
+1. The verifier template tells operators that chain ID 8453 and authorization acceptance are mandatory
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,14 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Make live Base provisioning reproducible rather than module-internal
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/30](https://github.com/ImmortalDemonGod/money-agent/issues/30)
+- **Requirements Verified:** Base rail configuration must fail visibly when pointed at another chain
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`8204315`](https://github.com/ImmortalDemonGod/money-agent/tree/8204315cd9099034f061f1c660111caf2d8c49b5))
+**Scope Inventory** (SHA: [`ae81911`](https://github.com/ImmortalDemonGod/money-agent/tree/ae819118bc4939031029d11b07357c92cc1f656f))
 
-- [`.env.example#L46-L59`](https://github.com/ImmortalDemonGod/money-agent/blob/8204315cd9099034f061f1c660111caf2d8c49b5/.env.example#L46-L59)
+- [`.env.example#L48-L50`](https://github.com/ImmortalDemonGod/money-agent/blob/ae819118bc4939031029d11b07357c92cc1f656f/.env.example#L48-L50)
 
 ### Class A (Execution Evidence)
 
@@ -68,18 +69,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
-aa601ba [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-b36b966 [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-2a5f010 [S4] fact-lane signing: verifier signatures + hash chain + customer attestation (#36 #42)
+68b46db test(sim): isolate AIV edge fixture state
+bc601c3 test(rails): expose registry contract to verification
+86e664c test(pr50): exercise executable rail and queue contracts
+67e9adb test(pr50): pin issue-closure trust boundaries
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The verifier environment template names every Base settlemen... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The verifier template tells operators that chain ID 8453 and... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -95,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Document complete Base verifier configuration
+Clarify chain and acceptance requirements
