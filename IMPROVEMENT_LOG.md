@@ -1442,15 +1442,13 @@ P6 probe registry, P7 exposure caps).
   fail-closed on ABSENCE, never grades content; a rubber stamp (thin decision/rationale) blocks;
   acquisitions must pin a committed provenance manifest by sha256 that actually exists in-tree.
   disclosure_gate stays the specialized send instance, regexes untouched (the JA lesson).
-- **P5 `bin/obligations.py` + `bin/obligation_watch.py`:** post-payment promises as typed records
-  (what/oracle/deadline/value/charge_id); the verifier watchdog publishes breaches to the facts
-  lane; guard HALTS on any breach (a dispute-in-waiting on a real name outranks everything);
-  with STRIPE_REFUND_KEY provisioned the watchdog issues the refund itself, else refund_status
-  says the halt is the only guarantee. verifier_loop runs it each cycle and publishes.
-- **P7 exposure caps at registration, ALL DEFAULT ZERO:** max open / max single / cumulative as
-  a fraction of VERIFIED received_usd — rule 3 stays absolute until the memo raises them
-  together with the watchdog provisioning; "you may never owe more than a fraction of what real
-  customers have actually paid" is now arithmetic, not prose.
+- **P5 `bin/obligations.py` + `bin/obligation_watch.py`:** the current constitution permits no
+  post-payment promises. Registration and agent fulfillment are therefore refusal-only and every
+  proposed deliver-later offer is durably recorded in `REFUSALS.md`. The verifier watchdog remains
+  solely as fail-safe cleanup for historical or externally introduced records; refund authority
+  does not make deferred work permissible.
+- **P7 exposure caps:** retained as a future design note, not an authorization switch. Raising
+  environment caps cannot relax CLAUDE.md's deliver-in-full-at-payment boundary.
 - **P6 `bin/probes.py`:** the substrate-probe registry (claim type → probe → the gate that
   re-runs it), plus a built-in mail-roundtrip probe (the M5 propagation test as a named probe).
 
