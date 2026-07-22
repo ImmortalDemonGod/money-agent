@@ -19,7 +19,7 @@ Checks, against the LIVE delivery URL (the success-redirect target -- never a lo
      post-payment redirect; an unrelated healthy URL is not evidence of delivery.
 
 Output ends with one machine-readable line the aiv gate re-runs and trusts only fresh:
-  DELIVERY_CHECK: <url> | status=<n> | bytes=<n> | placeholder=<none|FOUND> | sha256=<match|mismatch|n/a> | link_limit=<1|n|unverified|n/a> | verdict=<PASS|FAIL>
+  DELIVERY_CHECK: <url> | status=<n> | bytes=<n> | content_type=<type|unacceptable> | placeholder=<none|FOUND> | sha256=<match|mismatch|n/a> | link_limit=<1|n|unverified|n/a> | verdict=<PASS|FAIL>
 
 Usage: python3 bin/delivery_check.py <delivery-url> [--expect-sha256 <hex>] [--payment-link <url>]
 """
@@ -37,27 +37,37 @@ import host_check  # the SSRF guard + redirect-vetting fetch are shared, not rei
 
 PLACEHOLDER = re.compile(r"(<fill>|TODO|FILL ME)", re.IGNORECASE)
 MIN_BYTES = 256  # smaller than any real deliverable this repo ships; a stub page is smaller still
+# A delivery must identify itself as a consumable document, never an arbitrary response body.
+# Deliberately accept broad text formats and common portable documents, but not a missing or
+# generic binary Content-Type (which could hide a login page, an error payload, or a redirect shim).
+DELIVERABLE_TYPES = {
+    "application/json", "application/pdf", "application/zip",
+    "text/csv", "text/html", "text/markdown", "text/plain",
+}
 
 
-def _fetch(url: str) -> tuple[int, bytes]:
+def _fetch(url: str) -> tuple[int, bytes, str]:
     """host_check._get returns decoded text; delivery needs BYTES (sha256 of the artifact), so
     fetch through the same opener + guard with a bytes read."""
     if not host_check._public_https(url):
         print(f"  refused: {url} is not a public http(s) URL (SSRF guard)", file=sys.stderr)
-        return 0, b""
+        return 0, b"", ""
     req = urllib.request.Request(url, headers={"User-Agent": "delivery-check/1.0 (harness verifier)"})
     try:
         with host_check._OPENER.open(req, timeout=30) as r:
             body = r.read(5_000_001)
             if len(body) > 5_000_000:
                 print("  refused: delivery artifact exceeds the verification cap", file=sys.stderr)
-                return 0, b""
-            return r.status, body
+                return 0, b"", ""
+            # get_content_type() defaults a missing header to text/plain; retain the distinction
+            # because #39 requires an explicit content type from the delivery endpoint.
+            header_type = r.headers.get("Content-Type", "")
+            return r.status, body, header_type.split(";", 1)[0].strip().lower()
     except urllib.error.HTTPError as e:
-        return e.code, b""
+        return e.code, b"", ""
     except Exception as e:
         print(f"  fetch failed: {type(e).__name__}: {e}", file=sys.stderr)
-        return 0, b""
+        return 0, b"", ""
 
 
 def _payment_link(payment_link: str) -> dict | None:
@@ -112,8 +122,11 @@ def main() -> int:
         elif a == "--payment-link":
             payment_link = next(it, None)
 
-    status, body = _fetch(url)
+    status, body, content_type = _fetch(url)
     print(f"delivery page : HTTP {status}, {len(body)} bytes")
+    acceptable_type = content_type in DELIVERABLE_TYPES
+    print(f"content type  : {content_type or 'missing'}"
+          + ("" if acceptable_type else " (not an accepted deliverable type)"))
     m = PLACEHOLDER.search(body.decode("utf-8", "replace"))
     placeholder = "FOUND" if m else "none"
     if m:
@@ -134,10 +147,11 @@ def main() -> int:
                  if limit != "1" else ""))
         print(f"success URL   : {completion_url or 'unverified'} ({redirect})")
 
-    ok = (bool(status) and status < 400 and len(body) >= MIN_BYTES and placeholder == "none"
+    ok = (bool(status) and status < 400 and acceptable_type and len(body) >= MIN_BYTES and placeholder == "none"
           and sha in ("match", "n/a")
           and (payment_link is None or (limit == "1" and redirect == "match")))
     print(f"\nDELIVERY_CHECK: {url} | status={status} | bytes={len(body)} | "
+          f"content_type={content_type if acceptable_type else 'unacceptable'} | "
           f"placeholder={placeholder} | sha256={sha} | link_limit={limit} | redirect={redirect} | "
           f"verdict={'PASS' if ok else 'FAIL'}")
     if not ok:
