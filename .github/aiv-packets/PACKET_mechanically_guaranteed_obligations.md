@@ -6,9 +6,9 @@
 |-------|-------|
 | **Repository** | github.com/ImmortalDemonGod/money-agent |
 | **Change ID** | mechanically-guaranteed-obligations |
-| **Commits** | `d859a60`, `a024bb0`, `512f388`, `6763b83`, `d8adf3b`, `bcf1f1a`, `9d56125`, `7f3be9e`, `f6084e3`, `c085827`, `55dc2f1`, `167bd21`, `72b8c7c`, `bd1e7a8`, `6cc1a28`, `3b8b421` |
-| **Head SHA** | `3b8b421` |
-| **Base SHA** | `29226cc` |
+| **Commits** | `48dfde1`, `6656cfa`, `256ac12`, `7147aae`, `88b769c`, `e5e4416`, `5fe29f3`, `0ba7b16`, `d9e0a59`, `e0f224c`, `426fe8e`, `9f74517`, `d8b547b`, `4ab906a`, `be55086`, `4bf79b4` |
+| **Head SHA** | `4bf79b4` |
+| **Base SHA** | `534e970` |
 | **Created** | 2026-07-22T23:22:46Z |
 
 ## Classification
@@ -45,31 +45,31 @@ classification:
 
 | # | Evidence File | Commit SHA | Classes |
 |---|---------------|------------|---------|
-| 1 | EVIDENCE_BIN_OBLIGATIONS.md | `d859a60` | A, B, C, E, F |
-| 2 | EVIDENCE_BIN_OBLIGATION_WATCH.md | `a024bb0` | A, B, C, E, F |
-| 3 | EVIDENCE_TESTS_TEST_V3_HARDENING.md | `512f388` | A, B, C, E, F |
-| 4 | EVIDENCE_TESTS_SIM.SH.md | `6763b83` | A, B, C, E, F |
-| 5 | EVIDENCE_DOCS_V2_HARNESS_DESIGN.MD.md | `d8adf3b` | A, B, C, E, F |
-| 6 | EVIDENCE_.ENV.EXAMPLE.md | `bcf1f1a` | A, B, C, E, F |
-| 7 | EVIDENCE_CLAUDE.MD.md | `9d56125` | A, B, C, E, F |
-| 8 | EVIDENCE_SETUP.MD.md | `7f3be9e` | A, B, C, E, F |
-| 9 | EVIDENCE_IMPROVEMENT_LOG.MD.md | `f6084e3` | A, B, C, E, F |
-| 10 | EVIDENCE_BIN_OBLIGATIONS.md | `c085827` | A, B, C, E, F |
-| 11 | EVIDENCE_TESTS_TEST_V3_HARDENING.md | `55dc2f1` | A, B, C, E, F |
-| 12 | EVIDENCE_TESTS_SIM.SH.md | `167bd21` | A, B, C, E, F |
-| 13 | EVIDENCE_CLAUDE.MD.md | `72b8c7c` | A, B, C, E, F |
-| 14 | EVIDENCE_SETUP.MD.md | `bd1e7a8` | A, B, C, E, F |
-| 15 | EVIDENCE_DOCS_V2_HARNESS_DESIGN.MD.md | `6cc1a28` | A, B, C, E, F |
-| 16 | EVIDENCE_IMPROVEMENT_LOG.MD.md | `3b8b421` | A, B, C, E, F |
+| 1 | EVIDENCE_BIN_OBLIGATIONS.md | `48dfde1` | A, B, C, E, F |
+| 2 | EVIDENCE_BIN_OBLIGATION_WATCH.md | `6656cfa` | A, B, C, E, F |
+| 3 | EVIDENCE_TESTS_TEST_V3_HARDENING.md | `256ac12` | A, B, C, E, F |
+| 4 | EVIDENCE_TESTS_SIM.SH.md | `7147aae` | A, B, C, E, F |
+| 5 | EVIDENCE_DOCS_V2_HARNESS_DESIGN.MD.md | `88b769c` | A, B, C, E, F |
+| 6 | EVIDENCE_.ENV.EXAMPLE.md | `e5e4416` | A, B, C, E, F |
+| 7 | EVIDENCE_CLAUDE.MD.md | `5fe29f3` | A, B, C, E, F |
+| 8 | EVIDENCE_SETUP.MD.md | `0ba7b16` | A, B, C, E, F |
+| 9 | EVIDENCE_IMPROVEMENT_LOG.MD.md | `d9e0a59` | A, B, C, E, F |
+| 10 | EVIDENCE_BIN_OBLIGATIONS.md | `e0f224c` | A, B, C, E, F |
+| 11 | EVIDENCE_TESTS_TEST_V3_HARDENING.md | `426fe8e` | A, B, C, E, F |
+| 12 | EVIDENCE_TESTS_SIM.SH.md | `9f74517` | A, B, C, E, F |
+| 13 | EVIDENCE_CLAUDE.MD.md | `d8b547b` | A, B, C, E, F |
+| 14 | EVIDENCE_SETUP.MD.md | `4ab906a` | A, B, C, E, F |
+| 15 | EVIDENCE_DOCS_V2_HARNESS_DESIGN.MD.md | `be55086` | A, B, C, E, F |
+| 16 | EVIDENCE_IMPROVEMENT_LOG.MD.md | `4bf79b4` | A, B, C, E, F |
 
 ### Class A (Execution Evidence)
 
-Executed against committed head `3b8b421be79789fcf956cfc769bb13cbbc1a6bbb` on macOS/Python 3:
+Executed against committed head `eb11ad966dcd9cb88049f40197abec490bb6f11c` on macOS/Python 3 after rebasing onto `adfd48fa8285e5416a5c472338fef6d645c7ce7f`:
 
 | Command | Pass | Fail | Skip | Result |
 |---|---:|---:|---:|---|
 | `pytest -q tests/test_v3_hardening.py` | 17 | 0 | 0 | PASS |
-| `bash tests/sim.sh` | 114 | 0 | 0 | PASS |
+| `bash tests/sim.sh` | 119 | 0 | 0 | PASS |
 | `bash tests/corpus.sh` | 11 | 0 | 0 | PASS |
 | `python3 -m compileall -q bin tests/test_v3_hardening.py` | 1 | 0 | 0 | PASS |
 | scoped Ruff | 1 | 0 | 0 | PASS |
@@ -130,7 +130,8 @@ Focused obligation tests: `test_obligation_authorization_requires_fresh_grounded
 
 The first differential run executed the new simulation assertions against parent `29226cc`: 111
 passed and exactly the three new authorization assertions failed. Against the committed runtime,
-the same matrix passed 114/114.
+the same three added assertions passed after implementation; the current rebased matrix passes
+119/119.
 
 ### Class E (Intent Alignment)
 
@@ -142,11 +143,11 @@ the same matrix passed 114/114.
 
 ### Class F (Provenance Evidence)
 
-- Runtime: `d859a60`, `a024bb0`, `c085827`.
-- Focused regressions: `512f388`, `55dc2f1`.
-- Protected two-lane regressions: `6763b83`, `167bd21`.
-- Policy and provisioning: `d8adf3b`, `bcf1f1a`, `9d56125`, `7f3be9e`, `f6084e3`, `72b8c7c`,
-  `bd1e7a8`, `6cc1a28`, `3b8b421`.
+- Runtime: `48dfde1`, `6656cfa`, `e0f224c`.
+- Focused regressions: `256ac12`, `426fe8e`.
+- Protected two-lane regressions: `7147aae`, `9f74517`.
+- Policy and provisioning: `88b769c`, `e5e4416`, `5fe29f3`, `0ba7b16`, `d9e0a59`, `d8b547b`,
+  `4ab906a`, `be55086`, `4bf79b4`.
 - No test was deleted or skipped. Class G is omitted because no black-box prediction was
   preregistered; reconstructing one post hoc would be verification theater.
 
