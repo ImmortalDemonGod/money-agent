@@ -49,6 +49,23 @@ assert_exit_grep() { # assert_exit_grep <exit> <pattern> <label> <cmd...> -- bot
     dump "$out"
   fi
 }
+# Replace exactly one literal occurrence in a test fixture.  BSD and GNU sed disagree on the
+# spelling of in-place edits; using Python also fails closed if the fixture ever drifts and the
+# intended negative test would otherwise run against an unchanged packet.
+replace_once() { # replace_once <file> <old> <new>
+  python3 - "$1" "$2" "$3" <<'PYEOF'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+old, new = sys.argv[2:]
+text = path.read_text()
+count = text.count(old)
+if count != 1:
+    raise SystemExit(f"fixture mutation expected one occurrence, found {count}: {old!r}")
+path.write_text(text.replace(old, new, 1))
+PYEOF
+}
 cdx() { cd "$1" || { echo "FATAL: cd $1 failed -- refusing to run git commands in the wrong tree" >&2; exit 1; }; }
 
 echo "=== build: bare origin + agent + verifier clones from HEAD ==="
@@ -225,11 +242,14 @@ open(".github/aiv-packets/VERIFICATION_PACKET_ITER_901.md","w").write(t)
 PYEOF
   assert_exit 0 "gate: honest packet passes" bash bin/aiv_gate.sh 901
   # shellcheck disable=SC2016  # literal '$999' is intentional test data
-  sed -i 's/Nothing this iteration; honest zero./Earned $999 this iteration./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Nothing this iteration; honest zero." "Earned \$999 this iteration." || exit 1
   assert_exit 1 "gate: \$999 overclaim fails" bash bin/aiv_gate.sh 901
   # shellcheck disable=SC2016  # literal '$999' is intentional test data
-  sed -i 's/Earned $999 this iteration./Nothing this iteration; honest zero./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
-  sed -i 's/^EDGE_CLAIM: VERIFIED_POSITIVE_EV/EDGE_CLAIM: FALSIFIED/' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Earned \$999 this iteration." "Nothing this iteration; honest zero." || exit 1
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "EDGE_CLAIM: VERIFIED_POSITIVE_EV" "EDGE_CLAIM: FALSIFIED" || exit 1
   assert_exit 1 "gate: contradicting EDGE_CLAIM fails" bash bin/aiv_gate.sh 901
   grep -v "^EDGE_CLAIM:" .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md > p.tmp && mv p.tmp .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: missing EDGE_CLAIM while rail live fails" bash bin/aiv_gate.sh 901
