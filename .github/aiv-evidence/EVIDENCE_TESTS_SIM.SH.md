@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `d131f6e`
-**Previous:** `4c0df17`
-**Generated:** 2026-07-22T21:15:44Z
+**Commit:** `17c5b28`
+**Previous:** `655bb5b`
+**Generated:** 2026-07-22T21:54:19Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "R3 because this regression verifies the payment-fact signature boundary"
+  classification_rationale: "R3 regression coverage for a payment-delivery boundary"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:15:44Z"
+  classified_at: "2026-07-22T21:54:19Z"
 ```
 
 ## Claim(s)
 
-1. the signing simulation proves an initial truth-signature failure persists verified=false and leaves no truth signature or attestation artifact
+1. The simulation rejects a payment link whose provider-configured completion redirect differs from the checked delivery artifact
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,14 +32,16 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
-- **Requirements Verified:** Issue #36 requires signing failures to fail closed before facts are grounded
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/39](https://github.com/ImmortalDemonGod/money-agent/issues/39)
+- **Requirements Verified:** Issue #39 requires the delivery check to validate the post-payment destination
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`d131f6e`](https://github.com/ImmortalDemonGod/money-agent/tree/d131f6e776080914d547e614d41fa2016a33037b))
+**Scope Inventory** (SHA: [`17c5b28`](https://github.com/ImmortalDemonGod/money-agent/tree/17c5b28447720bb566dd11ddff3f0c727ec1ecc0))
 
-- [`tests/sim.sh#L698-L713`](https://github.com/ImmortalDemonGod/money-agent/blob/d131f6e776080914d547e614d41fa2016a33037b/tests/sim.sh#L698-L713)
+- [`tests/sim.sh#L567`](https://github.com/ImmortalDemonGod/money-agent/blob/17c5b28447720bb566dd11ddff3f0c727ec1ecc0/tests/sim.sh#L567)
+- [`tests/sim.sh#L569-L570`](https://github.com/ImmortalDemonGod/money-agent/blob/17c5b28447720bb566dd11ddff3f0c727ec1ecc0/tests/sim.sh#L569-L570)
+- [`tests/sim.sh#L586-L588`](https://github.com/ImmortalDemonGod/money-agent/blob/17c5b28447720bb566dd11ddff3f0c727ec1ecc0/tests/sim.sh#L586-L588)
 
 ### Class A (Execution Evidence)
 
@@ -48,7 +50,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 11409 error(s)
+- **ruff:** 14215 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -69,18 +71,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+aa1dc15 [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
+fe0427a [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
+655bb5b test(verifier): cover initial truth signing failure
 4c0df17 test(verifier): reject unsigned attestation output
 46c2a41 docs(tests): record verifier hardening bug catalog
-54ef777 test(verifier): cover raw paths and inference CSV validation
-abe8811 test(corpus): fail closed on fixture probe crashes
-93a3e7d test(verifier): cover raw quarantine move failure
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | the signing simulation proves an initial truth-signature fai... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The simulation rejects a payment link whose provider-configu... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -96,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Cover fail-closed initial truth signing failure
+Cover Stripe completion redirect binding in the delivery simulation
