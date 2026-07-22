@@ -313,7 +313,7 @@ assert_exit_grep 1 "finite" "bet_gate: NaN typed thresholds fail schema validati
 assert_exit_grep 1 "requires max_spend_usd" "bet_gate: spend reservations require a real cap" \
   python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'probe','lane':'x','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':1}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
 assert_exit_grep 0 "cap exceeded" "bet_gate: cumulative spend cannot cross max_spend_usd" \
-  env BET_GATE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as g,bets; x={'id':'s','type':'probe','lane':'l','status':'open','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':2},'max_spend_usd':10,'spent_usd':0}; bets._load=lambda:[x]; bets._save=lambda *_:None; assert g.authorize('spend',True,bet_id='s',amount_usd=6)[0]; ok,why=g.authorize('spend',True,bet_id='s',amount_usd=5); print(why); assert not ok"
+  env BET_GATE_ENFORCE=1 python3 -c "import contextlib,sys;sys.path.insert(0,'bin');import bet_gate as g,bets; x={'id':'s','type':'probe','lane':'l','status':'open','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':2},'max_spend_usd':10,'spent_usd':0}; bets._load=lambda:[x]; bets._transaction=lambda _m:contextlib.nullcontext([x]); assert g.authorize('spend',True,bet_id='s',amount_usd=6)[0]; ok,why=g.authorize('spend',True,bet_id='s',amount_usd=5); print(why); assert not ok"
 assert_exit 0 "bets: path-limited save never commits unrelated staged files" \
   python3 -c "import sys,tempfile,pathlib,types;sys.path.insert(0,'bin');import bets; bets.REPO=pathlib.Path(tempfile.mkdtemp()); bets.BETS=bets.REPO/'run/bets.json'; calls=[]; bets.subprocess.run=lambda a,**k: (calls.append(a) or types.SimpleNamespace(returncode=1 if a[1:4]==['diff','--cached','--quiet'] else 0,stdout='branch',stderr='')); bets._save([], 'x'); commit=next(a for a in calls if 'commit' in a); assert '--' in commit and str(bets.BETS) in commit"
 # A refusal after the authorization check must not consume the reservation.
@@ -337,7 +337,7 @@ assert_exit_grep 1 "ordering" "bets: armed placement refuses the out-of-order ty
   --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":24}'
 L="spine-lane/offer"
 for M in instrument-probe substrate-probe; do
-  python3 bin/bets.py add --what "$M" --clock other --check "exit 0" --oracle deterministic \
+  python3 bin/bets.py add --what "$M" --clock other --check "printf '{\"$M\":1}'" --oracle deterministic \
     --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type probe --lane "$L" \
     --success "{\"oracle_id\":\"deterministic\",\"metric\":\"$M\",\"comparator\":\">=\",\"threshold\":1,\"window_h\":24}" \
     >/dev/null 2>&1
@@ -346,7 +346,7 @@ python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK lin
 python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)" >/dev/null 2>&1
 assert_exit 0 "spine: ladder cleared -> demand-confirmed placeable at stage 2" \
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "$L"
-python3 bin/bets.py add --what "demand probe" --clock reply --check true --oracle instrumented \
+python3 bin/bets.py add --what "demand probe" --clock reply --check "printf '{\"replies\":0}'" --oracle instrumented \
   --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type demand-confirmed --lane "$L" \
   --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":24}' \
   >/dev/null 2>&1
@@ -423,6 +423,10 @@ assert_exit_grep 1 "stamp" "decision gate (P3): a rubber stamp is not a decision
 replace_once DECISION_LOG.md "rationale:ok" "rationale:page reviewed, name-test applied, worth shipping"
 assert_exit 0 "decision gate (P3): recorded publish decision passes (content never graded)" \
   python3 bin/decision_gate.py publish dg_body.txt
+echo "- class:wrong | body:wrong | decision:ship | rationale:mentions class:publish and body:$DGH only inside prose" >> DECISION_LOG.md
+replace_once DECISION_LOG.md "class:publish | body:$DGH" "class:removed | body:removed"
+assert_exit_grep 1 "no decision recorded" "decision gate (P3): substrings inside other fields do not authorize" \
+  python3 bin/decision_gate.py publish dg_body.txt
 printf 'scraped dataset payload A (no provenance recorded)' > dg_acq.txt
 AQH=$(python3 -c "import sys;sys.path.insert(0,'bin');import decision_gate as d;print(d.body_hash(open('dg_acq.txt').read()))")
 echo "- class:data-acquisition | body:$AQH | decision:acquire | rationale:public docs pages only, robots respected" >> DECISION_LOG.md
@@ -438,30 +442,14 @@ assert_exit_grep 1 "not committed" "decision gate (P3): untracked file cannot sa
 replace_once DECISION_LOG.md "manifest:untracked_manifest.txt" "manifest:LICENSE"
 assert_exit 0 "decision gate (P3): pinned provenance manifest passes" \
   python3 bin/decision_gate.py data-acquisition dg_acq2.txt
-assert_exit_grep 1 "EXPOSURE_MAX_OPEN=0" "obligations (P5/P7): default caps are ZERO -- rule 3 stands" \
-  python3 bin/obligations.py register --what "ship later" --check "true" \
-  --deadline 2099-01-01T00:00:00Z --value-usd 1
-assert_exit_grep 1 "EXPOSURE_MAX_SINGLE" "obligations (P7): single-value cap refuses" \
-  env EXPOSURE_MAX_OPEN=1 python3 bin/obligations.py register --what x --check true \
-  --deadline 2099-01-01T00:00:00Z --value-usd 5
-assert_exit_grep 1 "fraction of what real customers" "obligations (P7): cumulative cap is a fraction of VERIFIED revenue (0 here)" \
-  env EXPOSURE_MAX_OPEN=1 EXPOSURE_MAX_SINGLE_USD=10 EXPOSURE_MAX_TOTAL_FRACTION=0.5 \
-  python3 bin/obligations.py register --what x --check true \
-  --deadline 2099-01-01T00:00:00Z --value-usd 5
-assert_exit_grep 1 "finite and non-negative" "obligations (P7): negative exposure cannot shrink the cap total" \
-  env EXPOSURE_MAX_OPEN=1 EXPOSURE_MAX_SINGLE_USD=10 EXPOSURE_MAX_TOTAL_FRACTION=1 \
-  python3 bin/obligations.py register --what x --check delivery-url:https://example.com \
-  --deadline 2099-01-01T00:00:00Z --value-usd=-1
-assert_exit_grep 1 "finite and non-negative" "obligations (P7): NaN cannot bypass comparisons" \
-  env EXPOSURE_MAX_OPEN=1 EXPOSURE_MAX_SINGLE_USD=10 EXPOSURE_MAX_TOTAL_FRACTION=1 \
-  python3 bin/obligations.py register --what x --check delivery-url:https://example.com \
-  --deadline 2099-01-01T00:00:00Z --value-usd=nan
-assert_exit_grep 1 "typed oracle" "obligations: arbitrary verifier-side shell commands are refused" \
-  env EXPOSURE_MAX_OPEN=1 EXPOSURE_MAX_SINGLE_USD=10 EXPOSURE_MAX_TOTAL_FRACTION=1 \
-  python3 bin/obligations.py register --what x --check true \
-  --deadline 2099-01-01T00:00:00Z --value-usd=0
-assert_exit 0 "obligations: agent fulfillment remains a claim, not a verified terminal status" \
-  python3 -c "import sys,types;sys.path.insert(0,'bin');import obligations as o; x={'id':'obl-x','status':'open','check':'delivery-url:https://example.com'}; o._load=lambda:[x]; o._save=lambda *_:None; a=types.SimpleNamespace(id='obl-x',evidence='delivered at URL'); assert o.cmd_fulfill(a)==0 and x['status']=='fulfillment-claimed'"
+assert_exit_grep 1 "post-payment work is forbidden" "obligations (P5): raised caps cannot authorize deferred paid work" \
+  env EXPOSURE_MAX_OPEN=99 EXPOSURE_MAX_SINGLE_USD=999 EXPOSURE_MAX_TOTAL_FRACTION=99 \
+  python3 bin/obligations.py register --what "ship later" --check delivery-url:https://example.com \
+  --deadline 2099-01-01T00:00:00Z --value-usd=1
+if grep -q "ship later" REFUSALS.md; then ok "obligations (P5): deferred offer recorded in REFUSALS.md"
+else bad "obligations (P5): refusal record missing"; fi
+assert_exit_grep 1 "cannot operate a deliver-later" "obligations (P5): agent fulfillment path is disabled" \
+  python3 bin/obligations.py fulfill obl-x --evidence "delivered later"
 assert_exit 0 "obligation watchdog: arbitrary shell is not a completion oracle" \
   python3 -c "import sys;sys.path.insert(0,'bin');import obligation_watch as o; ok,e=o._completion_oracle('true'); assert not ok and 'unsupported' in e['error']"
 assert_exit 0 "obligation watchdog: refund requests carry a stable idempotency key" \

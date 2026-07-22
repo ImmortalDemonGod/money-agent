@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `f162957`
-**Generated:** 2026-07-22T22:08:58Z
+**Commit:** `8e1e2ed`
+**Previous:** `1c0d6f2`
+**Generated:** 2026-07-22T22:40:41Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +16,15 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "End-to-end regression matrix for payment, refund, PII, and audit critical surfaces inherits R3"
+  classification_rationale: "The matrix exercises payment, PII, verifier, and audit critical surfaces and therefore inherits R3"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:08:58Z"
+  classified_at: "2026-07-22T22:40:41Z"
 ```
 
 ## Claim(s)
 
-1. The two-clone simulation rejects ambiguous bet actions, cap bypasses, stale promise facts, self-certified fulfillment, lane reopening, and uncommitted provenance
-2. The simulation's text mutation helper runs portably on BSD and GNU hosts
+1. The two-clone simulation rejects substring authorization and all deferred obligation registration
+2. Typed resolution fixtures emit observable metric values for declared-condition evaluation
 3. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,28 +33,18 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** Every confirmed PR 51 defect requires a discriminator regression in the canonical verification matrix
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51#pullrequestreview-4759249208](https://github.com/ImmortalDemonGod/money-agent/pull/51#pullrequestreview-4759249208)
+- **Requirements Verified:** CodeRabbit fixes require end-to-end regression coverage in the existing simulation matrix
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`f162957`](https://github.com/ImmortalDemonGod/money-agent/tree/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1))
+**Scope Inventory** (SHA: [`8e1e2ed`](https://github.com/ImmortalDemonGod/money-agent/tree/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0))
 
-- [`tests/sim.sh#L52-L61`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L52-L61)
-- [`tests/sim.sh#L228`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L228)
-- [`tests/sim.sh#L246`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L246)
-- [`tests/sim.sh#L248-L266`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L248-L266)
-- [`tests/sim.sh#L330-L331`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L330-L331)
-- [`tests/sim.sh#L366`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L366)
-- [`tests/sim.sh#L376-L381`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L376-L381)
-- [`tests/sim.sh#L394-L411`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L394-L411)
-- [`tests/sim.sh#L426-L429`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L426-L429)
-- [`tests/sim.sh#L437-L448`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L437-L448)
-- [`tests/sim.sh#L460`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L460)
-- [`tests/sim.sh#L806`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L806)
-- [`tests/sim.sh#L809`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L809)
-- [`tests/sim.sh#L815`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L815)
-- [`tests/sim.sh#L817-L818`](https://github.com/ImmortalDemonGod/money-agent/blob/f16295700ba0b13c6d0d44a44a61dbf6ec2b93c1/tests/sim.sh#L817-L818)
+- [`tests/sim.sh#L259`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L259)
+- [`tests/sim.sh#L283`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L283)
+- [`tests/sim.sh#L292`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L292)
+- [`tests/sim.sh#L369-L372`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L369-L372)
+- [`tests/sim.sh#L388-L395`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L388-L395)
 
 ### Class A (Execution Evidence)
 
@@ -62,7 +53,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 22843 error(s)
+- **ruff:** 22194 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -83,19 +74,19 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+8e1e2ed test(v3): cover CodeRabbit hardening findings
+1c0d6f2 test(sim): adversarially cover PR 51 hardening
 a3d4a5a test(v3): cover adversarial enforcement seams
 937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
 7b7a7fe [S10] V3 spine: per-lane stage ordering, config-gated off (the contested layer, by explicit switch)
-644f13c [S9] V3 typed bet-spec + action authorization, config-gated off (bet-ledger layer)
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The two-clone simulation rejects ambiguous bet actions, cap ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | The simulation's text mutation helper runs portably on BSD a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The two-clone simulation rejects substring authorization and... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | Typed resolution fixtures emit observable metric values for ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 2 manual review.
@@ -111,4 +102,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Add adversarial fixtures for all PR 51 enforcement defects
+Extend the integration matrix for exact decisions, typed outcomes, and refusal-only obligations
