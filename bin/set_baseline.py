@@ -68,6 +68,31 @@ if _stale_edge.exists():
     _stale_edge.rename(_dest)
     print(f"NOTE: archived a STALE edge freeze from a previous run -> {_dest}")
     print("      The edge rail is unfrozen for this run; the agent must re-register its bet.")
+
+# A chain baseline is run-scoped for exactly the same reason as Stripe's created_gt. Reusing the
+# previous run's block would recount its settlements and could trip the next run's first-dollar
+# stop immediately. Freeze at run start (not on the first pnl cycle, which leaves a race where a
+# payment arriving after this script but before that cycle is incorrectly hidden behind baseline).
+if os.environ.get("BASE_RPC_URL"):
+    _stale_base = STATE_DIR / "base_usdc_baseline.json"
+    if _stale_base.exists():
+        _base_dest = STATE_DIR / f"base_usdc_baseline.{now}.archived.json"
+        _n = 1
+        while _base_dest.exists():
+            _base_dest = STATE_DIR / f"base_usdc_baseline.{now}.{_n}.archived.json"
+            _n += 1
+        _stale_base.rename(_base_dest)
+        print(f"NOTE: archived the previous run's Base baseline -> {_base_dest}")
+    import sys
+    sys.path.insert(0, str(REPO / "bin"))
+    from rails import base_usdc
+    try:
+        _base = base_usdc.freeze_baseline(STATE_DIR)
+    except Exception as e:
+        raise SystemExit(f"FATAL: could not freeze the run-scoped Base baseline: "
+                         f"{type(e).__name__}: {e}")
+    print(f"  froze Base baseline at {_base['finality_tag']} block "
+          f"{_base['baseline_block']} ({_base['baseline_hash']})")
 payload = json.dumps({
     "created_gt": now,
     "set_at_iso": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(now)),
