@@ -3,8 +3,8 @@
 # explicit VERDICT line the assistant reads to decide: keep waiting, restart the verifier, or
 # ALERT THE OPERATOR (first dollar / dead verifier).
 #
-#   bin/supervise.sh                       # facts from the LEDGER branch (two-lane, default)
-#   LEDGER_BRANCH=ledger-run2 bin/supervise.sh
+#   bin/supervise.sh <agent-branch>        # facts + claims-lane human requests
+#   AGENT_BRANCH=run-2 LEDGER_BRANCH=ledger-run2 bin/supervise.sh
 #
 # It does NOT do the verification (verifier_loop.sh does). It answers: is the verifier alive, is
 # truth.json fresh, is the push working, and HAS THE FIRST DOLLAR ARRIVED. That last one is the
@@ -12,6 +12,7 @@
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
+AGENT_BRANCH="${1:-${AGENT_BRANCH:-}}"
 now=$(date -u +%s)
 
 echo "===== VERIFIER SUPERVISOR @ $(date -u +%H:%M:%SZ) ====="
@@ -71,23 +72,45 @@ if [[ "$(git branch --show-current 2>/dev/null)" == "$LEDGER_BRANCH" ]] \
   fi
 fi
 
-# 3d. #31: open human-actuation requests -- the one queue where the AGENT is waiting on the
-# OPERATOR; invisible here, it would defeat its own purpose. Reads the working-tree file (this
-# screen runs wherever the operator looks; on the verifier's ledger checkout the file is absent
-# and the line stays silent).
-if [[ -f "$R/run/human_tasks.json" ]]; then
-  HQ=$(python3 - "$R/run/human_tasks.json" <<'PY' 2>/dev/null
-import json, sys, datetime as dt
-ts = json.load(open(sys.argv[1])).get("tasks", [])
-op = [t for t in ts if t.get("status") == "open"]
-if op:
-    oldest = min(t["requested_at"] for t in op)
-    age_h = (dt.datetime.now(dt.timezone.utc)
-             - dt.datetime.fromisoformat(oldest.replace("Z", "+00:00"))).total_seconds() / 3600
-    print(f"{len(op)} open actuation request(s), oldest {age_h:.1f}h -- fulfill or decline (bin/human.py)")
+# 3d. #31: requests live on the AGENT branch; operator resolutions live on the FACTS branch.
+# Read both refs explicitly. Looking at this verifier checkout's working tree made the queue
+# invisible in the very topology supervise exists for, and the old simulation accidentally ran
+# this command from the agent clone.
+if [[ -z "$AGENT_BRANCH" ]]; then
+  echo "human queue: UNKNOWN (pass <agent-branch> or set AGENT_BRANCH)"
+else
+  git fetch -q origin "$AGENT_BRANCH" 2>/dev/null || true
+  HQ=$(python3 - "$R" "$AGENT_BRANCH" "$LEDGER_BRANCH" <<'PY' 2>/dev/null
+import datetime as dt, json, subprocess, sys
+repo, agent, ledger = sys.argv[1:]
+def show(ref, path):
+    r = subprocess.run(["git", "show", f"origin/{ref}:{path}"], cwd=repo,
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        return None
+    return json.loads(r.stdout)
+try:
+    task_doc = show(agent, "run/human_tasks.json")
+    if task_doc is None:
+        print("no requests recorded")
+        raise SystemExit
+    resolutions = (show(ledger, "ledger/human_resolutions.json") or {}).get("resolutions", {})
+    open_tasks = [t for t in task_doc.get("tasks", []) if t.get("status") == "open"]
+    pending = [t for t in open_tasks if t.get("id") not in resolutions]
+    awaiting = [t for t in open_tasks if t.get("id") in resolutions]
+    if not open_tasks:
+        print("clear")
+    else:
+        oldest = min(t["requested_at"] for t in open_tasks)
+        age_h = (dt.datetime.now(dt.timezone.utc)
+                 - dt.datetime.fromisoformat(oldest.replace("Z", "+00:00"))).total_seconds()/3600
+        print(f"{len(pending)} awaiting operator, {len(awaiting)} resolved-awaiting-agent-sync, "
+              f"oldest {age_h:.1f}h")
+except Exception as e:
+    print(f"UNREADABLE ({type(e).__name__}: {e})")
 PY
 )
-  [[ -n "$HQ" ]] && echo "human queue: $HQ"
+  echo "human queue: ${HQ:-UNREADABLE}"
 fi
 
 # 4. recent push activity from the log
