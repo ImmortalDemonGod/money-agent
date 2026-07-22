@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `.env.example`
-**Commit:** `ae81911`
-**Previous:** `8f307cf`
-**Generated:** 2026-07-22T23:06:07Z
+**Commit:** `5303969`
+**Previous:** `b7e13e2`
+**Generated:** 2026-07-22T23:36:52Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: ".env.example"
-  classification_rationale: "Configuration is part of the payment verification boundary"
+  classification_rationale: "Mismatched configuration documentation can leave a payment rail unexpectedly inert"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:06:07Z"
+  classified_at: "2026-07-22T23:36:52Z"
 ```
 
 ## Claim(s)
 
-1. The verifier template tells operators that chain ID 8453 and authorization acceptance are mandatory
+1. The verifier environment template states that BASE_RPC_URL also requires the bound private live-acceptance marker
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,14 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/30](https://github.com/ImmortalDemonGod/money-agent/issues/30)
-- **Requirements Verified:** Base rail configuration must fail visibly when pointed at another chain
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703)
+- **Requirements Verified:** Configuration guidance must match startup and adapter enforcement
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`ae81911`](https://github.com/ImmortalDemonGod/money-agent/tree/ae819118bc4939031029d11b07357c92cc1f656f))
+**Scope Inventory** (SHA: [`5303969`](https://github.com/ImmortalDemonGod/money-agent/tree/530396920c046c91397c3641ea3fb562055a6a1c))
 
-- [`.env.example#L48-L50`](https://github.com/ImmortalDemonGod/money-agent/blob/ae819118bc4939031029d11b07357c92cc1f656f/.env.example#L48-L50)
+- [`.env.example#L51`](https://github.com/ImmortalDemonGod/money-agent/blob/530396920c046c91397c3641ea3fb562055a6a1c/.env.example#L51)
 
 ### Class A (Execution Evidence)
 
@@ -69,18 +69,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-68b46db test(sim): isolate AIV edge fixture state
-bc601c3 test(rails): expose registry contract to verification
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
+d060b27 test(rails): call monetary validator directly
+5f37af2 test(supervisor): model live verifier process explicitly
+dfe3ff8 test(pr50): pin final review failure modes
+d52a400 test(rails): expand fail-closed registry catalog
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The verifier template tells operators that chain ID 8453 and... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The verifier environment template states that BASE_RPC_URL a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -96,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Clarify chain and acceptance requirements
+Align Base environment template with acceptance enforcement
