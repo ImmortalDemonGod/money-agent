@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `.env.example`
-**Commit:** `5303969`
-**Previous:** `b7e13e2`
-**Generated:** 2026-07-22T23:36:52Z
+**File:** `.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md`
+**Commit:** `ebcfa10`
+**Generated:** 2026-07-22T23:40:01Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +14,15 @@ classification:
   risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
-  blast_radius: ".env.example"
-  classification_rationale: "Mismatched configuration documentation can leave a payment rail unexpectedly inert"
+  blast_radius: ".github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md"
+  classification_rationale: "Verification metadata on payment and conclusion surfaces must remain auditably accurate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:36:52Z"
+  classified_at: "2026-07-22T23:40:01Z"
 ```
 
 ## Claim(s)
 
-1. The verifier environment template states that BASE_RPC_URL also requires the bound private live-acceptance marker
+1. Environment evidence uses labeled fences and retains manual-review and claim-specific-test limitations
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,14 +31,15 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703)
-- **Requirements Verified:** Configuration guidance must match startup and adapter enforcement
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532](https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532)
+- **Requirements Verified:** Address final CodeRabbit evidence-integrity findings without overstating collected proof
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`5303969`](https://github.com/ImmortalDemonGod/money-agent/tree/530396920c046c91397c3641ea3fb562055a6a1c))
+**Scope Inventory** (SHA: [`ebcfa10`](https://github.com/ImmortalDemonGod/money-agent/tree/ebcfa10d2fcb79bc1e76e6a9c0dd2c09fdb48837))
 
-- [`.env.example#L51`](https://github.com/ImmortalDemonGod/money-agent/blob/530396920c046c91397c3641ea3fb562055a6a1c/.env.example#L51)
+- [`.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L71`](https://github.com/ImmortalDemonGod/money-agent/blob/ebcfa10d2fcb79bc1e76e6a9c0dd2c09fdb48837/.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L71)
+- [`.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L99-L100`](https://github.com/ImmortalDemonGod/money-agent/blob/ebcfa10d2fcb79bc1e76e6a9c0dd2c09fdb48837/.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L99-L100)
 
 ### Class A (Execution Evidence)
 
@@ -48,8 +48,8 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 33 error(s)
-- **mypy:** Found 3 errors in 1 file (checked 1 source file)
+- **ruff:** All checks passed
+- **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
 
@@ -68,7 +68,7 @@ No covering test files found.
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
-```text
+```
 d060b27 test(rails): call monetary validator directly
 5f37af2 test(supervisor): model live verifier process explicitly
 dfe3ff8 test(pr50): pin final review failure modes
@@ -80,7 +80,7 @@ d52a400 test(rails): expand fail-closed registry catalog
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The verifier environment template states that BASE_RPC_URL a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Environment evidence uses labeled fences and retains manual-... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -96,5 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Align Base environment template with acceptance enforcement. Claim 1 remains manual-review-only;
-this documentation artifact has no claim-specific execution test.
+docs(aiv): preserve env evidence limitations
