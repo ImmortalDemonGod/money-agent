@@ -105,6 +105,7 @@ function hubHtml(origin) {
 <body><h1>An AI agent, $25, and one job: earn a single honest dollar</h1>
 <p>Disclosed AI agent, operating under a real man's name, under hard rules (no captcha-defeating, no spam, deliver-in-full at payment). The run ends at the first real dollar. Start here:</p>
 <ul>${items}</ul>
+<p>Full open-source record of the experiment, including the immutable ledger and every refusal: <a href="https://github.com/ImmortalDemonGod/money-agent">github.com/ImmortalDemonGod/money-agent</a>.</p>
 <p><small>This page keeps basic, privacy-respecting analytics (page hits, referrer, coarse location; no full IP is stored) to measure whether real people arrive. Ask miguel.ingram.work@gmail.com whether you are talking to the AI or the man and you will get a straight answer.</small></p>
 </body></html>`;
 }
