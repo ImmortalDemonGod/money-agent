@@ -130,6 +130,10 @@ def cmd_register(a) -> int:
     if (not math.isfinite(a.value_usd)) or a.value_usd <= 0:
         print("FATAL: --value-usd must be positive and finite.", file=sys.stderr)
         return 1
+    if not isinstance(a.charge_id, str) or not a.charge_id.startswith("ch_"):
+        print("REFUSING: mechanically guaranteed obligations require --charge-id ch_... so the "
+              "verifier can issue the promised refund.", file=sys.stderr)
+        return 1
     try:
         deadline = dt.datetime.fromisoformat(a.deadline.replace("Z", "+00:00"))
     except (TypeError, ValueError) as e:
@@ -172,7 +176,7 @@ def cmd_register(a) -> int:
         oid = f"obl-{len(obls) + 1:03d}"
         obls.append({"id": oid, "registered_at": _now().strftime("%Y-%m-%dT%H:%M:%SZ"),
                      "what": a.what, "check": a.check, "deadline": a.deadline,
-                     "value_usd": a.value_usd, "charge_id": a.charge_id or None,
+                     "value_usd": a.value_usd, "charge_id": a.charge_id,
                      "status": "open", "resolution": None})
     print(f"{oid} registered under verifier-owned caps. The watchdog independently checks "
           "completion and refunds an overdue failure.")

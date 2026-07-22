@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/obligations.py`
-**Commit:** `29226cc`
-**Previous:** `2157725`
-**Generated:** 2026-07-22T23:05:35Z
+**Commit:** `f6084e3`
+**Previous:** `d859a60`
+**Generated:** 2026-07-22T23:13:44Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,17 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/obligations.py"
-  classification_rationale: "R3 under AIV section 5.2 because this changes payment liability authorization and the verifier privilege boundary"
+  classification_rationale: "R3 because this closes a refund-authority bypass on post-payment liability registration"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:05:35Z"
+  classified_at: "2026-07-22T23:13:44Z"
 ```
 
 ## Claim(s)
 
-1. Obligation registration succeeds only under fresh grounded verifier authorization with positive caps and refund authority
-2. Concurrent obligation registrations cannot jointly exceed verifier-published exposure caps
-3. Agent fulfillment evidence remains unverified until the verifier completion oracle passes
-4. No existing tests were modified or deleted during this change.
+1. cmd_register refuses every mechanically guaranteed obligation without a concrete Stripe charge identifier
+2. Persisted obligations retain the exact charge identifier the verifier will use for an overdue refund
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -34,46 +33,25 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/docs/V2_HARNESS_DESIGN.md#L791-L810](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/docs/V2_HARNESS_DESIGN.md#L791-L810)
-- **Requirements Verified:** P5 specifies the operator amendment permitting instant or mechanically guaranteed delivery through an out-of-band refund watchdog
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
+- **Requirements Verified:** Mechanically guaranteed delivery requires the watchdog to have a concrete refund target for every accepted liability
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`29226cc`](https://github.com/ImmortalDemonGod/money-agent/tree/29226cc090679296d15f4c9d8174a70db8749553))
+**Scope Inventory** (SHA: [`f6084e3`](https://github.com/ImmortalDemonGod/money-agent/tree/f6084e36b6f943fcf212d76d3fa2bd846350fb8d))
 
-- [`bin/obligations.py#L2`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L2)
-- [`bin/obligations.py#L4-L7`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L4-L7)
-- [`bin/obligations.py#L18`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L18)
-- [`bin/obligations.py#L20`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L20)
-- [`bin/obligations.py#L23`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L23)
-- [`bin/obligations.py#L28-L29`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L28-L29)
-- [`bin/obligations.py#L37`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L37)
-- [`bin/obligations.py#L43`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L43)
-- [`bin/obligations.py#L57-L120`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L57-L120)
-- [`bin/obligations.py#L125`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L125)
-- [`bin/obligations.py#L127-L131`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L127-L131)
-- [`bin/obligations.py#L133-L179`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L133-L179)
-- [`bin/obligations.py#L183-L195`](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/bin/obligations.py#L183-L195)
+- [`bin/obligations.py#L133-L136`](https://github.com/ImmortalDemonGod/money-agent/blob/f6084e36b6f943fcf212d76d3fa2bd846350fb8d/bin/obligations.py#L133-L136)
+- [`bin/obligations.py#L179`](https://github.com/ImmortalDemonGod/money-agent/blob/f6084e36b6f943fcf212d76d3fa2bd846350fb8d/bin/obligations.py#L179)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`_load_unlocked`** (L2): FAIL -- WARNING: No tests import or call `_load_unlocked`
-- **`_save_unlocked`** (L4-L7): FAIL -- WARNING: No tests import or call `_save_unlocked`
-- **`_lock`** (L18): FAIL -- WARNING: No tests import or call `_lock`
-- **`_load`** (L20): FAIL -- WARNING: No tests import or call `_load`
-- **`_transaction`** (L23): FAIL -- WARNING: No tests import or call `_transaction`
-- **`_authorization`** (L28-L29): PASS -- 2 test(s) call `_authorization` directly
-  - `tests/test_v3_hardening.py::test_obligation_authorization_requires_fresh_grounded_verifier_fact`
-  - `tests/test_v3_hardening.py::test_obligation_watch_authorization_requires_every_safeguard`
-- **`cmd_register`** (L37): PASS -- 2 test(s) call `cmd_register` directly
+- **`cmd_register`** (L133-L136): PASS -- 2 test(s) call `cmd_register` directly
   - `tests/test_v3_hardening.py::test_obligation_registration_uses_verifier_caps_and_serializes`
   - `tests/test_v3_hardening.py::test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`
-- **`cmd_fulfill`** (L43): PASS -- 1 test(s) call `cmd_fulfill` directly
-  - `tests/test_v3_hardening.py::test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`
 
-**Coverage summary:** 3/8 symbols verified by tests.
+**Coverage summary:** 1/1 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
@@ -98,33 +76,32 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+6763b83 test(sim): exercise verifier-authorized obligations
+512f388 test(obligations): cover guarded authorization contract
 30612e5 test(sim): exercise CodeRabbit review invariants
 76c1bec test(v3): cover CodeRabbit hardening findings
 bb5cbed test(sim): adversarially cover PR 51 hardening
-d90785d test(v3): cover adversarial enforcement seams
-1529ea1 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Obligation registration succeeds only under fresh grounded v... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Concurrent obligation registrations cannot jointly exceed ve... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | Agent fulfillment evidence remains unverified until the veri... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 4 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | cmd_register refuses every mechanically guaranteed obligatio... | symbol | 2 test(s) call `cmd_register` | PASS VERIFIED |
+| 2 | Persisted obligations retain the exact charge identifier the... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 3 manual review.
+**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (3/8 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (1/1 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Restore bounded post-payment obligations using only verifier-owned authorization facts
+Bind every accepted obligation to its refundable Stripe charge
