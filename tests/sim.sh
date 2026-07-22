@@ -564,9 +564,10 @@ sys.excepthook = lambda t, v, tb: print(f"DC_FAILS:crash:{t.__name__}:{v}")
 import importlib, delivery_check as dc
 importlib.reload(dc)
 fails = []
-def case(label, want_rc, fetch, limit, argv):
+def case(label, want_rc, fetch, limit, argv, redirect="https://example.com/unlock"):
     dc._fetch = fetch
-    dc._link_limit = lambda u: limit
+    dc._payment_link = lambda u: {"url": u, "restrictions": {"completed_sessions": {"limit": limit}},
+                                  "after_completion": {"type": "redirect", "redirect": {"url": redirect}}}
     sys.argv = ["delivery_check.py"] + argv
     rc = dc.main()
     if rc != want_rc:
@@ -582,6 +583,9 @@ case("uncapped link fails (#35)", 1, GOOD, "none",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
 case("unverifiable limit fails closed (#35)", 1, GOOD, "unverified",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("unrelated success redirect fails (#39)", 1, GOOD, "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"],
+     redirect="https://example.com/not-the-delivery")
 case("no payment link -> delivery-only check passes", 0, GOOD, "n/a",
      ["https://example.com/unlock"])
 import hashlib
