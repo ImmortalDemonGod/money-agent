@@ -326,12 +326,17 @@ if t["verified"] or not any(e.startswith("non_usd_amount:privacy:EUR") for e in 
    or t["spent_usd"] != 2.0:
     fails.append(f"privacy EUR txn not poisoned/excluded: {t['errors']} spent={t['spent_usd']}")
 
-# 8. #46: an untracked raw pull is QUARANTINED into the state dir, never deleted (it is either a
-#    plant preserved as evidence, or the orphan of a failed commit preserved as audit trail)
+# 8. #46: untracked raws are QUARANTINED into the state dir, never deleted (they are either a
+#    plant preserved as evidence, or the orphan of a failed commit preserved as audit trail).
+#    The nested whitespace name pins NUL-delimited Git parsing and path-preserving rescue: a
+#    whitespace splitter would treat it as multiple paths, while basename-only rescue can collide.
 import pathlib
 plant = pathlib.Path("ledger/raw/29990104T000000_plant.json")
 plant.parent.mkdir(parents=True, exist_ok=True)
 plant.write_text('{"plant": true}')
+nested_plant = pathlib.Path("ledger/raw/nested raw/plant file.json")
+nested_plant.parent.mkdir(parents=True, exist_ok=True)
+nested_plant.write_text('{"plant": "nested whitespace path"}')
 def privacy_clean(url, headers, params=None):
     if "balance_transactions" in url: return {"data": [], "has_more": False}
     if "/charges" in url: return {"data": [], "has_more": False}
@@ -340,9 +345,13 @@ def privacy_clean(url, headers, params=None):
                          {"token": "t2", "settled_amount": 200}]}
     return {}
 t = run(privacy_clean)
-q = list(pathlib.Path("pnl_state/raw-rescue").glob("*/29990104T000000_plant.json"))
-if plant.exists() or not q:
-    fails.append(f"C3 quarantine broken: still_in_tree={plant.exists()} quarantined={bool(q)}")
+q = pathlib.Path("pnl_state/raw-rescue")
+top_rescue = list(q.glob("*/ledger/raw/29990104T000000_plant.json"))
+nested_rescue = list(q.glob("*/ledger/raw/nested raw/plant file.json"))
+if plant.exists() or nested_plant.exists() or not top_rescue or not nested_rescue:
+    fails.append("C3 quarantine broken: "
+                 f"top_in_tree={plant.exists()} nested_in_tree={nested_plant.exists()} "
+                 f"top_rescued={bool(top_rescue)} nested_rescued={bool(nested_rescue)}")
 
 # 9. #46: a quarantine failure must halt before an untrusted raw pull can reach the manifest.
 #    The real failure mode is a state directory on a different filesystem (Path.rename raises
@@ -375,12 +384,22 @@ if not t["verified"] or t.get("inference_usd") != 1.75 or t.get("net_usd_full") 
     fails.append(f"inference metering wrong: verified={t['verified']} inf={t.get('inference_usd')} "
                  f"full={t.get('net_usd_full')} errors={t['errors']}")
 
-# 12. #41: malformed feed fails closed; header-only file is a measured zero
+# 12. #41: malformed CSVs fail closed; header-only file remains a documented measured zero.
 pathlib.Path("inf_bad.csv").write_text("date,usd\n2026-07-20,notanumber\n")
 os.environ["INFERENCE_CSV"] = "inf_bad.csv"
 t = run(privacy_clean)
 if t["verified"] or not any(e.startswith("inference_feed_failed") for e in t["errors"]):
     fails.append(f"malformed inference feed not failing closed: {t['errors']}")
+pathlib.Path("inf_no_usd.csv").write_text("date,cost\n2026-07-20,1.25\n")
+os.environ["INFERENCE_CSV"] = "inf_no_usd.csv"
+t = run(privacy_clean)
+if t["verified"] or not any(e.startswith("inference_feed_failed") for e in t["errors"]):
+    fails.append(f"inference schema without usd not failing closed: {t['errors']}")
+pathlib.Path("inf_nonfinite.csv").write_text("date,usd\n2026-07-20,NaN\n")
+os.environ["INFERENCE_CSV"] = "inf_nonfinite.csv"
+t = run(privacy_clean)
+if t["verified"] or not any(e.startswith("inference_feed_failed") for e in t["errors"]):
+    fails.append(f"non-finite inference feed not failing closed: {t['errors']}")
 pathlib.Path("inf_zero.csv").write_text("date,usd\n")
 os.environ["INFERENCE_CSV"] = "inf_zero.csv"
 t = run(privacy_clean)
@@ -397,7 +416,7 @@ if [[ -z "$PNL_FAILS" ]]; then
 else
   bad "pnl currency/coverage: $PNL_FAILS"
 fi
-rm -rf pnl_state inf.csv inf_bad.csv inf_zero.csv
+rm -rf pnl_state inf.csv inf_bad.csv inf_no_usd.csv inf_nonfinite.csv inf_zero.csv
 git checkout -q -- ledger/ 2>/dev/null || true
 git clean -qfd ledger/raw/ 2>/dev/null || true
 

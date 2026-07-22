@@ -63,6 +63,9 @@ classification:
   the portable AIV-gate negative checks.
 - `bash tests/corpus.sh`: **11 PASS, 0 FAIL**. It replays the archived iter-095 false stop and
   the iter-086 empty-commit seam for CLM-002.
+- `bash tests/sim.sh`: **29 PASS, 0 FAIL, 0 SKIP** after the CLM-004 regression additions. It
+  quarantines a nested raw filename containing spaces and rejects inference feeds missing `usd`
+  or containing `NaN`, while a `date,usd` header alone reports measured zero.
 - `shellcheck bin/*.sh tests/*.sh`, `python3 -m compileall -q bin`, `git diff --check`, and
   `aiv check .github/aiv-packets/VERIFICATION_PACKET_PR47_FAIL_CLOSED.md`: all exit 0.
 
@@ -72,8 +75,7 @@ classification:
 - CLM-002: `tests/corpus.sh` fixture 3 marker handling.
 - CLM-003: `bin/verifier_loop.sh` divergence branch.
 - CLM-004: `bin/pnl.py` NUL-delimited raw discovery, nested rescue destinations, and
-  `INFERENCE_CSV` schema/finite-number checks. Targeted simulation coverage follows in the next
-  atomic commit in this logical unit.
+  `INFERENCE_CSV` schema/finite-number checks; `tests/sim.sh` PnL fixture regression cases.
 
 ### Class C (Negative)
 
@@ -106,9 +108,8 @@ checks for the new behavior.
 
 - The simulation exercises filesystem failures by monkeypatching `Path.rename`; live verifier-host
   acceptance still needs an operator-owned filesystem test.
-- This first atomic commit establishes CLM-004's implementation. Its regression cases are recorded
-  only after their following atomic test commit; this packet does not treat future test evidence as
-  evidence for the current commit.
+- The simulation controls the local verifier filesystem and Git repository; it does not exercise
+  a production remote with adversarial filenames supplied over a network boundary.
 - Independent human S1 review is required before merge; no claim here treats automated review as a
   substitute.
 - Class G is omitted: no pre-implementation prediction was recorded.
@@ -136,3 +137,5 @@ states. Its tests are designed to fail on the old warning-only and vacuous-pass 
 - `bin/verifier_loop.sh`: preserves the facts lane for retry if divergence side-car capture fails.
 - `bin/pnl.py` (follow-up): uses NUL-delimited, checked Git output for raw quarantine and rejects
   malformed/non-finite inference CSV amounts while retaining intentional header-only zero semantics.
+- `tests/sim.sh` (follow-up): pins nested-whitespace raw rescue and missing-schema/non-finite
+  inference feeds as terminal verifier errors.
