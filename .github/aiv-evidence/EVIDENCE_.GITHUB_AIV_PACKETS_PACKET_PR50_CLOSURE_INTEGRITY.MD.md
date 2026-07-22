@@ -22,7 +22,7 @@ classification:
 
 ## Claim(s)
 
-1. The aggregate packet now declares the correct repository, R3/S1 classification, complete A-F evidence, preserved-test provenance, and honest live limitations
+1. The aggregate packet declares the correct repository and R3/S1 classification and records preserved-test provenance plus honest live limitations.
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -72,7 +72,7 @@ No covering test files found.
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
-```
+```text
 68b46db test(sim): isolate AIV edge fixture state
 bc601c3 test(rails): expose registry contract to verification
 86e664c test(pr50): exercise executable rail and queue contracts
@@ -84,8 +84,8 @@ c5fd8f6 docs(tests): normalize bug-catalog whitespace
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The aggregate packet now declares the correct repository, R3... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Claim 1 (see Claim(s)) | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | Claim 2 (see Claim(s)) | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
@@ -100,4 +100,5 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Repair generated classification and intent/provenance evidence
+Repair generated classification and intent/provenance evidence. The packet-edit claim remains
+manual-review-only; this sidecar does not represent lint/type output as execution evidence.
