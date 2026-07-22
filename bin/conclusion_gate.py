@@ -230,6 +230,22 @@ def main() -> int:
     except Exception as e:
         fails.append(f"cannot read the bet registry ({type(e).__name__}: {e}) -- fail-closed: "
                      "unknown bets are not resolved bets.")
+    # Human requests are checked independently of their companion bets. Otherwise the run agent
+    # could directly resolve a judgment-class companion and erase the only mechanical signal that
+    # operator actuation is still outstanding. Only `human.py sync`, after a facts-lane resolution,
+    # changes this status.
+    human_tasks = REPO / "run" / "human_tasks.json"
+    if human_tasks.exists():
+        try:
+            import json
+            for task in json.loads(human_tasks.read_text()).get("tasks", []):
+                if task.get("status") == "open":
+                    fails.append(f"open human actuation {task.get('id')} ({task.get('kind')}): "
+                                 f"{task.get('gate')!r} -- only a verifier-published operator "
+                                 "resolution consumed via bin/human.py sync closes it.")
+        except Exception as e:
+            fails.append(f"cannot read human task registry ({type(e).__name__}: {e}) -- "
+                         "fail-closed: unknown actuation state is not resolved state.")
     try:
         import truth as _truth
         e_facts, e_src = _truth.load("edge.json")
