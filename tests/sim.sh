@@ -344,11 +344,30 @@ q = list(pathlib.Path("pnl_state/raw-rescue").glob("*/29990104T000000_plant.json
 if plant.exists() or not q:
     fails.append(f"C3 quarantine broken: still_in_tree={plant.exists()} quarantined={bool(q)}")
 
-# 9. #41: absent feed -> null fields (unknown is not zero), even with spend measured
+# 9. #46: a quarantine failure must halt before an untrusted raw pull can reach the manifest.
+#    The real failure mode is a state directory on a different filesystem (Path.rename raises
+#    EXDEV); patching the one planted file's rename gives the same verifier-visible contract.
+plant = pathlib.Path("ledger/raw/29990105T000000_rename_failure.json")
+plant.write_text('{"plant": "rename failure"}')
+real_rename = pathlib.Path.rename
+def reject_plant_rename(self, target):
+    if self.resolve() == plant.resolve():
+        raise OSError("simulated cross-device quarantine failure")
+    return real_rename(self, target)
+pathlib.Path.rename = reject_plant_rename
+try:
+    rc = pnl.main()
+finally:
+    pathlib.Path.rename = real_rename
+if rc == 0 or not plant.exists():
+    fails.append(f"C3 quarantine failure did not halt/preserve raw: rc={rc} exists={plant.exists()}")
+plant.unlink(missing_ok=True)
+
+# 10. #41: absent feed -> null fields (unknown is not zero), even with spend measured
 if t.get("inference_usd") is not None or t.get("net_usd_full") is not None:
     fails.append(f"inference absent-feed not null: {t.get('inference_usd')}/{t.get('net_usd_full')}")
 
-# 10. #41: valid feed + measured spend -> summed inference and full net
+# 11. #41: valid feed + measured spend -> summed inference and full net
 pathlib.Path("inf.csv").write_text("date,usd\n2026-07-20,1.25\n2026-07-20,0.50\n")
 os.environ["INFERENCE_CSV"] = "inf.csv"
 t = run(privacy_clean)
@@ -356,7 +375,7 @@ if not t["verified"] or t.get("inference_usd") != 1.75 or t.get("net_usd_full") 
     fails.append(f"inference metering wrong: verified={t['verified']} inf={t.get('inference_usd')} "
                  f"full={t.get('net_usd_full')} errors={t['errors']}")
 
-# 11. #41: malformed feed fails closed; header-only file is a measured zero
+# 12. #41: malformed feed fails closed; header-only file is a measured zero
 pathlib.Path("inf_bad.csv").write_text("date,usd\n2026-07-20,notanumber\n")
 os.environ["INFERENCE_CSV"] = "inf_bad.csv"
 t = run(privacy_clean)
@@ -442,7 +461,11 @@ PYEOF
   # shellcheck disable=SC2016  # literal '$999' is intentional test data
   replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
     "Earned \$999 this iteration." "Nothing this iteration; honest zero." || exit 1
-  # The bare-word form was how a false claim could slip past a $-only parser; pin it as well.
+  # The bare-word forms ("999 dollars", "USD 999") were how a false claim could slip past a
+  # $-only parser; the gate matches them too -- pin that path (queued from IMPROVEMENT_LOG entry
+  # 021). The amount must exceed EVERY verifier bound: the rig's edge rail carries paper_pnl 62.5,
+  # and the gate's documented residual accepts real-money claims up to the paper P&L -- a first
+  # draft of this test used "47 dollars" and passed the gate for exactly that reason.
   replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
     "Nothing this iteration; honest zero." "Earned 999 dollars this iteration." || exit 1
   assert_exit 1 "gate: bare-word '999 dollars' overclaim fails" bash bin/aiv_gate.sh 901

@@ -109,3 +109,8 @@ aiv check .github/aiv-packets/VERIFICATION_PACKET_PR47_FAIL_CLOSED.md
 
 This R3 follow-up turns verifier-rescue failures and corpus-probe crashes into visible, blocking
 states. Its tests are designed to fail on the old warning-only and vacuous-pass behavior.
+
+## Atomic commit record
+
+- `bin/pnl.py`: raw quarantine detects ignored files and refuses fact publication on a move failure.
+- `tests/sim.sh`: adds the cross-device-equivalent move-failure regression for CLM-001.
