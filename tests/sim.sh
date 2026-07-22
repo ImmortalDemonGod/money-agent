@@ -248,10 +248,29 @@ python3 bin/human.py request --kind approval-click --gate "mastodon.nu staff app
   --test "iter-079 packet: account stuck at human staff approval" \
   --ev "the account exists; one click activates it" >/dev/null 2>&1
 cdx "$W/verifier"
+mkdir -p .run
+echo "$$" > .run/verifier.pid
 assert_grep "1 awaiting operator" "supervise: reads queue from agent branch in verifier checkout" \
   bash bin/supervise.sh "$BRANCH"
 assert_grep "VERDICT.*HUMAN ACTUATION" "supervise: pending queue reaches the VERDICT line" \
   bash bin/supervise.sh "$BRANCH"
+echo "99999999" > .run/verifier.pid
+assert_grep "VERDICT.*RESTART" "supervise: dead verifier outranks a pending human queue" \
+  bash bin/supervise.sh "$BRANCH"
+echo "$$" > .run/verifier.pid
+printf 'tampered signature\n' > ledger/human_resolutions.json.sig
+git add ledger/human_resolutions.json.sig
+git commit -qm "verifier: plant unreadable human signature"
+git push -q origin ledger
+assert_grep "VERDICT.*INVESTIGATE.*UNREADABLE" \
+  "supervise: unreadable signed queue reaches the VERDICT line" \
+  bash bin/supervise.sh "$BRANCH"
+rm -f ledger/human_resolutions.json.sig
+ssh-keygen -Y sign -q -f "$HUMAN_STATE/verifier_signing_key" -n money-agent-ledger \
+  ledger/human_resolutions.json
+git add ledger/human_resolutions.json.sig
+git commit -qm "verifier: restore signed human resolutions"
+git push -q origin ledger
 cdx "$W/agent"
 python3 - <<'PYEOF'
 import json
@@ -262,6 +281,11 @@ PYEOF
 assert_exit_grep 1 "not grounded" "human: direct task-status edit cannot authorize conclusion" \
   python3 bin/conclusion_gate.py
 git checkout -q -- run/human_tasks.json
+mv run/human_tasks.json run/human_tasks.saved
+assert_exit_grep 1 "has no task record" \
+  "human: deleting the task registry cannot orphan a conclusion-blocking companion" \
+  python3 bin/conclusion_gate.py
+mv run/human_tasks.saved run/human_tasks.json
 cdx "$W/verifier"
 if env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH=ledger MONEY_AGENT_STATE="$HUMAN_STATE" \
      python3 bin/human.py decline hum-002 --minutes 0.25 \
@@ -592,6 +616,14 @@ os.environ.update({"BASE_RPC_URL": "http://rpc.sim",
 import rails.base_usdc as bu
 importlib.reload(bu)
 OP_ADDR = "0x" + "77" * 20
+def write_base_acceptance():
+    json.dump({"status": "passed", "checks_passed": list(range(1, 8)), "chain_id": 8453,
+               "settlement_address": os.environ["BASE_SETTLEMENT_ADDRESS"],
+               "marketplace_address": os.environ["BASE_MARKETPLACE_ADDRESS"],
+               "settlement_event_topic0": os.environ["BASE_SETTLEMENT_EVENT_TOPIC0"],
+               "accepted_at": "2026-07-22T00:00:00Z", "operator": "sim-verifier"},
+              open("pnl_state/base_usdc_live_acceptance.json", "w"))
+write_base_acceptance()
 calls = []
 safe_head = [1000]
 chain_id = [8453]
@@ -622,7 +654,7 @@ def rpc_stub(url, method, params):
     raise RuntimeError("unexpected rpc " + method)
 bu._rpc = rpc_stub
 opid = json.load(open("pnl_state/operator_identity.json"))
-opid["addresses"] = [OP_ADDR]
+opid["addresses"] = [OP_ADDR[2:].upper()]
 json.dump(opid, open("pnl_state/operator_identity.json", "w"))
 bu.freeze_baseline(pathlib.Path("pnl_state"))
 safe_head[0] = 1010
@@ -670,6 +702,11 @@ t = run(clean)
 if t["verified"] or not any("wrong_chain" in e for e in t["errors"]):
     fails.append(f"non-Base RPC did not fail closed: {t['errors']}")
 chain_id[0] = 8453
+pathlib.Path("pnl_state/base_usdc_live_acceptance.json").unlink()
+t = run(clean)
+if t["verified"] or not any("base_usdc_acceptance_failed" in e for e in t["errors"]):
+    fails.append(f"missing Base live acceptance did not fail closed: {t['errors']}")
+write_base_acceptance()
 os.environ.pop("BASE_SETTLEMENT_EVENT_TOPIC0")
 t = run(clean)
 if t["verified"] or not any("base_usdc_misprovisioned" in e for e in t["errors"]):
@@ -680,7 +717,7 @@ json.dump(opid, open("pnl_state/operator_identity.json", "w"))
 t = run(clean)
 if t["verified"] or not any("wallet allowlist is empty" in e for e in t["errors"]):
     fails.append(f"empty Base operator allowlist did not fail closed: {t['errors']}")
-opid["addresses"] = [OP_ADDR]
+opid["addresses"] = [OP_ADDR[2:].upper()]
 json.dump(opid, open("pnl_state/operator_identity.json", "w"))
 bu._rpc = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("chain down"))
 t = run(clean)
@@ -764,7 +801,17 @@ assert_exit 2 "preflight: armed Base rail requires operator wallet addresses" \
     bash -c "set -uo pipefail; source '$BASE_PRE'"
 echo '{"emails":["op@sim.example"],"addresses":["0x777"]}' > \
   "$W/opid-state/operator_identity.json"
-assert_exit 0 "preflight: fully provisioned Base binding + wallet allowlist passes" \
+assert_exit 2 "preflight: armed Base rail requires persisted live acceptance" \
+  env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" OPID="$W/opid-state/operator_identity.json" \
+    bash -c "set -uo pipefail; source '$BASE_PRE'"
+python3 - "$W/opid-state/base_usdc_live_acceptance.json" <<'PYEOF'
+import json, sys
+json.dump({"status":"passed", "checks_passed":list(range(1,8)), "chain_id":8453,
+           "settlement_address":"0xabc", "marketplace_address":"0xdef",
+           "settlement_event_topic0":"0x123", "accepted_at":"2026-07-22T00:00:00Z",
+           "operator":"sim-verifier"}, open(sys.argv[1], "w"))
+PYEOF
+assert_exit 0 "preflight: binding, wallet allowlist, and live acceptance pass" \
   env "${BASE_ENV[@]}" MONEY_AGENT_STATE="$W/opid-state" OPID="$W/opid-state/operator_identity.json" \
     bash -c "set -uo pipefail; source '$BASE_PRE'"
 cdx "$W/agent"
