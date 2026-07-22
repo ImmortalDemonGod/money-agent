@@ -1445,8 +1445,9 @@ P6 probe registry, P7 exposure caps).
 - **P5 `bin/obligations.py` + `bin/obligation_watch.py`:** the operator adopted the designed
   mechanically-guaranteed exception. Instant delivery remains the default; post-payment work is
   permitted only from a fresh verifier-owned authorization fact proving explicit enablement,
-  refund authority, positive P7 caps, and a maximum deadline. The verifier checks the restricted
-  completion oracle independently, refunds an overdue failure, and halts.
+  refund authority, positive P7 caps, and a maximum deadline; each record binds its refundable
+  charge. The verifier checks the restricted completion oracle independently, refunds an overdue
+  failure, and halts.
 - **P7 exposure caps:** verifier-owned and published on the protected facts lane. Agent-local
   environment variables cannot activate or widen the obligation class, and registration holds one
   cross-process lock across cap evaluation and append.
