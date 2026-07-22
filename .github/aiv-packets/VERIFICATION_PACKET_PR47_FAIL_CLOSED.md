@@ -114,3 +114,4 @@ states. Its tests are designed to fail on the old warning-only and vacuous-pass 
 
 - `bin/pnl.py`: raw quarantine detects ignored files and refuses fact publication on a move failure.
 - `tests/sim.sh`: adds the cross-device-equivalent move-failure regression for CLM-001.
+- `tests/corpus.sh`: emits an explicit failure marker when fixture 3's Python probe crashes.
