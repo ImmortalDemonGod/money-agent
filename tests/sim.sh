@@ -49,6 +49,19 @@ assert_exit_grep() { # assert_exit_grep <exit> <pattern> <label> <cmd...> -- bot
     dump "$out"
   fi
 }
+# BSD and GNU sed disagree on in-place-edit syntax. Use a fail-closed literal replacement so a
+# fixture drift cannot silently leave the packet unchanged and turn a negative gate test green.
+replace_once() { # replace_once <file> <old> <new>
+  python3 - "$1" "$2" "$3" <<'PYEOF'
+from pathlib import Path
+import sys
+path = Path(sys.argv[1]); old, new = sys.argv[2:]
+text = path.read_text(); count = text.count(old)
+if count != 1:
+    raise SystemExit(f"fixture mutation expected one occurrence, found {count}: {old!r}")
+path.write_text(text.replace(old, new, 1))
+PYEOF
+}
 cdx() { cd "$1" || { echo "FATAL: cd $1 failed -- refusing to run git commands in the wrong tree" >&2; exit 1; }; }
 
 echo "=== build: bare origin + agent + verifier clones from HEAD ==="
@@ -640,19 +653,24 @@ open(".github/aiv-packets/VERIFICATION_PACKET_ITER_901.md","w").write(t)
 PYEOF
   assert_exit 0 "gate: honest packet passes" bash bin/aiv_gate.sh 901
   # shellcheck disable=SC2016  # literal '$999' is intentional test data
-  sed -i 's/Nothing this iteration; honest zero./Earned $999 this iteration./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Nothing this iteration; honest zero." "Earned \$999 this iteration." || exit 1
   assert_exit 1 "gate: \$999 overclaim fails" bash bin/aiv_gate.sh 901
   # shellcheck disable=SC2016  # literal '$999' is intentional test data
-  sed -i 's/Earned $999 this iteration./Nothing this iteration; honest zero./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Earned \$999 this iteration." "Nothing this iteration; honest zero." || exit 1
   # the bare-word forms ("999 dollars", "USD 999") were how a false claim could slip past a
   # $-only parser; the gate matches them too -- pin that path (queued from IMPROVEMENT_LOG entry
   # 021). The amount must exceed EVERY verifier bound: the rig's edge rail carries paper_pnl 62.5,
   # and the gate's documented residual accepts real-money claims up to the paper P&L -- a first
   # draft of this test used "47 dollars" and passed the gate for exactly that reason.
-  sed -i 's/Nothing this iteration; honest zero./Earned 999 dollars this iteration./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Nothing this iteration; honest zero." "Earned 999 dollars this iteration." || exit 1
   assert_exit 1 "gate: bare-word '999 dollars' overclaim fails" bash bin/aiv_gate.sh 901
-  sed -i 's/Earned 999 dollars this iteration./Nothing this iteration; honest zero./' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
-  sed -i 's/^EDGE_CLAIM: VERIFIED_POSITIVE_EV/EDGE_CLAIM: FALSIFIED/' .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "Earned 999 dollars this iteration." "Nothing this iteration; honest zero." || exit 1
+  replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
+    "EDGE_CLAIM: VERIFIED_POSITIVE_EV" "EDGE_CLAIM: FALSIFIED" || exit 1
   assert_exit 1 "gate: contradicting EDGE_CLAIM fails" bash bin/aiv_gate.sh 901
   grep -v "^EDGE_CLAIM:" .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md > p.tmp && mv p.tmp .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: missing EDGE_CLAIM while rail live fails" bash bin/aiv_gate.sh 901
