@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/obligation_watch.py`
-**Commit:** `3136eeb`
-**Generated:** 2026-07-22T22:07:55Z
+**Commit:** `d859a60`
+**Previous:** `c1dca6a`
+**Generated:** 2026-07-22T23:07:11Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +16,15 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/obligation_watch.py"
-  classification_rationale: "Runs with verifier credentials and refund authority across a payment safety boundary, requiring R3"
+  classification_rationale: "R3 under AIV section 5.2 because verifier-held refund credentials and payment remediation are critical surfaces"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:07:55Z"
+  classified_at: "2026-07-22T23:07:11Z"
 ```
 
 ## Claim(s)
 
-1. Unreadable or unfetched obligation registers publish verified false rather than an empty all-clear
-2. Fulfillment uses only the reviewed delivery oracle and refunds use stable per-obligation idempotency keys
+1. _authorization enables obligations only when operator enablement, refund authority, positive exposure caps, and a positive deadline cap are all present
+2. main independently checks open obligations and removes verifier-confirmed deliveries from the open count
 3. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,35 +33,36 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** PR 51 watchdog must independently detect delivery breaches without executing agent-authored shell or duplicating refunds
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/docs/V2_HARNESS_DESIGN.md#L791-L810](https://github.com/ImmortalDemonGod/money-agent/blob/29226cc090679296d15f4c9d8174a70db8749553/docs/V2_HARNESS_DESIGN.md#L791-L810)
+- **Requirements Verified:** P5 requires an out-of-band watchdog holding refund authority to mechanically guarantee deferred delivery
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`3136eeb`](https://github.com/ImmortalDemonGod/money-agent/tree/3136eeb499d94bd6cb273447008fbba4b59d85c0))
+**Scope Inventory** (SHA: [`d859a60`](https://github.com/ImmortalDemonGod/money-agent/tree/d859a605ddab22e702e3d1321cec0514ffd51a81))
 
-- [`bin/obligation_watch.py#L36`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L36)
-- [`bin/obligation_watch.py#L41-L42`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L41-L42)
-- [`bin/obligation_watch.py#L50-L77`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L50-L77)
-- [`bin/obligation_watch.py#L81-L101`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L81-L101)
-- [`bin/obligation_watch.py#L103-L104`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L103-L104)
-- [`bin/obligation_watch.py#L107-L109`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L107-L109)
-- [`bin/obligation_watch.py#L111-L117`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L111-L117)
-- [`bin/obligation_watch.py#L126`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L126)
-- [`bin/obligation_watch.py#L132-L134`](https://github.com/ImmortalDemonGod/money-agent/blob/3136eeb499d94bd6cb273447008fbba4b59d85c0/bin/obligation_watch.py#L132-L134)
+- [`bin/obligation_watch.py#L2-L8`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L2-L8)
+- [`bin/obligation_watch.py#L27`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L27)
+- [`bin/obligation_watch.py#L75-L113`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L75-L113)
+- [`bin/obligation_watch.py#L117-L119`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L117-L119)
+- [`bin/obligation_watch.py#L129-L130`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L129-L130)
+- [`bin/obligation_watch.py#L161-L168`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L161-L168)
+- [`bin/obligation_watch.py#L185`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L185)
+- [`bin/obligation_watch.py#L187-L189`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L187-L189)
+- [`bin/obligation_watch.py#L191`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L191)
+- [`bin/obligation_watch.py#L193`](https://github.com/ImmortalDemonGod/money-agent/blob/d859a605ddab22e702e3d1321cec0514ffd51a81/bin/obligation_watch.py#L193)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`_refund`** (L36): PASS -- 1 test(s) call `_refund` directly
-  - `tests/test_v3_hardening.py::test_obligation_watch_rejects_shell_and_idempotently_refunds`
-- **`_completion_oracle`** (L41-L42): PASS -- 1 test(s) call `_completion_oracle` directly
-  - `tests/test_v3_hardening.py::test_obligation_watch_rejects_shell_and_idempotently_refunds`
-- **`_publish_unverified`** (L50-L77): FAIL -- WARNING: No tests import or call `_publish_unverified`
-- **`main`** (L81-L101): FAIL -- WARNING: No tests import or call `main`
+- **`_authorization`** (L2-L8): PASS -- 2 test(s) call `_authorization` directly
+  - `tests/test_v3_hardening.py::test_obligation_authorization_requires_fresh_grounded_verifier_fact`
+  - `tests/test_v3_hardening.py::test_obligation_watch_authorization_requires_every_safeguard`
+- **`_publish_unverified`** (L27): FAIL -- WARNING: No tests import or call `_publish_unverified`
+- **`main`** (L75-L113): PASS -- 1 test(s) call `main` directly
+  - `tests/test_v3_hardening.py::test_obligation_watch_checks_open_records_without_agent_claim`
 
-**Coverage summary:** 2/4 symbols verified by tests.
+**Coverage summary:** 2/3 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
@@ -82,37 +84,37 @@ classification:
 
 | File | Commits | Created By | Last Modified By | Assertions |
 |------|---------|------------|------------------|------------|
-| `tests/test_v3_hardening.py` | 1 | Miguel Ingram (a3d4a5a) | Miguel Ingram (a3d4a5a) | 16 |
+| `tests/test_v3_hardening.py` | 2 | Miguel Ingram (d90785d) | Miguel Ingram (76c1bec) | 36 |
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-a3d4a5a test(v3): cover adversarial enforcement seams
-937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
-7b7a7fe [S10] V3 spine: per-lane stage ordering, config-gated off (the contested layer, by explicit switch)
-644f13c [S9] V3 typed bet-spec + action authorization, config-gated off (bet-ledger layer)
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
+30612e5 test(sim): exercise CodeRabbit review invariants
+76c1bec test(v3): cover CodeRabbit hardening findings
+bb5cbed test(sim): adversarially cover PR 51 hardening
+d90785d test(v3): cover adversarial enforcement seams
+1529ea1 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Unreadable or unfetched obligation registers publish verifie... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Fulfillment uses only the reviewed delivery oracle and refun... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | _authorization enables obligations only when operator enable... | symbol | 2 test(s) call `_authorization` | PASS VERIFIED |
+| 2 | main independently checks open obligations and removes verif... | symbol | 1 test(s) call `main` | PASS VERIFIED |
 | 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 3 verified, 0 unverified, 0 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (2/4 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (2/3 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Make the obligation watchdog fresh, typed, and idempotent
+Publish the protected authorization fact and monitor liabilities independently

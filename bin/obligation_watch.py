@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""P5 watchdog (S11). VERIFIER-ONLY, run by verifier_loop.sh after pnl.py: reads the agent's
+"""P5 authorization publisher and watchdog (S11). VERIFIER-ONLY, run after pnl.py.
+
+The verifier publishes the only authorization the agent accepts. Deferred fulfillment is enabled
+only when OBLIGATION_CLASS_ENABLE=1, STRIPE_REFUND_KEY is present, and all verifier-side P7 caps
+are positive and valid. The agent cannot grant itself permission by changing its own environment.
+
+The watchdog reads the agent's
 COMMITTED obligation register (origin/AGENT_BRANCH:run/obligations.json -- a working-tree file
 is not a promise), and publishes ledger/obligations.json to the facts lane:
 
@@ -18,6 +24,7 @@ unreadable promise-book is not an empty one).
 from __future__ import annotations
 import datetime as dt
 import json
+import math
 import os
 import subprocess
 import sys
@@ -65,9 +72,51 @@ def _completion_oracle(spec: str) -> tuple[bool, dict]:
                        "error": f"{type(e).__name__}: {e}"}
 
 
+def _authorization(refund_key: str) -> dict:
+    """Build the operator-controlled capability fact without exposing the refund secret."""
+    errors = []
+    try:
+        max_open = int(os.environ.get("EXPOSURE_MAX_OPEN", "0") or "0")
+    except ValueError:
+        max_open = 0
+        errors.append("EXPOSURE_MAX_OPEN is not an integer")
+
+    values = {}
+    for env_name, field in (("EXPOSURE_MAX_SINGLE_USD", "max_single_usd"),
+                            ("EXPOSURE_MAX_TOTAL_FRACTION", "max_total_fraction"),
+                            ("OBLIGATION_MAX_DEADLINE_H", "max_deadline_hours")):
+        try:
+            value = float(os.environ.get(env_name, "0") or "0")
+        except ValueError:
+            value = 0.0
+            errors.append(f"{env_name} is not numeric")
+        if not math.isfinite(value):
+            value = 0.0
+            errors.append(f"{env_name} is not finite")
+        values[field] = value
+
+    operator_enabled = os.environ.get("OBLIGATION_CLASS_ENABLE", "0") == "1"
+    refund_authority = bool(refund_key.strip())
+    if max_open <= 0:
+        errors.append("EXPOSURE_MAX_OPEN must be positive")
+    for field, value in values.items():
+        if value <= 0:
+            errors.append(f"{field} must be positive")
+    if not operator_enabled:
+        errors.append("OBLIGATION_CLASS_ENABLE is not 1")
+    if not refund_authority:
+        errors.append("STRIPE_REFUND_KEY is not provisioned")
+    return {"enabled": not errors, "operator_enabled": operator_enabled,
+            "refund_authority": refund_authority, "max_open": max_open, **values,
+            "reason": "enabled" if not errors else "; ".join(errors)}
+
+
 def _publish_unverified(reason: str) -> int:
     out = {"computed_at": _now().isoformat(), "open": None, "fulfilled": [], "breached": [],
            "verified": False, "errors": [reason],
+           "authorization": {"enabled": False, "operator_enabled": False,
+                             "refund_authority": False,
+                             "reason": "watchdog state is unverified"},
            "_note": "The committed promise-book could not be read; unknown is not an all-clear."}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, indent=2) + "\n")
@@ -77,6 +126,8 @@ def _publish_unverified(reason: str) -> int:
 
 def main() -> int:
     branch = os.environ.get("AGENT_BRANCH", "")
+    refund_key = os.environ.get("STRIPE_REFUND_KEY", "")
+    authorization = _authorization(refund_key)
     obls: list[dict] = []
     if not branch:
         return _publish_unverified("AGENT_BRANCH unset")
@@ -102,18 +153,20 @@ def main() -> int:
     breached = []
     fulfilled = []
     completion_errors = []
-    refund_key = os.environ.get("STRIPE_REFUND_KEY", "")
     for o in obls:
         status = o.get("status")
         if status not in ("open", "fulfillment-claimed", "fulfilled"):
             breached.append({**o, "breach": f"unrecognized status {status!r} (fail-closed)"})
             continue
+        # Check every open record: after the first-dollar halt, fulfillment may complete in an
+        # external substrate (carrier, hosted delivery, subscription) without an agent claim.
+        # A claim merely asks for an immediate recheck; it never certifies itself.
+        ok, evidence = _completion_oracle(o.get("check", ""))
+        if ok:
+            fulfilled.append({"id": o.get("id"), "verified_at": _now().isoformat(),
+                              "oracle_evidence": evidence})
+            continue
         if status in ("fulfillment-claimed", "fulfilled"):
-            ok, evidence = _completion_oracle(o.get("check", ""))
-            if ok:
-                fulfilled.append({"id": o.get("id"), "verified_at": _now().isoformat(),
-                                  "oracle_evidence": evidence})
-                continue
             completion_errors.append({"id": o.get("id"), "oracle_evidence": evidence})
         try:
             deadline = dt.datetime.fromisoformat(str(o["deadline"]).replace("Z", "+00:00"))
@@ -129,12 +182,15 @@ def main() -> int:
                 rec["refund_status"] = ("unprovisioned: no STRIPE_REFUND_KEY -- the halt is the "
                                         "only guarantee; refund manually NOW")
             breached.append(rec)
+    fulfilled_ids = {item["id"] for item in fulfilled}
     out = {"computed_at": _now().isoformat(),
-           "open": sum(1 for o in obls if o.get("status") in ("open", "fulfillment-claimed")),
+           "open": sum(1 for o in obls
+                       if o.get("status") in ("open", "fulfillment-claimed")
+                       and o.get("id") not in fulfilled_ids),
            "fulfilled": fulfilled, "completion_errors": completion_errors,
-           "breached": breached, "verified": True,
+           "breached": breached, "verified": True, "authorization": authorization,
            "_note": "Computed by the verifier from the agent's COMMITTED register. A breach "
-                    "halts the run (guard.py); rule 3 makes the normal state an empty list."}
+                    "halts the run (guard.py); authorization is verifier-owned and default-off."}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, indent=2) + "\n")
     if breached:
