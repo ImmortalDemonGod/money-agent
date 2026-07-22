@@ -113,6 +113,18 @@ class RailRegistryTests(unittest.TestCase):
                     )
                 )
 
+    def test_validate_directly_rejects_boolean_money(self) -> None:
+        for contribution in (
+            RailContribution(
+                name="invalid", directions=frozenset({"receive"}), customer_usd=True
+            ),
+            RailContribution(
+                name="invalid", directions=frozenset({"spend"}), spent_usd=False
+            ),
+        ):
+            with self.subTest(contribution=contribution), self.assertRaises(ValueError):
+                contribution.validate()
+
     def test_boolean_measured_spend_and_non_null_unmeasured_spend_fail_closed(self) -> None:
         invalid_spends = (
             RailContribution(
