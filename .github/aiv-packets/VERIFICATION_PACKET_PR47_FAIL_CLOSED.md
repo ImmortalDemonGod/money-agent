@@ -139,3 +139,5 @@ states. Its tests are designed to fail on the old warning-only and vacuous-pass 
   malformed/non-finite inference CSV amounts while retaining intentional header-only zero semantics.
 - `tests/sim.sh` (follow-up): pins nested-whitespace raw rescue and missing-schema/non-finite
   inference feeds as terminal verifier errors.
+- `tests/sim.sh.bug-catalog.md`: records the two review-derived failure modes and why their
+  observable simulation assertions resist behavior-preserving refactors.
