@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `8e1e2ed`
-**Previous:** `1c0d6f2`
-**Generated:** 2026-07-22T22:40:41Z
+**Commit:** `512f388`
+**Previous:** `30612e5`
+**Generated:** 2026-07-22T23:08:22Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,16 +16,17 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "The matrix exercises payment, PII, verifier, and audit critical surfaces and therefore inherits R3"
+  classification_rationale: "R3 integration evidence because the simulation crosses the agent/verifier payment authorization boundary"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:40:41Z"
+  classified_at: "2026-07-22T23:08:22Z"
 ```
 
 ## Claim(s)
 
-1. The two-clone simulation rejects substring authorization and all deferred obligation registration
-2. Typed resolution fixtures emit observable metric values for declared-condition evaluation
-3. No existing tests were modified or deleted during this change.
+1. The two-lane simulation proves agent-local exposure variables cannot activate obligations
+2. The verifier facts lane publishes an enabled authorization only with refund authority and all positive caps
+3. A grounded authorization reaches exposure enforcement while grounded received funds remain binding
+4. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -33,18 +34,15 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51#pullrequestreview-4759249208](https://github.com/ImmortalDemonGod/money-agent/pull/51#pullrequestreview-4759249208)
-- **Requirements Verified:** CodeRabbit fixes require end-to-end regression coverage in the existing simulation matrix
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
+- **Requirements Verified:** PR 51 must preserve default-off behavior while permitting explicitly enabled mechanically guaranteed obligations
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`8e1e2ed`](https://github.com/ImmortalDemonGod/money-agent/tree/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0))
+**Scope Inventory** (SHA: [`512f388`](https://github.com/ImmortalDemonGod/money-agent/tree/512f388bedaad690811c99e342233bf4c6cedfef))
 
-- [`tests/sim.sh#L259`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L259)
-- [`tests/sim.sh#L283`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L283)
-- [`tests/sim.sh#L292`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L292)
-- [`tests/sim.sh#L369-L372`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L369-L372)
-- [`tests/sim.sh#L388-L395`](https://github.com/ImmortalDemonGod/money-agent/blob/8e1e2eddf5c95ad61db3989c5c06726c6a3000f0/tests/sim.sh#L388-L395)
+- [`tests/sim.sh#L410`](https://github.com/ImmortalDemonGod/money-agent/blob/512f388bedaad690811c99e342233bf4c6cedfef/tests/sim.sh#L410)
+- [`tests/sim.sh#L413-L429`](https://github.com/ImmortalDemonGod/money-agent/blob/512f388bedaad690811c99e342233bf4c6cedfef/tests/sim.sh#L413-L429)
 
 ### Class A (Execution Evidence)
 
@@ -53,7 +51,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 22194 error(s)
+- **ruff:** 23946 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -74,22 +72,23 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-8e1e2ed test(v3): cover CodeRabbit hardening findings
-1c0d6f2 test(sim): adversarially cover PR 51 hardening
-a3d4a5a test(v3): cover adversarial enforcement seams
-937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
-7b7a7fe [S10] V3 spine: per-lane stage ordering, config-gated off (the contested layer, by explicit switch)
+512f388 test(obligations): cover guarded authorization contract
+30612e5 test(sim): exercise CodeRabbit review invariants
+76c1bec test(v3): cover CodeRabbit hardening findings
+bb5cbed test(sim): adversarially cover PR 51 hardening
+d90785d test(v3): cover adversarial enforcement seams
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The two-clone simulation rejects substring authorization and... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Typed resolution fixtures emit observable metric values for ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The two-lane simulation proves agent-local exposure variable... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | The verifier facts lane publishes an enabled authorization o... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 3 | A grounded authorization reaches exposure enforcement while ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 4 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 3 manual review.
 ---
 
 ## Verification Methodology
@@ -102,4 +101,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Extend the integration matrix for exact decisions, typed outcomes, and refusal-only obligations
+Exercise obligation authorization on separate claims and facts lanes

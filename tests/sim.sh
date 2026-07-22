@@ -442,14 +442,26 @@ assert_exit_grep 1 "not committed" "decision gate (P3): untracked file cannot sa
 replace_once DECISION_LOG.md "manifest:untracked_manifest.txt" "manifest:LICENSE"
 assert_exit 0 "decision gate (P3): pinned provenance manifest passes" \
   python3 bin/decision_gate.py data-acquisition dg_acq2.txt
-assert_exit_grep 1 "post-payment work is forbidden" "obligations (P5): raised caps cannot authorize deferred paid work" \
+assert_exit_grep 1 "no mechanically guaranteed obligation authorization" "obligations (P5): agent-local caps cannot authorize deferred paid work" \
   env EXPOSURE_MAX_OPEN=99 EXPOSURE_MAX_SINGLE_USD=999 EXPOSURE_MAX_TOTAL_FRACTION=99 \
   python3 bin/obligations.py register --what "ship later" --check delivery-url:https://example.com \
-  --deadline 2099-01-01T00:00:00Z --value-usd=1
-if grep -q "ship later" REFUSALS.md; then ok "obligations (P5): deferred offer recorded in REFUSALS.md"
-else bad "obligations (P5): refusal record missing"; fi
-assert_exit_grep 1 "cannot operate a deliver-later" "obligations (P5): agent fulfillment path is disabled" \
-  python3 bin/obligations.py fulfill obl-x --evidence "delivered later"
+  --deadline "$(python3 -c 'import datetime as d;print((d.datetime.now(d.timezone.utc)+d.timedelta(hours=1)).isoformat())')" --value-usd=1
+cdx "$W/verifier"
+git checkout -q ledger 2>/dev/null || git checkout -q -B ledger origin/ledger
+git fetch -q origin ledger && git reset -q --hard origin/ledger
+env AGENT_BRANCH="$BRANCH" OBLIGATION_CLASS_ENABLE=1 STRIPE_REFUND_KEY=rk_sim_refund \
+  EXPOSURE_MAX_OPEN=1 EXPOSURE_MAX_SINGLE_USD=10 EXPOSURE_MAX_TOTAL_FRACTION=1 \
+  OBLIGATION_MAX_DEADLINE_H=24 python3 bin/obligation_watch.py >/dev/null
+git add ledger/obligations.json && git -c user.name=verifier -c user.email=v@sim \
+  commit -qm "verifier: authorize bounded obligations" && git push -q origin ledger
+if python3 -c "import json;d=json.load(open('ledger/obligations.json'));a=d['authorization'];assert a['enabled'] and a['refund_authority'] and a['max_open']==1"; then
+  ok "obligations (P5): verifier publishes explicit refund-backed authorization"
+else bad "obligations (P5): verifier authorization fact missing"; fi
+cdx "$W/agent"
+assert_exit_grep 1 "cumulative open" "obligations (P5): grounded authorization passes but received-funds cap remains binding" \
+  env EXPOSURE_MAX_OPEN=999 EXPOSURE_MAX_SINGLE_USD=999 EXPOSURE_MAX_TOTAL_FRACTION=999 \
+  python3 bin/obligations.py register --what "ship later" --check delivery-url:https://example.com \
+  --deadline "$(python3 -c 'import datetime as d;print((d.datetime.now(d.timezone.utc)+d.timedelta(hours=1)).isoformat())')" --value-usd=1
 assert_exit 0 "obligation watchdog: arbitrary shell is not a completion oracle" \
   python3 -c "import sys;sys.path.insert(0,'bin');import obligation_watch as o; ok,e=o._completion_oracle('true'); assert not ok and 'unsupported' in e['error']"
 assert_exit 0 "obligation watchdog: refund requests carry a stable idempotency key" \
