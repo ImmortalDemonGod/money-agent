@@ -96,11 +96,25 @@ while true; do
           # re-commit below is the primary rescue; the side-car survives even a botched rescue or
           # an operator intervention inside the divergence window (traps.md #9's residual).
           SIDECAR="${MONEY_AGENT_STATE:-$HOME/.money-agent-verifier}/raw-rescue/$(date -u +%Y%m%dT%H%M%S)-diverged"
-          mkdir -p "$SIDECAR"
+          if ! mkdir -p "$SIDECAR"; then
+            say "FATAL: cannot create divergence side-car $SIDECAR -- NOT resetting facts lane"
+            rm -rf "$RD"
+            continue
+          fi
+          COPY_OK=1
           while IFS= read -r f; do
-            mkdir -p "$RD/$(dirname "$f")"; git show "HEAD:$f" > "$RD/$f" 2>>"$LOG"
-            cp "$RD/$f" "$SIDECAR/" 2>>"$LOG" || true
+            if ! mkdir -p "$RD/$(dirname "$f")" \
+                || ! git show "HEAD:$f" > "$RD/$f" 2>>"$LOG" \
+                || ! cp "$RD/$f" "$SIDECAR/" 2>>"$LOG"; then
+              COPY_OK=0
+              break
+            fi
           done <<< "$RESCUE"
+          if [[ "$COPY_OK" != "1" ]]; then
+            say "FATAL: divergence side-car copy failed -- NOT resetting facts lane"
+            rm -rf "$RD"
+            continue
+          fi
           say "side-car: diverged pull(s) copied to $SIDECAR (belt; the re-commit below is the suspenders)"
         fi
         say "WARN: facts lane diverged from origin -- converging to origin/$LEDGER_BRANCH"
