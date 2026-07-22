@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `SETUP.md`
-**Commit:** `c7bb903`
-**Generated:** 2026-07-22T22:06:18Z
+**Commit:** `68b46db`
+**Previous:** `4f7a8e4`
+**Generated:** 2026-07-22T23:05:35Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -11,20 +12,19 @@
 
 ```yaml
 classification:
-  risk_tier: R2
+  risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "SETUP.md"
-  classification_rationale: "R2 because this expands the operator provisioning and acceptance contract for two optional subsystems"
+  classification_rationale: "Omitted runbook steps could make safe code unsafe in deployment"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:06:18Z"
+  classified_at: "2026-07-22T23:05:35Z"
 ```
 
 ## Claim(s)
 
-1. Operator setup includes a six-step live Base acceptance that checks bare, self-funded, customer, finality, and cross-run cases
-2. Operator setup documents facts-lane human resolution and agent synchronization commands
-3. No existing tests were modified or deleted during this change.
+1. Operators are instructed to verify chain, event uniqueness, authorization, live funding, and signed human resolution prerequisites before scoring
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,15 +32,19 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Turn PR #50's deferred live seams into explicit pre-run acceptance gates
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
+- **Requirements Verified:** Issue acceptance depends on operator-visible provisioning and live acceptance boundaries
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`c7bb903`](https://github.com/ImmortalDemonGod/money-agent/tree/c7bb903402f6ba372e9a7d514ce1873e505a7901))
+**Scope Inventory** (SHA: [`68b46db`](https://github.com/ImmortalDemonGod/money-agent/tree/68b46dbf59a91cce058bc728a83838d5fdb70f5b))
 
-- [`SETUP.md#L130`](https://github.com/ImmortalDemonGod/money-agent/blob/c7bb903402f6ba372e9a7d514ce1873e505a7901/SETUP.md#L130)
-- [`SETUP.md#L189-L245`](https://github.com/ImmortalDemonGod/money-agent/blob/c7bb903402f6ba372e9a7d514ce1873e505a7901/SETUP.md#L189-L245)
+- [`SETUP.md#L207-L214`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L207-L214)
+- [`SETUP.md#L227-L229`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L227-L229)
+- [`SETUP.md#L232-L235`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L232-L235)
+- [`SETUP.md#L243-L248`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L243-L248)
+- [`SETUP.md#L250-L253`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L250-L253)
+- [`SETUP.md#L256-L261`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L256-L261)
 
 ### Class A (Execution Evidence)
 
@@ -70,22 +74,21 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
-aa601ba [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-b36b966 [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-2a5f010 [S4] fact-lane signing: verifier signatures + hash chain + customer attestation (#36 #42)
+68b46db test(sim): isolate AIV edge fixture state
+bc601c3 test(rails): expose registry contract to verification
+86e664c test(pr50): exercise executable rail and queue contracts
+67e9adb test(pr50): pin issue-closure trust boundaries
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Operator setup includes a six-step live Base acceptance that... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Operator setup documents facts-lane human resolution and age... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Operators are instructed to verify chain, event uniqueness, ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -98,4 +101,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Runbook live Base verification and grounded human actuation
+Document mandatory trust and live acceptance conditions
