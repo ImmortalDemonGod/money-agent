@@ -222,7 +222,8 @@ def main() -> int:
     try:
         sys.path.insert(0, str(REPO / "bin"))
         import bets as _bets
-        for b in _bets.open_bets():
+        all_bets = _bets._load()
+        for b in _bets.open_bets(all_bets):
             fails.append(f"open external bet {b['id']} ({b['clock']}, oracle: "
                          f"{b.get('oracle', 'judgment')}): {b['what']!r} -- resolve it "
                          "(bin/bets.py resolve) or wait out its clock; an unresolved bet is "
@@ -238,11 +239,32 @@ def main() -> int:
     if human_tasks.exists():
         try:
             import json
-            for task in json.loads(human_tasks.read_text()).get("tasks", []):
+            import human as _human
+            tasks = json.loads(human_tasks.read_text()).get("tasks", [])
+            task_bets = {task.get("companion_bet"): task for task in tasks}
+            for task in tasks:
                 if task.get("status") == "open":
                     fails.append(f"open human actuation {task.get('id')} ({task.get('kind')}): "
                                  f"{task.get('gate')!r} -- only a verifier-published operator "
                                  "resolution consumed via bin/human.py sync closes it.")
+                    continue
+                try:
+                    grounded = _human._grounded_resolution(task)
+                    if not grounded or grounded.get("status") != task.get("status"):
+                        raise RuntimeError("facts-lane status does not match the claims task")
+                    if task.get("resolution") != grounded:
+                        raise RuntimeError("claims task does not contain the exact signed resolution")
+                except Exception as e:
+                    fails.append(f"human actuation {task.get('id')} is not grounded "
+                                 f"({type(e).__name__}: {e}) -- agent-written task status cannot "
+                                 "authorize a conclusion.")
+            # A removed task must not make its still-visible companion bet meaningless. This catches
+            # the common tamper path (delete/rename the task while retaining the agenda registry).
+            for bet in all_bets:
+                if str(bet.get("what", "")).startswith("human actuation ") \
+                        and bet.get("id") not in task_bets:
+                    fails.append(f"human companion {bet.get('id')} has no task record -- "
+                                 "deleted actuation state cannot authorize a conclusion.")
         except Exception as e:
             fails.append(f"cannot read human task registry ({type(e).__name__}: {e}) -- "
                          "fail-closed: unknown actuation state is not resolved state.")

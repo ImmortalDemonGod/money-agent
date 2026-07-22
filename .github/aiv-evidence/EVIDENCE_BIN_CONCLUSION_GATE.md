@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/conclusion_gate.py`
-**Commit:** `6214c75`
-**Generated:** 2026-07-22T22:05:00Z
+**Commit:** `e7a1091`
+**Previous:** `09399f5`
+**Generated:** 2026-07-22T23:01:35Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/conclusion_gate.py"
-  classification_rationale: "R3 because this is a load-bearing termination and conclusion authorization gate"
+  classification_rationale: "Trusting mutable run state would let the agent forge task completion"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:05:00Z"
+  classified_at: "2026-07-22T23:01:35Z"
 ```
 
 ## Claim(s)
 
-1. An open human-actuation request blocks an impossible conclusion even if its companion judgment bet was resolved directly
+1. Conclusion eligibility recomputes every terminal human task from the signed verifier resolution and rejects orphaned companion bets
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,20 +32,22 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Prevent claims-lane bet resolution from self-certifying operator actuation
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
+- **Requirements Verified:** Issue #31 requires pending human work to block conclusion and only grounded outcomes to unblock it
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`6214c75`](https://github.com/ImmortalDemonGod/money-agent/tree/6214c75d8af2218f473f608626434d3c28a1b913))
+**Scope Inventory** (SHA: [`e7a1091`](https://github.com/ImmortalDemonGod/money-agent/tree/e7a10911fae283992772a56c7f200a850b1107ce))
 
-- [`bin/conclusion_gate.py#L233-L248`](https://github.com/ImmortalDemonGod/money-agent/blob/6214c75d8af2218f473f608626434d3c28a1b913/bin/conclusion_gate.py#L233-L248)
+- [`bin/conclusion_gate.py#L225-L226`](https://github.com/ImmortalDemonGod/money-agent/blob/e7a10911fae283992772a56c7f200a850b1107ce/bin/conclusion_gate.py#L225-L226)
+- [`bin/conclusion_gate.py#L242-L245`](https://github.com/ImmortalDemonGod/money-agent/blob/e7a10911fae283992772a56c7f200a850b1107ce/bin/conclusion_gate.py#L242-L245)
+- [`bin/conclusion_gate.py#L250-L267`](https://github.com/ImmortalDemonGod/money-agent/blob/e7a10911fae283992772a56c7f200a850b1107ce/bin/conclusion_gate.py#L250-L267)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L233-L248): FAIL -- WARNING: No tests import or call `main`
+- **`main`** (L225-L226): FAIL -- WARNING: No tests import or call `main`
 
 **Coverage summary:** 0/1 symbols verified by tests.
 
@@ -71,18 +74,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
-aa601ba [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-b36b966 [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-2a5f010 [S4] fact-lane signing: verifier signatures + hash chain + customer attestation (#36 #42)
+bc601c3 test(rails): expose registry contract to verification
+86e664c test(pr50): exercise executable rail and queue contracts
+67e9adb test(pr50): pin issue-closure trust boundaries
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
+8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | An open human-actuation request blocks an impossible conclus... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Conclusion eligibility recomputes every terminal human task ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -98,4 +101,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Check human request state independently of companion bets
+Make the conclusion gate independently revalidate human outcomes
