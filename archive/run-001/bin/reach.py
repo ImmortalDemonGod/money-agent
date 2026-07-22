@@ -176,7 +176,7 @@ def bottom_line(d: dict, usd: float | None) -> str:
         parts.append(f"telegra.ph telemetry UNAVAILABLE this run (all {n_pages} page fetches failed) "
                      f"-- NO reach conclusion can be drawn; this is expressly NOT a zero-traffic "
                      f"result. Frozen baseline was {d['telegraph_baseline_total']}.")
-    elif tg <= 0 and not hn:
+    elif tg <= 0:
         note = (f" [{len(unavail)}/{n_pages} pages unavailable -> lower bound]" if unavail else "")
         parts.append(f"No external traffic measured on the readable pages since {d['frozen_at']} "
                      f"(telegra.ph {d['telegraph_now_available']} vs baseline "
@@ -185,13 +185,14 @@ def bottom_line(d: dict, usd: float | None) -> str:
         note = (f" [{len(unavail)}/{n_pages} pages unavailable -> lower bound]" if unavail else "")
         parts.append(f"EXTERNAL traffic since {d['frozen_at']}: telegra.ph +{tg} page loads "
                      f"({d['telegraph_baseline_available']} -> {d['telegraph_now_available']}){note}"
-                     + (f", HN +{hn} point(s)." if hn else "."))
+                     + ".")
         parts.append("Post-baseline hits are external BY CONSTRUCTION (the agent stopped touching "
                      "the pages at the cutoff), but telegra.ph exposes no referrer/UA, so "
                      "bot-vs-human is NOT separable and +N is an UPPER BOUND on human reach.")
-        if hn:
-            parts.append(f"The HN delta (+{hn}) is the stronger signal: HN votes require a "
-                         "logged-in account.")
+    if hn is None:
+        parts.append("HN telemetry is UNAVAILABLE this run; it is not treated as zero evidence.")
+    elif hn > 0:
+        parts.append(f"HN +{hn} point(s): the stronger signal, because votes require a logged-in account.")
     parts.append("Scope limit: these numbers cover the ESSAYS (telegra.ph) only, and telegra.ph "
                  "cannot separate bot from human. The STORE (surge funnels + hub) has been "
                  f"BEACONED since 2026-07-20 and is read separately at {BEACON_ORIGIN}/stats "
