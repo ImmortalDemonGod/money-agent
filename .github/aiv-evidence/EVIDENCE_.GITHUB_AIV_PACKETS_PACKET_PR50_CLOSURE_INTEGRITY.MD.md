@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `.github/aiv-packets/PACKET_pr50_closure_integrity.md`
-**Commit:** `b7e5552`
-**Generated:** 2026-07-22T23:09:18Z
+**Commit:** `3804cba`
+**Previous:** `04cc825`
+**Generated:** 2026-07-22T23:40:53Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: ".github/aiv-packets/PACKET_pr50_closure_integrity.md"
-  classification_rationale: "A misclassified or incomplete packet could create verification theater on critical surfaces"
+  classification_rationale: "Verification metadata on payment and conclusion surfaces must remain auditably accurate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:09:18Z"
+  classified_at: "2026-07-22T23:40:53Z"
 ```
 
 ## Claim(s)
 
-1. The aggregate packet declares the correct repository and R3/S1 classification and records preserved-test provenance plus honest live limitations.
+1. The closure packet evidence table matches the referenced sidecar commit headers
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -31,19 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50](https://github.com/ImmortalDemonGod/money-agent/pull/50)
-- **Requirements Verified:** The verification packet must accurately represent the payment and conclusion-authorization risk under review
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532](https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532)
+- **Requirements Verified:** Address final CodeRabbit evidence-integrity findings without overstating collected proof
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`b7e5552`](https://github.com/ImmortalDemonGod/money-agent/tree/b7e55525488bf26feeb90196a6994145e1a650c1))
+**Scope Inventory** (SHA: [`3804cba`](https://github.com/ImmortalDemonGod/money-agent/tree/3804cbafe0380e07a340a8762310bea561892d02))
 
-- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L7`](https://github.com/ImmortalDemonGod/money-agent/blob/b7e55525488bf26feeb90196a6994145e1a650c1/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L7)
-- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L18-L20`](https://github.com/ImmortalDemonGod/money-agent/blob/b7e55525488bf26feeb90196a6994145e1a650c1/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L18-L20)
-- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L22`](https://github.com/ImmortalDemonGod/money-agent/blob/b7e55525488bf26feeb90196a6994145e1a650c1/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L22)
-- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L30`](https://github.com/ImmortalDemonGod/money-agent/blob/b7e55525488bf26feeb90196a6994145e1a650c1/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L30)
-- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L66-L125`](https://github.com/ImmortalDemonGod/money-agent/blob/b7e55525488bf26feeb90196a6994145e1a650c1/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L66-L125)
-- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L207-L210`](https://github.com/ImmortalDemonGod/money-agent/blob/b7e55525488bf26feeb90196a6994145e1a650c1/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L207-L210)
+- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L62-L64`](https://github.com/ImmortalDemonGod/money-agent/blob/3804cbafe0380e07a340a8762310bea561892d02/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L62-L64)
 
 ### Class A (Execution Evidence)
 
@@ -72,20 +68,20 @@ No covering test files found.
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
-```text
-68b46db test(sim): isolate AIV edge fixture state
-bc601c3 test(rails): expose registry contract to verification
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
+```
+d060b27 test(rails): call monetary validator directly
+5f37af2 test(supervisor): model live verifier process explicitly
+dfe3ff8 test(pr50): pin final review failure modes
+d52a400 test(rails): expand fail-closed registry catalog
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Claim 1 (see Claim(s)) | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Claim 2 (see Claim(s)) | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The closure packet evidence table matches the referenced sid... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
@@ -100,5 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Repair generated classification and intent/provenance evidence. The packet-edit claim remains
-manual-review-only; this sidecar does not represent lint/type output as execution evidence.
+docs(aiv): align closure evidence SHAs

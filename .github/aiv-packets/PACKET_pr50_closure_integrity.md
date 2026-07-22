@@ -59,9 +59,9 @@ classification:
 | 10 | EVIDENCE_TESTS_SIM.SH.md | `68b46db` | A, B, C, E, F |
 | 11 | EVIDENCE_SETUP.MD.md | `ae81911` | A, B, C, E, F |
 | 12 | EVIDENCE_.ENV.EXAMPLE.md | `b7e13e2` | A, B, C, E, F |
-| 13 | EVIDENCE_LEDGER_README.MD.md | `170ec27` | A, B, C, E, F |
-| 14 | EVIDENCE_BIN_README.MD.md | `2b080a4` | A, B, C, E, F |
-| 15 | EVIDENCE_PROMPT.MD.md | `ec86494` | A, B, C, E, F |
+| 13 | EVIDENCE_LEDGER_README.MD.md | `b7e13e2` | A, B, C, E, F |
+| 14 | EVIDENCE_BIN_README.MD.md | `170ec27` | A, B, C, E, F |
+| 15 | EVIDENCE_PROMPT.MD.md | `2b080a4` | A, B, C, E, F |
 
 ### Class A (Execution Evidence)
 
