@@ -201,6 +201,14 @@ assert_exit 0 "pace: a due bet unblocks lever-less iterations" \
 assert_exit 0 "pace: default-off leaves iteration-opening untouched" python3 bin/iter.py new
 
 echo "=== human-actuation queue (#31) ==="
+HUMAN_STATE="$W/human-state"
+mkdir -p "$HUMAN_STATE" harness
+ssh-keygen -q -t ed25519 -N "" -f "$HUMAN_STATE/verifier_signing_key"
+cp "$HUMAN_STATE/verifier_signing_key.pub" harness/verifier_key.pub
+echo "verifier $(cat "$HUMAN_STATE/verifier_signing_key.pub")" > harness/allowed_signers
+git add harness/verifier_key.pub harness/allowed_signers
+git commit -qm "harness: trust verifier human-resolution signer"
+git push -q origin "$BRANCH"
 assert_exit_grep 2 "kind" "human: free-text kind rejected (actuator, never oracle)" \
   python3 bin/human.py request --kind "write-my-pitch" --gate "reach wall" \
   --test "iter 001 packet" --ev "would help a lot"
@@ -217,14 +225,20 @@ assert_exit_grep 1 "human actuation hum-001" \
 assert_exit 1 "human: agent checkout cannot self-certify operator fulfillment" \
   python3 bin/human.py fulfill hum-001 --minutes 3 \
     --evidence "operator completed the captcha on their own account"
+assert_exit_grep 1 "must differ" "human: branch-name spoof cannot self-certify fulfillment" \
+  env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH="$BRANCH" MONEY_AGENT_STATE="$HUMAN_STATE" \
+    python3 bin/human.py fulfill hum-001 --minutes 3 \
+      --evidence "agent claims operator completed the captcha"
 cdx "$W/verifier"
-if env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH=ledger python3 bin/human.py fulfill hum-001 \
+if env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH=ledger MONEY_AGENT_STATE="$HUMAN_STATE" \
+     python3 bin/human.py fulfill hum-001 \
      --minutes 3 --evidence "operator completed the captcha on their own account" >/dev/null 2>&1; then
   ok "human: operator resolution published on facts lane"; else bad "human: operator fulfill"; fi
 cdx "$W/agent"
 if python3 bin/human.py sync hum-001 >/dev/null 2>&1 \
-   && grep -q '"human_minutes_total": 3' run/human_tasks.json; then
-  ok "human: grounded fulfillment sync meters minutes and resolves companion"
+   && grep -q '"human_minutes_total": 3' run/human_tasks.json \
+   && grep -q '"resolution_latency_seconds":' run/human_tasks.json; then
+  ok "human: signed fulfillment sync meters minutes + latency and resolves companion"
 else bad "human: grounded sync"; fi
 python3 bin/human.py request --kind approval-click --gate "mastodon.nu staff approval" \
   --test "iter-079 packet: account stuck at human staff approval" \
@@ -232,10 +246,26 @@ python3 bin/human.py request --kind approval-click --gate "mastodon.nu staff app
 cdx "$W/verifier"
 assert_grep "1 awaiting operator" "supervise: reads queue from agent branch in verifier checkout" \
   bash bin/supervise.sh "$BRANCH"
-if env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH=ledger python3 bin/human.py decline hum-002 \
+assert_grep "VERDICT.*HUMAN ACTUATION" "supervise: pending queue reaches the VERDICT line" \
+  bash bin/supervise.sh "$BRANCH"
+cdx "$W/agent"
+python3 - <<'PYEOF'
+import json
+p="run/human_tasks.json"; d=json.load(open(p)); d["tasks"][1]["status"]="fulfilled"
+d["tasks"][1]["resolution"]={"status":"fulfilled","evidence":"agent typed this"}
+json.dump(d, open(p,"w"), indent=2)
+PYEOF
+assert_exit_grep 1 "not grounded" "human: direct task-status edit cannot authorize conclusion" \
+  python3 bin/conclusion_gate.py
+git checkout -q -- run/human_tasks.json
+cdx "$W/verifier"
+if env AGENT_BRANCH="$BRANCH" LEDGER_BRANCH=ledger MONEY_AGENT_STATE="$HUMAN_STATE" \
+     python3 bin/human.py decline hum-002 --minutes 0.25 \
      --reason "not worth operator identity exposure this run" >/dev/null 2>&1; then
   ok "human: operator decline published on facts lane"; else bad "human: operator decline"; fi
 assert_grep "1 resolved-awaiting-agent-sync" "supervise: distinguishes published resolution" \
+  bash bin/supervise.sh "$BRANCH"
+assert_grep "VERDICT.*AGENT SYNC" "supervise: published resolution reaches the VERDICT line" \
   bash bin/supervise.sh "$BRANCH"
 cdx "$W/agent"
 if python3 bin/human.py sync hum-002 >/dev/null 2>&1 \
@@ -526,8 +556,11 @@ importlib.reload(bu)
 OP_ADDR = "0x" + "77" * 20
 calls = []
 safe_head = [1000]
+chain_id = [8453]
 def rpc_stub(url, method, params):
     calls.append((method, params))
+    if method == "eth_chainId":
+        return hex(chain_id[0])
     if method == "eth_getBlockByNumber":
         return {"number": hex(safe_head[0]), "hash": "0x" + f"{safe_head[0]:064x}"}
     if method == "eth_getLogs":
@@ -572,6 +605,33 @@ if t2["received_usd"] != 12.34 or t2.get("rails", {}).get("base_usdc", {}).get("
 if not any(m == "eth_getLogs" and p[0]["fromBlock"] == hex(2001)
            and p[0]["toBlock"] == hex(2010) for m, p in calls):
     fails.append("run-scoped baseline/finalized toBlock not used")
+# One settlement event is evidence for one transfer, not a reusable coupon for every identical
+# Transfer in the receipt. The second transfer must remain unbound.
+def duplicate_rpc(url, method, params):
+    if method == "eth_chainId": return hex(8453)
+    if method == "eth_getBlockByNumber":
+        return {"number": hex(2010), "hash": "0x" + "44" * 32}
+    if method == "eth_getLogs":
+        base = {"data": hex(1_000_000), "transactionHash": "0xduplicate",
+                "topics": [bu.TRANSFER_TOPIC0, bu._addr_topic("0x" + "22" * 20),
+                           bu._addr_topic("0x" + "ab" * 20)]}
+        return [{**base, "logIndex": "0x1"}, {**base, "logIndex": "0x2"}]
+    if method == "eth_getTransactionReceipt":
+        return {"logs": [{"address": "0x" + "cd" * 20, "logIndex": "0x3",
+                          "topics": ["0x" + "ee" * 32, bu._addr_topic("0x" + "11" * 20),
+                                     bu._addr_topic("0x" + "ab" * 20)],
+                          "data": "0x" + f"{1_000_000:064x}"}]}
+    raise RuntimeError(method)
+bu._rpc = duplicate_rpc
+dup = bu.pull(pathlib.Path("pnl_state"), {OP_ADDR})
+if dup["customer_usd"] != 1.0 or dup["unbound_usd"] != 1.0:
+    fails.append(f"one settlement event reused across transfers: {dup}")
+bu._rpc = rpc_stub
+chain_id[0] = 1
+t = run(clean)
+if t["verified"] or not any("wrong_chain" in e for e in t["errors"]):
+    fails.append(f"non-Base RPC did not fail closed: {t['errors']}")
+chain_id[0] = 8453
 os.environ.pop("BASE_SETTLEMENT_EVENT_TOPIC0")
 t = run(clean)
 if t["verified"] or not any("base_usdc_misprovisioned" in e for e in t["errors"]):

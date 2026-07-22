@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `60d9363`
-**Previous:** `0dfb70b`
-**Generated:** 2026-07-22T22:22:19Z
+**Commit:** `c5fd8f6`
+**Previous:** `8457d08`
+**Generated:** 2026-07-22T22:45:07Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,15 +16,17 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "This merge crosses verifier, payment-rail, and human-actuation trust boundaries and therefore requires independent review"
+  classification_rationale: "Tests exercise payment attribution and conclusion authorization critical surfaces under AIV section 5.2"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:22:19Z"
+  classified_at: "2026-07-22T22:45:07Z"
 ```
 
 ## Claim(s)
 
-1. PR50 contains the advanced stack-3 fixes and retains the rail and human-actuation regressions
-2. No existing tests were modified or deleted during this change.
+1. The simulation rejects claims-lane human self-certification and direct task-status tampering
+2. The simulation requires one-to-one Base settlement binding and Base mainnet chain identity
+3. The simulation requires per-task resolution latency and human queue VERDICT surfacing
+4. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,28 +34,22 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50](https://github.com/ImmortalDemonGod/money-agent/pull/50)
-- **Requirements Verified:** PR #50 must merge cleanly into its updated stacked base before CI can evaluate it
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
+- **Requirements Verified:** Issues #30 and #31 require verifier-grounded actuation and independently verifiable rail contributions before closure
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`60d9363`](https://github.com/ImmortalDemonGod/money-agent/tree/60d93633b47cd109e7697b689c8d7566a470afe3))
+**Scope Inventory** (SHA: [`c5fd8f6`](https://github.com/ImmortalDemonGod/money-agent/tree/c5fd8f63be061733b5b0d16533997a51cc9c94f2))
 
-- [`tests/sim.sh#L52-L54`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L52-L54)
-- [`tests/sim.sh#L59-L63`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L59-L63)
-- [`tests/sim.sh#L282-L287`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L282-L287)
-- [`tests/sim.sh#L428-L431`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L428-L431)
-- [`tests/sim.sh#L436-L438`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L436-L438)
-- [`tests/sim.sh#L447-L474`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L447-L474)
-- [`tests/sim.sh#L478`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L478)
-- [`tests/sim.sh#L486`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L486)
-- [`tests/sim.sh#L492-L501`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L492-L501)
-- [`tests/sim.sh#L602`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L602)
-- [`tests/sim.sh#L710`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L710)
-- [`tests/sim.sh#L745`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L745)
-- [`tests/sim.sh#L747-L748`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L747-L748)
-- [`tests/sim.sh#L764-L766`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L764-L766)
-- [`tests/sim.sh#L963-L1001`](https://github.com/ImmortalDemonGod/money-agent/blob/60d93633b47cd109e7697b689c8d7566a470afe3/tests/sim.sh#L963-L1001)
+- [`tests/sim.sh#L204-L211`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L204-L211)
+- [`tests/sim.sh#L228-L231`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L228-L231)
+- [`tests/sim.sh#L233-L234`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L233-L234)
+- [`tests/sim.sh#L239-L241`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L239-L241)
+- [`tests/sim.sh#L249-L263`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L249-L263)
+- [`tests/sim.sh#L268-L269`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L268-L269)
+- [`tests/sim.sh#L559`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L559)
+- [`tests/sim.sh#L562-L563`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L562-L563)
+- [`tests/sim.sh#L608-L634`](https://github.com/ImmortalDemonGod/money-agent/blob/c5fd8f63be061733b5b0d16533997a51cc9c94f2/tests/sim.sh#L608-L634)
 
 ### Class A (Execution Evidence)
 
@@ -62,7 +58,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 16424 error(s)
+- **ruff:** 17042 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -70,21 +66,9 @@ This file has no claim-specific execution evidence.
 **Search methodology:** Ran `git diff --cached` and scanned for regression indicators.
 
 - Test file deletions: **none**
-- Test files modified: 3
-  - `.github/aiv-evidence/EVIDENCE_TESTS_SIM.SH.md`
-  - `tests/corpus.sh`
-  - `tests/sim.sh`
+- Test file modifications: **none**
 - Deleted assertions (`assert` removals in diff): **none found**
 - Added skip markers (`@pytest.mark.skip`, `@unittest.skip`): **none found**
-
-### Class D (Differential Evidence)
-
-**Change summary** (`git diff --cached --stat`):
-
-```
-tests/sim.sh | 123 +++++++++++++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 107 insertions(+), 16 deletions(-)
-```
 
 ### Class F (Provenance Evidence)
 
@@ -95,21 +79,23 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
+8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
 0dfb70b test(sim): make packet mutations portable and fail closed
 b48810e test(preflight): provide extracted Base identity path
 406c9f6 test(harness): cover PR50 trust-boundary regressions
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | PR50 contains the advanced stack-3 fixes and retains the rai... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The simulation rejects claims-lane human self-certification ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | The simulation requires one-to-one Base settlement binding a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 3 | The simulation requires per-task resolution latency and huma... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 4 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 3 manual review.
 ---
 
 ## Verification Methodology
@@ -122,4 +108,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Reconcile PR50 against the advanced stack-3 base using its actual stack parent
+Add adversarial closure tests for PR50 trust boundaries
