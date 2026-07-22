@@ -355,11 +355,14 @@ def main() -> int:
     # agent-unreachable state dir keeps the audit trail in both cases; the tree stays clean either
     # way, so nothing untrusted reaches the manifest.
     try:
+        # Do NOT apply ignore rules here. A global `*.json` ignore made planted raw pulls invisible
+        # to the previous command in a real verifier environment; every untracked file beneath this
+        # verifier-owned directory is untrusted input regardless of a developer's Git preferences.
         untracked = subprocess.run(
-            ["git", "ls-files", "-o", "--exclude-standard", "ledger/raw/"],
+            ["git", "ls-files", "-o", "--", "ledger/raw/"],
             cwd=REPO, capture_output=True, text=True, timeout=10).stdout.split()
         if untracked:
-            qdir = STATE_DIR / "raw-rescue" / time.strftime("%Y%m%dT%H%M%S")
+            qdir = STATE_DIR / "raw-rescue" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
             qdir.mkdir(parents=True, exist_ok=True)
             for rel in untracked:
                 src = REPO / rel
@@ -369,7 +372,13 @@ def main() -> int:
                   "(agent plant or orphan of a failed commit -- preserved, not trusted)",
                   file=sys.stderr)
     except Exception as e:
-        print(f"warn: could not quarantine untracked raw files ({e})", file=sys.stderr)
+        # Continuing would let a raw JSON file we failed to remove remain eligible for the manifest
+        # below. A stale ledger halts the run; a fresh ledger containing an untrusted raw pull would
+        # falsely authorize it. Refuse to publish facts until the operator resolves the filesystem
+        # failure (including a state directory mounted on a different filesystem).
+        print(f"FATAL: could not quarantine untracked raw files ({e}); refusing to publish facts",
+              file=sys.stderr)
+        return 2
 
     pulls: list[Path] = []
     # errors initialized earlier (constitution check appends to it)
