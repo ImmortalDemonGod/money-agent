@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/pnl.py`
-**Commit:** `a410be6`
-**Generated:** 2026-07-22T21:06:25Z
+**Commit:** `42280fd`
+**Previous:** `0ad5b46`
+**Generated:** 2026-07-22T21:09:31Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/pnl.py"
-  classification_rationale: "R3 because this verifier-owned payment evidence determines whether public financial facts are trusted"
+  classification_rationale: "R3 because a stale or missing signature changes whether payment facts are grounded"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:06:25Z"
+  classified_at: "2026-07-22T21:09:31Z"
 ```
 
 ## Claim(s)
 
-1. pnl.py removes an unsigned attestation and marks truth unverified when attestation signing fails
+1. pnl.py replaces the prior truth signature before re-signing the unverified record produced by an attestation signing failure
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,21 +33,19 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/42](https://github.com/ImmortalDemonGod/money-agent/issues/42)
-- **Requirements Verified:** Issue #42 requires a verifier-signed public attestation rather than an unsigned customer-facing claim
+- **Requirements Verified:** Issue #42 requires a failed attestation signature to fail closed without invalidating the signed truth evidence
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`a410be6`](https://github.com/ImmortalDemonGod/money-agent/tree/a410be65e3dd0d484b32c799e9418857926c6c31))
+**Scope Inventory** (SHA: [`42280fd`](https://github.com/ImmortalDemonGod/money-agent/tree/42280fd03af5c4e764cf2464e8fb716604591171))
 
-- [`bin/pnl.py#L523-L534`](https://github.com/ImmortalDemonGod/money-agent/blob/a410be65e3dd0d484b32c799e9418857926c6c31/bin/pnl.py#L523-L534)
-- [`bin/pnl.py#L537`](https://github.com/ImmortalDemonGod/money-agent/blob/a410be65e3dd0d484b32c799e9418857926c6c31/bin/pnl.py#L537)
-- [`bin/pnl.py#L576-L649`](https://github.com/ImmortalDemonGod/money-agent/blob/a410be65e3dd0d484b32c799e9418857926c6c31/bin/pnl.py#L576-L649)
+- [`bin/pnl.py#L644-L646`](https://github.com/ImmortalDemonGod/money-agent/blob/42280fd03af5c4e764cf2464e8fb716604591171/bin/pnl.py#L644-L646)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L523-L534): FAIL -- WARNING: No tests import or call `main`
+- **`main`** (L644-L646): FAIL -- WARNING: No tests import or call `main`
 
 **Coverage summary:** 0/1 symbols verified by tests.
 
@@ -73,18 +72,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+4c0df17 test(verifier): reject unsigned attestation output
 46c2a41 docs(tests): record verifier hardening bug catalog
 54ef777 test(verifier): cover raw paths and inference CSV validation
 abe8811 test(corpus): fail closed on fixture probe crashes
 93a3e7d test(verifier): cover raw quarantine move failure
-b2dcae1 [S3] durability + metering: raw-pull side-car/quarantine, unpushed counter, inference cost (#46 #41)
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | pnl.py removes an unsigned attestation and marks truth unver... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | pnl.py replaces the prior truth signature before re-signing ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -100,4 +99,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Prevent publication of unsigned attestations after signing failure
+Re-sign the unverified truth record after attestation failure

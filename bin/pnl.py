@@ -641,6 +641,9 @@ def main() -> int:
             errors.append(f"attestation_signing_failed: {ra.stderr.strip()[:120]}")
             truth["errors"], truth["verified"] = errors, False
             TRUTH.write_text(json.dumps(truth, indent=2) + "\n")
+            # ssh-keygen -Y sign does not overwrite an existing detached signature. Remove the
+            # signature for the pre-error truth before producing the one that covers this record.
+            (TRUTH.parent / (TRUTH.name + ".sig")).unlink(missing_ok=True)
             retry = subprocess.run(["ssh-keygen", "-Y", "sign", "-f", str(sign_key),
                                     "-n", "money-agent-ledger", str(TRUTH)],
                                    capture_output=True, text=True, timeout=30)
