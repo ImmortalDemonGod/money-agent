@@ -35,3 +35,21 @@ daily-salted truncated IP hash (no raw IPs), and `/go` click-through logging to 
 - **Retention:** raw `ua` is kept for bot-classification refinement. Add a scheduled purge (a Cron
   Trigger running `DELETE FROM hits WHERE ts < date('now','-90 days')`) before running this beyond
   a short experiment — indefinite UA retention under a real name is not acceptable.
+
+## Two counting rules the instrument must keep (learned the hard way, 2026-07-20)
+
+Within two hours of first deployment the beacon reported **2 human visitors**. Both were
+`/favicon.ico` fetches — one from **Google LLC**'s network, one from a Norwegian hosting company —
+wearing full browser user-agents with `Accept-Language`. Zero people had actually opened a page.
+
+1. **Asset paths are not visits.** `favicon.ico`, icons, css/js, fonts. A browser fetches them
+   alongside a page, so counting them double-counts a real visitor; and a bare crawler asset fetch
+   manufactures a visit out of nothing. They are still LOGGED (they are evidence) but excluded from
+   every human-facing number. `ASSET_SQL` in `stats()` must stay in sync with `ASSET_RE`.
+2. **A browser UA from a datacenter ASN is a bot.** Cloudflare already hands us `asOrganization`;
+   use it. Consumer ISPs are deliberately absent from `DATACENTER_RE`.
+
+The point is not the two rows. It is that **an instrument which flatters its own numbers is worse
+than no instrument**, because a false "someone arrived" is exactly the conclusion run 1 had to
+retract. `/stats` now reports `page_views`, `humans`, `bots` and `assets_excluded` separately, so
+what was dropped is visible rather than silently swallowed.

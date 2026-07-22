@@ -1,0 +1,32 @@
+name: Deploy showcase to Vercel production
+
+# Clean auto-deploy WITHOUT the Vercel GitHub app integration, so no preview
+# deployments are ever created for other branches/PRs. Only a push to main that
+# touches showcase/ (or this workflow) deploys, straight to production.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'showcase/**'
+      - '.github/workflows/deploy-showcase.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-showcase-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy showcase/ to Vercel production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx --yes vercel@latest deploy showcase --prod --yes --token "$VERCEL_TOKEN"

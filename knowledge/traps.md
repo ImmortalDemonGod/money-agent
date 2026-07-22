@@ -26,3 +26,27 @@
    pulls. verifier_loop.sh now pushes pending local commits BEFORE any reset and skips the reset
    while ahead of origin, but a persistently unreachable remote is still a raw-pull hazard until
    fully resolved. On any v1-topology repo: commit+push in the same breath as every write.
+
+## Cloudflare Workers responses are edge-cached; a stale read is not a failed deploy
+Twice on 2026-07-20 a fresh `curl` of a just-deployed Worker returned the PREVIOUS build -- once
+reading as "the fix did not deploy", once as "the new route 404s to the hub". Both deploys were
+fine; the read was stale. Cost: two false diagnoses. Same family as every other trap here -- a
+description layer standing in for the artifact.
+Verify against the deploy itself, not a guessed cache key: `wrangler deployments list` (or a build
+marker the worker echoes) confirms the live version. A `?v=$(date +%s%N)` cache-buster USUALLY
+dodges the edge cache, but only when the active cache key includes the query string -- a custom
+cache key can ignore it and still serve the old body, so a nonce is a convenience, not proof.
+
+## `git` answers from your last fetch, not from the remote
+A local `main` that had not been fetched was **85 commits behind**. Reasoning from it produced a
+confident, wrong "`archive/run-001` does not exist on any branch", and a PR branched from the stale
+base that duplicated archived content at live root paths. **`git fetch` before any claim about what
+a branch contains**, and before cutting a branch to PR from.
+
+## Analytics that counts asset fetches and datacenter traffic will invent humans
+A beacon deployed 2026-07-20 reported 2 "human" visitors within two hours. Both were
+`/favicon.ico` fetches from cloud networks (Google LLC; a NO hosting company) with browser UAs and
+`Accept-Language`. Real human page views: zero. Two rules, both now in `harness/beacon/`: exclude
+asset paths from every human-facing count, and treat a browser UA from a datacenter ASN as a bot.
+Report what was excluded so the drop is visible. **An instrument that flatters its own numbers is
+worse than none** — a false "someone arrived" is the exact conclusion run 1 had to retract.
