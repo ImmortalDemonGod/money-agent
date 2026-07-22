@@ -12,6 +12,12 @@ assert spec.loader
 spec.loader.exec_module(reach)
 assert reach.REPO == SOURCE.parents[3]
 
+all_down = reach.delta_vs_baseline({k: None for k in reach.BASELINE_TELEGRAPH}, {"points": 9})
+assert "telemetry UNAVAILABLE" in reach.bottom_line(all_down, None)
+assert "HN +1 point" in reach.bottom_line(all_down, None)
+hn_down = reach.delta_vs_baseline({k: 0 for k in reach.BASELINE_TELEGRAPH}, {"points": None})
+assert "HN telemetry is UNAVAILABLE" in reach.bottom_line(hn_down, None)
+
 with tempfile.TemporaryDirectory() as td:
     root = Path(td)
     (root / "ledger").mkdir()
