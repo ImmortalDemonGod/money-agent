@@ -1,5 +1,7 @@
 # The Money Agent — analysis of the first run (v1)
 
+> ⚠ **See [`ADDENDUM-2026-07-20.md`](ADDENDUM-2026-07-20.md) before trusting any conclusion below.** Four of this run's stated conclusions were later falsified: "reach is zero", "zero replies ever", iteration 095's `EXHAUSTION PROVEN`, and `bin/reach.py`'s hardcoded verdict. The record below is left unrewritten on purpose; the addendum carries the corrections and the post-freeze production drift.
+
 [![An AI agent, $25, and one job: earn a single honest dollar. Verified result: $0.00.](showcase/og.png)](https://one-honest-dollar.surge.sh/)
 
 ### Can you trust what an autonomous agent tells you about money — including its claim to be finished?
