@@ -11,19 +11,22 @@ verifier-provisioned env, and the baseline block freezes verifier-side on first 
 discipline on a different clock).
 
 SETTLEMENT-EVENT BINDING (the onchain wash-trade analogue, from the operator's #30 comment): a
-bare ERC-20 Transfer proves value moved, NOT that a marketplace paid for completed work -- the
-operator funding the wallet would otherwise read as revenue. A transfer therefore counts as
-CUSTOMER revenue ONLY when its transaction also emitted the provisioned marketplace settlement
-event (escrow release / acceptance); everything else lands in `unbound_usd`: visible, surfaced,
-NEVER counted. Fail toward not counting, always. The binding config (event topic + marketplace
-address) is REQUIRED provisioning: an armed adapter without it is misprovisioned and poisons the
-pull rather than guessing.
+bare ERC-20 Transfer proves value moved, NOT that a marketplace paid for completed work. A
+transfer counts only when the same transaction's marketplace event binds the payer, payee, and
+amount to that transfer. Looking only for an event signature in the receipt is insufficient: an
+unrelated transfer can share a transaction with a valid event, and escrow payouts make the token
+sender the escrow contract rather than the buyer. Everything without an exact binding lands in
+`unbound_usd`: visible, surfaced, NEVER counted.
 
 Env (verifier's .env; absent BASE_RPC_URL = adapter idle):
   BASE_RPC_URL                     JSON-RPC endpoint for Base
   BASE_SETTLEMENT_ADDRESS          the agent's settlement wallet (0x...)
   BASE_MARKETPLACE_ADDRESS         the marketplace escrow contract whose event binds a payment
   BASE_SETTLEMENT_EVENT_TOPIC0     topic0 (keccak) of the settlement/acceptance event
+  BASE_SETTLEMENT_PAYER_TOPIC      indexed-event topic containing the payer address (>=1)
+  BASE_SETTLEMENT_PAYEE_TOPIC      indexed-event topic containing the payee address (>=1)
+  BASE_SETTLEMENT_AMOUNT_WORD      zero-based 32-byte word in event data containing USDC amount
+  BASE_FINALITY_TAG                safe|finalized (default: safe)
   BASE_USDC_CONTRACT               override for the USDC token contract (defaults to Base USDC)
 
 Operator self-exclusion: `addresses` in STATE_DIR/operator_identity.json (lowercased 0x...).
@@ -58,11 +61,58 @@ def _addr_topic(addr: str) -> str:
     return "0x" + addr.lower().replace("0x", "").rjust(64, "0")
 
 
+def _event_addr(log: dict, index: int) -> str:
+    topics = log.get("topics") or []
+    if index < 1 or index >= len(topics):
+        raise ValueError(f"settlement event missing configured address topic {index}")
+    return "0x" + topics[index][-40:].lower()
+
+
+def _event_word(log: dict, index: int) -> int:
+    data = str(log.get("data", "")).removeprefix("0x")
+    start = index * 64
+    if index < 0 or len(data) < start + 64:
+        raise ValueError(f"settlement event missing configured data word {index}")
+    return int(data[start:start + 64], 16)
+
+
+def _finality_anchor(url: str) -> dict:
+    tag = os.environ.get("BASE_FINALITY_TAG", "safe").lower()
+    if tag not in ("safe", "finalized"):
+        raise ValueError("BASE_FINALITY_TAG must be safe or finalized")
+    block = _rpc(url, "eth_getBlockByNumber", [tag, False])
+    if not isinstance(block, dict) or not block.get("number") or not block.get("hash"):
+        raise ValueError(f"RPC returned no {tag} block anchor")
+    return {"tag": tag, "number": int(block["number"], 16), "hash": block["hash"]}
+
+
+def freeze_baseline(state_dir: Path) -> dict:
+    """Freeze this run's Base boundary at an already-safe block.
+
+    Called by set_baseline.py for every run. Pulling never creates this file itself: otherwise a
+    payment between run start and the first verifier cycle could disappear behind a late baseline.
+    """
+    url = os.environ.get("BASE_RPC_URL", "")
+    if not url:
+        raise ValueError("BASE_RPC_URL is required to freeze the Base baseline")
+    anchor = _finality_anchor(url)
+    payload = {"baseline_block": anchor["number"], "baseline_hash": anchor["hash"],
+               "finality_tag": anchor["tag"],
+               "_note": "AUTHORITATIVE, verifier-side, run-scoped Base baseline."}
+    bfile = state_dir / "base_usdc_baseline.json"
+    bfile.parent.mkdir(parents=True, exist_ok=True)
+    bfile.write_text(json.dumps(payload, indent=2) + "\n")
+    return payload
+
+
 def pull(state_dir: Path, operator_addresses: set[str]) -> dict:
     url = os.environ.get("BASE_RPC_URL", "")
     settle_addr = os.environ.get("BASE_SETTLEMENT_ADDRESS", "").lower()
     mkt_addr = os.environ.get("BASE_MARKETPLACE_ADDRESS", "").lower()
     mkt_topic0 = os.environ.get("BASE_SETTLEMENT_EVENT_TOPIC0", "").lower()
+    payer_topic = os.environ.get("BASE_SETTLEMENT_PAYER_TOPIC", "")
+    payee_topic = os.environ.get("BASE_SETTLEMENT_PAYEE_TOPIC", "")
+    amount_word = os.environ.get("BASE_SETTLEMENT_AMOUNT_WORD", "")
     usdc = os.environ.get("BASE_USDC_CONTRACT", USDC_DEFAULT)
     out = {"customer_usd": 0.0, "self_usd": 0.0, "unbound_usd": 0.0, "raws": [], "errors": []}
 
@@ -70,50 +120,53 @@ def pull(state_dir: Path, operator_addresses: set[str]) -> dict:
         out["errors"].append("base_usdc_misprovisioned: BASE_RPC_URL set but "
                              "BASE_SETTLEMENT_ADDRESS missing")
         return out
-    if not (mkt_addr and mkt_topic0):
+    if not (mkt_addr and mkt_topic0 and payer_topic and payee_topic and amount_word):
         # the binding IS the wash-trade guard on this rail; without it every inbound transfer
         # would be uncountable-or-forgeable. Refuse to guess.
         out["errors"].append("base_usdc_misprovisioned: settlement-event binding config missing "
-                             "(BASE_MARKETPLACE_ADDRESS + BASE_SETTLEMENT_EVENT_TOPIC0) -- a bare "
-                             "Transfer is not revenue; provision the binding or disarm the rail")
+                             "(marketplace, topic0, payer/payee topics, amount word) -- a bare "
+                             "Transfer or event co-occurrence is not revenue")
+        return out
+    if not operator_addresses:
+        out["errors"].append("base_usdc_misprovisioned: operator wallet allowlist is empty")
         return out
 
     try:
-        # baseline block: frozen verifier-side on first sight, agent-unreachable -- pre-run value
-        # on this wallet never counts (the created_gt discipline)
+        payer_i, payee_i, amount_i = int(payer_topic), int(payee_topic), int(amount_word)
         bfile = state_dir / "base_usdc_baseline.json"
-        if bfile.exists():
-            from_block = int(json.loads(bfile.read_text())["baseline_block"]) + 1
-        else:
-            head = int(_rpc(url, "eth_blockNumber", []), 16)
-            bfile.parent.mkdir(parents=True, exist_ok=True)
-            bfile.write_text(json.dumps({"baseline_block": head,
-                                         "_note": "AUTHORITATIVE, verifier-side. USDC inbound at "
-                                                  "or before this block is NOT the agent's."},
-                                        indent=2))
-            from_block = head + 1
-        logs = _rpc(url, "eth_getLogs", [{
-            "fromBlock": hex(from_block), "toBlock": "latest", "address": usdc,
+        if not bfile.exists():
+            raise RuntimeError("run-scoped Base baseline missing; run bin/set_baseline.py before pnl")
+        from_block = int(json.loads(bfile.read_text())["baseline_block"]) + 1
+        anchor = _finality_anchor(url)
+        out["raws"].append(("base_usdc_finality_anchor", anchor))
+        logs = [] if anchor["number"] < from_block else _rpc(url, "eth_getLogs", [{
+            "fromBlock": hex(from_block), "toBlock": hex(anchor["number"]), "address": usdc,
             "topics": [TRANSFER_TOPIC0, None, _addr_topic(settle_addr)]}])
         out["raws"].append(("base_usdc_transfers", logs))
         receipts = {}
         for lg in logs:
             amt = int(lg["data"], 16) / (10 ** USDC_DECIMALS)
-            sender = "0x" + lg["topics"][1][-40:].lower()
-            if sender in operator_addresses:
-                out["self_usd"] += amt
-                continue
             txh = lg["transactionHash"]
             if txh not in receipts:
                 receipts[txh] = _rpc(url, "eth_getTransactionReceipt", [txh])
             rcpt = receipts[txh] or {}
-            bound = any((l.get("address", "").lower() == mkt_addr
-                         and (l.get("topics") or [""])[0].lower() == mkt_topic0)
-                        for l in rcpt.get("logs", []))
-            if bound:
-                out["customer_usd"] += amt
-            else:
+            bound = None
+            for event in rcpt.get("logs", []):
+                if (event.get("address", "").lower() != mkt_addr
+                        or (event.get("topics") or [""])[0].lower() != mkt_topic0):
+                    continue
+                if (_event_addr(event, payee_i) == settle_addr
+                        and _event_word(event, amount_i) == int(lg["data"], 16)):
+                    bound = event
+                    break
+            if bound is None:
                 out["unbound_usd"] += amt   # visible, never counted -- fail toward not counting
+                continue
+            payer = _event_addr(bound, payer_i)
+            if payer in operator_addresses:
+                out["self_usd"] += amt
+            else:
+                out["customer_usd"] += amt
         if receipts:
             out["raws"].append(("base_usdc_receipts", receipts))
         for k in ("customer_usd", "self_usd", "unbound_usd"):
