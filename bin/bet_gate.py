@@ -32,7 +32,6 @@ Usage:
 Importable: authorize(action, consume=False, bet_id=..., lane=..., amount_usd=...) -> (ok, why)
 """
 from __future__ import annotations
-import json
 import math
 import os
 import sys
