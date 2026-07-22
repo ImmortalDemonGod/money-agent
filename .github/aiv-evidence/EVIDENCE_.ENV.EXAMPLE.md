@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `.env.example`
-**Commit:** `ae81911`
+**Commit:** `d8adf3b`
 **Previous:** `8f307cf`
-**Generated:** 2026-07-22T23:06:07Z
+**Generated:** 2026-07-22T23:10:38Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,15 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: ".env.example"
-  classification_rationale: "Configuration is part of the payment verification boundary"
+  classification_rationale: "R3 because this documents custody and configuration of a refund credential on the payment boundary"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:06:07Z"
+  classified_at: "2026-07-22T23:10:38Z"
 ```
 
 ## Claim(s)
 
-1. The verifier template tells operators that chain ID 8453 and authorization acceptance are mandatory
-2. No existing tests were modified or deleted during this change.
+1. The environment template keeps obligation authorization default-off and places every enabling value in the verifier-only section
+2. The template identifies the refund key, exposure caps, and deadline cap required for authorization
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,14 +33,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/30](https://github.com/ImmortalDemonGod/money-agent/issues/30)
-- **Requirements Verified:** Base rail configuration must fail visibly when pointed at another chain
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
+- **Requirements Verified:** Operators need a complete verifier-side provisioning contract for mechanically guaranteed obligations
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`ae81911`](https://github.com/ImmortalDemonGod/money-agent/tree/ae819118bc4939031029d11b07357c92cc1f656f))
+**Scope Inventory** (SHA: [`d8adf3b`](https://github.com/ImmortalDemonGod/money-agent/tree/d8adf3b08d187057b2dde6f729b29c595dd49e2f))
 
-- [`.env.example#L48-L50`](https://github.com/ImmortalDemonGod/money-agent/blob/ae819118bc4939031029d11b07357c92cc1f656f/.env.example#L48-L50)
+- [`.env.example#L32-L42`](https://github.com/ImmortalDemonGod/money-agent/blob/d8adf3b08d187057b2dde6f729b29c595dd49e2f/.env.example#L32-L42)
 
 ### Class A (Execution Evidence)
 
@@ -69,21 +70,22 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-68b46db test(sim): isolate AIV edge fixture state
-bc601c3 test(rails): expose registry contract to verification
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
+6763b83 test(sim): exercise verifier-authorized obligations
+512f388 test(obligations): cover guarded authorization contract
+30612e5 test(sim): exercise CodeRabbit review invariants
+76c1bec test(v3): cover CodeRabbit hardening findings
+bb5cbed test(sim): adversarially cover PR 51 hardening
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The verifier template tells operators that chain ID 8453 and... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The environment template keeps obligation authorization defa... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | The template identifies the refund key, exposure caps, and d... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
 ---
 
 ## Verification Methodology
@@ -96,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Clarify chain and acceptance requirements
+Document every verifier-only input for guarded obligations
