@@ -15,7 +15,8 @@ Checks, against the LIVE delivery URL (the success-redirect target -- never a lo
      completed checkout, closing the race the ~120s verifier polling window leaves open. The
      limit is verified via the API, never trusted from the packet; no key -> FAIL (the agent that
      created the link holds the key, so an unverifiable limit is a misconfiguration, not an
-     exemption).
+     exemption). The API response must also identify this exact delivery URL as the link's
+     post-payment redirect; an unrelated healthy URL is not evidence of delivery.
 
 Output ends with one machine-readable line the aiv gate re-runs and trusts only fresh:
   DELIVERY_CHECK: <url> | status=<n> | bytes=<n> | placeholder=<none|FOUND> | sha256=<match|mismatch|n/a> | link_limit=<1|n|unverified|n/a> | verdict=<PASS|FAIL>
@@ -55,26 +56,41 @@ def _fetch(url: str) -> tuple[int, bytes]:
         return 0, b""
 
 
-def _link_limit(payment_link: str) -> str:
+def _payment_link(payment_link: str) -> dict | None:
     """#35: read the payment link's completed-sessions restriction from the Stripe API with the
-    agent's own write key (restricted write keys can read the objects they create). Returns
-    '1'/'<n>'/'unverified'."""
+    agent's own write key. Paginate rather than assuming a recent link is among the first 100."""
     key = os.environ.get("STRIPE_WRITE_KEY", "")
     if not key or "REPLACE_ME" in key:
-        return "unverified"
+        return None
     try:
-        req = urllib.request.Request("https://api.stripe.com/v1/payment_links?limit=100",
-                                     headers={"Authorization": f"Bearer {key}"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            data = json.loads(r.read().decode())
-        for link in data.get("data", []):
-            if link.get("url") == payment_link:
-                lim = ((link.get("restrictions") or {}).get("completed_sessions") or {}).get("limit")
-                return str(lim) if lim is not None else "none"
-        return "not-found"
+        cursor = None
+        while True:
+            endpoint = "https://api.stripe.com/v1/payment_links?limit=100"
+            if cursor:
+                endpoint += "&starting_after=" + urllib.parse.quote(cursor, safe="")
+            req = urllib.request.Request(endpoint, headers={"Authorization": f"Bearer {key}"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                data = json.loads(r.read().decode())
+            links = data.get("data", [])
+            for link in links:
+                if link.get("url") == payment_link:
+                    return link
+            if not data.get("has_more") or not links:
+                return None
+            cursor = links[-1].get("id")
+            if not cursor:
+                return None
     except Exception as e:
         print(f"  stripe lookup failed: {type(e).__name__}: {e}", file=sys.stderr)
-        return "unverified"
+        return None
+
+
+def _completion_redirect(link: dict | None) -> str | None:
+    """Return the provider-configured post-payment redirect, if it is a public URL."""
+    completion = (link or {}).get("after_completion") or {}
+    redirect = completion.get("redirect") or {}
+    url = redirect.get("url") if completion.get("type") == "redirect" else None
+    return url if isinstance(url, str) and host_check._public_https(url) else None
 
 
 def main() -> int:
@@ -102,17 +118,23 @@ def main() -> int:
     if expect:
         sha = "match" if hashlib.sha256(body).hexdigest() == expect.lower() else "mismatch"
         print(f"sha256        : {sha}")
-    limit = "n/a"
+    limit = redirect = "n/a"
     if payment_link:
-        limit = _link_limit(payment_link)
+        link = _payment_link(payment_link)
+        limit_value = ((link or {}).get("restrictions") or {}).get("completed_sessions") or {}
+        limit = str(limit_value.get("limit")) if limit_value.get("limit") is not None else "unverified"
+        completion_url = _completion_redirect(link)
+        redirect = "match" if completion_url == url else "mismatch"
         print(f"link limit    : {limit}"
               + ("   (#35: the provider must atomically cap completed sessions at 1)"
                  if limit != "1" else ""))
+        print(f"success URL   : {completion_url or 'unverified'} ({redirect})")
 
     ok = (bool(status) and status < 400 and len(body) >= MIN_BYTES and placeholder == "none"
-          and sha in ("match", "n/a") and (payment_link is None or limit == "1"))
+          and sha in ("match", "n/a")
+          and (payment_link is None or (limit == "1" and redirect == "match")))
     print(f"\nDELIVERY_CHECK: {url} | status={status} | bytes={len(body)} | "
-          f"placeholder={placeholder} | sha256={sha} | link_limit={limit} | "
+          f"placeholder={placeholder} | sha256={sha} | link_limit={limit} | redirect={redirect} | "
           f"verdict={'PASS' if ok else 'FAIL'}")
     if not ok:
         print("NOT SAFELY SELLABLE: the pay->deliver seam is broken or uncapped -- fix it before "
