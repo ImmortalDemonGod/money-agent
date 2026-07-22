@@ -60,8 +60,8 @@ archive() {  # move if present (tracked or not); silence if absent; DEST created
 echo "=== archiving run $N state -> $DEST ==="
 archive MONEY_LOG.md SENT_LOG.md REFUSALS.md WATCH_LOG.md DISCLOSURE_EV_LOG.md \
         EXHAUSTION_PACKET.md ADVERSARY_REPORT.md ADVERSARY_TRANSCRIPT.md EDGE_REGISTRATION.md
-archive run/bets.json
-rmdir run 2>/dev/null || true   # bets.py recreates it on first use
+archive run/bets.json run/human_tasks.json
+rmdir run 2>/dev/null || true   # agent tools recreate it on first use
 [[ -d iterations ]] && { mkdir -p "$DEST"; git mv iterations "$DEST/iterations" 2>/dev/null || mv iterations "$DEST/iterations"; MOVED+=("iterations::$DEST/iterations"); echo "  archived: iterations/"; }
 shopt -s nullglob
 PKTS=(.github/aiv-packets/VERIFICATION_PACKET_ITER_*.md)
