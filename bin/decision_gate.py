@@ -48,12 +48,12 @@ def _decision(risk_class: str, h: str) -> dict | None:
     if not LOG.exists():
         return None
     for line in LOG.read_text().splitlines():
-        if f"class:{risk_class}" in line and f"body:{h}" in line:
-            d = {}
-            for part in line.lstrip("- ").split("|"):
-                if ":" in part:
-                    k, _, v = part.strip().partition(":")
-                    d[k.strip()] = v.strip()
+        d = {}
+        for part in line.lstrip("- ").split("|"):
+            if ":" in part:
+                k, _, v = part.strip().partition(":")
+                d[k.strip()] = v.strip()
+        if d.get("class") == risk_class and d.get("body") == h:
             return d
     return None
 
