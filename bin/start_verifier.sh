@@ -19,6 +19,15 @@ AGENT_BRANCH="${1:?usage: start_verifier.sh <agent-branch>   (e.g. claude/xxx)}"
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 export AGENT_BRANCH LEDGER_BRANCH
 
+# Provisioning participates in baseline creation, so load the verifier environment BEFORE any
+# preflight or set_baseline.py. Previously .env was only sourced by the background loop, which
+# made an armed Base rail invisible while the run-start baseline was being frozen.
+[[ -f .env ]] || { echo "FATAL: .env (read keys) missing on this machine." >&2; exit 2; }
+set -a
+# shellcheck source=/dev/null
+. "$R/.env"
+set +a
+
 echo "=== 1. agent branch on origin? ==="
 git fetch -q origin
 git rev-parse -q --verify "origin/$AGENT_BRANCH" >/dev/null 2>&1 \
@@ -54,6 +63,29 @@ fi
 echo "  operator identity allowlist present: $OPID"
 # TEST-MARKER: preflight-opid-end
 
+# TEST-MARKER: preflight-base-begin (tests/sim.sh extracts this block verbatim)
+if [[ -n "${BASE_RPC_URL:-}" ]]; then
+  echo "=== 1c. Base/USDC rail provisioned? ==="
+  missing=0
+  for name in BASE_SETTLEMENT_ADDRESS BASE_MARKETPLACE_ADDRESS \
+              BASE_SETTLEMENT_EVENT_TOPIC0 BASE_SETTLEMENT_PAYER_TOPIC \
+              BASE_SETTLEMENT_PAYEE_TOPIC BASE_SETTLEMENT_AMOUNT_WORD; do
+    if [[ -z "${!name:-}" ]]; then echo "FATAL: $name missing for armed Base rail" >&2; missing=1; fi
+  done
+  [[ "$missing" -eq 0 ]] || exit 2
+  if ! python3 -c '
+import json, sys
+try: d=json.load(open(sys.argv[1]))
+except Exception: sys.exit(1)
+sys.exit(0 if d.get("addresses") else 1)' "$OPID"; then
+    echo "FATAL: Base rail armed but operator_identity.json has no wallet addresses." >&2
+    echo '       Add: {"addresses": ["0x<operator-wallet>"]} alongside email/fingerprint IDs.' >&2
+    exit 2
+  fi
+  echo "  Base binding + operator wallet allowlist present; set_baseline.py will freeze a safe block"
+fi
+# TEST-MARKER: preflight-base-end
+
 echo "=== 2. ensure the facts lane exists, THEN freeze the baseline ==="
 # ROUND-3 FIX (ordering): set_baseline froze the facts-lane OID, but this script used to run it
 # BEFORE verifier_loop.sh created the ledger branch -- so the OID froze empty on every fresh run
@@ -71,7 +103,6 @@ fi
 python3 bin/set_baseline.py
 
 echo "=== 3. launch verifier_loop (two-lane) under caffeinate (background) ==="
-[[ -f .env ]] || { echo "FATAL: .env (read keys) missing on this machine." >&2; exit 2; }
 mkdir -p "$R/.run"
 PIDFILE="$R/.run/verifier.pid"
 if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
