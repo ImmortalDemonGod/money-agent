@@ -33,12 +33,13 @@ def _now() -> dt.datetime:
     return dt.datetime.now(dt.timezone.utc)
 
 
-def _refund(charge_id: str, key: str) -> tuple[bool, str]:
+def _refund(charge_id: str, key: str, obligation_id: str) -> tuple[bool, str]:
     try:
         req = urllib.request.Request(
             "https://api.stripe.com/v1/refunds",
             data=urllib.parse.urlencode({"charge": charge_id}).encode(),
-            headers={"Authorization": f"Bearer {key}"})
+            headers={"Authorization": f"Bearer {key}",
+                     "Idempotency-Key": f"money-agent-obligation-{obligation_id}"})
         with urllib.request.urlopen(req, timeout=30) as r:
             out = json.loads(r.read().decode())
         return out.get("status") in ("succeeded", "pending"), f"refund {out.get('id')} {out.get('status')}"
@@ -46,27 +47,74 @@ def _refund(charge_id: str, key: str) -> tuple[bool, str]:
         return False, f"refund_failed: {type(e).__name__}: {e}"
 
 
+def _completion_oracle(spec: str) -> tuple[bool, dict]:
+    """Run only reviewed built-in oracle shapes; never execute agent-authored shell."""
+    prefix = "delivery-url:"
+    if not isinstance(spec, str) or not spec.startswith(prefix):
+        return False, {"error": "unsupported completion oracle; expected delivery-url:<https-url>"}
+    target = spec.removeprefix(prefix).strip()
+    if not target:
+        return False, {"error": "completion oracle has an empty delivery URL"}
+    try:
+        r = subprocess.run([sys.executable, str(REPO / "bin" / "delivery_check.py"), target],
+                           cwd=REPO, capture_output=True, text=True, timeout=60)
+        return r.returncode == 0, {"kind": "delivery-url", "target": target,
+                                  "rc": r.returncode, "output": (r.stdout + r.stderr)[:4000]}
+    except Exception as e:
+        return False, {"kind": "delivery-url", "target": target,
+                       "error": f"{type(e).__name__}: {e}"}
+
+
+def _publish_unverified(reason: str) -> int:
+    out = {"computed_at": _now().isoformat(), "open": None, "fulfilled": [], "breached": [],
+           "verified": False, "errors": [reason],
+           "_note": "The committed promise-book could not be read; unknown is not an all-clear."}
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(json.dumps(out, indent=2) + "\n")
+    print(f"UNVERIFIED: {reason}", file=sys.stderr)
+    return 0
+
+
 def main() -> int:
     branch = os.environ.get("AGENT_BRANCH", "")
     obls: list[dict] = []
-    if branch:
-        # self-sufficient freshness: verifier_loop fetches the agent branch each cycle, but this
-        # tool must not silently read a stale promise-book when run standalone
-        subprocess.run(["git", "fetch", "-q", "origin", branch], cwd=REPO,
-                       capture_output=True, timeout=60)
-        r = subprocess.run(["git", "show", f"origin/{branch}:run/obligations.json"],
-                           cwd=REPO, capture_output=True, text=True, timeout=30)
-        if r.returncode == 0 and r.stdout.strip():
-            try:
-                obls = json.loads(r.stdout).get("obligations", [])
-            except json.JSONDecodeError as e:
-                print(f"FATAL: committed obligations register unparseable: {e}", file=sys.stderr)
-                return 2
+    if not branch:
+        return _publish_unverified("AGENT_BRANCH unset")
+    try:
+        fetched = subprocess.run(["git", "fetch", "-q", "origin", branch], cwd=REPO,
+                                 capture_output=True, text=True, timeout=60)
+    except Exception as e:
+        return _publish_unverified(f"agent-branch fetch failed: {type(e).__name__}: {e}")
+    if fetched.returncode != 0:
+        return _publish_unverified(f"agent-branch fetch failed: {fetched.stderr.strip()[:300]}")
+    r = subprocess.run(["git", "show", f"origin/{branch}:run/obligations.json"],
+                       cwd=REPO, capture_output=True, text=True, timeout=30)
+    if r.returncode == 0 and r.stdout.strip():
+        try:
+            payload = json.loads(r.stdout)
+            obls = payload.get("obligations", [])
+            if not isinstance(obls, list):
+                return _publish_unverified("committed obligations register is not a list")
+        except json.JSONDecodeError as e:
+            return _publish_unverified(f"committed obligations register unparseable: {e}")
+    elif "exists on disk, but not in" not in r.stderr and "does not exist" not in r.stderr:
+        return _publish_unverified(f"committed obligations register unreadable: {r.stderr.strip()[:300]}")
     breached = []
+    fulfilled = []
+    completion_errors = []
     refund_key = os.environ.get("STRIPE_REFUND_KEY", "")
     for o in obls:
-        if o.get("status") != "open":
+        status = o.get("status")
+        if status not in ("open", "fulfillment-claimed", "fulfilled"):
+            breached.append({**o, "breach": f"unrecognized status {status!r} (fail-closed)"})
             continue
+        if status in ("fulfillment-claimed", "fulfilled"):
+            ok, evidence = _completion_oracle(o.get("check", ""))
+            if ok:
+                fulfilled.append({"id": o.get("id"), "verified_at": _now().isoformat(),
+                                  "oracle_evidence": evidence})
+                continue
+            completion_errors.append({"id": o.get("id"), "oracle_evidence": evidence})
         try:
             deadline = dt.datetime.fromisoformat(str(o["deadline"]).replace("Z", "+00:00"))
         except Exception:
@@ -75,14 +123,15 @@ def main() -> int:
         if _now() > deadline:
             rec = {**o, "breach": f"deadline {o['deadline']} passed unfulfilled"}
             if refund_key and o.get("charge_id"):
-                ok, why = _refund(o["charge_id"], refund_key)
+                ok, why = _refund(o["charge_id"], refund_key, str(o.get("id", "unknown")))
                 rec["refund_status"] = why if ok else f"REFUND ATTEMPT FAILED: {why}"
             else:
                 rec["refund_status"] = ("unprovisioned: no STRIPE_REFUND_KEY -- the halt is the "
                                         "only guarantee; refund manually NOW")
             breached.append(rec)
-    out = {"computed_at": _now().isoformat(), "open": sum(1 for o in obls
-                                                          if o.get("status") == "open"),
+    out = {"computed_at": _now().isoformat(),
+           "open": sum(1 for o in obls if o.get("status") in ("open", "fulfillment-claimed")),
+           "fulfilled": fulfilled, "completion_errors": completion_errors,
            "breached": breached, "verified": True,
            "_note": "Computed by the verifier from the agent's COMMITTED register. A breach "
                     "halts the run (guard.py); rule 3 makes the normal state an empty list."}
