@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/start_verifier.sh`
-**Commit:** `594984a`
-**Generated:** 2026-07-22T22:04:31Z
+**Commit:** `34146a3`
+**Previous:** `d93be03`
+**Generated:** 2026-07-22T23:33:34Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,16 +16,15 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/start_verifier.sh"
-  classification_rationale: "R3 because startup provisioning controls payment identity classification and verified revenue"
+  classification_rationale: "Startup is the final operator-side payment-rail provisioning gate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:04:31Z"
+  classified_at: "2026-07-22T23:33:34Z"
 ```
 
 ## Claim(s)
 
-1. An armed Base rail cannot start unless all settlement binding fields and at least one operator wallet address are provisioned before baseline creation
-2. Verifier environment is loaded before the Base baseline is frozen
-3. No existing tests were modified or deleted during this change.
+1. Verifier startup refuses an armed Base rail until the persisted acceptance marker matches current bindings
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,15 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Fail closed when the Base wash-trade guard or binding schema is inert
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703)
+- **Requirements Verified:** The operator must not enter baseline creation with an unaccepted live rail
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`594984a`](https://github.com/ImmortalDemonGod/money-agent/tree/594984a22d036cbe854ff9a35098e81cb77dfd7e))
+**Scope Inventory** (SHA: [`34146a3`](https://github.com/ImmortalDemonGod/money-agent/tree/34146a3d9cebf59f48a94c799577b38341268e09))
 
-- [`bin/start_verifier.sh#L22-L30`](https://github.com/ImmortalDemonGod/money-agent/blob/594984a22d036cbe854ff9a35098e81cb77dfd7e/bin/start_verifier.sh#L22-L30)
-- [`bin/start_verifier.sh#L66-L88`](https://github.com/ImmortalDemonGod/money-agent/blob/594984a22d036cbe854ff9a35098e81cb77dfd7e/bin/start_verifier.sh#L66-L88)
+- [`bin/start_verifier.sh#L85-L96`](https://github.com/ImmortalDemonGod/money-agent/blob/34146a3d9cebf59f48a94c799577b38341268e09/bin/start_verifier.sh#L85-L96)
 
 ### Class A (Execution Evidence)
 
@@ -49,7 +48,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 2258 error(s)
+- **ruff:** 2369 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -70,22 +69,21 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
-aa601ba [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-b36b966 [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-2a5f010 [S4] fact-lane signing: verifier signatures + hash chain + customer attestation (#36 #42)
+dfe3ff8 test(pr50): pin final review failure modes
+d52a400 test(rails): expand fail-closed registry catalog
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
+618e3eb merge(stack): integrate reviewed stack 3 advances
+4ff597e test(delivery): cover content-type refusal
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | An armed Base rail cannot start unless all settlement bindin... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Verifier environment is loaded before the Base baseline is f... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Verifier startup refuses an armed Base rail until the persis... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -98,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Fail startup on incomplete Base trust configuration
+Add acceptance validation to Base preflight

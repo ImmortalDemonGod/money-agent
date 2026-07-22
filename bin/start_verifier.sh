@@ -82,7 +82,18 @@ sys.exit(0 if d.get("addresses") else 1)' "$OPID"; then
     echo '       Add: {"addresses": ["0x<operator-wallet>"]} alongside email/fingerprint IDs.' >&2
     exit 2
   fi
-  echo "  Base binding + operator wallet allowlist present; set_baseline.py will freeze a safe block"
+  BASE_STATE="${MONEY_AGENT_STATE:-$HOME/.money-agent-verifier}"
+  if ! PYTHONPATH=bin python3 -c '
+import pathlib, sys
+from rails.base_usdc import validate_live_acceptance
+try: validate_live_acceptance(pathlib.Path(sys.argv[1]))
+except Exception as e:
+    print(f"FATAL: Base live acceptance is not valid: {e}", file=sys.stderr)
+    sys.exit(1)' "$BASE_STATE"; then
+    echo "       Complete SETUP.md section 4c and write the bound live-acceptance marker." >&2
+    exit 2
+  fi
+  echo "  Base binding, wallet allowlist, and live acceptance marker present; baseline may freeze"
 fi
 # TEST-MARKER: preflight-base-end
 
