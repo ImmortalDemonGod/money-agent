@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `d52a400`
-**Previous:** `618e3eb`
-**Generated:** 2026-07-22T23:31:33Z
+**Commit:** `a308fe3`
+**Previous:** `dfe3ff8`
+**Generated:** 2026-07-22T23:35:00Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "The cases govern payment facts and conclusion authorization"
+  classification_rationale: "The previous fixture wrote an unused PID file and tested the wrong state"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:31:33Z"
+  classified_at: "2026-07-22T23:35:00Z"
 ```
 
 ## Claim(s)
 
-1. The integration matrix covers missing human task registries, dead and unreadable supervisor precedence, address normalization, and mandatory Base live acceptance
+1. Queue precedence assertions run with a matching live verifier process and the dead-precedence assertion terminates it deliberately
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -33,20 +33,16 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532](https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532)
-- **Requirements Verified:** Final CodeRabbit review identified trust-boundary cases that must fail closed in the committed two-lane simulation
+- **Requirements Verified:** Supervisor tests must control the actual pgrep-based health input
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`d52a400`](https://github.com/ImmortalDemonGod/money-agent/tree/d52a4006adf724376a78abc1219296e8791de74d))
+**Scope Inventory** (SHA: [`a308fe3`](https://github.com/ImmortalDemonGod/money-agent/tree/a308fe3c3f11fdd318696ceef4b1ecfc8a89ea89))
 
-- [`tests/sim.sh#L251-L252`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L251-L252)
-- [`tests/sim.sh#L257-L273`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L257-L273)
-- [`tests/sim.sh#L284-L288`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L284-L288)
-- [`tests/sim.sh#L619-L626`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L619-L626)
-- [`tests/sim.sh#L657`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L657)
-- [`tests/sim.sh#L705-L709`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L705-L709)
-- [`tests/sim.sh#L720`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L720)
-- [`tests/sim.sh#L804-L814`](https://github.com/ImmortalDemonGod/money-agent/blob/d52a4006adf724376a78abc1219296e8791de74d/tests/sim.sh#L804-L814)
+- [`tests/sim.sh#L251-L252`](https://github.com/ImmortalDemonGod/money-agent/blob/a308fe3c3f11fdd318696ceef4b1ecfc8a89ea89/tests/sim.sh#L251-L252)
+- [`tests/sim.sh#L257-L258`](https://github.com/ImmortalDemonGod/money-agent/blob/a308fe3c3f11fdd318696ceef4b1ecfc8a89ea89/tests/sim.sh#L257-L258)
+- [`tests/sim.sh#L261-L262`](https://github.com/ImmortalDemonGod/money-agent/blob/a308fe3c3f11fdd318696ceef4b1ecfc8a89ea89/tests/sim.sh#L261-L262)
+- [`tests/sim.sh#L300-L301`](https://github.com/ImmortalDemonGod/money-agent/blob/a308fe3c3f11fdd318696ceef4b1ecfc8a89ea89/tests/sim.sh#L300-L301)
 
 ### Class A (Execution Evidence)
 
@@ -55,7 +51,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 17954 error(s)
+- **ruff:** 18108 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -76,18 +72,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+dfe3ff8 test(pr50): pin final review failure modes
 d52a400 test(rails): expand fail-closed registry catalog
 710e1c0 merge(stack): sync rewritten stack 3 ancestry
 618e3eb merge(stack): integrate reviewed stack 3 advances
 4ff597e test(delivery): cover content-type refusal
-85d4db3 test(edge): cover benchmark-relative verdicts
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The integration matrix covers missing human task registries,... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Queue precedence assertions run with a matching live verifie... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -103,4 +99,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Add adversarial regressions before final production fixes
+Make supervisor health fixtures behaviorally accurate

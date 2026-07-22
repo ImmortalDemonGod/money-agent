@@ -248,16 +248,18 @@ python3 bin/human.py request --kind approval-click --gate "mastodon.nu staff app
   --test "iter-079 packet: account stuck at human staff approval" \
   --ev "the account exists; one click activates it" >/dev/null 2>&1
 cdx "$W/verifier"
-mkdir -p .run
-echo "$$" > .run/verifier.pid
+bash -c 'exec -a "bash bin/verifier_loop.sh" sleep 300' &
+SIM_VERIFIER_PID=$!
 assert_grep "1 awaiting operator" "supervise: reads queue from agent branch in verifier checkout" \
   bash bin/supervise.sh "$BRANCH"
 assert_grep "VERDICT.*HUMAN ACTUATION" "supervise: pending queue reaches the VERDICT line" \
   bash bin/supervise.sh "$BRANCH"
-echo "99999999" > .run/verifier.pid
+kill "$SIM_VERIFIER_PID"
+wait "$SIM_VERIFIER_PID" 2>/dev/null || true
 assert_grep "VERDICT.*RESTART" "supervise: dead verifier outranks a pending human queue" \
   bash bin/supervise.sh "$BRANCH"
-echo "$$" > .run/verifier.pid
+bash -c 'exec -a "bash bin/verifier_loop.sh" sleep 300' &
+SIM_VERIFIER_PID=$!
 printf 'tampered signature\n' > ledger/human_resolutions.json.sig
 git add ledger/human_resolutions.json.sig
 git commit -qm "verifier: plant unreadable human signature"
@@ -295,6 +297,8 @@ assert_grep "1 resolved-awaiting-agent-sync" "supervise: distinguishes published
   bash bin/supervise.sh "$BRANCH"
 assert_grep "VERDICT.*AGENT SYNC" "supervise: published resolution reaches the VERDICT line" \
   bash bin/supervise.sh "$BRANCH"
+kill "$SIM_VERIFIER_PID"
+wait "$SIM_VERIFIER_PID" 2>/dev/null || true
 cdx "$W/agent"
 if python3 bin/human.py sync hum-002 >/dev/null 2>&1 \
    && grep -q '"status": "declined"' run/human_tasks.json; then
