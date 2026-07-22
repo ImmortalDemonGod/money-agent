@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/rails/base_usdc.py`
-**Commit:** `e07aefd`
-**Generated:** 2026-07-22T22:03:34Z
+**Commit:** `7e8c2f9`
+**Previous:** `509884a`
+**Generated:** 2026-07-22T23:00:54Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,16 +16,15 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/rails/base_usdc.py"
-  classification_rationale: "R3 under AIV section 5.2 because this changes payment verification, wash-trade exclusion, and the first-dollar terminal fact"
+  classification_rationale: "Incorrect chain or event reuse could fabricate verified received_usd"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:03:34Z"
+  classified_at: "2026-07-22T23:00:54Z"
 ```
 
 ## Claim(s)
 
-1. Base USDC scoring counts only safe-or-finalized transfers whose marketplace event binds payer, payee, and amount
-2. Operator-funded escrow payouts classify as self revenue even when the ERC-20 sender is the escrow contract
-3. No existing tests were modified or deleted during this change.
+1. Base USDC scoring rejects the wrong chain and consumes each settlement event at most once
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,40 +32,39 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Correct PR #50 S7 trust-boundary defects before merge
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/30](https://github.com/ImmortalDemonGod/money-agent/issues/30)
+- **Requirements Verified:** Issue #30 requires settlement-event binding that never treats a bare or reused ERC-20 Transfer as revenue
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`e07aefd`](https://github.com/ImmortalDemonGod/money-agent/tree/e07aefd61e52f61d314cc211df056ee312793da3))
+**Scope Inventory** (SHA: [`7e8c2f9`](https://github.com/ImmortalDemonGod/money-agent/tree/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd))
 
-- [`bin/rails/base_usdc.py#L14-L19`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L14-L19)
-- [`bin/rails/base_usdc.py#L26-L29`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L26-L29)
-- [`bin/rails/base_usdc.py#L64-L107`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L64-L107)
-- [`bin/rails/base_usdc.py#L113-L115`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L113-L115)
-- [`bin/rails/base_usdc.py#L123`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L123)
-- [`bin/rails/base_usdc.py#L127-L131`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L127-L131)
-- [`bin/rails/base_usdc.py#L135`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L135)
-- [`bin/rails/base_usdc.py#L137-L143`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L137-L143)
-- [`bin/rails/base_usdc.py#L153-L162`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L153-L162)
-- [`bin/rails/base_usdc.py#L164-L169`](https://github.com/ImmortalDemonGod/money-agent/blob/e07aefd61e52f61d314cc211df056ee312793da3/bin/rails/base_usdc.py#L164-L169)
+- [`bin/rails/base_usdc.py#L45`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L45)
+- [`bin/rails/base_usdc.py#L81-L84`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L81-L84)
+- [`bin/rails/base_usdc.py#L91-L92`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L91-L92)
+- [`bin/rails/base_usdc.py#L105-L106`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L105-L106)
+- [`bin/rails/base_usdc.py#L154`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L154)
+- [`bin/rails/base_usdc.py#L162-L167`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L162-L167)
+- [`bin/rails/base_usdc.py#L174`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L174)
+- [`bin/rails/base_usdc.py#L179`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L179)
+- [`bin/rails/base_usdc.py#L192-L208`](https://github.com/ImmortalDemonGod/money-agent/blob/7e8c2f9bf97e247bf0f90c39546078fd2a243dbd/bin/rails/base_usdc.py#L192-L208)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`_event_addr`** (L14-L19): FAIL -- WARNING: No tests import or call `_event_addr`
-- **`_event_word`** (L26-L29): FAIL -- WARNING: No tests import or call `_event_word`
-- **`_finality_anchor`** (L64-L107): FAIL -- WARNING: No tests import or call `_finality_anchor`
-- **`freeze_baseline`** (L113-L115): FAIL -- WARNING: No tests import or call `freeze_baseline`
-- **`pull`** (L123): FAIL -- WARNING: No tests import or call `pull`
+- **`_finality_anchor`** (L45): FAIL -- WARNING: No tests import or call `_finality_anchor`
+- **`freeze_baseline`** (L81-L84): FAIL -- WARNING: No tests import or call `freeze_baseline`
+- **`pull`** (L91-L92): FAIL -- WARNING: No tests import or call `pull`
+- **`registered_adapter`** (L105-L106): FAIL -- WARNING: No tests import or call `registered_adapter`
+- **`pull_contribution`** (L154): FAIL -- WARNING: No tests import or call `pull_contribution`
 
 **Coverage summary:** 0/5 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
 - **ruff:** All checks passed
-- **mypy:** Found 10 errors in 1 file (checked 1 source file)
+- **mypy:** Found 11 errors in 1 file (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -85,22 +84,21 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
-aa601ba [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-b36b966 [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-2a5f010 [S4] fact-lane signing: verifier signatures + hash chain + customer attestation (#36 #42)
+bc601c3 test(rails): expose registry contract to verification
+86e664c test(pr50): exercise executable rail and queue contracts
+67e9adb test(pr50): pin issue-closure trust boundaries
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
+8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Base USDC scoring counts only safe-or-finalized transfers wh... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Operator-funded escrow payouts classify as self revenue even... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Base USDC scoring rejects the wrong chain and consumes each ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -113,4 +111,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Require finalized, identity-bound Base marketplace settlements
+Verify Base mainnet chain ID and uniquely match settlement events

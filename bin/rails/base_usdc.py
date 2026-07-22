@@ -42,6 +42,7 @@ USDC_DEFAULT = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
 # keccak256("Transfer(address,address,uint256)") -- the ERC-20 transfer event signature
 TRANSFER_TOPIC0 = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 USDC_DECIMALS = 6
+BASE_MAINNET_CHAIN_ID = 8453
 
 
 def _rpc(url: str, method: str, params: list) -> object:
@@ -77,13 +78,18 @@ def _event_word(log: dict, index: int) -> int:
 
 
 def _finality_anchor(url: str) -> dict:
+    chain_id = int(str(_rpc(url, "eth_chainId", [])), 16)
+    if chain_id != BASE_MAINNET_CHAIN_ID:
+        raise ValueError(f"wrong_chain: Base mainnet chain id is {BASE_MAINNET_CHAIN_ID}, RPC "
+                         f"reported {chain_id}")
     tag = os.environ.get("BASE_FINALITY_TAG", "safe").lower()
     if tag not in ("safe", "finalized"):
         raise ValueError("BASE_FINALITY_TAG must be safe or finalized")
     block = _rpc(url, "eth_getBlockByNumber", [tag, False])
     if not isinstance(block, dict) or not block.get("number") or not block.get("hash"):
         raise ValueError(f"RPC returned no {tag} block anchor")
-    return {"tag": tag, "number": int(block["number"], 16), "hash": block["hash"]}
+    return {"chain_id": chain_id, "tag": tag, "number": int(block["number"], 16),
+            "hash": block["hash"]}
 
 
 def freeze_baseline(state_dir: Path) -> dict:
@@ -96,7 +102,8 @@ def freeze_baseline(state_dir: Path) -> dict:
     if not url:
         raise ValueError("BASE_RPC_URL is required to freeze the Base baseline")
     anchor = _finality_anchor(url)
-    payload = {"baseline_block": anchor["number"], "baseline_hash": anchor["hash"],
+    payload = {"chain_id": anchor["chain_id"], "baseline_block": anchor["number"],
+               "baseline_hash": anchor["hash"],
                "finality_tag": anchor["tag"],
                "_note": "AUTHORITATIVE, verifier-side, run-scoped Base baseline."}
     bfile = state_dir / "base_usdc_baseline.json"
@@ -144,6 +151,7 @@ def pull(state_dir: Path, operator_addresses: set[str]) -> dict:
             "topics": [TRANSFER_TOPIC0, None, _addr_topic(settle_addr)]}])
         out["raws"].append(("base_usdc_transfers", logs))
         receipts = {}
+        used_settlement_events: dict[str, set[str]] = {}
         for lg in logs:
             amt = int(lg["data"], 16) / (10 ** USDC_DECIMALS)
             txh = lg["transactionHash"]
@@ -151,17 +159,24 @@ def pull(state_dir: Path, operator_addresses: set[str]) -> dict:
                 receipts[txh] = _rpc(url, "eth_getTransactionReceipt", [txh])
             rcpt = receipts[txh] or {}
             bound = None
-            for event in rcpt.get("logs", []):
+            bound_key = None
+            used = used_settlement_events.setdefault(txh, set())
+            for event_index, event in enumerate(rcpt.get("logs", [])):
+                event_key = str(event.get("logIndex", event_index))
+                if event_key in used:
+                    continue
                 if (event.get("address", "").lower() != mkt_addr
                         or (event.get("topics") or [""])[0].lower() != mkt_topic0):
                     continue
                 if (_event_addr(event, payee_i) == settle_addr
                         and _event_word(event, amount_i) == int(lg["data"], 16)):
                     bound = event
+                    bound_key = event_key
                     break
             if bound is None:
                 out["unbound_usd"] += amt   # visible, never counted -- fail toward not counting
                 continue
+            used.add(bound_key)
             payer = _event_addr(bound, payer_i)
             if payer in operator_addresses:
                 out["self_usd"] += amt
@@ -174,3 +189,20 @@ def pull(state_dir: Path, operator_addresses: set[str]) -> dict:
     except Exception as e:  # fail-closed: an unreadable chain is not $0 on this rail
         out["errors"].append(f"base_usdc_pull_failed: {type(e).__name__}: {e}")
     return out
+
+
+def registered_adapter(state_dir: Path, operator_addresses: set[str]):
+    """Return this module's executable registry entry without exposing Base details to pnl.py."""
+    from rails import RailAdapter, RailContribution
+
+    def pull_contribution() -> RailContribution:
+        result = pull(state_dir, operator_addresses)
+        return RailContribution(
+            name="base_usdc", directions=frozenset({"receive"}),
+            customer_usd=result["customer_usd"], self_usd=result["self_usd"],
+            unbound_usd=result["unbound_usd"], raw_payloads=result["raws"],
+            errors=result["errors"], spent_usd=0.0,
+        )
+
+    return RailAdapter(name="base_usdc", directions=frozenset({"receive"}),
+                       pull=pull_contribution)
