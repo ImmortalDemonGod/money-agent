@@ -794,13 +794,17 @@ that the classes are cut right.
   triggers the fail-closed remediation (verifier-issued refund) and halts the
   activity. Completion oracles are plug-ins under P1 (carrier tracking, client
   confirmation, subscription delivery) — the register itself never knows what a
-  "shipment" is. Under the current constitution the register is trivially empty
-  (deliver-in-full = no obligations may exist); the primitive is what makes any
-  future relaxation *safe* rather than prose. The relaxation itself has exact
-  language (restored — this is the proposed amendment an operator would sign):
+  "shipment" is. The original constitution kept the register trivially empty; the primitive made
+  its deliberate relaxation safe rather than prose. The operator adopted this amendment for V3:
 
   > Delivery is either INSTANT, or MECHANICALLY GUARANTEED by an out-of-band
   > watchdog holding refund authority.
+
+  “Mechanically guaranteed” is a runtime conjunction, not an aspiration: the verifier facts lane
+  must publish explicit obligation-class enablement, presence of its refund credential, positive
+  exposure caps, and a maximum deadline. Registration accepts only that fresh grounded fact; the
+  agent's own environment cannot activate or widen the class. Missing any conjunct preserves the
+  old refusal behavior.
 
   Why the guarantee is real: the verifier-issued refund fires on a deadline the
   harness controls, *before* any chargeback window matters — collapsing the
