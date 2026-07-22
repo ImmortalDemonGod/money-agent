@@ -74,7 +74,6 @@ FOUND = re.compile(r"^VERDICT:\s*FOUND:\s*(.+)$", re.MULTILINE)
 
 
 def _read(p: Path) -> str:
-    all_bets = []
     try:
         return p.read_text(errors="replace")
     except Exception:
@@ -220,6 +219,7 @@ def main() -> int:
     #       mode this catches is FORGETTING under drift, and deleting a bet is a visible commit);
     #   (b) ledger/edge.json -- a PENDING verified-edge experiment is an open bet on the facts
     #       lane, which the agent cannot edit at all.
+    all_bets = []
     try:
         sys.path.insert(0, str(REPO / "bin"))
         import bets as _bets

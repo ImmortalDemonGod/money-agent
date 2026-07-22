@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/conclusion_gate.py`
-**Commit:** `408857c`
-**Previous:** `2382040`
-**Generated:** 2026-07-22T23:32:13Z
+**Commit:** `d076eab`
+**Previous:** `d076eab`
+**Generated:** 2026-07-22T23:32:42Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/conclusion_gate.py"
-  classification_rationale: "Deleting the registry must not erase a conclusion-authorizing obligation"
+  classification_rationale: "This corrects defensive initialization on the conclusion authorization surface"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:32:13Z"
+  classified_at: "2026-07-22T23:32:42Z"
 ```
 
 ## Claim(s)
 
-1. A human companion bet without a task record blocks conclusions even when the entire human_tasks.json file is absent
+1. Orphan scanning has an empty bet list when registry loading fails and never depends on an unrelated file-read helper
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -33,29 +33,26 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578647](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578647)
-- **Requirements Verified:** CodeRabbit requires orphan detection to run independently of task-registry existence
+- **Requirements Verified:** The fail-closed orphan scan must be defined on every control-flow path
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`408857c`](https://github.com/ImmortalDemonGod/money-agent/tree/408857ca71c92f9df429961814babfc09f33ecce))
+**Scope Inventory** (SHA: [`d076eab`](https://github.com/ImmortalDemonGod/money-agent/tree/d076eabac5dd0a8e9d80e2f458ceda0fbb1cce4f))
 
-- [`bin/conclusion_gate.py#L77`](https://github.com/ImmortalDemonGod/money-agent/blob/408857ca71c92f9df429961814babfc09f33ecce/bin/conclusion_gate.py#L77)
-- [`bin/conclusion_gate.py#L240`](https://github.com/ImmortalDemonGod/money-agent/blob/408857ca71c92f9df429961814babfc09f33ecce/bin/conclusion_gate.py#L240)
-- [`bin/conclusion_gate.py#L266-L272`](https://github.com/ImmortalDemonGod/money-agent/blob/408857ca71c92f9df429961814babfc09f33ecce/bin/conclusion_gate.py#L266-L272)
+- [`bin/conclusion_gate.py#L222`](https://github.com/ImmortalDemonGod/money-agent/blob/d076eabac5dd0a8e9d80e2f458ceda0fbb1cce4f/bin/conclusion_gate.py#L222)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`_read`** (L77): FAIL -- WARNING: No tests import or call `_read`
-- **`main`** (L240): FAIL -- WARNING: No tests import or call `main`
+- **`main`** (L222): FAIL -- WARNING: No tests import or call `main`
 
-**Coverage summary:** 0/2 symbols verified by tests.
+**Coverage summary:** 0/1 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 13 error(s)
-- **mypy:** Found 2 errors in 1 file (checked 1 source file)
+- **ruff:** All checks passed
+- **mypy:** Found 1 error in 1 file (checked 1 source file)
 
 ### Class C (Negative Evidence)
 
@@ -86,7 +83,7 @@ d52a400 test(rails): expand fail-closed registry catalog
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | A human companion bet without a task record blocks conclusio... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Orphan scanning has an empty bet list when registry loading ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -95,11 +92,11 @@ d52a400 test(rails): expand fail-closed registry catalog
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/2 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Move human companion orphan detection outside the file guard
+Place bet initialization at the intended registry boundary
