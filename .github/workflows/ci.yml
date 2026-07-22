@@ -43,6 +43,11 @@ jobs:
       - name: Run the verification matrix
         run: bash tests/sim.sh
         # The aiv-gate stage tests SKIP loudly without the aiv CLI (issue #20 item 3).
+      - name: Run the Tier-0 regression corpus (issue #44)
+        run: bash tests/corpus.sh
+        # Replays run-1's REAL failure artifacts (the iter-095 false stop, the 086
+        # empty commit) against the v2 gates, asserting on failure MESSAGES so a
+        # wrong-reason refusal cannot read as coverage.
 
   python:
     name: python byte-compile (bin/)

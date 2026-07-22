@@ -31,6 +31,8 @@ minutes. `bin/iter.py watch` makes each tick one committed line, ~0 tokens, no i
 **4. The verifier is provisioned for days, not hours.**
 ```bash
 export INTERVAL=300             # facts recompute cadence; 120s is sprint posture
+# INFERENCE_CSV=/path/costs.csv # (issue #41) refresh the export ~daily on a multi-day run so
+                                # net_usd_full tracks reality instead of a stale snapshot
 export HEARTBEAT_S=600          # liveness pushes (must stay < LEDGER_MAX_AGE_S)
 export LEDGER_MAX_AGE_S=1800    # agent-side staleness halt, unchanged
 export LEDGER_MAX_COMMITS=3000  # NEW: rotate (squash) the facts lane when history exceeds this;

@@ -30,6 +30,30 @@ if ! git show "origin/$AGENT_BRANCH:CONSTITUTION.md" 2>/dev/null | grep -qi "fir
   echo "    branched off an OLD base; have it merge the current default branch before the run." >&2
 fi
 
+echo "=== 1b. wash-trade allowlist provisioned? (issue #37) ==="
+# TEST-MARKER: preflight-opid-begin (tests/sim.sh extracts this block verbatim)
+# pnl.py excludes operator self-purchases via STATE_DIR/operator_identity.json. Empty or absent,
+# that guard is INERT and only surfaces at the FIRST CHARGE -- wash_guard_disarmed flips
+# verified=false and a legitimate first sale halts the run as unverifiable instead of counting.
+# Related-party exclusion is a precondition for a qualifying sale; assert it BEFORE any offer can
+# go live, not at settlement. (setup_sandbox.sh cannot check this: STATE_DIR is verifier-side,
+# unreachable from the sandbox by design -- so the check lives here, on the machine that has it.)
+OPID="${MONEY_AGENT_STATE:-$HOME/.money-agent-verifier}/operator_identity.json"
+if ! python3 -c '
+import json, sys
+try:
+    d = json.load(open(sys.argv[1]))
+except Exception:
+    sys.exit(1)
+sys.exit(0 if (d.get("emails") or d.get("card_fingerprints")) else 1)' "$OPID"; then
+  echo "FATAL: $OPID missing/empty -- the wash-trade guard would be inert until the first charge," >&2
+  echo "       then halt the run on wash_guard_disarmed instead of counting a legitimate sale." >&2
+  echo '       Provision it: {"emails": ["<operator email>"], "card_fingerprints": ["<stripe fp>"]}' >&2
+  exit 2
+fi
+echo "  operator identity allowlist present: $OPID"
+# TEST-MARKER: preflight-opid-end
+
 echo "=== 2. ensure the facts lane exists, THEN freeze the baseline ==="
 # ROUND-3 FIX (ordering): set_baseline froze the facts-lane OID, but this script used to run it
 # BEFORE verifier_loop.sh created the ledger branch -- so the OID froze empty on every fresh run

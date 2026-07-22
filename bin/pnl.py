@@ -21,6 +21,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -38,6 +39,30 @@ MANIFEST = RAW / "MANIFEST.sha256"
 
 STRIPE_API = "https://api.stripe.com/v1"
 PRIVACY_API = "https://api.privacy.com/v1"
+
+# #34 FIX: one shared pagination bound, and hitting it while the provider still reports more data
+# is a COVERAGE ERROR (verified=false), never a silent stop. The old code fell out of its loops at
+# 50 pages with no error -- an under-count that read as a complete, verified pull. 50*100 charges /
+# 50*500 card txns is far past any real run; the bound exists to stop a pathological history from
+# hanging the verifier, and the error exists so the bound can never silently truncate.
+MAX_PAGES = 50
+
+
+def _currency_err(kind: str, obj: dict, ident: str) -> str | None:
+    """#33 FIX: provider amounts are in the currency's MINOR unit; the /100 below is only correct
+    for two-decimal USD. A zero-decimal currency (JPY: Y500 -> "$5.00") mis-scales 100x and a
+    mixed-currency sum is meaningless -- while verified stayed true. Fail closed instead: any
+    object this verifier would COUNT must declare usd, or it poisons the pull with an error
+    (verified=false, guard halts) and its amount is excluded from every sum. Handling non-USD
+    correctly (ISO-4217 minor-unit table + per-currency segregation + a recorded conversion
+    source) is a deliberate non-goal until a run actually needs it -- a halted verifier beats a
+    silently wrong number."""
+    cur = obj.get("currency")
+    if cur is None:
+        return f"currency_missing:{kind}:{ident}"
+    if str(cur).lower() != "usd":
+        return f"non_usd_amount:{kind}:{cur}:{ident}"
+    return None
 
 
 def _now() -> str:
@@ -97,12 +122,15 @@ def load_baseline_ledger_commit() -> str:
     return ""
 
 
-def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
+def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path], list[str]]:
     """Every cent that moved through Stripe. balance_transactions is the canonical ledger:
-    charges alone miss refunds, fees, disputes and adjustments."""
+    charges alone miss refunds, fees, disputes and adjustments. Returns (txns, raw_files,
+    pull_errors) -- a non-empty error list means the numbers are NOT complete/clean and the
+    caller must let verified go false (#33/#34)."""
     h = {"Authorization": f"Bearer {key}"}
-    txns, starting_after, files = [], None, []
-    while True:
+    txns, starting_after, files, errs = [], None, [], []
+    complete = False
+    for _ in range(MAX_PAGES):  # #34: bounded (was unbounded -- hangable), cap-hit-with-more errors below
         params = {"limit": 100}
         if baseline:
             params["created[gt]"] = baseline   # server-side: pre-baseline money never even arrives
@@ -111,11 +139,15 @@ def pull_stripe(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
         page = _get(f"{STRIPE_API}/balance_transactions", h, params)
         txns.extend(page.get("data", []))
         if not page.get("has_more"):
+            complete = True
             break
         starting_after = page["data"][-1]["id"]
+    if not complete:
+        errs.append("coverage_incomplete:stripe_balance_transactions: page cap "
+                    f"({MAX_PAGES}) hit while has_more=true -- the pull is an under-count")
     files.append(_write_raw("stripe_balance_transactions", txns))
     files.append(_write_raw("stripe_balance", _get(f"{STRIPE_API}/balance", h)))
-    return txns, files
+    return txns, files, errs
 
 
 # ------------------------------------------------------ customer vs self (wash-trade)
@@ -138,14 +170,17 @@ def _operator_ids() -> tuple[set, set]:
     return set(), set()
 
 
-def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
-    """Return (customer_usd, self_purchase_usd, raw_files). Classifies each paid charge by payer:
-    operator email/fingerprint -> self; anyone else -> customer."""
+def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path], list[str]]:
+    """Return (customer_usd, self_purchase_usd, raw_files, pull_errors). Classifies each paid
+    charge by payer: operator email/fingerprint -> self; anyone else -> customer. received_usd is
+    computed FROM THIS FEED, so a mis-scaled charge here is a mis-scaled received_usd (#33) and a
+    truncated page walk here is a silent under-count (#34) -- both poison the pull instead."""
     op_emails, op_fps = _operator_ids()
     h = {"Authorization": f"Bearer {key}"}
     customer = selfpay = 0.0
-    charges, starting_after = [], None
-    for _ in range(50):
+    charges, starting_after, errs = [], None, []
+    complete = False
+    for _ in range(MAX_PAGES):
         # NOTE: payment_method_details is included on charges by DEFAULT and is NOT an expandable
         # property -- passing it as expand[] makes Stripe 400 ("cannot be expanded"), which would
         # fail every verifier cycle and halt the run. So we do not expand it; the fingerprint we
@@ -159,10 +194,18 @@ def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
         data = page.get("data", [])
         charges.extend(data)
         if not page.get("has_more"):
+            complete = True
             break
         starting_after = data[-1]["id"]
+    if not complete:
+        errs.append(f"coverage_incomplete:stripe_charges: page cap ({MAX_PAGES}) hit while "
+                    "has_more=true -- received_usd would be an under-count")
     for c in charges:
         if not c.get("paid") or c.get("status") != "succeeded":
+            continue
+        cerr = _currency_err("charge", c, c.get("id", "<no-id>"))
+        if cerr:
+            errs.append(cerr)  # counted-charge in a non-usd/unknown currency: exclude + poison
             continue
         amt = c.get("amount", 0) / 100.0
         email = ((c.get("billing_details") or {}).get("email") or "").lower()
@@ -172,19 +215,20 @@ def pull_charges(key: str, baseline: int) -> tuple[float, float, list[Path]]:
             selfpay += amt
         else:
             customer += amt
-    return round(customer, 2), round(selfpay, 2), [_write_raw("stripe_charges", charges)]
+    return round(customer, 2), round(selfpay, 2), [_write_raw("stripe_charges", charges)], errs
 
 
 # ------------------------------------------------------------------ spend side
 
-def pull_privacy(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
+def pull_privacy(key: str, baseline: int = 0) -> tuple[list, list[Path], list[str]]:
     # M1 FIX: filter spend to AFTER the baseline, same as receive. Without it, ANY pre-existing
     # Privacy.com spend (any card on the account, from any date) was charged to the agent and burned
     # its cap before iteration 1. `begin` is the strict lower bound; paginate so >500 txns are not
     # silently truncated while spend_measured stays true.
     h = {"Authorization": f"api-key {key}"}
-    txns, page_token = [], None
-    for _ in range(50):  # hard bound; 50*500 = 25k txns is far past any real run
+    txns, page_token, errs = [], None, []
+    complete = False
+    for _ in range(MAX_PAGES):
         params = {"page_size": 500}
         if baseline:
             params["begin"] = _dt_iso(baseline)
@@ -194,11 +238,26 @@ def pull_privacy(key: str, baseline: int = 0) -> tuple[list, list[Path]]:
         data = page.get("data", [])
         txns.extend(data)
         if len(data) < 500 or not data:
+            complete = True
             break
         page_token = data[-1].get("token") or data[-1].get("id")
         if not page_token:
+            # #34: a FULL page whose last item carries no continuation token means we cannot know
+            # whether more exist -- that is incomplete coverage, not a clean end. Fail closed.
+            errs.append("coverage_incomplete:privacy_transactions: full page with no continuation "
+                        "token -- cannot prove the pull is complete")
             break
-    return txns, [_write_raw("privacy_transactions", txns)]
+    if not complete and not errs:
+        errs.append(f"coverage_incomplete:privacy_transactions: page cap ({MAX_PAGES}) hit with "
+                    "full pages still arriving -- spent_usd would be an under-count")
+    # #33: Privacy.com is a US issuer and settled_amount is USD cents by API contract, so a missing
+    # currency field is the NORMAL shape here (unlike Stripe, where every object declares one). We
+    # only poison the pull when a txn explicitly declares something other than USD.
+    for t in txns:
+        cur = t.get("currency")
+        if cur is not None and str(cur).upper() not in ("USD", "840"):
+            errs.append(f"non_usd_amount:privacy:{cur}:{t.get('token', t.get('id', '<no-id>'))}")
+    return txns, [_write_raw("privacy_transactions", txns)], errs
 
 
 def _dt_iso(epoch: int) -> str:
@@ -288,17 +347,48 @@ def main() -> int:
     # manifest hashes RAW.glob("*.json"); an agent that plants a fabricated pull (claiming a $4700
     # charge) would otherwise get it hashed into the trusted manifest and signed by the verifier.
     # A raw file the verifier wrote is committed within the same cycle, so any UNTRACKED raw file is
-    # not the verifier's and must not be trusted. Remove it.
+    # not the verifier's and must not be trusted.
+    #
+    # #46 FIX: QUARANTINE, do not delete. An untracked raw here is EITHER an agent plant (worth
+    # preserving as evidence of the attempt) OR the verifier's own orphan from a cycle whose commit
+    # failed (git lock, crash) -- and deleting that orphan was a real loss path: traps.md #9's
+    # residual, where a written pull could vanish without ever reaching origin. Moving it to the
+    # agent-unreachable state dir keeps the audit trail in both cases; the tree stays clean either
+    # way, so nothing untrusted reaches the manifest.
     try:
-        untracked = subprocess.run(
-            ["git", "ls-files", "-o", "--exclude-standard", "ledger/raw/"],
-            cwd=REPO, capture_output=True, text=True, timeout=10).stdout.split()
-        for rel in untracked:
-            (REPO / rel).unlink(missing_ok=True)
+        # Do NOT apply ignore rules here. A global `*.json` ignore made planted raw pulls invisible
+        # to the previous command in a real verifier environment; every untracked file beneath this
+        # verifier-owned directory is untrusted input regardless of a developer's Git preferences.
+        # `-z` makes this safe for every Git-valid filename (including spaces and newlines).
+        # Keep bytes until after splitting: text-mode whitespace splitting both corrupts names and
+        # conflates two distinct paths into one quarantine destination.
+        raw_untracked = subprocess.run(
+            ["git", "ls-files", "-o", "-z", "--", "ledger/raw/"],
+            cwd=REPO, capture_output=True, check=True, timeout=10).stdout
+        untracked = [Path(rel.decode("utf-8", errors="surrogateescape"))
+                     for rel in raw_untracked.split(b"\0") if rel]
         if untracked:
-            print(f"C3: purged {len(untracked)} untracked (agent-planted?) raw file(s)", file=sys.stderr)
+            qdir = STATE_DIR / "raw-rescue" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
+            qdir.mkdir(parents=True, exist_ok=True)
+            for rel in untracked:
+                src = REPO / rel
+                if src.exists():
+                    # Preserve the path below ledger/raw so equal basenames in different source
+                    # directories cannot collide in rescue storage.
+                    dest = qdir / rel
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    src.rename(dest)
+            print(f"C3: quarantined {len(untracked)} untracked raw file(s) -> {qdir} "
+                  "(agent plant or orphan of a failed commit -- preserved, not trusted)",
+                  file=sys.stderr)
     except Exception as e:
-        print(f"warn: could not purge untracked raw files ({e})", file=sys.stderr)
+        # Continuing would let a raw JSON file we failed to remove remain eligible for the manifest
+        # below. A stale ledger halts the run; a fresh ledger containing an untrusted raw pull would
+        # falsely authorize it. Refuse to publish facts until the operator resolves the filesystem
+        # failure (including a state directory mounted on a different filesystem).
+        print(f"FATAL: could not quarantine untracked raw files ({e}); refusing to publish facts",
+              file=sys.stderr)
+        return 2
 
     pulls: list[Path] = []
     # errors initialized earlier (constitution check appends to it)
@@ -306,15 +396,22 @@ def main() -> int:
     # ---- received (gross, from balance_transactions -- fees/refunds/net)
     received_gross = fees = refunded = 0.0
     try:
-        txns, f = pull_stripe(stripe_key, baseline)
+        txns, f, perrs = pull_stripe(stripe_key, baseline)
         pulls += f
+        errors.extend(perrs)   # #34: an under-count must fail verification, never read as $0
         for t in txns:
+            if t.get("type") not in ("charge", "payment", "refund", "payment_refund"):
+                continue
+            cerr = _currency_err("balance_transaction", t, t.get("id", "<no-id>"))
+            if cerr:
+                errors.append(cerr)  # #33: never add a known-mis-scaled amount to any sum
+                continue
             amt = t.get("amount", 0) / 100.0
             fee = t.get("fee", 0) / 100.0
             if t.get("type") in ("charge", "payment"):
                 received_gross += amt
                 fees += fee
-            elif t.get("type") in ("refund", "payment_refund"):
+            else:
                 refunded += abs(amt)
     except Exception as e:  # a failed pull must never silently read as $0 earned
         errors.append(f"stripe_pull_failed: {type(e).__name__}: {e}")
@@ -324,8 +421,9 @@ def main() -> int:
     op_emails, op_fps = _operator_ids()
     wash_guard_armed = bool(op_emails or op_fps)
     try:
-        customer_received, self_purchase, f = pull_charges(stripe_key, baseline)
+        customer_received, self_purchase, f, cerrs = pull_charges(stripe_key, baseline)
         pulls += f
+        errors.extend(cerrs)   # #33/#34: currency or coverage problems on the received_usd feed
     except Exception as e:
         errors.append(f"charge_classify_failed: {type(e).__name__}: {e}")
     # If the operator-identity allowlist is empty, every charge classifies as CUSTOMER and the
@@ -355,9 +453,13 @@ def main() -> int:
     spend_source = None
     try:
         if privacy_key:
-            txns, f = pull_privacy(privacy_key, baseline)
+            txns, f, perrs = pull_privacy(privacy_key, baseline)
             pulls += f
-            spent = sum(t.get("settled_amount", 0) / 100.0 for t in txns)
+            errors.extend(perrs)
+            # #33: a txn that explicitly declares a non-USD currency has already poisoned the pull
+            # above; its amount is also excluded here so no known-wrong number reaches a sum.
+            spent = sum(t.get("settled_amount", 0) / 100.0 for t in txns
+                        if t.get("currency") is None or str(t.get("currency")).upper() in ("USD", "840"))
             spend_source = "privacy_api"
         elif card_csv and Path(card_csv).exists():
             rows, f = pull_card_csv(Path(card_csv))
@@ -374,6 +476,38 @@ def main() -> int:
             errors.append("no_card_source: set PRIVACY_READ_KEY, CARD_CSV, or CARD_SOURCE=issuer_enforced")
     except Exception as e:
         errors.append(f"card_pull_failed: {type(e).__name__}: {e}")
+
+    # ---- #41: the run's OWN cost (inference), so a retro can state full economics from the
+    # ledger alone. Run 1's true P&L was "negative by an unrecorded amount" (archived README);
+    # the unknown-is-not-zero discipline that governs card spend applies to the dominant real
+    # cost too. Feed: INFERENCE_CSV in the verifier's .env -- `date,usd` rows exported from the
+    # provider's usage page (or kept by hand). Absent feed -> null fields, never 0. A header-only
+    # file IS a measured zero (the operator asserting no cost yet); a fully empty file is a
+    # misconfiguration and fails closed. Measurement only: no stop condition reads these fields.
+    inference: float | None = None
+    inference_source = None
+    inf_csv = _clean(os.environ.get("INFERENCE_CSV", ""))
+    if inf_csv:
+        try:
+            text = Path(inf_csv).read_text()
+            if not text.strip():
+                raise ValueError("empty file -- for a genuine zero, provide the 'date,usd' "
+                                 "header (a header-only file reads as measured 0)")
+            reader = csv.DictReader(text.splitlines())
+            if not reader.fieldnames or "usd" not in reader.fieldnames:
+                raise ValueError("missing required 'usd' column (need date,usd columns)")
+            # Header-only deliberately remains a measured zero: it is an explicit operator
+            # assertion of no inference cost, unlike a completely empty file above.
+            rows = list(reader)
+            if any("usd" not in r or r["usd"] in (None, "") for r in rows):
+                raise ValueError("rows missing a 'usd' value (need date,usd columns)")
+            values = [float(r["usd"]) for r in rows]
+            if not all(math.isfinite(value) for value in values):
+                raise ValueError("rows contain a non-finite 'usd' value")
+            inference = round(sum(values), 2)
+            inference_source = "manual_csv"
+        except Exception as e:
+            errors.append(f"inference_feed_failed: {type(e).__name__}: {e}")
 
     # ---- manifest: every pull hashed, so a packet can cite one
     lines = []
@@ -404,6 +538,12 @@ def main() -> int:
         "spend_source": spend_source,
         "spend_measured": spent is not None,
         "net_usd": net,
+        # #41: full economics -- net including the run's own inference cost. Null unless BOTH
+        # sides are measured (unknown is not zero, on either side of the subtraction).
+        "inference_usd": inference,
+        "inference_source": inference_source,
+        "net_usd_full": (round(net - inference, 2)
+                         if (net is not None and inference is not None) else None),
         "cap_usd": cap,
         "cap_remaining_usd": (round(cap - spent, 2) if (cap and spent is not None) else None),
         "cap_enforced_by": "card_issuer" if spend_source == "issuer_enforced_uncounted" else "guard.py+issuer",

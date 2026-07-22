@@ -1,6 +1,7 @@
 # tests/ — the committed verification matrix
 
     bash tests/sim.sh        # exits 0 iff every assertion passes; SIM_KEEP=1 keeps the workdir
+    bash tests/corpus.sh     # Tier-0 regression corpus: run-1's real artifacts vs the v2 gates
 
 `sim.sh` builds a LOCAL bare origin + separate agent/verifier clones + a real ledger branch and
 asserts the harness's load-bearing behaviors: grounded reads, every guard terminal (first dollar,
@@ -20,3 +21,20 @@ issue #20. A green matrix here is necessary, never sufficient, for trusting a ru
 
 `aiv` CLI note: the gate's stage 0 is fail-closed on a missing CLI by design, so the gate tests
 SKIP loudly if `aiv` is not on PATH (`pip install` the aiv-protocol repo to run them).
+
+## corpus.sh — the Tier-0 regression corpus (issue #44)
+
+Where `sim.sh` synthesizes fixtures, `corpus.sh` replays run-1's REAL failure artifacts from
+`archive/run-001/` (copied into a throwaway rig; the archive is never mutated) and asserts the v2
+gates refuse them **for the right reasons**. Assertions are on failure MESSAGES, not exit codes —
+proven necessary by the bite check: a gate mutated blind to the bet registry (the exact v1 defect)
+still exits non-zero on other layers, so an exit-code-only test reads green while the regression
+is live. Current fixtures: the iteration-095 false stop (open estate bet + missing fresh-context
+adversary, with a discriminator run proving each assertion tracks its cause), the stale-adversary
+counterfactual, and the 086 empty-commit seam (labeled seam test: the gate subprocess is stubbed;
+the ls-tree safety net is the subject).
+
+**The pattern for adding one (do this per future incident):** copy the incident's real artifacts
+from the archive into the rig, reconstruct any state that postdates the incident's tooling (e.g.
+the bets registry), assert the refusing gate names the incident's SPECIFIC cause, then add a
+discriminator run showing the message disappears when only that cause is repaired.
