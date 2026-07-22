@@ -126,7 +126,7 @@ refuses a second completed checkout.
 charge's payer against `$MONEY_AGENT_STATE/operator_identity.json` (default
 `~/.money-agent-verifier/operator_identity.json`) so an operator self-purchase can never trip the
 first-dollar success condition. Provision it on the verifier machine:
-```json
+```jsonc
 {"emails": ["<operator email>"], "card_fingerprints": ["<stripe card fingerprint>"], "addresses": []}
 ```
 `bin/start_verifier.sh` refuses to start while it is missing or empty (issue #37) -- an inert
@@ -233,6 +233,24 @@ Until all seven pass against the live RPC and deployed contract, the adapter rem
 simulation-tested only and must not participate in a scored run. Issue #30's live half also remains
 open until the operator records the wallet-funding source and explicit spend cap, runs a real
 TaskMarket submission/settlement, and decides whether that live path belongs in the scored run.
+
+After all seven checks pass, persist the acceptance on the verifier machine. Both
+`start_verifier.sh` and the adapter bind this marker to the current address/contract/event tuple;
+missing, partial, or stale markers fail closed. Changing any binding requires a new acceptance:
+
+```jsonc
+// $MONEY_AGENT_STATE/base_usdc_live_acceptance.json (shown as JSONC; remove this comment)
+{
+  "status": "passed",
+  "checks_passed": [1, 2, 3, 4, 5, 6, 7],
+  "chain_id": 8453,
+  "settlement_address": "0xagent-wallet",
+  "marketplace_address": "0xmarketplace-contract",
+  "settlement_event_topic0": "0xevent-topic0",
+  "accepted_at": "2026-07-22T00:00:00Z",
+  "operator": "operator-name-or-review-id"
+}
+```
 
 ### Human actuation queue (issue #31)
 

@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `SETUP.md`
-**Commit:** `68b46db`
-**Previous:** `4f7a8e4`
-**Generated:** 2026-07-22T23:05:35Z
+**Commit:** `d060b27`
+**Previous:** `ae81911`
+**Generated:** 2026-07-22T23:36:45Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "SETUP.md"
-  classification_rationale: "Omitted runbook steps could make safe code unsafe in deployment"
+  classification_rationale: "The marker is part of the payment rail go/no-go procedure"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:05:35Z"
+  classified_at: "2026-07-22T23:36:45Z"
 ```
 
 ## Claim(s)
 
-1. Operators are instructed to verify chain, event uniqueness, authorization, live funding, and signed human resolution prerequisites before scoring
+1. The runbook provides the exact seven-check marker schema bound to current Base settlement configuration
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,19 +32,15 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
-- **Requirements Verified:** Issue acceptance depends on operator-visible provisioning and live acceptance boundaries
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578703)
+- **Requirements Verified:** Operators need an enforceable handoff from live acceptance to scored-run enablement
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`68b46db`](https://github.com/ImmortalDemonGod/money-agent/tree/68b46dbf59a91cce058bc728a83838d5fdb70f5b))
+**Scope Inventory** (SHA: [`d060b27`](https://github.com/ImmortalDemonGod/money-agent/tree/d060b27cd13984b2d1cec1e03952294cadd05f98))
 
-- [`SETUP.md#L207-L214`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L207-L214)
-- [`SETUP.md#L227-L229`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L227-L229)
-- [`SETUP.md#L232-L235`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L232-L235)
-- [`SETUP.md#L243-L248`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L243-L248)
-- [`SETUP.md#L250-L253`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L250-L253)
-- [`SETUP.md#L256-L261`](https://github.com/ImmortalDemonGod/money-agent/blob/68b46dbf59a91cce058bc728a83838d5fdb70f5b/SETUP.md#L256-L261)
+- [`SETUP.md#L129`](https://github.com/ImmortalDemonGod/money-agent/blob/d060b27cd13984b2d1cec1e03952294cadd05f98/SETUP.md#L129)
+- [`SETUP.md#L237-L254`](https://github.com/ImmortalDemonGod/money-agent/blob/d060b27cd13984b2d1cec1e03952294cadd05f98/SETUP.md#L237-L254)
 
 ### Class A (Execution Evidence)
 
@@ -74,18 +70,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-68b46db test(sim): isolate AIV edge fixture state
-bc601c3 test(rails): expose registry contract to verification
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
+d060b27 test(rails): call monetary validator directly
+5f37af2 test(supervisor): model live verifier process explicitly
+dfe3ff8 test(pr50): pin final review failure modes
+d52a400 test(rails): expand fail-closed registry catalog
+710e1c0 merge(stack): sync rewritten stack 3 ancestry
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Operators are instructed to verify chain, event uniqueness, ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The runbook provides the exact seven-check marker schema bou... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -101,4 +97,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Document mandatory trust and live acceptance conditions
+Document the enforced Base acceptance artifact
