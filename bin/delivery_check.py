@@ -48,7 +48,11 @@ def _fetch(url: str) -> tuple[int, bytes]:
     req = urllib.request.Request(url, headers={"User-Agent": "delivery-check/1.0 (harness verifier)"})
     try:
         with host_check._OPENER.open(req, timeout=30) as r:
-            return r.status, r.read(5_000_000)
+            body = r.read(5_000_001)
+            if len(body) > 5_000_000:
+                print("  refused: delivery artifact exceeds the verification cap", file=sys.stderr)
+                return 0, b""
+            return r.status, body
     except urllib.error.HTTPError as e:
         return e.code, b""
     except Exception as e:
