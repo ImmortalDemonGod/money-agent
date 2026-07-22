@@ -81,20 +81,41 @@ if [[ -z "$AGENT_BRANCH" ]]; then
 else
   git fetch -q origin "$AGENT_BRANCH" 2>/dev/null || true
   HQ=$(python3 - "$R" "$AGENT_BRANCH" "$LEDGER_BRANCH" <<'PY' 2>/dev/null
-import datetime as dt, json, subprocess, sys
+import datetime as dt, json, pathlib, subprocess, sys, tempfile
 repo, agent, ledger = sys.argv[1:]
-def show(ref, path):
+def show_raw(ref, path):
     r = subprocess.run(["git", "show", f"origin/{ref}:{path}"], cwd=repo,
                        capture_output=True, text=True)
     if r.returncode != 0:
         return None
-    return json.loads(r.stdout)
+    return r.stdout
+def show(ref, path):
+    raw = show_raw(ref, path)
+    return None if raw is None else json.loads(raw)
 try:
     task_doc = show(agent, "run/human_tasks.json")
     if task_doc is None:
         print("no requests recorded")
         raise SystemExit
-    resolutions = (show(ledger, "ledger/human_resolutions.json") or {}).get("resolutions", {})
+    resolution_raw = show_raw(ledger, "ledger/human_resolutions.json")
+    if resolution_raw is None:
+        resolutions = {}
+    else:
+        allowed = show_raw(agent, "harness/allowed_signers")
+        signature = show_raw(ledger, "ledger/human_resolutions.json.sig")
+        if not allowed or not signature:
+            raise RuntimeError("human resolutions are unsigned or signer policy is missing")
+        with tempfile.TemporaryDirectory() as td:
+            d = pathlib.Path(td)
+            (d / "allowed").write_text(allowed)
+            (d / "sig").write_text(signature)
+            verified = subprocess.run(
+                ["ssh-keygen", "-Y", "verify", "-f", str(d / "allowed"), "-I", "verifier",
+                 "-n", "money-agent-ledger", "-s", str(d / "sig")],
+                input=resolution_raw, text=True, capture_output=True)
+        if verified.returncode != 0:
+            raise RuntimeError("human-resolution signature verification failed")
+        resolutions = json.loads(resolution_raw).get("resolutions", {})
     open_tasks = [t for t in task_doc.get("tasks", []) if t.get("status") == "open"]
     pending = [t for t in open_tasks if t.get("id") not in resolutions]
     awaiting = [t for t in open_tasks if t.get("id") in resolutions]
@@ -122,6 +143,10 @@ if python3 -c "import sys; sys.exit(0 if float('$RECV')>0 else 1)" 2>/dev/null; 
 elif [[ "$EVERDICT" == "VERIFIED_POSITIVE_EV" ]]; then
   echo "VERDICT    : ⭐ EDGE VERIFIED POSITIVE-EV. The variant experiment is answered. ALERT THE"
   echo "             OPERATOR NOW -- real-capital deployment is a human decision, never the agent's."
+elif [[ "$HQ" =~ ^[1-9][0-9]*\ awaiting\ operator ]]; then
+  echo "VERDICT    : HUMAN ACTUATION REQUIRED -- $HQ"
+elif [[ "$HQ" =~ ,\ [1-9][0-9]*\ resolved-awaiting-agent-sync ]]; then
+  echo "VERDICT    : AGENT SYNC REQUIRED -- $HQ"
 elif [[ "$alive" -eq 0 ]]; then
   echo "VERDICT    : RESTART -- verifier process is dead. Run bin/start_verifier.sh <agent-branch>"
 elif [[ "$age" != "?" && "$age" -gt 1500 ]]; then

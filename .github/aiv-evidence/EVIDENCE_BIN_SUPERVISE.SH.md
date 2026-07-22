@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/supervise.sh`
-**Commit:** `09399f5`
-**Generated:** 2026-07-22T22:05:11Z
+**Commit:** `2382040`
+**Previous:** `0936838`
+**Generated:** 2026-07-22T23:01:48Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -11,20 +12,19 @@
 
 ```yaml
 classification:
-  risk_tier: R2
+  risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/supervise.sh"
-  classification_rationale: "R2 because this changes cross-branch operational supervision but does not itself authorize payments or termination"
+  classification_rationale: "Unauthenticated or hidden queue state can mislead operators and permit premature conclusions"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:05:11Z"
+  classified_at: "2026-07-22T23:01:48Z"
 ```
 
 ## Claim(s)
 
-1. Supervisor reads requests from the named agent branch and resolutions from the ledger branch while running in the verifier checkout
-2. Supervisor distinguishes requests awaiting the operator from resolutions awaiting agent synchronization
-3. No existing tests were modified or deleted during this change.
+1. Supervisor verdicts distinguish human actuation required from agent sync required using signature-verified ledger resolutions
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,17 +32,18 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3](https://github.com/ImmortalDemonGod/money-agent/commit/e07aefd61e52f61d314cc211df056ee312793da3)
-- **Requirements Verified:** Make actuation requests visible in the deployed two-checkout topology
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
+- **Requirements Verified:** Issue #31 requires the asynchronous actuation queue to be visible without stalling the agent loop
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`09399f5`](https://github.com/ImmortalDemonGod/money-agent/tree/09399f55fff85dfd43afebaa2ff4cf4151457f7a))
+**Scope Inventory** (SHA: [`2382040`](https://github.com/ImmortalDemonGod/money-agent/tree/23820409015d4a4b7414a65ad5a0a6540ecf7e84))
 
-- [`bin/supervise.sh#L6-L7`](https://github.com/ImmortalDemonGod/money-agent/blob/09399f55fff85dfd43afebaa2ff4cf4151457f7a/bin/supervise.sh#L6-L7)
-- [`bin/supervise.sh#L15`](https://github.com/ImmortalDemonGod/money-agent/blob/09399f55fff85dfd43afebaa2ff4cf4151457f7a/bin/supervise.sh#L15)
-- [`bin/supervise.sh#L75-L110`](https://github.com/ImmortalDemonGod/money-agent/blob/09399f55fff85dfd43afebaa2ff4cf4151457f7a/bin/supervise.sh#L75-L110)
-- [`bin/supervise.sh#L113`](https://github.com/ImmortalDemonGod/money-agent/blob/09399f55fff85dfd43afebaa2ff4cf4151457f7a/bin/supervise.sh#L113)
+- [`bin/supervise.sh#L84`](https://github.com/ImmortalDemonGod/money-agent/blob/23820409015d4a4b7414a65ad5a0a6540ecf7e84/bin/supervise.sh#L84)
+- [`bin/supervise.sh#L86`](https://github.com/ImmortalDemonGod/money-agent/blob/23820409015d4a4b7414a65ad5a0a6540ecf7e84/bin/supervise.sh#L86)
+- [`bin/supervise.sh#L91-L94`](https://github.com/ImmortalDemonGod/money-agent/blob/23820409015d4a4b7414a65ad5a0a6540ecf7e84/bin/supervise.sh#L91-L94)
+- [`bin/supervise.sh#L100-L118`](https://github.com/ImmortalDemonGod/money-agent/blob/23820409015d4a4b7414a65ad5a0a6540ecf7e84/bin/supervise.sh#L100-L118)
+- [`bin/supervise.sh#L146-L149`](https://github.com/ImmortalDemonGod/money-agent/blob/23820409015d4a4b7414a65ad5a0a6540ecf7e84/bin/supervise.sh#L146-L149)
 
 ### Class A (Execution Evidence)
 
@@ -51,7 +52,7 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 2070 error(s)
+- **ruff:** 2246 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
@@ -72,22 +73,21 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
-3143f26 [S7] rail adapters: the P1 contract + a stubbed Base/USDC rail with settlement-event binding (#30 Part 1)
-aa601ba [S6] edge-verdict quality: frozen risk cap + peak tracking + signed edge facts (#38, closes the S4 edge-signing deferral)
-b36b966 [S5] gates & probes: delivery seam + provider cap, oracle-classed resolutions, mechanical pacing (#39 #35 #40 #45)
-2a5f010 [S4] fact-lane signing: verifier signatures + hash chain + customer attestation (#36 #42)
+bc601c3 test(rails): expose registry contract to verification
+86e664c test(pr50): exercise executable rail and queue contracts
+67e9adb test(pr50): pin issue-closure trust boundaries
+c5fd8f6 docs(tests): normalize bug-catalog whitespace
+8457d08 merge(stack): reconcile PR50 with reviewed stack 3 fixes
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Supervisor reads requests from the named agent branch and re... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Supervisor distinguishes requests awaiting the operator from... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Supervisor verdicts distinguish human actuation required fro... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -100,4 +100,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Surface claims-lane human requests from the verifier checkout
+Verify ledger signatures and prioritize queue state in VERDICT
