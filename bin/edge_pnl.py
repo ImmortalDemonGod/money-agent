@@ -266,11 +266,10 @@ def main() -> int:
     registration_sha = frozen["sha256"]
     try:
         runtime = json.loads(RUNTIME.read_text())
-        peak = float((runtime.get("registrations") or {}).get(registration_sha, {})
-                     .get("peak_equity_usd"))
     except Exception:
         runtime = {}
-        peak = frozen["baseline_equity_usd"]
+    previous = (runtime.get("registrations") or {}).get(registration_sha, {})
+    peak = float(previous.get("peak_equity_usd", frozen["baseline_equity_usd"]))
     peak = max(peak, equity)
     registrations = runtime.get("registrations") or {}
     registrations[registration_sha] = {"peak_equity_usd": peak, "updated_at": _now()}
