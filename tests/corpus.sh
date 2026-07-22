@@ -103,39 +103,46 @@ rm -f ADVERSARY_REPORT.md
 echo "=== fixture 3: the 086 empty-commit seam (iter.py close must catch a commit that landed nothing) ==="
 FIX3=$(python3 - <<'PYEOF'
 import sys, types
-sys.path.insert(0, "bin")
-import importlib
-import iter as it
-importlib.reload(it)
-# packet exists on disk; MONEY_LOG (run-1 copy) carries no <fill>
-(it.PACKETS / "VERIFICATION_PACKET_ITER_903.md").write_text("# corpus seam probe\n")
-real_run = it.subprocess.run
-def stub_gate(args, **kw):
-    # stub ONLY the aiv_gate call: the seam under test is the ls-tree net, not the gate
-    if any("aiv_gate" in str(a) for a in (args if isinstance(args, (list, tuple)) else [args])):
-        return types.SimpleNamespace(returncode=0)
-    return real_run(args, **kw)
-it.subprocess.run = stub_gate
-fails = []
-# (a) the 086 condition: commit machinery silently lands nothing -> close MUST fail
-it._commit_push = lambda paths, msg: None
-rc = it.close("903")
-if rc == 0: fails.append("close returned 0 with no blob in HEAD (the 086 trap, reopened)")
-# (b) control: with the real commit machinery the same close succeeds and the blob is in HEAD
-import subprocess as sp
-it._commit_push = lambda paths, msg: (
-    sp.run(["git", "add", "--", *[str(p) for p in paths]], check=True),
-    sp.run(["git", "-c", "commit.gpgsign=false", "commit", "-qm", msg], check=True))
-rc2 = it.close("903")
-if rc2 != 0: fails.append(f"control close failed (rc={rc2}) -- seam test cannot discriminate")
-print("FIX3_FAILS:" + ";".join(fails))
+try:
+    sys.path.insert(0, "bin")
+    import importlib
+    import iter as it
+    importlib.reload(it)
+    # packet exists on disk; MONEY_LOG (run-1 copy) carries no <fill>
+    (it.PACKETS / "VERIFICATION_PACKET_ITER_903.md").write_text("# corpus seam probe\n")
+    real_run = it.subprocess.run
+    def stub_gate(args, **kw):
+        # stub ONLY the aiv_gate call: the seam under test is the ls-tree net, not the gate
+        if any("aiv_gate" in str(a) for a in (args if isinstance(args, (list, tuple)) else [args])):
+            return types.SimpleNamespace(returncode=0)
+        return real_run(args, **kw)
+    it.subprocess.run = stub_gate
+    fails = []
+    # (a) the 086 condition: commit machinery silently lands nothing -> close MUST fail
+    it._commit_push = lambda paths, msg: None
+    rc = it.close("903")
+    if rc == 0: fails.append("close returned 0 with no blob in HEAD (the 086 trap, reopened)")
+    # (b) control: with the real commit machinery the same close succeeds and the blob is in HEAD
+    import subprocess as sp
+    it._commit_push = lambda paths, msg: (
+        sp.run(["git", "add", "--", *[str(p) for p in paths]], check=True),
+        sp.run(["git", "-c", "commit.gpgsign=false", "commit", "-qm", msg], check=True))
+    rc2 = it.close("903")
+    if rc2 != 0: fails.append(f"control close failed (rc={rc2}) -- seam test cannot discriminate")
+    print("FIX3_FAILS:" + ";".join(fails))
+except BaseException as exc:
+    print(f"FIX3_FAILS:crash:{type(exc).__name__}:{exc}")
 PYEOF
 )
-FIX3_FAILS="${FIX3##*FIX3_FAILS:}"
-if [[ -z "$FIX3_FAILS" ]]; then
-  ok "086 seam: no-blob close fails, real-commit close passes (net discriminates)"
+if [[ "$FIX3" != *"FIX3_FAILS:"* ]]; then
+  bad "086 seam: fixture emitted no result marker"; dump "$FIX3"
 else
-  bad "086 seam: $FIX3_FAILS"
+  FIX3_FAILS="${FIX3##*FIX3_FAILS:}"
+  if [[ -z "$FIX3_FAILS" ]]; then
+    ok "086 seam: no-blob close fails, real-commit close passes (net discriminates)"
+  else
+    bad "086 seam: $FIX3_FAILS"
+  fi
 fi
 
 echo

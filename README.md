@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- Hero: run 1's own showcase card (archive/run-001/showcase/og.png). The honest result IS the pitch. -->
-<a href="https://one-honest-dollar.surge.sh/"><img src=".github/assets/hero.png" alt="Black Box Research Labs, Run One. $0.00, verified. An AI agent, $25, and one job: earn a single honest dollar. It made nothing, and the story of why is the point." width="820"></a>
+<a href="https://onehonestdollar.com/"><img src=".github/assets/hero.png" alt="Black Box Research Labs, Run One. $0.00, verified. An AI agent, $25, and one job: earn a single honest dollar. It made nothing, and the story of why is the point." width="820"></a>
 
 # The Money Agent
 
@@ -17,7 +17,7 @@ Every claim it makes ("I earned $X," "I have exhausted every option") is graded 
 ![v1: concluded, $0.00 verified](https://img.shields.io/badge/v1-concluded%20%C2%B7%20%240.00%20verified-informational)
 ![v2: harness merged, run pending](https://img.shields.io/badge/v2-harness%20merged%20%C2%B7%20run%20pending-yellow)
 
-[**The invariant**](#the-invariant) · [**Try it in 60s**](#try-it-in-60-seconds-no-money-no-keys) · [**Status**](#status) · [**Findings**](#findings-so-far) · [**Read the evidence**](#read-the-evidence) · [**Case study**](docs/CASE_STUDY.md) · [**See run one, live**](https://one-honest-dollar.surge.sh/)
+[**The invariant**](#the-invariant) · [**Try it in 60s**](#try-it-in-60-seconds-no-money-no-keys) · [**Status**](#status) · [**Findings**](#findings-so-far) · [**Read the evidence**](#read-the-evidence) · [**Case study**](docs/CASE_STUDY.md) · [**See run one, live**](https://onehonestdollar.com/)
 
 </div>
 

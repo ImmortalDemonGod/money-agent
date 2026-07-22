@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `ledger/README.md`
-**Commit:** `655bb5b`
-**Previous:** `42280fd`
-**Generated:** 2026-07-22T21:16:00Z
+**File:** `bin/setup_sandbox.sh`
+**Commit:** `4d65006`
+**Generated:** 2026-07-22T21:07:31Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -12,18 +11,18 @@
 
 ```yaml
 classification:
-  risk_tier: R0
+  risk_tier: R1
   sod_mode: S0
   critical_surfaces: []
-  blast_radius: "ledger/README.md"
-  classification_rationale: "R0 because this clarifies an existing documented verification procedure without changing behavior"
+  blast_radius: "bin/setup_sandbox.sh"
+  classification_rationale: "R1 because this is a local readiness check whose failure does not alter financial calculations"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:16:00Z"
+  classified_at: "2026-07-22T21:07:31Z"
 ```
 
 ## Claim(s)
 
-1. the manual verification recipe tells an auditor to skip parent-hash comparison at a documented ledger rotation boundary
+1. setup_sandbox rejects an armed signing configuration when ssh-keygen is unavailable
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -33,13 +32,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
-- **Requirements Verified:** Issue #36 requires the signed fact chain to remain independently verifiable across ledger rotation
+- **Requirements Verified:** Issue #36 requires signed facts to be verifiable before they are treated as grounded
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`655bb5b`](https://github.com/ImmortalDemonGod/money-agent/tree/655bb5b02a13b957f4d2f37e002b531e37d4bc8d))
+**Scope Inventory** (SHA: [`4d65006`](https://github.com/ImmortalDemonGod/money-agent/tree/4d65006cb47c6849a63a616f08b9832d269c1d89))
 
-- [`ledger/README.md#L46-L47`](https://github.com/ImmortalDemonGod/money-agent/blob/655bb5b02a13b957f4d2f37e002b531e37d4bc8d/ledger/README.md#L46-L47)
+- [`bin/setup_sandbox.sh#L117-L126`](https://github.com/ImmortalDemonGod/money-agent/blob/4d65006cb47c6849a63a616f08b9832d269c1d89/bin/setup_sandbox.sh#L117-L126)
 
 ### Class A (Execution Evidence)
 
@@ -48,14 +47,14 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** All checks passed
+- **ruff:** 3351 error(s)
 - **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | the manual verification recipe tells an auditor to skip pare... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | setup_sandbox rejects an armed signing configuration when ss... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
 **Verdict summary:** 0 verified, 0 unverified, 2 manual review.
@@ -71,4 +70,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Document the chain-start rule after ledger rotation
+Check ssh-keygen before starting an armed signed-fact run

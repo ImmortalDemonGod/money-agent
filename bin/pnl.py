@@ -21,6 +21,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -364,21 +365,39 @@ def main() -> int:
     # agent-unreachable state dir keeps the audit trail in both cases; the tree stays clean either
     # way, so nothing untrusted reaches the manifest.
     try:
-        untracked = subprocess.run(
-            ["git", "ls-files", "-o", "--exclude-standard", "ledger/raw/"],
-            cwd=REPO, capture_output=True, text=True, timeout=10).stdout.split()
+        # Do NOT apply ignore rules here. A global `*.json` ignore made planted raw pulls invisible
+        # to the previous command in a real verifier environment; every untracked file beneath this
+        # verifier-owned directory is untrusted input regardless of a developer's Git preferences.
+        # `-z` makes this safe for every Git-valid filename (including spaces and newlines).
+        # Keep bytes until after splitting: text-mode whitespace splitting both corrupts names and
+        # conflates two distinct paths into one quarantine destination.
+        raw_untracked = subprocess.run(
+            ["git", "ls-files", "-o", "-z", "--", "ledger/raw/"],
+            cwd=REPO, capture_output=True, check=True, timeout=10).stdout
+        untracked = [Path(rel.decode("utf-8", errors="surrogateescape"))
+                     for rel in raw_untracked.split(b"\0") if rel]
         if untracked:
-            qdir = STATE_DIR / "raw-rescue" / time.strftime("%Y%m%dT%H%M%S")
+            qdir = STATE_DIR / "raw-rescue" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
             qdir.mkdir(parents=True, exist_ok=True)
             for rel in untracked:
                 src = REPO / rel
                 if src.exists():
-                    src.rename(qdir / src.name)
+                    # Preserve the path below ledger/raw so equal basenames in different source
+                    # directories cannot collide in rescue storage.
+                    dest = qdir / rel
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    src.rename(dest)
             print(f"C3: quarantined {len(untracked)} untracked raw file(s) -> {qdir} "
                   "(agent plant or orphan of a failed commit -- preserved, not trusted)",
                   file=sys.stderr)
     except Exception as e:
-        print(f"warn: could not quarantine untracked raw files ({e})", file=sys.stderr)
+        # Continuing would let a raw JSON file we failed to remove remain eligible for the manifest
+        # below. A stale ledger halts the run; a fresh ledger containing an untrusted raw pull would
+        # falsely authorize it. Refuse to publish facts until the operator resolves the filesystem
+        # failure (including a state directory mounted on a different filesystem).
+        print(f"FATAL: could not quarantine untracked raw files ({e}); refusing to publish facts",
+              file=sys.stderr)
+        return 2
 
     pulls: list[Path] = []
     # errors initialized earlier (constitution check appends to it)
@@ -504,10 +523,18 @@ def main() -> int:
             if not text.strip():
                 raise ValueError("empty file -- for a genuine zero, provide the 'date,usd' "
                                  "header (a header-only file reads as measured 0)")
-            rows = list(csv.DictReader(text.splitlines()))
+            reader = csv.DictReader(text.splitlines())
+            if not reader.fieldnames or "usd" not in reader.fieldnames:
+                raise ValueError("missing required 'usd' column (need date,usd columns)")
+            # Header-only deliberately remains a measured zero: it is an explicit operator
+            # assertion of no inference cost, unlike a completely empty file above.
+            rows = list(reader)
             if any("usd" not in r or r["usd"] in (None, "") for r in rows):
                 raise ValueError("rows missing a 'usd' value (need date,usd columns)")
-            inference = round(sum(float(r["usd"]) for r in rows), 2)
+            values = [float(r["usd"]) for r in rows]
+            if not all(math.isfinite(value) for value in values):
+                raise ValueError("rows contain a non-finite 'usd' value")
+            inference = round(sum(values), 2)
             inference_source = "manual_csv"
         except Exception as e:
             errors.append(f"inference_feed_failed: {type(e).__name__}: {e}")
@@ -585,6 +612,9 @@ def main() -> int:
     # the facts lane. truth.py refuses the grounded label for an unsigned/tampered file whenever
     # a committed pubkey exists. The signature covers truth.json, which embeds manifest_sha256 --
     # so the raw-pull manifest is integrity-covered transitively. Namespace must match truth.py.
+    # `truth["errors"]` aliases `errors`, so preserve the pre-signing state independently: an
+    # append from signing must force the persisted fact record to become unverified.
+    errors_before_signing = list(errors)
     sign_key = STATE_DIR / "verifier_signing_key"
     pubkey_committed = (REPO / "harness" / "verifier_key.pub").exists()
     if sign_key.exists():
@@ -600,15 +630,15 @@ def main() -> int:
         errors.append("signing_key_missing: harness/verifier_key.pub is committed but "
                       f"{sign_key} does not exist -- generate it (see ledger/README.md) or "
                       "remove the pubkey to run unsigned.")
-    if errors != truth["errors"]:
+    if errors != errors_before_signing:
         # a signing error must ride IN the signed-about file's verified flag: rewrite (and re-sign
         # attempts are pointless -- the error is precisely that signing is broken)
         truth["errors"], truth["verified"] = errors, False
         TRUTH.write_text(json.dumps(truth, indent=2) + "\n")
 
-    # ---- #42: the customer-facing attestation, produced only when signing is live (an unsigned
-    # attestation is a claim wearing a costume -- exactly what this repo refuses to emit). Content
-    # is verifier-computed facts only; storefront rendering is the run agent's problem.
+    # ---- #42: the customer-facing attestation, produced only when signing is live. An unsigned
+    # attestation is a claim wearing a costume, so a signing failure removes it and turns the
+    # already-signed truth record into an explicit unverified verifier error.
     if sign_key.exists() and not any(e.startswith("signing_failed") for e in errors):
         ref_txt = None
         agent_branch = os.environ.get("AGENT_BRANCH", "")
@@ -639,7 +669,22 @@ def main() -> int:
                              "-n", "money-agent-ledger", str(ATT)],
                             capture_output=True, text=True, timeout=30)
         if ra.returncode != 0:
-            print(f"warn: attestation signing failed ({ra.stderr.strip()[:120]})", file=sys.stderr)
+            # Never leave an unsigned public summary for verifier_loop.sh to publish. The money
+            # facts must also say the attestation run was incomplete; re-sign that changed truth
+            # record, or remove its old signature so truth.py fails closed as well.
+            ATT.unlink(missing_ok=True)
+            (ATT.parent / (ATT.name + ".sig")).unlink(missing_ok=True)
+            errors.append(f"attestation_signing_failed: {ra.stderr.strip()[:120]}")
+            truth["errors"], truth["verified"] = errors, False
+            TRUTH.write_text(json.dumps(truth, indent=2) + "\n")
+            # ssh-keygen -Y sign does not overwrite an existing detached signature. Remove the
+            # signature for the pre-error truth before producing the one that covers this record.
+            (TRUTH.parent / (TRUTH.name + ".sig")).unlink(missing_ok=True)
+            retry = subprocess.run(["ssh-keygen", "-Y", "sign", "-f", str(sign_key),
+                                    "-n", "money-agent-ledger", str(TRUTH)],
+                                   capture_output=True, text=True, timeout=30)
+            if retry.returncode != 0:
+                (TRUTH.parent / (TRUTH.name + ".sig")).unlink(missing_ok=True)
 
     print(json.dumps(truth, indent=2))
     if errors:

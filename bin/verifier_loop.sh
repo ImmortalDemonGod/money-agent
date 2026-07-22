@@ -96,11 +96,25 @@ while true; do
           # re-commit below is the primary rescue; the side-car survives even a botched rescue or
           # an operator intervention inside the divergence window (traps.md #9's residual).
           SIDECAR="${MONEY_AGENT_STATE:-$HOME/.money-agent-verifier}/raw-rescue/$(date -u +%Y%m%dT%H%M%S)-diverged"
-          mkdir -p "$SIDECAR"
+          if ! mkdir -p "$SIDECAR"; then
+            say "FATAL: cannot create divergence side-car $SIDECAR -- NOT resetting facts lane"
+            rm -rf "$RD"
+            continue
+          fi
+          COPY_OK=1
           while IFS= read -r f; do
-            mkdir -p "$RD/$(dirname "$f")"; git show "HEAD:$f" > "$RD/$f" 2>>"$LOG"
-            cp "$RD/$f" "$SIDECAR/" 2>>"$LOG" || true
+            if ! mkdir -p "$RD/$(dirname "$f")" \
+                || ! git show "HEAD:$f" > "$RD/$f" 2>>"$LOG" \
+                || ! cp "$RD/$f" "$SIDECAR/" 2>>"$LOG"; then
+              COPY_OK=0
+              break
+            fi
           done <<< "$RESCUE"
+          if [[ "$COPY_OK" != "1" ]]; then
+            say "FATAL: divergence side-car copy failed -- NOT resetting facts lane"
+            rm -rf "$RD"
+            continue
+          fi
           say "side-car: diverged pull(s) copied to $SIDECAR (belt; the re-commit below is the suspenders)"
         fi
         say "WARN: facts lane diverged from origin -- converging to origin/$LEDGER_BRANCH"
@@ -173,9 +187,13 @@ print(d.get('verdict'), d.get('paper_pnl_usd'), d.get('verified'))" 2>/dev/null)
     { git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json
       git add ledger/edge.json ledger/raw/EDGE_MANIFEST.sha256
       git add ledger/raw/*.json
-      # #36/#42: signature + attestation artifacts (present only when signing is provisioned)
-      git add ledger/truth.json.sig ledger/attestation.json ledger/attestation.json.sig
-      git add harness/verifier_key.pub harness/allowed_signers
+      # #36/#42: signature + attestation artifacts are optional until provisioning arms signing.
+      # Stage only artifacts actually emitted this cycle; an absent optional signature must not
+      # make `git add` fail while leaving unrelated staged facts to be committed implicitly.
+      for fact_artifact in ledger/truth.json.sig ledger/attestation.json ledger/attestation.json.sig \
+                           harness/verifier_key.pub harness/allowed_signers; do
+        [[ -e "$fact_artifact" ]] && git add -- "$fact_artifact"
+      done
     } 2>>"$LOG"
     if AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
          commit -q --no-gpg-sign -m "verifier: ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ) | $SIG" 2>>"$LOG"; then

@@ -44,6 +44,8 @@ git show origin/ledger:harness/allowed_signers > /tmp/signers
 ssh-keygen -Y verify -f /tmp/signers -I verifier -n money-agent-ledger -s /tmp/t.sig < /tmp/t.json
 # chain: previous_hash in t.json == sha256 of the parent commit's truth.json
 git show origin/ledger~1:ledger/truth.json | sha256sum
+# If origin/ledger~1 does not resolve, this tip is a LEDGER_MAX_COMMITS rotation boundary:
+# an unreachable parent is the documented chain start, so skip this parent-hash comparison.
 ```
 
 The same commands with `attestation.json` verify the customer-facing summary. What this does NOT

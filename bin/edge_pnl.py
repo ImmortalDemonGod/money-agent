@@ -52,6 +52,7 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -120,12 +121,18 @@ def parse_registration(text: str) -> tuple[dict | None, str | None]:
     if fields["METRIC"] not in SUPPORTED_METRICS:
         return None, f"unsupported METRIC {fields['METRIC']!r} (supported: {SUPPORTED_METRICS})"
     try:
-        float(fields["BAR"])
-        int(fields["MIN_FILLED_ORDERS"])
-        float(fields["MAX_DRAWDOWN_USD"])
+        bar = float(fields["BAR"])
+        min_fills = int(fields["MIN_FILLED_ORDERS"])
+        drawdown = float(fields["MAX_DRAWDOWN_USD"])
         deadline = dt.datetime.fromisoformat(fields["RESOLVE_BY"].replace("Z", "+00:00"))
     except ValueError as e:
         return None, f"registration field unparseable: {e}"
+    if not math.isfinite(bar) or bar <= 0:
+        return None, "BAR must be a positive finite number"
+    if min_fills <= 0:
+        return None, "MIN_FILLED_ORDERS must be positive"
+    if not math.isfinite(drawdown) or drawdown < 0:
+        return None, "MAX_DRAWDOWN_USD must be a finite non-negative number"
     # ROUND-4 FIX: fromisoformat accepts a timezone-NAIVE value, which would freeze a bet whose
     # deadline can never be compared to aware now() -- every later verdict cycle then crashes into
     # the fail-closed handler and an active registration masquerades as an idle rail (verdict NONE,
@@ -256,14 +263,20 @@ def main() -> int:
     # ---- #38: peak-equity tracking in the SEPARATE runtime file (the frozen registration stays
     # hash-immutable). Peak initializes to max(baseline, first observed equity); drawdown is
     # peak-to-current -- the quantity a martingale hides from a raw P&L level.
+    registration_sha = frozen["sha256"]
     try:
-        peak = float(json.loads(RUNTIME.read_text()).get("peak_equity_usd"))
+        runtime = json.loads(RUNTIME.read_text())
+        peak = float((runtime.get("registrations") or {}).get(registration_sha, {})
+                     .get("peak_equity_usd"))
     except Exception:
+        runtime = {}
         peak = frozen["baseline_equity_usd"]
     peak = max(peak, equity)
-    RUNTIME.write_text(json.dumps({"peak_equity_usd": peak, "updated_at": _now(),
-                                   "_note": "runtime state, deliberately outside the frozen "
-                                            "registration so its hash never moves"}, indent=2))
+    registrations = runtime.get("registrations") or {}
+    registrations[registration_sha] = {"peak_equity_usd": peak, "updated_at": _now()}
+    RUNTIME.write_text(json.dumps({"registrations": registrations,
+                                   "_note": "runtime state, keyed by frozen registration hash so "
+                                            "a prior bet cannot contaminate a new one"}, indent=2))
     drawdown = round(peak - equity, 2)
 
     out.update({

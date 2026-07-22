@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `ledger/README.md`
-**Commit:** `655bb5b`
-**Previous:** `42280fd`
-**Generated:** 2026-07-22T21:16:00Z
+**File:** `IMPROVEMENT_LOG.md`
+**Commit:** `35217cf`
+**Generated:** 2026-07-22T21:10:25Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -12,18 +11,18 @@
 
 ```yaml
 classification:
-  risk_tier: R0
+  risk_tier: R1
   sod_mode: S0
   critical_surfaces: []
-  blast_radius: "ledger/README.md"
-  classification_rationale: "R0 because this clarifies an existing documented verification procedure without changing behavior"
+  blast_radius: "IMPROVEMENT_LOG.md"
+  classification_rationale: "R1 because this records rationale and evidence without altering runtime behavior"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:16:00Z"
+  classified_at: "2026-07-22T21:10:25Z"
 ```
 
 ## Claim(s)
 
-1. the manual verification recipe tells an auditor to skip parent-hash comparison at a documented ledger rotation boundary
+1. the improvement log records the signing architecture, explicit limits, and verification evidence for issues #36 and #42
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -33,13 +32,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
-- **Requirements Verified:** Issue #36 requires the signed fact chain to remain independently verifiable across ledger rotation
+- **Requirements Verified:** Issue #36 requires a durable, reviewable description of the verifier signing and hash-chain boundary
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`655bb5b`](https://github.com/ImmortalDemonGod/money-agent/tree/655bb5b02a13b957f4d2f37e002b531e37d4bc8d))
+**Scope Inventory** (SHA: [`35217cf`](https://github.com/ImmortalDemonGod/money-agent/tree/35217cf983e6a370bacba920884ff084a0835922))
 
-- [`ledger/README.md#L46-L47`](https://github.com/ImmortalDemonGod/money-agent/blob/655bb5b02a13b957f4d2f37e002b531e37d4bc8d/ledger/README.md#L46-L47)
+- [`IMPROVEMENT_LOG.md#L1057-L1120`](https://github.com/ImmortalDemonGod/money-agent/blob/35217cf983e6a370bacba920884ff084a0835922/IMPROVEMENT_LOG.md#L1057-L1120)
 
 ### Class A (Execution Evidence)
 
@@ -55,7 +54,7 @@ This file has no claim-specific execution evidence.
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | the manual verification recipe tells an auditor to skip pare... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | the improvement log records the signing architecture, explic... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
 **Verdict summary:** 0 verified, 0 unverified, 2 manual review.
@@ -71,4 +70,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Document the chain-start rule after ledger rotation
+Record signing architecture and verification results

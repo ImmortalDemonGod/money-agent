@@ -49,14 +49,18 @@ assert_exit_grep() { # assert_exit_grep <exit> <pattern> <label> <cmd...> -- bot
     dump "$out"
   fi
 }
-# BSD and GNU sed disagree on in-place-edit syntax. Use a fail-closed literal replacement so a
-# fixture drift cannot silently leave the packet unchanged and turn a negative gate test green.
+# Replace exactly one literal occurrence in a test fixture.  BSD and GNU sed disagree on the
+# spelling of in-place edits; using Python also fails closed if the fixture ever drifts and the
+# intended negative test would otherwise run against an unchanged packet.
 replace_once() { # replace_once <file> <old> <new>
   python3 - "$1" "$2" "$3" <<'PYEOF'
 from pathlib import Path
 import sys
-path = Path(sys.argv[1]); old, new = sys.argv[2:]
-text = path.read_text(); count = text.count(old)
+
+path = Path(sys.argv[1])
+old, new = sys.argv[2:]
+text = path.read_text()
+count = text.count(old)
 if count != 1:
     raise SystemExit(f"fixture mutation expected one occurrence, found {count}: {old!r}")
 path.write_text(text.replace(old, new, 1))
@@ -275,6 +279,12 @@ if v != "FALSIFIED" or "drawdown" not in _e.get("falsified_reason", ""):
     fails.append(f"drawdown breach not FALSIFIED-with-reason: {v} / {_e.get('falsified_reason')}")
 nofield_f, nofield_e = edge_pnl.parse_registration(reg.replace("MAX_DRAWDOWN_USD: 25.0\n", ""))
 if not nofield_e: fails.append("registration without MAX_DRAWDOWN_USD accepted")
+for bad in ("MAX_DRAWDOWN_USD: nan", "MAX_DRAWDOWN_USD: inf", "MIN_FILLED_ORDERS: 0"):
+    candidate = reg.replace("MAX_DRAWDOWN_USD: 25.0", bad) if bad.startswith("MAX") else reg.replace("MIN_FILLED_ORDERS: 10", bad)
+    if not edge_pnl.parse_registration(candidate)[1]: fails.append(f"invalid registration accepted: {bad}")
+runtime = json.load(open("state/edge_runtime.json"))
+if list((runtime.get("registrations") or {})) != [json.load(open("state/edge_registration.json"))["sha256"]]:
+    fails.append("runtime peak is not scoped to the frozen registration")
 frozen = json.load(open("state/edge_registration.json"))
 frozen["fields"]["RESOLVE_BY"] = "2000-01-01T00:00:00Z"
 json.dump(frozen, open("state/edge_registration.json","w"))
@@ -415,12 +425,17 @@ if t["verified"] or not any(e.startswith("non_usd_amount:privacy:EUR") for e in 
    or t["spent_usd"] != 2.0:
     fails.append(f"privacy EUR txn not poisoned/excluded: {t['errors']} spent={t['spent_usd']}")
 
-# 8. #46: an untracked raw pull is QUARANTINED into the state dir, never deleted (it is either a
-#    plant preserved as evidence, or the orphan of a failed commit preserved as audit trail)
+# 8. #46: untracked raws are QUARANTINED into the state dir, never deleted (they are either a
+#    plant preserved as evidence, or the orphan of a failed commit preserved as audit trail).
+#    The nested whitespace name pins NUL-delimited Git parsing and path-preserving rescue: a
+#    whitespace splitter would treat it as multiple paths, while basename-only rescue can collide.
 import pathlib
 plant = pathlib.Path("ledger/raw/29990104T000000_plant.json")
 plant.parent.mkdir(parents=True, exist_ok=True)
 plant.write_text('{"plant": true}')
+nested_plant = pathlib.Path("ledger/raw/nested raw/plant file.json")
+nested_plant.parent.mkdir(parents=True, exist_ok=True)
+nested_plant.write_text('{"plant": "nested whitespace path"}')
 def privacy_clean(url, headers, params=None):
     if "balance_transactions" in url: return {"data": [], "has_more": False}
     if "/charges" in url: return {"data": [], "has_more": False}
@@ -429,15 +444,38 @@ def privacy_clean(url, headers, params=None):
                          {"token": "t2", "settled_amount": 200}]}
     return {}
 t = run(privacy_clean)
-q = list(pathlib.Path("pnl_state/raw-rescue").glob("*/29990104T000000_plant.json"))
-if plant.exists() or not q:
-    fails.append(f"C3 quarantine broken: still_in_tree={plant.exists()} quarantined={bool(q)}")
+q = pathlib.Path("pnl_state/raw-rescue")
+top_rescue = list(q.glob("*/ledger/raw/29990104T000000_plant.json"))
+nested_rescue = list(q.glob("*/ledger/raw/nested raw/plant file.json"))
+if plant.exists() or nested_plant.exists() or not top_rescue or not nested_rescue:
+    fails.append("C3 quarantine broken: "
+                 f"top_in_tree={plant.exists()} nested_in_tree={nested_plant.exists()} "
+                 f"top_rescued={bool(top_rescue)} nested_rescued={bool(nested_rescue)}")
 
-# 9. #41: absent feed -> null fields (unknown is not zero), even with spend measured
+# 9. #46: a quarantine failure must halt before an untrusted raw pull can reach the manifest.
+#    The real failure mode is a state directory on a different filesystem (Path.rename raises
+#    EXDEV); patching the one planted file's rename gives the same verifier-visible contract.
+plant = pathlib.Path("ledger/raw/29990105T000000_rename_failure.json")
+plant.write_text('{"plant": "rename failure"}')
+real_rename = pathlib.Path.rename
+def reject_plant_rename(self, target):
+    if self.resolve() == plant.resolve():
+        raise OSError("simulated cross-device quarantine failure")
+    return real_rename(self, target)
+pathlib.Path.rename = reject_plant_rename
+try:
+    rc = pnl.main()
+finally:
+    pathlib.Path.rename = real_rename
+if rc == 0 or not plant.exists():
+    fails.append(f"C3 quarantine failure did not halt/preserve raw: rc={rc} exists={plant.exists()}")
+plant.unlink(missing_ok=True)
+
+# 10. #41: absent feed -> null fields (unknown is not zero), even with spend measured
 if t.get("inference_usd") is not None or t.get("net_usd_full") is not None:
     fails.append(f"inference absent-feed not null: {t.get('inference_usd')}/{t.get('net_usd_full')}")
 
-# 10. #41: valid feed + measured spend -> summed inference and full net
+# 11. #41: valid feed + measured spend -> summed inference and full net
 pathlib.Path("inf.csv").write_text("date,usd\n2026-07-20,1.25\n2026-07-20,0.50\n")
 os.environ["INFERENCE_CSV"] = "inf.csv"
 t = run(privacy_clean)
@@ -445,12 +483,22 @@ if not t["verified"] or t.get("inference_usd") != 1.75 or t.get("net_usd_full") 
     fails.append(f"inference metering wrong: verified={t['verified']} inf={t.get('inference_usd')} "
                  f"full={t.get('net_usd_full')} errors={t['errors']}")
 
-# 11. #41: malformed feed fails closed; header-only file is a measured zero
+# 12. #41: malformed CSVs fail closed; header-only file remains a documented measured zero.
 pathlib.Path("inf_bad.csv").write_text("date,usd\n2026-07-20,notanumber\n")
 os.environ["INFERENCE_CSV"] = "inf_bad.csv"
 t = run(privacy_clean)
 if t["verified"] or not any(e.startswith("inference_feed_failed") for e in t["errors"]):
     fails.append(f"malformed inference feed not failing closed: {t['errors']}")
+pathlib.Path("inf_no_usd.csv").write_text("date,cost\n2026-07-20,1.25\n")
+os.environ["INFERENCE_CSV"] = "inf_no_usd.csv"
+t = run(privacy_clean)
+if t["verified"] or not any(e.startswith("inference_feed_failed") for e in t["errors"]):
+    fails.append(f"inference schema without usd not failing closed: {t['errors']}")
+pathlib.Path("inf_nonfinite.csv").write_text("date,usd\n2026-07-20,NaN\n")
+os.environ["INFERENCE_CSV"] = "inf_nonfinite.csv"
+t = run(privacy_clean)
+if t["verified"] or not any(e.startswith("inference_feed_failed") for e in t["errors"]):
+    fails.append(f"non-finite inference feed not failing closed: {t['errors']}")
 pathlib.Path("inf_zero.csv").write_text("date,usd\n")
 os.environ["INFERENCE_CSV"] = "inf_zero.csv"
 t = run(privacy_clean)
@@ -551,7 +599,7 @@ if [[ -z "$PNL_FAILS" ]]; then
 else
   bad "pnl verifier cases: $PNL_FAILS"
 fi
-rm -rf pnl_state inf.csv inf_bad.csv inf_zero.csv
+rm -rf pnl_state inf.csv inf_bad.csv inf_no_usd.csv inf_nonfinite.csv inf_zero.csv
 git checkout -q -- ledger/ 2>/dev/null || true
 git clean -qfd ledger/raw/ 2>/dev/null || true
 
@@ -659,7 +707,7 @@ PYEOF
   # shellcheck disable=SC2016  # literal '$999' is intentional test data
   replace_once .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md \
     "Earned \$999 this iteration." "Nothing this iteration; honest zero." || exit 1
-  # the bare-word forms ("999 dollars", "USD 999") were how a false claim could slip past a
+  # The bare-word forms ("999 dollars", "USD 999") were how a false claim could slip past a
   # $-only parser; the gate matches them too -- pin that path (queued from IMPROVEMENT_LOG entry
   # 021). The amount must exceed EVERY verifier bound: the rig's edge rail carries paper_pnl 62.5,
   # and the gate's documented residual accepts real-money claims up to the paper P&L -- a first
@@ -694,9 +742,10 @@ sys.excepthook = lambda t, v, tb: print(f"DC_FAILS:crash:{t.__name__}:{v}")
 import importlib, delivery_check as dc
 importlib.reload(dc)
 fails = []
-def case(label, want_rc, fetch, limit, argv):
+def case(label, want_rc, fetch, limit, argv, redirect="https://example.com/unlock"):
     dc._fetch = fetch
-    dc._link_limit = lambda u: limit
+    dc._payment_link = lambda u: {"url": u, "restrictions": {"completed_sessions": {"limit": limit}},
+                                  "after_completion": {"type": "redirect", "redirect": {"url": redirect}}}
     sys.argv = ["delivery_check.py"] + argv
     rc = dc.main()
     if rc != want_rc:
@@ -712,6 +761,9 @@ case("uncapped link fails (#35)", 1, GOOD, "none",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
 case("unverifiable limit fails closed (#35)", 1, GOOD, "unverified",
      ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("unrelated success redirect fails (#39)", 1, GOOD, "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"],
+     redirect="https://example.com/not-the-delivery")
 case("no payment link -> delivery-only check passes", 0, GOOD, "n/a",
      ["https://example.com/unlock"])
 import hashlib
@@ -908,6 +960,45 @@ for target in ("ledger/truth.json", "ledger/attestation.json"):
 att = json.load(open("ledger/attestation.json"))
 if att.get("received_usd") != t.get("received_usd"): fails.append("attestation/truth mismatch")
 if not att.get("refusals_lines"): fails.append("attestation missing refusals provenance")
+# A failed second signature must not leave an unsigned customer artifact behind. This patches only
+# the attestation signing command; the truth re-sign remains real and must verify while marked
+# unverified by its recorded attestation failure.
+real_run = pnl.subprocess.run
+def reject_attestation_sign(args, **kwargs):
+    if (args[:3] == ["ssh-keygen", "-Y", "sign"]
+            and str(args[-1]).endswith("attestation.json")):
+        return subprocess.CompletedProcess(args, 1, stdout="", stderr="simulated attestation failure")
+    return real_run(args, **kwargs)
+pnl.subprocess.run = reject_attestation_sign
+failed_rc = pnl.main()
+pnl.subprocess.run = real_run
+failed_truth = json.load(open("ledger/truth.json"))
+if failed_rc == 0 or failed_truth.get("verified") or not any(
+        e.startswith("attestation_signing_failed") for e in failed_truth.get("errors", [])):
+    fails.append(f"attestation signing failure did not fail closed: rc={failed_rc} truth={failed_truth}")
+if os.path.exists("ledger/attestation.json") or os.path.exists("ledger/attestation.json.sig"):
+    fails.append("attestation signing failure left an unsigned artifact")
+r = subprocess.run(["ssh-keygen", "-Y", "verify", "-f", "harness/allowed_signers",
+                    "-I", "verifier", "-n", "money-agent-ledger", "-s", "ledger/truth.json.sig"],
+                   input=open("ledger/truth.json", "rb").read(), capture_output=True)
+if r.returncode != 0:
+    fails.append("truth signature was not refreshed after attestation signing failure")
+# Initial truth signing failure takes a different path: no signed truth or attestation may survive,
+# and the persisted fact must record verified=false rather than retaining the pre-sign verdict.
+def reject_truth_sign(args, **kwargs):
+    if (args[:3] == ["ssh-keygen", "-Y", "sign"]
+            and str(args[-1]).endswith("truth.json")):
+        return subprocess.CompletedProcess(args, 1, stdout="", stderr="simulated truth failure")
+    return real_run(args, **kwargs)
+pnl.subprocess.run = reject_truth_sign
+initial_rc = pnl.main()
+pnl.subprocess.run = real_run
+initial_truth = json.load(open("ledger/truth.json"))
+if initial_rc == 0 or initial_truth.get("verified") or not any(
+        e.startswith("signing_failed") for e in initial_truth.get("errors", [])):
+    fails.append(f"truth signing failure did not persist unverified verdict: rc={initial_rc} truth={initial_truth}")
+if os.path.exists("ledger/truth.json.sig") or os.path.exists("ledger/attestation.json"):
+    fails.append("truth signing failure left signed-looking public artifacts")
 print("SIGN_FAILS:" + ";".join(fails))
 PYEOF
 )
