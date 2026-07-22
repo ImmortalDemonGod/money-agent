@@ -35,6 +35,7 @@ Commands:
 from __future__ import annotations
 import argparse
 import datetime as dt
+import fcntl
 import json
 import os
 import shutil
@@ -51,6 +52,7 @@ KINDS = ("captcha", "approval-click", "kyc-step", "signup-complete", "claim-host
 SIGN_NAMESPACE = "money-agent-ledger"
 STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-agent-verifier")))
 SIGN_KEY = STATE_DIR / "verifier_signing_key"
+RESOLUTION_LOCK = STATE_DIR / "human_resolutions.lock"
 
 sys.path.insert(0, str(REPO / "bin"))
 
@@ -157,39 +159,45 @@ def _publish_resolution(task_id: str, resolution: dict) -> None:
         raise RuntimeError(f"operator resolutions must be published from {ledger_branch!r}, "
                            f"not {current or 'detached HEAD'!r}")
     task = _operator_task(task_id)
-    resolutions = _facts_resolutions()
-    if task_id in resolutions:
-        raise RuntimeError(f"resolution for {task_id} already exists; facts are append-only")
-    resolutions[task_id] = {**resolution, "task_sha256": _task_hash(task), "at": _now(),
-                            "agent_branch": os.environ["AGENT_BRANCH"]}
-    RESOLUTIONS.parent.mkdir(parents=True, exist_ok=True)
-    previous_doc = RESOLUTIONS.read_bytes() if RESOLUTIONS.exists() else None
-    previous_sig = RESOLUTION_SIG.read_bytes() if RESOLUTION_SIG.exists() else None
-    RESOLUTIONS.write_text(json.dumps({"resolutions": resolutions}, indent=2) + "\n")
-    try:
-        _sign_resolution_document()
-    except Exception:
-        if previous_doc is None:
-            RESOLUTIONS.unlink(missing_ok=True)
-        else:
-            RESOLUTIONS.write_bytes(previous_doc)
-        if previous_sig is None:
-            RESOLUTION_SIG.unlink(missing_ok=True)
-        else:
-            RESOLUTION_SIG.write_bytes(previous_sig)
-        raise
-    _git("add", str(RESOLUTIONS), str(RESOLUTION_SIG), check=True)
-    commit = subprocess.run(
-        ["git", "-c", "user.name=verifier", "-c", "user.email=verifier@local",
-         "-c", "commit.gpgsign=false", "commit", "-m", f"verifier: resolve human task {task_id}",
-         "--", str(RESOLUTIONS), str(RESOLUTION_SIG)], cwd=REPO,
-        capture_output=True, text=True, timeout=90,
-        env={**os.environ, "AIV_VERIFIER": "1"})
-    if commit.returncode != 0:
-        raise RuntimeError(f"could not commit operator resolution: {commit.stderr.strip()[:160]}")
-    push = _git("push", "origin", f"HEAD:{ledger_branch}")
-    if push.returncode != 0:
-        raise RuntimeError(f"could not publish operator resolution: {push.stderr.strip()[:160]}")
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    with RESOLUTION_LOCK.open("a+") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        resolutions = _facts_resolutions()
+        if task_id in resolutions:
+            raise RuntimeError(f"resolution for {task_id} already exists; facts are append-only")
+        resolutions[task_id] = {**resolution, "task_sha256": _task_hash(task), "at": _now(),
+                                "agent_branch": os.environ["AGENT_BRANCH"]}
+        RESOLUTIONS.parent.mkdir(parents=True, exist_ok=True)
+        previous_doc = RESOLUTIONS.read_bytes() if RESOLUTIONS.exists() else None
+        previous_sig = RESOLUTION_SIG.read_bytes() if RESOLUTION_SIG.exists() else None
+        RESOLUTIONS.write_text(json.dumps({"resolutions": resolutions}, indent=2) + "\n")
+        try:
+            _sign_resolution_document()
+        except Exception:
+            if previous_doc is None:
+                RESOLUTIONS.unlink(missing_ok=True)
+            else:
+                RESOLUTIONS.write_bytes(previous_doc)
+            if previous_sig is None:
+                RESOLUTION_SIG.unlink(missing_ok=True)
+            else:
+                RESOLUTION_SIG.write_bytes(previous_sig)
+            raise
+        _git("add", str(RESOLUTIONS), str(RESOLUTION_SIG), check=True)
+        # Keep the lock through commit and push too: releasing after staging would still let a
+        # second process replace the index/worktree while this process publishes its snapshot.
+        commit = subprocess.run(
+            ["git", "-c", "user.name=verifier", "-c", "user.email=verifier@local",
+             "-c", "commit.gpgsign=false", "commit", "-m",
+             f"verifier: resolve human task {task_id}", "--", str(RESOLUTIONS),
+             str(RESOLUTION_SIG)], cwd=REPO, capture_output=True, text=True, timeout=90,
+            env={**os.environ, "AIV_VERIFIER": "1"})
+        if commit.returncode != 0:
+            raise RuntimeError(f"could not commit operator resolution: "
+                               f"{commit.stderr.strip()[:160]}")
+        push = _git("push", "origin", f"HEAD:{ledger_branch}")
+        if push.returncode != 0:
+            raise RuntimeError(f"could not publish operator resolution: {push.stderr.strip()[:160]}")
 
 
 def _grounded_resolution(task: dict) -> dict | None:
