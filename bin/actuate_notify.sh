@@ -58,6 +58,10 @@ scan_once() {
       [[ "$tag" == "ALERT" && "$id" == ACT-* ]] || continue
       urg="${urgfield#urgency=}"
       [[ "$urg" == "URGENT" || "$urg" == "NORMAL" ]] || continue
+      # Dedup on id:urgency. Known LOW residual (accepted): an agent that hand-crafts a task with a
+      # VALID future id can pre-seed this key and suppress that id's later genuine URGENT push. The
+      # incentive is backwards (it delays the agent's OWN fulfillment) and the task stays visible via
+      # `actuate.py list`/`card`, so it is a tripwire limit, not a wall -- like bets.json.
       key="${id}:${urg}"
       grep -qxF "$key" "$SEEN" && continue
       if [[ "$urg" == "URGENT" || "${ACTUATE_NOTIFY_ALL:-0}" == "1" ]]; then

@@ -728,6 +728,36 @@ def neg_deleted_task_caught():
     return "deleted task file still blocks conclusions (mandatory companion-bet orphan check)"
 
 
+def neg_artifact_null_sha():
+    """N15 — nulling artifact_sha256 while keeping artifact_ref must NOT skip the byte check: a ref
+    present REQUIRES a present+matching sha. Round-3 adversary bypassed N13 via the sha field."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n15.txt", "1. apply the staged file\n")
+    art = steps_file(world, "n15art.txt", "BENIGN worker body")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "apply the file",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--artifact", art, "--expect", "done", "--return-kind", "none",
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    (agent / "run" / "actuation_artifacts" / tid / "n15art.txt").write_text("MALICIOUS body")
+    tf = agent / "run" / "actuation_tasks.json"
+    doc = json.loads(tf.read_text())
+    doc["tasks"][0]["artifact_sha256"] = None   # keep artifact_ref, drop the bound sha
+    tf.write_text(json.dumps(doc, indent=2) + "\n")
+    git(agent, "commit", "-aqm", "null sha + swap bytes")
+    git(agent, "push", "-q", "origin", AGENT_BRANCH)
+    f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "3",
+                "--evidence", "attempted to fulfill")
+    want(f.returncode != 0, "fulfill ACCEPTED an artifact whose bound sha was nulled (check skipped)")
+    both = (f.stderr + f.stdout).lower()
+    want("tamper" in both or "missing" in both or "does not match" in both,
+         f"refused, but not for the tamper reason: {f.stderr[:160]}")
+    return "nulled artifact_sha256 with a live ref rejected as tamper"
+
+
 # ----- runner ----------------------------------------------------------------------------
 def main() -> int:
     check("S1", "claim-host round-trip (deadline + staged artifact)", scenario_claim_host)
@@ -749,6 +779,7 @@ def main() -> int:
     check("N12", "notify: id/kind newline injection neutralized", neg_notify_injection_id_kind)
     check("N13", "SoD: artifact byte-swap after signing rejected", neg_artifact_byte_swap)
     check("N14", "deleted task file still blocks conclusions", neg_deleted_task_caught)
+    check("N15", "artifact byte-swap via nulled sha rejected", neg_artifact_null_sha)
 
     width = max(len(t) for _, t, _, _ in RESULTS)
     print("\n  ACCEPTANCE — capability-delegation queue (bin/actuate.py)\n")

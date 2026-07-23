@@ -100,10 +100,17 @@ def _git_show_bytes(ref: str) -> bytes | None:
 
 
 def _verify_local_artifact(task: dict) -> None:
-    """Raise if the task stages an artifact whose on-disk bytes no longer match the bound sha."""
-    ref, want = task.get("artifact_ref"), task.get("artifact_sha256")
-    if not (ref and want):
+    """Raise if the task stages an artifact whose on-disk bytes no longer match the bound sha.
+
+    cmd_request always sets artifact_ref and artifact_sha256 together, so a ref WITHOUT a sha can
+    only be tampering -- and skipping the check on a null sha would let the agent swap the applied
+    bytes (and dodge the request-time leak-check). A present ref therefore REQUIRES a present sha."""
+    ref = task.get("artifact_ref")
+    if not ref:
         return
+    want = task.get("artifact_sha256")
+    if not want:
+        raise RuntimeError(f"staged artifact {ref} carries no bound sha256 (tampered)")
     f = REPO / ref
     if not f.is_file() or _sha256(f.read_bytes()) != want:
         raise RuntimeError(f"staged artifact {ref} does not match its bound sha256 (tampered)")
@@ -454,6 +461,16 @@ def cmd_request(a) -> int:
         return 2
     tasks = _load_tasks()
     tid = f"ACT-{len(tasks) + 1:03d}"
+    # Register the conclusion-blocking companion bet FIRST and make it MANDATORY (parity with
+    # human.py): a request the agenda cannot track would be the invisible-wait this tool exists to
+    # kill, and the orphan-bet backstop in conclusion_gate.py (which catches DELETION of the task
+    # file) depends on every task having a bet. Doing it before keygen/artifact-staging means a bet
+    # failure leaves no orphan key or staged file.
+    bet_id = _register_companion_bet(tid, a.kind, a.gate, a.deadline)
+    if not bet_id:
+        print("FATAL: could not register the conclusion-blocking companion bet; refusing to file "
+              "an actuation the agenda cannot track.", file=sys.stderr)
+        return 1
     enc_pubkey = None
     if a.return_kind == "credential":
         try:
@@ -469,19 +486,9 @@ def cmd_request(a) -> int:
         (dst_dir / src.name).write_bytes(artifact_bytes)
         artifact_ref = f"run/actuation_artifacts/{tid}/{src.name}"
         # sha of the exact bytes, bound into _task_hash AND re-verified at fulfill/sync so a
-        # post-signature file swap is detected (the hash binding alone only stops changing the sha
-        # FIELD; the on-disk bytes must be re-compared, which fulfill and sync now do).
+        # post-signature file swap is detected (a ref present REQUIRES a matching sha).
         artifact_sha256 = _sha256(artifact_bytes)
         extra_paths.append(ARTIFACTS_DIR)
-    # Register the conclusion-blocking companion bet BEFORE the task and make it MANDATORY (parity
-    # with human.py): a request the agenda cannot track would be the invisible-wait this tool exists
-    # to kill, and the orphan-bet backstop in conclusion_gate.py (which catches DELETION of the task
-    # file) depends on every task having a bet.
-    bet_id = _register_companion_bet(tid, a.kind, a.gate, a.deadline)
-    if not bet_id:
-        print("FATAL: could not register the conclusion-blocking companion bet; refusing to file "
-              "an actuation the agenda cannot track.", file=sys.stderr)
-        return 1
     tasks.append({"id": tid, "requested_at": _now(), "kind": a.kind, "gate": a.gate,
                   "target_url": a.target_url, "identity": a.identity,
                   "steps": steps_text.splitlines(), "artifact_ref": artifact_ref,
@@ -545,13 +552,17 @@ def cmd_fulfill(a) -> int:
         print(f"FATAL: {e}", file=sys.stderr)
         return 1
     # If the request stages an artifact the operator will APPLY, verify its committed bytes match the
-    # sha the request bound (and that the operator's signature will cover). A swapped file is a
-    # tampered request; refuse before the operator acts on the wrong bytes.
-    if task.get("artifact_ref") and task.get("artifact_sha256"):
-        ab = _git_show_bytes(f"origin/{os.environ['AGENT_BRANCH']}:{task['artifact_ref']}")
-        if ab is None or _sha256(ab) != task["artifact_sha256"]:
-            print(f"FATAL: staged artifact {task['artifact_ref']} does not match the sha the request "
-                  "bound -- the request is tampered; refusing to fulfill.", file=sys.stderr)
+    # sha the request bound (and that the operator's signature will cover). A ref present REQUIRES a
+    # sha (nulling it is tamper); a swapped file is a tampered request. Refuse before the operator
+    # acts on the wrong bytes.
+    if task.get("artifact_ref"):
+        want = task.get("artifact_sha256")
+        ab = _git_show_bytes(f"origin/{os.environ['AGENT_BRANCH']}:{task['artifact_ref']}") if want \
+            else None
+        if not want or ab is None or _sha256(ab) != want:
+            print(f"FATAL: staged artifact {task['artifact_ref']} is missing its bound sha256 or its "
+                  "bytes do not match it -- the request is tampered; refusing to fulfill.",
+                  file=sys.stderr)
             return 1
     resolution = {"status": "fulfilled", "human_minutes": a.minutes, "evidence": a.evidence}
     rk = task.get("return_kind", "none")
@@ -782,7 +793,7 @@ def cmd_notify_scan(a) -> int:
         # ACT-NNN id); a tampered record never produces an alert. The machine fields lead the line
         # and the notifier parses them by fixed position, so free text can never override id/urgency.
         tid = _scrub(t.get("id"))
-        if not re.fullmatch(r"ACT-\d+", tid):
+        if not re.fullmatch(r"ACT-[0-9]+", tid):   # ASCII digits only (\d would admit ٧/１２)
             continue
         try:
             ttl = int((_parse_iso(t["deadline"]) - now).total_seconds())
