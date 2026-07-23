@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `PROMPT.md`
-**Commit:** `32e2318`
-**Previous:** `597449f`
-**Generated:** 2026-07-23T01:48:13Z
+**Commit:** `9999076`
+**Previous:** `3d31554`
+**Generated:** 2026-07-23T03:11:51Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -12,20 +12,19 @@
 
 ```yaml
 classification:
-  risk_tier: R3
-  sod_mode: S1
+  risk_tier: R1
+  sod_mode: S0
   critical_surfaces: []
   blast_radius: "PROMPT.md"
-  classification_rationale: "Pairs with the gate message. R3: run-prompt change"
+  classification_rationale: "CLAUDE.md and knowledge/README were updated in this PR but PROMPT.md still contradicted them"
   classified_by: "Claude"
-  classified_at: "2026-07-23T01:48:13Z"
+  classified_at: "2026-07-23T03:11:51Z"
 ```
 
 ## Claim(s)
 
-1. The run prompt documents the runnable decision-gate command and that the recorded body must equal the published URL, so the agent can satisfy the gate's publish decision check
-2. No existing tests were modified or deleted
-3. No existing tests were modified or deleted during this change.
+1. PROMPT.md no longer claims agent convergence is evidence; it states runs are context-aware and the authored-input absence (issue #9) is the enforceable half
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -33,14 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** PROMPT.md must document a runnable decision-gate command whose body matches the publish URL the gate checks (CodeRabbit Minor)
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/53](https://github.com/ImmortalDemonGod/money-agent/pull/53)
+- **Requirements Verified:** Issue #10 closure requires the authored inputs to be consistent with the context-aware ruling; PROMPT.md still asserted the retired convergence-as-evidence premise
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`32e2318`](https://github.com/ImmortalDemonGod/money-agent/tree/32e231800b7222703386ab980a46b7f916a22f3f))
+**Scope Inventory** (SHA: [`9999076`](https://github.com/ImmortalDemonGod/money-agent/tree/99990761f997867b24f8d7bd5292ec3c43ecab57))
 
-- [`PROMPT.md#L134-L140`](https://github.com/ImmortalDemonGod/money-agent/blob/32e231800b7222703386ab980a46b7f916a22f3f/PROMPT.md#L134-L140)
+- [`PROMPT.md#L204-L211`](https://github.com/ImmortalDemonGod/money-agent/blob/99990761f997867b24f8d7bd5292ec3c43ecab57/PROMPT.md#L204-L211)
 
 ### Class A (Execution Evidence)
 
@@ -52,50 +51,24 @@ This file has no claim-specific execution evidence.
 - **ruff:** 0 error(s)
 - **mypy:** 
 
-### Class C (Negative Evidence)
-
-**Search methodology:** Ran `git diff --cached` and scanned for regression indicators.
-
-- Test file deletions: **none**
-- Test file modifications: **none**
-- Deleted assertions (`assert` removals in diff): **none found**
-- Added skip markers (`@pytest.mark.skip`, `@unittest.skip`): **none found**
-
-### Class F (Provenance Evidence)
-
-**Test file chain-of-custody:**
-
-No covering test files found.
-
-**Recent test directory history** (`git log --oneline -5 -- tests/`):
-
-```
-6da1998 test(watchdog): assert breached records are not counted as open
-dfde8e4 test(watchdog): late-reachable delivery and unknown status breach and refund
-b28993c test(gate): note the P3 publish-decision requirement (e2e fixture deferred)
-9c7574d Merge main into run2-e-v3-gated (rebase after #50 merged)
-5b05cc4 test(human): skip signing tests when ssh-keygen is absent (sim portability)
-```
-
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The run prompt documents the runnable decision-gate command ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | PROMPT.md no longer claims agent convergence is evidence; it... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
-**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 0 verified, 0 unverified, 2 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found).
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Document the runnable publish decision-gate command and body-equals-URL rule
+Reword the 'deliberately absent' paragraph: keep the no-strategy authored-input rule (issue #9), retire the convergence claim per issue #10

@@ -201,10 +201,14 @@ seeing it. Ceremony can live in a file. Bounds -- and the search discipline -- c
 
 ## What is deliberately absent, and what is deliberately NOW present
 
-Still absent, on purpose: **what to sell.** No strategy, market, product idea, ICP, channel, or any
-prior business. If the agent converges on distribution as the wall, or on a particular product, that
-convergence means something precisely because nothing pointed it there. That absence is the
-experiment and it is untouched.
+Still absent from your AUTHORED inputs, on purpose: **what to sell.** No strategy, market, product
+idea, ICP, channel, or any prior business -- that absence is the enforceable half of the discipline
+(issue #9), held by the M9 leak-check grep over what the run is handed. What issue #10's ruling
+(2026-07-18) retired is the OTHER half: runs are now context-AWARE, so "the agent converged on X
+because nothing pointed it there" no longer counts as evidence -- in-repo reads are unauditable, and
+the rest of the repo (README.md, docs/, archive/) is reference you MAY read (see CLAUDE.md, "Your
+world"). The experiment that remains is what the authored inputs withhold, not what the agent could
+or could not see.
 
 Now present, on purpose: **how to search.** v1 was blind to the answer *and* silent on effort, so the
 agent defaulted to shallow tries and waiting. v2 keeps it blind to the answer but explicit about the
