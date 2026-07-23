@@ -27,4 +27,9 @@ if ! [[ "$next" =~ ^[0-9]+$ ]] || [[ "$next" -le 0 ]]; then
   next="${ACTUATE_IDLE_WAKEUP_S:-1800}"
   echo "actuate_watch: next-wakeup unavailable/invalid; falling back to ${next}s" >&2
 fi
+# Re-validate the fallback itself: ACTUATE_IDLE_WAKEUP_S may be a non-numeric override, and `:-`
+# only fills on unset/empty -- never emit a garbage NEXT_WAKEUP_SECONDS to the durable queue.
+if ! [[ "$next" =~ ^[0-9]+$ ]] || [[ "$next" -le 0 ]]; then
+  next=1800
+fi
 echo "NEXT_WAKEUP_SECONDS=${next}"

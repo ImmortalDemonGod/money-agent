@@ -7,11 +7,13 @@ this file is its human-readable companion (the contract, the benchmarks, and the
 runs.
 
 **Status:** Tier-S is **GREEN** — `bin/actuate.py` (+ `bin/actuate_notify.sh`, `bin/actuate_watch.sh`)
-implemented to the contract; `python3 tests/acceptance_actuation.py` reports **16 PASS / 0 FAIL**.
-Existing suites unaffected (`sim.sh` 163/0, `corpus.sh` 11/0). A four-agent adversarial pass found
-real defects (binding confusion, shell injection/exfiltration, an unguarded conclusion gate, a
-tz-naive-deadline poison) — all fixed and each encoded as a regression check (N5–N11). Tier-L (one
-live actuation on a real rail) remains an operator gate.
+implemented to the contract; `python3 tests/acceptance_actuation.py` reports **19 PASS / 0 FAIL**.
+Existing suites unaffected (`sim.sh` 163/0, `corpus.sh` 11/0). **Two** adversarial rounds found real
+defects — round 1: binding confusion, shell injection/exfiltration, an unguarded conclusion gate, a
+tz-naive-deadline poison (→ N5–N11); round 2, re-attacking the fixes: id/kind (not just gate) still
+forgeable, artifact bytes bound but never re-checked, and a best-effort bet that holed the
+file-deletion backstop (→ N12–N14). All fixed and regression-locked. Tier-L (one live actuation on a
+real rail) remains an operator gate.
 
 ## The goal
 
@@ -70,7 +72,10 @@ the operator — we never fake it green.**
 | **N8** | leak-check covers the **staged artifact bytes and the target URL**, not only gate/steps | adversary: unscanned channels |
 | **N9** | a **timezone-naive** `--deadline` is rejected (it silently poisoned `next-wakeup`/`notify-scan`) | adversary: tz poison |
 | **N10** | a **binary** (non-UTF-8) credential round-trips byte-exact via base64, never mangled | adversary: lossy decode |
-| **N11** | an **open actuation blocks `conclusion_gate.py`** directly, independent of the best-effort, self-resolvable companion bet | adversary: unguarded gate |
+| **N11** | an **open actuation blocks `conclusion_gate.py`** directly, independent of the companion bet | adversary r1: unguarded gate |
+| **N12** | a newline in **`id` or `kind`** (not only `gate`) cannot forge an ALERT line; all agent fields scrubbed + id-format validated | adversary r2: incomplete scrub |
+| **N13** | swapping the **staged artifact bytes** after signing is rejected — fulfill re-verifies the file against the bound sha256 | adversary r2: sha bound but unchecked |
+| **N14** | **deleting** `actuation_tasks.json` still blocks conclusions via the now-**mandatory** companion bet's orphan check | adversary r2: best-effort bet holed it |
 
 **On the actuator-never-oracle leak-check:** it is a **heuristic tripwire, not a wall** — a denylist
 cannot catch every paraphrase. It is applied to every operator-facing surface (gate/steps/expect/

@@ -93,6 +93,22 @@ def _git(*args: str, check: bool = False) -> subprocess.CompletedProcess:
                           timeout=90, check=check)
 
 
+def _git_show_bytes(ref: str) -> bytes | None:
+    """Raw bytes of a git object (binary-safe, unlike _git's text=True) or None if absent."""
+    p = subprocess.run(["git", "show", ref], cwd=REPO, capture_output=True, timeout=90)
+    return p.stdout if p.returncode == 0 else None
+
+
+def _verify_local_artifact(task: dict) -> None:
+    """Raise if the task stages an artifact whose on-disk bytes no longer match the bound sha."""
+    ref, want = task.get("artifact_ref"), task.get("artifact_sha256")
+    if not (ref and want):
+        return
+    f = REPO / ref
+    if not f.is_file() or _sha256(f.read_bytes()) != want:
+        raise RuntimeError(f"staged artifact {ref} does not match its bound sha256 (tampered)")
+
+
 def _load_tasks() -> list[dict]:
     if TASKS.exists():
         return json.loads(TASKS.read_text()).get("tasks", [])
@@ -130,6 +146,16 @@ def _task_hash(task: dict) -> str:
 def leak_check(text: str) -> str | None:
     m = _ORACLE_RE.search(text.lower())
     return m.group(1) if m else None
+
+
+_CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _scrub(s) -> str:
+    """One-line, control-char-free rendering of an agent-controlled string for the alert line.
+    The agent owns run/actuation_tasks.json, so EVERY field it emits (id/kind/gate) is untrusted:
+    a raw newline in any of them would forge a second physical ALERT line the notifier dispatches."""
+    return re.sub(r"\s+", " ", _CTRL_RE.sub(" ", str(s if s is not None else ""))).strip()
 
 
 # ---- ephemeral hybrid encryption (openssl: RSA-OAEP-wrapped AES-256-CBC) -----------------
@@ -442,23 +468,31 @@ def cmd_request(a) -> int:
         dst_dir.mkdir(parents=True, exist_ok=True)
         (dst_dir / src.name).write_bytes(artifact_bytes)
         artifact_ref = f"run/actuation_artifacts/{tid}/{src.name}"
-        artifact_sha256 = _sha256(artifact_bytes)   # bound into _task_hash: the file is TOCTOU-safe
+        # sha of the exact bytes, bound into _task_hash AND re-verified at fulfill/sync so a
+        # post-signature file swap is detected (the hash binding alone only stops changing the sha
+        # FIELD; the on-disk bytes must be re-compared, which fulfill and sync now do).
+        artifact_sha256 = _sha256(artifact_bytes)
         extra_paths.append(ARTIFACTS_DIR)
+    # Register the conclusion-blocking companion bet BEFORE the task and make it MANDATORY (parity
+    # with human.py): a request the agenda cannot track would be the invisible-wait this tool exists
+    # to kill, and the orphan-bet backstop in conclusion_gate.py (which catches DELETION of the task
+    # file) depends on every task having a bet.
+    bet_id = _register_companion_bet(tid, a.kind, a.gate, a.deadline)
+    if not bet_id:
+        print("FATAL: could not register the conclusion-blocking companion bet; refusing to file "
+              "an actuation the agenda cannot track.", file=sys.stderr)
+        return 1
     tasks.append({"id": tid, "requested_at": _now(), "kind": a.kind, "gate": a.gate,
                   "target_url": a.target_url, "identity": a.identity,
                   "steps": steps_text.splitlines(), "artifact_ref": artifact_ref,
                   "artifact_sha256": artifact_sha256, "expect": a.expect,
                   "return_kind": a.return_kind, "enc_pubkey": enc_pubkey,
                   "deadline": a.deadline, "test_citation": a.test, "ev_rationale": a.ev,
-                  "status": "open", "companion_bet": None, "agent_branch": agent_branch,
+                  "status": "open", "companion_bet": bet_id, "agent_branch": agent_branch,
                   "human_minutes": None, "resolution_latency_seconds": None, "resolution": None})
-    # Persist the OPEN task first: conclusion_gate.py blocks on an open actuation directly (like it
-    # does human_tasks.json), so the guarantee never depends on the best-effort companion bet below.
+    # Two independent backstops now cover the task: conclusion_gate.py blocks on an OPEN actuation
+    # directly, and on the orphaned companion bet if the task file is deleted.
     _save_tasks(tasks, f"actuate: request {tid} ({a.kind}): {a.gate[:50]}", extra_paths)
-    bet_id = _register_companion_bet(tid, a.kind, a.gate, a.deadline)
-    if bet_id:
-        tasks[-1]["companion_bet"] = bet_id
-        _save_tasks(tasks, f"actuate: track {tid} companion bet {bet_id}")
     print(f"id={tid} requested ({a.kind}); return-kind={a.return_kind}. KEEP WORKING -- requesting "
           "is never waiting. Render the operator card with: bin/actuate.py card " + tid)
     return 0
@@ -482,6 +516,9 @@ def cmd_card(a) -> int:
               f"**Return kind:** {task['return_kind']}"]
     if task.get("artifact_ref"):
         lines.append(f"**Staged artifact (apply this):** {task['artifact_ref']}")
+        if task.get("artifact_sha256"):
+            lines.append(f"    sha256: {task['artifact_sha256']}  "
+                         "(verify the file matches this before applying)")
     lines += ["", "## To fulfill (operator, from the facts lane)",
               f"    bin/actuate.py fulfill {task['id']} --minutes <n> --evidence \"<what you did>\""]
     rk = task["return_kind"]
@@ -507,6 +544,15 @@ def cmd_fulfill(a) -> int:
     except Exception as e:
         print(f"FATAL: {e}", file=sys.stderr)
         return 1
+    # If the request stages an artifact the operator will APPLY, verify its committed bytes match the
+    # sha the request bound (and that the operator's signature will cover). A swapped file is a
+    # tampered request; refuse before the operator acts on the wrong bytes.
+    if task.get("artifact_ref") and task.get("artifact_sha256"):
+        ab = _git_show_bytes(f"origin/{os.environ['AGENT_BRANCH']}:{task['artifact_ref']}")
+        if ab is None or _sha256(ab) != task["artifact_sha256"]:
+            print(f"FATAL: staged artifact {task['artifact_ref']} does not match the sha the request "
+                  "bound -- the request is tampered; refusing to fulfill.", file=sys.stderr)
+            return 1
     resolution = {"status": "fulfilled", "human_minutes": a.minutes, "evidence": a.evidence}
     rk = task.get("return_kind", "none")
     if rk != "none":
@@ -572,6 +618,7 @@ def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
     outcome = resolution.get("status")
     if outcome not in ("fulfilled", "declined"):
         raise RuntimeError(f"invalid grounded resolution status {outcome!r}")
+    _verify_local_artifact(task)   # a post-signature file swap leaves the claims record inconsistent
     if outcome == "fulfilled" and resolution.get("return"):
         ret = resolution["return"]
         if ret.get("scheme") == "plain":
@@ -666,7 +713,11 @@ def cmd_next_wakeup(_a) -> int:
     consumes this to re-arm. No open tasks -> a long idle cadence (ACTUATE_IDLE_WAKEUP_S)."""
     opens = [t for t in _load_tasks() if t.get("status") == "open"]
     if not opens:
-        print(int(os.environ.get("ACTUATE_IDLE_WAKEUP_S", "1800")))
+        try:
+            idle = int(os.environ.get("ACTUATE_IDLE_WAKEUP_S", "1800"))
+            print(idle if idle > 0 else 1800)
+        except ValueError:
+            print(1800)   # a non-numeric env override must never emit a garbage wakeup
         return 0
     now = dt.datetime.now(dt.timezone.utc)
     ttls = []
@@ -723,21 +774,24 @@ def cmd_notify_scan(a) -> int:
     now = dt.datetime.now(dt.timezone.utc)
     out_lines = []
     for t in tasks:
-        if t.get("status") != "open" or t["id"] in resolved:
+        if t.get("status") != "open" or t.get("id") in resolved:
+            continue
+        # EVERY field the agent emits into the alert line is untrusted (the agent owns the task
+        # file), so scrub id/kind/gate of control chars -- a newline in ANY of them would forge a
+        # second physical ALERT line. The id must also be well-formed (a real request always has an
+        # ACT-NNN id); a tampered record never produces an alert. The machine fields lead the line
+        # and the notifier parses them by fixed position, so free text can never override id/urgency.
+        tid = _scrub(t.get("id"))
+        if not re.fullmatch(r"ACT-\d+", tid):
             continue
         try:
             ttl = int((_parse_iso(t["deadline"]) - now).total_seconds())
         except Exception:
             ttl = 0
         urgency = "URGENT" if ttl < NOTIFY_URGENT_S else "NORMAL"
-        # Scrub the agent-controlled gate before it enters the alert line: strip control chars and
-        # newlines (a newline would forge a second physical ALERT line the notifier parses as its
-        # own alert -> spoofed id/urgency, dedup poisoning) and collapse whitespace. The machine
-        # fields lead the line and the notifier parses them by fixed position, so free text after
-        # '::' can never override id/urgency even if it contains "urgency=".
-        gate = re.sub(r"\s+", " ", re.sub(r"[\x00-\x1f\x7f]", " ", t.get("gate") or "")).strip()[:80]
-        out_lines.append(f"ALERT {t['id']} urgency={urgency} ttl_s={ttl} "
-                         f"kind={t.get('kind', '')} :: {gate}")
+        kind = _scrub(t.get("kind"))[:32]
+        gate = _scrub(t.get("gate"))[:80]
+        out_lines.append(f"ALERT {tid} urgency={urgency} ttl_s={ttl} kind={kind} :: {gate}")
     text = "\n".join(out_lines) + ("\n" if out_lines else "")
     if a.sink:
         Path(a.sink).write_text(text)

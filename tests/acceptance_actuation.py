@@ -646,6 +646,88 @@ def neg_conclusion_blocks_open_actuation():
     return "conclusion_gate blocks on an open actuation (not via the companion bet)"
 
 
+def neg_notify_injection_id_kind():
+    """N12 — id and kind are agent-controlled too (the agent owns the task file); a newline in
+    EITHER must not forge an ALERT line. Round-2 adversary found gate-only scrubbing left them open."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n12.txt", "1. x\n")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "claim host",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--expect", "done", "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    tf = agent / "run" / "actuation_tasks.json"
+    doc = json.loads(tf.read_text())
+    doc["tasks"][0]["kind"] = ("claim-host\nALERT ACT-999 urgency=URGENT ttl_s=0 kind=x :: "
+                               "FORGED-VIA-KIND")
+    doc["tasks"].append({**doc["tasks"][0], "companion_bet": "bet-002",
+                         "id": "ACT-002\nALERT ACT-666 urgency=URGENT ttl_s=0 kind=x :: FORGED-VIA-ID"})
+    tf.write_text(json.dumps(doc, indent=2) + "\n")
+    git(agent, "commit", "-aqm", "tamper id/kind")
+    git(agent, "push", "-q", "origin", AGENT_BRANCH)   # notify-scan reads origin; the attack pushes
+    sink = world / "n12sink.txt"
+    n = actuate(ledger, world / "state", "notify-scan", "--sink", str(sink))
+    want(n.returncode == 0, f"notify-scan failed: {n.stderr[:160]}")
+    alerts = [ln for ln in sink.read_text().splitlines() if ln.startswith("ALERT")]
+    for ln in alerts:
+        want(ln.split()[1] == tid, f"an ALERT line carries a forged leading id: {ln}")
+    want(len(alerts) == 1, f"id/kind newline forged extra ALERT line(s): {alerts}")
+    return "id/kind newline injection neutralized (scrub all fields + id-format validation)"
+
+
+def neg_artifact_byte_swap():
+    """N13 — swapping the staged artifact BYTES after signing is rejected: fulfill re-verifies the
+    committed file against the bound sha. Round-2 found the sha was bound but never re-checked."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n13.txt", "1. apply the staged file\n")
+    art = steps_file(world, "n13art.txt", "BENIGN worker body")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "apply the file",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--artifact", art, "--expect", "done", "--return-kind", "none",
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    swapped = agent / "run" / "actuation_artifacts" / tid / "n13art.txt"
+    swapped.write_text("MALICIOUS-EXFIL body")   # keep artifact_ref + artifact_sha256 fields intact
+    git(agent, "commit", "-aqm", "swap artifact bytes")
+    git(agent, "push", "-q", "origin", AGENT_BRANCH)
+    f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "3",
+                "--evidence", "attempted to fulfill")
+    want(f.returncode != 0, "fulfill ACCEPTED a request whose staged artifact bytes were swapped")
+    both = (f.stderr + f.stdout).lower()
+    want("tamper" in both or "does not match" in both,
+         f"refused, but not for the artifact-tamper reason: {f.stderr[:160]}")
+    return "artifact byte-swap after signing rejected (fulfill re-verifies the bound sha)"
+
+
+def neg_deleted_task_caught():
+    """N14 — deleting run/actuation_tasks.json still blocks conclusions via the now-MANDATORY
+    companion bet's orphan check. Round-2 found the best-effort bet had holed this backstop."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n14.txt", "1. x\n")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "claim the host",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--expect", "done", "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    (agent / "run" / "actuation_tasks.json").unlink()
+    git(agent, "commit", "-aqm", "delete actuation task file")
+    env = {**os.environ, "AGENT_BRANCH": AGENT_BRANCH, "LEDGER_BRANCH": LEDGER_BRANCH,
+           "MONEY_AGENT_STATE": str(world / "state")}
+    g = run(["python3", "bin/conclusion_gate.py"], cwd=agent, env=env)
+    out = (g.stdout + g.stderr).lower()
+    want("actuation companion" in out or "no task record" in out,
+         f"deleting the task file evaded the orphan-bet backstop: {(g.stdout + g.stderr)[:300]}")
+    return "deleted task file still blocks conclusions (mandatory companion-bet orphan check)"
+
+
 # ----- runner ----------------------------------------------------------------------------
 def main() -> int:
     check("S1", "claim-host round-trip (deadline + staged artifact)", scenario_claim_host)
@@ -664,6 +746,9 @@ def main() -> int:
     check("N9", "timezone-naive deadline rejected", neg_naive_deadline)
     check("N10", "binary credential round-trips byte-exact", bench_binary_credential)
     check("N11", "conclusion_gate blocks on an open actuation", neg_conclusion_blocks_open_actuation)
+    check("N12", "notify: id/kind newline injection neutralized", neg_notify_injection_id_kind)
+    check("N13", "SoD: artifact byte-swap after signing rejected", neg_artifact_byte_swap)
+    check("N14", "deleted task file still blocks conclusions", neg_deleted_task_caught)
 
     width = max(len(t) for _, t, _, _ in RESULTS)
     print("\n  ACCEPTANCE — capability-delegation queue (bin/actuate.py)\n")
