@@ -201,6 +201,9 @@ assert_exit 0 "pace: a due bet unblocks lever-less iterations" \
 assert_exit 0 "pace: default-off leaves iteration-opening untouched" python3 bin/iter.py new
 
 echo "=== human-actuation queue (#31) ==="
+if ! command -v ssh-keygen >/dev/null 2>&1; then
+  skip "human-actuation + supervise signing tests (#31): ssh-keygen not on PATH -- install openssh-client"
+else
 cdx "$W/verifier"
 publish "
 import json; e=json.load(open('ledger/edge.json')); e.update({'verdict':'PENDING','registration_intact':True}); json.dump(e,open('ledger/edge.json','w'))"
@@ -306,6 +309,7 @@ if python3 bin/human.py sync hum-002 >/dev/null 2>&1 \
 else bad "human: decline sync"; fi
 assert_grep "human_minutes_total: 3.25" "human: fulfillment + decline minutes are metered" \
   python3 bin/human.py list
+fi
 
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
