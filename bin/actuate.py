@@ -522,6 +522,45 @@ def cmd_decline(a) -> int:
     return 0
 
 
+def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
+    """Materialize a grounded resolution into task state (shared by `sync` and `sync-all`).
+
+    Raises on any verification/decrypt/timestamp failure so the caller can fail closed; on
+    success it persists the task and returns a human-readable line."""
+    tid = task["id"]
+    outcome = resolution.get("status")
+    if outcome not in ("fulfilled", "declined"):
+        raise RuntimeError(f"invalid grounded resolution status {outcome!r}")
+    if outcome == "fulfilled" and resolution.get("return"):
+        ret = resolution["return"]
+        if ret.get("scheme") == "plain":
+            plaintext = ret.get("value", "").encode()
+            if _sha256(plaintext) != ret.get("plaintext_sha256"):
+                raise RuntimeError("returned value failed its integrity hash")
+        else:
+            plaintext = _decrypt_with(KEYS_DIR / f"{tid}.pem", ret)
+        RETURNS_DIR.mkdir(parents=True, exist_ok=True)
+        out = RETURNS_DIR / f"{tid}.json"
+        out.write_text(json.dumps({"id": tid, "return_kind": task["return_kind"],
+                                   "return_value": plaintext.decode(errors="replace")},
+                                  indent=2) + "\n")
+        out.chmod(0o600)
+    task["status"] = outcome
+    task["resolution"] = resolution
+    task["human_minutes"] = resolution.get("human_minutes")
+    requested = _parse_iso(task["requested_at"])
+    resolved = _parse_iso(resolution["at"])
+    task["resolution_latency_seconds"] = max(0.0, (resolved - requested).total_seconds())
+    # Persist with a TARGETED add: the materialized return under run/actuation_returns/ must
+    # never be committed (that is the plaintext handback).
+    _save_tasks(tasks, f"actuate: sync grounded {outcome} {tid}")
+    ev = (f"facts-lane resolution: {resolution.get('evidence')}" if outcome == "fulfilled"
+          else f"facts-lane decline: {resolution.get('reason')}")
+    _resolve_companion_bet(task.get("companion_bet"), outcome, ev)
+    where = f" -> run/actuation_returns/{tid}.json" if resolution.get("return") else ""
+    return f"{tid} synced from verifier facts: {outcome}{where}."
+
+
 def cmd_sync(a) -> int:
     tasks = _load_tasks()
     task = next((t for t in tasks if t.get("id") == a.id), None)
@@ -539,46 +578,58 @@ def cmd_sync(a) -> int:
     if not resolution:
         print(f"FATAL: no verifier-published resolution for {a.id}", file=sys.stderr)
         return 1
-    outcome = resolution.get("status")
-    if outcome not in ("fulfilled", "declined"):
-        print(f"FATAL: invalid grounded resolution status {outcome!r}", file=sys.stderr)
-        return 1
-    if outcome == "fulfilled" and resolution.get("return"):
-        ret = resolution["return"]
-        try:
-            if ret.get("scheme") == "plain":
-                plaintext = ret.get("value", "").encode()
-                if _sha256(plaintext) != ret.get("plaintext_sha256"):
-                    raise RuntimeError("returned value failed its integrity hash")
-            else:
-                plaintext = _decrypt_with(KEYS_DIR / f"{a.id}.pem", ret)
-        except Exception as e:
-            print(f"FATAL: could not recover the return payload: {e}", file=sys.stderr)
-            return 1
-        RETURNS_DIR.mkdir(parents=True, exist_ok=True)
-        out = RETURNS_DIR / f"{a.id}.json"
-        out.write_text(json.dumps({"id": a.id, "return_kind": task["return_kind"],
-                                   "return_value": plaintext.decode(errors="replace")},
-                                  indent=2) + "\n")
-        out.chmod(0o600)
-    task["status"] = outcome
-    task["resolution"] = resolution
-    task["human_minutes"] = resolution.get("human_minutes")
     try:
-        requested = _parse_iso(task["requested_at"])
-        resolved = _parse_iso(resolution["at"])
-        task["resolution_latency_seconds"] = max(0.0, (resolved - requested).total_seconds())
+        print(_apply_resolution(task, tasks, resolution))
     except Exception as e:
-        print(f"FATAL: invalid resolution latency timestamps: {e}", file=sys.stderr)
+        print(f"FATAL: {e}", file=sys.stderr)
         return 1
-    # Persist the task state with a TARGETED add: the materialized return under run/
-    # actuation_returns/ must never be committed (that is the plaintext handback).
-    _save_tasks(tasks, f"actuate: sync grounded {outcome} {a.id}")
-    ev = (f"facts-lane resolution: {resolution.get('evidence')}" if outcome == "fulfilled"
-          else f"facts-lane decline: {resolution.get('reason')}")
-    _resolve_companion_bet(task.get("companion_bet"), outcome, ev)
-    where = f" -> run/actuation_returns/{a.id}.json" if resolution.get("return") else ""
-    print(f"{a.id} synced from verifier facts: {outcome}{where}.")
+    return 0
+
+
+def cmd_sync_all(_a) -> int:
+    """Sync every open task that now has a grounded resolution; skip those still unresolved.
+
+    This is what the durable-wakeup handler (bin/actuate_watch.sh) runs each time it fires — a
+    task with no resolution yet is a normal WAIT, not an error, so it is skipped, never fatal."""
+    tasks = _load_tasks()
+    opens = [t for t in tasks if t.get("status") == "open"]
+    synced = 0
+    for task in opens:
+        try:
+            resolution = _grounded_resolution(task)
+        except Exception as e:
+            print(f"warn: {task['id']} resolution failed verification ({e}); left open.",
+                  file=sys.stderr)
+            continue
+        if not resolution:
+            continue  # not resolved yet — a legitimate WAIT
+        try:
+            print(_apply_resolution(task, tasks, resolution))
+            synced += 1
+        except Exception as e:
+            print(f"warn: {task['id']} could not be applied ({e}); left open.", file=sys.stderr)
+    print(f"sync-all: {synced} of {len(opens)} open task(s) synced")
+    return 0
+
+
+def cmd_next_wakeup(_a) -> int:
+    """Print the seconds until the agent should next run sync-all — sized to the soonest open
+    deadline, capped at 1h so an early resolution is never missed. The durable queue (issue #20.6)
+    consumes this to re-arm. No open tasks -> a long idle cadence (ACTUATE_IDLE_WAKEUP_S)."""
+    opens = [t for t in _load_tasks() if t.get("status") == "open"]
+    if not opens:
+        print(int(os.environ.get("ACTUATE_IDLE_WAKEUP_S", "1800")))
+        return 0
+    now = dt.datetime.now(dt.timezone.utc)
+    ttls = []
+    for t in opens:
+        try:
+            ttls.append((_parse_iso(t["deadline"]) - now).total_seconds())
+        except Exception:
+            ttls.append(0.0)
+    soonest = min(ttls)
+    delay = max(60.0, min(3600.0, soonest if soonest > 0 else 60.0))
+    print(int(delay))
     return 0
 
 
@@ -631,7 +682,9 @@ def cmd_notify_scan(a) -> int:
         except Exception:
             ttl = 0
         urgency = "URGENT" if ttl < NOTIFY_URGENT_S else "NORMAL"
-        out_lines.append(f"ALERT {t['id']} urgency={urgency} ttl_s={ttl}")
+        gate = (t.get("gate") or "")[:80]
+        out_lines.append(f"ALERT {t['id']} urgency={urgency} ttl_s={ttl} "
+                         f"kind={t.get('kind', '')} :: {gate}")
     text = "\n".join(out_lines) + ("\n" if out_lines else "")
     if a.sink:
         Path(a.sink).write_text(text)
@@ -672,6 +725,9 @@ def main() -> int:
     ps = sub.add_parser("sync")
     ps.add_argument("id")
     ps.set_defaults(fn=cmd_sync)
+
+    sub.add_parser("sync-all").set_defaults(fn=cmd_sync_all)
+    sub.add_parser("next-wakeup").set_defaults(fn=cmd_next_wakeup)
 
     pn = sub.add_parser("notify-scan")
     pn.add_argument("--sink", default="")
