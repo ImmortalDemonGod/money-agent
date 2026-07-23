@@ -24,7 +24,7 @@ classification:
 ## Claim(s)
 
 1. A shadow rehearsal that receives a test-mode dollar publishes a verified shadow truth.json and guard halts on the first-dollar stop under SHADOW=1
-2. No existing tests were modified or deleted during this change.
+2. No existing tests were deleted. This change ADDS an end-to-end shadow rehearsal to tests/sim.sh: a test-mode charge flows through pnl under SHADOW=1 to a verified shadow truth.json (received_usd=12.34, shadow:true), then guard's first-dollar stop is asserted to fire (exit 2, "FIRST DOLLAR") under SHADOW=1.
 
 ---
 
