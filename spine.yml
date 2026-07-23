@@ -47,7 +47,9 @@ freshness_h:
 # demand-confirmed exit (run 1's only real lead, Marcos, arrived FROM a live build). A
 # demand-probe is NOT a `delivery`: it never satisfies the stage-3 build exit, so it cannot be
 # relabeled into "the product is built", and it is capped per lane (lane_caps.demand_probe_per_lane)
-# so a full product line cannot be shipped as a run of "probes". The full product stays gated at 3.
+# so a full product line cannot be shipped as a run of "probes". Second gaming-safety layer (in
+# bin/bet_gate.py): a demand-probe's success oracle must be externally grounded (instrumented|stripe,
+# never deterministic) -- a self-graded "demand" probe is a delivery build in disguise. Full at 3.
 ordering:
   probe: 0
   demand-probe: 0

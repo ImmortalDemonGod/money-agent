@@ -332,27 +332,31 @@ if python3 bin/bets.py add --what "typed probe" --clock reply --check "true" --o
   ok "bets: valid typed bet with send reservations registered"
 else bad "bets: typed add"; fi
 assert_exit 0 "bet_gate: reservation 1 of 2 consumed" \
-  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw" --consume
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-006 --lane "ja-makers/liw" --consume
 assert_exit 0 "bet_gate: reservation 2 of 2 consumed" \
-  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw" --consume
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-006 --lane "ja-makers/liw" --consume
 assert_exit_grep 1 "no unconsumed" "bet_gate: exhausted reservations refuse (consumption is real)" \
-  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --consume
-python3 -c "import json,pathlib; p=pathlib.Path('run/bets.json'); d=json.loads(p.read_text()); d['bets'][7]['authorizes']['send']=1; p.write_text(json.dumps(d))"
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-006 --consume
+python3 -c "import json,pathlib; p=pathlib.Path('run/bets.json'); d=json.loads(p.read_text()); d['bets'][5]['authorizes']['send']=1; p.write_text(json.dumps(d))"
 assert_exit_grep 1 "not requested lane" "bet_gate: lane mismatch is refused" \
-  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane other/lane
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-006 --lane other/lane
 assert_exit_grep 1 "finite" "bet_gate: NaN typed thresholds fail schema validation" \
   python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'probe','lane':'x','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':float('nan'),'window_h':1}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
 assert_exit_grep 1 "requires max_spend_usd" "bet_gate: spend reservations require a real cap" \
   python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'probe','lane':'x','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':1}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit_grep 1 "externally-grounded" "bet_gate: demand-probe rejects a deterministic (self-graded) success oracle (S17)" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'demand-probe','lane':'l','success_condition':{'oracle_id':'deterministic','metric':'built','comparator':'>=','threshold':1,'window_h':24}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit 0 "bet_gate: demand-probe accepts an instrumented (externally-grounded) success oracle (S17)" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'demand-probe','lane':'l','success_condition':{'oracle_id':'instrumented','metric':'clicks','comparator':'>=','threshold':1,'window_h':24}}; raise SystemExit(1 if b.validate_bet(x) else 0)"
 assert_exit_grep 0 "cap exceeded" "bet_gate: cumulative spend cannot cross max_spend_usd" \
   env BET_GATE_ENFORCE=1 python3 -c "import contextlib,sys;sys.path.insert(0,'bin');import bet_gate as g,bets; x={'id':'s','type':'probe','lane':'l','status':'open','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':2},'max_spend_usd':10,'spent_usd':0}; bets._load=lambda:[x]; bets._transaction=lambda _m:contextlib.nullcontext([x]); assert g.authorize('spend',True,bet_id='s',amount_usd=6)[0]; ok,why=g.authorize('spend',True,bet_id='s',amount_usd=5); print(why); assert not ok"
 assert_exit 0 "bets: path-limited save never commits unrelated staged files" \
   python3 -c "import sys,tempfile,pathlib,types;sys.path.insert(0,'bin');import bets; bets.REPO=pathlib.Path(tempfile.mkdtemp()); bets.BETS=bets.REPO/'run/bets.json'; calls=[]; bets.subprocess.run=lambda a,**k: (calls.append(a) or types.SimpleNamespace(returncode=1 if a[1:4]==['diff','--cached','--quiet'] else 0,stdout='branch',stderr='')); bets._save([], 'x'); commit=next(a for a in calls if 'commit' in a); assert '--' in commit and str(bets.BETS) in commit"
 # A refusal after the authorization check must not consume the reservation.
 assert_exit_grep 1 "em-dash" "mail: content refusal occurs without burning the checked reservation" \
-  env BET_GATE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import mail;mail.send('a@b.c','s','bad—body',bet_id='bet-008',lane='ja-makers/liw')"
+  env BET_GATE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import mail;mail.send('a@b.c','s','bad—body',bet_id='bet-006',lane='ja-makers/liw')"
 assert_exit 0 "mail: refused message left its reservation available" \
-  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw"
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-006 --lane "ja-makers/liw"
 assert_exit_grep 1 "bet gate" "mail: an armed send refuses without a reservation (wired first, pre-creds)" \
   env BET_GATE_ENFORCE=1 python3 -c "import sys; sys.path.insert(0,'bin'); import mail; mail.send('a@b.c','s','body')"
 
@@ -380,8 +384,8 @@ for M in instrument-probe substrate-probe; do
     --success "{\"oracle_id\":\"deterministic\",\"metric\":\"$M\",\"comparator\":\">=\",\"threshold\":1,\"window_h\":24}" \
     >/dev/null 2>&1
 done
-python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK line in output)" >/dev/null 2>&1
-python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)" >/dev/null 2>&1
+python3 bin/bets.py resolve bet-007 won "instrument probe passed (HOST_CHECK line in output)" >/dev/null 2>&1
+python3 bin/bets.py resolve bet-008 won "substrate probe passed (DELIVERY_CHECK line in output)" >/dev/null 2>&1
 assert_exit 0 "spine: ladder cleared -> demand-confirmed placeable at stage 2" \
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "$L"
 python3 bin/bets.py add --what "demand probe" --clock reply --check "printf '{\"replies\":0}'" --oracle instrumented \
@@ -393,23 +397,23 @@ import json, datetime as dt
 d = json.load(open("run/bets.json"))
 old = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=100)).strftime("%Y-%m-%dT%H:%M:%SZ")
 for b in d["bets"]:
-    if b["id"] == "bet-009":
+    if b["id"] == "bet-007":
         b["resolution"]["at"] = old
 open("run/bets.json", "w").write(json.dumps(d, indent=2) + "\n")
 PY
 assert_exit_grep 1 "suspended" "bets: E2 -- a stale instrument suspends dependent resolution" \
-  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-011 lost "no replies in window"
+  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-009 lost "no replies in window"
 python3 - <<'PY'
 import json, datetime as dt
 d = json.load(open("run/bets.json"))
 now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 for b in d["bets"]:
-    if b["id"] == "bet-009":
+    if b["id"] == "bet-007":
         b["resolution"]["at"] = now
 open("run/bets.json", "w").write(json.dumps(d, indent=2) + "\n")
 PY
 assert_exit 0 "bets: refreshed instrument un-suspends the lane" \
-  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-011 lost "no replies in window"
+  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-009 lost "no replies in window"
 assert_exit_grep 2 "DEMAND REFUTED" "guard: DEMAND_REFUTED_K checkpoint fires (armed only)" \
   env DEMAND_REFUTED_K=1 EDGE_TERMINAL=0 python3 bin/guard.py
 assert_exit 0 "guard: K off leaves the closed terminal set unchanged" \

@@ -33,8 +33,11 @@ stage 0: a MINIMAL published/payable smoke test (one landing page, one payment-l
 "reply for X" offer) whose sole purpose is to elicit demand. It is not a `delivery`: it never
 satisfies the stage-3 build exit, so it cannot be relabeled into "the product is built", and it is
 capped per lane (`lane_caps.demand_probe_per_lane`, default 2) so a full product line cannot be
-shipped as a run of "probes". The full/scaled product stays gated at stage 3 behind a won
-`demand-confirmed` bet.
+shipped as a run of "probes". A second gaming-safety layer (in `bin/bet_gate.py`, enforced on every
+typed add regardless of `BET_GATE_ENFORCE`) requires a demand-probe's success oracle to be
+externally grounded (`instrumented`/`stripe`, never `deterministic`): demand is a fact about other
+people, so a self-graded "demand" probe is a delivery build in disguise. The full/scaled product
+stays gated at stage 3 behind a won `demand-confirmed` bet.
 
 **Precondition, not optional.** With the spine armed, the beacon (`harness/beacon/`) MUST be
 deployed at hour one of run 2. Run 1 never measured whether its funnels converted (the beacon went
