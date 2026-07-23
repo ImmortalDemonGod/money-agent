@@ -1560,6 +1560,45 @@ assert_exit_grep 1 "NO live card" "shadow: guard halts on card creds (test+card 
 assert_exit_grep 0 "SHADOW RUN" "shadow: guard blesses test+test and passes end-to-end" \
   env -u PRIVACY_READ_KEY -u CARD_NUM SHADOW=1 STRIPE_WRITE_KEY=sk_test_x python3 bin/guard.py
 
+# FULL-LIFECYCLE: the PR claims "the rehearsal runs the full lifecycle, including the stop." Prove
+# it end to end -- flow a REAL test-mode dollar through pnl -> shadow truth.json (received>0,
+# verified) -> guard, and assert the first-dollar stop fires under SHADOW exactly as it would live.
+# Bite test: if the stop were skipped in shadow, guard would bless test+test with exit 0 (as it did
+# one line above at received=0) and this assert_exit_grep 2 would fail.
+cdx "$W/verifier"
+echo '{"emails":["op@sim.example"],"card_fingerprints":[]}' > "$W/shstate/operator_identity.json"
+cat > "$W/pnl_stub_paid.py" <<'PY'
+import sys, pathlib
+sys.path.insert(0, str(pathlib.Path("bin").resolve()))
+sys.excepthook = lambda t, v, tb: print(f"SHPNL:crash:{t.__name__}:{v}")
+import pnl
+def _paid(url, headers, params=None):
+    if "balance_transactions" in url:
+        return {"data": [{"id": "txn_1", "type": "charge", "amount": 1234, "fee": 30,
+                          "currency": "usd"}], "has_more": False}
+    if "/charges" in url:
+        return {"data": [{"id": "ch_1", "paid": True, "status": "succeeded", "amount": 1234,
+                          "currency": "usd", "billing_details": {"email": "buyer@x.com"},
+                          "payment_method_details": {"card": {"fingerprint": "fp1"}}}],
+                "has_more": False}
+    return {"data": [], "has_more": False}
+pnl._get = _paid
+sys.exit(pnl.main())
+PY
+assert_exit 0 "shadow: a test-mode dollar publishes clean on the shadow lane" \
+  env SHADOW=1 STRIPE_READ_KEY=rk_test_x CARD_SOURCE=issuer_enforced CARD_CAP_USD=25 \
+      MONEY_AGENT_STATE="$W/shstate" python3 "$W/pnl_stub_paid.py"
+SHRECV=$(python3 -c "import json; t=json.load(open('ledger/truth.json')); print(t.get('received_usd'), t.get('verified'), t.get('shadow'))")
+if [[ "$SHRECV" == "12.34 True True" ]]; then
+  ok "shadow: test dollar counted (received_usd=12.34, verified, shadow:true)"
+else bad "shadow: test dollar not counted right ($SHRECV)"; fi
+git add ledger/ && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: shadow first dollar" \
+  && git push -q origin shadow-ledger
+cdx "$W/agent"
+git fetch -q origin shadow-ledger
+assert_exit_grep 2 "FIRST DOLLAR" "shadow: FIRST-DOLLAR stop fires in a rehearsal (full lifecycle incl. the stop)" \
+  env -u PRIVACY_READ_KEY -u CARD_NUM SHADOW=1 STRIPE_WRITE_KEY=sk_test_x python3 bin/guard.py
+
 echo "=== S12: shadow mail -- captured never delivered, gates intact, scripted world ==="
 printf 'Yes, the bundle includes the source files and it is a one-time payment.\n' > "$W/shbody.txt"
 SHH=$(python3 -c "import sys; sys.path.insert(0, 'bin'); import disclosure_gate as d; print(d.body_hash(open('$W/shbody.txt').read()))")
