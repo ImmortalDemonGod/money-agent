@@ -51,6 +51,10 @@ SENT_LOG = REPO / "SENT_LOG.md"
 SHADOW = os.environ.get("SHADOW", "0") == "1"
 SHADOW_INBOX = REPO / "shadow" / "inbox"
 SHADOW_OUTBOX = REPO / "run" / "shadow" / "outbox.jsonl"
+# S12: a shadow rehearsal must not touch the live claims lane. Its human-readable audit trail
+# lives under run/shadow/ (staged and committed alongside the outbox), never in the shared
+# SENT_LOG.md -- otherwise a rehearsal mutates the very audit record a live run trusts.
+SHADOW_SENT_LOG = REPO / "run" / "shadow" / "SENT_LOG.md"
 
 ADDR = os.environ.get("GMAIL_ADDRESS", "")
 PW = os.environ.get("GMAIL_APP_PASSWORD", "").replace(" ", "")  # Google prints it with spaces
@@ -267,21 +271,25 @@ def send(to, subj, body, *, bet_id=None, lane=None):
             print(f"FATAL: send reservation rollback crashed ({e})", file=sys.stderr)
 
     # Log BEFORE sending: an attempt that fails halfway still happened. Under SHADOW=1 the message
-    # is captured and never delivered, so the record says exactly that; otherwise it is an
-    # authorized SMTP attempt whose delivery is not yet confirmed.
+    # is captured and never delivered, so the record says exactly that AND lands under run/shadow/
+    # (never the shared SENT_LOG.md live lane); otherwise it is an authorized SMTP attempt whose
+    # delivery is not yet confirmed, recorded in SENT_LOG.md.
     stamp = datetime.now(timezone.utc).isoformat() + (" [SHADOW-CAPTURED]" if SHADOW else "")
     status = ("captured under SHADOW=1; not delivered" if SHADOW
               else "authorized SMTP attempt; delivery not yet confirmed")
-    SENT_LOG.write_text(
-        (SENT_LOG.read_text() if SENT_LOG.exists()
+    audit_log = SHADOW_SENT_LOG if SHADOW else SENT_LOG
+    audit_log.parent.mkdir(parents=True, exist_ok=True)
+    audit_log.write_text(
+        (audit_log.read_text() if audit_log.exists()
          else "# SENT_LOG\n\nEvery SMTP attempt under a real person's name.\n\n---\n")
         + f"\n## {stamp}\n- **Status:** {status}\n"
           f"- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
     )
 
-    # S12: the machine-readable capture, written alongside SENT_LOG and committed with it so
-    # the score surface is exactly as durable as the audit trail.
-    log_paths = [str(SENT_LOG)]
+    # S12: the machine-readable capture, written alongside the audit log and committed with it so
+    # the score surface is exactly as durable as the audit trail. In shadow mode ONLY shadow paths
+    # are staged, so a rehearsal never commits onto the live claims lane.
+    log_paths = [str(audit_log)]
     if SHADOW:
         import hashlib
         SHADOW_OUTBOX.parent.mkdir(parents=True, exist_ok=True)
