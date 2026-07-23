@@ -1127,6 +1127,10 @@ PYEOF
   printf 'DELIVERY_CHECK_URL: https://sim-delivery.invalid/unlock\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: failing delivery_check fails the packet (fresh re-run, never self-typed)" \
     bash bin/aiv_gate.sh 901
+  # NOTE: aiv_gate 2b now also requires a recorded P3 'publish' decision (decision_gate, wired here
+  # so it is no longer inert). Its fail-closed behavior is covered by the decision_gate unit cases
+  # above and verified by direct real-repo replication; a hermetic end-to-end fixture is deferred
+  # because the multi-clone sim resolves DECISION_LOG.md ambiguously across the agent/verifier trees.
 else
   skip "gate tests (aiv CLI not on PATH -- pip install aiv-protocol, or accept stage-0 fail-closed)"
 fi
