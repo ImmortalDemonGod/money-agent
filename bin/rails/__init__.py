@@ -36,11 +36,13 @@ class RailContribution:
         for field_name in ("customer_usd", "self_usd", "unbound_usd", "gross_usd",
                            "refunded_usd", "fees_usd"):
             value = getattr(self, field_name)
-            if not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+            if (isinstance(value, bool) or not isinstance(value, (int, float))
+                    or not math.isfinite(value) or value < 0):
                 raise ValueError(f"{self.name}: {field_name} must be finite and non-negative")
         if "spend" in self.directions:
             if self.spend_measured:
-                if (not isinstance(self.spent_usd, (int, float))
+                if (isinstance(self.spent_usd, bool)
+                        or not isinstance(self.spent_usd, (int, float))
                         or not math.isfinite(self.spent_usd) or self.spent_usd < 0):
                     raise ValueError(f"{self.name}: measured spent_usd must be finite and non-negative")
             elif self.spent_usd is not None:

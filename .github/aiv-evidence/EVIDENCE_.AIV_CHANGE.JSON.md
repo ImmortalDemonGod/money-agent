@@ -22,8 +22,7 @@ classification:
 
 ## Claim(s)
 
-1. The pre-existing empty harness-setup context is restored after closing the PR50 change without carrying PR50 commits into that context
-2. No existing tests were modified or deleted during this change.
+1. At commit `158e806`, `.aiv/change.json` contains the named `harness-setup` context with empty commit, file, and evidence arrays.
 
 ---
 
@@ -38,7 +37,7 @@ classification:
 
 **Scope Inventory** (SHA: [`158e806`](https://github.com/ImmortalDemonGod/money-agent/tree/158e8069282d1017d4a1f8b3ebf72c491facc1b3))
 
-- [`.aiv/change.json#L9`](https://github.com/ImmortalDemonGod/money-agent/blob/158e8069282d1017d4a1f8b3ebf72c491facc1b3/.aiv/change.json#L9)
+- [`.aiv/change.json#L1-L9`](https://github.com/ImmortalDemonGod/money-agent/blob/158e8069282d1017d4a1f8b3ebf72c491facc1b3/.aiv/change.json#L1-L9)
 
 ### Class A (Execution Evidence)
 
@@ -53,6 +52,9 @@ classification:
 **R0 (trivial) -- local checks skipped.**
 **Reason:** Metadata-only restoration; no runtime or verification behavior changes
 Only git diff scope inventory was collected. No execution evidence.
+
+The claim is intentionally limited to the SHA-pinned file contents; it makes no assertion about
+test preservation or an uncollected before/after state.
 
 ---
 

@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `bin/conclusion_gate.py`
-**Commit:** `d076eab`
-**Previous:** `d076eab`
-**Generated:** 2026-07-22T23:32:42Z
+**File:** `.github/aiv-evidence/EVIDENCE_LEDGER_README.MD.md`
+**Commit:** `b811e37`
+**Generated:** 2026-07-22T23:40:32Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +14,15 @@ classification:
   risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
-  blast_radius: "bin/conclusion_gate.py"
-  classification_rationale: "This corrects defensive initialization on the conclusion authorization surface"
+  blast_radius: ".github/aiv-evidence/EVIDENCE_LEDGER_README.MD.md"
+  classification_rationale: "Verification metadata on payment and conclusion surfaces must remain auditably accurate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:32:42Z"
+  classified_at: "2026-07-22T23:40:32Z"
 ```
 
 ## Claim(s)
 
-1. Orphan scanning has an empty bet list when registry loading fails and never depends on an unrelated file-read helper
+1. The ledger evidence matrix uses stable claim IDs without truncated identities
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -32,27 +31,24 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578647](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578647)
-- **Requirements Verified:** The fail-closed orphan scan must be defined on every control-flow path
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532](https://github.com/ImmortalDemonGod/money-agent/pull/50#pullrequestreview-4759622532)
+- **Requirements Verified:** Address final CodeRabbit evidence-integrity findings without overstating collected proof
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`d076eab`](https://github.com/ImmortalDemonGod/money-agent/tree/d076eabac5dd0a8e9d80e2f458ceda0fbb1cce4f))
+**Scope Inventory** (SHA: [`b811e37`](https://github.com/ImmortalDemonGod/money-agent/tree/b811e37a2f72b637990a8d4807917fa17fd6a27d))
 
-- [`bin/conclusion_gate.py#L222`](https://github.com/ImmortalDemonGod/money-agent/blob/d076eabac5dd0a8e9d80e2f458ceda0fbb1cce4f/bin/conclusion_gate.py#L222)
+- [`.github/aiv-evidence/EVIDENCE_LEDGER_README.MD.md#L85-L86`](https://github.com/ImmortalDemonGod/money-agent/blob/b811e37a2f72b637990a8d4807917fa17fd6a27d/.github/aiv-evidence/EVIDENCE_LEDGER_README.MD.md#L85-L86)
 
 ### Class A (Execution Evidence)
 
-**Per-symbol test coverage (AST analysis):**
-
-- **`main`** (L222): FAIL -- WARNING: No tests import or call `main`
-
-**Coverage summary:** 0/1 symbols verified by tests.
+**WARNING:** No tests found that directly import or reference the changed file.
+This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
 - **ruff:** All checks passed
-- **mypy:** Found 1 error in 1 file (checked 1 source file)
+- **mypy:** Found 1 error in 1 file (errors prevented further checking)
 
 ### Class C (Negative Evidence)
 
@@ -72,18 +68,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+d060b27 test(rails): call monetary validator directly
+5f37af2 test(supervisor): model live verifier process explicitly
 dfe3ff8 test(pr50): pin final review failure modes
 d52a400 test(rails): expand fail-closed registry catalog
 710e1c0 merge(stack): sync rewritten stack 3 ancestry
-618e3eb merge(stack): integrate reviewed stack 3 advances
-4ff597e test(delivery): cover content-type refusal
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Orphan scanning has an empty bet list when registry loading ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The ledger evidence matrix uses stable claim IDs without tru... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -92,11 +88,11 @@ d52a400 test(rails): expand fail-closed registry catalog
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Place bet initialization at the intended registry boundary
+docs(aiv): stabilize ledger claim IDs

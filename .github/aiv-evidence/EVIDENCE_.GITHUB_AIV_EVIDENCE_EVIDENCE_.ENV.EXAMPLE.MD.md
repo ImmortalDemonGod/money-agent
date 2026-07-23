@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `.github/aiv-packets/PACKET_pr50_closure_integrity.md`
-**Commit:** `3804cba`
-**Previous:** `04cc825`
-**Generated:** 2026-07-22T23:40:53Z
+**File:** `.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md`
+**Commit:** `ebcfa10`
+**Generated:** 2026-07-22T23:40:01Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +14,15 @@ classification:
   risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
-  blast_radius: ".github/aiv-packets/PACKET_pr50_closure_integrity.md"
+  blast_radius: ".github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md"
   classification_rationale: "Verification metadata on payment and conclusion surfaces must remain auditably accurate"
   classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:40:53Z"
+  classified_at: "2026-07-22T23:40:01Z"
 ```
 
 ## Claim(s)
 
-1. The closure packet evidence table matches the referenced sidecar commit headers
+1. Environment evidence uses labeled fences and retains manual-review and claim-specific-test limitations
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -37,9 +36,10 @@ classification:
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`3804cba`](https://github.com/ImmortalDemonGod/money-agent/tree/3804cbafe0380e07a340a8762310bea561892d02))
+**Scope Inventory** (SHA: [`ebcfa10`](https://github.com/ImmortalDemonGod/money-agent/tree/ebcfa10d2fcb79bc1e76e6a9c0dd2c09fdb48837))
 
-- [`.github/aiv-packets/PACKET_pr50_closure_integrity.md#L62-L64`](https://github.com/ImmortalDemonGod/money-agent/blob/3804cbafe0380e07a340a8762310bea561892d02/.github/aiv-packets/PACKET_pr50_closure_integrity.md#L62-L64)
+- [`.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L71`](https://github.com/ImmortalDemonGod/money-agent/blob/ebcfa10d2fcb79bc1e76e6a9c0dd2c09fdb48837/.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L71)
+- [`.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L99-L100`](https://github.com/ImmortalDemonGod/money-agent/blob/ebcfa10d2fcb79bc1e76e6a9c0dd2c09fdb48837/.github/aiv-evidence/EVIDENCE_.ENV.EXAMPLE.md#L99-L100)
 
 ### Class A (Execution Evidence)
 
@@ -80,7 +80,7 @@ d52a400 test(rails): expand fail-closed registry catalog
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The closure packet evidence table matches the referenced sid... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Environment evidence uses labeled fences and retains manual-... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
 **Verdict summary:** 1 verified, 0 unverified, 1 manual review.
@@ -96,4 +96,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-docs(aiv): align closure evidence SHAs
+docs(aiv): preserve env evidence limitations
