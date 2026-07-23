@@ -5,8 +5,10 @@
 # this is the one-shot each fire runs. `--loop [S]` runs a foreground poller (default 60s).
 #
 # It never touches the sandbox or signs anything -- it only READS the claims/facts lanes and emits
-# a push, so it adds no surface the agent could spoof (worst case the agent spams requests, already
-# bounded by the falsify-before-requesting + metering guardrails, and every request is a commit).
+# a push, so it adds no surface the agent could spoof. The alert line's machine fields (id,
+# urgency, ttl) LEAD the line and are parsed by fixed position; the agent-controlled gate is
+# scrubbed of control chars by notify-scan and sits last, so it cannot forge a line or override a
+# field. Agent text is never passed as a curl `-d` argument (that would let `@path` read a file).
 #
 # Transport (first match wins):
 #   ACTUATE_NTFY_TOPIC -> POST to ${ACTUATE_NTFY_BASE:-https://ntfy.sh}/$topic  (phone/web push)
@@ -21,11 +23,11 @@ R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 SEEN="${ACTUATE_NOTIFY_SEEN:-$R/run/.actuate_notify_seen}"
 mkdir -p "$(dirname "$SEEN")"; : >>"$SEEN"
 
-dispatch() {   # $1 = alert line
+dispatch() {   # $1 = full alert line (never used as a curl -d argument)
   local msg="$1"
   if [[ -n "${ACTUATE_NTFY_TOPIC:-}" ]]; then
     if ! curl -fsS -m 20 -H "Title: money-agent actuation" \
-         -d "$msg" "${ACTUATE_NTFY_BASE:-https://ntfy.sh}/${ACTUATE_NTFY_TOPIC}" >/dev/null; then
+         --data-raw "$msg" "${ACTUATE_NTFY_BASE:-https://ntfy.sh}/${ACTUATE_NTFY_TOPIC}" >/dev/null; then
       echo "actuate_notify: ntfy push failed for: $msg" >&2
     fi
   elif [[ -n "${ACTUATE_NOTIFY_CMD:-}" ]]; then
@@ -39,23 +41,31 @@ dispatch() {   # $1 = alert line
 }
 
 scan_once() {
-  local sink; sink="$(mktemp)"
+  local sink; sink="$(mktemp)" || { echo "actuate_notify: mktemp failed" >&2; return 1; }
+  # shellcheck disable=SC2064
+  trap "rm -f '$sink'" RETURN
   if ! python3 bin/actuate.py notify-scan --sink "$sink" >/dev/null 2>&1; then
-    echo "actuate_notify: notify-scan failed (is AGENT_BRANCH set?)" >&2; rm -f "$sink"; return 1
+    echo "actuate_notify: notify-scan failed (is AGENT_BRANCH set?)" >&2
+    return 1
   fi
-  local n=0 line id urg key
-  while read -r line; do
-    [[ -z "$line" ]] && continue
-    id="$(awk '{print $2}' <<<"$line")"
-    urg="$(sed -n 's/.*urgency=\([A-Z]*\).*/\1/p' <<<"$line")"
-    key="${id}:${urg}"
-    grep -qxF "$key" "$SEEN" && continue
-    if [[ "$urg" == "URGENT" || "${ACTUATE_NOTIFY_ALL:-0}" == "1" ]]; then
-      dispatch "$line"; printf '%s\n' "$key" >>"$SEEN"; n=$((n + 1))
-    fi
-  done <"$sink"
-  rm -f "$sink"
-  echo "actuate_notify: dispatched $n new alert(s)" >&2
+  # Hold a lock across the whole read/dedup/append pass so a concurrent poller cannot double-send.
+  (
+    flock 9
+    n=0
+    while IFS= read -r line || [[ -n "$line" ]]; do
+      [[ -z "$line" ]] && continue
+      read -r tag id urgfield _ <<<"$line"       # fixed-position parse; gate cannot spoof these
+      [[ "$tag" == "ALERT" && "$id" == ACT-* ]] || continue
+      urg="${urgfield#urgency=}"
+      [[ "$urg" == "URGENT" || "$urg" == "NORMAL" ]] || continue
+      key="${id}:${urg}"
+      grep -qxF "$key" "$SEEN" && continue
+      if [[ "$urg" == "URGENT" || "${ACTUATE_NOTIFY_ALL:-0}" == "1" ]]; then
+        dispatch "$line"; printf '%s\n' "$key" >>"$SEEN"; n=$((n + 1))
+      fi
+    done <"$sink"
+    echo "actuate_notify: dispatched $n new alert(s)" >&2
+  ) 9>"${SEEN}.lock"
 }
 
 if [[ "${1:-}" == "--loop" ]]; then

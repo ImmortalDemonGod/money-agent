@@ -30,7 +30,9 @@ import datetime as dt
 import fcntl
 import hashlib
 import json
+import math
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -48,7 +50,7 @@ ARTIFACTS_DIR = REPO / "run" / "actuation_artifacts"      # committed; the opera
 
 KINDS = ("claim-host", "deploy-account", "wallet-fund", "kyc-step", "approval-click")
 RETURN_KINDS = ("none", "confirmation", "value", "credential")
-SIGN_NAMESPACE = "money-agent-ledger"
+SIGN_NAMESPACE = "money-agent-actuation"   # per-purpose domain separation (no cross-protocol replay)
 
 STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-agent-verifier")))
 SIGN_KEY = STATE_DIR / "verifier_signing_key"
@@ -57,10 +59,20 @@ AUDIT_DIR = STATE_DIR / "actuation_returns"               # operator's off-repo 
 RESOLUTION_LOCK = STATE_DIR / "actuation_resolutions.lock"
 NOTIFY_URGENT_S = int(os.environ.get("NOTIFY_URGENT_S", "900"))
 
-# actuator-never-oracle: free text asking the human to DECIDE strategy/content, not ACTUATE a gate.
+# actuator-never-oracle: this is a HEURISTIC TRIPWIRE, not a wall. A denylist cannot catch every
+# paraphrase (an adversary proved synonym bypasses); the real backstop is the human operator, who
+# sees the rendered card and can DECLINE any oracle-shaped ask (a metered decline is the operator's
+# REFUSALS mirror). The tripwire's job is to catch the obvious cases and the run-1 OPERATOR_UNBLOCK
+# strategy-leak class cheaply. It is applied to EVERY operator-facing surface (gate/steps/expect/
+# identity/target_url AND the staged artifact bytes), with word-boundary matching to cut false
+# positives on legitimate substrings.
 ORACLE_TERMS = ("strategy", "decide", "choose", "target market", "market to target",
                 "which product", "which market", "launch copy", "pricing", "recommend",
-                "brainstorm", "come up with", "what to sell", "should we sell", "write the")
+                "brainstorm", "come up with", "what to sell", "should we sell", "write the",
+                "pick the", "pick which", "pick one", "in your own words", "compose", "settle on",
+                "which one", "advise", "what should we", "how much should", "of your choosing",
+                "you believe", "your judgment", "judgment needed", "your call")
+_ORACLE_RE = re.compile(r"(?<![a-z])(" + "|".join(re.escape(t) for t in ORACLE_TERMS) + r")(?![a-z])")
 
 
 # ---- small helpers ----------------------------------------------------------------------
@@ -105,17 +117,19 @@ def _save_tasks(tasks: list[dict], msg: str, extra_paths: list[Path] | None = No
 
 
 def _task_hash(task: dict) -> str:
+    # Bind EVERY field the operator sees on the card, so the signature attests to exactly what the
+    # human acted on. Omitting identity/steps/expect/artifact (as an earlier version did) let the
+    # agent rewrite the meaning of an approved request post-signature -- a binding-confusion break.
     stable = {k: task.get(k) for k in ("id", "requested_at", "kind", "gate", "target_url",
-                                       "return_kind", "deadline", "agent_branch", "enc_pubkey")}
+                                       "identity", "steps", "expect", "artifact_ref",
+                                       "artifact_sha256", "return_kind", "deadline", "agent_branch",
+                                       "enc_pubkey")}
     return _sha256(json.dumps(stable, sort_keys=True, separators=(",", ":")).encode())
 
 
 def leak_check(text: str) -> str | None:
-    low = text.lower()
-    for term in ORACLE_TERMS:
-        if term in low:
-            return term
-    return None
+    m = _ORACLE_RE.search(text.lower())
+    return m.group(1) if m else None
 
 
 # ---- ephemeral hybrid encryption (openssl: RSA-OAEP-wrapped AES-256-CBC) -----------------
@@ -363,11 +377,11 @@ def cmd_request(a) -> int:
         print(f"FATAL: --return-kind must be one of {RETURN_KINDS}.", file=sys.stderr)
         return 2
     # descriptive fields must be PRESENT; --test/--ev carry the falsify-before-requesting and
-    # worth-the-minutes guardrails, so they must be SUBSTANTIVE (not a rubber-stamp character).
+    # worth-the-minutes guardrails, so they must be SUBSTANTIVE (>= 8 chars, parity with human.py).
     for field, minlen, why in (("gate", 1, "which gate/action"), ("target_url", 1, "the exact URL"),
                                ("identity", 1, "which account acts"), ("expect", 1, "the result"),
-                               ("test", 4, "the empirical hit, cited — a request for an untested "
-                                "gate is guessing"), ("ev", 4, "why passing it is worth minutes")):
+                               ("test", 8, "the empirical hit, cited — a request for an untested "
+                                "gate is guessing"), ("ev", 8, "why passing it is worth minutes")):
         if len(getattr(a, field).strip()) < minlen:
             print(f"FATAL: --{field.replace('_','-')} needs real content ({why}).", file=sys.stderr)
             return 2
@@ -376,18 +390,42 @@ def cmd_request(a) -> int:
     except OSError as e:
         print(f"FATAL: cannot read --steps file: {e}", file=sys.stderr)
         return 2
-    hit = leak_check(" \n ".join([a.gate, steps_text, a.expect, a.identity]))
-    if hit:
-        print(f"FATAL: actuator, never oracle -- the request text asks the operator to decide "
-              f"strategy/content (matched {hit!r}). Strategy, judgment, and content are not "
-              "requestable; only mechanical gate-passage is.", file=sys.stderr)
-        return 2
     try:
-        _parse_iso(a.deadline)
+        deadline_dt = _parse_iso(a.deadline)
     except Exception:
         print("FATAL: --deadline must be ISO-8601 (e.g. 2026-08-01T00:00:00Z).", file=sys.stderr)
         return 2
+    if deadline_dt.tzinfo is None:
+        print("FATAL: --deadline must carry a timezone/offset (append 'Z' for UTC). A naive "
+              "deadline silently poisons every downstream time computation.", file=sys.stderr)
+        return 2
+    # Validate + read the artifact BEFORE any side effect (keygen/copy), so a bad path fails clean.
+    artifact_bytes = None
+    src = None
+    if a.artifact and a.artifact != "-":
+        src = Path(a.artifact)
+        if not src.is_file():
+            print(f"FATAL: --artifact must be a readable file: {src}", file=sys.stderr)
+            return 2
+        try:
+            artifact_bytes = src.read_bytes()
+        except OSError as e:
+            print(f"FATAL: cannot read --artifact: {e}", file=sys.stderr)
+            return 2
+    # Leak-check EVERY operator-facing surface, including the staged artifact the card says "apply".
+    artifact_text = artifact_bytes.decode("utf-8", "ignore") if artifact_bytes is not None else ""
+    hit = leak_check(" \n ".join([a.gate, steps_text, a.expect, a.identity, a.target_url,
+                                  artifact_text]))
+    if hit:
+        print(f"FATAL: actuator, never oracle -- an operator-facing surface asks the operator to "
+              f"decide strategy/content (matched {hit!r}). Strategy, judgment, and content are not "
+              "requestable; only mechanical gate-passage is.", file=sys.stderr)
+        return 2
 
+    agent_branch = _git("branch", "--show-current").stdout.strip()
+    if not agent_branch:
+        print("FATAL: actuation requests require a named claims branch.", file=sys.stderr)
+        return 2
     tasks = _load_tasks()
     tid = f"ACT-{len(tasks) + 1:03d}"
     enc_pubkey = None
@@ -397,31 +435,30 @@ def cmd_request(a) -> int:
         except Exception as e:
             print(f"FATAL: could not create the secure return channel: {e}", file=sys.stderr)
             return 1
-    artifact_ref = None
+    artifact_ref = artifact_sha256 = None
     extra_paths = []
-    if a.artifact and a.artifact != "-":
-        src = Path(a.artifact)
-        if not src.exists():
-            print(f"FATAL: --artifact file not found: {src}", file=sys.stderr)
-            return 2
+    if artifact_bytes is not None:
         dst_dir = ARTIFACTS_DIR / tid
         dst_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy(src, dst_dir / src.name)
+        (dst_dir / src.name).write_bytes(artifact_bytes)
         artifact_ref = f"run/actuation_artifacts/{tid}/{src.name}"
+        artifact_sha256 = _sha256(artifact_bytes)   # bound into _task_hash: the file is TOCTOU-safe
         extra_paths.append(ARTIFACTS_DIR)
-    agent_branch = _git("branch", "--show-current").stdout.strip()
-    if not agent_branch:
-        print("FATAL: actuation requests require a named claims branch.", file=sys.stderr)
-        return 2
-    bet_id = _register_companion_bet(tid, a.kind, a.gate, a.deadline)
     tasks.append({"id": tid, "requested_at": _now(), "kind": a.kind, "gate": a.gate,
                   "target_url": a.target_url, "identity": a.identity,
                   "steps": steps_text.splitlines(), "artifact_ref": artifact_ref,
-                  "expect": a.expect, "return_kind": a.return_kind, "enc_pubkey": enc_pubkey,
+                  "artifact_sha256": artifact_sha256, "expect": a.expect,
+                  "return_kind": a.return_kind, "enc_pubkey": enc_pubkey,
                   "deadline": a.deadline, "test_citation": a.test, "ev_rationale": a.ev,
-                  "status": "open", "companion_bet": bet_id, "agent_branch": agent_branch,
+                  "status": "open", "companion_bet": None, "agent_branch": agent_branch,
                   "human_minutes": None, "resolution_latency_seconds": None, "resolution": None})
+    # Persist the OPEN task first: conclusion_gate.py blocks on an open actuation directly (like it
+    # does human_tasks.json), so the guarantee never depends on the best-effort companion bet below.
     _save_tasks(tasks, f"actuate: request {tid} ({a.kind}): {a.gate[:50]}", extra_paths)
+    bet_id = _register_companion_bet(tid, a.kind, a.gate, a.deadline)
+    if bet_id:
+        tasks[-1]["companion_bet"] = bet_id
+        _save_tasks(tasks, f"actuate: track {tid} companion bet {bet_id}")
     print(f"id={tid} requested ({a.kind}); return-kind={a.return_kind}. KEEP WORKING -- requesting "
           "is never waiting. Render the operator card with: bin/actuate.py card " + tid)
     return 0
@@ -438,8 +475,9 @@ def cmd_card(a) -> int:
              f"**Deadline:** {task['deadline']}",
              f"**Target URL:** {task['target_url']}", "",
              "## Steps"]
+    _numbered = re.compile(r"^\s*\d+[.)]\s")   # already has a "1. " / "2) " marker
     for i, step in enumerate(task.get("steps") or [], 1):
-        lines.append(f"{i}. {step}" if not step[:2].strip().rstrip('.').isdigit() else step)
+        lines.append(step if _numbered.match(step) else f"{i}. {step}")
     lines += ["", f"**Expected result:** {task['expect']}",
               f"**Return kind:** {task['return_kind']}"]
     if task.get("artifact_ref"):
@@ -457,8 +495,9 @@ def cmd_card(a) -> int:
 
 
 def cmd_fulfill(a) -> int:
-    if a.minutes is None or a.minutes < 0:
-        print("FATAL: --minutes required (the metering IS the point).", file=sys.stderr)
+    if a.minutes is None or not math.isfinite(a.minutes) or a.minutes <= 0:
+        print("FATAL: --minutes must be a finite number > 0 (a real human action costs real "
+              "minutes; the metering IS the point).", file=sys.stderr)
         return 2
     if len(a.evidence.strip()) < 8:
         print("FATAL: --evidence required (what was actually done).", file=sys.stderr)
@@ -484,8 +523,10 @@ def cmd_fulfill(a) -> int:
                 if not task.get("enc_pubkey"):
                     raise RuntimeError("task has no ephemeral public key; cannot encrypt a secret")
                 resolution["return"] = _encrypt_to(task["enc_pubkey"], plaintext)
-                AUDIT_DIR.mkdir(parents=True, exist_ok=True)
-                (AUDIT_DIR / f"{a.id}.plaintext").write_bytes(plaintext)  # off-repo audit copy
+                AUDIT_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
+                _audit = AUDIT_DIR / f"{a.id}.plaintext"           # off-repo audit copy
+                _audit.write_bytes(plaintext)
+                _audit.chmod(0o600)                                # never group/other-readable
             else:
                 resolution["return"] = {"scheme": "plain", "value": plaintext.decode(),
                                         "plaintext_sha256": _sha256(plaintext)}
@@ -503,9 +544,9 @@ def cmd_fulfill(a) -> int:
 
 
 def cmd_decline(a) -> int:
-    if a.minutes is None or a.minutes < 0:
-        print("FATAL: --minutes required; assessing a declined request is still human work.",
-              file=sys.stderr)
+    if a.minutes is None or not math.isfinite(a.minutes) or a.minutes <= 0:
+        print("FATAL: --minutes must be a finite number > 0; assessing a declined request is "
+              "still human work.", file=sys.stderr)
         return 2
     if len(a.reason.strip()) < 8:
         print("FATAL: --reason required (declines are the operator's REFUSALS mirror).",
@@ -541,9 +582,16 @@ def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
             plaintext = _decrypt_with(KEYS_DIR / f"{tid}.pem", ret)
         RETURNS_DIR.mkdir(parents=True, exist_ok=True)
         out = RETURNS_DIR / f"{tid}.json"
-        out.write_text(json.dumps({"id": tid, "return_kind": task["return_kind"],
-                                   "return_value": plaintext.decode(errors="replace")},
-                                  indent=2) + "\n")
+        # Binary-safe: always carry exact bytes (base64) + sha256; return_value is the utf-8 text
+        # only when the payload decodes, so a binary credential is never lossily mangled.
+        material = {"id": tid, "return_kind": task["return_kind"], "sha256": _sha256(plaintext),
+                    "return_value_b64": base64.b64encode(plaintext).decode()}
+        try:
+            material["return_value"] = plaintext.decode("utf-8")
+        except UnicodeDecodeError:
+            material["return_value"] = None
+            material["encoding"] = "binary — decode return_value_b64"
+        out.write_text(json.dumps(material, indent=2) + "\n")
         out.chmod(0o600)
     task["status"] = outcome
     task["resolution"] = resolution
@@ -682,7 +730,12 @@ def cmd_notify_scan(a) -> int:
         except Exception:
             ttl = 0
         urgency = "URGENT" if ttl < NOTIFY_URGENT_S else "NORMAL"
-        gate = (t.get("gate") or "")[:80]
+        # Scrub the agent-controlled gate before it enters the alert line: strip control chars and
+        # newlines (a newline would forge a second physical ALERT line the notifier parses as its
+        # own alert -> spoofed id/urgency, dedup poisoning) and collapse whitespace. The machine
+        # fields lead the line and the notifier parses them by fixed position, so free text after
+        # '::' can never override id/urgency even if it contains "urgency=".
+        gate = re.sub(r"\s+", " ", re.sub(r"[\x00-\x1f\x7f]", " ", t.get("gate") or "")).strip()[:80]
         out_lines.append(f"ALERT {t['id']} urgency={urgency} ttl_s={ttl} "
                          f"kind={t.get('kind', '')} :: {gate}")
     text = "\n".join(out_lines) + ("\n" if out_lines else "")

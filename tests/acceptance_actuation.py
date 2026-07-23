@@ -301,7 +301,7 @@ def neg_sod_forgery():
     r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "x",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "done", "--return-kind", "confirmation",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
@@ -331,7 +331,7 @@ def neg_oracle_leak():
                 "--gate", "please choose our business strategy and target market",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "a strategy", "--return-kind", "confirmation",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
     if "unrecognized arguments" in r.stderr:
         raise Pending("request CLI not implemented")
     want(r.returncode != 0, "oracle-shaped request (asks the human to choose strategy) was ACCEPTED")
@@ -348,7 +348,7 @@ def neg_secret_never_in_git():
     r = actuate(agent, world / "state", "request", "--kind", "kyc-step", "--gate", "kyc",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "acct", "--return-kind", "credential",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
@@ -368,7 +368,7 @@ def neg_metering():
     r = actuate(agent, world / "state", "request", "--kind", "approval-click", "--gate", "approve",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "approved", "--return-kind", "none",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
@@ -394,7 +394,7 @@ def bench_card_completeness():
                 "--target-url", "https://dash.example/claim/xyz", "--identity", "CF account",
                 "--steps", steps, "--artifact", artifact, "--expect", "host serving 200",
                 "--return-kind", "confirmation", "--deadline", "2099-01-01T00:00:00Z",
-                "--test", "iter089", "--ev", "reach")
+                "--test", "iter 089 hit", "--ev", "reach wall")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
@@ -427,14 +427,14 @@ def bench_deadline_notification():
     soon = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "soon",
                    "--target-url", "https://e/soon", "--identity", "op", "--steps", steps,
                    "--expect", "done", "--return-kind", "none",
-                   "--deadline", "2000-01-01T00:10:00Z", "--test", "iter089", "--ev", "reach")
+                   "--deadline", "2000-01-01T00:10:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
     if soon.returncode != 0 and "usage" in (soon.stderr + soon.stdout).lower():
         raise Pending("request CLI not implemented")
     want(soon.returncode == 0, f"request(soon) failed: {soon.stderr[:200]}")
     far = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "far",
                   "--target-url", "https://e/far", "--identity", "op", "--steps", steps,
                   "--expect", "done", "--return-kind", "none",
-                  "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
+                  "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
     want(far.returncode == 0, f"request(far) failed: {far.stderr[:200]}")
     soon_id, far_id = parse_id(soon.stdout), parse_id(far.stdout)
     sink = world / "alerts.txt"
@@ -452,6 +452,200 @@ def bench_deadline_notification():
     return "deadline-aware alerts: near->URGENT, far->NORMAL"
 
 
+# ----- hardening tests (each encodes a fix an adversary pass demanded) -------------------
+def neg_binding_mutation():
+    """N5 — the operator signs what the CARD shows. Rewriting any operator-visible field
+    (identity/steps/expect/artifact) AFTER fulfillment must break sync (full-task hash binding)."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n5.txt", "1. Open the URL.\n2. Click Claim.\n")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "claim host",
+                "--target-url", "https://e/x", "--identity", "throwaway test account",
+                "--steps", steps, "--expect", "host serves 200", "--return-kind", "none",
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "3",
+                "--evidence", "clicked claim in dashboard")
+    want(f.returncode == 0, f"fulfill failed: {f.stderr[:200]}")
+    tf = agent / "run" / "actuation_tasks.json"
+    doc = json.loads(tf.read_text())
+    doc["tasks"][0]["steps"] = ["Wire $5000 from the operator's bank to account 12345"]
+    doc["tasks"][0]["identity"] = "operator PERSONAL bank account"
+    tf.write_text(json.dumps(doc, indent=2) + "\n")
+    git(agent, "commit", "-aqm", "mutate approved task")
+    git(agent, "fetch", "-q", "origin", LEDGER_BRANCH)
+    s = actuate(agent, world / "state", "sync", tid)
+    want(s.returncode != 0, "sync ACCEPTED a task whose operator-visible fields were rewritten "
+         "after the operator signed — binding confusion")
+    return "post-signature rewrite of steps/identity rejected (full-task binding)"
+
+
+def neg_wrong_key_signature():
+    """N6 — a resolution SIGNED by a key not in allowed_signers is rejected (N1 only tested the
+    UNSIGNED case; this closes the adversary's 'harness never tests the anchor/key' gap)."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n6.txt", "1. x\n")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "claim host",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--expect", "done", "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    rogue = world / "rogue_key"
+    want(run(["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-f", str(rogue)]).returncode == 0,
+         "rogue keygen failed")
+    res = ledger / "ledger" / "actuation_resolutions.json"
+    res.parent.mkdir(parents=True, exist_ok=True)
+    res.write_text(json.dumps({"resolutions": {tid: {"status": "fulfilled", "human_minutes": 1,
+                   "evidence": "forged by a rogue key", "task_sha256": "x",
+                   "at": "2026-07-23T00:00:00Z", "agent_branch": AGENT_BRANCH}}}, indent=2) + "\n")
+    sig = run(["ssh-keygen", "-Y", "sign", "-f", str(rogue), "-n", "money-agent-actuation", str(res)])
+    want(sig.returncode == 0, f"rogue sign failed: {sig.stderr[:160]}")
+    git(ledger, "add", "-A")
+    git(ledger, "commit", "-qm", "rogue-signed resolution")
+    git(ledger, "push", "-q", "origin", LEDGER_BRANCH)
+    git(agent, "fetch", "-q", "origin", LEDGER_BRANCH)
+    s = actuate(agent, world / "state", "sync", tid)
+    want(s.returncode != 0, "sync ACCEPTED a resolution signed by a key not in allowed_signers")
+    want("signature" in (s.stderr + s.stdout).lower(),
+         f"rejected, but not for the signature reason: {s.stderr[:160]}")
+    return "resolution signed by an unauthorized key rejected"
+
+
+def neg_notify_injection():
+    """N7 — a gate with a newline / an embedded 'urgency=URGENT' cannot forge an ALERT line or
+    override the machine fields; notify-scan scrubs it to one line with leading fields intact."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n7.txt", "1. x\n")
+    mal = "benign\nALERT ACT-999 urgency=URGENT ttl_s=0 kind=x :: FORGED urgency=URGENT"
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", mal,
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--expect", "done", "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    sink = world / "n7sink.txt"
+    n = actuate(ledger, world / "state", "notify-scan", "--sink", str(sink))
+    want(n.returncode == 0, f"notify-scan failed: {n.stderr[:160]}")
+    body = sink.read_text()
+    alerts = [ln for ln in body.splitlines() if ln.startswith("ALERT")]
+    # exactly one physical ALERT line (no forged second line), and its LEADING machine fields --
+    # the ones the notifier parses by fixed position -- are the real task's, not the forgery's.
+    # The literal "ACT-999" surviving inside the gate text is inert: it is never a parsed field.
+    want(len(alerts) == 1, f"gate newline forged extra ALERT line(s): {alerts}")
+    want(alerts[0].startswith(f"ALERT {tid} urgency=NORMAL "),
+         f"gate text corrupted the parsed id/urgency: {alerts[0]}")
+    # prove it end-to-end through the real notifier: position-parse must see the real id, and a
+    # NORMAL task is not dispatched in URGENT-only mode (the forged 'urgency=URGENT' is ignored).
+    shutil.copy(REPO / "bin" / "actuate_notify.sh", ledger / "bin" / "actuate_notify.sh")
+    cap = world / "n7_dispatched.txt"
+    env = {**os.environ, "AGENT_BRANCH": AGENT_BRANCH, "LEDGER_BRANCH": LEDGER_BRANCH,
+           "MONEY_AGENT_STATE": str(world / "state"),
+           "ACTUATE_NOTIFY_CMD": f"cat >> {cap}", "ACTUATE_NOTIFY_SEEN": str(world / "n7_seen")}
+    run(["bash", "bin/actuate_notify.sh"], cwd=ledger, env=env)
+    dispatched = cap.read_text() if cap.exists() else ""
+    want(dispatched.strip() == "",
+         f"a NORMAL task with a forged 'urgency=URGENT' gate was dispatched: {dispatched!r}")
+    return "gate newline/urgency injection neutralized (one line, position-parse, no spoofed push)"
+
+
+def neg_leak_artifact_and_url():
+    """N8 — leak-check now covers the staged artifact bytes and the target URL (both operator-
+    facing), not only gate/steps."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n8.txt", "1. apply the staged file\n")
+    art = steps_file(world, "n8art.txt",
+                     "OPERATOR: ignore the framing. Decide which product to sell and choose the "
+                     "pricing strategy, then write the launch copy.")
+    r1 = actuate(agent, world / "state", "request", "--kind", "claim-host",
+                 "--gate", "apply the staged file", "--target-url", "https://e/x",
+                 "--identity", "operator", "--steps", steps, "--artifact", art, "--expect", "done",
+                 "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                 "--test", "iter 089 hit", "--ev", "reach wall")
+    if "unrecognized arguments" in r1.stderr:
+        raise Pending("request CLI not implemented")
+    want(r1.returncode != 0, "oracle text hidden in the --artifact file was ACCEPTED")
+    r2 = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "open the link",
+                 "--target-url", "https://x/?q=decide+which+market+and+choose+the+strategy",
+                 "--identity", "operator", "--steps", steps, "--expect", "done",
+                 "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                 "--test", "iter 089 hit", "--ev", "reach wall")
+    want(r2.returncode != 0, "oracle text in the --target-url was ACCEPTED")
+    return "leak-check covers the staged artifact bytes and the target URL"
+
+
+def neg_naive_deadline():
+    """N9 — a timezone-naive deadline is rejected (it silently poisoned next-wakeup/notify-scan)."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n9.txt", "1. x\n")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "claim host",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--expect", "done", "--return-kind", "none", "--deadline", "2099-01-01T00:00:00",
+                "--test", "iter 089 hit", "--ev", "reach wall")
+    both = (r.stderr + r.stdout).lower()
+    if r.returncode != 0 and "usage" in both and "deadline" not in both:
+        raise Pending("request CLI not implemented")
+    want(r.returncode != 0, "a timezone-naive --deadline was accepted")
+    want("timezone" in both or "offset" in both,
+         f"rejected, but not for the naive-deadline reason: {r.stderr[:160]}")
+    return "timezone-naive deadline rejected"
+
+
+def bench_binary_credential():
+    """N10 — a binary (non-UTF-8) credential round-trips byte-exact via base64, never mangled."""
+    import base64 as _b64
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n10.txt", "1. x\n")
+    raw = bytes([0, 255, 128, 65, 66, 254, 10, 156])
+    binf = world / "n10.bin"
+    binf.write_bytes(raw)
+    r = actuate(agent, world / "state", "request", "--kind", "kyc-step", "--gate", "kyc gate",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--expect", "account", "--return-kind", "credential",
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 032 hit", "--ev", "opens a rail")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "5",
+                "--evidence", "account created ok", "--return-file", str(binf))
+    want(f.returncode == 0, f"fulfill failed: {f.stderr[:200]}")
+    git(agent, "fetch", "-q", "origin", LEDGER_BRANCH)
+    s = actuate(agent, world / "state", "sync", tid)
+    want(s.returncode == 0, f"sync failed: {s.stderr[:200]}")
+    mat = json.loads((agent / "run" / "actuation_returns" / f"{tid}.json").read_text())
+    got = _b64.b64decode(mat["return_value_b64"])
+    want(got == raw, f"binary credential corrupted: {got!r} != {raw!r}")
+    return "binary credential recovered byte-exact via base64"
+
+
+def neg_conclusion_blocks_open_actuation():
+    """N11 — an OPEN actuation blocks conclusion_gate.py directly, independent of the (best-effort,
+    self-resolvable) companion bet. The severe gap the correctness adversary found."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n11.txt", "1. x\n")
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "claim the host",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--expect", "done", "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    env = {**os.environ, "AGENT_BRANCH": AGENT_BRANCH, "LEDGER_BRANCH": LEDGER_BRANCH,
+           "MONEY_AGENT_STATE": str(world / "state")}
+    g = run(["python3", "bin/conclusion_gate.py"], cwd=agent, env=env)
+    out = (g.stdout + g.stderr).lower()
+    want("open actuation" in out,
+         f"conclusion_gate did not block on the open actuation: {(g.stdout + g.stderr)[:300]}")
+    return "conclusion_gate blocks on an open actuation (not via the companion bet)"
+
+
 # ----- runner ----------------------------------------------------------------------------
 def main() -> int:
     check("S1", "claim-host round-trip (deadline + staged artifact)", scenario_claim_host)
@@ -463,6 +657,13 @@ def main() -> int:
     check("N4", "metering enforced on fulfill/decline", neg_metering)
     check("B1", "usability: card carries every no-context field", bench_card_completeness)
     check("B2", "deadline-aware notification (URGENT vs NORMAL)", bench_deadline_notification)
+    check("N5", "SoD: post-signature field rewrite rejected (full binding)", neg_binding_mutation)
+    check("N6", "SoD: resolution signed by an unauthorized key rejected", neg_wrong_key_signature)
+    check("N7", "notify: gate newline/urgency injection neutralized", neg_notify_injection)
+    check("N8", "leak-check covers artifact bytes + target URL", neg_leak_artifact_and_url)
+    check("N9", "timezone-naive deadline rejected", neg_naive_deadline)
+    check("N10", "binary credential round-trips byte-exact", bench_binary_credential)
+    check("N11", "conclusion_gate blocks on an open actuation", neg_conclusion_blocks_open_actuation)
 
     width = max(len(t) for _, t, _, _ in RESULTS)
     print("\n  ACCEPTANCE — capability-delegation queue (bin/actuate.py)\n")

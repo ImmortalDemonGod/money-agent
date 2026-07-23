@@ -6,9 +6,12 @@ this file is its human-readable companion (the contract, the benchmarks, and the
 "done"). If the two ever disagree, the harness is authoritative — it is the thing a fresh party
 runs.
 
-**Status:** Tier-S is **GREEN** — `bin/actuate.py` is implemented to the contract and
-`python3 tests/acceptance_actuation.py` reports 9 PASS / 0 FAIL. Existing suites unaffected
-(`sim.sh` 163/0, `corpus.sh` 11/0). Tier-L (one live actuation) remains an operator gate.
+**Status:** Tier-S is **GREEN** — `bin/actuate.py` (+ `bin/actuate_notify.sh`, `bin/actuate_watch.sh`)
+implemented to the contract; `python3 tests/acceptance_actuation.py` reports **16 PASS / 0 FAIL**.
+Existing suites unaffected (`sim.sh` 163/0, `corpus.sh` 11/0). A four-agent adversarial pass found
+real defects (binding confusion, shell injection/exfiltration, an unguarded conclusion gate, a
+tz-naive-deadline poison) — all fixed and each encoded as a regression check (N5–N11). Tier-L (one
+live actuation on a real rail) remains an operator gate.
 
 ## The goal
 
@@ -61,6 +64,20 @@ the operator — we never fake it green.**
 | **N4** | metering: `human_minutes` is required and recorded on **both** fulfill and decline | issue #31 metering guardrail |
 | **B1** | usability (measured, no live human): the rendered **card** carries every field a no-context operator needs | the bar today's design flunks |
 | **B2** | deadline-aware notification: near-deadline → `URGENT`, far → `NORMAL` | the 60-minute window |
+| **N5** | SoD: rewriting any operator-visible field (identity/steps/expect/artifact) **after** the operator signs breaks `sync` (full-task hash binding) | adversary: binding confusion |
+| **N6** | SoD: a resolution **signed by a key not in `allowed_signers`** is rejected (N1 only covered *unsigned*) | adversary: anchor/key gap |
+| **N7** | a `gate` with a newline / embedded `urgency=URGENT` cannot forge an ALERT line or override the parsed fields, and the real notifier does not dispatch it | adversary: shell injection |
+| **N8** | leak-check covers the **staged artifact bytes and the target URL**, not only gate/steps | adversary: unscanned channels |
+| **N9** | a **timezone-naive** `--deadline` is rejected (it silently poisoned `next-wakeup`/`notify-scan`) | adversary: tz poison |
+| **N10** | a **binary** (non-UTF-8) credential round-trips byte-exact via base64, never mangled | adversary: lossy decode |
+| **N11** | an **open actuation blocks `conclusion_gate.py`** directly, independent of the best-effort, self-resolvable companion bet | adversary: unguarded gate |
+
+**On the actuator-never-oracle leak-check:** it is a **heuristic tripwire, not a wall** — a denylist
+cannot catch every paraphrase. It is applied to every operator-facing surface (gate/steps/expect/
+identity/target-url/artifact) with word-boundary matching, and it catches the obvious oracle asks and
+the run-1 `OPERATOR_UNBLOCK` strategy-leak class. The **wall is the human operator**, who sees the
+rendered card and can `decline` any oracle-shaped request (a metered decline is the operator's
+REFUSALS mirror). N2/N8 test the tripwire; they do not claim it is complete.
 
 The harness is **bite-verified**: run against a no-op stub, all 9 checks FAIL (not PENDING) with
 meaningful reasons — so it distinguishes *unbuilt* (PENDING) from *broken* (FAIL) from *real*
