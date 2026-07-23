@@ -22,6 +22,7 @@ remote branch protection.
 | `run_weak.sh` | co-located weak-mode loop for fast local trials — tripwire-only, never resets |
 | `supervise.sh` | operator one-screen status + VERDICT line (first dollar / edge verified / signed human actuation or sync / stale / dead) |
 | `actuate_notify.sh` | operator-device notifier for the actuation queue: deadline-aware, deduplicated, pluggable transport (out-of-band, keyless) |
+| `actuate_fulfill_server.py` | operator-device **web form** for fulfilling requests without a terminal: renders the card, collects evidence/credential, auto-measures minutes, and shells out to the signed `actuate.py fulfill` (binds localhost; holds no new secret) |
 | `set_live_keys.sh`, `load_keys.sh` | key plumbing helpers |
 
 ## GATES — run in the agent's environment, adjudicate claims against verifier facts (tripwires by design; the walls are the out-of-band verifier + remote branch protection)

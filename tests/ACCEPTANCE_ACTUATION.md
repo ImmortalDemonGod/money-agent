@@ -7,7 +7,7 @@ this file is its human-readable companion (the contract, the benchmarks, and the
 runs.
 
 **Status:** Tier-S is **GREEN** — `bin/actuate.py` (+ `bin/actuate_notify.sh`, `bin/actuate_watch.sh`)
-implemented to the contract; `python3 tests/acceptance_actuation.py` reports **24 PASS / 0 FAIL**,
+implemented to the contract; `python3 tests/acceptance_actuation.py` reports **25 PASS / 0 FAIL**,
 and it is **gate-enforced in CI** (a job in `.github/workflows/ci.yml`), not self-reported. Existing
 suites unaffected (`sim.sh` 163/0, `corpus.sh` 11/0). **Four** adversarial rounds found real defects —
 round 1: binding confusion, shell injection/exfiltration, an unguarded conclusion gate, a
@@ -50,7 +50,7 @@ no channel — the archive still holds them:
 ## Definition of done — two tiers
 
 **Tier-S — provable on our branch now (keyless, offline).** `python3 tests/acceptance_actuation.py`
-exits 0: all 24 checks PASS. This is fully in our control and is what "done for testing" means.
+exits 0: all 25 checks PASS. This is fully in our control and is what "done for testing" means.
 
 **Tier-L — the live gate (operator, not self-certifiable).** One real actuation verified out of
 band: a real host claimed, or a real testnet wallet funded, with the agent demonstrably using
@@ -85,6 +85,7 @@ the operator — we never fake it green.**
 | **N17** | a **money-moving** kind (`wallet-fund`) cannot be fulfilled without a recorded **P3 name-test ruling**, embedded in the signed resolution | owner review #2 |
 | **N18** | the **open-request cap** (default 3) refuses a further request while the queue is full (each open request blocks conclusions) | owner review #6 (§12 R1) |
 | **N19** | a **pre-registered post-handback usability probe** runs at `sync`: a pass records `usability=verified`; a fail flags the handback unusable and makes `sync` exit non-zero, **while the operator obligation stays discharged** (agent-side tripwire, downgrade-only) | design review: WAF/IP-reputation residual |
+| **N20** | the **no-terminal fulfill path**: `bin/actuate_fulfill_server.py`'s `perform_fulfill` (the web form's backend) drives the SAME signed fulfill the CLI does, so an operator using the browser form produces a resolution the agent syncs — without weakening the facts-lane signature | operator review: CLI-for-the-human rejected |
 
 **On the actuator-never-oracle leak-check:** it is a **heuristic tripwire, not a wall** — a denylist
 cannot catch every paraphrase. It is applied to every operator-facing surface (gate/steps/expect/
@@ -93,7 +94,7 @@ the run-1 `OPERATOR_UNBLOCK` strategy-leak class. The **wall is the human operat
 rendered card and can `decline` any oracle-shaped request (a metered decline is the operator's
 REFUSALS mirror). N2/N8 test the tripwire; they do not claim it is complete.
 
-The harness is **bite-verified**: run against a no-op stub, all 24 checks FAIL (not PENDING) with
+The harness is **bite-verified**: run against a no-op stub, all 25 checks FAIL (not PENDING) with
 meaningful reasons — so it distinguishes *unbuilt* (PENDING) from *broken* (FAIL) from *real*
 (PASS). This mirrors the repo's `tests/corpus.sh` discipline (assert on substance, prove the
 test bites).
@@ -114,7 +115,7 @@ test bites).
 ## How to run
 
 ```bash
-python3 tests/acceptance_actuation.py      # scorecard; exit 0 only when all 24 PASS
+python3 tests/acceptance_actuation.py      # scorecard; exit 0 only when all 25 PASS
 ```
 
 Requires `ssh-keygen` (the verifier signature, same dependency as `tests/sim.sh`) and, for the

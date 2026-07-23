@@ -2,7 +2,7 @@
 
 This is the Tier-L-adjacent evidence for the capability-delegation queue: a **real** notification
 delivered through a live service, and the full round-trip transcript. It complements the
-[acceptance harness](../../tests/acceptance_actuation.py) (24 offline checks) with proof against real
+[acceptance harness](../../tests/acceptance_actuation.py) (25 offline checks) with proof against real
 components. The only thing simulated is one process driving both lanes — the true two-machine /
 human split is the operator gate that stays with the operator by design.
 
@@ -76,7 +76,7 @@ REAL E2E OK — push delivered, resolution signed+verified, return materialized.
 
 ## Reproduce it
 
-The offline proof is `python3 tests/acceptance_actuation.py` (24 checks). The real-push leg needs an
+The offline proof is `python3 tests/acceptance_actuation.py` (25 checks). The real-push leg needs an
 outbound path to a notification service: set `ACTUATE_NTFY_TOPIC` and run the notifier against a
 two-lane world (the driver used here is not committed — it composes `bin/actuate.py`,
 `bin/actuate_notify.sh`, and `bin/actuate_watch.sh` exactly as production would).

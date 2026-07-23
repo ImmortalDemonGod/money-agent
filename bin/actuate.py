@@ -324,8 +324,8 @@ def _facts_resolutions() -> dict:
     return {}
 
 
-def _operator_task(task_id: str) -> dict:
-    """Read an open task by id from the agent branch on origin (operator side)."""
+def _operator_tasks_all() -> list[dict]:
+    """Fetch the agent branch from origin and return its full task list (operator side)."""
     agent_branch = os.environ.get("AGENT_BRANCH", "")
     if not agent_branch:
         raise RuntimeError("AGENT_BRANCH is required on the operator side")
@@ -333,9 +333,19 @@ def _operator_task(task_id: str) -> dict:
     r = _git("show", f"origin/{agent_branch}:run/actuation_tasks.json")
     if r.returncode != 0:
         raise RuntimeError(f"cannot read requests from origin/{agent_branch}")
-    tasks = json.loads(r.stdout).get("tasks", [])
-    task = next((t for t in tasks if t.get("id") == task_id), None)
+    return json.loads(r.stdout).get("tasks", [])
+
+
+def _operator_open_tasks() -> list[dict]:
+    """The open (unresolved) requests, for the operator's queue view (the web form's list)."""
+    return [t for t in _operator_tasks_all() if t.get("status") == "open"]
+
+
+def _operator_task(task_id: str) -> dict:
+    """Read one OPEN task by id from the agent branch on origin (operator side)."""
+    task = next((t for t in _operator_tasks_all() if t.get("id") == task_id), None)
     if not task or task.get("status") != "open":
+        agent_branch = os.environ.get("AGENT_BRANCH", "")
         raise RuntimeError(f"no open request {task_id!r} on origin/{agent_branch}")
     return task
 
@@ -576,15 +586,14 @@ def cmd_request(a) -> int:
     return 0
 
 
-def cmd_card(a) -> int:
-    """Render the human-readable operator card for a task."""
-    task = next((t for t in _load_tasks() if t.get("id") == a.id), None)
-    if not task:
-        print(f"FATAL: no task {a.id!r}", file=sys.stderr)
-        return 1
-    # Every agent-controlled field is scrubbed of control characters before rendering: the card is
-    # read in a terminal, and raw ANSI/OSC escapes in gate/identity/steps/etc. could rewrite or hide
-    # the real instructions (or poison the clipboard) before the operator sees them.
+def _render_card(task: dict, include_cli: bool = True) -> str:
+    """Build the human-readable operator card (shared by `card` and the fulfill web form).
+
+    include_cli=False omits the terminal fulfill/decline recipe -- the web form provides those
+    controls, so showing the CLI there is just noise. Every agent-controlled field is scrubbed of
+    control characters: the card is read in a terminal or a browser, and raw ANSI/OSC escapes in
+    gate/identity/steps/etc. could rewrite or hide the real instructions (or poison the clipboard)
+    before the operator sees them."""
     lines = [f"# Actuation task {_scrub(task['id'])} — {_scrub(task['kind'])}", "",
              f"**What/gate:** {_scrub(task['gate'])}",
              f"**Act as:** {_scrub(task['identity'])}",
@@ -602,6 +611,8 @@ def cmd_card(a) -> int:
         if task.get("artifact_sha256"):
             lines.append(f"    sha256: {task['artifact_sha256']}  "
                          "(verify the file matches this before applying)")
+    if not include_cli:
+        return "\n".join(lines)   # the web form supplies the fulfill/decline controls
     lines += ["", "## To fulfill (operator, from the facts lane)",
               f"    bin/actuate.py fulfill {task['id']} --minutes <n> --evidence \"<what you did>\""]
     rk = task["return_kind"]
@@ -609,8 +620,18 @@ def cmd_card(a) -> int:
         lines.append(f"    # add: --return-file <file with the credential>  (encrypted to {task['id']})")
     elif rk in ("confirmation", "value"):
         lines.append("    # add: --return-value \"<the confirmation/value>\"")
-    lines += ["", f"Or decline: bin/actuate.py decline {task['id']} --minutes <n> --reason \"<why>\""]
-    print("\n".join(lines))
+    lines += ["", f"Or decline: bin/actuate.py decline {task['id']} --minutes <n> --reason \"<why>\"",
+              "", "Tip: `bin/actuate_fulfill_server.py` serves this as a local web form -- no terminal."]
+    return "\n".join(lines)
+
+
+def cmd_card(a) -> int:
+    """Render the human-readable operator card for a task."""
+    task = next((t for t in _load_tasks() if t.get("id") == a.id), None)
+    if not task:
+        print(f"FATAL: no task {a.id!r}", file=sys.stderr)
+        return 1
+    print(_render_card(task))
     return 0
 
 

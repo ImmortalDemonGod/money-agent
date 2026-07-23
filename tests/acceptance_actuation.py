@@ -366,6 +366,41 @@ def scenario_usability_probe():
     return "usability probe: pass->verified/exit0, fail->unusable/exit!=0 with the obligation kept"
 
 
+def scenario_fulfill_web_form():
+    """N20 — the no-terminal operator path. bin/actuate_fulfill_server.perform_fulfill (the web
+    form's backend) drives the SAME signed fulfill the CLI does, so an operator using the browser
+    form produces a resolution the agent syncs -- proving the human never needs a terminal, without
+    weakening the facts-lane signature. (The HTTP layer is a thin wrapper over this seam.)"""
+    world, _origin, agent, ledger = build_world()
+    steps = steps_file(world, "n20_steps.txt", "1. Create the account in your browser.\n")
+    r = actuate(agent, world / "state", "request", "--kind", "deploy-account",
+                "--gate", "signup gate the sandbox cannot pass", "--target-url",
+                "https://x.example/signup", "--identity", "operator browser", "--steps", steps,
+                "--expect", "an account + token", "--return-kind", "value",
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 037 dev.to reCAPTCHA",
+                "--ev", "unblocks a metered channel")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    # operator fulfills THROUGH THE WEB FORM'S BACKEND (perform_fulfill), from the facts-lane clone
+    code = ("import actuate_fulfill_server as s;"
+            f"ok,msg=s.perform_fulfill({tid!r},7.0,'account created via the form','value','0xFORMVAL','');"
+            "print('OK' if ok else 'FAIL', msg)")
+    fr = run(["python3", "-c", code], cwd=ledger,
+             env={**os.environ, "AGENT_BRANCH": AGENT_BRANCH, "LEDGER_BRANCH": LEDGER_BRANCH,
+                  "MONEY_AGENT_STATE": str(world / "state"), "PYTHONPATH": str(ledger / "bin")})
+    if "No module named 'actuate_fulfill_server'" in fr.stderr:
+        raise Pending("actuate_fulfill_server not implemented")
+    want(fr.returncode == 0 and "OK" in fr.stdout,
+         f"web-form fulfill backend failed: {(fr.stdout + fr.stderr)[:200]}")
+    git(agent, "fetch", "-q", "origin", LEDGER_BRANCH)
+    s = actuate(agent, world / "state", "sync", tid)
+    want(s.returncode == 0, f"agent could not sync a web-form fulfill: {s.stderr[:200]}")
+    ret = agent / "run" / "actuation_returns" / f"{tid}.json"
+    want(ret.exists() and "0xFORMVAL" in ret.read_text(),
+         "the web-form fulfill did not hand back the value the agent syncs")
+    return "web-form fulfill (no terminal) yields a signed resolution the agent syncs"
+
+
 # ----- invariants (negative tests) -------------------------------------------------------
 def neg_sod_forgery():
     """N1 — the agent cannot fabricate 'a human acted'. A resolution the verifier did not sign
@@ -961,6 +996,7 @@ def main() -> int:
     check("N17", "money-moving fulfill requires a P3 name-test ruling", neg_money_moving_needs_p3)
     check("N18", "open-request cap bounds queue-spam", neg_open_request_cap)
     check("N19", "post-handback usability probe: pass verifies, fail flags unusable", scenario_usability_probe)
+    check("N20", "no-terminal fulfill: web-form backend yields a signed resolution the agent syncs", scenario_fulfill_web_form)
 
     width = max(len(t) for _, t, _, _ in RESULTS)
     print("\n  ACCEPTANCE — capability-delegation queue (bin/actuate.py)\n")

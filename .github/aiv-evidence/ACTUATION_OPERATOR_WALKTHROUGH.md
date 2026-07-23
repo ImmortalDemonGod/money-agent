@@ -2,9 +2,12 @@
 
 This answers the operator review's core ask: **operator usability shown, not asserted.** The
 subsystem exists because the old queue "could not tell the operator HOW"; so the load-bearing claim
-is that a no-context human can *read the card and run the CLI* under a deadline. `B1` only asserts
-the card *contains* its fields — this shows the actual text a human reads and the actual commands a
-human runs, end to end.
+is that a no-context human can act on a request under a deadline **without a terminal**. `B1` only
+asserts the card *contains* its fields — this shows the actual surfaces a human uses, end to end.
+
+The operator's fulfill path is a **local web form** (`bin/actuate_fulfill_server.py`), not the CLI —
+requiring a human to type `bin/actuate.py fulfill … --return-file …` in a terminal under a deadline
+was rejected as too much work. The form is the surface; the signed CLI is its backend (§4 below).
 
 ## What makes this a genuine two-actor split (not one process)
 
@@ -27,7 +30,7 @@ capture" below.
 | 1 | The notification as it lands | content proven in [ACTUATION_E2E.md](ACTUATION_E2E.md) (real ntfy push, re-fetched) | **operator** — a screenshot on their real device |
 | 2 | The rendered **card** the operator opens | ✅ below, verbatim, for a `credential` kind | reproduced here |
 | 3 | Operator performs the real external action in the site UI | ✕ — needs a real human in a real authenticated browser | **operator (Tier-L)** — the genuinely hard step |
-| 4 | Operator runs `fulfill … --return-file` | ✅ below (separate operator key custody) | reproduced here |
+| 4 | Operator **fulfills via the web form** (no terminal) | ✅ below — real running server, separate operator key custody | reproduced here |
 | 5 | Agent `sync` + the materialized return | ✅ below (redacted) | reproduced here |
 
 ## 2 · The card the operator opens (`credential` / `kyc-step`, delivered via the claims lane)
@@ -60,12 +63,26 @@ Rendered by `bin/actuate.py card ACT-001` — this is exactly the markdown a no-
 Or decline: bin/actuate.py decline ACT-001 --minutes <n> --reason "<why>"
 ```
 
-## 4 + 5 · The CLI a human runs, and what the agent receives (redacted)
+## 4 · The operator fulfills — no terminal (the web form)
+
+`bin/actuate_fulfill_server.py` runs on the operator's machine (holds the key, binds localhost). The
+operator opens it from the notification, reads the same card, does the real action, pastes any
+credential, and taps **Submit (sign & publish)** — minutes are auto-measured. This is a real capture
+from the running server:
+
+![The operator fulfill web form — no terminal](actuation_web_form.png)
+
+On Submit the form shells out to the signed `bin/actuate.py fulfill` (its backend) — it holds no new
+secret and signs nothing itself; the facts-lane signature is unchanged. The pasted credential is
+written to a private temp file, encrypted to the request's published key, and unlinked. N20 proves
+this backend produces a resolution the agent syncs; the CLI transcript below is that backend.
+
+## 4b + 5 · The signed backend the form drives, and what the agent receives (redacted)
 
 ![Operator fulfill then agent sync, on a two-key-custody split](actuation_fulfill_sync.png)
 
 ```text
-# 4. OPERATOR (facts-lane clone, MONEY_AGENT_STATE=$OPERATOR_STATE — holds the signing key)
+# 4b. OPERATOR (facts-lane clone, MONEY_AGENT_STATE=$OPERATOR_STATE — holds the signing key)
 $ bin/actuate.py fulfill ACT-001 --minutes 14 \
     --evidence "account created; KYC passed; API token copied" --return-file ./cred.txt
 ACT-001 fulfilled on the verifier facts lane (14.0 human-minutes). Agent must run: bin/actuate.py sync ACT-001
@@ -113,5 +130,5 @@ is the same "we name the live seam, we never fake it green" discipline as issue 
 The full driver (a genuine two-state-dir split) is uncommitted, like the E2E driver; it composes
 `bin/actuate.py request → card → fulfill → sync` across two clones with two `MONEY_AGENT_STATE`
 dirs. The offline contract that gates every mechanic shown here is
-`python3 tests/acceptance_actuation.py` (24 checks, CI-enforced), including the `credential`
+`python3 tests/acceptance_actuation.py` (25 checks, CI-enforced), including the `credential`
 round-trip (S3), the secret-never-in-git check (N3), and the post-handback usability probe (N19).

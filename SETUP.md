@@ -276,7 +276,20 @@ missing, partial, or stale markers fail closed. Changing any binding requires a 
 
 `bin/actuate.py` is the CANONICAL tool (`bin/human.py` is deprecated). The agent creates a request
 with `bin/actuate.py request` and keeps working. The operator resolves it from the verifier's
-**ledger checkout**, not from the agent sandbox — first rendering the self-contained card:
+**ledger checkout**, not from the agent sandbox.
+
+**Recommended operator surface — the web form (no terminal).** After the one-time signing-key setup
+below, run the fulfill server on the operator's machine and use the browser instead of the CLI:
+
+```bash
+AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE=~/.money-agent-verifier \
+  python3 bin/actuate_fulfill_server.py            # -> http://127.0.0.1:8765
+```
+
+The operator opens the queue, taps a request, reads the card, does the real action, pastes any
+credential, and taps **Submit** — minutes are auto-measured; the form shells out to the signed
+`fulfill` below (it holds no key and signs nothing itself). The rest of this section documents that
+underlying CLI (what the form drives, and what a fully headless operator would run):
 
 ```bash
 export MONEY_AGENT_STATE=~/.money-agent-verifier
