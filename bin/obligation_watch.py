@@ -199,10 +199,14 @@ def main() -> int:
         if now > deadline:
             _breach({**o, "breach": f"deadline {o['deadline']} passed unfulfilled"}, o)
     fulfilled_ids = {item["id"] for item in fulfilled}
+    breached_ids = {b.get("id") for b in breached}
     out = {"computed_at": _now().isoformat(),
+           # a breached record keeps its original status:"open"/"fulfillment-claimed", so it must be
+           # excluded here too or it is double-counted (in `breached` AND `open`).
            "open": sum(1 for o in obls
                        if o.get("status") in ("open", "fulfillment-claimed")
-                       and o.get("id") not in fulfilled_ids),
+                       and o.get("id") not in fulfilled_ids
+                       and o.get("id") not in breached_ids),
            "fulfilled": fulfilled, "completion_errors": completion_errors,
            "breached": breached, "verified": True, "authorization": authorization,
            "_note": "Computed by the verifier from the agent's COMMITTED register. A breach "
