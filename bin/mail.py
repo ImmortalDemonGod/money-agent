@@ -260,9 +260,24 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
     msg.set_content(body)
 
-    # S16 FIX: the reservation is checked (consume=False) up front and BURNED only at the wire
-    # below, after every gate and the fail-closed SENT_LOG commit have passed -- so a refused send
-    # never spends a reservation, and no compensating rollback window exists.
+    # BURN the reservation now -- AFTER every content gate has passed (a refused send above never
+    # reached here), but BEFORE the audit record is written or committed. Consuming after the commit
+    # (an earlier S16 variant) left a window where a failed final consume exited with the log already
+    # committed, permanently claiming an attempt that never happened -- a false record under a real
+    # person's name. Consume first; if the durable commit below fails, roll the reservation back.
+    ok_bg, why_bg = _bet_gate(consume=True)
+    if not ok_bg:
+        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
+        sys.exit(1)
+
+    def _rollback_reservation():
+        try:
+            import bet_gate
+            ok, why = bet_gate.rollback("send", bet_id=bet_id, lane=lane)
+            if not ok:
+                print(f"FATAL: send reservation rollback failed: {why}", file=sys.stderr)
+        except Exception as e:
+            print(f"FATAL: send reservation rollback crashed ({e})", file=sys.stderr)
 
     # Log BEFORE sending: an attempt that fails halfway still happened. Under SHADOW=1 the message
     # is captured and never delivered, so the record says exactly that AND lands under run/shadow/
@@ -312,6 +327,7 @@ def send(to, subj, body, *, bet_id=None, lane=None):
                             "--", *log_paths],
                            cwd=REPO, check=True, capture_output=True, timeout=30)
     except Exception as e:
+        _rollback_reservation()
         print(f"REFUSING: could not commit SENT_LOG before sending ({e}). "
               "An unpersisted audit trail is how run 1 lost its send record.", file=sys.stderr)
         sys.exit(1)
@@ -326,14 +342,6 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     except Exception as e:
         print(f"warn: SENT_LOG push failed ({e}); the commit is local -- push when possible.",
               file=sys.stderr)
-
-    # S16 FIX: NOW burn the reservation -- every gate passed and the audit trail is committed, so
-    # the send is about to happen (shadow-capture counts, it exercises the same accounting). This
-    # is the only place the bet is consumed; a refusal above returned without spending it.
-    ok_bg, why_bg = _bet_gate(consume=True)
-    if not ok_bg:
-        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
-        sys.exit(1)
 
     if SHADOW:
         # S12: captured, never delivered. Every gate above ran exactly as live; no socket opens.
