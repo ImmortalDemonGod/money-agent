@@ -65,17 +65,23 @@ def _shadow_mismatch() -> str | None:
     "not live-marked")."""
     if os.environ.get("SHADOW", "0") != "1":
         return None
-    k = os.environ.get("STRIPE_WRITE_KEY", "") or os.environ.get("STRIPE_READ_KEY", "")
-    if k and "REPLACE_ME" not in k and "_test_" not in k:
-        return ("SHADOW=1 with a non-test Stripe key. A shadow run touches test-mode Stripe "
-                "ONLY -- a live key here wires real money into a rehearsal.\n"
-                "       Fix: use sk_test_/rk_test_ keys, or unset SHADOW for a live run.")
-    card = os.environ.get("PRIVACY_READ_KEY", "") + os.environ.get("CARD_NUM", "")
-    if card and "REPLACE_ME" not in card:
-        return ("SHADOW=1 with live card credentials present. There is NO live card in a "
-                "shadow run -- that is the mode's definition (test-mode Stripe AND no live "
-                "card).\n       Fix: remove PRIVACY_READ_KEY/CARD_NUM from the shadow "
-                "environment; use CARD_CSV for a scripted spend feed.")
+    # Validate EACH credential independently. A logical OR / string concatenation would let one
+    # benign value mask a live one (a test write key hiding a live read key; PRIVACY_READ_KEY=
+    # REPLACE_ME hiding a live CARD_NUM). Only an explicit test-key prefix passes -- fail-closed,
+    # exactly as the docstring promises, not merely "not live-marked".
+    for env_name in ("STRIPE_WRITE_KEY", "STRIPE_READ_KEY"):
+        k = os.environ.get(env_name, "").strip()
+        if k and "REPLACE_ME" not in k and not k.startswith(("sk_test_", "rk_test_")):
+            return (f"SHADOW=1 with a non-test {env_name}. A shadow run touches test-mode Stripe "
+                    "ONLY -- a live key here wires real money into a rehearsal.\n"
+                    "       Fix: use sk_test_/rk_test_ keys, or unset SHADOW for a live run.")
+    for env_name in ("PRIVACY_READ_KEY", "CARD_NUM"):
+        v = os.environ.get(env_name, "").strip()
+        if v and "REPLACE_ME" not in v:
+            return (f"SHADOW=1 with a live card credential ({env_name}) present. There is NO live "
+                    "card in a shadow run -- that is the mode's definition (test-mode Stripe AND "
+                    "no live card).\n       Fix: remove PRIVACY_READ_KEY/CARD_NUM from the shadow "
+                    "environment; use CARD_CSV for a scripted spend feed.")
     return None
 
 
