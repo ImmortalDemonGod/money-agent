@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""V3 business spine (S10) -- per-lane stage ordering over the typed bet registry. CONFIG-GATED:
-`SPINE_ENFORCE=1` arms placement/resolution rules; `DEMAND_REFUTED_K>0` arms the demand-refuted
-operator checkpoint (guard reads it). Both default OFF -- the demand-first ordering is
-V2_HARNESS_DESIGN's one contested proposal, so adoption is a decisions-memo switch, never a
-stealth default.
+"""V3 business spine (S10; S17 flip: default ARMED). Per-lane stage ordering over the typed bet
+registry. The committed default now lives in spine.yml (`enforce:`); `SPINE_ENFORCE` overrides it
+in BOTH directions (=0 forces a pure-measurement run, =1 forces arming). `DEMAND_REFUTED_K>0`
+separately arms the demand-refuted checkpoint (guard reads it) and is UNCHANGED -- still off.
+Rationale for the flip is recorded in DECISION_LOG.md and RUN2_OPERATOR_RUNBOOK.md (Decisions D6):
+run 1 already established the unforced build-first -> $0 null, so a spine-off run 2 only replicates
+a solved measurement; the informative next run imposes demand-first as method. A `demand-probe`
+type is legal at stage 0 (the smoke-test carve-out) so demand can be gathered before building.
 
 THE MODEL: lanes, not a global phase. A lane = "audience/channel + pain/offer signature" (the
 `lane` field on typed bets). Stage state is DERIVED on demand from the committed registry --
@@ -46,7 +49,18 @@ sys.path.insert(0, str(REPO / "bin"))
 
 
 def enforced() -> bool:
-    return os.environ.get("SPINE_ENFORCE", "0") == "1"
+    # Explicit env override wins BOTH ways: SPINE_ENFORCE=0 forces a pure-measurement (un-armed)
+    # run, =1 forces arming -- CI and the operator use it to override the committed default.
+    env = os.environ.get("SPINE_ENFORCE")
+    if env is not None:
+        return env == "1"
+    # No override -> the committed default lives in spine.yml (`enforce:`; S17 flip: default ON).
+    # An UNREADABLE config here is treated as ARMED, so a broken config never silently un-arms the
+    # spine (check_placement/-resolution then surface the parse error, fail-closed).
+    try:
+        return str(load_config().get("enforce", "off")).strip().lower() in ("on", "1", "true", "yes")
+    except Exception:
+        return True
 
 
 def load_config() -> dict:
@@ -172,6 +186,21 @@ def check_placement(bet_type: str, lane: str, bets: list[dict] | None = None) ->
         errs.append(f"ordering: a {bet_type!r} bet needs lane stage >= {need}, but lane "
                     f"{lane!r} is at stage {cur} (a new lane starts at 0 -- relabeling only "
                     "loses permissions). Clear the earlier exits first (spine.py status).")
+    # S17 probe carve-out gaming-safety: a demand-probe is legal at stage 0 (building the smoke
+    # test is HOW a lane earns its demand-confirmed exit -- run 1's only real lead arrived from a
+    # live build), but it is a MINIMAL test, not a product line. Cap demand-probes per lane so a
+    # full build cannot be shipped as a run of "probes" to dodge the stage-3 delivery gate. (A
+    # demand-probe also never satisfies a ladder exit, so it can neither advance the lane nor be
+    # counted as the built product -- the count cap is the remaining gaming surface to close.)
+    if bet_type == "demand-probe":
+        cap = int(cfg["lane_caps"].get("demand_probe_per_lane", 2))
+        lane_bets = all_lanes.get(lane, {}).get("bets", [])
+        existing = sum(1 for b in lane_bets if b.get("type") == "demand-probe")
+        if existing >= cap:
+            errs.append(f"demand-probe cap: lane {lane!r} already has {existing} demand-probe(s) "
+                        f">= cap {cap}. A demand-probe is a minimal smoke test, not a product "
+                        "line -- confirm demand (win a demand-confirmed bet -> stage 2) before "
+                        "building more in this lane.")
     # Every newly placed bet is immediately due (last_checked=None), hence active. Enforce the
     # post-placement transition even for a historical lane that currently exists but is closed or
     # watching; checking only `lane not in all_lanes` let closed lanes reopen past the cap.
@@ -187,8 +216,8 @@ def check_placement(bet_type: str, lane: str, bets: list[dict] | None = None) ->
 
 def check_resolution(bet: dict, bets: list[dict] | None = None) -> list[str]:
     """E2 suspension, armed only: dependent bets in a stale-instrument lane cannot resolve."""
-    if not enforced() or not bet.get("lane") or bet.get("type") in (None, "probe"):
-        return []   # probes themselves must stay resolvable -- they are how a lane un-suspends
+    if not enforced() or not bet.get("lane") or bet.get("type") in (None, "probe", "demand-probe"):
+        return []   # probes/demand-probes stay resolvable -- how a lane un-suspends / earns demand
     try:
         cfg = load_config()
     except Exception as e:

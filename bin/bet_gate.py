@@ -9,7 +9,8 @@ deploy / spend -- is only justified by a live, typed hypothesis about what it te
 
   1. TYPED BETS extend run/bets.json entries, backward-compatibly (untyped bets stay legal for
      the registry's original job: not forgetting):
-       type: probe | demand-confirmed | delivery | funnel | channel-blocked | other
+       type: probe | demand-probe | demand-confirmed | delivery | funnel | channel-blocked | other
+         (demand-probe: a minimal smoke-test build, legal at spine stage 0; see spine.yml S17)
        lane: "<audience/channel + pain/offer signature>"
        success_condition / kill_condition: {oracle_id, metric, comparator, threshold, window_h}
          oracle_id: deterministic | instrumented | stripe -- `judgment` is NOT a legal success
@@ -42,7 +43,8 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "bin"))
 
 ACTIONS = ("send", "publish", "deploy", "spend")
-TYPES = ("probe", "demand-confirmed", "delivery", "funnel", "channel-blocked", "other")
+TYPES = ("probe", "demand-probe", "demand-confirmed", "delivery", "funnel", "channel-blocked",
+         "other")
 SUCCESS_ORACLES = ("deterministic", "instrumented", "stripe")
 COMPARATORS = (">=", "<=", "==")
 

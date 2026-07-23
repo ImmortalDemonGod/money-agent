@@ -1,13 +1,21 @@
-# V3 business spine config (S10; V2_HARNESS_DESIGN's contested layer, built CONFIG-GATED).
-# SPINE_ENFORCE=1 arms ordering/caps/freshness at bet placement+resolution; DEMAND_REFUTED_K>0
-# arms the demand-refuted operator checkpoint in guard. BOTH default off -- adopting the spine is
-# an explicit operator decision (the Decisions section of docs/runbooks/RUN2_OPERATOR_RUNBOOK.md),
-# never a stealth default, because the
-# demand-first ordering is the design's one contested proposal (method vs strategy-injection).
+# V3 business spine config (S10; S17 flip: default ARMED). `enforce:` below is the committed
+# default; env SPINE_ENFORCE overrides it in BOTH directions (=1 arm, =0 force a pure-measurement
+# run). DEMAND_REFUTED_K>0 still separately arms guard's demand-refuted HALT and is UNCHANGED --
+# still off; flipping the spine does not flip the terminal set.
+#
+# WHY the default flipped (recorded: DECISION_LOG.md + RUN2_OPERATOR_RUNBOOK.md Decisions D6):
+# run 1 already established the unforced behavior -- build-first -> $0 (archive/run-001). A
+# spine-off run 2 replicates a solved null, so the informative next run intervenes. Demand-first
+# is no longer being MEASURED as the agent's discovery; it is being IMPOSED as method -- an
+# explicit, logged operator decision, not a stealth default. Restore measurement mode with
+# SPINE_ENFORCE=0. The `demand-probe` carve-out (see ordering) keeps a minimal smoke-test build
+# legal at stage 0 so demand can be gathered before the real product is built.
 #
 # FORMAT NOTE: this file is parsed by bin/spine.py's deliberate YAML-SUBSET parser -- flat
 # `key: value` scalars and one level of `section:` + indented `key: value` maps, '#' comments.
 # Extend the parser before extending the format; a config that does not parse fails closed.
+
+enforce: on          # committed default (env SPINE_ENFORCE overrides). S17: was off.
 
 stages:
   0: instrument      # exit: a resolved-won probe bet whose metric is `instrument-probe`
@@ -22,6 +30,7 @@ stages:
 lane_caps:
   active: 3
   watching: 6
+  demand_probe_per_lane: 2
 
 # E2: a stage-0/1 exit fact older than this SUSPENDS dependent resolutions in the lane (unknown
 # is not zero) -- it never un-exits the stage. Stage-2 TTL is a memo knob (off unless set).
@@ -31,8 +40,17 @@ freshness_h:
 
 # ordering: minimum lane stage a bet TYPE may be placed at (the monotone lattice: a brand-new
 # lane starts at stage 0, so relabeling work into a "fresh" lane only LOSES permissions).
+#
+# PROBE CARVE-OUT (S17): `demand-probe` -- a MINIMAL published/payable smoke test whose sole
+# purpose is to ELICIT demand (one landing page, one payment-linked stub, a "reply for X" offer)
+# -- is legal at stage 0, because building the probe is HOW a lane earns its stage-2
+# demand-confirmed exit (run 1's only real lead, Marcos, arrived FROM a live build). A
+# demand-probe is NOT a `delivery`: it never satisfies the stage-3 build exit, so it cannot be
+# relabeled into "the product is built", and it is capped per lane (lane_caps.demand_probe_per_lane)
+# so a full product line cannot be shipped as a run of "probes". The full product stays gated at 3.
 ordering:
   probe: 0
+  demand-probe: 0
   demand-confirmed: 2
   delivery: 3
   funnel: 4

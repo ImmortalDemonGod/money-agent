@@ -295,7 +295,7 @@ def cmd_resolve(a) -> int:
             serrs = _spine.check_resolution(b, bets)
         except Exception as e:
             serrs = ([f"spine check failed ({type(e).__name__}: {e}) -- fail-closed"]
-                     if _os.environ.get("SPINE_ENFORCE", "0") == "1" else [])
+                     if _os.environ.get("SPINE_ENFORCE", "1") == "1" else [])
         if serrs:
             for e in serrs:
                 print(f"FATAL: {e}", file=sys.stderr)

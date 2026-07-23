@@ -357,8 +357,14 @@ assert_exit_grep 1 "bet gate" "mail: an armed send refuses without a reservation
   env BET_GATE_ENFORCE=1 python3 -c "import sys; sys.path.insert(0,'bin'); import mail; mail.send('a@b.c','s','body')"
 
 echo "=== V3 spine: ordering, lattice, caps, E2, demand-refuted (S10, SPINE_ENFORCE) ==="
-assert_exit 0 "spine: flag off places anything (inert by default)" \
+assert_exit 0 "spine: SPINE_ENFORCE=0 places anything (measurement-run override)" \
+  env SPINE_ENFORCE=0 python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit_grep 1 "stage" "spine: committed default ARMED -- bare invocation enforces (S17 flip)" \
   python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit 0 "spine: demand-probe placeable at stage 0 (S17 probe carve-out, armed)" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-probe "fresh/lane"
+assert_exit_grep 1 "demand-probe cap" "spine: demand-probe cap refuses the 3rd in a lane (S17 gaming-safety)" \
+  env SPINE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import spine; b=[{'id':x,'lane':'cap/l','type':'demand-probe','status':'open','last_checked':None,'poll_after_h':1,'resolve_by':'2099-01-01T00:00:00Z'} for x in ('a','b')]; e=spine.check_placement('demand-probe','cap/l',b); print(';'.join(e)); raise SystemExit(1 if e else 0)"
 assert_exit_grep 1 "stage" "spine: armed refuses demand-confirmed in a stage-0 lane (relabel loses permissions)" \
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "fresh/lane"
 assert_exit 0 "spine: armed allows a probe anywhere (stage-0 work)" \
