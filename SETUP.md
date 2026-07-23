@@ -272,91 +272,60 @@ missing, partial, or stale markers fail closed. Changing any binding requires a 
 }
 ```
 
-### Capability-delegation (human actuation) queue (issue #31)
+### Capability-delegation (human actuation) queue
 
-`bin/actuate.py` is the CANONICAL tool (`bin/human.py` is deprecated). The agent creates a request
-with `bin/actuate.py request` and keeps working. The operator resolves it from the verifier's
-**ledger checkout**, not from the agent sandbox.
+**Why you need this.** The agent will hit walls it structurally cannot pass on its own — a signup
+CAPTCHA, a one-time human KYC, claiming or deploying a host, funding a wallet. This queue lets the
+agent hand *you* that one bounded action: it stops on that gate (not on the whole run), pings you,
+you do the thing in your own browser, and you hand the result back. You act for a couple of minutes;
+the agent keeps working the rest of the time. Nothing here lets the agent fake "a human did it" —
+your fulfillment is cryptographically signed on a separate lane the agent cannot write.
 
-**Recommended operator surface — the web form (no terminal).** After the one-time signing-key setup
-below, run the fulfill server on the operator's machine and use the browser instead of the CLI:
+**One-time setup — do these in order (the form cannot sign until the key exists).**
 
-```bash
-AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE=~/.money-agent-verifier \
-  python3 bin/actuate_fulfill_server.py            # -> http://127.0.0.1:8765
-```
+1. Create the operator signing key and register it (this is the whole trust anchor):
+   ```bash
+   export MONEY_AGENT_STATE=~/.money-agent-operator
+   ssh-keygen -t ed25519 -N "" -C verifier -f "$MONEY_AGENT_STATE/verifier_signing_key"
+   # Commit these on the harness BEFORE the run starts:
+   #   harness/verifier_key.pub  = the .pub you just made
+   #   harness/allowed_signers   = one line: "verifier <contents of that .pub>"
+   ```
+2. Install `openssl` and `ssh-keygen` if missing — the signed + encrypted return channel needs both.
+3. Start the notifier so you are told when there is something to do (phone / web push):
+   ```bash
+   export AGENT_BRANCH=<run-branch> ACTUATE_NTFY_TOPIC=<a-hard-to-guess-topic>
+   bin/actuate_notify.sh --loop 60      # or call it once from a systemd timer / cron
+   ```
+4. Start the fulfill web form — this is how you act, no terminal:
+   ```bash
+   AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE=~/.money-agent-operator \
+     python3 bin/actuate_fulfill_server.py            # -> http://127.0.0.1:8765
+   ```
 
-The operator opens the queue, taps a request, reads the card, does the real action, pastes any
-credential, and taps **Submit** — minutes are auto-measured; the form shells out to the signed
-`fulfill` below (it holds no key and signs nothing itself). The rest of this section documents that
-underlying CLI (what the form drives, and what a fully headless operator would run):
+**Day-to-day — you do nothing until pinged.** A request arrives as a push. Open the form, tap the
+request, read the card (what to do, where, by when), do it in your own browser, paste any credential
+it produced, and tap **Submit** — the form measures how long it took and signs + publishes for you.
+To refuse, use **Decline** (measured too, and a legitimate answer — an oracle-shaped or over-risky
+ask *should* be declined).
 
-```bash
-export MONEY_AGENT_STATE=~/.money-agent-verifier
-ssh-keygen -t ed25519 -N "" -C verifier -f "$MONEY_AGENT_STATE/verifier_signing_key"
-# Commit the public key as harness/verifier_key.pub and the line
-# "verifier <public-key>" as harness/allowed_signers before the run.
+**Two things to know.**
 
-python3 bin/actuate.py card ACT-001            # the no-context operator card: target, steps, deadline
+- *Money-moving* (e.g. funding a wallet): the form additionally asks you to record a P3 name-test
+  ruling — confirm the transaction is acceptable on the account holder's statement before you send.
+- *Cross-run credentials*: a returned credential lives only for the current run (its plaintext and
+  decrypt key are sandbox-ephemeral). If a later run needs it — a one-time KYC account, say — copy it
+  from your off-repo `$MONEY_AGENT_STATE/actuation_returns/<id>` into `.env.agent`; the agent never
+  persists secrets itself.
 
-AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE="$MONEY_AGENT_STATE" \
-  python3 bin/actuate.py fulfill ACT-001 --minutes 3 --evidence "completed account CAPTCHA"
-# a MONEY-MOVING kind (e.g. wallet-fund) additionally requires a recorded P3 name-test ruling:
-#   ... fulfill ACT-002 --minutes 3 --evidence "sent 10 USDC" --return-value 0xTX \
-#       --consent-ruling "name-test cleared: $10 into the agent's own settlement wallet, bounded"
-# or (declined operator time is measured too):
-AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE="$MONEY_AGENT_STATE" \
-  python3 bin/actuate.py decline ACT-001 --minutes 0.25 \
-  --reason "identity exposure exceeds this run's bound"
-```
+**Headless alternative (no browser).** The form only drives the CLI, so a fully headless operator can
+run it directly: `bin/actuate.py card <id>` to read the request, then
+`bin/actuate.py fulfill <id> --minutes <n> --evidence "<what you did>" [--return-value <v> |
+--return-file <f>] [--consent-ruling "<...>"]`, or `bin/actuate.py decline <id> --minutes <n>
+--reason "<why>"`. The agent consumes the result itself with `bin/actuate.py sync`.
 
-The signing key is mandatory for operator resolutions. This publishes
-`ledger/actuation_resolutions.json` plus its detached signature; the agent then runs
-`python3 bin/actuate.py sync ACT-001` (or `sync-all`). The facts branch must be distinct from the
-request's claims branch, and sync rechecks the full signed request hash. Directly editing task state
-or resolving the companion bet does not close the request. Supervision must name the claims lane so
-requests are visible from the verifier checkout:
-
-**Cross-run credential persistence (operator action).** A returned credential round-trips only
-*within* a run: the materialized plaintext (`run/actuation_returns/<id>.json`) is git-ignored and
-the ephemeral decrypt key (`$MONEY_AGENT_STATE/actuation_keys/<id>.pem`) is sandbox-local, so the
-ledger ciphertext is **undecryptable by any future run** — a one-time credential (`deploy-account`,
-`kyc-step`) would otherwise be lost, and re-requesting a "one-time" KYC is nonsensical. The bridge
-is the repo's existing secret model: the operator retains an off-repo plaintext copy at
-`$MONEY_AGENT_STATE/actuation_returns/<id>` and, for any credential the next run needs, **promotes
-it into `.env.agent`** (which is re-injected per run) out-of-band. The agent never persists secrets
-itself; `sync` prints a reminder when a `credential` return lands.
-
-```bash
-bin/supervise.sh <run-branch>
-```
-
-The steps so far cover *resolving* a request. Wiring the operator **notification** and the agent
-**durable wakeup** is what makes the queue usable in real time — run 1's 60-minute claim window was
-missed for exactly this reason. Both are out-of-band and pluggable.
-
-**Operator notifier** (`bin/actuate_notify.sh` — runs on the operator's device, keyless, read-only,
-one-shot per fire):
-
-```bash
-export AGENT_BRANCH=<run-branch>                  # the claims lane it scans
-export ACTUATE_NTFY_TOPIC=<a-hard-to-guess-topic> # phone/web push via ntfy.sh
-bin/actuate_notify.sh          # what a systemd timer / cron entry calls each fire
-bin/actuate_notify.sh --loop 60   # or a foreground poller for a quick trial (default 60s)
-```
-
-Transports, first match wins: `ACTUATE_NTFY_TOPIC` (ntfy push) → `ACTUATE_NOTIFY_CMD` (alert piped
-to your own command) → else appended to `run/actuation_alerts.log`. URGENT alerts fire by default;
-`ACTUATE_NOTIFY_ALL=1` pushes NORMAL ones too. Durability is the caller's job — a systemd timer or
-cron, never a session-local loop.
-
-**Agent durable wakeup** (`bin/actuate_watch.sh` — agent side, issue #20.6): the durable queue fires
-it; it syncs resolved actuations and prints `NEXT_WAKEUP_SECONDS=<n>` (tightening as a deadline
-nears) for the caller to re-arm. Wire it to the `/loop`'s queued wakeup or a systemd timer that
-reads that line; the idle fallback is `ACTUATE_IDLE_WAKEUP_S` (default 1800s).
-
-Prerequisite for the encrypted credential-return channel: `openssl` on both machines (same class of
-dependency as `ssh-keygen` above).
+*(The agent side is automatic: `bin/actuate_watch.sh` fires on the durable wakeup, syncs resolved
+requests, and re-arms — you never run it.)*
 
 ## 4d. Optional: standing-presence posture (issue #4)
 

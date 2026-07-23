@@ -47,6 +47,5 @@ The falsifiable definition-of-done for the actuation queue, written RED-first an
 check and asserts the round-trips (S1–S3), the separation-of-duties / tamper-resistance defenses
 (N1–N18, one regression per adversarial finding), the post-handback usability probe (N19), the
 no-terminal web-form fulfill path (N20), and the usability/notification benchmarks (B1–B2). Same honest scope as `sim.sh`: offline and keyless — the one live actuation on a real rail
-is the Tier-L operator gate (see `.github/aiv-evidence/ACTUATION_E2E.md` for the real end-to-end
-push). Human-readable companion contract: `tests/ACCEPTANCE_ACTUATION.md`. Run by CI in the sim job,
+is the Tier-L operator gate. Human-readable companion contract: `tests/ACCEPTANCE_ACTUATION.md`. Run by CI in the sim job,
 so "25 green" is gate-enforced, not self-reported.
