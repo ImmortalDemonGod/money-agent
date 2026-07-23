@@ -58,13 +58,15 @@ OPERATOR side (facts lane, branch = $LEDGER_BRANCH, must differ from the agent b
 NOTIFIER (operator side, out-of-band, read-only):
   actuate.py notify-scan --sink <file>
      -> for every open, unresolved task, emit one line to <sink>:
-        "ALERT <id> urgency=<URGENT|NORMAL> ttl_s=<int>"
-        urgency=URGENT when the deadline is within $NOTIFY_URGENT_S (default 900). This is the
-        60-minute-window lesson made mechanical.
+        "ALERT <id> urgency=<URGENT|NORMAL> ttl_s=<int> kind=<kind> :: <gate>"
+        (id/kind/gate are control-char-scrubbed; the machine fields lead the line so the notifier
+        parses them by fixed position). urgency=URGENT when the deadline is within $NOTIFY_URGENT_S
+        (default 900). This is the 60-minute-window lesson made mechanical.
 --------------------------------------------------------------------------------------------
 """
 from __future__ import annotations
 
+import atexit
 import json
 import os
 import shutil
@@ -91,6 +93,7 @@ class Pending(Exception):
 
 
 def check(cid: str, title: str, fn) -> None:
+    """Run one acceptance check and record PASS/FAIL/PENDING."""
     if not MODULE.exists():
         RESULTS.append((cid, title, PENDING, "bin/actuate.py not implemented"))
         return
@@ -106,22 +109,26 @@ def check(cid: str, title: str, fn) -> None:
 
 
 def want(cond: bool, msg: str) -> None:
+    """Assert a condition, raising AssertionError(msg) on failure."""
     if not cond:
         raise AssertionError(msg)
 
 
 # ----- shell / git helpers ---------------------------------------------------------------
 def run(cmd, cwd=None, env=None, text_input=None) -> subprocess.CompletedProcess:
+    """Run a subprocess and capture text output (test helper)."""
     return subprocess.run(cmd, cwd=cwd, env=env, input=text_input,
                           capture_output=True, text=True, timeout=120)
 
 
 def git(cwd: Path, *args: str) -> subprocess.CompletedProcess:
+    """Run a git command in a clone with a fixed test identity."""
     return run(["git", "-c", "user.email=t@t.test", "-c", "user.name=acc",
                 "-c", "commit.gpgsign=false", *args], cwd=cwd)
 
 
 def actuate(clone: Path, state: Path, *args: str, text_input=None) -> subprocess.CompletedProcess:
+    """Invoke bin/actuate.py in a clone with the two-lane env set."""
     env = {**os.environ, "AGENT_BRANCH": AGENT_BRANCH, "LEDGER_BRANCH": LEDGER_BRANCH,
            "MONEY_AGENT_STATE": str(state)}
     return run(["python3", "bin/actuate.py", *args], cwd=clone, env=env, text_input=text_input)
@@ -133,6 +140,7 @@ def build_world() -> tuple[Path, Path, Path, Path]:
     if shutil.which("ssh-keygen") is None:
         raise Pending("ssh-keygen not on PATH — install openssh-client")
     world = Path(tempfile.mkdtemp(prefix="acc-actuation-"))
+    atexit.register(shutil.rmtree, world, ignore_errors=True)   # don't leave 21 temp worlds under /tmp
     origin = world / "origin.git"
     r = run(["git", "clone", "--bare", "--quiet", "--local", str(REPO), str(origin)])
     want(r.returncode == 0, f"bare clone failed: {r.stderr[:200]}")
@@ -169,6 +177,7 @@ def build_world() -> tuple[Path, Path, Path, Path]:
 
 
 def parse_id(out: str) -> str:
+    """Extract the 'id=ACT-NNN' token printed by `request`."""
     for tok in out.split():
         if tok.startswith("id="):
             return tok[3:].strip()
@@ -176,6 +185,7 @@ def parse_id(out: str) -> str:
 
 
 def steps_file(world: Path, name: str, body: str) -> str:
+    """Write a steps/artifact file in the world and return its path."""
     p = world / name
     p.write_text(body)
     return str(p)
@@ -242,9 +252,11 @@ def scenario_wallet_fund():
         raise Pending(f"request CLI not implemented: {r.stderr[:160]}")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
     tid = parse_id(r.stdout)
+    # wallet-fund moves real capital -> fulfill requires a recorded P3 name-test ruling.
     f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "6",
-                "--evidence", "sent 10 USDC; tx confirmed",
-                "--return-value", "0xTXHASHconfirmed")
+                "--evidence", "sent 10 USDC; tx confirmed", "--return-value", "0xTXHASHconfirmed",
+                "--consent-ruling", "name-test cleared: funding the agent's own settlement wallet "
+                "with $10 of the principal's USDC, a bounded amount the operator authorizes.")
     want(f.returncode == 0, f"fulfill failed: {f.stderr[:200]}")
     git(agent, "fetch", "-q", "origin", LEDGER_BRANCH)
     s = actuate(agent, world / "state", "sync", tid)
@@ -792,6 +804,65 @@ def neg_artifact_swap_before_fulfill():
     return "swap-to-oracle-with-consistent-sha before fulfill rejected (fulfill re-runs leak-check)"
 
 
+def neg_money_moving_needs_p3():
+    """N17 — a money-moving kind (wallet-fund) cannot be fulfilled without a recorded P3 name-test
+    ruling; the ruling is embedded in the signed resolution. Owner review #2."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n17.txt", "1. Send 10 USDC to the address.\n")
+    r = actuate(agent, world / "state", "request", "--kind", "wallet-fund",
+                "--gate", "x402 rail needs a funded Base wallet", "--target-url", "https://e/x",
+                "--identity", "operator funding wallet", "--steps", steps,
+                "--expect", "10 USDC settled", "--return-kind", "value",
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "issue #30 OQ1", "--ev", "unblock x402")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    # fulfill WITHOUT a consent ruling must be refused
+    f0 = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "5",
+                 "--evidence", "sent the USDC", "--return-value", "0xTX")
+    if "unrecognized arguments" in f0.stderr:
+        raise Pending("--consent-ruling not implemented")
+    want(f0.returncode != 0, "wallet-fund fulfilled with NO P3 name-test ruling")
+    want("p3" in (f0.stderr + f0.stdout).lower() or "name-test" in (f0.stderr + f0.stdout).lower()
+         or "real money" in (f0.stderr + f0.stdout).lower(),
+         f"refused, but not for the money-moving/P3 reason: {f0.stderr[:160]}")
+    # fulfill WITH a ruling succeeds and records it in the signed resolution
+    f1 = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "5", "--evidence", "sent USDC",
+                 "--return-value", "0xTX", "--consent-ruling",
+                 "name-test cleared: $10 USDC into the agent's own settlement wallet, bounded and "
+                 "operator-authorized.")
+    want(f1.returncode == 0, f"metered+ruled wallet-fund fulfill failed: {f1.stderr[:200]}")
+    lr = git(ledger, "show", f"HEAD:ledger/actuation_resolutions.json").stdout
+    want("p3_ruling" in lr and "name-test cleared" in lr,
+         "the P3 name-test ruling was not recorded in the signed resolution")
+    return "money-moving fulfill requires + records a P3 name-test ruling"
+
+
+def neg_open_request_cap():
+    """N18 — the open-request cap (default 3) bounds queue-spam; each open request blocks
+    conclusions. Owner review #6 (§12 R1)."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n18.txt", "1. x\n")
+    env_cap = {**os.environ, "AGENT_BRANCH": AGENT_BRANCH, "LEDGER_BRANCH": LEDGER_BRANCH,
+               "MONEY_AGENT_STATE": str(world / "state"), "ACTUATE_MAX_OPEN": "3"}
+    last = None
+    for i in range(4):
+        last = run(["python3", "bin/actuate.py", "request", "--kind", "claim-host",
+                    "--gate", f"claim host {i}", "--target-url", "https://e/x",
+                    "--identity", "operator", "--steps", steps, "--expect", "done",
+                    "--return-kind", "none", "--deadline", "2099-01-01T00:00:00Z",
+                    "--test", "iter 089 hit", "--ev", "reach wall"], cwd=agent, env=env_cap)
+        if i == 0 and last.returncode != 0 and "usage" in (last.stderr + last.stdout).lower():
+            raise Pending("request CLI not implemented")
+        if i < 3:
+            want(last.returncode == 0, f"request {i} unexpectedly failed: {last.stderr[:160]}")
+    want(last.returncode != 0, "a 4th open request was accepted despite the cap of 3")
+    want("cap" in (last.stderr + last.stdout).lower() or "already open" in (last.stderr + last.stdout).lower(),
+         f"refused, but not for the open-request-cap reason: {last.stderr[:160]}")
+    return "open-request cap (3) refuses the 4th open request"
+
+
 # ----- runner ----------------------------------------------------------------------------
 def main() -> int:
     check("S1", "claim-host round-trip (deadline + staged artifact)", scenario_claim_host)
@@ -815,13 +886,15 @@ def main() -> int:
     check("N14", "deleted task file still blocks conclusions", neg_deleted_task_caught)
     check("N15", "artifact byte-swap via nulled sha rejected", neg_artifact_null_sha)
     check("N16", "artifact swap-to-oracle before fulfill rejected", neg_artifact_swap_before_fulfill)
+    check("N17", "money-moving fulfill requires a P3 name-test ruling", neg_money_moving_needs_p3)
+    check("N18", "open-request cap bounds queue-spam", neg_open_request_cap)
 
     width = max(len(t) for _, t, _, _ in RESULTS)
     print("\n  ACCEPTANCE — capability-delegation queue (bin/actuate.py)\n")
     icons = {PASS: "PASS   ", FAIL: "FAIL   ", PENDING: "PENDING"}
     for cid, title, state, detail in RESULTS:
         print(f"  [{icons[state]}] {cid}  {title.ljust(width)}  — {detail}")
-    npass = sum(1 for *_, s, _ in ((r[0], r[1], r[2], r[3]) for r in RESULTS) if s == PASS)
+    npass = sum(1 for r in RESULTS if r[2] == PASS)
     nfail = sum(1 for r in RESULTS if r[2] == FAIL)
     npend = sum(1 for r in RESULTS if r[2] == PENDING)
     print(f"\n  {npass} PASS  ·  {nfail} FAIL  ·  {npend} PENDING   (Tier-S done = all PASS)\n")

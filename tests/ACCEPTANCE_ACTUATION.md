@@ -7,13 +7,16 @@ this file is its human-readable companion (the contract, the benchmarks, and the
 runs.
 
 **Status:** Tier-S is **GREEN** — `bin/actuate.py` (+ `bin/actuate_notify.sh`, `bin/actuate_watch.sh`)
-implemented to the contract; `python3 tests/acceptance_actuation.py` reports **19 PASS / 0 FAIL**.
-Existing suites unaffected (`sim.sh` 163/0, `corpus.sh` 11/0). **Two** adversarial rounds found real
-defects — round 1: binding confusion, shell injection/exfiltration, an unguarded conclusion gate, a
-tz-naive-deadline poison (→ N5–N11); round 2, re-attacking the fixes: id/kind (not just gate) still
-forgeable, artifact bytes bound but never re-checked, and a best-effort bet that holed the
-file-deletion backstop (→ N12–N14). All fixed and regression-locked. Tier-L (one live actuation on a
-real rail) remains an operator gate.
+implemented to the contract; `python3 tests/acceptance_actuation.py` reports **23 PASS / 0 FAIL**,
+and it is **gate-enforced in CI** (a job in `.github/workflows/ci.yml`), not self-reported. Existing
+suites unaffected (`sim.sh` 163/0, `corpus.sh` 11/0). **Four** adversarial rounds found real defects —
+round 1: binding confusion, shell injection/exfiltration, an unguarded conclusion gate, a
+tz-naive-deadline poison (→ N5–N11); round 2 (re-attacking the fixes): id/kind still forgeable,
+artifact bytes bound-but-unchecked, a best-effort bet that holed the file-deletion backstop
+(→ N12–N14); round 3: the artifact sha check bypassed by nulling the sha field (→ N15); round 4:
+the swap-to-oracle-before-fulfill vector (→ N16), then clean. A subsequent operator review added the
+money-moving P3 name-test gate (→ N17) and the open-request cap (→ N18). All fixed and
+regression-locked. Tier-L (one live actuation on a real rail) remains an operator gate.
 
 ## The goal
 
@@ -46,7 +49,7 @@ no channel — the archive still holds them:
 ## Definition of done — two tiers
 
 **Tier-S — provable on our branch now (keyless, offline).** `python3 tests/acceptance_actuation.py`
-exits 0: all 9 checks PASS. This is fully in our control and is what "done for testing" means.
+exits 0: all 23 checks PASS. This is fully in our control and is what "done for testing" means.
 
 **Tier-L — the live gate (operator, not self-certifiable).** One real actuation verified out of
 band: a real host claimed, or a real testnet wallet funded, with the agent demonstrably using
@@ -76,6 +79,10 @@ the operator — we never fake it green.**
 | **N12** | a newline in **`id` or `kind`** (not only `gate`) cannot forge an ALERT line; all agent fields scrubbed + id-format validated | adversary r2: incomplete scrub |
 | **N13** | swapping the **staged artifact bytes** after signing is rejected — fulfill re-verifies the file against the bound sha256 | adversary r2: sha bound but unchecked |
 | **N14** | **deleting** `actuation_tasks.json` still blocks conclusions via the now-**mandatory** companion bet's orphan check | adversary r2: best-effort bet holed it |
+| **N15** | swapping the artifact bytes while **nulling** `artifact_sha256` is rejected — a ref present *requires* a matching sha | adversary r3: sha-field bypass |
+| **N16** | swapping the artifact to **oracle content with a consistent sha** before fulfill is caught — fulfill re-runs the leak-check on the actual bytes | adversary r4: pre-fulfill swap |
+| **N17** | a **money-moving** kind (`wallet-fund`) cannot be fulfilled without a recorded **P3 name-test ruling**, embedded in the signed resolution | owner review #2 |
+| **N18** | the **open-request cap** (default 3) refuses a further request while the queue is full (each open request blocks conclusions) | owner review #6 (§12 R1) |
 
 **On the actuator-never-oracle leak-check:** it is a **heuristic tripwire, not a wall** — a denylist
 cannot catch every paraphrase. It is applied to every operator-facing surface (gate/steps/expect/
@@ -84,7 +91,7 @@ the run-1 `OPERATOR_UNBLOCK` strategy-leak class. The **wall is the human operat
 rendered card and can `decline` any oracle-shaped request (a metered decline is the operator's
 REFUSALS mirror). N2/N8 test the tripwire; they do not claim it is complete.
 
-The harness is **bite-verified**: run against a no-op stub, all 9 checks FAIL (not PENDING) with
+The harness is **bite-verified**: run against a no-op stub, all 23 checks FAIL (not PENDING) with
 meaningful reasons — so it distinguishes *unbuilt* (PENDING) from *broken* (FAIL) from *real*
 (PASS). This mirrors the repo's `tests/corpus.sh` discipline (assert on substance, prove the
 test bites).
@@ -105,7 +112,7 @@ test bites).
 ## How to run
 
 ```bash
-python3 tests/acceptance_actuation.py      # scorecard; exit 0 only when all 9 PASS
+python3 tests/acceptance_actuation.py      # scorecard; exit 0 only when all 23 PASS
 ```
 
 Requires `ssh-keygen` (the verifier signature, same dependency as `tests/sim.sh`) and, for the

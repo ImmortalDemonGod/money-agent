@@ -49,7 +49,14 @@ RETURNS_DIR = REPO / "run" / "actuation_returns"          # git-ignored; sandbox
 ARTIFACTS_DIR = REPO / "run" / "actuation_artifacts"      # committed; the operator's staged files
 
 KINDS = ("claim-host", "deploy-account", "wallet-fund", "kyc-step", "approval-click")
+# Kinds that move the principal's real capital on an irreversible rail. Fulfilling one requires a
+# recorded P3-class name-test ruling (COMPARATIVE_ANALYSIS §12 R1) -- the operator's consent is a
+# checkpoint, but the *reasoning* must be committed too, per the constitution's "real capital is the
+# operator's checkpoint" bound. Enforced in cmd_fulfill.
+MONEY_MOVING_KINDS = ("wallet-fund",)
 RETURN_KINDS = ("none", "confirmation", "value", "credential")
+# Open requests each block conclusions; cap the queue to bound spam (COMPARATIVE_ANALYSIS §12 R1).
+MAX_OPEN_REQUESTS = int(os.environ.get("ACTUATE_MAX_OPEN", "3"))
 SIGN_NAMESPACE = "money-agent-actuation"   # per-purpose domain separation (no cross-protocol replay)
 
 STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-agent-verifier")))
@@ -77,18 +84,22 @@ _ORACLE_RE = re.compile(r"(?<![a-z])(" + "|".join(re.escape(t) for t in ORACLE_T
 
 # ---- small helpers ----------------------------------------------------------------------
 def _now() -> str:
+    """UTC timestamp as ISO-8601 with a trailing Z."""
     return dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _parse_iso(s: str) -> dt.datetime:
+    """Parse an ISO-8601 timestamp (accepting a trailing Z) to a datetime."""
     return dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
 
 
 def _sha256(b: bytes) -> str:
+    """Hex sha256 of the given bytes."""
     return hashlib.sha256(b).hexdigest()
 
 
 def _git(*args: str, check: bool = False) -> subprocess.CompletedProcess:
+    """Run a git command in the repo and capture its text output."""
     return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True,
                           timeout=90, check=check)
 
@@ -117,12 +128,14 @@ def _verify_local_artifact(task: dict) -> None:
 
 
 def _load_tasks() -> list[dict]:
+    """Load the actuation task list from run/actuation_tasks.json (empty if absent)."""
     if TASKS.exists():
         return json.loads(TASKS.read_text()).get("tasks", [])
     return []
 
 
 def _save_tasks(tasks: list[dict], msg: str, extra_paths: list[Path] | None = None) -> None:
+    """Write the task list, stage the given paths, commit if changed, and best-effort push."""
     total = sum(t.get("human_minutes") or 0 for t in tasks)
     TASKS.parent.mkdir(parents=True, exist_ok=True)
     TASKS.write_text(json.dumps({"tasks": tasks, "human_minutes_total": total}, indent=2) + "\n")
@@ -143,6 +156,7 @@ def _task_hash(task: dict) -> str:
     # Bind EVERY field the operator sees on the card, so the signature attests to exactly what the
     # human acted on. Omitting identity/steps/expect/artifact (as an earlier version did) let the
     # agent rewrite the meaning of an approved request post-signature -- a binding-confusion break.
+    """Stable sha256 over every operator-visible field, so the signature binds what the card showed."""
     stable = {k: task.get(k) for k in ("id", "requested_at", "kind", "gate", "target_url",
                                        "identity", "steps", "expect", "artifact_ref",
                                        "artifact_sha256", "return_kind", "deadline", "agent_branch",
@@ -151,6 +165,7 @@ def _task_hash(task: dict) -> str:
 
 
 def leak_check(text: str) -> str | None:
+    """Return the first oracle-term the text trips (actuator-never-oracle tripwire), else None."""
     m = _ORACLE_RE.search(text.lower())
     return m.group(1) if m else None
 
@@ -167,11 +182,13 @@ def _scrub(s) -> str:
 
 # ---- ephemeral hybrid encryption (openssl: RSA-OAEP-wrapped AES-256-CBC) -----------------
 def _openssl(args: list[str], data: bytes | None = None) -> tuple[int, bytes, bytes]:
+    """Run openssl with the given args; return (returncode, stdout, stderr) as bytes."""
     p = subprocess.run(["openssl", *args], input=data, capture_output=True, timeout=60)
     return p.returncode, p.stdout, p.stderr
 
 
 def _require_openssl() -> None:
+    """Raise if openssl is unavailable (the secret return channel needs it)."""
     if shutil.which("openssl") is None:
         raise RuntimeError("openssl missing; the secret return channel cannot operate")
 
@@ -193,6 +210,7 @@ def _gen_keypair(task_id: str) -> str:
 
 
 def _encrypt_to(pub_pem: str, plaintext: bytes) -> dict:
+    """Hybrid-encrypt plaintext to an RSA public key (RSA-OAEP-wrapped AES-256-CBC); return the payload dict."""
     _require_openssl()
     key_hex = os.urandom(32).hex()
     iv_hex = os.urandom(16).hex()
@@ -214,6 +232,7 @@ def _encrypt_to(pub_pem: str, plaintext: bytes) -> dict:
 
 
 def _decrypt_with(priv_path: Path, ret: dict) -> bytes:
+    """Decrypt a hybrid payload with the ephemeral private key and verify its plaintext sha256."""
     _require_openssl()
     if not priv_path.exists():
         raise RuntimeError(f"ephemeral private key missing: {priv_path}")
@@ -237,6 +256,7 @@ def _decrypt_with(priv_path: Path, ret: dict) -> bytes:
 
 # ---- verifier signing of the facts-lane resolution document (mirrors bin/human.py) -------
 def _sign_resolution_document() -> None:
+    """Sign the resolutions document with the verifier-only key (detached .sig)."""
     if not SIGN_KEY.exists():
         raise RuntimeError(f"verifier signing key missing: {SIGN_KEY}; resolutions cannot be "
                            "published unsigned")
@@ -256,6 +276,7 @@ def _verify_resolution_document(ref: str, content: str) -> None:
     # to bin/human.py/bin/truth.py. That is defense-in-depth, not the wall: the wall is remote
     # ledger-branch write protection (the agent cannot place a matching forged+signed doc on
     # origin/LEDGER_BRANCH), and sod_hook.sh blocks committing allowed_signers in the first place.
+    """Verify the resolutions document against the signer pinned in the committed harness."""
     if shutil.which("ssh-keygen") is None:
         raise RuntimeError("ssh-keygen missing; cannot verify operator resolution")
     allowed = _git("show", "HEAD:harness/allowed_signers")
@@ -278,12 +299,14 @@ def _verify_resolution_document(ref: str, content: str) -> None:
 
 
 def _facts_resolutions() -> dict:
+    """Load the operator-resolutions map from the facts-lane file (empty if absent)."""
     if RESOLUTIONS.exists():
         return json.loads(RESOLUTIONS.read_text()).get("resolutions", {})
     return {}
 
 
 def _operator_task(task_id: str) -> dict:
+    """Read an open task by id from the agent branch on origin (operator side)."""
     agent_branch = os.environ.get("AGENT_BRANCH", "")
     if not agent_branch:
         raise RuntimeError("AGENT_BRANCH is required on the operator side")
@@ -299,6 +322,7 @@ def _operator_task(task_id: str) -> dict:
 
 
 def _publish_resolution(task: dict, resolution: dict) -> None:
+    """Append, sign, commit, and push an operator resolution on the facts lane."""
     ledger_branch = os.environ.get("LEDGER_BRANCH", "ledger")
     agent_branch = os.environ.get("AGENT_BRANCH", "")
     if not agent_branch:
@@ -351,6 +375,7 @@ def _publish_resolution(task: dict, resolution: dict) -> None:
 
 
 def _grounded_resolution(task: dict) -> dict | None:
+    """Fetch and verify the signed resolution for a task; return it, or None if unresolved."""
     ledger_branch = os.environ.get("LEDGER_BRANCH", "ledger")
     current = _git("branch", "--show-current").stdout.strip()
     task_branch = task.get("agent_branch") or current
@@ -373,6 +398,7 @@ def _grounded_resolution(task: dict) -> dict | None:
 
 # ---- companion bet (conclusion-blocking / request-don't-wait); best-effort ---------------
 def _register_companion_bet(task_id: str, kind: str, gate: str, deadline: str) -> str | None:
+    """Register the conclusion-blocking companion bet; return its id, or None on failure."""
     try:
         import bets as _bets
         resolve_by = (dt.datetime.now(dt.timezone.utc)
@@ -386,13 +412,16 @@ def _register_companion_bet(task_id: str, kind: str, gate: str, deadline: str) -
                                 check=f"bin/actuate.py list  # is {task_id} fulfilled?",
                                 oracle="judgment", poll_after_h=poll, resolve_by=resolve_by)
         if _bets.cmd_add(ns) == 0:
-            return f"bet-{len(_bets._load()):03d}"
+            placed = _bets._load()   # read the id cmd_add actually appended, not a re-derived count
+            if placed:
+                return placed[-1].get("id")
     except Exception as e:
         print(f"warn: companion bet not registered ({e}); request still tracked.", file=sys.stderr)
     return None
 
 
 def _resolve_companion_bet(bet_id: str | None, outcome: str, evidence: str) -> None:
+    """Best-effort resolution of the companion bet after a sync (won/lost)."""
     if not bet_id:
         return
     try:
@@ -406,6 +435,7 @@ def _resolve_companion_bet(bet_id: str | None, outcome: str, evidence: str) -> N
 
 # ---- commands ---------------------------------------------------------------------------
 def cmd_request(a) -> int:
+    """Agent: file a typed, validated actuation request (leak-checked, capped, bet-backed)."""
     if a.kind not in KINDS:
         print(f"FATAL: --kind must be one of {KINDS}. This queue carries mechanical ACTUATION "
               "only (actuator, never oracle).", file=sys.stderr)
@@ -464,6 +494,12 @@ def cmd_request(a) -> int:
         print("FATAL: actuation requests require a named claims branch.", file=sys.stderr)
         return 2
     tasks = _load_tasks()
+    open_count = sum(1 for t in tasks if t.get("status") == "open")
+    if open_count >= MAX_OPEN_REQUESTS:
+        print(f"FATAL: {open_count} actuation request(s) already open (cap {MAX_OPEN_REQUESTS}); "
+              "each blocks conclusions. Resolve or wait for the existing ones before filing another.",
+              file=sys.stderr)
+        return 1
     tid = f"ACT-{len(tasks) + 1:03d}"
     # Register the conclusion-blocking companion bet FIRST and make it MANDATORY (parity with
     # human.py): a request the agenda cannot track would be the invisible-wait this tool exists to
@@ -510,6 +546,7 @@ def cmd_request(a) -> int:
 
 
 def cmd_card(a) -> int:
+    """Render the human-readable operator card for a task."""
     task = next((t for t in _load_tasks() if t.get("id") == a.id), None)
     if not task:
         print(f"FATAL: no task {a.id!r}", file=sys.stderr)
@@ -543,6 +580,7 @@ def cmd_card(a) -> int:
 
 
 def cmd_fulfill(a) -> int:
+    """Operator: publish a signed 'fulfilled' resolution (metered; P3-gated for money-moving kinds)."""
     if a.minutes is None or not math.isfinite(a.minutes) or a.minutes <= 0:
         print("FATAL: --minutes must be a finite number > 0 (a real human action costs real "
               "minutes; the metering IS the point).", file=sys.stderr)
@@ -555,6 +593,17 @@ def cmd_fulfill(a) -> int:
     except Exception as e:
         print(f"FATAL: {e}", file=sys.stderr)
         return 1
+    resolution_extra = {}
+    if task.get("kind") in MONEY_MOVING_KINDS:
+        # A money-moving kind spends the principal's real capital on an irreversible rail. Fulfilling
+        # it requires a recorded P3-class name-test ruling (not just the operator's click): the
+        # rationale is embedded in the signed resolution, so the consent is permanent and grounded.
+        if not a.consent_ruling or len(a.consent_ruling.strip()) < 20:
+            print(f"FATAL: {task['kind']} moves the principal's real money -- fulfilling it requires "
+                  "a recorded P3 name-test ruling. Pass --consent-ruling \"<the name-test / statement-"
+                  "descriptor rationale for spending real capital>\" (>= 20 chars).", file=sys.stderr)
+            return 2
+        resolution_extra["p3_ruling"] = a.consent_ruling.strip()
     # If the request stages an artifact the operator will APPLY, verify its committed bytes match the
     # sha the request bound (and that the operator's signature will cover). A ref present REQUIRES a
     # sha (nulling it is tamper); a swapped file is a tampered request. Refuse before the operator
@@ -576,11 +625,16 @@ def cmd_fulfill(a) -> int:
             print(f"FATAL: the staged artifact asks the operator to decide strategy/content "
                   f"(matched {hit!r}) -- actuator, never oracle; refusing to fulfill.", file=sys.stderr)
             return 1
-    resolution = {"status": "fulfilled", "human_minutes": a.minutes, "evidence": a.evidence}
+    resolution = {"status": "fulfilled", "human_minutes": a.minutes, "evidence": a.evidence,
+                  **resolution_extra}
     rk = task.get("return_kind", "none")
     if rk != "none":
         if a.return_file:
-            plaintext = Path(a.return_file).read_bytes()
+            try:
+                plaintext = Path(a.return_file).read_bytes()
+            except OSError as e:
+                print(f"FATAL: cannot read --return-file: {e}", file=sys.stderr)
+                return 2
         elif a.return_value is not None:
             plaintext = a.return_value.encode()
         else:
@@ -613,6 +667,7 @@ def cmd_fulfill(a) -> int:
 
 
 def cmd_decline(a) -> int:
+    """Operator: publish a signed 'declined' resolution (metered)."""
     if a.minutes is None or not math.isfinite(a.minutes) or a.minutes <= 0:
         print("FATAL: --minutes must be a finite number > 0; assessing a declined request is "
               "still human work.", file=sys.stderr)
@@ -680,6 +735,7 @@ def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
 
 
 def cmd_sync(a) -> int:
+    """Agent: verify and apply the grounded resolution for one task."""
     tasks = _load_tasks()
     task = next((t for t in tasks if t.get("id") == a.id), None)
     if not task:
@@ -756,6 +812,7 @@ def cmd_next_wakeup(_a) -> int:
 
 
 def cmd_list(_a) -> int:
+    """Print all actuation tasks with status and metering."""
     tasks = _load_tasks()
     if not tasks:
         print("no actuation requests recorded")
@@ -769,6 +826,7 @@ def cmd_list(_a) -> int:
 
 
 def cmd_due(_a) -> int:
+    """Print open tasks with their time-to-deadline."""
     now = dt.datetime.now(dt.timezone.utc)
     for t in _load_tasks():
         if t.get("status") != "open":
@@ -823,6 +881,7 @@ def cmd_notify_scan(a) -> int:
 
 
 def main() -> int:
+    """Parse argv and dispatch to the selected subcommand."""
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -844,6 +903,8 @@ def main() -> int:
     pf.add_argument("--evidence", required=True)
     pf.add_argument("--return-file", dest="return_file", default="")
     pf.add_argument("--return-value", dest="return_value", default=None)
+    pf.add_argument("--consent-ruling", dest="consent_ruling", default="",
+                    help="required P3 name-test ruling when fulfilling a money-moving kind")
     pf.set_defaults(fn=cmd_fulfill)
 
     pd = sub.add_parser("decline")
