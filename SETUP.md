@@ -4,6 +4,13 @@ How to provision the money-agent so the result means something. The design goal 
 same: keep the load-bearing controls **outside the agent's reach**. Read the [README](README.md) first for
 why that matters.
 
+> **This file is the "why," not the walkthrough.** For the ordered, command-by-command procedure — with the
+> output you should see at each step and what a failure means — follow
+> [`docs/runbooks/RUN2_OPERATOR_RUNBOOK.md`](docs/runbooks/RUN2_OPERATOR_RUNBOOK.md) after reading this, and
+> fill in [`docs/RUN2_DECISIONS.md`](docs/RUN2_DECISIONS.md) before touching anything live. In a fresh clone,
+> run `bash bin/setup_sandbox.sh` **first** — git clones neither the hooks nor the `aiv` CLI, so an
+> un-bootstrapped checkout enforces nothing.
+
 ---
 
 ## Two deployment modes

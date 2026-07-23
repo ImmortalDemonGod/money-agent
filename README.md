@@ -73,8 +73,32 @@ bash tests/sim.sh          # runs the verification harness end-to-end, offline
 ```
 
 Then read one real artifact to feel the point: [`ledger/truth.json`](ledger/truth.json) is the only number
-that is *real*; [`REFUSALS.md`](REFUSALS.md) is what the agent would not do. Provisioning a *live* run (real
-Stripe account, restricted keys, issuer-capped card, two-machine verifier) is in [`SETUP.md`](SETUP.md).
+that is *real*; [`REFUSALS.md`](REFUSALS.md) is what the agent would not do.
+
+## Setting up a real run
+
+A *live* run (real Stripe account, restricted keys, issuer-capped card, two-machine verifier) is more
+involved than the demo. The docs exist and are thorough, but they are spread across a few files, so **read
+them in this order** -- each answers a different question:
+
+1. **[`SETUP.md`](SETUP.md)**: *why* the boundary is shaped the way it is, and *what* to provision (Stripe
+   account, the two restricted keys, the issuer-capped card, env files). Read for understanding.
+2. **[`docs/RUN2_DECISIONS.md`](docs/RUN2_DECISIONS.md)**: the knob choices (cap, horizon, which optional
+   rails). Fill this in *before* you touch anything live; the runbook assumes it is signed.
+3. **`bash bin/setup_sandbox.sh`**: run this **first in any fresh clone**. Git does not clone the hooks or
+   the `aiv` CLI, so a bare checkout enforces *nothing*; this installs the guards and then *proves* each one
+   actually fires.
+4. **[`docs/runbooks/RUN2_OPERATOR_RUNBOOK.md`](docs/runbooks/RUN2_OPERATOR_RUNBOOK.md)**: the
+   command-by-command walkthrough from "merged main" to "a trustable run," with the output you should see and
+   what it means when you do not. This is the step-by-step; the three above are its prerequisites.
+5. **[`RUN_COMMANDS.md`](RUN_COMMANDS.md)**: the `/goal` and `/loop` to issue once the runbook's preflights
+   are green.
+
+**You will need:** `python3` + `pip`, `git`, and (for the signed operator return-channel) `openssh-client`
+(`ssh-keygen`) and `openssl`; a KYC'd **Stripe** account (individual); an **issuer-capped card** with an API
+feed (e.g. Privacy.com) or a `CARD_CSV`. Optional rails add their own: **Alpaca** (paper edge rail),
+**Cloudflare `wrangler`** + Node (the traffic beacon), a **Base** RPC (on-chain rail). `SETUP.md` marks each
+optional block; a minimum viable run needs only the required set.
 
 ## Status
 
