@@ -202,7 +202,7 @@ Priority order (cheapest + highest information first; each probe names its recor
 3. **superteam** (PROBE_superteam.yaml): `POST /api/agents {"name": ...}` then
    `GET /api/agents/listings/live` with the key -- COUNT the AGENT_ALLOWED/AGENT_ONLY
    inventory. The payout claim step needs a human talent profile: budget it via
-   `bin/human.py request` (kind: signup-complete), not improvisation.
+   `bin/actuate.py request` (kind: kyc-step), not improvisation.
 4. **toku** (PROBE_toku.yaml): register OMITTING ownerEmail -- does a usable key return, and
    can a service be listed without email activation? (Resolves the docs-vs-FAQ conflict.)
 5. **circle** (PROBE_circle.yaml): view the listing form from a Google-logged-in browser
@@ -214,7 +214,7 @@ Priority order (cheapest + highest information first; each probe names its recor
 7. **claw-earn** (PROBE_clawtasks.yaml): wallet-only registration; poll `/claw/tasks` for
    `available > 0` and record task sizes. (ClawTasks itself is wound down -- skip unless it
    relaunches. Its Moltbook verification requires a PUBLIC post under the run identity: that
-   action routes through `bin/disclosure_gate.py` + `bin/human.py`, never improvised.)
+   action routes through `bin/disclosure_gate.py` + `bin/actuate.py`, never improvised.)
 8. **opentask** (PROBE_opentask.yaml): create an account, mint a token, re-poll
    `/api/payment-methods` -- is the crypto-rail outage transient or chronic?
 9. **taskmarket** (PROBE_taskmarket.yaml): `taskmarket init` from the sandbox; enter one

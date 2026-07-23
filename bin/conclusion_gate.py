@@ -270,6 +270,43 @@ def main() -> int:
                 and bet.get("id") not in task_bets:
             fails.append(f"human companion {bet.get('id')} has no task record -- "
                          "deleted actuation state cannot authorize a conclusion.")
+    # Capability-delegation requests (bin/actuate.py) get the identical treatment, for the identical
+    # reason: an open actuation is an outstanding operator obligation, and its companion bet is
+    # best-effort (may be absent) and judgment-class (self-resolvable), so the block must rest on the
+    # task record directly. Only bin/actuate.py sync, after a verifier-signed facts-lane resolution,
+    # closes one.
+    actuation_tasks = REPO / "run" / "actuation_tasks.json"
+    actuation_bets = {}
+    if actuation_tasks.exists():
+        try:
+            import json
+            import actuate as _actuate
+            a_tasks = json.loads(actuation_tasks.read_text()).get("tasks", [])
+            actuation_bets = {task.get("companion_bet"): task for task in a_tasks}
+            for task in a_tasks:
+                if task.get("status") == "open":
+                    fails.append(f"open actuation {task.get('id')} ({task.get('kind')}): "
+                                 f"{task.get('gate')!r} -- only a verifier-published operator "
+                                 "resolution consumed via bin/actuate.py sync closes it.")
+                    continue
+                try:
+                    grounded = _actuate._grounded_resolution(task)
+                    if not grounded or grounded.get("status") != task.get("status"):
+                        raise RuntimeError("facts-lane status does not match the claims task")
+                    if task.get("resolution") != grounded:
+                        raise RuntimeError("claims task does not contain the exact signed resolution")
+                except Exception as e:
+                    fails.append(f"actuation {task.get('id')} is not grounded "
+                                 f"({type(e).__name__}: {e}) -- agent-written task status cannot "
+                                 "authorize a conclusion.")
+        except Exception as e:
+            fails.append(f"cannot read actuation task registry ({type(e).__name__}: {e}) -- "
+                         "fail-closed: unknown actuation state is not resolved state.")
+    for bet in all_bets:
+        if str(bet.get("what", "")).startswith("actuation ") \
+                and bet.get("id") not in actuation_bets:
+            fails.append(f"actuation companion {bet.get('id')} has no task record -- "
+                         "deleted actuation state cannot authorize a conclusion.")
     try:
         import truth as _truth
         e_facts, e_src = _truth.load("edge.json")

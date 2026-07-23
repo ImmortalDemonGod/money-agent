@@ -48,6 +48,11 @@ jobs:
         # Replays run-1's REAL failure artifacts (the iter-095 false stop, the 086
         # empty commit) against the v2 gates, asserting on failure MESSAGES so a
         # wrong-reason refusal cannot read as coverage.
+      - name: Run the capability-delegation acceptance harness
+        run: python3 tests/acceptance_actuation.py
+        # The bin/actuate.py contract (25 checks: scenarios, SoD, tamper-resistance,
+        # money-moving P3 gate, notifier). Needs ssh-keygen + openssl (both on the
+        # runner). Wiring it here makes "green" gate-enforced, not self-reported.
 
   python:
     name: python byte-compile (bin/)

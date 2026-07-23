@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """Async human-actuation queue (issue #31; COMPARATIVE_ANALYSIS §12 R1 -- request, don't wait).
 
+DEPRECATED: superseded by bin/actuate.py (the capability-delegation queue), which adds a
+self-contained operator card, an encrypted credential return channel, a deadline-aware notifier,
+full-task signature binding, and a P3 name-test gate on money-moving actuations. Keep this module
+for reading historical human_tasks.json / grounding old resolutions; file NEW requests with
+actuate.py. PROMPT.md points the run agent at actuate.py.
+
 The identity/channel wall has no in-run agent solution: it is solvable only by a human passing a
 gate they are AUTHORIZED to pass (their own account's CAPTCHA, approval click, KYC step). Two
 roads were already closed -- defeating gates (constitution-forbidden) and guessing the gates at

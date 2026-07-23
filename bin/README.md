@@ -21,6 +21,8 @@ remote branch protection.
 | `verifier_daemon.sh` | launchd/systemd entrypoint for the loop |
 | `run_weak.sh` | co-located weak-mode loop for fast local trials — tripwire-only, never resets |
 | `supervise.sh` | operator one-screen status + VERDICT line (first dollar / edge verified / signed human actuation or sync / stale / dead) |
+| `actuate_notify.sh` | operator-device notifier for the actuation queue: deadline-aware, deduplicated, pluggable transport (out-of-band, keyless) |
+| `actuate_fulfill_server.py` | operator-device **web form** for fulfilling requests without a terminal: renders the card, collects evidence/credential, auto-measures minutes, and shells out to the signed `actuate.py fulfill` (binds localhost; holds no new secret) |
 | `set_live_keys.sh`, `load_keys.sh` | key plumbing helpers |
 
 ## GATES — run in the agent's environment, adjudicate claims against verifier facts (tripwires by design; the walls are the out-of-band verifier + remote branch protection)
@@ -44,7 +46,9 @@ remote branch protection.
 | `bets.py` | day-scale bet registry: `add` / `due` / `checked` / `resolve` — open bets block conclusions |
 | `edge.py` | edge rail claims side: `register` (commit the pre-registered bar), `status` (grounded verdict) |
 | `mail.py` | email under the real name: inbox/read/search/send, disclosure-gated, SENT_LOG fail-closed |
-| `human.py` | request mechanical operator actuation; operator signs/publishes a hash-bound resolution on a distinct facts lane, agent syncs and meters it |
+| `actuate.py` | CANONICAL capability-delegation queue: `request` a bounded operator action → self-contained operator `card` → operator signs a hash-bound resolution on the facts lane → `sync`/`sync-all` verifies + decrypts + meters. Money-moving kinds require a P3 name-test ruling; open requests block conclusions; an optional pre-registered `--verify-cmd` runs a post-handback usability probe at sync (agent-side tripwire, downgrade-only) |
+| `actuate_watch.sh` | agent-side durable-wake handler: runs `actuate.py sync-all`, then computes the next deadline-aware wakeup (#20.6) |
+| `human.py` | DEPRECATED → `actuate.py`. (Legacy: request operator actuation; operator signs a hash-bound resolution on a distinct facts lane, agent syncs and meters it) |
 | `outcome.py` | append structured outcomes to `knowledge/` (strategy-denylisted) |
 | `append_log.py` | durable append: commit-before-action so no reset can eat a log line |
 
