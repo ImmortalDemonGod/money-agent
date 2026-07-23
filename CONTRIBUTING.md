@@ -4,8 +4,8 @@ Four very different readers use this repo. Start from who you are; skip everythi
 
 **You are the OPERATOR (provisioning or starting a run):**
 [`SETUP.md`](SETUP.md) end to end, then issue #20 (the pre-run-2 acceptance gates), then `bin/new_run.sh`
-to close the previous run and `bin/start_verifier.sh` to open yours. [`docs/STANDING_RUN.md`](docs/STANDING_RUN.md)
-if the run should last days. That is the whole list.
+to close the previous run and `bin/start_verifier.sh` to open yours. `SETUP.md` §4d covers running for
+days. That is the whole list.
 
 **You are the RUN AGENT:**
 your world is `CLAUDE.md` (the bounds), `CONSTITUTION.md`, `PROMPT.md`, `RUN_COMMANDS.md`,
@@ -35,7 +35,7 @@ repo).
 | `knowledge/` | agent (append), operator (review) | cross-run operational memory: channels tested, approaches falsified, traps |
 | `templates/` | operator | the forms a run fills in: exhaustion packet, adversary report, edge registration |
 | `tests/` | contributor | the committed two-lane simulation matrix (`sim.sh`) |
-| `docs/` | humans | design, case study, standing-run recipe, probe records; reference for the agent, never instruction (#10 ruling) |
+| `docs/` | humans | design, case study, the operator runbook (with the decisions memo + human-control appendix), probe records; reference for the agent, never instruction (#10 ruling) |
 | `harness/` | operator | the traffic beacon (Cloudflare worker) |
 | `archive/` | `bin/new_run.sh` | each finished run's frozen state, one directory per run |
 | `.github/aiv-packets/` | agent (per iteration) | AIV verification packets: one claim + evidence classes A-F each |

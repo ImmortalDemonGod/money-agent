@@ -1,7 +1,8 @@
 # V3 business spine config (S10; V2_HARNESS_DESIGN's contested layer, built CONFIG-GATED).
 # SPINE_ENFORCE=1 arms ordering/caps/freshness at bet placement+resolution; DEMAND_REFUTED_K>0
 # arms the demand-refuted operator checkpoint in guard. BOTH default off -- adopting the spine is
-# an explicit operator decision (docs/RUN2_DECISIONS.md), never a stealth default, because the
+# an explicit operator decision (the Decisions section of docs/runbooks/RUN2_OPERATOR_RUNBOOK.md),
+# never a stealth default, because the
 # demand-first ordering is the design's one contested proposal (method vs strategy-injection).
 #
 # FORMAT NOTE: this file is parsed by bin/spine.py's deliberate YAML-SUBSET parser -- flat
