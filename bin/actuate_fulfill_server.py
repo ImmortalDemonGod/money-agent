@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import html
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -88,7 +89,10 @@ _PAGE = """<!doctype html><meta charset=utf-8><meta name=viewport content="width
 font-family:-apple-system,Segoe UI,Roboto,sans-serif;padding:18px;max-width:720px;margin:0 auto}}
 h1{{font-size:17px;color:#fff}}a{{color:#7aa2ff;text-decoration:none}}
 .card{{background:#12182b;border:1px solid #263154;border-radius:12px;padding:16px 18px;margin:14px 0}}
-.k{{color:#7ee787}}.h2{{color:#7aa2ff;font-weight:700;text-transform:uppercase;font-size:11px;letter-spacing:.6px;margin:12px 0 4px}}
+.h1{{color:#fff;font-weight:700;font-size:16px;margin-bottom:8px}}
+.h2{{color:#7aa2ff;font-weight:700;text-transform:uppercase;font-size:11px;letter-spacing:.6px;margin:12px 0 4px}}
+.ln{{margin:3px 0;line-height:1.5}}.ln b{{color:#eaf0ff}}
+.code{{font-family:ui-monospace,monospace;font-size:12px;color:#8ee6b8;white-space:pre}}.sp{{height:6px}}
 b{{color:#eaf0ff}}label{{display:block;margin:12px 0 4px;color:#9fb0d8;font-size:13px}}
 input,textarea{{width:100%;background:#0c1226;border:1px solid #2b385f;border-radius:8px;color:#eaf0ff;
 padding:10px;font-size:14px;font-family:inherit}}textarea{{min-height:70px;font-family:ui-monospace,monospace}}
@@ -158,7 +162,7 @@ class Handler(BaseHTTPRequestHandler):
                               "<a href=/>&larr; queue</a>", 404)
         _OPENED.setdefault(tid, time.monotonic())   # start the human-minutes clock
         rk = task.get("return_kind", "none")
-        card = html.escape(_card_to_html_source(task))
+        card = _card_html(task)
         ret_field = ""
         if rk == "credential":
             ret_field = ('<label>Paste the credential the action produced (stays on this machine; '
@@ -172,7 +176,7 @@ class Handler(BaseHTTPRequestHandler):
             p3 = ('<label>P3 name-test ruling (required for money-moving; ≥ 20 chars) — is this '
                   'transaction acceptable on the account holder’s statement?</label>'
                   '<textarea name=consent_ruling></textarea>')
-        body = (f'<a href=/>&larr; queue</a><div class=card><pre>{card}</pre></div>'
+        body = (f'<a href=/>&larr; queue</a><div class=card>{card}</div>'
                 f'<form method=post action="/fulfill"><input type=hidden name=id value="{html.escape(tid)}">'
                 f'<input type=hidden name=return_kind value="{html.escape(rk)}">'
                 '<label>What you did (one line is fine)</label>'
@@ -214,10 +218,26 @@ class Handler(BaseHTTPRequestHandler):
                    "<a href=/>&larr; back to the queue</a>")
 
 
-def _card_to_html_source(task: dict) -> str:
-    """The rendered operator card (reuses actuate._render_card for identical wording/scrubbing);
-    the CLI recipe is omitted since the form itself provides the fulfill/decline controls."""
-    return actuate._render_card(task, include_cli=False)
+def _card_html(task: dict) -> str:
+    """Render the operator card's markdown (from actuate._render_card, already control-char-scrubbed)
+    to safe HTML -- headers, bold key/value lines, numbered steps -- so the operator sees a clean
+    card, not raw `**` and `##`. Every line is html.escaped before the markdown transform, so an
+    agent-controlled field cannot inject markup."""
+    out = []
+    for ln in actuate._render_card(task, include_cli=False).splitlines():
+        e = html.escape(ln)
+        if ln.startswith("# "):
+            out.append(f"<div class=h1>{html.escape(ln[2:])}</div>")
+        elif ln.startswith("## "):
+            out.append(f"<div class=h2>{html.escape(ln[3:])}</div>")
+        elif ln.startswith("    "):
+            out.append(f"<div class=code>{e[4:] or '&nbsp;'}</div>")
+        elif not ln.strip():
+            out.append("<div class=sp></div>")
+        else:
+            bolded = re.sub(r"[*][*](.+?)[*][*]", r"<b>\1</b>", e)
+            out.append(f"<div class=ln>{bolded}</div>")
+    return "".join(out)
 
 
 def main() -> int:
