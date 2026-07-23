@@ -23,7 +23,6 @@ the mechanics move into the harness.
 """
 from __future__ import annotations
 import datetime as dt
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -116,18 +115,26 @@ def new(lever: str = "") -> int:
     # a lever could exist -- deviation from issue #45's wording, recorded there.
     import os
     if os.environ.get("PACE_ENFORCE", "0") == "1" and not lever:
+        sys.path.insert(0, str(REPO / "bin"))
         try:
-            sys.path.insert(0, str(REPO / "bin"))
             import bets as _b
-            _open = _b.open_bets()
-            if _open and not any(_b.is_due(b) for b in _open):
-                print('PACE_ENFORCE: open bets exist and none is due. A NEW iteration needs a '
-                      'declared lever:\n  bin/iter.py new --lever "<one line: the genuinely new '
-                      'thing this iteration tries>"\nWatch ticks (bin/iter.py watch) and bet '
-                      'resolutions are never blocked.', file=sys.stderr)
-                return 1
         except ImportError:
-            pass  # a missing registry must never brick iteration-opening; guard surfaces it
+            # PACE_ENFORCE is opt-in: the operator asked for pacing, so an unimportable registry
+            # must FAIL CLOSED (block), not silently pass. A merely absent bets.json is NOT this
+            # branch -- open_bets() returns [] for a missing file -- so only a broken or absent
+            # bets MODULE lands here, and opening an iteration on an unverifiable pacing state is
+            # the fail-open this gate exists to prevent.
+            print("PACE_ENFORCE is on but the bets registry could not be imported -- refusing to "
+                  "open an iteration on an unverifiable pacing state. Fix bin/bets.py, or unset "
+                  "PACE_ENFORCE.", file=sys.stderr)
+            return 1
+        _open = _b.open_bets()
+        if _open and not any(_b.is_due(b) for b in _open):
+            print('PACE_ENFORCE: open bets exist and none is due. A NEW iteration needs a '
+                  'declared lever:\n  bin/iter.py new --lever "<one line: the genuinely new '
+                  'thing this iteration tries>"\nWatch ticks (bin/iter.py watch) and bet '
+                  'resolutions are never blocked.', file=sys.stderr)
+            return 1
     t = _truth()
     n = int(COUNTER.read_text().strip()) + 1 if COUNTER.exists() else 1
     nnn = f"{n:03d}"
@@ -159,7 +166,7 @@ def new(lever: str = "") -> int:
         + f"\n## Iteration {nnn} — {_now()} (ledger @ {t.get('computed_at')})\n\n"
         + lever_line
         + "**Tried:** <fill>\n\n**Cost:** <fill>\n\n**Actually happened:** <fill>\n\n"
-          f"**Learned:** <fill>\n\n**Next:** <fill>\n")
+          "**Learned:** <fill>\n\n**Next:** <fill>\n")
 
     # commit the ALLOCATION immediately: numbering must survive any interruption
     _commit_push([packet, COUNTER, MONEY_LOG], f"iter {nnn}: open (scaffolded)")

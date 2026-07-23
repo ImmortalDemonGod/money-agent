@@ -62,5 +62,5 @@ future runs must provision a new fixture rather than weaken the cap.
 Use a Stripe test-mode `STRIPE_WRITE_KEY`, then run:
 
 ```bash
-python3 bin/delivery_check.py https://money-agent-test-delivery.cloud-pyramid.workers.dev/ --payment-link <test-link-url>
+python3 bin/delivery_check.py https://money-agent-test-delivery.cloud-pyramid.workers.dev --payment-link <test-link-url>
 ```
