@@ -20,6 +20,16 @@ capability-delegation channel — the agent's hands for bounded actions it is st
 barred from (claim/deploy a host, fund a wallet, pass a KYC) — so a strategy like x402 becomes
 reachable, WITHOUT weakening `actuator-never-oracle` or separation-of-duties.
 
+Each core scenario is grounded in a real run-1 failure, not theory:
+  S1 (claim-host + deadline + staged artifact) + B2 (deadline-aware notification)
+        — OPERATOR_CLAIM_workers_dev.md, iter 089 (the 60-minute window above).
+  S3 (a one-time human KYC/signup that returns a credential)
+        — the signup-gate wall map (iters 003/004/012/013; the IndieHackers birthday widget, 010–057).
+  S2 (wallet-fund) — issue #30 OQ1 (x402 needs a funded Base wallet).
+  N2 (a request smuggling strategy/content is refused) — the OPERATOR_UNBLOCK / OPERATOR_NOTE leak,
+        where the operator wrote strategy back ("stop grinding the audit business"); the oracle
+        direction this guardrail exists to forbid.
+
 --------------------------------------------------------------------------------------------
 THE CONTRACT (bin/actuate.py) that a green run proves. Implement to this; revise it only
 deliberately, in the same commit that revises the harness.
