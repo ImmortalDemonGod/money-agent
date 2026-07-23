@@ -187,7 +187,7 @@ if grep -qiE '(published|deployed|went live|now live|live at http)' "$PACKET"; t
   # Keyed on the URL, checked offline and FAIL-CLOSED before the network host_check. Without this
   # wiring the P3 gate was inert: built and unit-tested, but nothing ever invoked it.
   elif ! REPO_DIR="$REPO" DG_BODY="$HC_URL" python3 -c 'import os,sys; sys.path.insert(0, os.path.join(os.environ["REPO_DIR"],"bin")); import decision_gate as d; ok,msg=d.check("publish", os.environ["DG_BODY"]); sys.stderr.write(msg+"\n"); sys.exit(0 if ok else 1)'; then
-    fail "publish claim: no recorded P3 'publish' decision for $HC_URL -- decide and record it in DECISION_LOG.md (bin/decision_gate.py publish) before a publish counts"
+    fail "publish claim: no recorded P3 'publish' decision for $HC_URL -- write the URL to a file and run 'python3 bin/decision_gate.py publish <file>' (its body must be EXACTLY this URL so the gate's check matches), commit the DECISION_LOG.md line, then the publish counts"
   elif ! python3 "$REPO/bin/host_check.py" "$HC_URL" >/dev/null 2>&1; then
     fail "publish claim: bin/host_check.py FAILED for $HC_URL (host hides it from crawlers, noindex, or unreachable) -- not published"
   fi
