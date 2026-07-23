@@ -182,6 +182,12 @@ if grep -qiE '(published|deployed|went live|now live|live at http)' "$PACKET"; t
   HC_URL=$(grep -oiE 'HOST_CHECK_URL:[[:space:]]*https?://[^[:space:]]+' "$PACKET" | head -1 | sed -E 's/.*(https?:\/\/[^ ]+)/\1/')
   if [[ -z "$HC_URL" ]]; then
     fail "publish claim present but no 'HOST_CHECK_URL: <url>' line for the gate to verify (the old self-typed HOST_CHECK line is not trusted)"
+  # P3 (bin/decision_gate.py): a publish is a declared RISK CLASS -- it needs a name-test decision
+  # RECORDED before the act (disclosure_gate's pattern, generalized to publish/listing/acquisition).
+  # Keyed on the URL, checked offline and FAIL-CLOSED before the network host_check. Without this
+  # wiring the P3 gate was inert: built and unit-tested, but nothing ever invoked it.
+  elif ! REPO_DIR="$REPO" DG_BODY="$HC_URL" python3 -c 'import os,sys; sys.path.insert(0, os.path.join(os.environ["REPO_DIR"],"bin")); import decision_gate as d; ok,msg=d.check("publish", os.environ["DG_BODY"]); sys.stderr.write(msg+"\n"); sys.exit(0 if ok else 1)'; then
+    fail "publish claim: no recorded P3 'publish' decision for $HC_URL -- decide and record it in DECISION_LOG.md (bin/decision_gate.py publish) before a publish counts"
   elif ! python3 "$REPO/bin/host_check.py" "$HC_URL" >/dev/null 2>&1; then
     fail "publish claim: bin/host_check.py FAILED for $HC_URL (host hides it from crawlers, noindex, or unreachable) -- not published"
   fi
