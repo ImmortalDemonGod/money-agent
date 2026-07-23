@@ -279,61 +279,6 @@ missing, partial, or stale markers fail closed. Changing any binding requires a 
 }
 ```
 
-### Capability-delegation (human actuation) queue
-
-**Why you need this.** The agent will hit walls it structurally cannot pass on its own — a signup
-CAPTCHA, a one-time human KYC, claiming or deploying a host, funding a wallet. This queue lets the
-agent hand *you* that one bounded action: it stops on that gate (not on the whole run), pings you,
-you do the thing in your own browser, and you hand the result back. You act for a couple of minutes;
-the agent keeps working the rest of the time. Nothing here lets the agent fake "a human did it" —
-your fulfillment is cryptographically signed on a separate lane the agent cannot write.
-
-**One-time setup — do these in order (the form cannot sign until the key exists).**
-
-1. Create the operator signing key and register it (this is the whole trust anchor):
-   ```bash
-   export MONEY_AGENT_STATE=~/.money-agent-operator
-   ssh-keygen -t ed25519 -N "" -C verifier -f "$MONEY_AGENT_STATE/verifier_signing_key"
-   # Commit these on the harness BEFORE the run starts:
-   #   harness/verifier_key.pub  = the .pub you just made
-   #   harness/allowed_signers   = one line: "verifier <contents of that .pub>"
-   ```
-2. Install `openssl` and `ssh-keygen` if missing — the signed + encrypted return channel needs both.
-3. Start the notifier so you are told when there is something to do (phone / web push):
-   ```bash
-   export AGENT_BRANCH=<run-branch> ACTUATE_NTFY_TOPIC=<a-hard-to-guess-topic>
-   bin/actuate_notify.sh --loop 60      # or call it once from a systemd timer / cron
-   ```
-4. Start the fulfill web form — this is how you act, no terminal:
-   ```bash
-   AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE=~/.money-agent-operator \
-     python3 bin/actuate_fulfill_server.py            # -> http://127.0.0.1:8765
-   ```
-
-**Day-to-day — you do nothing until pinged.** A request arrives as a push. Open the form, tap the
-request, read the card (what to do, where, by when), do it in your own browser, paste any credential
-it produced, and tap **Submit** — the form measures how long it took and signs + publishes for you.
-To refuse, use **Decline** (measured too, and a legitimate answer — an oracle-shaped or over-risky
-ask *should* be declined).
-
-**Two things to know.**
-
-- *Money-moving* (e.g. funding a wallet): the form additionally asks you to record a P3 name-test
-  ruling — confirm the transaction is acceptable on the account holder's statement before you send.
-- *Cross-run credentials*: a returned credential lives only for the current run (its plaintext and
-  decrypt key are sandbox-ephemeral). If a later run needs it — a one-time KYC account, say — copy it
-  from your off-repo `$MONEY_AGENT_STATE/actuation_returns/<id>` into `.env.agent`; the agent never
-  persists secrets itself.
-
-**Headless alternative (no browser).** The form only drives the CLI, so a fully headless operator can
-run it directly: `bin/actuate.py card <id>` to read the request, then
-`bin/actuate.py fulfill <id> --minutes <n> --evidence "<what you did>" [--return-value <v> |
---return-file <f>] [--consent-ruling "<...>"]`, or `bin/actuate.py decline <id> --minutes <n>
---reason "<why>"`. The agent consumes the result itself with `bin/actuate.py sync`.
-
-*(The agent side is automatic: `bin/actuate_watch.sh` fires on the durable wakeup, syncs resolved
-requests, and re-arms — you never run it.)*
-
 ## 4d. Optional: standing-presence posture (issue #4)
 
 Run 1's iterations burned in ~6–10 minutes each, so the agent exhausted every minutes-scale action
@@ -404,6 +349,61 @@ falsification, and a compounding portfolio of resolved bets is exactly the datas
   forging.
 - The wakeup mechanism itself (cron vs queued wakeups) lives outside the repo; entry 005 of
   IMPROVEMENT_LOG.md records why queued wakeups beat cron for liveness.
+
+## 4e. Capability-delegation (human actuation) queue
+
+**Why you need this.** The agent will hit walls it structurally cannot pass on its own — a signup
+CAPTCHA, a one-time human KYC, claiming or deploying a host, funding a wallet. This queue lets the
+agent hand *you* that one bounded action: it stops on that gate (not on the whole run), pings you,
+you do the thing in your own browser, and you hand the result back. You act for a couple of minutes;
+the agent keeps working the rest of the time. Nothing here lets the agent fake "a human did it" —
+your fulfillment is cryptographically signed on a separate lane the agent cannot write.
+
+**One-time setup — do these in order (the form cannot sign until the key exists).**
+
+1. Create the operator signing key and register it (this is the whole trust anchor):
+   ```bash
+   export MONEY_AGENT_STATE=~/.money-agent-operator
+   ssh-keygen -t ed25519 -N "" -C verifier -f "$MONEY_AGENT_STATE/verifier_signing_key"
+   # Commit these on the harness BEFORE the run starts:
+   #   harness/verifier_key.pub  = the .pub you just made
+   #   harness/allowed_signers   = one line: "verifier <contents of that .pub>"
+   ```
+2. Install `openssl` and `ssh-keygen` if missing — the signed + encrypted return channel needs both.
+3. Start the notifier so you are told when there is something to do (phone / web push):
+   ```bash
+   export AGENT_BRANCH=<run-branch> ACTUATE_NTFY_TOPIC=<a-hard-to-guess-topic>
+   bin/actuate_notify.sh --loop 60      # or call it once from a systemd timer / cron
+   ```
+4. Start the fulfill web form — this is how you act, no terminal:
+   ```bash
+   AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE=~/.money-agent-operator \
+     python3 bin/actuate_fulfill_server.py            # -> http://127.0.0.1:8765
+   ```
+
+**Day-to-day — you do nothing until pinged.** A request arrives as a push. Open the form, tap the
+request, read the card (what to do, where, by when), do it in your own browser, paste any credential
+it produced, and tap **Submit** — the form measures how long it took and signs + publishes for you.
+To refuse, use **Decline** (measured too, and a legitimate answer — an oracle-shaped or over-risky
+ask *should* be declined).
+
+**Two things to know.**
+
+- *Money-moving* (e.g. funding a wallet): the form additionally asks you to record a P3 name-test
+  ruling — confirm the transaction is acceptable on the account holder's statement before you send.
+- *Cross-run credentials*: a returned credential lives only for the current run (its plaintext and
+  decrypt key are sandbox-ephemeral). If a later run needs it — a one-time KYC account, say — copy it
+  from your off-repo `$MONEY_AGENT_STATE/actuation_returns/<id>` into `.env.agent`; the agent never
+  persists secrets itself.
+
+**Headless alternative (no browser).** The form only drives the CLI, so a fully headless operator can
+run it directly: `bin/actuate.py card <id>` to read the request, then
+`bin/actuate.py fulfill <id> --minutes <n> --evidence "<what you did>" [--return-value <v> |
+--return-file <f>] [--consent-ruling "<...>"]`, or `bin/actuate.py decline <id> --minutes <n>
+--reason "<why>"`. The agent consumes the result itself with `bin/actuate.py sync`.
+
+*(The agent side is automatic: `bin/actuate_watch.sh` fires on the durable wakeup, syncs resolved
+requests, and re-arms — you never run it.)*
 
 ---
 

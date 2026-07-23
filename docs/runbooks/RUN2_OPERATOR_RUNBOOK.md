@@ -7,7 +7,7 @@ read the values you set there. Steps marked **[preflight: X]** have a mechanical
 to proceed if you skipped them; steps marked **[no automated check]** are enforced only by this
 line -- read those twice.
 
-Order matters: Decisions -> 0 -> 1 -> 2(optional) -> 3 -> 4 -> 5 -> 6 -> 7 -> 8/9(optional) -> 10 -> 11 -> 12.
+Order matters: Decisions -> 0 -> 1 -> 2(optional) -> 3 -> 4 -> 5 -> 6 -> 7 -> 7b -> 8/9(optional) -> 10 -> 11 -> 12.
 Section 11 (the #32 signup probes) is NOT optional -- it is the evidence this run exists to collect;
 sign-off (12) is not complete until every Section 11 probe is done or recorded `not_run` with a reason.
 
@@ -236,6 +236,31 @@ poll list. `SETUP.md` §4d has the full recipe (INTERVAL/HEARTBEAT_S/LEDGER_MAX_
 values per the decisions memo). **[no automated check -- the wakeup mechanism lives outside
 the repo]**
 
+## 7b. Stand up the capability-delegation surface (operator device -- before Section 11)
+
+The agent's ONE legitimate operator-ask is a bounded mechanical action it cannot perform itself
+(a signup CAPTCHA, a one-time KYC, claiming/deploying a host, funding a wallet). It queues these
+with `bin/actuate.py request`; you fulfill them. **Section 11's #32 probes explicitly queue
+`kyc-step` requests, so a surface must be running to receive them** -- if it is not, the agent's
+requests land with nothing listening.
+
+Follow `SETUP.md` §4e end to end (it is the full procedure). In short, on the operator device:
+
+```bash
+# 1. signing key -- the SAME key as D3's #36 fact-lane signing (do it once, not twice):
+#    ssh-keygen ... $MONEY_AGENT_STATE/verifier_signing_key, commit harness/verifier_key.pub +
+#    harness/allowed_signers on the harness BEFORE the run.
+# 2. notifier (so you are pinged):
+AGENT_BRANCH=<run-branch> ACTUATE_NTFY_TOPIC=<hard-to-guess> bin/actuate_notify.sh --loop 60
+# 3. fulfill web form (how you act, no terminal):
+AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE=~/.money-agent-operator \
+  python3 bin/actuate_fulfill_server.py            # -> http://127.0.0.1:8765
+```
+- Money-moving kinds (`wallet-fund`) additionally require a P3 name-test ruling at fulfillment
+  (the form prompts for it). A returned credential is within-run only.
+- **[no automated check -- verify by queueing one throwaway `approval-click` request from the
+  sandbox and confirming the notifier fires and the form renders its card]**
+
 ## 8. Gate #26: deploy the traffic beacon (M7 -- do this at run START)
 
 From `harness/beacon/` (commands cross-checked against its README):
@@ -348,6 +373,7 @@ Priority order (cheapest + highest information first; each probe names its recor
 
 - [ ] Gates 0-2 green (3 if edge rail on; 8 before any published artifact).
 - [ ] Every Section 11 (#32) probe completed, or explicitly recorded `not_run` with a reason and artifact.
+- [ ] Capability-delegation surface up (Section 7b): notifier + fulfill form running, throwaway request round-tripped.
 - [ ] The Decisions section signed.
 - [ ] Both machines' matrices green at the deployed commit.
 

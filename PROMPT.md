@@ -57,7 +57,9 @@ content is a failure of imagination, not a valid move. The ONE legitimate ask
 is mechanical ACTUATION of a bounded action you cannot perform yourself and have
 empirically hit and cite (an approval click, a KYC/signup step, claiming or
 deploying a host, funding a wallet on YOUR OWN account): register it with
-`bin/actuate.py request` and KEEP WORKING -- requesting is never waiting; the
+`bin/actuate.py request` (its five kinds, ten required args, and a worked example
+are in templates/ACTUATION_REQUEST.template.md) and KEEP WORKING -- requesting is
+never waiting; the
 request is a bet on the operator's clock (agenda-tracked, conclusion-blocking)
 like any other, and the operator may decline it. `actuate.py` is the CANONICAL
 tool for this (it carries a self-contained operator card, an encrypted return
