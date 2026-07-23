@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/test_v3_hardening.py`
-**Commit:** `c085827`
-**Previous:** `512f388`
-**Generated:** 2026-07-22T23:14:04Z
+**Commit:** `a0f1fdc`
+**Previous:** `426fe8e`
+**Generated:** 2026-07-23T01:29:55Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -12,19 +12,19 @@
 
 ```yaml
 classification:
-  risk_tier: R3
-  sod_mode: S1
+  risk_tier: R1
+  sod_mode: S0
   critical_surfaces: []
   blast_radius: "tests/test_v3_hardening.py"
-  classification_rationale: "R3 regression evidence for a payment-refund binding"
-  classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:14:04Z"
+  classification_rationale: "Bite test for the deadline-first refund fix. R1: test-only"
+  classified_by: "Claude"
+  classified_at: "2026-07-23T01:29:55Z"
 ```
 
 ## Claim(s)
 
-1. The focused obligation test refuses authorized registration when charge_id is empty
-2. The same test permits the bounded record after a concrete ch_ identifier is supplied
+1. A late-but-reachable delivery and an unrecognized status are both recorded as breaches (never fulfilments) and both bound charges are refunded; the test fails on the pre-fix watchdog
+2. No existing tests were modified or deleted; one test was added
 3. No existing tests were modified or deleted during this change.
 
 ---
@@ -34,71 +34,47 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** Every accepted deferred liability must have a mechanically actionable refund target
+- **Requirements Verified:** The Critical refund-bypass fix must be regression-tested with a fixture that bites on pre-fix code
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`c085827`](https://github.com/ImmortalDemonGod/money-agent/tree/c085827d7725d85d8abc04611a97e2f62b52102e))
+**Scope Inventory** (SHA: [`a0f1fdc`](https://github.com/ImmortalDemonGod/money-agent/tree/a0f1fdcbc6f499e5274a3084c51d93710e54a277))
 
-- [`tests/test_v3_hardening.py#L298-L300`](https://github.com/ImmortalDemonGod/money-agent/blob/c085827d7725d85d8abc04611a97e2f62b52102e/tests/test_v3_hardening.py#L298-L300)
+- [`tests/test_v3_hardening.py#L248-L287`](https://github.com/ImmortalDemonGod/money-agent/blob/a0f1fdcbc6f499e5274a3084c51d93710e54a277/tests/test_v3_hardening.py#L248-L287)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`** (L298-L300): FAIL -- WARNING: No tests import or call `test_obligation_deadline_cap_and_fulfillment_claim_are_not_self_certifying`
+- **`test_obligation_watch_breaches_late_delivery_and_unknown_status_with_refund`** (L248-L287): FAIL -- WARNING: No tests import or call `test_obligation_watch_breaches_late_delivery_and_unknown_status_with_refund`
+- **`run`** (unknown): FAIL -- WARNING: No tests import or call `run`
 
-**Coverage summary:** 0/1 symbols verified by tests.
+**Coverage summary:** 0/2 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** All checks passed
-- **mypy:** Found 10 errors in 1 file (checked 1 source file)
-
-### Class C (Negative Evidence)
-
-**Search methodology:** Ran `git diff --cached` and scanned for regression indicators.
-
-- Test file deletions: **none**
-- Test file modifications: **none**
-- Deleted assertions (`assert` removals in diff): **none found**
-- Added skip markers (`@pytest.mark.skip`, `@unittest.skip`): **none found**
-
-### Class F (Provenance Evidence)
-
-**Test file chain-of-custody:**
-
-No covering test files found.
-
-**Recent test directory history** (`git log --oneline -5 -- tests/`):
-
-```
-6763b83 test(sim): exercise verifier-authorized obligations
-512f388 test(obligations): cover guarded authorization contract
-30612e5 test(sim): exercise CodeRabbit review invariants
-76c1bec test(v3): cover CodeRabbit hardening findings
-bb5cbed test(sim): adversarially cover PR 51 hardening
-```
+- **ruff:** 0 error(s)
+- **mypy:** 
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The focused obligation test refuses authorized registration ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | The same test permits the bounded record after a concrete ch... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | A late-but-reachable delivery and an unrecognized status are... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted; one test was add... | structural | Class C not collected | REVIEW MANUAL REVIEW |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
-**Verdict summary:** 1 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 0 verified, 0 unverified, 3 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/2 symbols verified).
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Prove charge binding is mandatory for obligation registration
+Add a biting watchdog test for late-delivery and unknown-status breach+refund

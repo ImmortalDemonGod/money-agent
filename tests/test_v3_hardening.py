@@ -245,6 +245,46 @@ def test_obligation_watch_checks_open_records_without_agent_claim(monkeypatch, t
     assert facts["fulfilled"][0]["id"] == "obl-001"
 
 
+def test_obligation_watch_breaches_late_delivery_and_unknown_status_with_refund(monkeypatch,
+                                                                                tmp_path):
+    # A delivery that is reachable NOW but only after the promised deadline is a breach, not a
+    # fulfilment; an unrecognized status is a breach; and BOTH must attempt the bound refund. A
+    # breach that halts the run while leaving the customer un-refunded is the exact harm the rail
+    # exists to prevent (pre-fix: the late URL read as fulfilled, and the unknown status refunded
+    # nothing).
+    out = tmp_path / "ledger" / "obligations.json"
+    late = {"id": "obl-late", "status": "open", "what": "hosted report",
+            "check": "delivery-url:https://example.test/report",
+            "deadline": "2000-01-01T00:00:00Z", "value_usd": 10.0, "charge_id": "ch_late"}
+    weird = {"id": "obl-weird", "status": "resolved", "what": "hosted report",
+             "check": "delivery-url:https://example.test/report",
+             "deadline": "2099-01-01T00:00:00Z", "value_usd": 10.0, "charge_id": "ch_weird"}
+    refunded = []
+
+    def run(args, **_kwargs):
+        if args[1:3] == ["show", "origin/agent:run/obligations.json"]:
+            return SimpleNamespace(returncode=0,
+                                   stdout=json.dumps({"obligations": [late, weird]}), stderr="")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    monkeypatch.setenv("AGENT_BRANCH", "agent")
+    monkeypatch.setenv("STRIPE_REFUND_KEY", "rk_test")
+    monkeypatch.setattr(obligation_watch, "REPO", tmp_path)
+    monkeypatch.setattr(obligation_watch, "OUT", out)
+    monkeypatch.setattr(obligation_watch.subprocess, "run", run)
+    monkeypatch.setattr(obligation_watch, "_authorization", lambda _key: obligation_auth())
+    # the delivery URL is reachable now (oracle True); timeliness is what must decide the verdict
+    monkeypatch.setattr(obligation_watch, "_completion_oracle",
+                        lambda _spec: (True, {"kind": "delivery-url", "rc": 0}))
+    monkeypatch.setattr(obligation_watch, "_refund",
+                        lambda charge, key, oid: (refunded.append(charge) or (True, "refunded")))
+    assert obligation_watch.main() == 0
+    facts = json.loads(out.read_text())
+    assert {b["id"] for b in facts["breached"]} == {"obl-late", "obl-weird"}
+    assert not facts["fulfilled"]              # reachable-but-late is NOT a fulfilment
+    assert set(refunded) == {"ch_late", "ch_weird"}   # every breached liability was refunded
+
+
 def test_obligation_registration_uses_verifier_caps_and_serializes(monkeypatch, tmp_path):
     registry = tmp_path / "run" / "obligations.json"
     registry.parent.mkdir()
