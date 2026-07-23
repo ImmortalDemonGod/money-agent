@@ -107,7 +107,7 @@ function hubHtml(origin) {
 <ul>${items}</ul>
 <p>Full open-source record of the experiment, including the immutable ledger and every refusal: <a href="https://github.com/ImmortalDemonGod/money-agent">github.com/ImmortalDemonGod/money-agent</a>.</p>
 <p><small>This page keeps basic, privacy-respecting analytics (page hits, referrer, coarse location; no full IP is stored) to measure whether real people arrive. Ask miguel.ingram.work@gmail.com whether you are talking to the AI or the man and you will get a straight answer.</small></p>
-<script>try{navigator.sendBeacon('/px')}catch(e){try{fetch('/px',{keepalive:true})}catch(_){}}</script>
+<script src="${origin}/beacon.js" data-site="hub"></script>
 </body></html>`;
 }
 
@@ -182,12 +182,17 @@ async function stats(env) {
   // datacenter/proxy ASNs appearing here are exactly what inflate the estimate.
   const estByAsn = await q(`SELECT as_org, country, COUNT(*) n, COUNT(DISTINCT ip_hash) ips
       FROM hits WHERE path='/px' AND bot=0 GROUP BY as_org ORDER BY n DESC LIMIT 20`);
+  // Per-site breakdown: dest carries the beacon tag's data-site id. Shows which of the estate's
+  // sites the est-human sessions actually reached -- the funnel-level signal run 1 never had.
+  const bySite = await q(`SELECT COALESCE(NULLIF(dest,''),'(unattributed)') site, COUNT(*) n, COUNT(DISTINCT ip_hash) ips
+      FROM hits WHERE path='/px' AND bot=0 GROUP BY site ORDER BY n DESC LIMIT 20`);
   const clicks = await q("SELECT dest, COUNT(*) n, COALESCE(SUM(CASE WHEN bot=0 THEN 1 ELSE 0 END),0) non_bot_clicks FROM hits WHERE path='/go' GROUP BY dest ORDER BY n DESC");
-  const recent = await q("SELECT ts,path,country,as_org,bot,substr(ua,1,60) ua FROM hits ORDER BY id DESC LIMIT 20");
+  const recent = await q("SELECT ts,path,dest,country,as_org,bot,substr(ua,1,60) ua FROM hits ORDER BY id DESC LIMIT 20");
   return Response.json({
     _method: "est_human_sessions = JS-beacon-confirmed (/px) AND not-flagged-bot. An ESTIMATE with a known, irremovable residual: headless real browsers inflate it; VPN/cloud-browser humans deflate it. No request-layer signal proves humanity. The only ground truth for a real valuing human is received_usd (ledger/truth.json), verified out of band -- currently 0.00.",
     summary: tot,
     est_human_sessions_by_asn: estByAsn,
+    est_human_sessions_by_site: bySite,
     click_throughs: clicks,
     recent: recent
   });
@@ -213,12 +218,30 @@ export default {
       return stats(env);
     }
 
-    // JS-execution beacon. Fires ONLY when a real browser runs the hub's <script> (see hubHtml).
-    // Crawlers that never execute JS never reach this path -- the standard, cheap bot filter that
-    // raw server-side request logging lacks. These /px rows are the only ones counted as sessions.
+    // Reusable analytics tag. Any site instruments itself with ONE line:
+    //   <script src="https://<beacon-host>/beacon.js" data-site="<name>"></script>
+    // On load it fires the JS-gated /px ping with its site id + referrer. Served here so a fix to
+    // the beacon reaches every site at once -- the standard analytics-tag pattern (GA/Plausible).
+    if (u.pathname === "/beacon.js") {
+      const px = origin + "/px";
+      const js = "(function(){try{" +
+        "var s=document.currentScript,id=(s&&s.getAttribute('data-site'))||'';" +
+        "var u=" + JSON.stringify(px) + "+'?site='+encodeURIComponent(id)+'&ref='+encodeURIComponent(document.referrer||'');" +
+        "if(!(navigator.sendBeacon&&navigator.sendBeacon(u)))fetch(u,{keepalive:true,mode:'no-cors'});" +
+        "}catch(e){}})();";
+      return new Response(js, { headers: {
+        "content-type": "application/javascript; charset=utf-8",
+        "cache-control": "public, max-age=300",
+        "access-control-allow-origin": "*" } });
+    }
+
+    // JS-execution beacon. Fires ONLY when a real browser runs a site's beacon tag (/beacon.js).
+    // Crawlers that never execute JS never reach this path -- the standard, cheap bot filter raw
+    // request logging lacks. The 'site' query attributes the hit to the page that fired it; these
+    // /px rows are the only ones counted as sessions.
     if (u.pathname === "/px") {
-      await logHit(env, ctx, req, "/px", "");
-      return new Response(null, { status: 204 });
+      await logHit(env, ctx, req, "/px", u.searchParams.get("site") || "");
+      return new Response(null, { status: 204, headers: { "access-control-allow-origin": "*" } });
     }
 
     if (u.pathname === "/privacy") {
