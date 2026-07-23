@@ -16,6 +16,18 @@
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 AGENT_BRANCH="${1:?usage: start_verifier.sh <agent-branch>   (e.g. claude/xxx)}"
+
+# Load the verifier environment FIRST. .env is the documented place to set SHADOW=1 (and may set
+# LEDGER_BRANCH), so the shadow-default resolution below must run AFTER it -- otherwise a
+# .env-only SHADOW=1 setup takes the live default and the loop starts with SHADOW=1 +
+# LEDGER_BRANCH=ledger, which pnl.py's write wall rejects. (Provisioning also participates in
+# baseline creation, so .env must precede any preflight or set_baseline.py regardless.)
+[[ -f .env ]] || { echo "FATAL: .env (read keys) missing on this machine." >&2; exit 2; }
+set -a
+# shellcheck source=/dev/null
+. "$R/.env"
+set +a
+
 # S12: shadow defaults (see verifier_loop.sh -- same rule, applied here too because either
 # script can be the entry point).
 if [[ "${SHADOW:-0}" == "1" ]]; then
@@ -26,15 +38,6 @@ if [[ "${SHADOW:-0}" == "1" ]]; then
 fi
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 export AGENT_BRANCH LEDGER_BRANCH
-
-# Provisioning participates in baseline creation, so load the verifier environment BEFORE any
-# preflight or set_baseline.py. Previously .env was only sourced by the background loop, which
-# made an armed Base rail invisible while the run-start baseline was being frozen.
-[[ -f .env ]] || { echo "FATAL: .env (read keys) missing on this machine." >&2; exit 2; }
-set -a
-# shellcheck source=/dev/null
-. "$R/.env"
-set +a
 
 echo "=== 1. agent branch on origin? ==="
 git fetch -q origin

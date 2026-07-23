@@ -407,7 +407,7 @@ def main() -> int:
                   file=sys.stderr)
             return 2
         os.environ["LEDGER_BRANCH"] = lb  # resolved lane: the truth dict + children see it
-        if stripe_key and "_test_" not in stripe_key:
+        if stripe_key and not stripe_key.startswith(("sk_test_", "rk_test_")):
             print("FATAL: SHADOW=1 with a non-test STRIPE_READ_KEY. A shadow run reads "
                   "test-mode Stripe ONLY (sk_test_/rk_test_) -- a live read would mix real "
                   "money into a rehearsal ledger.", file=sys.stderr)

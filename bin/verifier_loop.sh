@@ -23,6 +23,17 @@ set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$R" || exit 1
 INTERVAL="${INTERVAL:-120}"
+LOG="$R/verifier.log"
+# Load .env FIRST: it may set SHADOW=1 (the documented shadow setup) and/or LEDGER_BRANCH, so the
+# shadow-default resolution below must run after it. A .env-only SHADOW=1 would otherwise take the
+# live default, and pnl.py's write wall rejects SHADOW=1 on a non-shadow lane.
+[[ -f "$R/.env" ]] || { echo "FATAL: .env missing. The verifier needs the read key." >&2; exit 2; }
+set -a
+# .env is a runtime credential file; shellcheck cannot follow it
+# shellcheck source=/dev/null
+. "$R/.env"
+set +a
+
 # S12: a shadow verifier (SHADOW=1) defaults onto its own lane + state dir so a rehearsal can
 # never touch anything a live run trusts. Explicit env still wins -- and pnl.py refuses a
 # non-shadow lane under SHADOW=1 regardless (that is the wall; this is the convenience).
@@ -36,14 +47,6 @@ LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
 # actually sees (its committed copy on origin), not whatever this checkout happens to contain.
 AGENT_BRANCH="${AGENT_BRANCH:-}"
 export AGENT_BRANCH
-
-LOG="$R/verifier.log"
-[[ -f "$R/.env" ]] || { echo "FATAL: .env missing. The verifier needs the read key." >&2; exit 2; }
-set -a
-# .env is a runtime credential file; shellcheck cannot follow it
-# shellcheck source=/dev/null
-. "$R/.env"
-set +a
 
 say() { echo "[$(date -u +%H:%M:%SZ)] $*" | tee -a "$LOG"; }
 

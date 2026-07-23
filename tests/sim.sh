@@ -1544,8 +1544,14 @@ assert_exit_grep 2 "SHADOW-RUN facts" "shadow: live consumer refuses shadow fact
   env LEDGER_BRANCH=shadow-ledger python3 bin/truth.py received_usd
 assert_exit_grep 2 "LIVE facts" "shadow: shadow consumer refuses the live lane" \
   env SHADOW=1 LEDGER_BRANCH=ledger python3 bin/truth.py received_usd
-assert_exit_grep 1 "non-test Stripe key" "shadow: guard halts on a live write key" \
+assert_exit_grep 1 "non-test STRIPE_WRITE_KEY" "shadow: guard halts on a live write key" \
   env SHADOW=1 STRIPE_WRITE_KEY=sk_live_x python3 bin/guard.py
+# the read key is checked INDEPENDENTLY -- a test write key must not mask a live read key
+assert_exit_grep 1 "non-test STRIPE_READ_KEY" "shadow: guard halts on a live READ key behind a test write key" \
+  env SHADOW=1 STRIPE_WRITE_KEY=sk_test_x STRIPE_READ_KEY=rk_live_x python3 bin/guard.py
+# a placeholder must not mask a live card credential (concatenation-masking regression)
+assert_exit_grep 1 "live card credential" "shadow: guard halts on a live CARD_NUM behind a REPLACE_ME privacy key" \
+  env SHADOW=1 STRIPE_WRITE_KEY=sk_test_x PRIVACY_READ_KEY=REPLACE_ME CARD_NUM=4111111111111111 python3 bin/guard.py
 assert_exit_grep 1 "NO live card" "shadow: guard halts on card creds (test+card is not test+test)" \
   env SHADOW=1 STRIPE_WRITE_KEY=sk_test_x PRIVACY_READ_KEY=lk_x python3 bin/guard.py
 # env -u: the HOST environment may carry real card/Stripe creds (this fixture's first run
@@ -1563,8 +1569,11 @@ assert_exit_grep 0 "captured" "shadow: send is captured, not delivered (no creds
       python3 bin/mail.py send sam@shadow.example "re: question before I buy" "$W/shbody.txt"
 if grep -q '"to": "sam@shadow.example"' run/shadow/outbox.jsonl 2>/dev/null; then
   ok "shadow: outbox JSONL holds the capture"; else bad "shadow: outbox capture missing"; fi
+if grep -q "SHADOW-CAPTURED" run/shadow/SENT_LOG.md 2>/dev/null; then
+  ok "shadow: audit entry marked SHADOW-CAPTURED (under run/shadow/)"; else bad "shadow: shadow audit marker missing"; fi
+# ISOLATION: a rehearsal must never mutate the live claims-lane SENT_LOG.md.
 if grep -q "SHADOW-CAPTURED" SENT_LOG.md 2>/dev/null; then
-  ok "shadow: SENT_LOG entry marked SHADOW-CAPTURED"; else bad "shadow: SENT_LOG marker missing"; fi
+  bad "shadow: rehearsal leaked into the live SENT_LOG.md"; else ok "shadow: live SENT_LOG.md untouched by the rehearsal"; fi
 if git log -1 --format=%s | grep -q "shadow-capture"; then
   ok "shadow: capture committed (durable as the audit trail)"
 else bad "shadow: capture commit missing"; fi
