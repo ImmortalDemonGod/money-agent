@@ -64,7 +64,14 @@ tool for this (it carries a self-contained operator card, an encrypted return
 channel for any credential the action produces, and a deadline-aware notifier);
 `bin/human.py` is DEPRECATED -- do not use it for new requests. Only a resolution
 published on the distinct, signed verifier facts lane counts; consume it with
-`bin/actuate.py sync`. You cannot self-certify that the operator acted, edit a
+`bin/actuate.py sync`. When a channel's gate is egress reputation (WAF/IP), attach
+a pre-registered `--verify-cmd` to the request: `sync` runs it against the handed-back
+credential and on failure flags it unusable-from-here even though the operator's
+obligation is discharged (an operator-created account does not cure a sandbox the
+platform still blocks). A returned credential is WITHIN-RUN ONLY -- its plaintext and
+decrypt key are sandbox-ephemeral -- so for a one-time credential you need again next
+run, have the operator promote it into `.env.agent` out-of-band; never assume last
+run's handback survives. You cannot self-certify that the operator acted, edit a
 task to resolved, or close it by directly resolving the companion bet. Human
 actuation is never permission to violate platform terms or act outside the
 account owner's explicit authorization -- and a MONEY-MOVING actuation

@@ -304,6 +304,16 @@ request's claims branch, and sync rechecks the full signed request hash. Directl
 or resolving the companion bet does not close the request. Supervision must name the claims lane so
 requests are visible from the verifier checkout:
 
+**Cross-run credential persistence (operator action).** A returned credential round-trips only
+*within* a run: the materialized plaintext (`run/actuation_returns/<id>.json`) is git-ignored and
+the ephemeral decrypt key (`$MONEY_AGENT_STATE/actuation_keys/<id>.pem`) is sandbox-local, so the
+ledger ciphertext is **undecryptable by any future run** — a one-time credential (`deploy-account`,
+`kyc-step`) would otherwise be lost, and re-requesting a "one-time" KYC is nonsensical. The bridge
+is the repo's existing secret model: the operator retains an off-repo plaintext copy at
+`$MONEY_AGENT_STATE/actuation_returns/<id>` and, for any credential the next run needs, **promotes
+it into `.env.agent`** (which is re-injected per run) out-of-band. The agent never persists secrets
+itself; `sync` prints a reminder when a `credential` return lands.
+
 ```bash
 bin/supervise.sh <run-branch>
 ```

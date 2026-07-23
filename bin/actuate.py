@@ -798,7 +798,14 @@ def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
     where = f" -> run/actuation_returns/{tid}.json" if resolution.get("return") else ""
     usab = f" [usability: {task['usability']} -- {task.get('usability_detail','')}]" \
         if task.get("usability") else ""
-    return f"{tid} synced from verifier facts: {outcome}{where}{usab}."
+    # Cross-run boundary: the materialized plaintext (git-ignored) and the ephemeral decrypt key are
+    # both sandbox-ephemeral, so a credential does NOT survive to the next run. Name the boundary at
+    # the exact point the agent receives it: for a one-time credential the operator promotes it into
+    # .env.agent out-of-band (they hold the off-repo AUDIT_DIR plaintext copy).
+    persist = (" NOTE: this credential is WITHIN-RUN only (plaintext + decrypt key are "
+               "sandbox-ephemeral) -- have the operator promote it into .env.agent for cross-run use."
+               if outcome == "fulfilled" and task.get("return_kind") == "credential" else "")
+    return f"{tid} synced from verifier facts: {outcome}{where}{usab}.{persist}"
 
 
 def cmd_sync(a) -> int:
