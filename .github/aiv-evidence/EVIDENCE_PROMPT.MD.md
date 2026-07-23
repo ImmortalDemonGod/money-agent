@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `PROMPT.md`
-**Commit:** `9999076`
-**Previous:** `3d31554`
-**Generated:** 2026-07-23T03:11:51Z
+**Commit:** `406a504`
+**Previous:** `406a504`
+**Generated:** 2026-07-23T03:24:33Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,14 +16,14 @@ classification:
   sod_mode: S0
   critical_surfaces: []
   blast_radius: "PROMPT.md"
-  classification_rationale: "CLAUDE.md and knowledge/README were updated in this PR but PROMPT.md still contradicted them"
+  classification_rationale: "The authored-input absence is business direction, not the operational wall-map"
   classified_by: "Claude"
-  classified_at: "2026-07-23T03:11:51Z"
+  classified_at: "2026-07-23T03:24:33Z"
 ```
 
 ## Claim(s)
 
-1. PROMPT.md no longer claims agent convergence is evidence; it states runs are context-aware and the authored-input absence (issue #9) is the enforceable half
+1. PROMPT.md excludes channel STRATEGY from authored inputs while allowing operational channel walls documented in knowledge/, consistent with CLAUDE.md's knowledge/ contract
 2. No existing tests were modified or deleted during this change.
 
 ---
@@ -33,13 +33,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/53](https://github.com/ImmortalDemonGod/money-agent/pull/53)
-- **Requirements Verified:** Issue #10 closure requires the authored inputs to be consistent with the context-aware ruling; PROMPT.md still asserted the retired convergence-as-evidence premise
+- **Requirements Verified:** CodeRabbit #53: saying no 'channel' is present contradicts knowledge/ retaining tested channel walls
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`9999076`](https://github.com/ImmortalDemonGod/money-agent/tree/99990761f997867b24f8d7bd5292ec3c43ecab57))
+**Scope Inventory** (SHA: [`406a504`](https://github.com/ImmortalDemonGod/money-agent/tree/406a504e93845ced4b9ca4fa4b8995ff8018dc6b))
 
-- [`PROMPT.md#L204-L211`](https://github.com/ImmortalDemonGod/money-agent/blob/99990761f997867b24f8d7bd5292ec3c43ecab57/PROMPT.md#L204-L211)
+- [`PROMPT.md#L205-L208`](https://github.com/ImmortalDemonGod/money-agent/blob/406a504e93845ced4b9ca4fa4b8995ff8018dc6b/PROMPT.md#L205-L208)
 
 ### Class A (Execution Evidence)
 
@@ -55,7 +55,7 @@ This file has no claim-specific execution evidence.
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | PROMPT.md no longer claims agent convergence is evidence; it... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | PROMPT.md excludes channel STRATEGY from authored inputs whi... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
 **Verdict summary:** 0 verified, 0 unverified, 2 manual review.
@@ -71,4 +71,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Reword the 'deliberately absent' paragraph: keep the no-strategy authored-input rule (issue #9), retire the convergence claim per issue #10
+PROMPT.md retains the no-strategy authored-input rule (issue #9) and retires convergence as evidence (issue #10); channel exclusion scoped to strategy, operational walls permitted

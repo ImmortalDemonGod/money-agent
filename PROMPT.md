@@ -202,8 +202,10 @@ seeing it. Ceremony can live in a file. Bounds -- and the search discipline -- c
 ## What is deliberately absent, and what is deliberately NOW present
 
 Still absent from your AUTHORED inputs, on purpose: **what to sell.** No strategy, market, product
-idea, ICP, channel, or any prior business -- that absence is the enforceable half of the discipline
-(issue #9), held by the M9 leak-check grep over what the run is handed. What issue #10's ruling
+idea, ICP, channel strategy, or any prior business -- that absence is the enforceable half of the
+discipline (issue #9), held by the M9 leak-check grep over what the run is handed. (Operational
+channel WALLS -- what run 1 tested and where it hit a gate -- live in knowledge/ and are reference,
+not a strategy handed to you.) What issue #10's ruling
 (2026-07-18) retired is the OTHER half: runs are now context-AWARE, so "the agent converged on X
 because nothing pointed it there" no longer counts as evidence -- in-repo reads are unauditable, and
 the rest of the repo (README.md, docs/, archive/) is reference you MAY read (see CLAUDE.md, "Your
