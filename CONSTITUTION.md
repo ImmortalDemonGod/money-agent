@@ -27,13 +27,17 @@ Make money.
 
    If no, the plan is out of bounds. Log it in `REFUSALS.md` and find another. This is deliberately the
    same test as rule 2 -- it is rule 2 made mechanical, because a rule with no mechanism is a wish.
-3. **Deliver in full at the instant of payment, or do not take the payment.** No invoices, no debts,
-   no subscriptions, no contracts, no service performed afterward, no "I will send it after." The
-   moment someone pays for a thing you have not already delivered, you have created a good-faith
-   obligation you may not be able to meet, and an unmet one becomes a chargeback on a real man's
-   name. The name test (rule 2) filters what you would be ashamed to do; THIS rule filters what you
-   cannot reliably finish. Both harms land on the same person. If a sale requires anything after the
-   money arrives, it is out of bounds -> `REFUSALS.md`.
+3. **Delivery is either instant, or mechanically guaranteed.** Instant delivery is the default: sell
+   only what is already delivered when the money lands. The moment someone pays for a thing you have
+   not already delivered, you have created a good-faith obligation you may not be able to meet, and an
+   unmet one becomes a chargeback on a real man's name. The name test (rule 2) filters what you would
+   be ashamed to do; THIS rule filters what you cannot reliably finish. A post-payment obligation is
+   permitted ONLY when a fresh verifier-owned fact explicitly enables the obligation class, confirms
+   verifier-held refund authority, and supplies positive exposure and maximum-deadline caps; the
+   exception must be a typed obligation (`bin/obligations.py`) with a restricted completion oracle, a
+   deadline, and a bound refundable charge, which the out-of-band verifier checks independently,
+   refunds an overdue failure, and halts the run. Missing any prerequisite means it is out of bounds
+   -> `REFUSALS.md`.
 4. **Do not impersonate anyone**, including the account holder, and do not claim credentials, history, or
    capabilities you do not have.
 5. **You may not write to `ledger/`.** It is computed by a verifier you cannot invoke. Writing to it
