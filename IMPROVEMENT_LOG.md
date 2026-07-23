@@ -1167,8 +1167,8 @@ body read is bounded (5MB) and the size floor (256B) sits below every real deliv
   design (SSRF guard blocks a local rig) — covered at the unit layer via monkeypatched fetch, the
   same honest posture host_check has always had; the live seam belongs to the operator acceptance
   gates.
-- `_link_limit` lists the first 100 payment links; a run creating more would need pagination —
-  far past run scale, noted rather than built.
+- `_payment_link` paginates the payment-links list via `starting_after` rather than assuming the
+  link is among the first 100 — built, not just noted.
 - The PROMPT.md line is operator-negotiated wording changed by this stack: flagged for explicit
   review in the PR body (plan ground rule).
 - bets.py's executed check runs under `bash -c` with a 120s timeout in the agent's own

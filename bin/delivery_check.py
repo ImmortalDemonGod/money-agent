@@ -19,7 +19,7 @@ Checks, against the LIVE delivery URL (the success-redirect target -- never a lo
      post-payment redirect; an unrelated healthy URL is not evidence of delivery.
 
 Output ends with one machine-readable line the aiv gate re-runs and trusts only fresh:
-  DELIVERY_CHECK: <url> | status=<n> | bytes=<n> | content_type=<type|unacceptable> | placeholder=<none|FOUND> | sha256=<match|mismatch|n/a> | link_limit=<1|n|unverified|n/a> | verdict=<PASS|FAIL>
+  DELIVERY_CHECK: <url> | status=<n> | bytes=<n> | content_type=<type|unacceptable> | placeholder=<none|FOUND> | sha256=<match|mismatch|n/a> | link_limit=<1|n|unverified|n/a> | redirect=<match|mismatch|n/a> | verdict=<PASS|FAIL>
 
 Usage: python3 bin/delivery_check.py <delivery-url> [--expect-sha256 <hex>] [--payment-link <url>]
 """
