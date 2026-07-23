@@ -3,7 +3,11 @@
 Every knob the run-2 harness reads, with a recommended value, the reason, and where the knob
 lives. Check each box (or strike the recommendation and write your own value NEXT TO IT) before
 `bin/start_verifier.sh` runs. Nothing here is self-executing: an unchecked box means the coded
-default applies, and the defaults are deliberately conservative (new machinery OFF, caps ZERO).
+default applies. The NEW machinery and spend defaults fail closed (new gates OFF, exposure caps
+ZERO). But NOT everything is conservative: `SHADOW` defaults to a LIVE posture, and the wall-clock
+(`MAX_WALL_CLOCK_H`) and iteration (`MAX_ITERS`) caps default OFF -- no duration bound. Treat the
+posture and duration boxes as MANDATORY, not optional: skipping them starts an unattended live run
+with no time limit, which is the opposite of conservative.
 
 Legend: [code default] is what happens if you do nothing.
 

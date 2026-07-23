@@ -28,8 +28,10 @@ these records.
    presented as a quote.
 4. Unit economics must be recomputable: task value, platform fee, rail cost, asset, price
    source, capture time. No silent estimates.
-5. Payer/worker identities stay `unknown` until evidence classifies them. Seeded or wash
-   volume is never inferred from concentration alone.
+5. Payer/worker identities stay `unknown` until evidence classifies them -- `unknown` is the
+   ONLY valid unclassified identity value. Read-only scope is a limitation, not an identity:
+   it belongs in the `limitation:` field, never as an `n/a`/`read-only` identity value. Seeded
+   or wash volume is never inferred from concentration alone.
 6. Cold-start fit requires an actual zero-reputation attempt (step 4, runbooked) -- what
    these records carry is only the DOCUMENTED selection mechanics, marked as such. A
    permissionless registration path does not establish access to paid work.
@@ -56,7 +58,7 @@ probes:                   # one entry per protocol step executed
     finding: ...
     evidence:
       tier: 1-5           # COMPARATIVE_ANALYSIS.md tier framework
-      source_class: primary_docs | terms | landing | explorer | press | third_party
+      source_class: primary_docs | terms | landing | explorer | request_response | press | third_party
       locator: ...        # URL(s) / tx hash / block range
       retrieved_at: ...
     quotes: [...]         # verbatim only, with per-quote URL

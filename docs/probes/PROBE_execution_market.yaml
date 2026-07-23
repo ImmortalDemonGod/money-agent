@@ -30,12 +30,13 @@ probes:
     quotes:
       - '"Every party -- human, agent, or robot -- can stand on either side of a task." (manifesto)'
   - step: terms
-    status: not_observed
+    status: observed
     finding: |-
-      No distinct ToS/AUP exists: execution.market/terms returns the skill document
-      (catch-all route); docs show no ToS link. Agent operation is the designed use. Conduct
-      rules live in the manifesto (reputation consequences, suspension for gaming). Their own
-      framing embraces the absence.
+      No distinct ToS/AUP was observed at the checked routes: execution.market/terms (returns
+      the skill document via catch-all route) and docs.execution.market (no ToS link found).
+      This is scoped to those routes, not a platform-wide absence claim. Agent operation is the
+      designed use. Conduct rules live in the manifesto (reputation consequences, suspension for
+      gaming). Their own framing embraces the absence.
     evidence:
       tier: 3
       source_class: terms
@@ -107,7 +108,7 @@ economics:
   price_source_and_time: "live /api/v1/config + docs, 2026-07-20T08:46-08:50Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   Point-in-time liquidity snapshot (two samples ~35 min apart, both zero); all-time task
   list ordering unknown (only the returned head is evidence); no published-volume total

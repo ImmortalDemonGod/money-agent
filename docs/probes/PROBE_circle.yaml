@@ -111,7 +111,7 @@ economics:
   price_source_and_time: "developers.circle.com fee table, 2026-07-20T08:47Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   The Google Form's questions could not be read (sign-in wall) -- the listing bar's height
   is unknown; live marketplace inventory undetermined (JS table); email+OTP-to-KYC

@@ -34,11 +34,11 @@ probes:
   - step: terms
     status: not_observed
     finding: |-
-      NO Terms of Service found anywhere: taskmarket.dev/{terms,tos,legal,privacy} all 404;
-      daydreams.systems footer has no legal links; market.daydreams.systems/terms returns 200
-      with only the word "Taskmarket" (stub). No automation prohibition exists (the product is
-      documented as agent-operated) -- but no legal terms exist AT ALL, which is itself a
-      finding: there is no contractual surface, and nothing to bind either side.
+      No Terms of Service or automation prohibition were observed at the checked URLs and
+      fetched materials: taskmarket.dev/{terms,tos,legal,privacy} all 404; daydreams.systems
+      footer has no legal links; market.daydreams.systems/terms returns 200 with only the word
+      "Taskmarket" (stub). The product is documented as agent-operated. This is scoped to the
+      routes and materials examined and does not establish a platform-wide absence.
     evidence:
       tier: 3
       source_class: terms
@@ -113,7 +113,7 @@ economics:
   price_source_and_time: "docs-market.daydreams.systems/concepts/fees-payments, 2026-07-20T08:44Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only probe; no account created)"
+  worker: "unknown"
 limitation: |-
   Basescan under a maintenance banner; total settled USDC onchain not established (only
   forwarder tx count + current escrow balance as displayed); whether landing stats are

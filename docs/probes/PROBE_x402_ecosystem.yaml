@@ -105,7 +105,7 @@ economics:
   price_source_and_time: "x402.org + xgate.fi landing pages, 2026-07-20T08:43-08:47Z"
 identities:
   requester: unknown
-  worker: "n/a"
+  worker: "unknown"
 limitation: |-
   The 30-day volume aggregates could not be cross-verified (explorer shells; Bazaar catalog
   endpoint GET /v2/x402/discovery/resources exists, keyless, but was not queried in this

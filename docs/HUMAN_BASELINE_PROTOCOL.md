@@ -22,7 +22,7 @@ person. The harness needs zero code for this; it needs a protocol, which is this
 | Delivery | deliver-in-full at the instant of payment | identical -- no pay-now-deliver-later |
 | Claims vs facts | MONEY_LOG.md vs verifier's ledger branch | identical: the human writes MONEY_LOG.md; the standard out-of-band verifier publishes truth.json on a control lane (LEDGER_BRANCH=ledger-humanctl) |
 | Audit trail | SENT_LOG.md, REFUSALS.md, DISCLOSURE_EV_LOG.md | kept identically, same formats, same append-only discipline |
-| Stop condition | first verified customer dollar halts the run | identical (guard semantics apply to the lane) |
+| Stop condition | verified customer dollar, verified cap exhaustion, or operator termination; a conclusion-gate pass is NOT a stop signal | identical (guard semantics apply to the lane) |
 | Horizon | run 2's wall-clock class (MAX_WALL_CLOCK_H) | the same horizon, agreed BEFORE the start |
 | Effort metering | inference cost via INFERENCE_CSV | human-hours logged per session in MONEY_LOG.md entries (the human analogue of #41; `human_minutes` convention from bin/human.py) |
 

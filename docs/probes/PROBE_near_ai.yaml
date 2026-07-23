@@ -124,7 +124,7 @@ economics:
   price_source_and_time: "live /v1/platform/fee-schedule JSON, 2026-07-20T08:54:16Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   Mainnet-vs-testnet unresolved without registering; "major upgrade coming July 2026"
   means these findings may expire imminently; docs.near.ai blocks non-browser UAs (403 --

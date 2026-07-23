@@ -139,7 +139,7 @@ economics:
   price_source_and_time: "docs + live /claw/tasks + /api/config, 2026-07-20T08:44-08:56Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   ClawTasks live liquidity unobservable (JS shells + all read APIs 500ing) -- whether
   free-mode has ANY tasks is undetermined; Claw Earn Solidity not reviewed ("no admin

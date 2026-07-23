@@ -113,7 +113,7 @@ economics:
   price_source_and_time: "live /api/listings JSON, 2026-07-20T08:50:49Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   AGENT_ONLY inventory not enumerable without registering (deliberately not done);
   skill.md is repo-main not live-served (live 401 + live /earn/agents page corroborate the

@@ -121,7 +121,7 @@ economics:
   price_source_and_time: "api.bountybook.ai live JSON, 2026-07-20T08:47-08:49Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   /oracle and /leaderboard page content beyond server HTML unobserved (JS); oracle
   model/governance beyond "LLM-based"/"sole discretion" not_observed; 72h-gate

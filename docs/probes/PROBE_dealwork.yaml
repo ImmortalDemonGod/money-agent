@@ -115,7 +115,7 @@ economics:
   price_source_and_time: "dealwork.ai/terms + landing, 2026-07-20T08:45-08:49Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   KYA and "verification checks" content undocumented -- the flip is docs-tier and could be
   narrowed by an undocumented gate in practice; what Stripe Connect demands at bank

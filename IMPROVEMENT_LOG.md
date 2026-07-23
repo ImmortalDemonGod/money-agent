@@ -1665,8 +1665,8 @@ next_falsifier above), S16 adversarial+mutation+stacking.
   EDGE_TERMINAL, MAX_WALL_CLOCK_H, MAX_ITERS, LEDGER_MAX_COMMITS, LEDGER_MAX_AGE_S,
   INTERVAL, HEARTBEAT_S, MIN_APPROACHES/MIN_DEMAND_PROBES, CARD_CAP_USD/CARD_SOURCE,
   INFERENCE_CSV, signing provisioning (#36), BASE_RPC_URL + settlement binding (#30),
-  BET_GATE_ENFORCE, SPINE_ENFORCE, DEMAND_REFUTED_K, PACE_ENFORCE, EXPOSURE_MAX_* (P7),
-  STRIPE_REFUND_KEY (P5), SHADOW (Tier-1 rehearsal), edge rail iff ALPACA_* creds,
+  BET_GATE_ENFORCE, SPINE_ENFORCE, DEMAND_REFUTED_K, PACE_ENFORCE, `EXPOSURE_MAX_*` (P7),
+  STRIPE_REFUND_KEY (P5), SHADOW (Tier-1 rehearsal), edge rail iff `ALPACA_*` creds,
   broker-creds-to-agent: no.
 
 **Edge cases enumerated:** (1) CLAUDE.md: ONLY the "Your world" section may change — every

@@ -6,7 +6,9 @@ choice lives in `docs/RUN2_DECISIONS.md` (walk it first). Steps marked **[prefli
 mechanical check that refuses to proceed if you skipped them; steps marked **[no automated
 check]** are enforced only by this line -- read those twice.
 
-Order matters: 0 -> 1 -> 2(optional) -> 3 -> 4 -> 5 -> 6 -> 7 -> 8/9(optional) -> 10.
+Order matters: 0 -> 1 -> 2(optional) -> 3 -> 4 -> 5 -> 6 -> 7 -> 8/9(optional) -> 10 -> 11 -> 12.
+Section 11 (the #32 signup probes) is NOT optional -- it is the evidence this run exists to collect;
+sign-off (12) is not complete until every Section 11 probe is done or recorded `not_run` with a reason.
 
 ---
 
@@ -89,8 +91,9 @@ Follow SETUP.md §4b's five steps exactly; they are the live seams the sim stubb
    - `.github/aiv-packets/TEMPLATE.md`: the E010 trap note ("...heuristic (E010) and fails
      the packet -- name the mandate in words, not by ticket number").
 4. `bash tests/sim.sh` after -- the aiv-dependent stages must go from SKIP to PASS on a
-   machine with the pinned CLI. **[no automated check that the workarounds died -- grep for
-   `E010` and `sed -i.bak` after; zero hits is the artifact]**
+   machine with the pinned CLI. **[no automated check that the workarounds died -- grep
+   `E010` and `sed -i.bak` in `bin/setup_sandbox.sh` and `.github/aiv-packets/TEMPLATE.md` only
+   (not this runbook, which documents the strings); zero hits THERE is the artifact]**
 
 ## 5. Gate #20-4: provisioning decisions
 
@@ -179,6 +182,15 @@ identities; a ToS that bans agent operation is a stop for that platform, not a p
 probe's result goes into its record's `onboarding` entry (flip `not_run` -> observed with the
 artifact) and, if a label moves, the fit table on #30/#32.
 
+LIVE-MONEY GATE (binds every step below that funds a wallet, sends, or receives real value --
+circle's mainnet payment, bountybook's wallet funding, any on-chain fund): "only if justified" is
+NOT a gate. Before any such step, ALL of these must hold, written down in the step's record:
+(1) a FIXED amount, decided in advance, not "whatever it takes"; (2) an approved funding source
+named by the operator; (3) a remaining-budget check against the finite $25 card -- if the amount
+would exceed the known remaining budget, STOP; (4) the transaction hash and wallet-funding entry
+logged to the record; (5) an explicit rollback/refund condition and the procedure to execute it.
+Any step missing one of the five does NOT run -- record it `not_run` with the missing prerequisite.
+
 Priority order (cheapest + highest information first; each probe names its record):
 1. **dealwork** (PROBE_dealwork.yaml -- #32's "highest-value re-check"):
    `POST https://api.dealwork.ai/api/v1/agents/onboard {"agentName":"<name>"}` -- does an
@@ -194,8 +206,9 @@ Priority order (cheapest + highest information first; each probe names its recor
 4. **toku** (PROBE_toku.yaml): register OMITTING ownerEmail -- does a usable key return, and
    can a service be listed without email activation? (Resolves the docs-vs-FAQ conflict.)
 5. **circle** (PROBE_circle.yaml): view the listing form from a Google-logged-in browser
-   (record every field); separately run the Nanopayments seller quickstart against MAINNET
-   with a real EVM receive address and take one live payment end-to-end.
+   (record every field); separately, ONLY under the LIVE-MONEY GATE above, run the Nanopayments
+   seller quickstart against MAINNET with a real EVM receive address and take one live payment
+   end-to-end (fixed amount, remaining-budget check, tx hash logged, refund condition recorded).
 6. **execution-market** (PROBE_execution_market.yaml): register a wallet; poll
    `GET /api/v1/tasks?status=published` daily for a week -- does ANY external task appear?
 7. **claw-earn** (PROBE_clawtasks.yaml): wallet-only registration; poll `/claw/tasks` for
@@ -208,8 +221,9 @@ Priority order (cheapest + highest information first; each probe names its recor
    bounty-mode task; record whether a zero-reputation entry is ever accepted and any gate
    the docs did not name.
 10. **bountybook** (PROBE_bountybook.yaml -- LOW priority; read the record's EV numbers
-    first): only if justified, fund a wallet, wait out the 72h age gate, claim one small
-    bounty, measure real verification latency.
+    first): ONLY after the LIVE-MONEY GATE above is satisfied (fixed amount, approved source,
+    remaining-budget check, logging, rollback condition) -- fund a wallet, wait out the 72h age
+    gate, claim one small bounty, measure real verification latency.
 11. **x402** (PROBE_x402_ecosystem.yaml): query the keyless Bazaar catalog
     (`GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources`) and count
     resources + staleness; the deploy-an-endpoint demand test pairs with step 5's mainnet
@@ -218,5 +232,6 @@ Priority order (cheapest + highest information first; each probe names its recor
 ## 12. Sign-off
 
 - [ ] Gates 0-2 green (3 if edge rail on; 8 before any published artifact).
+- [ ] Every Section 11 (#32) probe completed, or explicitly recorded `not_run` with a reason and artifact.
 - [ ] `docs/RUN2_DECISIONS.md` signed.
 - [ ] Both machines' matrices green at the deployed commit.

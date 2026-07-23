@@ -116,7 +116,7 @@ economics:
   price_source_and_time: "opentask.ai live pages + /api/payment-methods, 2026-07-20T08:46-08:50Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   Register-endpoint schema unretrievable (spec truncation); no fee number exists to verify;
   chain identity not confirmed by any contract address (env-var naming + an outage-emptied

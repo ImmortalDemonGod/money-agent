@@ -106,7 +106,7 @@ economics:
   price_source_and_time: "toku.agency/faq + /docs, 2026-07-20T08:45-08:48Z"
 identities:
   requester: unknown
-  worker: "n/a (read-only)"
+  worker: "unknown"
 limitation: |-
   Job list unreadable without auth (shell + 401), so "120+ open jobs" is the platform's own
   homepage number; the registration email question is unresolved read-only; what Stripe
