@@ -50,8 +50,16 @@ def _save_unlocked(obls: list[dict], msg: str) -> None:
                         "--", str(OBL)], cwd=REPO, check=True, capture_output=True)
     branch = subprocess.run(["git", "branch", "--show-current"], cwd=REPO,
                             capture_output=True, text=True).stdout.strip()
-    subprocess.run(["git", "push", "origin", branch or "HEAD"], cwd=REPO,
-                   capture_output=True, timeout=90)
+    push = subprocess.run(["git", "push", "origin", branch or "HEAD"], cwd=REPO,
+                          capture_output=True, text=True, timeout=90)
+    if push.returncode != 0:
+        # The watchdog reads ONLY origin/<AGENT_BRANCH>:run/obligations.json. An unpushed liability
+        # is invisible to the verifier -- it will never be watched or refunded -- so a failed push
+        # must NOT read as a successful registration. Fail closed; the commit is local, retry.
+        raise RuntimeError(
+            f"obligation committed locally but PUSH FAILED ({push.stderr.strip()[:200]}); the "
+            "verifier cannot see or refund a liability that is not on origin. Registration is NOT "
+            "complete -- retry the push.")
 
 
 @contextmanager
@@ -158,6 +166,12 @@ def cmd_register(a) -> int:
         received = 0.0
     with _transaction(f"obligations: register (${a.value_usd} by {a.deadline})") as obls:
         open_obls = [o for o in obls if o.get("status") in ("open", "fulfillment-claimed")]
+        if any(o.get("charge_id") == a.charge_id for o in obls):
+            print(f"REFUSING: charge {a.charge_id} is already bound to another obligation -- one "
+                  "charge backs at most one refundable liability (no reuse), so a single payment "
+                  "can never be double-promised or refunded to the wrong obligation.",
+                  file=sys.stderr)
+            return 1
         if len(open_obls) + 1 > auth["max_open"]:
             print(f"REFUSING (P7 exposure cap): {len(open_obls)} open + this one > verifier "
                   f"max_open={auth['max_open']}.", file=sys.stderr)
@@ -225,7 +239,13 @@ def main() -> int:
     pf.set_defaults(fn=cmd_fulfill)
     sub.add_parser("list").set_defaults(fn=cmd_list)
     a = p.parse_args()
-    return a.fn(a)
+    try:
+        return a.fn(a)
+    except RuntimeError as e:
+        # e.g. a failed publish push -- the liability is not on origin, so registration is not
+        # complete. Surface it as a clean non-zero failure, never a silent success.
+        print(f"FATAL: {e}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
