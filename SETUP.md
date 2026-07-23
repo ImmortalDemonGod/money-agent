@@ -308,6 +308,33 @@ requests are visible from the verifier checkout:
 bin/supervise.sh <run-branch>
 ```
 
+The steps so far cover *resolving* a request. Wiring the operator **notification** and the agent
+**durable wakeup** is what makes the queue usable in real time — run 1's 60-minute claim window was
+missed for exactly this reason. Both are out-of-band and pluggable.
+
+**Operator notifier** (`bin/actuate_notify.sh` — runs on the operator's device, keyless, read-only,
+one-shot per fire):
+
+```bash
+export AGENT_BRANCH=<run-branch>                  # the claims lane it scans
+export ACTUATE_NTFY_TOPIC=<a-hard-to-guess-topic> # phone/web push via ntfy.sh
+bin/actuate_notify.sh          # what a systemd timer / cron entry calls each fire
+bin/actuate_notify.sh --loop 60   # or a foreground poller for a quick trial (default 60s)
+```
+
+Transports, first match wins: `ACTUATE_NTFY_TOPIC` (ntfy push) → `ACTUATE_NOTIFY_CMD` (alert piped
+to your own command) → else appended to `run/actuation_alerts.log`. URGENT alerts fire by default;
+`ACTUATE_NOTIFY_ALL=1` pushes NORMAL ones too. Durability is the caller's job — a systemd timer or
+cron, never a session-local loop.
+
+**Agent durable wakeup** (`bin/actuate_watch.sh` — agent side, issue #20.6): the durable queue fires
+it; it syncs resolved actuations and prints `NEXT_WAKEUP_SECONDS=<n>` (tightening as a deadline
+nears) for the caller to re-arm. Wire it to the `/loop`'s queued wakeup or a systemd timer that
+reads that line; the idle fallback is `ACTUATE_IDLE_WAKEUP_S` (default 1800s).
+
+Prerequisite for the encrypted credential-return channel: `openssl` on both machines (same class of
+dependency as `ssh-keygen` above).
+
 ## 4d. Optional: standing-presence posture (issue #4)
 
 Run 1 proved a minutes-cadence loop cannot harvest day-scale clocks (indexation, approvals,
