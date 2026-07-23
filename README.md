@@ -73,8 +73,12 @@ bash tests/sim.sh          # runs the verification harness end-to-end, offline
 ```
 
 Then read one real artifact to feel the point: [`ledger/truth.json`](ledger/truth.json) is the only number
-that is *real*; [`REFUSALS.md`](REFUSALS.md) is what the agent would not do. Provisioning a *live* run (real
-Stripe account, restricted keys, issuer-capped card, two-machine verifier) is in [`SETUP.md`](SETUP.md).
+that is *real*; [`REFUSALS.md`](REFUSALS.md) is what the agent would not do.
+
+Provisioning a *live* run (real Stripe account, restricted keys, issuer-capped card, two-machine verifier) is
+more involved: [`SETUP.md`](SETUP.md) explains the boundary and what to provision, and
+[`docs/runbooks/RUN2_OPERATOR_RUNBOOK.md`](docs/runbooks/RUN2_OPERATOR_RUNBOOK.md) is the command-by-command
+walkthrough (in a fresh clone, run `bash bin/setup_sandbox.sh` first).
 
 ## Status
 

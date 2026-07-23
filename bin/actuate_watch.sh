@@ -5,8 +5,8 @@
 # (the /loop's queued wakeup, a systemd timer, a launchd interval) reads that line and re-arms.
 #
 # This is the durable replacement for the fixed 24h companion-bet poll: the DURABILITY comes from
-# the external queue that survives restarts (never session-local cron -- STANDING_RUN.md, entry
-# 005), and the CADENCE comes from `next-wakeup` tightening as a deadline approaches.
+# the external queue that survives restarts (never session-local cron -- SETUP.md §4d, entry
+# 005 of IMPROVEMENT_LOG.md), and the CADENCE comes from `next-wakeup` tightening as a deadline approaches.
 #
 # It always emits a VALID positive NEXT_WAKEUP_SECONDS (falling back to a safe idle cadence if
 # next-wakeup is unavailable), so a corrupt tasks file can never leave the durable queue with an
