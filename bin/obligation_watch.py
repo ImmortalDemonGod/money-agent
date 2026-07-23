@@ -153,35 +153,51 @@ def main() -> int:
     breached = []
     fulfilled = []
     completion_errors = []
+    def _breach(rec: dict, o: dict) -> None:
+        # EVERY breach with a bound charge must attempt the promised refund. A breach that halts the
+        # run but leaves the customer un-refunded is exactly the harm the obligation rail exists to
+        # prevent (an unrecognized status or an unparseable deadline used to halt WITHOUT a refund).
+        # _refund is idempotent; with no charge the halt is the only guarantee and the operator must
+        # refund by hand.
+        if refund_key and o.get("charge_id"):
+            ok_r, why = _refund(o["charge_id"], refund_key, str(o.get("id", "unknown")))
+            rec["refund_status"] = why if ok_r else f"REFUND ATTEMPT FAILED: {why}"
+        else:
+            rec["refund_status"] = ("unprovisioned: no STRIPE_REFUND_KEY -- the halt is the "
+                                    "only guarantee; refund manually NOW")
+        breached.append(rec)
+
     for o in obls:
-        status = o.get("status")
-        if status not in ("open", "fulfillment-claimed", "fulfilled"):
-            breached.append({**o, "breach": f"unrecognized status {status!r} (fail-closed)"})
-            continue
-        # Check every open record: after the first-dollar halt, fulfillment may complete in an
-        # external substrate (carrier, hosted delivery, subscription) without an agent claim.
-        # A claim merely asks for an immediate recheck; it never certifies itself.
-        ok, evidence = _completion_oracle(o.get("check", ""))
-        if ok:
-            fulfilled.append({"id": o.get("id"), "verified_at": _now().isoformat(),
-                              "oracle_evidence": evidence})
-            continue
-        if status in ("fulfillment-claimed", "fulfilled"):
-            completion_errors.append({"id": o.get("id"), "oracle_evidence": evidence})
+        # Deadline FIRST: timeliness must be known before any completion is accepted, or a delivery
+        # that becomes reachable AFTER the promised deadline reads as fulfilment when it is a breach.
+        # A malformed deadline is a fail-closed breach (and is refunded if a charge is bound).
         try:
             deadline = dt.datetime.fromisoformat(str(o["deadline"]).replace("Z", "+00:00"))
         except Exception:
-            breached.append({**o, "breach": "unparseable deadline (fail-closed)"})
+            _breach({**o, "breach": "unparseable deadline (fail-closed)"}, o)
             continue
-        if _now() > deadline:
-            rec = {**o, "breach": f"deadline {o['deadline']} passed unfulfilled"}
-            if refund_key and o.get("charge_id"):
-                ok, why = _refund(o["charge_id"], refund_key, str(o.get("id", "unknown")))
-                rec["refund_status"] = why if ok else f"REFUND ATTEMPT FAILED: {why}"
-            else:
-                rec["refund_status"] = ("unprovisioned: no STRIPE_REFUND_KEY -- the halt is the "
-                                        "only guarantee; refund manually NOW")
-            breached.append(rec)
+        status = o.get("status")
+        if status not in ("open", "fulfillment-claimed", "fulfilled"):
+            _breach({**o, "breach": f"unrecognized status {status!r} (fail-closed)"}, o)
+            continue
+        now = _now()
+        # Completion may occur in an external substrate without an agent claim; a claim merely asks
+        # for an immediate recheck and never certifies itself.
+        ok, evidence = _completion_oracle(o.get("check", ""))
+        if ok and now <= deadline:
+            fulfilled.append({"id": o.get("id"), "verified_at": now.isoformat(),
+                              "oracle_evidence": evidence})
+            continue
+        if ok and now > deadline:
+            # reachable NOW, but the promise was BY the deadline -- late delivery is a breach, and
+            # the customer is refunded despite the deliverable now being served.
+            _breach({**o, "breach": f"delivered late: reachable now but deadline {o['deadline']} "
+                     "already passed", "oracle_evidence": evidence}, o)
+            continue
+        if status in ("fulfillment-claimed", "fulfilled"):
+            completion_errors.append({"id": o.get("id"), "oracle_evidence": evidence})
+        if now > deadline:
+            _breach({**o, "breach": f"deadline {o['deadline']} passed unfulfilled"}, o)
     fulfilled_ids = {item["id"] for item in fulfilled}
     out = {"computed_at": _now().isoformat(),
            "open": sum(1 for o in obls
