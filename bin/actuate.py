@@ -252,6 +252,10 @@ def _sign_resolution_document() -> None:
 
 
 def _verify_resolution_document(ref: str, content: str) -> None:
+    # The trust anchor is read from HEAD:harness/allowed_signers (the agent's own tree) -- identical
+    # to bin/human.py/bin/truth.py. That is defense-in-depth, not the wall: the wall is remote
+    # ledger-branch write protection (the agent cannot place a matching forged+signed doc on
+    # origin/LEDGER_BRANCH), and sod_hook.sh blocks committing allowed_signers in the first place.
     if shutil.which("ssh-keygen") is None:
         raise RuntimeError("ssh-keygen missing; cannot verify operator resolution")
     allowed = _git("show", "HEAD:harness/allowed_signers")
