@@ -140,6 +140,7 @@ function hubHtml(origin) {
 <p>${CONFIG.disclosure}</p>
 <ul>${items}</ul>
 <p><small>${CONFIG.analytics_note} <a href="${origin}/privacy">Privacy</a>. Contact: ${CONFIG.contact}.</small></p>
+<script>try{navigator.sendBeacon('/px')}catch(e){try{fetch('/px',{keepalive:true})}catch(_){}}</script>
 </body></html>`;
 }
 
@@ -194,18 +195,33 @@ identifies a person, the honest answer is usually that there is nothing to retur
 export async function stats(env) {
   if (!env.DB) return new Response("no DB bound", { status: 500 });
   const q = async (sql) => (await env.DB.prepare(sql).all()).results;
-  // ASSET_SQL must mirror ASSET_RE. Asset fetches are still logged (they are evidence) but never
-  // counted as visits: the headline number has to mean "a page was opened".
-  const ASSET_SQL = assetSql();
-  // COALESCE so an empty hits table returns 0, not NULL. NULLIF(ip_hash,'') so requests with no
-  // cf-connecting-ip (stored as '') do not collapse into a single phantom "distinct human".
-  const [tot] = await q(`SELECT COUNT(*) n_all, COALESCE(SUM(CASE WHEN NOT ${ASSET_SQL} THEN 1 ELSE 0 END),0) page_views, COALESCE(SUM(CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END),0) humans, COALESCE(SUM(CASE WHEN bot=1 AND NOT ${ASSET_SQL} THEN 1 ELSE 0 END),0) bots, COALESCE(SUM(CASE WHEN ${ASSET_SQL} THEN 1 ELSE 0 END),0) assets_excluded, COUNT(DISTINCT CASE WHEN bot=0 AND NOT ${ASSET_SQL} THEN NULLIF(ip_hash,'') END) distinct_human_ips FROM hits`);
-  const humansByCountry = await q(`SELECT country, COUNT(*) n FROM hits WHERE bot=0 AND NOT ${ASSET_SQL} GROUP BY country ORDER BY n DESC LIMIT 15`);
-  const clicks = await q("SELECT dest, COUNT(*) n, SUM(CASE WHEN bot=0 THEN 1 ELSE 0 END) human_clicks FROM hits WHERE path='/go' GROUP BY dest ORDER BY n DESC");
-  const recentHumans = await q(`SELECT ts,path,dest,country,as_org,ref,substr(ua,1,80) ua FROM hits WHERE bot=0 AND NOT ${ASSET_SQL} ORDER BY id DESC LIMIT 30`);
-  const recentAll = await q("SELECT ts,path,country,bot,substr(ua,1,60) ua FROM hits ORDER BY id DESC LIMIT 15");
-  return Response.json({ summary: tot, humans_by_country: humansByCountry, click_throughs: clicks,
-                         recent_human_hits: recentHumans, recent_any: recentAll });
+  // est_human_sessions uses the industry-standard JS-execution gate: a hit counts as a session
+  // only if a real browser ran the hub's beacon <script> and fired /px. Non-JS crawlers never
+  // reach it. Then bot=0 drops the ones whose UA/ASN still looks automated. What remains is an
+  // ESTIMATE, not a proof -- a headless real browser also runs JS (inflates it), a VPN/cloud-browser
+  // human egresses from a datacenter ASN (deflates it). No request-layer signal proves humanity;
+  // the only ground truth for "a real human who valued this" is received_usd in ledger/truth.json.
+  const [tot] = await q(`SELECT
+      COUNT(*) raw_hits_all_paths,
+      COALESCE(SUM(CASE WHEN path='/px' THEN 1 ELSE 0 END),0) js_confirmed_hits,
+      COALESCE(SUM(CASE WHEN path='/px' AND bot=0 THEN 1 ELSE 0 END),0) est_human_sessions,
+      COALESCE(SUM(CASE WHEN path='/px' AND bot=1 THEN 1 ELSE 0 END),0) js_hits_flagged_bot,
+      COUNT(DISTINCT CASE WHEN path='/px' AND bot=0 THEN NULLIF(ip_hash,'') END) est_human_ips,
+      COALESCE(SUM(CASE WHEN bot=1 THEN 1 ELSE 0 END),0) server_hits_flagged_bot
+    FROM hits`);
+  // ASN breakdown of the est-human bucket, so a reader can judge the residual themselves:
+  // datacenter/proxy ASNs appearing here are exactly what inflate the estimate.
+  const estByAsn = await q(`SELECT as_org, country, COUNT(*) n, COUNT(DISTINCT ip_hash) ips
+      FROM hits WHERE path='/px' AND bot=0 GROUP BY as_org ORDER BY n DESC LIMIT 20`);
+  const clicks = await q("SELECT dest, COUNT(*) n, COALESCE(SUM(CASE WHEN bot=0 THEN 1 ELSE 0 END),0) non_bot_clicks FROM hits WHERE path='/go' GROUP BY dest ORDER BY n DESC");
+  const recent = await q("SELECT ts,path,country,as_org,bot,substr(ua,1,60) ua FROM hits ORDER BY id DESC LIMIT 20");
+  return Response.json({
+    _method: "est_human_sessions = JS-beacon-confirmed (/px) AND not-flagged-bot. An ESTIMATE with a known, irremovable residual: headless real browsers inflate it; VPN/cloud-browser humans deflate it. No request-layer signal proves humanity. The only ground truth for a real valuing human is received_usd (ledger/truth.json), verified out of band.",
+    summary: tot,
+    est_human_sessions_by_asn: estByAsn,
+    click_throughs: clicks,
+    recent: recent
+  });
 }
 
 export default {
@@ -226,6 +242,14 @@ export default {
       if (!env.STATS_SECRET || u.searchParams.get("k") !== env.STATS_SECRET)
         return new Response("forbidden", { status: 403 });
       return stats(env);
+    }
+
+    // JS-execution beacon. Fires ONLY when a real browser runs the hub's <script> (see hubHtml).
+    // Crawlers that never execute JS never reach this path -- the standard, cheap bot filter that
+    // raw server-side request logging lacks. These /px rows are the only ones counted as sessions.
+    if (u.pathname === "/px") {
+      await logHit(env, ctx, req, "/px", "");
+      return new Response(null, { status: 204 });
     }
 
     if (u.pathname === "/privacy") {
