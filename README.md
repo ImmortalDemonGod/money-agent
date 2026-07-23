@@ -130,14 +130,21 @@ original un-redacted history remains on its run branch, [PR #8](../../pull/8).
 
 ## Roadmap
 
-The harness redesign v1's findings forced is **built and merged** (PRs #18/#19): the grounded stop (#7),
-cross-run memory (#2), the standing-presence machinery (#4), and the verified-edge rail (#6) all shipped.
-What remains is the [issue tracker](../../issues), in dependency order. **#20 comes first**: the
-operator-side pre-run-2 acceptance gates (one live verifier cycle, the edge-rail checklist, remote
+The harness redesign v1's findings forced is **built and merged**. PRs #18/#19 shipped the foundation —
+the grounded stop (#7), cross-run memory (#2), the standing-presence machinery (#4), the verified-edge rail
+(#6), and the context-hygiene fixes (#9, #10, #11). The run-2 build stack (PRs #47–#54, sprints S1–S16) then
+landed the verification-hardening wave (#33–#46: currency integrity, coverage-truncation guards, fact-lane
+signing + hash chain, risk-adjusted edge verdict, delivery- and oracle-grounding, inference metering) and
+the async human-actuation queue (#31).
+
+What remains is deliberately **outside the agent's code**. **#20 comes first**: the operator-side pre-run-2
+acceptance gates (one live verifier cycle, the edge-rail checklist, the traffic-beacon deploy #26, remote
 `ledger`-branch protection); until it passes, v2's machinery sits on the unproven side of exactly the line
-this project draws. Then the harness loose ends (#10 context hygiene, #11 tool-promotion policy), and the
-run-2 backlog the harness deliberately does not decide for the agent: craft (#1), findable surfaces and
-targeting (#3, #5), and the untried card-paying levers (#12-#17).
+this project draws. Two harness pieces stay **optional** — a new x402/USDC payment rail (#30) and the
+buyer-facing signed attestation (#42; the verifier already emits `ledger/attestation.json`, but nothing
+publishes it to a buyer yet). Everything else is the run-2 revenue backlog the harness deliberately does not
+decide for the agent: craft (#1), findable surfaces and targeting (#3, #5), and the untried card-paying
+levers (#12–#17).
 
 ## What this is, and is not
 

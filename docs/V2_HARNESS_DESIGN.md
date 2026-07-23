@@ -10,10 +10,11 @@ $0.00) and from the architecture of `aiv-workflow`'s `fix_pipeline.mjs`.
 
 ---
 
-## 0. Reconciliation with the implemented v2 (main @ `3910122`)
+## 0. Reconciliation with the implemented v2 (originally main @ `3910122`; **updated post-run-2-stack, main @ `360f5c3`**)
 
 Much of this proposal already exists in v2, sometimes in a stronger form, sometimes
-deliberately narrower. Honest accounting:
+deliberately narrower. Honest accounting (the table below was first written against
+`3910122`; a **post-run-2-stack update** follows it):
 
 | This doc proposed | v2 implemented | Status |
 |---|---|---|
@@ -21,10 +22,23 @@ deliberately narrower. Honest accounting:
 | Exhaustion as convergence; single termination authority; iter-095 impossible (§6) | `bin/conclusion_gate.py`: effort floor + filled packet + **fresh-context adversary** (hash-pinned to MONEY_LOG + a ≥30-line transcript) + no-live-bets; and the deeper fix — **a passing gate never stops the run**; no stop condition may read it | **Implemented, different mechanism** — v2 uses an adversarial-search novelty check where this doc used a novelty signature; v2's decoupling of permission-to-record from stop semantics is *stronger* than what this doc specified |
 | Instrument-first; no unmeasurable success conditions (§7) | Beacon promoted to canonical harness (`harness/beacon/`, entry 007); `bin/host_check.py` (serving-layer gate, SSRF-guarded, `HOST_CHECK` line required by `aiv_gate.sh` for publish claims) | **Implemented** at the artifact level; NOT implemented as a registration-time refusal of unmeasurable bets |
 | Out-of-rail check for e.g. trading (§14.1-A1 as first drafted) | **The verified-edge rail** (`bin/edge.py`, `bin/edge_pnl.py`, `ledger/edge.json`): trading is not refused — it is *scored*, as rail #2 | **This doc's first-draft verdict was wrong**; see §14.1 rewritten |
-| Verifier-stamped bet resolutions (§4.4) | Not implemented — `bets.py resolve` requires evidence text but the agent authors it | **Still additive** (v2 consciously scoped the registry to the forgetting failure-mode, not forging) |
+| Verifier-stamped bet resolutions (§4.4) | **Partially implemented (#40):** `bets.py` now classifies each bet's clock by oracle (`deterministic`/`instrumented`/`judgment`); deterministic/instrumented resolutions carry the executed check's output, and `conclusion_gate.py` distinguishes machine-checked from judgment-class. A verifier *countersign* on the facts lane remains additive. | **Mostly implemented** |
 | Business spine / demand-before-build ordering (§5) | Not implemented — v2 keeps the harness strategy-free by design (context discipline: `knowledge/` is "operational, never strategic") | **Still additive, and now carries a named tension**: is ordering enforcement *method* (allowed by PROMPT v2's own method-vs-answer line) or *strategy injection* (which v2 deliberately refuses)? Operator call. |
-| Instant-delivery test (§14.3-A4) | Not implemented — deliver-in-full remains constitution prose; containment is the first-dollar stop | **Still additive**, see §14.3 |
+| Instant-delivery test (§14.3-A4) | **Implemented (#39):** `bin/delivery_check.py` drives/fetches the pay→success→deliver seam; `aiv_gate.sh` requires a passing `DELIVERY_CHECK` line for any live paid-offer claim | **Implemented** |
 | `bounds_note` per bet (§14.2-A2) | Not implemented (nearest precedent: `disclosure_gate.py`, now canonical on main and wired into `mail.py`) | **Still additive** |
+
+**Update — post run-2 build stack (PRs #47–#54, main @ `360f5c3`).** The rows above were first written
+against `3910122`; since then the verification-hardening wave landed on `main` and several "still additive"
+items became real. Built: the async human-actuation queue (**P4→R1**, #31, `bin/human.py` + the PROMPT.md
+amendment); inference metering (**R4**, #41, `inference_usd`/`net_usd_full`, fail-closed); the instant-delivery
+probe (**P6/G4**, #39, `bin/delivery_check.py`); oracle-classed bet resolutions (#40); fact-lane signing +
+hash chain (#36); currency and coverage integrity (#33/#34); the provider-level first-sale cap (#35); the
+risk-adjusted edge verdict (**G1**, #38); and the Tier-0 regression corpus, pace-enforce, and side-car
+durability hardening (#44/#45/#46). Per-primitive build status is now marked inline in §15.2 and §18. Still
+additive after the stack: the business spine / demand-ordering (deliberately unbuilt — see the tension noted
+above); the **buyer-facing half** of the outward attestation (**R2**, #42 — the verifier already emits a
+signed `ledger/attestation.json`, but nothing publishes it to a buyer yet); new rail *instances* (**R3**,
+#30); and the human baseline control (**R5**, #43).
 
 **One-sentence summary:** extend v1's verification architecture — which grounded exactly
 one claim ("money arrived") outside the agent's reach — to every decision surface of the
@@ -764,12 +778,15 @@ that the classes are cut right.
   *config + one pull function*, not a redesign. Registration-time behavior for the
   rest: a strategy citing a non-provisioned source gets the mechanical message "not
   scored — request provisioning or an operator ruling" (G5, generalized).
+  **Status: contract implemented** (`pnl.py`, `edge_pnl.py`); new-rail *instances* pending (#30 / R3).
 - **P2 — Pre-registration freeze, generic.** The `edge_pnl.py` freeze/VOID machinery
   lifted out of the trading vertical: ANY claim of the form "METRIC from FACT-SOURCE
   will clear BAR with ≥ SAMPLE by DEADLINE" can be registered, frozen (sha256 +
   baseline snapshot in the verifier's private state), and mechanically adjudicated.
   Trading was merely the first user. G1's risk-shape fields become optional
   registration keys, not trading-specific code.
+  **Status: implemented** (`edge_pnl.py` freeze/VOID; the G1 risk-adjusted verdict — benchmark +
+  excess-return bar — landed via #38).
 - **P3 — Recorded-decision gate, generic.** `disclosure_gate.py` generalized from its
   one topic: before any action in a declared **risk class** (external send, publish,
   listing, data acquisition), a decision record keyed by content hash must exist —
@@ -782,12 +799,16 @@ that the classes are cut right.
   passes every mechanical gate but fails bounds — e.g. market analysis sold as a
   product is rail-clean and instant-delivery-clean yet is investment advice under a
   real man's name; P3 forces that reasoning to be committed before the listing acts.
+  **Status: implemented** (`disclosure_gate.py` for sends; `decision_gate.py` for the generic
+  risk-class / committed-manifest check).
 - **P4 — Facts-lane countersign.** The async operator-approval primitive (§15's first
   draft had this right, and it is already general): request on the claims lane,
   approval committed to the ledger branch the agent cannot write, `guard.py` checks
   presence. Consumed via an `approval`-clock bet so the agent never waits. Typed by
   **risk class**, never by business ("sell-derived-data-class", "post-payment-
   obligation-class"), so one approval covers every future instance of the class.
+  **Status: implemented**, and extended to *actuation* — the operator performing a human-gated step,
+  not just authorizing one (R1, #31, `bin/human.py`).
 - **P5 — Obligation register + watchdog.** The general form of the dropship problem:
   a sale MAY create an obligation record (what is owed, completion oracle, deadline).
   The verifier watches obligations like it watches the ledger; an unmet deadline
@@ -812,15 +833,24 @@ that the classes are cut right.
   mechanics. Cost named where it belongs: this widens the verifier's Stripe key from
   read-only to read+refund — a deliberate, documented posture change on the
   operator-controlled side; the agent side gains nothing.
+  **Status: implemented** (`obligations.py` register + `obligation_watch.py`); the amendment above is
+  now the operative CONSTITUTION rule, gated on the fresh verifier-owned enablement fact.
 - **P6 — Substrate-probe registry.** `host_check.py` as the first entry in an
   extensible set of deterministic "does the layer under me actually work" probes
   (serving, mail round-trip, payment-link flow — including the G4/A4 instant-delivery
   probe, which is just the payment-substrate probe). A claim of type X must cite a
   passing probe of type X (the `HOST_CHECK`-line-in-packet pattern, generalized).
+  **Status: implemented** (`host_check.py`; the G4/A4 instant-delivery probe landed as
+  `delivery_check.py`, #39).
 - **P7 — Exposure caps, generic.** Per-risk-class ceilings (count of open
   obligations, max single-item liability, cumulative liability as a fraction of
   received funds), enforced at action time — the liability-side twin of the card's
   spend cap.
+  **Status: implemented** (`obligations.py` exposure caps; the cumulative fraction-of-verified-revenue
+  ceiling is mutation-tested, #47–#54 stack).
+
+**Build-status summary (post run-2 stack, main @ `360f5c3`):** P1 contract ✅ / instances ⬜ (#30) ·
+P2 ✅ · P3 ✅ · P4 ✅ · P5 ✅ · P6 ✅ (#39) · P7 ✅ · **P8 (outward attestation) ◐ partial** (#42; see §18 R2).
 
 ### 15.3 The probes, recomposed (no primitive knows which business it is serving)
 
@@ -1075,21 +1105,33 @@ analysis's §12, R1–R5):
   `human_minutes_total` as a first-class run metric — the walls measured in human-minutes.
   Requires the PROMPT.md autonomy-clause amendment in the same commit (analysis Issue 8,
   adoption requirement).
+  **Status: implemented (#31)** — `bin/human.py` ships the whitelisted actuation-request class and the
+  atomic PROMPT.md amendment (requesting ≠ waiting).
 - **R2 — Outward-facing trust primitive ("P8")**: the one gap with no counterpart in P1–P7 —
   every existing primitive faces the operator/agent/verifier; none faces the customer. A
   verifier-signed public attestation surface (`harness/attest/`) turns the ledger into a
   buyer-visible trust asset: verification quality as a market primitive, not only an epistemic
   one.
+  **Status: partially implemented (#42)** — the verifier already emits a signed `ledger/attestation.json`
+  (`pnl.py`, produced only when signing is armed, removed on any signing failure). The **buyer-facing half**
+  remains: publishing it where a buyer can fetch it, a storefront surface that renders/links it, and the
+  independent-verification-from-a-bare-clone doc.
 - **R3 — Rail instances**: concrete P1 plug-ins (marketplace payouts routed to the scored rail;
   the human-sold-reach spend class under a P3 decision record). Contract exists; instances do not.
+  **Status: pending (#30)** — the P1 contract is built; no new-rail instance (x402/USDC) is; blocked on a
+  wallet-funding decision (also #20 item 4). Optional — run 2 is scoreable on the Stripe rail alone.
 - **R4 — Inference metering**: verifier-pulled `inference_usd` / `inference_tokens` into
   `truth.json` (`net_usd_full`); §15.5 costs the primitives but never the agent's own compute.
   Fail-closed: delayed, partial, or unavailable provider usage marks `net_usd_full` unresolved —
   full-net conclusions are blocked until coverage is complete.
+  **Status: implemented (#41)** — `pnl.py` computes `inference_usd`/`net_usd_full`, null-not-zero when the
+  feed is absent (unknown ≠ zero).
 - **R5 — Human baseline control**: §16's pyramid benchmarks the *policy*, never a human under
   matched constraints; `pnl.py` is subject-agnostic, so the same verifier scores a matched human
   run unchanged (`HUMAN_CONTROL_PROTOCOL.md`). Without it, the field's $0s cannot distinguish
   "agents cannot" from "no unrooted actor can, this fast."
+  **Status: pending (#43)** — experiment design, not code; `HUMAN_CONTROL_PROTOCOL.md` is unwritten and no
+  control run has been scored. The one component money cannot summon (it needs a willing human).
 
 Context note: the companion analysis is strategy-visible to any run agent that reads the repo;
 per its epistemic-status note (operator ruling, 2026-07-18), future runs are context-AWARE and
