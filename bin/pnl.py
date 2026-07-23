@@ -100,8 +100,13 @@ def _sha256(p: Path) -> str:
 # operator's Mac. The sandbox agent has no filesystem access to it. pnl.py runs ONLY on the verifier
 # (it needs the read key the agent does not have), so this path is only ever read by the trusted
 # party. The repo's ledger/baseline.json is a published COPY for transparency and is never read here.
+# S12: a shadow verifier (SHADOW=1, the Tier-1 benchmark posture -- design §16) gets its OWN
+# default state dir so a rehearsal can never touch the live baseline/keys/rescues. An explicit
+# MONEY_AGENT_STATE always wins (the sim rigs and any deliberate operator layout rely on that).
+SHADOW = os.environ.get("SHADOW", "0") == "1"
 STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE",
-                                str(Path.home() / ".money-agent-verifier")))
+                                str(Path.home() / (".money-agent-shadow" if SHADOW
+                                                   else ".money-agent-verifier"))))
 BASELINE = STATE_DIR / "baseline.json"
 REPO_BASELINE_COPY = REPO / "ledger" / "baseline.json"
 
@@ -390,6 +395,29 @@ def main() -> int:
 
     stripe_key, privacy_key, card_csv = map(_clean, (stripe_key, privacy_key, card_csv))
 
+    # ---- S12: the shadow wall, write side. SHADOW=1 is the Tier-1 benchmark posture (design
+    # §16): test-mode Stripe, NO live card, facts on a shadow-* lane only. Anything live-shaped
+    # is contamination and is refused BEFORE a single pull; the branch rule guarantees a shadow
+    # verifier can never publish onto a lane a live run trusts.
+    if SHADOW:
+        lb = os.environ.get("LEDGER_BRANCH", "") or "shadow-ledger"
+        if not lb.startswith("shadow"):
+            print(f"FATAL: SHADOW=1 but LEDGER_BRANCH={lb!r}. A shadow verifier may only "
+                  "publish to a 'shadow*' lane -- refusing before anything is written.",
+                  file=sys.stderr)
+            return 2
+        os.environ["LEDGER_BRANCH"] = lb  # resolved lane: the truth dict + children see it
+        if stripe_key and not stripe_key.startswith(("sk_test_", "rk_test_")):
+            print("FATAL: SHADOW=1 with a non-test STRIPE_READ_KEY. A shadow run reads "
+                  "test-mode Stripe ONLY (sk_test_/rk_test_) -- a live read would mix real "
+                  "money into a rehearsal ledger.", file=sys.stderr)
+            return 2
+        if privacy_key:
+            print("FATAL: SHADOW=1 with PRIVACY_READ_KEY set. There is NO live card in a "
+                  "shadow run (that is the mode's definition); use CARD_CSV for a scripted "
+                  "spend feed.", file=sys.stderr)
+            return 2
+
     raw_cap = _clean(os.environ.get("CARD_CAP_USD", ""))
     try:
         cap = float(raw_cap or 0)
@@ -601,6 +629,9 @@ def main() -> int:
         "baseline_created_gt": baseline,
         "baseline_ledger_commit": load_baseline_ledger_commit(),  # verifier-signed; guard scopes SoD by it
         "ledger_branch": os.environ.get("LEDGER_BRANCH", "ledger"),  # self-declared lane; truth.py cross-checks
+        # S12: the shadow marker -- key ABSENT on live runs (byte-parity), so a live consumer
+        # can refuse rehearsal facts and a shadow consumer can refuse live facts (truth.py).
+        **({"shadow": True} if SHADOW else {}),
         "counts_only_money_after": (dt.datetime.fromtimestamp(baseline, dt.timezone.utc).isoformat()
                                     if baseline else "NO BASELINE -- counting all history"),
         "verified": verified,

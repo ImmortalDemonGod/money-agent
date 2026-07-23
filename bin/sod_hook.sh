@@ -37,8 +37,11 @@ while IFS= read -r f; do
     # v2 moved the whole trusted read/adjudication path into these files. If the agent could commit
     # them it could make guard/aiv_gate/gates believe anything -- so they are all verifier-owned now
     # (the v1 blocklist covered only pnl.py+guard.py, which was the migration hole the audit found).
-    bin/pnl.py|bin/guard.py|bin/truth.py|bin/aiv_gate.sh|bin/conclusion_gate.py|bin/disclosure_gate.py|bin/delivery_check.py|bin/bet_gate.py|bin/prereg.py|bin/decision_gate.py|bin/obligations.py|bin/obligation_watch.py|bin/probes.py|bin/iter.py|bin/host_check.py|bin/append_log.py|bin/verifier_loop.sh|bin/set_baseline.py|bin/sod_hook.sh|bin/mail.py|bin/outcome.py|bin/edge_pnl.py|bin/edge.py|bin/bets.py|bin/human.py|bin/exhaustion_gate.py|bin/new_run.sh|bin/run_weak.sh|bin/supervise.sh|bin/start_verifier.sh|bin/verifier_daemon.sh|bin/rails/*|tests/*) \
+    bin/pnl.py|bin/guard.py|bin/truth.py|bin/aiv_gate.sh|bin/conclusion_gate.py|bin/disclosure_gate.py|bin/delivery_check.py|bin/bet_gate.py|bin/prereg.py|bin/decision_gate.py|bin/obligations.py|bin/obligation_watch.py|bin/probes.py|bin/iter.py|bin/host_check.py|bin/append_log.py|bin/verifier_loop.sh|bin/set_baseline.py|bin/sod_hook.sh|bin/mail.py|bin/outcome.py|bin/edge_pnl.py|bin/edge.py|bin/bets.py|bin/human.py|bin/exhaustion_gate.py|bin/shadow_metrics.py|bin/new_run.sh|bin/run_weak.sh|bin/supervise.sh|bin/start_verifier.sh|bin/verifier_daemon.sh|bin/rails/*|tests/*) \
         block "the agent may not edit its own verifier/gate/sender: $f" ;;
+    # S12: the shadow world's fixture pack + scoring inputs. Editing the benchmark mid-run
+    # voids the score, same class as editing the spine's config.
+    shadow/*) block "the shadow-world pack is operator-owned (editing the benchmark voids the score): $f" ;;
     # #36: the signature trust anchors. An agent that could commit a swapped pubkey could mint its
     # own "verifier" signatures -- same class as editing truth.py itself.
     harness/verifier_key.pub|harness/allowed_signers) \

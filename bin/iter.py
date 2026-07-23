@@ -73,8 +73,9 @@ def _manifest_lines(t: dict) -> list[str]:
     would let a forged hash be pre-presented as 'citable' (CodeRabbit finding). So: read ONLY the
     committed manifest on the facts lane; if it is unreachable, pre-fill NOTHING (the agent fills
     the anchor by hand and aiv_gate validates it against the same committed manifest at close)."""
-    import os
-    lb = os.environ.get("LEDGER_BRANCH", "ledger")
+    sys.path.insert(0, str(REPO / "bin"))
+    import truth as _t
+    lb = _t.LEDGER_BRANCH  # one resolution point (S12: the default is mode-aware)
     r = _run("git", "show", f"origin/{lb}:ledger/raw/MANIFEST.sha256", check=False)
     if r.returncode != 0 or not r.stdout:
         return []  # no verifier-owned manifest reachable -> do NOT fall back to the writable file
