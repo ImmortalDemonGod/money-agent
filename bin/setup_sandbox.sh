@@ -23,28 +23,30 @@ if command -v aiv >/dev/null 2>&1; then
   ok "aiv present: $(command -v aiv)"
 else
   echo "  installing aiv-protocol..."
-  pip install -q "git+https://github.com/ImmortalDemonGod/aiv-protocol.git" 2>/dev/null \
-    || pip3 install -q "git+https://github.com/ImmortalDemonGod/aiv-protocol.git" 2>/dev/null \
-    || bad "pip install failed. Install manually: pip install git+https://github.com/ImmortalDemonGod/aiv-protocol.git"
+  # Pinned to the merge of aiv-protocol#30 (E010 false-positive fix + #29 hook-interpreter
+  # pinning). An unpinned install silently drifts with upstream main; pinning makes a sandbox's
+  # aiv behavior reproducible and guarantees it carries the two fixes the workarounds below used
+  # to patch locally. Bump this ref deliberately when adopting a newer aiv.
+  AIV_REF="958b2ba1e129123ddf73053b2165132d52572ac5"
+  pip install -q "git+https://github.com/ImmortalDemonGod/aiv-protocol.git@${AIV_REF}" 2>/dev/null \
+    || pip3 install -q "git+https://github.com/ImmortalDemonGod/aiv-protocol.git@${AIV_REF}" 2>/dev/null \
+    || bad "pip install failed. Install manually: pip install git+https://github.com/ImmortalDemonGod/aiv-protocol.git@${AIV_REF}"
   command -v aiv >/dev/null 2>&1 && ok "aiv installed: $(command -v aiv)"
 fi
 
-# ---------------------------------------------------- 2. aiv init + THE SHEBANG BUG
+# ---------------------------------------------------- 2. aiv init + hook chaining
 #
-# `aiv init` writes .git/hooks/pre-commit with `#!/usr/bin/env python3`. That resolves to whatever
-# python3 is first on PATH, which is NOT necessarily the interpreter aiv was installed into. When
-# they differ, EVERY commit dies with `ModuleNotFoundError: No module named 'aiv'` -- including
-# `aiv commit` itself. aiv init prints "Installed" and exits 0 while installing a hook that cannot
-# run. Filed upstream: Black-Box-Research-Labs/aiv-protocol#29.
+# `aiv init` installs .git/hooks/pre-commit and pre-push. Hooks are NEVER cloned, so this must run
+# in every fresh sandbox (gate on the HOOK, not on the committed .aiv.yml, or init is skipped and
+# no hook is ever installed -- exactly the failure this script exists to catch).
 #
-# Fix: repoint the shebang at the interpreter that actually owns the `aiv` entrypoint.
+# Since aiv-protocol#29 -- shipped in the #30 merge pinned above -- `aiv init` writes the hook
+# shebang as the owning interpreter's absolute path (sys.executable), so the historical
+# `#!/usr/bin/env python3` ModuleNotFoundError-on-every-commit bug is gone and the old shebang
+# sed-repair loop is no longer needed.
 echo
-echo "=== aiv init + shebang repair ==="
+echo "=== aiv init + hook chaining ==="
 if command -v aiv >/dev/null 2>&1; then
-  # Gate on the HOOK, not on .aiv.yml. .aiv.yml IS committed, so it exists in every clone --
-  # but hooks are NOT cloned, and `aiv init` is what creates them. Gating on the config meant init
-  # was skipped in every fresh clone, so no hook was ever installed and this whole section
-  # silently did nothing and printed nothing. Exactly the failure this script exists to catch.
   if [[ ! -f .git/hooks/aiv-pre-commit.orig && ! -f .git/hooks/pre-push ]]; then
     aiv init . >/dev/null 2>&1 && ok "aiv init ran (hooks are not cloned; config alone is not enough)"
   else
@@ -53,12 +55,6 @@ if command -v aiv >/dev/null 2>&1; then
   AIV_BIN="$(command -v aiv)"
   AIV_PY="$(head -1 "$AIV_BIN" | sed 's|^#!||')"
   if [[ -x "$AIV_PY" ]] && "$AIV_PY" -c "import aiv" 2>/dev/null; then
-    for h in pre-commit pre-push; do
-      if [[ -f ".git/hooks/$h" ]] && head -1 ".git/hooks/$h" | grep -q "env python3"; then
-        sed -i.bak "1s|.*|#!${AIV_PY}|" ".git/hooks/$h"
-        ok "repointed .git/hooks/$h -> $AIV_PY"
-      fi
-    done
     # move aiv's hook aside; ours chains to it
     [[ -f .git/hooks/pre-commit ]] && ! grep -q sod_hook .git/hooks/pre-commit 2>/dev/null \
       && mv .git/hooks/pre-commit .git/hooks/aiv-pre-commit.orig
