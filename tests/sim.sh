@@ -1754,10 +1754,10 @@ echo "=== S16: adversarial-pass fixes (each bit the pre-fix committed code) ==="
 cdx "$W/agent"
 
 # F8: a non-finite / negative exposure value defeats every cap by NaN/sign comparison.
-assert_exit_grep 1 "finite, non-negative" "S16 F8: NaN obligation value refused before the caps" \
+assert_exit_grep 1 "positive and finite" "S16 F8: NaN obligation value refused before the caps" \
   env EXPOSURE_MAX_OPEN=5 EXPOSURE_MAX_SINGLE_USD=1000 EXPOSURE_MAX_TOTAL_FRACTION=1 \
   python3 bin/obligations.py register --what x --check "test -0" --deadline 2999-01-01T00:00:00Z --value-usd nan
-assert_exit_grep 1 "finite, non-negative" "S16 F8: negative obligation value refused" \
+assert_exit_grep 1 "positive and finite" "S16 F8: negative obligation value refused" \
   env EXPOSURE_MAX_OPEN=5 EXPOSURE_MAX_SINGLE_USD=1000 EXPOSURE_MAX_TOTAL_FRACTION=1 \
   python3 bin/obligations.py register --what x --check "test -0" --deadline 2999-01-01T00:00:00Z --value-usd -5
 git checkout -q run/obligations.json 2>/dev/null; rm -f run/obligations.json
@@ -1766,8 +1766,9 @@ git checkout -q run/obligations.json 2>/dev/null; rm -f run/obligations.json
 # verified all-clear. (Runs in the verifier clone so it never writes ledger/ in the agent tree.)
 cdx "$W/verifier"
 WOUT=$(env -u AGENT_BRANCH python3 bin/obligation_watch.py 2>&1)
-if grep -q "not an all-clear" <<<"$WOUT" && \
-   python3 -c "import json;d=json.load(open('ledger/obligations.json'));exit(0 if d['verified'] is False else 1)"; then
+# main's _publish_unverified writes verified:false with a "not an all-clear" note into the fact
+# file (stderr carries "UNVERIFIED: ..."); the affirmative all-clear is what must never appear.
+if python3 -c "import json;d=json.load(open('ledger/obligations.json'));exit(0 if (d['verified'] is False and 'not an all-clear' in d.get('_note','')) else 1)"; then
   ok "S16 F7: watchdog without AGENT_BRANCH publishes verified:false (not an all-clear)"
 else bad "S16 F7: watchdog claimed an all-clear without a promise-book"; dump "$WOUT"; fi
 git checkout -q ledger/obligations.json 2>/dev/null; rm -f ledger/obligations.json
@@ -1793,20 +1794,29 @@ rm -f f9_junk.txt run/bets.json
 # F2: a send blocked AFTER the bet-gate check must NOT have burned the reservation. Arm a typed
 # bet authorizing one send, attempt a send with an em-dash body (blocked post-check, before any
 # socket), then confirm the reservation survives. Pre-fix the em-dash send consumed it first.
-# Dummy creds so _need_creds passes and send() actually runs to the em-dash guard (no socket opens).
+# NOTE: S9/S11 scoping requires an explicit bet_id under BET_GATE_ENFORCE=1, and mail's CLI does not
+# thread one, so exercise send() at the function level with bet_id="b-f2" (it sys.exit()s at the
+# em-dash guard -- run it in a subprocess). No socket opens; dummy creds are irrelevant to send().
 python3 - <<'PY'
 import json, pathlib
+# a VALID typed bet (S9/S11 schema: lane + success_condition), authorizing exactly one send
 p = pathlib.Path("run/bets.json"); p.parent.mkdir(exist_ok=True)
-p.write_text(json.dumps({"bets": [{"id": "b-f2", "status": "open", "type": "probe",
-    "oracle": "instrumented", "authorizes": {"send": 1}}]}) + "\n")
+p.write_text(json.dumps({"bets": [{"id": "b-f2", "type": "probe", "lane": "f2-lane",
+    "status": "open",
+    "success_condition": {"oracle_id": "deterministic", "metric": "m", "comparator": ">=",
+                          "threshold": 1, "window_h": 1},
+    "authorizes": {"send": 1}}]}) + "\n")
 PY
-printf 'body with an em-dash %s right here\n' "$(printf '\xe2\x80\x94')" > f2_body.txt
-env GMAIL_ADDRESS=t@t.test GMAIL_APP_PASSWORD=x BET_GATE_ENFORCE=1 \
-  python3 bin/mail.py send x@x.example subj f2_body.txt >/dev/null 2>&1 || true
-if env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send >/dev/null 2>&1; then
+env BET_GATE_ENFORCE=1 python3 -c "
+import sys; sys.path.insert(0, 'bin'); import mail
+mail.send('x@x.example', 'subj', 'body with an em-dash — right here', bet_id='b-f2')
+" >/dev/null 2>&1 || true
+if env BET_GATE_ENFORCE=1 python3 -c "
+import sys; sys.path.insert(0, 'bin'); import bet_gate
+ok, why = bet_gate.authorize('send', consume=True, bet_id='b-f2'); sys.exit(0 if ok else 1)"; then
   ok "S16 F2: a post-check-blocked send did NOT burn the reservation (still authorizable)"
 else bad "S16 F2: the blocked send consumed the reservation (consume-before-validate)"; fi
-rm -f f2_body.txt run/bets.json
+rm -f run/bets.json
 
 # C2: edge.json/obligations.json carry no shadow marker, so the lane-world wall must bind them.
 # A live consumer reading a shadow lane must refuse -- even for a marker-less fact file.
