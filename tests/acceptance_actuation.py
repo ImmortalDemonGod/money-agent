@@ -76,7 +76,9 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 AGENT_BRANCH = "acc-agent"
 LEDGER_BRANCH = "acc-ledger"
-SECRET = "PLAINTEXT_CREDENTIAL_DO_NOT_LEAK_c0ffee"   # distinctive; grepped across all git objects
+# Runtime-random canary: never a committed literal, so a match in the object store can only come
+# from the return channel leaking it (not from this file being cloned into the test world).
+SECRET = "LEAKCANARY-" + os.urandom(12).hex()
 MODULE = REPO / "bin" / "actuate.py"
 
 # ----- tiny check framework (PASS / FAIL / PENDING) --------------------------------------
@@ -299,7 +301,7 @@ def neg_sod_forgery():
     r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "x",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "done", "--return-kind", "confirmation",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "t", "--ev", "e")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
@@ -329,7 +331,7 @@ def neg_oracle_leak():
                 "--gate", "please choose our business strategy and target market",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "a strategy", "--return-kind", "confirmation",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "t", "--ev", "e")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
     if "unrecognized arguments" in r.stderr:
         raise Pending("request CLI not implemented")
     want(r.returncode != 0, "oracle-shaped request (asks the human to choose strategy) was ACCEPTED")
@@ -346,13 +348,13 @@ def neg_secret_never_in_git():
     r = actuate(agent, world / "state", "request", "--kind", "kyc-step", "--gate", "kyc",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "acct", "--return-kind", "credential",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "t", "--ev", "e")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
     tid = parse_id(r.stdout)
     f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "5",
-                "--evidence", "done", "--return-file", secret_file)
+                "--evidence", "marketplace account created", "--return-file", secret_file)
     want(f.returncode == 0, f"fulfill failed: {f.stderr[:200]}")
     want(not origin_contains(origin, SECRET), "plaintext credential present in git objects")
     return "no plaintext credential in any committed object"
@@ -366,7 +368,7 @@ def neg_metering():
     r = actuate(agent, world / "state", "request", "--kind", "approval-click", "--gate", "approve",
                 "--target-url", "https://e/x", "--identity", "op", "--steps", steps,
                 "--expect", "approved", "--return-kind", "none",
-                "--deadline", "2099-01-01T00:00:00Z", "--test", "t", "--ev", "e")
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
@@ -392,7 +394,7 @@ def bench_card_completeness():
                 "--target-url", "https://dash.example/claim/xyz", "--identity", "CF account",
                 "--steps", steps, "--artifact", artifact, "--expect", "host serving 200",
                 "--return-kind", "confirmation", "--deadline", "2099-01-01T00:00:00Z",
-                "--test", "t", "--ev", "e")
+                "--test", "iter089", "--ev", "reach")
     if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
         raise Pending("request CLI not implemented")
     want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
@@ -425,14 +427,14 @@ def bench_deadline_notification():
     soon = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "soon",
                    "--target-url", "https://e/soon", "--identity", "op", "--steps", steps,
                    "--expect", "done", "--return-kind", "none",
-                   "--deadline", "2000-01-01T00:10:00Z", "--test", "t", "--ev", "e")
+                   "--deadline", "2000-01-01T00:10:00Z", "--test", "iter089", "--ev", "reach")
     if soon.returncode != 0 and "usage" in (soon.stderr + soon.stdout).lower():
         raise Pending("request CLI not implemented")
     want(soon.returncode == 0, f"request(soon) failed: {soon.stderr[:200]}")
     far = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "far",
                   "--target-url", "https://e/far", "--identity", "op", "--steps", steps,
                   "--expect", "done", "--return-kind", "none",
-                  "--deadline", "2099-01-01T00:00:00Z", "--test", "t", "--ev", "e")
+                  "--deadline", "2099-01-01T00:00:00Z", "--test", "iter089", "--ev", "reach")
     want(far.returncode == 0, f"request(far) failed: {far.stderr[:200]}")
     soon_id, far_id = parse_id(soon.stdout), parse_id(far.stdout)
     sink = world / "alerts.txt"

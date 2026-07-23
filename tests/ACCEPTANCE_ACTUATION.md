@@ -6,6 +6,10 @@ this file is its human-readable companion (the contract, the benchmarks, and the
 "done"). If the two ever disagree, the harness is authoritative — it is the thing a fresh party
 runs.
 
+**Status:** Tier-S is **GREEN** — `bin/actuate.py` is implemented to the contract and
+`python3 tests/acceptance_actuation.py` reports 9 PASS / 0 FAIL. Existing suites unaffected
+(`sim.sh` 163/0, `corpus.sh` 11/0). Tier-L (one live actuation) remains an operator gate.
+
 ## The goal
 
 Turn the queue from a thin **gate-signal** into a reliable, usable **capability-delegation**
