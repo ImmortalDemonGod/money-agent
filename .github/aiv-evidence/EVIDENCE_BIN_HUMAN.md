@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/human.py`
-**Commit:** `a05b6d3`
-**Previous:** `e7a1091`
-**Generated:** 2026-07-22T23:32:57Z
+**Commit:** `24ca694`
+**Previous:** `5b821c4`
+**Generated:** 2026-07-23T00:48:19Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,15 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/human.py"
-  classification_rationale: "Lost operator resolutions would corrupt the conclusion-authorization audit trail"
-  classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:32:57Z"
+  classification_rationale: "CodeRabbit flagged a non-atomic read-modify-write; the flock already prevents lost updates, this adds crash-atomicity. R3: human.py is in the SoD-owned set"
+  classified_by: "Claude"
+  classified_at: "2026-07-23T00:48:19Z"
 ```
 
 ## Claim(s)
 
-1. Concurrent operator resolutions share a verifier-private inter-process lock through read, duplicate check, write, signing, staging, commit, and push
-2. No existing tests were modified or deleted during this change.
+1. Publishing a human resolution writes the signed document via a temp file and an atomic replace, so a crash mid-write cannot leave a truncated facts-lane artifact; concurrent writers stay serialized by the existing exclusive lock
+2. No existing tests were modified or deleted in this change
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,29 +33,27 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578670](https://github.com/ImmortalDemonGod/money-agent/pull/50#discussion_r3634578670)
-- **Requirements Verified:** CodeRabbit requires concurrent fulfill and decline operations not to overwrite append-only facts
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
+- **Requirements Verified:** The signed human-resolution facts artifact must not be corruptible by a crash mid-write; the read-modify-write is already lock-serialized, this closes the crash-atomicity residual
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`a05b6d3`](https://github.com/ImmortalDemonGod/money-agent/tree/a05b6d356b9af6bcb9f3e28d00951758f7861817))
+**Scope Inventory** (SHA: [`24ca694`](https://github.com/ImmortalDemonGod/money-agent/tree/24ca69431ecb35e49836323c9445fe42bd5b6b2c))
 
-- [`bin/human.py#L38`](https://github.com/ImmortalDemonGod/money-agent/blob/a05b6d356b9af6bcb9f3e28d00951758f7861817/bin/human.py#L38)
-- [`bin/human.py#L55`](https://github.com/ImmortalDemonGod/money-agent/blob/a05b6d356b9af6bcb9f3e28d00951758f7861817/bin/human.py#L55)
-- [`bin/human.py#L162-L200`](https://github.com/ImmortalDemonGod/money-agent/blob/a05b6d356b9af6bcb9f3e28d00951758f7861817/bin/human.py#L162-L200)
+- [`bin/human.py#L173-L178`](https://github.com/ImmortalDemonGod/money-agent/blob/24ca69431ecb35e49836323c9445fe42bd5b6b2c/bin/human.py#L173-L178)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`_publish_resolution`** (L38): FAIL -- WARNING: No tests import or call `_publish_resolution`
+- **`_publish_resolution`** (L173-L178): FAIL -- WARNING: No tests import or call `_publish_resolution`
 
 **Coverage summary:** 0/1 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** All checks passed
-- **mypy:** Success: no issues found in 1 source file
+- **ruff:** 0 error(s)
+- **mypy:** 
 
 ### Class C (Negative Evidence)
 
@@ -74,21 +73,22 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
+24ca694 Merge main into run2-d-rails-human (rebase after #49 merged): pick up #49's gate/edge work
+d9d3dfe test(delivery): cover fail-closed arg parsing (unrecognized/value-less flags)
+d060b27 test(rails): call monetary validator directly
+5f37af2 test(supervisor): model live verifier process explicitly
 dfe3ff8 test(pr50): pin final review failure modes
-d52a400 test(rails): expand fail-closed registry catalog
-710e1c0 merge(stack): sync rewritten stack 3 ancestry
-618e3eb merge(stack): integrate reviewed stack 3 advances
-4ff597e test(delivery): cover content-type refusal
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Concurrent operator resolutions share a verifier-private int... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | Publishing a human resolution writes the signed document via... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted in this change | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -101,4 +101,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Lock the complete human resolution publication transaction
+Write the resolution map to a temp file and os.replace it into place

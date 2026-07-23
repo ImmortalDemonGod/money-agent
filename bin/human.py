@@ -170,7 +170,12 @@ def _publish_resolution(task_id: str, resolution: dict) -> None:
         RESOLUTIONS.parent.mkdir(parents=True, exist_ok=True)
         previous_doc = RESOLUTIONS.read_bytes() if RESOLUTIONS.exists() else None
         previous_sig = RESOLUTION_SIG.read_bytes() if RESOLUTION_SIG.exists() else None
-        RESOLUTIONS.write_text(json.dumps({"resolutions": resolutions}, indent=2) + "\n")
+        # atomic write: the flock above serializes writers, but write_text is not crash-atomic --
+        # a crash mid-write would truncate a SIGNED facts-lane artifact. Write to a temp file in the
+        # same directory and os.replace (atomic on POSIX) so the document is never partially written.
+        _tmp = RESOLUTIONS.with_name(RESOLUTIONS.name + ".tmp")
+        _tmp.write_text(json.dumps({"resolutions": resolutions}, indent=2) + "\n")
+        os.replace(_tmp, RESOLUTIONS)
         try:
             _sign_resolution_document()
         except Exception:
