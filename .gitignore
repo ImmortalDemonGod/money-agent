@@ -11,3 +11,4 @@ verifier.log
 ledger/verifier.log
 .telegraph_token
 run/actuation_returns/
+run/bets.lock
