@@ -14,7 +14,7 @@ owns the boilerplate.
   bin/mail.py inbox [N]            list N most recent (default 10)
   bin/mail.py read <id>            print one message
   bin/mail.py search <query>       IMAP search, e.g. 'FROM stripe.com' / 'UNSEEN'
-  bin/mail.py send <to> <subj> <body-file-or-->    send; '-' reads stdin
+  bin/mail.py send <to> <subj> <body-file-or--> [--bet-id ID] [--lane LANE]
 
 EVERY SEND IS LOGGED to ledger/../SENT_LOG.md before it goes out. The log is not a permission
 system -- you have the password, you could bypass this file entirely. It exists so that in the
@@ -33,6 +33,7 @@ import imaplib
 import os
 import smtplib
 import socket
+import subprocess
 import sys
 import urllib.parse
 from datetime import datetime, timezone
@@ -130,7 +131,8 @@ def read(mid):
     if msg.is_multipart():
         for p in msg.walk():
             if p.get_content_type() == "text/plain":
-                print(p.get_payload(decode=True).decode("utf-8", "replace")); break
+                print(p.get_payload(decode=True).decode("utf-8", "replace"))
+                break
     else:
         print(msg.get_payload(decode=True).decode("utf-8", "replace"))
     m.logout()
@@ -153,7 +155,26 @@ def search(q):
     m.logout()
 
 
-def send(to, subj, body):
+def send(to, subj, body, *, bet_id=None, lane=None):
+    # V3 (S9, BET_GATE_ENFORCE=1 only): a send is an external-effect action and needs a live
+    # typed bet's reservation -- the hypothesis-first discipline, consumed atomically so one bet
+    # never authorizes unbounded sends. Inert by default; fail-closed when armed.
+    def _bet_gate(consume):
+        try:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            import bet_gate
+            return bet_gate.authorize("send", consume=consume, bet_id=bet_id, lane=lane)
+        except Exception as e:
+            if os.environ.get("BET_GATE_ENFORCE", "0") == "1":
+                return False, f"bet gate could not run ({e}); fail-closed while armed"
+            return True, "bet gate unavailable and unarmed"
+
+    # Check now, but do not consume until every content gate and durable-log step has passed.
+    ok_bg, why_bg = _bet_gate(consume=False)
+    if not ok_bg:
+        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
+        sys.exit(1)
+
     if "—" in body or "—" in subj:
         print("REFUSING: em-dash present. Use commas or rewrite.", file=sys.stderr)
         sys.exit(1)
@@ -172,11 +193,27 @@ def send(to, subj, body):
         print(f"REFUSING (disclosure EV gate): {why}", file=sys.stderr)
         sys.exit(1)
 
-    # Log BEFORE sending: a send that fails halfway still happened as an attempt.
-    SENT_LOG.write_text(
-        (SENT_LOG.read_text() if SENT_LOG.exists() else "# SENT_LOG\n\nEvery message that left under a real person's name.\n\n---\n")
-        + f"\n## {datetime.now(timezone.utc).isoformat()}\n- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
-    )
+    # Construct the complete SMTP payload before consuming authorization. Failures before the
+    # external-attempt boundary must leave the reservation available.
+    msg = EmailMessage()
+    msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
+    msg.set_content(body)
+
+    # Reserve before persisting the attempt record. The bet registry serializes this consume
+    # across processes. If the durable audit write fails, compensate before refusing.
+    ok_bg, why_bg = _bet_gate(consume=True)
+    if not ok_bg:
+        print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
+        sys.exit(1)
+
+    def _rollback_reservation():
+        try:
+            import bet_gate
+            ok, why = bet_gate.rollback("send", bet_id=bet_id, lane=lane)
+            if not ok:
+                print(f"FATAL: send reservation rollback failed: {why}", file=sys.stderr)
+        except Exception as e:
+            print(f"FATAL: send reservation rollback crashed ({e})", file=sys.stderr)
 
     # PERSIST the log before the send leaves (run-1 lesson: SENT_LOG entries were repeatedly wiped
     # between write and commit, and the audit trail of what left under a real person's name ended
@@ -184,8 +221,14 @@ def send(to, subj, body):
     # Commit is FAIL-CLOSED: if the log cannot be committed, the message does not leave. Push is
     # best-effort -- with the v2 two-lane design nothing resets the claims branch, so a local
     # commit is already durable; the push just makes it visible off-box sooner.
-    import subprocess
     try:
+        SENT_LOG.write_text(
+            (SENT_LOG.read_text() if SENT_LOG.exists()
+             else "# SENT_LOG\n\nEvery SMTP attempt under a real person's name.\n\n---\n")
+            + f"\n## {datetime.now(timezone.utc).isoformat()}\n"
+              "- **Status:** authorized SMTP attempt; delivery not yet confirmed\n"
+              f"- **To:** {to}\n- **Subject:** {subj}\n- **Body:**\n\n```\n{body}\n```\n"
+        )
         subprocess.run(["git", "add", str(SENT_LOG)], cwd=REPO, check=True,
                        capture_output=True, timeout=15)
         diff = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(SENT_LOG)],
@@ -196,6 +239,7 @@ def send(to, subj, body):
                             f"sent-log: {to} | {subj[:60]}", "--", str(SENT_LOG)],
                            cwd=REPO, check=True, capture_output=True, timeout=30)
     except Exception as e:
+        _rollback_reservation()
         print(f"REFUSING: could not commit SENT_LOG before sending ({e}). "
               "An unpersisted audit trail is how run 1 lost its send record.", file=sys.stderr)
         sys.exit(1)
@@ -211,9 +255,8 @@ def send(to, subj, body):
         print(f"warn: SENT_LOG push failed ({e}); the commit is local -- push when possible.",
               file=sys.stderr)
 
-    msg = EmailMessage()
-    msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
-    msg.set_content(body)
+    # The external attempt starts after this point. A network attempt consumes the reservation
+    # even if the remote server rejects it; the durable record above says attempt, never delivery.
     with _ProxySMTP("smtp.gmail.com", 587, timeout=30) as s:
         s.starttls()
         s.login(ADDR, PW)
@@ -225,7 +268,8 @@ if __name__ == "__main__":
     _need_creds()
     a = sys.argv[1:]
     if not a:
-        print(__doc__); sys.exit(0)
+        print(__doc__)
+        sys.exit(0)
     cmd = a[0]
     if cmd == "inbox":
         inbox(int(a[1]) if len(a) > 1 else 10)
@@ -235,6 +279,9 @@ if __name__ == "__main__":
         search(" ".join(a[1:]))
     elif cmd == "send":
         body = sys.stdin.read() if a[3] == "-" else Path(a[3]).read_text()
-        send(a[1], a[2], body)
+        def option(name):
+            return a[a.index(name) + 1] if name in a and a.index(name) + 1 < len(a) else None
+        send(a[1], a[2], body, bet_id=option("--bet-id"), lane=option("--lane"))
     else:
-        print(__doc__); sys.exit(1)
+        print(__doc__)
+        sys.exit(1)

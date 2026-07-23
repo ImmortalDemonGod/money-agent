@@ -29,13 +29,17 @@ Commands:
 from __future__ import annotations
 import argparse
 import datetime as dt
+import fcntl
 import json
+import math
 import subprocess
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 BETS = REPO / "run" / "bets.json"
+LOCK = REPO / "run" / "bets.lock"
 CLOCKS = ("indexation", "approval", "reputation", "reply", "other")
 # #40: how a bet's resolution is grounded. deterministic/instrumented clocks have an observable
 # primary source, so resolving them EXECUTES the recorded --check command and stores its output --
@@ -53,19 +57,20 @@ def _iso(t: dt.datetime) -> str:
     return t.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _load() -> list[dict]:
+def _load_unlocked() -> list[dict]:
     if BETS.exists():
         return json.loads(BETS.read_text()).get("bets", [])
     return []
 
 
-def _save(bets: list[dict], msg: str) -> None:
+def _save_unlocked(bets: list[dict], msg: str) -> None:
     BETS.parent.mkdir(parents=True, exist_ok=True)
     BETS.write_text(json.dumps({"bets": bets}, indent=2) + "\n")
     subprocess.run(["git", "add", str(BETS)], cwd=REPO, check=True)
-    staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=REPO)
+    staged = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(BETS)], cwd=REPO)
     if staged.returncode != 0:
-        subprocess.run(["git", "-c", "commit.gpgsign=false", "commit", "-m", msg],
+        subprocess.run(["git", "-c", "commit.gpgsign=false", "commit", "-m", msg,
+                        "--", str(BETS)],
                        cwd=REPO, check=True)
     branch = subprocess.run(["git", "branch", "--show-current"], cwd=REPO,
                             capture_output=True, text=True).stdout.strip()
@@ -74,6 +79,38 @@ def _save(bets: list[dict], msg: str) -> None:
     if push.returncode != 0:
         print(f"warn: push failed ({push.stderr.strip()[:100]}); commit is local -- push soon.",
               file=sys.stderr)
+
+
+@contextmanager
+def _lock():
+    """The one cross-process lock for every bet-registry read/modify/write transaction."""
+    LOCK.parent.mkdir(parents=True, exist_ok=True)
+    with LOCK.open("a+") as lock_file:
+        fcntl.flock(lock_file, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock_file, fcntl.LOCK_UN)
+
+
+def _load() -> list[dict]:
+    with _lock():
+        return _load_unlocked()
+
+
+def _save(bets: list[dict], msg: str) -> None:
+    """Compatibility wrapper for snapshot writes; mutations must use _transaction()."""
+    with _lock():
+        _save_unlocked(bets, msg)
+
+
+@contextmanager
+def _transaction(msg: str):
+    """Serialize load, mutation, durable save, and push under the shared registry lock."""
+    with _lock():
+        bets = _load_unlocked()
+        yield bets
+        _save_unlocked(bets, msg)
 
 
 def _parse_iso(s: str) -> dt.datetime:
@@ -121,15 +158,58 @@ def cmd_add(a) -> int:
     if resolve_by <= _now():
         print("FATAL: --resolve-by must be in the future.", file=sys.stderr)
         return 1
-    bets = _load()
-    bid = f"bet-{len(bets) + 1:03d}"
-    bets.append({
-        "id": bid, "placed_at": _iso(_now()), "clock": a.clock, "what": a.what,
-        "check": a.check, "oracle": a.oracle, "poll_after_h": a.poll_after_h,
-        "resolve_by": a.resolve_by,
-        "status": "open", "last_checked": None, "checks": [], "resolution": None,
-    })
-    _save(bets, f"bets: place {bid} ({a.clock}): {a.what[:50]}")
+    # V3 typed fields (S9): optional -- untyped bets keep the registry's original job (not
+    # forgetting). When present, bet_gate's schema validates FAIL-CLOSED before anything saves.
+    typed: dict = {}
+    if getattr(a, "type", ""):
+        typed["type"] = a.type
+        typed["lane"] = getattr(a, "lane", "")
+        for nm, raw in (("success_condition", getattr(a, "success", "")),
+                        ("kill_condition", getattr(a, "kill", ""))):
+            if raw:
+                try:
+                    typed[nm] = json.loads(raw)
+                except json.JSONDecodeError as e:
+                    print(f"FATAL: --{nm.split('_')[0]} is not valid JSON: {e}", file=sys.stderr)
+                    return 1
+        if getattr(a, "authorizes", ""):
+            try:
+                typed["authorizes"] = {k.strip(): int(v) for k, v in
+                                       (p.split(":") for p in a.authorizes.split(","))}
+            except ValueError:
+                print("FATAL: --authorizes must look like 'send:2,publish:1'", file=sys.stderr)
+                return 1
+        if getattr(a, "max_spend_usd", None) is not None:
+            typed["max_spend_usd"] = a.max_spend_usd
+        typed["spent_usd"] = 0.0
+        if getattr(a, "bounds_note", ""):
+            typed["bounds_note"] = a.bounds_note
+        if getattr(a, "repro", ""):
+            typed["reproduction_protocol"] = a.repro
+        import bet_gate
+        errs = bet_gate.validate_bet(typed)
+        if errs:
+            for e in errs:
+                print(f"FATAL: {e}", file=sys.stderr)
+            return 1
+    with _transaction(f"bets: place ({a.clock}): {a.what[:50]}") as bets:
+        if typed:
+            # Placement ordering and caps must inspect the same locked snapshot that receives the
+            # append; otherwise concurrent placements can both pass the cap.
+            import spine
+            serrs = spine.check_placement(a.type, typed.get("lane", ""), bets)
+            if serrs:
+                for e in serrs:
+                    print(f"FATAL: {e}", file=sys.stderr)
+                return 1
+        bid = f"bet-{len(bets) + 1:03d}"
+        bets.append({
+            "id": bid, "placed_at": _iso(_now()), "clock": a.clock, "what": a.what,
+            "check": a.check, "oracle": a.oracle, "poll_after_h": a.poll_after_h,
+            "resolve_by": a.resolve_by,
+            "status": "open", "last_checked": None, "checks": [], "resolution": None,
+            **typed,
+        })
     print(f"{bid} placed ({a.clock} clock, poll every {a.poll_after_h}h, resolve by "
           f"{a.resolve_by}). It now blocks any 'impossible' conclusion until resolved.")
     return 0
@@ -167,16 +247,28 @@ def cmd_due(_a) -> int:
 
 
 def cmd_checked(a) -> int:
-    bets = _load()
-    b = next((x for x in bets if x["id"] == a.id), None)
-    if not b or b["status"] != "open":
-        print(f"FATAL: no open bet {a.id!r}", file=sys.stderr)
-        return 1
-    b["last_checked"] = _iso(_now())
-    b["checks"].append({"at": b["last_checked"], "note": a.note or ""})
-    _save(bets, f"bets: checked {a.id}" + (f" ({a.note[:40]})" if a.note else ""))
+    with _transaction(f"bets: checked {a.id}" +
+                      (f" ({a.note[:40]})" if a.note else "")) as bets:
+        b = next((x for x in bets if x["id"] == a.id), None)
+        if not b or b["status"] != "open":
+            print(f"FATAL: no open bet {a.id!r}", file=sys.stderr)
+            return 1
+        b["last_checked"] = _iso(_now())
+        b["checks"].append({"at": b["last_checked"], "note": a.note or ""})
     print(f"{a.id} check recorded; next due in {b['poll_after_h']}h.")
     return 0
+
+
+def _evaluate_condition(condition: dict, observed: dict) -> bool:
+    metric = condition["metric"]
+    value = observed.get(metric)
+    if (not isinstance(value, (int, float)) or isinstance(value, bool)
+            or not math.isfinite(float(value))):
+        raise ValueError(f"check output has no finite numeric value for metric {metric!r}")
+    threshold = float(condition["threshold"])
+    value = float(value)
+    return {">=": value >= threshold, "<=": value <= threshold,
+            "==": value == threshold}[condition["comparator"]]
 
 
 def cmd_resolve(a) -> int:
@@ -187,39 +279,70 @@ def cmd_resolve(a) -> int:
         print("FATAL: evidence required -- a resolution without evidence is an assertion.",
               file=sys.stderr)
         return 1
-    bets = _load()
-    b = next((x for x in bets if x["id"] == a.id), None)
-    if not b or b["status"] != "open":
-        print(f"FATAL: no open bet {a.id!r}", file=sys.stderr)
-        return 1
-    # #40: a deterministic/instrumented clock has an observable primary source, so its resolution
-    # must SHOW the observation -- the recorded --check command is executed here and its output
-    # stored with the resolution. The command's exit code is EVIDENCE (a check that returns
-    # nonzero may be exactly what "lost" looks like), never a refusal; refusal is reserved for a
-    # check that cannot RUN at all (not found / not executable / timeout) -- an unrunnable oracle
-    # grounds nothing. --downgrade-judgment relabels the resolution, visibly, as the escape hatch.
-    oracle = b.get("oracle", "judgment")
-    check_output = None
-    if oracle in ("deterministic", "instrumented") and not a.downgrade_judgment:
-        try:
-            r = subprocess.run(["bash", "-c", b["check"]], capture_output=True, text=True,
-                               timeout=120)
-            if r.returncode in (126, 127):
-                raise OSError(f"check command not runnable (exit {r.returncode}): {b['check']!r}")
-            check_output = {"cmd": b["check"], "rc": r.returncode,
-                            "output": (r.stdout + r.stderr)[:2000]}
-        except Exception as e:
-            print(f"FATAL: this bet's oracle is {oracle!r} but its check could not EXECUTE "
-                  f"({type(e).__name__}: {e}). Prose alone does not resolve a machine-checkable "
-                  "clock -- fix the check, or re-run with --downgrade-judgment to relabel this "
-                  "resolution (visible in the record).", file=sys.stderr)
+    with _transaction(f"bets: resolve {a.id} {a.outcome}") as bets:
+        b = next((x for x in bets if x["id"] == a.id), None)
+        if not b or b["status"] != "open":
+            print(f"FATAL: no open bet {a.id!r}", file=sys.stderr)
             return 1
-    if a.downgrade_judgment and oracle != "judgment":
-        oracle = f"{oracle}-downgraded-to-judgment"
-    b["status"] = a.outcome
-    b["resolution"] = {"at": _iso(_now()), "outcome": a.outcome, "evidence": a.evidence,
-                       "oracle": oracle, "check_output": check_output}
-    _save(bets, f"bets: resolve {a.id} {a.outcome}")
+        # S10/E2: a stale instrument suspends dependent resolutions in the lane (armed only)
+        import os as _os
+        try:
+            import spine as _spine
+            serrs = _spine.check_resolution(b, bets)
+        except Exception as e:
+            serrs = ([f"spine check failed ({type(e).__name__}: {e}) -- fail-closed"]
+                     if _os.environ.get("SPINE_ENFORCE", "0") == "1" else [])
+        if serrs:
+            for e in serrs:
+                print(f"FATAL: {e}", file=sys.stderr)
+            return 1
+
+        oracle = b.get("oracle", "judgment")
+        typed = "type" in b
+        if typed:
+            oracle = b["success_condition"]["oracle_id"]
+        if typed and a.downgrade_judgment:
+            print("FATAL: typed bets cannot downgrade to judgment; their declared condition is "
+                  "the resolution oracle.", file=sys.stderr)
+            return 1
+        check_output = None
+        condition_result = None
+        if typed or (oracle in ("deterministic", "instrumented") and not a.downgrade_judgment):
+            try:
+                r = subprocess.run(["bash", "-c", b["check"]], capture_output=True, text=True,
+                                   timeout=120)
+                if r.returncode in (126, 127):
+                    raise OSError(f"check command not runnable (exit {r.returncode}): {b['check']!r}")
+                check_output = {"cmd": b["check"], "rc": r.returncode,
+                                "output": (r.stdout + r.stderr)[:2000]}
+                if typed:
+                    observed = json.loads(r.stdout)
+                    if not isinstance(observed, dict):
+                        raise ValueError("typed check output must be a JSON object")
+                    success = _evaluate_condition(b["success_condition"], observed)
+                    kill = (_evaluate_condition(b["kill_condition"], observed)
+                            if b.get("kill_condition") else None)
+                    condition_result = {"observed": observed, "success": success, "kill": kill}
+                    accepted = ((a.outcome == "won" and success)
+                                or (a.outcome == "lost" and (kill is True or not success))
+                                or (a.outcome == "expired"
+                                    and _parse_iso(b["resolve_by"]) <= _now()))
+                    if not accepted:
+                        raise ValueError(f"declared conditions do not support outcome {a.outcome!r}")
+            except Exception as e:
+                print(f"FATAL: this bet's declared oracle could not EXECUTE and ground outcome "
+                      f"{a.outcome!r} "
+                      f"({type(e).__name__}: {e}). Typed checks must emit a JSON object mapping "
+                      "the declared metric to its finite observed value.", file=sys.stderr)
+                return 1
+        if a.downgrade_judgment and oracle != "judgment":
+            oracle = f"{oracle}-downgraded-to-judgment"
+        b["status"] = a.outcome
+        b["resolution"] = {"at": _iso(_now()), "outcome": a.outcome,
+                           "evidence": a.evidence, "oracle": oracle,
+                           "check_output": check_output,
+                           "condition_result": condition_result}
+        resolved = dict(b)
     # B9: a resolved day-scale bet IS a channel outcome -- the richest record the compounding
     # layer gets. Feed knowledge/outcomes.jsonl automatically so run N+1 inherits the resolution
     # even if the agent forgets the manual outcome.py step. Best-effort: a knowledge write must
@@ -227,13 +350,14 @@ def cmd_resolve(a) -> int:
     try:
         sys.path.insert(0, str(REPO / "bin"))
         import append_log
-        rec = {"at": b["resolution"]["at"], "channel": b["clock"],
-               "action": f"bet {b['id']}: {b['what']}",
-               "result": f"{a.outcome} after {b['placed_at']} -> {b['resolution']['at']}",
+        rec = {"at": resolved["resolution"]["at"], "channel": resolved["clock"],
+               "action": f"bet {resolved['id']}: {resolved['what']}",
+               "result": (f"{a.outcome} after {resolved['placed_at']} -> "
+                          f"{resolved['resolution']['at']}"),
                "evidence": a.evidence}
         append_log.append("knowledge/outcomes.jsonl", json.dumps(rec, ensure_ascii=False),
-                          f"outcome: bet {b['id']} {a.outcome}")
-        print(f"knowledge/outcomes.jsonl fed automatically ({b['id']} {a.outcome}).")
+                          f"outcome: bet {resolved['id']} {a.outcome}")
+        print(f"knowledge/outcomes.jsonl fed automatically ({resolved['id']} {a.outcome}).")
     except Exception as e:
         print(f"warn: could not feed knowledge/outcomes.jsonl ({type(e).__name__}: {e}) -- "
               "record it manually with bin/outcome.py add.", file=sys.stderr)
@@ -254,6 +378,15 @@ def main() -> int:
                          "EXECUTE the recorded --check and store its output")
     pa.add_argument("--poll-after-h", type=float, required=True, dest="poll_after_h")
     pa.add_argument("--resolve-by", required=True, dest="resolve_by")
+    # V3 typed bet-spec (S9; schema in bin/bet_gate.py, validated fail-closed when --type given)
+    pa.add_argument("--type", default="")
+    pa.add_argument("--lane", default="")
+    pa.add_argument("--success", default="", help='JSON: {"oracle_id","metric","comparator","threshold","window_h"}')
+    pa.add_argument("--kill", default="")
+    pa.add_argument("--authorizes", default="", help="'send:2,publish:1' action reservations")
+    pa.add_argument("--max-spend-usd", type=float, default=None, dest="max_spend_usd")
+    pa.add_argument("--bounds-note", default="", dest="bounds_note")
+    pa.add_argument("--reproduction-protocol", default="", dest="repro")
     pa.set_defaults(fn=cmd_add)
     sub.add_parser("list").set_defaults(fn=cmd_list)
     sub.add_parser("due").set_defaults(fn=cmd_due)

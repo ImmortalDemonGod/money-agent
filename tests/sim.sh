@@ -311,6 +311,244 @@ assert_grep "human_minutes_total: 3.25" "human: fulfillment + decline minutes ar
   python3 bin/human.py list
 fi
 
+echo "=== V3 bet_gate: typed bets + action authorization (S9, BET_GATE_ENFORCE) ==="
+assert_exit 0 "bet_gate: flag off always grants (advisory; run-2 semantics unchanged)" \
+  python3 bin/bet_gate.py authorize send
+assert_exit_grep 1 "explicit bet_id" "bet_gate: armed action-only matching refuses" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send
+assert_exit_grep 1 "judgment" "bets: judgment is not a legal success oracle for typed bets" \
+  python3 bin/bets.py add --what t --clock reply --check true --poll-after-h 24 \
+  --resolve-by 2099-01-01T00:00:00Z --type probe --lane "x/y" \
+  --success '{"oracle_id":"judgment","metric":"replies","comparator":">=","threshold":1,"window_h":24}'
+assert_exit_grep 1 "reproduction_protocol" "bets: a block-claim without a repro is rejected" \
+  python3 bin/bets.py add --what t --clock other --check true --poll-after-h 24 \
+  --resolve-by 2099-01-01T00:00:00Z --type channel-blocked --lane "x/y" \
+  --success '{"oracle_id":"deterministic","metric":"signup","comparator":"==","threshold":0,"window_h":24}'
+if python3 bin/bets.py add --what "typed probe" --clock reply --check "true" --oracle instrumented \
+     --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type probe --lane "ja-makers/liw" \
+     --authorizes "send:2" \
+     --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":168}' \
+     >/dev/null 2>&1; then
+  ok "bets: valid typed bet with send reservations registered"
+else bad "bets: typed add"; fi
+assert_exit 0 "bet_gate: reservation 1 of 2 consumed" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw" --consume
+assert_exit 0 "bet_gate: reservation 2 of 2 consumed" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw" --consume
+assert_exit_grep 1 "no unconsumed" "bet_gate: exhausted reservations refuse (consumption is real)" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --consume
+python3 -c "import json,pathlib; p=pathlib.Path('run/bets.json'); d=json.loads(p.read_text()); d['bets'][7]['authorizes']['send']=1; p.write_text(json.dumps(d))"
+assert_exit_grep 1 "not requested lane" "bet_gate: lane mismatch is refused" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane other/lane
+assert_exit_grep 1 "finite" "bet_gate: NaN typed thresholds fail schema validation" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'probe','lane':'x','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':float('nan'),'window_h':1}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit_grep 1 "requires max_spend_usd" "bet_gate: spend reservations require a real cap" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'probe','lane':'x','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':1}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit_grep 0 "cap exceeded" "bet_gate: cumulative spend cannot cross max_spend_usd" \
+  env BET_GATE_ENFORCE=1 python3 -c "import contextlib,sys;sys.path.insert(0,'bin');import bet_gate as g,bets; x={'id':'s','type':'probe','lane':'l','status':'open','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':2},'max_spend_usd':10,'spent_usd':0}; bets._load=lambda:[x]; bets._transaction=lambda _m:contextlib.nullcontext([x]); assert g.authorize('spend',True,bet_id='s',amount_usd=6)[0]; ok,why=g.authorize('spend',True,bet_id='s',amount_usd=5); print(why); assert not ok"
+assert_exit 0 "bets: path-limited save never commits unrelated staged files" \
+  python3 -c "import sys,tempfile,pathlib,types;sys.path.insert(0,'bin');import bets; bets.REPO=pathlib.Path(tempfile.mkdtemp()); bets.BETS=bets.REPO/'run/bets.json'; calls=[]; bets.subprocess.run=lambda a,**k: (calls.append(a) or types.SimpleNamespace(returncode=1 if a[1:4]==['diff','--cached','--quiet'] else 0,stdout='branch',stderr='')); bets._save([], 'x'); commit=next(a for a in calls if 'commit' in a); assert '--' in commit and str(bets.BETS) in commit"
+# A refusal after the authorization check must not consume the reservation.
+assert_exit_grep 1 "em-dash" "mail: content refusal occurs without burning the checked reservation" \
+  env BET_GATE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import mail;mail.send('a@b.c','s','bad—body',bet_id='bet-008',lane='ja-makers/liw')"
+assert_exit 0 "mail: refused message left its reservation available" \
+  env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw"
+assert_exit_grep 1 "bet gate" "mail: an armed send refuses without a reservation (wired first, pre-creds)" \
+  env BET_GATE_ENFORCE=1 python3 -c "import sys; sys.path.insert(0,'bin'); import mail; mail.send('a@b.c','s','body')"
+
+echo "=== V3 spine: ordering, lattice, caps, E2, demand-refuted (S10, SPINE_ENFORCE) ==="
+assert_exit 0 "spine: flag off places anything (inert by default)" \
+  python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit_grep 1 "stage" "spine: armed refuses demand-confirmed in a stage-0 lane (relabel loses permissions)" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit 0 "spine: armed allows a probe anywhere (stage-0 work)" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add probe "fresh/lane"
+assert_exit_grep 1 "ordering" "bets: armed placement refuses the out-of-order type" \
+  env SPINE_ENFORCE=1 python3 bin/bets.py add --what x --clock reply --check true \
+  --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type demand-confirmed --lane "fresh/lane" \
+  --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":24}'
+L="spine-lane/offer"
+for M in instrument-probe substrate-probe; do
+  python3 bin/bets.py add --what "$M" --clock other --check "printf '{\"$M\":1}'" --oracle deterministic \
+    --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type probe --lane "$L" \
+    --success "{\"oracle_id\":\"deterministic\",\"metric\":\"$M\",\"comparator\":\">=\",\"threshold\":1,\"window_h\":24}" \
+    >/dev/null 2>&1
+done
+python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK line in output)" >/dev/null 2>&1
+python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)" >/dev/null 2>&1
+assert_exit 0 "spine: ladder cleared -> demand-confirmed placeable at stage 2" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "$L"
+python3 bin/bets.py add --what "demand probe" --clock reply --check "printf '{\"replies\":0}'" --oracle instrumented \
+  --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type demand-confirmed --lane "$L" \
+  --success '{"oracle_id":"instrumented","metric":"replies","comparator":">=","threshold":1,"window_h":24}' \
+  >/dev/null 2>&1
+python3 - <<'PY'
+import json, datetime as dt
+d = json.load(open("run/bets.json"))
+old = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=100)).strftime("%Y-%m-%dT%H:%M:%SZ")
+for b in d["bets"]:
+    if b["id"] == "bet-009":
+        b["resolution"]["at"] = old
+open("run/bets.json", "w").write(json.dumps(d, indent=2) + "\n")
+PY
+assert_exit_grep 1 "suspended" "bets: E2 -- a stale instrument suspends dependent resolution" \
+  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-011 lost "no replies in window"
+python3 - <<'PY'
+import json, datetime as dt
+d = json.load(open("run/bets.json"))
+now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+for b in d["bets"]:
+    if b["id"] == "bet-009":
+        b["resolution"]["at"] = now
+open("run/bets.json", "w").write(json.dumps(d, indent=2) + "\n")
+PY
+assert_exit 0 "bets: refreshed instrument un-suspends the lane" \
+  env SPINE_ENFORCE=1 python3 bin/bets.py resolve bet-011 lost "no replies in window"
+assert_exit_grep 2 "DEMAND REFUTED" "guard: DEMAND_REFUTED_K checkpoint fires (armed only)" \
+  env DEMAND_REFUTED_K=1 EDGE_TERMINAL=0 python3 bin/guard.py
+assert_exit 0 "guard: K off leaves the closed terminal set unchanged" \
+  env EDGE_TERMINAL=0 python3 bin/guard.py
+for i in 1 2; do
+  python3 bin/bets.py add --what "cap probe $i" --clock other --check true --oracle deterministic \
+    --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z --type probe --lane "cap-$i/x" \
+    --success '{"oracle_id":"deterministic","metric":"instrument-probe","comparator":">=","threshold":1,"window_h":24}' \
+    >/dev/null 2>&1
+done
+assert_exit_grep 1 "lane cap" "spine: E1 active-lane cap refuses a fourth active lane" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add probe "cap-3/x"
+assert_exit_grep 1 "lane cap" "spine: a closed historical lane cannot reopen past the active cap" \
+  env SPINE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import spine; b=[{'id':x,'lane':x,'type':'probe','status':'open','last_checked':None,'poll_after_h':1,'resolve_by':'2099-01-01T00:00:00Z'} for x in ('a','b','c')]+[{'id':'old','lane':'old','type':'probe','status':'lost','resolution':None}]; e=spine.check_placement('probe','old',b); print(';'.join(e)); raise SystemExit(1 if e else 0)"
+mv spine.yml spine.yml.aside
+assert_exit_grep 1 "unreadable" "spine: unreadable config fails closed while armed" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add probe "any/lane"
+mv spine.yml.aside spine.yml
+
+echo "=== P-generalizations (S11): prereg, decision gate, obligations+watchdog, probes, caps ==="
+P2R=$(MONEY_AGENT_STATE=p2state python3 - 2>/dev/null <<'PYEOF'
+import sys, pathlib
+sys.path.insert(0, "bin")
+sys.excepthook = lambda t, v, tb: print(f"P2_FAILS:crash:{t.__name__}:{v}")
+import prereg
+r1 = prereg.freeze("toy", "BAR: 1\n", {"x": 2})
+bad = []
+if prereg.intact("toy", "BAR: 1\n") is not True: bad.append("intact should be True")
+if prereg.intact("toy", "BAR: 9\n") is not False: bad.append("tamper should be False")
+if prereg.freeze("toy", "BAR: 9\n")["sha256"] != r1["sha256"]: bad.append("re-freeze overwrote (the point is that it must not)")
+if prereg.intact("nothing", "x") is not None: bad.append("unfrozen should be None")
+prereg.clear("toy")
+if prereg.frozen("toy") is not None: bad.append("clear left the freeze")
+if not list(pathlib.Path("p2state").glob("toy.*.archived.json")): bad.append("archive missing")
+print("P2_FAILS:" + ";".join(bad))
+PYEOF
+)
+P2_FAILS="${P2R##*P2_FAILS:}"
+if [[ -z "$P2_FAILS" ]]; then ok "prereg (P2): freeze/intact/tamper/no-refreeze/clear-archive all correct"
+else bad "prereg (P2): $P2_FAILS"; fi
+rm -rf p2state
+printf 'the page body for a publish decision, long enough to be real content' > dg_body.txt
+assert_exit_grep 1 "no decision recorded" "decision gate (P3): absent record blocks" \
+  python3 bin/decision_gate.py publish dg_body.txt
+DGH=$(python3 -c "import sys;sys.path.insert(0,'bin');import decision_gate as d;print(d.body_hash(open('dg_body.txt').read()))")
+echo "- class:publish | body:$DGH | decision:ship | rationale:ok" >> DECISION_LOG.md
+assert_exit_grep 1 "stamp" "decision gate (P3): a rubber stamp is not a decision" \
+  python3 bin/decision_gate.py publish dg_body.txt
+replace_once DECISION_LOG.md "rationale:ok" "rationale:page reviewed, name-test applied, worth shipping"
+assert_exit 0 "decision gate (P3): recorded publish decision passes (content never graded)" \
+  python3 bin/decision_gate.py publish dg_body.txt
+echo "- class:wrong | body:wrong | decision:ship | rationale:mentions class:publish and body:$DGH only inside prose" >> DECISION_LOG.md
+replace_once DECISION_LOG.md "class:publish | body:$DGH" "class:removed | body:removed"
+assert_exit_grep 1 "no decision recorded" "decision gate (P3): substrings inside other fields do not authorize" \
+  python3 bin/decision_gate.py publish dg_body.txt
+printf 'scraped dataset payload A (no provenance recorded)' > dg_acq.txt
+AQH=$(python3 -c "import sys;sys.path.insert(0,'bin');import decision_gate as d;print(d.body_hash(open('dg_acq.txt').read()))")
+echo "- class:data-acquisition | body:$AQH | decision:acquire | rationale:public docs pages only, robots respected" >> DECISION_LOG.md
+assert_exit_grep 1 "provenance" "decision gate (P3): acquisition without a provenance manifest blocks" \
+  python3 bin/decision_gate.py data-acquisition dg_acq.txt
+printf 'scraped dataset payload B (provenance pinned)' > dg_acq2.txt
+AQH2=$(python3 -c "import sys;sys.path.insert(0,'bin');import decision_gate as d;print(d.body_hash(open('dg_acq2.txt').read()))")
+PROV=$(git show HEAD:LICENSE | shasum -a 256 | awk '{print $1}')
+cp LICENSE untracked_manifest.txt
+echo "- class:data-acquisition | body:$AQH2 | decision:acquire | rationale:public docs pages only, robots respected | manifest:untracked_manifest.txt | provenance:$PROV" >> DECISION_LOG.md
+assert_exit_grep 1 "not committed" "decision gate (P3): untracked file cannot satisfy committed provenance" \
+  python3 bin/decision_gate.py data-acquisition dg_acq2.txt
+replace_once DECISION_LOG.md "manifest:untracked_manifest.txt" "manifest:LICENSE"
+assert_exit 0 "decision gate (P3): pinned provenance manifest passes" \
+  python3 bin/decision_gate.py data-acquisition dg_acq2.txt
+assert_exit_grep 1 "no mechanically guaranteed obligation authorization" "obligations (P5): agent-local caps cannot authorize deferred paid work" \
+  env EXPOSURE_MAX_OPEN=99 EXPOSURE_MAX_SINGLE_USD=999 EXPOSURE_MAX_TOTAL_FRACTION=99 \
+  python3 bin/obligations.py register --what "ship later" --check delivery-url:https://example.com \
+  --deadline "$(python3 -c 'import datetime as d;print((d.datetime.now(d.timezone.utc)+d.timedelta(hours=1)).isoformat())')" --value-usd=1
+cdx "$W/verifier"
+git checkout -q ledger 2>/dev/null || git checkout -q -B ledger origin/ledger
+git fetch -q origin ledger && git reset -q --hard origin/ledger
+env AGENT_BRANCH="$BRANCH" OBLIGATION_CLASS_ENABLE=1 STRIPE_REFUND_KEY=rk_sim_refund \
+  EXPOSURE_MAX_OPEN=1 EXPOSURE_MAX_SINGLE_USD=10 EXPOSURE_MAX_TOTAL_FRACTION=1 \
+  OBLIGATION_MAX_DEADLINE_H=24 python3 bin/obligation_watch.py >/dev/null
+git add ledger/obligations.json && git -c user.name=verifier -c user.email=v@sim \
+  commit -qm "verifier: authorize bounded obligations" && git push -q origin ledger
+if python3 -c "import json;d=json.load(open('ledger/obligations.json'));a=d['authorization'];assert a['enabled'] and a['refund_authority'] and a['max_open']==1"; then
+  ok "obligations (P5): verifier publishes explicit refund-backed authorization"
+else bad "obligations (P5): verifier authorization fact missing"; fi
+cdx "$W/agent"
+assert_exit_grep 1 "cumulative open" "obligations (P5): grounded authorization passes but received-funds cap remains binding" \
+  env EXPOSURE_MAX_OPEN=999 EXPOSURE_MAX_SINGLE_USD=999 EXPOSURE_MAX_TOTAL_FRACTION=999 \
+  python3 bin/obligations.py register --what "ship later" --check delivery-url:https://example.com \
+  --deadline "$(python3 -c 'import datetime as d;print((d.datetime.now(d.timezone.utc)+d.timedelta(hours=1)).isoformat())')" \
+  --value-usd=1 --charge-id ch_sim
+assert_exit 0 "obligation watchdog: arbitrary shell is not a completion oracle" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import obligation_watch as o; ok,e=o._completion_oracle('true'); assert not ok and 'unsupported' in e['error']"
+assert_exit 0 "obligation watchdog: refund requests carry a stable idempotency key" \
+  python3 -c "import sys,json;sys.path.insert(0,'bin');import obligation_watch as o; seen=[]; C=type('C',(),{'__enter__':lambda s:s,'__exit__':lambda *a:None,'read':lambda s:json.dumps({'id':'re_1','status':'succeeded'}).encode()}); o.urllib.request.urlopen=lambda req,timeout:(seen.append(req) or C()); assert o._refund('ch_1','k','obl-007')[0]; assert seen[0].headers['Idempotency-key']=='money-agent-obligation-obl-007'"
+python3 - <<'PYEOF'
+import json, pathlib
+pathlib.Path("run").mkdir(exist_ok=True)
+reg = {"obligations": [{"id": "obl-001", "registered_at": "2026-07-20T00:00:00Z",
+                        "what": "sim: promised and never delivered", "check": "true",
+                        "deadline": "2000-01-01T00:00:00Z", "value_usd": 5.0,
+                        "charge_id": None, "status": "open", "resolution": None}]}
+pathlib.Path("run/obligations.json").write_text(json.dumps(reg, indent=2) + "\n")
+PYEOF
+git add run/obligations.json && git commit -qm "agent: overdue obligation (sim)" && git push -q origin "$BRANCH"
+cdx "$W/verifier"
+git checkout -q ledger 2>/dev/null || git checkout -q -B ledger origin/ledger
+git fetch -q origin ledger && git reset -q --hard origin/ledger
+OBL_PRE=$(git rev-parse HEAD)
+AGENT_BRANCH=missing-agent python3 bin/obligation_watch.py >/dev/null 2>&1
+if python3 -c "import json;d=json.load(open('ledger/obligations.json'));assert d['verified'] is False and d['open'] is None"; then
+  ok "obligation watchdog: unreadable agent branch publishes unverified, never an empty all-clear"
+else bad "obligation watchdog: unreadable branch state"; fi
+AGENT_BRANCH="$BRANCH" python3 bin/obligation_watch.py >/dev/null 2>&1
+git add ledger/obligations.json && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: obligations" \
+  && git push -q origin ledger
+cdx "$W/agent"
+assert_exit_grep 1 "OBLIGATION BREACHED" "guard (P5): a watchdog-published breach halts everything" \
+  env EDGE_TERMINAL=0 python3 bin/guard.py
+cdx "$W/verifier"
+publish "
+import json; d=json.load(open('ledger/obligations.json')); d.update({'verified':False,'errors':['fetch failed']}); json.dump(d,open('ledger/obligations.json','w'))"
+cdx "$W/agent"
+assert_exit_grep 1 "watchdog is unverified" "guard (P5): unverified promise-book halts" \
+  env EDGE_TERMINAL=0 python3 bin/guard.py
+cdx "$W/verifier"
+publish "
+import json; d=json.load(open('ledger/obligations.json')); d.update({'verified':True,'errors':[],'breached':[],'computed_at':'2000-01-01T00:00:00Z'}); json.dump(d,open('ledger/obligations.json','w'))"
+cdx "$W/agent"
+assert_exit_grep 1 "stale promise-book" "guard (P5): stale obligation facts cannot ride fresh money heartbeats" \
+  env EDGE_TERMINAL=0 python3 bin/guard.py
+cdx "$W/verifier"
+git reset -q --hard "$OBL_PRE" && git push -qf origin ledger
+cdx "$W/agent"
+git rm -q run/obligations.json && git commit -qm "agent: clear sim obligation" && git push -q origin "$BRANCH"
+assert_exit 0 "guard (P5): breach cleared, run continues" env EDGE_TERMINAL=0 python3 bin/guard.py
+assert_exit 0 "probes (P6): registry lists claim-type -> probe -> gate" python3 bin/probes.py list
+assert_exit_grep 2 "unknown claim type" "probes (P6): unregistered claim type refused" \
+  python3 bin/probes.py run seo-magic https://x.invalid/
+assert_exit 1 "probes (P6): dispatch runs the real probe (SSRF-refused target FAILs through)" \
+  python3 bin/probes.py run published https://sim-delivery.invalid/x
+assert_exit_grep 2 "GMAIL_ADDRESS" "probes (P6): mail-roundtrip demands sourced creds (the two-env trap)" \
+  env -u GMAIL_ADDRESS -u GMAIL_APP_PASSWORD python3 bin/probes.py run mail-roundtrip
+rm -f dg_body.txt dg_acq.txt dg_acq2.txt DECISION_LOG.md untracked_manifest.txt
+
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'
@@ -889,6 +1127,10 @@ PYEOF
   printf 'DELIVERY_CHECK_URL: https://sim-delivery.invalid/unlock\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: failing delivery_check fails the packet (fresh re-run, never self-typed)" \
     bash bin/aiv_gate.sh 901
+  # NOTE: aiv_gate 2b now also requires a recorded P3 'publish' decision (decision_gate, wired here
+  # so it is no longer inert). Its fail-closed behavior is covered by the decision_gate unit cases
+  # above and verified by direct real-repo replication; a hermetic end-to-end fixture is deferred
+  # because the multi-clone sim resolves DECISION_LOG.md ambiguously across the agent/verifier trees.
 else
   skip "gate tests (aiv CLI not on PATH -- pip install aiv-protocol, or accept stage-0 fail-closed)"
 fi

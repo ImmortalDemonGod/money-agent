@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
-**File:** `bin/guard.py`
-**Commit:** `a58520c`
-**Previous:** `bc26d02`
-**Generated:** 2026-07-23T01:48:09Z
+**File:** `bin/obligation_watch.py`
+**Commit:** `9953693`
+**Previous:** `a0f1fdc`
+**Generated:** 2026-07-23T01:48:10Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +15,15 @@ classification:
   risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
-  blast_radius: "bin/guard.py"
-  classification_rationale: "CodeRabbit: the handler collapsed all load errors to absence, unlike the edge handler. R3: P5 safety gate"
+  blast_radius: "bin/obligation_watch.py"
+  classification_rationale: "Follow-on to the deadline-first refactor. R3: verifier watchdog metric"
   classified_by: "Claude"
-  classified_at: "2026-07-23T01:48:09Z"
+  classified_at: "2026-07-23T01:48:10Z"
 ```
 
 ## Claim(s)
 
-1. The iteration guard halts when the obligation facts are refused for any reason other than genuine absence (signature refusal, lane mismatch, invalid JSON), mirroring the edge-rail handler, so a forged or corrupt promise-book can no longer read as empty and hide a breach
+1. The published open metric excludes ids that were routed to breached, so a breached record carrying its original open status is no longer double-counted in both breached and open
 2. No existing tests were modified or deleted
 3. No existing tests were modified or deleted during this change.
 
@@ -34,19 +34,21 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** A breach must not be hidden by an unverifiable obligations file; only genuine absence stays silent (CodeRabbit Major)
+- **Requirements Verified:** A breached obligation must not also appear in the open tally (CodeRabbit Major, follow-on to the deadline-first fix)
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`a58520c`](https://github.com/ImmortalDemonGod/money-agent/tree/a58520c6507453bbf206dfca524c79a82974655a))
+**Scope Inventory** (SHA: [`9953693`](https://github.com/ImmortalDemonGod/money-agent/tree/99536931c86534a54e3b6fc2597007609cad1861))
 
-- [`bin/guard.py#L305-L312`](https://github.com/ImmortalDemonGod/money-agent/blob/a58520c6507453bbf206dfca524c79a82974655a/bin/guard.py#L305-L312)
+- [`bin/obligation_watch.py#L202`](https://github.com/ImmortalDemonGod/money-agent/blob/99536931c86534a54e3b6fc2597007609cad1861/bin/obligation_watch.py#L202)
+- [`bin/obligation_watch.py#L204-L205`](https://github.com/ImmortalDemonGod/money-agent/blob/99536931c86534a54e3b6fc2597007609cad1861/bin/obligation_watch.py#L204-L205)
+- [`bin/obligation_watch.py#L208-L209`](https://github.com/ImmortalDemonGod/money-agent/blob/99536931c86534a54e3b6fc2597007609cad1861/bin/obligation_watch.py#L208-L209)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L305-L312): PASS -- 2 test(s) call `main` directly
+- **`main`** (L202): PASS -- 2 test(s) call `main` directly
   - `tests/test_v3_hardening.py::test_obligation_watch_checks_open_records_without_agent_claim`
   - `tests/test_v3_hardening.py::test_obligation_watch_breaches_late_delivery_and_unknown_status_with_refund`
 
@@ -70,7 +72,9 @@ classification:
 
 **Test file chain-of-custody:**
 
-No covering test files found.
+| File | Commits | Created By | Last Modified By | Assertions |
+|------|---------|------------|------------------|------------|
+| `tests/test_v3_hardening.py` | 5 | Miguel Ingram (42e2a25) | Claude (dfde8e4) | 42 |
 
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
@@ -86,7 +90,7 @@ b28993c test(gate): note the P3 publish-decision requirement (e2e fixture deferr
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The iteration guard halts when the obligation facts are refu... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | The published open metric excludes ids that were routed to b... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
 | 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
@@ -103,4 +107,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Only 'no ledger found' is treated as absence; other load failures halt
+Subtract breached ids from the open count in the published facts

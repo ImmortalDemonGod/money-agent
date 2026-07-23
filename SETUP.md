@@ -109,6 +109,26 @@ export PRIVACY_READ_KEY=...            # or CARD_CSV=/path/card.csv
 export CARD_CAP_USD=25                 # the number you're happy to pay for the answer
 ```
 
+Optional mechanically guaranteed fulfillment is **default-off**. These values belong only in the
+verifier environment; `bin/obligation_watch.py` publishes their non-secret authorization state to
+the protected facts lane. The agent cannot activate the class using its own environment:
+
+```bash
+export OBLIGATION_CLASS_ENABLE=1
+export STRIPE_REFUND_KEY=rk_live_...          # restricted to creating refunds
+export EXPOSURE_MAX_OPEN=2                    # concurrent liabilities
+export EXPOSURE_MAX_SINGLE_USD=25
+export EXPOSURE_MAX_TOTAL_FRACTION=0.5        # versus grounded received_usd
+export OBLIGATION_MAX_DEADLINE_H=48           # deadline must fit inside this window
+```
+
+Grant the refund key only the minimum refund permission supported by the provider. If any value is
+missing, zero, malformed, stale, or the watchdog cannot read the committed obligation book, the
+published authorization is disabled and registration fails closed. Presence of a key proves
+provisioning, not provider availability; a failed refund remains a breach and halts for manual
+remediation. Every obligation must also bind `--charge-id ch_...`; unbound liabilities are refused
+because a refund credential without a concrete refund target is not a mechanical guarantee.
+
 Agent's sandbox:
 ```bash
 export STRIPE_WRITE_KEY=rk_live_...    # products/prices/links/checkout ONLY

@@ -1,9 +1,8 @@
 # AIV Evidence File (v1.0)
 
-**File:** `bin/aiv_gate.sh`
-**Commit:** `6da1998`
-**Previous:** `1986b8e`
-**Generated:** 2026-07-23T01:48:12Z
+**File:** `CONSTITUTION.md`
+**Commit:** `8883e8a`
+**Generated:** 2026-07-23T01:23:49Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +14,15 @@ classification:
   risk_tier: R3
   sod_mode: S1
   critical_surfaces: []
-  blast_radius: "bin/aiv_gate.sh"
-  classification_rationale: "CodeRabbit: the message named an unrunnable command. R3: gate"
+  blast_radius: "CONSTITUTION.md"
+  classification_rationale: "Operator-directed coherence fix: the obligations authorization was wired into CLAUDE.md only; this brings the formal constitution into agreement. R3: a constitutional-class change"
   classified_by: "Claude"
-  classified_at: "2026-07-23T01:48:12Z"
+  classified_at: "2026-07-23T01:23:49Z"
 ```
 
 ## Claim(s)
 
-1. The publish-claim failure message states the full recording command and that the decision body must equal the published URL, so the instruction is executable and matches what the gate checks
+1. Constitution rule 3 authorizes the guarded post-payment obligation path (verifier-enabled, refund-backed, exposure/deadline-capped, typed) instead of a flat prohibition, matching CLAUDE.md and PROMPT.md so the obligations layer is not contradicted by the formal bounds doc
 2. No existing tests were modified or deleted
 3. No existing tests were modified or deleted during this change.
 
@@ -34,13 +33,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** The P3 failure message must show a runnable command whose body matches the gate's check (CodeRabbit Minor)
+- **Requirements Verified:** All three constitution surfaces (CONSTITUTION.md, CLAUDE.md, PROMPT.md) must agree on the delivery bound; #51 updated only CLAUDE.md, leaving rule 3 a categorical prohibition that contradicts the obligations layer
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`6da1998`](https://github.com/ImmortalDemonGod/money-agent/tree/6da1998cebca3664185b032cde1377311e415492))
+**Scope Inventory** (SHA: [`8883e8a`](https://github.com/ImmortalDemonGod/money-agent/tree/8883e8a6ae0a79ff893a9b19f95cff2b4b5d03d3))
 
-- [`bin/aiv_gate.sh#L190`](https://github.com/ImmortalDemonGod/money-agent/blob/6da1998cebca3664185b032cde1377311e415492/bin/aiv_gate.sh#L190)
+- [`CONSTITUTION.md#L30-L40`](https://github.com/ImmortalDemonGod/money-agent/blob/8883e8a6ae0a79ff893a9b19f95cff2b4b5d03d3/CONSTITUTION.md#L30-L40)
 
 ### Class A (Execution Evidence)
 
@@ -70,18 +69,18 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-6da1998 test(watchdog): assert breached records are not counted as open
-dfde8e4 test(watchdog): late-reachable delivery and unknown status breach and refund
-b28993c test(gate): note the P3 publish-decision requirement (e2e fixture deferred)
 9c7574d Merge main into run2-e-v3-gated (rebase after #50 merged)
 5b05cc4 test(human): skip signing tests when ssh-keygen is absent (sim portability)
+24ca694 Merge main into run2-d-rails-human (rebase after #49 merged): pick up #49's gate/edge work
+d9d3dfe test(delivery): cover fail-closed arg parsing (unrecognized/value-less flags)
+d060b27 test(rails): call monetary validator directly
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The publish-claim failure message states the full recording ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 1 | Constitution rule 3 authorizes the guarded post-payment obli... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
 | 2 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
 | 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
@@ -98,4 +97,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Publish P3 failure message shows the runnable command and the body-equals-URL rule
+Reconcile CONSTITUTION.md rule 3 to the instant-or-mechanically-guaranteed delivery bound

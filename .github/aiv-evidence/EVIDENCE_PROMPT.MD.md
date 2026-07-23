@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `PROMPT.md`
-**Commit:** `2b080a4`
-**Previous:** `c7bb903`
-**Generated:** 2026-07-22T23:06:33Z
+**Commit:** `32e2318`
+**Previous:** `597449f`
+**Generated:** 2026-07-23T01:48:13Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,15 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "PROMPT.md"
-  classification_rationale: "The prompt is an operator-negotiated safety boundary"
-  classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T23:06:33Z"
+  classification_rationale: "Pairs with the gate message. R3: run-prompt change"
+  classified_by: "Claude"
+  classified_at: "2026-07-23T01:48:13Z"
 ```
 
 ## Claim(s)
 
-1. The run prompt forbids self-certification and using human actuation to bypass platform terms or owner authorization
-2. No existing tests were modified or deleted during this change.
+1. The run prompt documents the runnable decision-gate command and that the recorded body must equal the published URL, so the agent can satisfy the gate's publish decision check
+2. No existing tests were modified or deleted
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,14 +33,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/31](https://github.com/ImmortalDemonGod/money-agent/issues/31)
-- **Requirements Verified:** The autonomy amendment permits mechanical actuation only, never strategy or policy exceptions
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
+- **Requirements Verified:** PROMPT.md must document a runnable decision-gate command whose body matches the publish URL the gate checks (CodeRabbit Minor)
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`2b080a4`](https://github.com/ImmortalDemonGod/money-agent/tree/2b080a4bd131af680d8f21a2f24ce3eb3a20a3a2))
+**Scope Inventory** (SHA: [`32e2318`](https://github.com/ImmortalDemonGod/money-agent/tree/32e231800b7222703386ab980a46b7f916a22f3f))
 
-- [`PROMPT.md#L55-L60`](https://github.com/ImmortalDemonGod/money-agent/blob/2b080a4bd131af680d8f21a2f24ce3eb3a20a3a2/PROMPT.md#L55-L60)
+- [`PROMPT.md#L134-L140`](https://github.com/ImmortalDemonGod/money-agent/blob/32e231800b7222703386ab980a46b7f916a22f3f/PROMPT.md#L134-L140)
 
 ### Class A (Execution Evidence)
 
@@ -48,8 +49,8 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** All checks passed
-- **mypy:** Found 1 error in 1 file (errors prevented further checking)
+- **ruff:** 0 error(s)
+- **mypy:** 
 
 ### Class C (Negative Evidence)
 
@@ -69,21 +70,22 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-68b46db test(sim): isolate AIV edge fixture state
-bc601c3 test(rails): expose registry contract to verification
-86e664c test(pr50): exercise executable rail and queue contracts
-67e9adb test(pr50): pin issue-closure trust boundaries
-c5fd8f6 docs(tests): normalize bug-catalog whitespace
+6da1998 test(watchdog): assert breached records are not counted as open
+dfde8e4 test(watchdog): late-reachable delivery and unknown status breach and refund
+b28993c test(gate): note the P3 publish-decision requirement (e2e fixture deferred)
+9c7574d Merge main into run2-e-v3-gated (rebase after #50 merged)
+5b05cc4 test(human): skip signing tests when ssh-keygen is absent (sim portability)
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Claim 1 (see Claim(s)) | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | Claim 2 (see Claim(s)) | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The run prompt documents the runnable decision-gate command ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -96,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Clarify signed lane and authorization limits
+Document the runnable publish decision-gate command and body-equals-URL rule

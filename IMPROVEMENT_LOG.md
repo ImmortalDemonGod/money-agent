@@ -1331,3 +1331,146 @@ outright — the behavior change IS the amendment, which is why the issue demand
 
 **Next:** S9 — V3 bet-spec + bet_gate.py (typed conditions, action authorization,
 BET_GATE_ENFORCE default off).
+
+---
+
+## Entry 029 — 2026-07-20 — S9 V3 typed bet-spec + action authorization (bet-ledger layer, config-gated)
+
+**What:** `bin/bet_gate.py` + typed extensions to `bets.py` — the UNCONTESTED half of
+V2_HARNESS_DESIGN's bet-ledger: typed bets (type/lane/typed success+kill conditions/action
+reservations/bounds_note; `reproduction_protocol` required for `channel-blocked`; **judgment is
+never a legal success oracle** — a bet only the agent can grade does not register) extend the
+registry backward-compatibly and are schema-validated FAIL-CLOSED before anything saves. Action
+authorization: with `BET_GATE_ENFORCE=1`, an external-effect action (send/publish/deploy/spend)
+requires an OPEN typed bet with an unconsumed reservation, decremented+committed in the same call.
+`mail.py` wires the check FIRST in `send()` — inert by default, fail-closed when armed. E3
+discipline stated at the stamp sites: lifecycle timestamps are local UTC at commit time, never
+counterparty-controlled content (an email Date header being the canonical counterexample).
+Ordering/spine rules deliberately NOT here — they are S10's config-gate.
+
+**Edge cases enumerated before coding:** validation must precede `_save` (a rejected typed bet
+must not exist); untyped bets stay fully legal (the registry's original not-forgetting job, and
+every existing sim/corpus fixture); reservations are per-action integers and consumption is
+single-invocation decrement+commit (single-agent CLI semantics — "atomic" stated honestly, not
+oversold); the mail wiring must precede creds/em-dash/disclosure so an armed refusal needs no
+credentials to test; flag-off must be byte-inert (acceptance criterion 6).
+
+**Verified by running (artifacts):** sim → **PASS=66 FAIL=0 SKIP=0** (was 57): flag-off grants;
+armed-no-bet refuses; judgment success oracle rejected; repro-less block-claim rejected; valid
+typed bet registers; two reservations consume then the third refuses; armed `mail.send` refuses
+pre-creds with the bet-gate message. Corpus **11/0**; shellcheck+compileall clean. **Bite:**
+definitional (bet_gate.py absent at HEAD~1) plus mechanical — the same armed send at HEAD~1 is
+refused by the DISCLOSURE gate, not the bet gate ("REFUSING: disclosure gate..." vs "REFUSING
+(bet gate)"), proving the new barrier is real and first.
+
+**Critique pass:**
+- Only mail.py consumes authorization today; "publish/deploy/spend" surfaces are declared in the
+  schema but have no wired chokepoint (publishing is ad hoc tooling) — the S10 spine +
+  S11 P6 probe registry are where publish paths get their chokepoints; until then an armed run
+  constrains sends only. Stated plainly for the memo.
+- `authorize` grants from the FIRST matching bet; no lane-matching of action→bet yet (that is
+  spine ordering, S10).
+
+**Next:** S10 — the spine (spine.yml + bin/spine.py, SPINE_ENFORCE off, DEMAND_REFUTED_K off,
+E1/E2 amendments, §13 answers recorded).
+
+---
+
+## Entry 030 — 2026-07-20 — S10 V3 spine: per-lane ordering, config-gated (the contested layer, by explicit switch only)
+
+**What:** `spine.yml` + `bin/spine.py` per the plan's S10 (see commit 18c2d92 for the full
+mechanism summary): derived-not-stored lane stages over the typed registry, monotone lattice,
+E1 active/watching lane caps, E2 freshness suspension, `DEMAND_REFUTED_K` guard CHECKPOINT.
+Wired: `bets.py` placement/resolution consult the spine when `SPINE_ENFORCE=1`; guard consults
+`demand_refuted()` when `K>0`; both default OFF (the demand-first ordering is the design's one
+contested proposal — adoption is a memo decision, and the terminal set stays closed until then).
+sod_hook owns `spine.yml`/`spine.py` (editing ordering to unlock a stage = the constitution-edit
+class, when armed).
+
+**V2_HARNESS_DESIGN §13's five open questions, answered as implementation decisions:**
+1. *Where do resolution stamps commit?* → CO-COMMITTED in `run/bets.json` at resolve time
+   (bets._save), local-UTC stamped (E3); verifier countersigning stays the S11/P4-adjacent
+   upgrade path.
+2. *Novelty-signature calibration for generator_dry?* → DEFERRED WITH REASON: no bet-generator
+   exists in the harness; a dry-generator terminal without a generator is config theater.
+3. *Does INCONCLUSIVE count toward DEMAND-REFUTED?* → NO, implemented: only lost/expired grade a
+   lane's demand bets dead; an ungraded bet keeps the lane alive.
+4. *The horizon parameter?* → belongs to run config (`MAX_WALL_CLOCK_H`), not the spine;
+   the spine deliberately owns ordering, not time.
+5. *Demand-confirmation TTL?* → machinery present (freshness_h is the extension point; stage-0/1
+   shipped); stage-2 TTL is a memo knob, off unless set.
+
+**Edge cases enumerated before coding:** stdlib has no YAML, so the config is a deliberate
+YAML-subset with its own ~25-line parser that FAILS CLOSED while armed (an unreadable config
+refuses placements rather than guessing); probes must stay resolvable in a suspended lane (they
+are how it un-suspends); a placed delivery bet IS the stage-3 exit (building is the bet);
+demand-refuted counts graded kills only; the lattice needs no relabel detection — a new lane
+starting at 0 makes relabeling self-defeating.
+
+**Verified by running (artifacts):** sim → **PASS=77 FAIL=0 SKIP=0** (was 66; 11 new): flag-off
+inert; stage-0 demand refused; probe placeable anywhere; armed bets.py add refuses out-of-order;
+instrument+substrate wins unlock stage 2; E2 aged instrument suspends the demand resolution and
+refresh un-suspends; DEMAND_REFUTED_K=1 guard checkpoint fires and K-off leaves terminals
+unchanged; E1 cap refuses a 4th active lane; unreadable config fails closed. Corpus **11/0**;
+shellcheck + compileall clean. Bite: definitional (no spine existed; every armed refusal is
+new behavior) — the flag-off assertions are the compatibility half of the proof.
+
+**Critique pass:**
+- Stage exits are metric-name conventions (`instrument-probe`/`substrate-probe`) — a mislabeled
+  probe metric silently fails to unlock a stage. Acceptable: armed mode's error names the
+  ordering rule and `spine.py status` shows the ladder; S16's doc-truthfulness lens should
+  confirm the runbook/memo explain the convention.
+- `check_placement` runs config-load + full lane derivation per add — O(bets) per call, fine at
+  registry scale.
+- bet_gate authorization and spine ordering are not yet lane-joined (an action is authorized by
+  any typed bet, not necessarily one in the acting lane) — V2_HARNESS_DESIGN leaves this
+  composition open; recorded as the S16-review question it is.
+
+**Next:** S11 — P-generalizations (P2 prereg module, P3 decision-gate, P5 obligations+watchdog,
+P6 probe registry, P7 exposure caps).
+
+---
+
+## Entry 031 — 2026-07-20 — S11 P-generalizations: prereg, decision gate, obligations + watchdog, probe registry, exposure caps
+
+**What (five primitives, each with the same shape: mechanism where prose was):**
+- **P2 `bin/prereg.py`:** edge_pnl's freeze/VOID lifted generic (freeze-on-first-sight that
+  REFUSES to re-freeze, hash-intact check, archive-aside clear = set_baseline's stale-freeze
+  rule generalized); edge_pnl is the first client with the SAME state file/record shape — the
+  existing verdict walk passing unchanged IS the behavior-identical proof.
+- **P3 `bin/decision_gate.py`:** recorded-decision gate for publish/listing/data-acquisition:
+  fail-closed on ABSENCE, never grades content; a rubber stamp (thin decision/rationale) blocks;
+  acquisitions must pin a committed provenance manifest by sha256 that actually exists in-tree.
+  disclosure_gate stays the specialized send instance, regexes untouched (the JA lesson).
+- **P5 `bin/obligations.py` + `bin/obligation_watch.py`:** the operator adopted the designed
+  mechanically-guaranteed exception. Instant delivery remains the default; post-payment work is
+  permitted only from a fresh verifier-owned authorization fact proving explicit enablement,
+  refund authority, positive P7 caps, and a maximum deadline; each record binds its refundable
+  charge. The verifier checks the restricted completion oracle independently, refunds an overdue
+  failure, and halts.
+- **P7 exposure caps:** verifier-owned and published on the protected facts lane. Agent-local
+  environment variables cannot activate or widen the obligation class, and registration holds one
+  cross-process lock across cap evaluation and append.
+- **P6 `bin/probes.py`:** the substrate-probe registry (claim type → probe → the gate that
+  re-runs it), plus a built-in mail-roundtrip probe (the M5 propagation test as a named probe).
+
+**Verified by running:** sim → **PASS=92 FAIL=0 SKIP=0** (was 77; 15 new), corpus **11/0**,
+shellcheck+compileall clean. Three first-run failures, each a FIXTURE-OR-TOOL bug the matrix
+caught and worth banking: (1) sed with `|` delimiter around content containing ` | ` silently
+broke the P3 fixture — restructured to two bodies, no sed; (2) **`obligation_watch` read a STALE
+`origin/<agent-branch>`** — it never fetched (the loop fetches for it in production, but a
+standalone run must not read a stale promise-book); it fetches itself now — a REAL tool bug the
+rig caught; (3) the mail-probe fixture assumed creds absent, but this sandbox exports
+GMAIL_ADDRESS — `env -u` makes the fixture deterministic (and en route proved the probe's
+fall-through order: with creds present the send died at the DISCLOSURE gate, i.e. the gate
+chain held).
+
+**Critique pass:** decision_gate's provenance check rglobs the tree per call (fine at repo
+scale); the acquisition manifest is pinned-by-hash but its CONTENT quality is judgment (the P3
+contract: prove the judgment happened, never grade it); obligations' completion oracle cmd is
+recorded but only deadline-vs-status is watched (running agent-authored shell on the verifier is
+deliberately NOT done — stated); probes' mail-roundtrip sends real mail when creds exist — it is
+an operator-acceptance probe, not a sim fixture, and the sim only exercises its refusal path.
+
+**Next:** S12 shadow-run mode, then S13 probes research, S14 governance docs + memo, S15
+runbook, S16 adversarial+mutation+stacking.

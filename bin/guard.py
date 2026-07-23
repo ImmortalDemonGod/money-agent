@@ -13,7 +13,6 @@ and an out-of-sandbox verifier are actually load-bearing.
 """
 
 from __future__ import annotations
-import json
 import os
 import subprocess
 import sys
@@ -297,6 +296,63 @@ def main() -> int:
                   f"(paper_pnl=${e.get('paper_pnl_usd')}, "
                   f"fills={e.get('filled_orders_since_freeze')}"
                   + (f", {e.get('pending_reason')}" if e.get("pending_reason") else "") + ")")
+
+    # --- P5 (S11): a BREACHED obligation is a dispute-in-waiting on a real name -- nothing else
+    # matters until it is addressed. Grounded read of the watchdog's verdict; no obligations.json
+    # anywhere = rule 3 holding = silence.
+    try:
+        ob, ob_src = _truth.load("obligations.json")
+    except RuntimeError as _obre:
+        # Mirror the edge.json handler above: a SIGNATURE refusal / lane mismatch / invalid JSON is
+        # NOT "rule 3 holding". Collapsing every RuntimeError to absence would let a forged, unsigned
+        # or corrupt promise-book read as empty -- hiding a breach exactly when a dispute-in-waiting
+        # sits in it. Fail closed; only genuine absence (no obligations.json anywhere) stays silent.
+        if "no ledger found" not in str(_obre).lower():
+            return fail(f"obligation facts refused: {_obre} -- an unverifiable promise-book is not "
+                        "an empty one")
+        ob, ob_src = None, None
+    except Exception as e:
+        return fail(f"cannot read the obligation facts ({type(e).__name__}: {e}) -- fail-closed.")
+    if ob is not None:
+        if ob_src not in _truth.GROUNDED_SOURCES:
+            return fail(f"obligation facts source is {ob_src!r}, not verifier-grounded")
+        if not ob.get("verified"):
+            return fail(f"obligation watchdog is unverified ({ob.get('errors')}); an unreadable "
+                        "promise-book is not an empty one")
+        try:
+            ob_age = (_dt.datetime.now(_dt.timezone.utc)
+                      - _dt.datetime.fromisoformat(
+                          str(ob["computed_at"]).replace("Z", "+00:00"))).total_seconds()
+        except Exception as e:
+            return fail(f"obligation facts have no parseable computed_at: {e}")
+        if ob_age > MAX_AGE_S:
+            return fail(f"obligation watchdog fact is {int(ob_age)}s old (> {MAX_AGE_S}s); a "
+                        "stale promise-book is not an all-clear")
+        if ob.get("breached"):
+            b0 = ob["breached"][0]
+            return fail(f"OBLIGATION BREACHED: {b0.get('id')} ({b0.get('breach')}; "
+                        f"refund: {b0.get('refund_status')}). A paid-for thing not delivered by "
+                        "its deadline is the harm rule 3 exists to prevent -- resolve it before "
+                        "anything else.")
+
+    # --- V3 DEMAND-REFUTED checkpoint (S10; armed by DEMAND_REFUTED_K>0, default off -- the
+    # closed terminal set {verified dollar, cap, operator} is UNCHANGED until the operator flips
+    # this in the decisions memo). Like MAX_ITERS it is a CHECKPOINT: >= K distinct lanes whose
+    # demand-confirmed bets all graded dead means the pivot cap is reached and a human should
+    # look; it concludes nothing.
+    k_refuted = int(os.environ.get("DEMAND_REFUTED_K", "0") or "0")
+    if k_refuted > 0:
+        try:
+            import spine as _spine
+            hit, why = _spine.demand_refuted(k_refuted)
+        except Exception as e:
+            return fail(f"DEMAND_REFUTED_K armed but the spine is unreadable "
+                        f"({type(e).__name__}: {e}) -- fail-closed.")
+        if hit:
+            print(f"HALT: DEMAND REFUTED checkpoint -- {why}. The pivot cap is reached; this is "
+                  "an operator checkpoint, not a conclusion. Write the retro in MONEY_LOG.md and "
+                  "stop for review.", file=sys.stderr)
+            return 2
 
     # --- STANDING-PRESENCE AGENDA (issue #4). Run 1's terminal failure was concluding with a live
     # day-scale bet open -- nothing mechanical surfaced it at the moment of drift. So the open-bet

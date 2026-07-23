@@ -20,10 +20,15 @@ run) in the packet; a publish claim with no HOST_CHECK line fails bin/aiv_gate.s
 Usage: python3 bin/host_check.py <url>
 """
 from __future__ import annotations
+import http.client
+import ipaddress
+import os
 import re
+import socket
 import sys
 import urllib.parse
 import urllib.request
+import urllib.error
 
 
 def _public_https(url: str) -> bool:
@@ -31,27 +36,93 @@ def _public_https(url: str) -> bool:
     operator-local services or cloud metadata (169.254.169.254). Accept only http/https to a
     public host (reject loopback/private/link-local/reserved resolved addresses).
 
-    KNOWN RESIDUAL (deliberately deferred, documented per round-3 review): this validates one
-    getaddrinfo() resolution, and urllib re-resolves at connect time -- a DNS-rebinding name (short
-    TTL, answer flips between checks) can still reach a private address. Closing it properly means
-    connecting to the vetted IP while preserving Host/SNI (a custom HTTPSConnection), which is a
-    heavier change than this tool's risk warrants today: the tool runs in the agent sandbox (same
-    egress the agent already has), fetches with GET only, and never returns response bodies to a
-    trust decision beyond robots/meta parsing. Revisit if it ever runs on the verifier host."""
-    import ipaddress
-    import socket
+    DNS rebinding is closed by the guarded connections below: _public_https vets the name's
+    resolution, and the connection classes re-check the peer the socket ACTUALLY connected to --
+    so a rebinding answer that flips between vet and connect can never reach a private address."""
     p = urllib.parse.urlparse(url)
     if p.scheme not in ("http", "https") or not p.hostname:
         return False
     try:
-        for fam, _, _, _, sa in socket.getaddrinfo(p.hostname, p.port or (443 if p.scheme == "https" else 80)):
-            ip = ipaddress.ip_address(sa[0])
-            if (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved
-                    or ip.is_multicast or ip.is_unspecified):
+        for _fam, _, _, _, sa in socket.getaddrinfo(
+                p.hostname, p.port or (443 if p.scheme == "https" else 80)):
+            if not _ip_is_public(sa[0]):
                 return False
     except Exception:
         return False
     return True
+
+
+def _ip_is_public(ip_str: str) -> bool:
+    try:
+        ip = ipaddress.ip_address(ip_str)
+    except ValueError:
+        return False
+    return not (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved
+                or ip.is_multicast or ip.is_unspecified)
+
+
+# DNS-rebinding close-out (the residual the docstring used to defer). urllib re-resolves at connect
+# time, so vetting the NAME is not enough; these connections re-check the peer the socket actually
+# connected to and abort if it is not public. Load-bearing now that obligation_watch runs
+# delivery_check -> this opener ON THE VERIFIER HOST, where SSRF reaches the real keys/feeds.
+def _proxy_ips() -> set:
+    """IPs of any configured egress proxy. A proxied request connects to the PROXY (often loopback),
+    not the target, so the proxy's own address must be exempt from the peer check -- the proxy owns
+    egress policy there, and _public_https still vets the target NAME as best effort."""
+    ips = set()
+    for var in ("HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy"):
+        v = os.environ.get(var)
+        if not v:
+            continue
+        host = urllib.parse.urlparse(v if "://" in v else "http://" + v).hostname
+        if not host:
+            continue
+        try:
+            for _f, _, _, _, sa in socket.getaddrinfo(host, None):
+                ips.add(sa[0])
+        except Exception:
+            ips.add(host)
+    return ips
+
+
+def _guard_peer(sock) -> None:
+    peer = sock.getpeername()[0]
+    # A DIRECT connection to a private/reserved peer is a rebinding hit and is refused; the
+    # configured proxy (which may itself be loopback) is exempt because it, not this client,
+    # performed the target resolution and connection.
+    if not _ip_is_public(peer) and peer not in _proxy_ips():
+        raise OSError(f"SSRF guard: peer {peer} is not public and not the configured proxy "
+                      "(DNS rebinding blocked)")
+
+
+class _GuardedHTTPSConnection(http.client.HTTPSConnection):
+    def connect(self):
+        super().connect()
+        try:
+            _guard_peer(self.sock)
+        except OSError:
+            self.close()
+            raise
+
+
+class _GuardedHTTPConnection(http.client.HTTPConnection):
+    def connect(self):
+        super().connect()
+        try:
+            _guard_peer(self.sock)
+        except OSError:
+            self.close()
+            raise
+
+
+class _GuardedHTTPSHandler(urllib.request.HTTPSHandler):
+    def https_open(self, req):
+        return self.do_open(_GuardedHTTPSConnection, req, context=self._context)
+
+
+class _GuardedHTTPHandler(urllib.request.HTTPHandler):
+    def http_open(self, req):
+        return self.do_open(_GuardedHTTPConnection, req)
 
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -66,7 +137,7 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-_OPENER = urllib.request.build_opener(_NoRedirect)
+_OPENER = urllib.request.build_opener(_NoRedirect, _GuardedHTTPSHandler, _GuardedHTTPHandler)
 
 
 def _get(url: str, timeout: int = 30) -> tuple[int, str]:
