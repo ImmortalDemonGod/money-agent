@@ -602,6 +602,13 @@ h = hashlib.sha256(b"X" * 400).hexdigest()
 case("sha256 match passes", 0, GOOD, "n/a", ["https://example.com/unlock", "--expect-sha256", h])
 case("sha256 mismatch fails", 1, GOOD, "n/a",
      ["https://example.com/unlock", "--expect-sha256", "0" * 64])
+# a safety gate must fail closed on a malformed invocation, never silently skip the check: an
+# unrecognized flag (typo'd --payment-link) or a value-less flag must exit 2, not proceed to a
+# PASS with the #35 cap check quietly disabled (pre-fix code returned 0 here -- the fail-open).
+case("unrecognized flag fails closed (not silently skipped)", 2, GOOD, "1",
+     ["https://example.com/unlock", "--payment-lnk", "https://buy.stripe.com/x"])
+case("flag missing its value fails closed", 2, GOOD, "1",
+     ["https://example.com/unlock", "--payment-link"])
 print("DC_FAILS:" + ";".join(fails))
 PYEOF
 )
