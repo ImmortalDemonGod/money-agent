@@ -45,7 +45,7 @@ remote branch protection.
 | `bets.py` | day-scale bet registry: `add` / `due` / `checked` / `resolve` — open bets block conclusions |
 | `edge.py` | edge rail claims side: `register` (commit the pre-registered bar), `status` (grounded verdict) |
 | `mail.py` | email under the real name: inbox/read/search/send, disclosure-gated, SENT_LOG fail-closed |
-| `actuate.py` | CANONICAL capability-delegation queue: `request` a bounded operator action → self-contained operator `card` → operator signs a hash-bound resolution on the facts lane → `sync`/`sync-all` verifies + decrypts + meters. Money-moving kinds require a P3 name-test ruling; open requests block conclusions |
+| `actuate.py` | CANONICAL capability-delegation queue: `request` a bounded operator action → self-contained operator `card` → operator signs a hash-bound resolution on the facts lane → `sync`/`sync-all` verifies + decrypts + meters. Money-moving kinds require a P3 name-test ruling; open requests block conclusions; an optional pre-registered `--verify-cmd` runs a post-handback usability probe at sync (agent-side tripwire, downgrade-only) |
 | `actuate_watch.sh` | agent-side durable-wake handler: runs `actuate.py sync-all`, then computes the next deadline-aware wakeup (#20.6) |
 | `human.py` | DEPRECATED → `actuate.py`. (Legacy: request operator actuation; operator signs a hash-bound resolution on a distinct facts lane, agent syncs and meters it) |
 | `outcome.py` | append structured outcomes to `knowledge/` (strategy-denylisted) |

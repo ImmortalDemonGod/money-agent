@@ -65,6 +65,7 @@ KEYS_DIR = STATE_DIR / "actuation_keys"                   # ephemeral private ke
 AUDIT_DIR = STATE_DIR / "actuation_returns"               # operator's off-repo plaintext retention
 RESOLUTION_LOCK = STATE_DIR / "actuation_resolutions.lock"
 NOTIFY_URGENT_S = int(os.environ.get("NOTIFY_URGENT_S", "900"))
+VERIFY_TIMEOUT_S = int(os.environ.get("ACTUATE_VERIFY_TIMEOUT_S", "120"))  # post-handback probe cap
 
 # actuator-never-oracle: this is a HEURISTIC TRIPWIRE, not a wall. A denylist cannot catch every
 # paraphrase (an adversary proved synonym bypasses); the real backstop is the human operator, who
@@ -443,6 +444,13 @@ def cmd_request(a) -> int:
     if a.return_kind not in RETURN_KINDS:
         print(f"FATAL: --return-kind must be one of {RETURN_KINDS}.", file=sys.stderr)
         return 2
+    # Optional PRE-REGISTERED post-handback usability probe: proves the returned credential grants
+    # working sandbox access (catches the WAF/IP-reputation residual). Needs a materialized return.
+    verify_cmd = (getattr(a, "verify_cmd", "") or "").strip()
+    if verify_cmd and a.return_kind not in ("value", "credential"):
+        print("FATAL: --verify-cmd needs a materialized return to probe; it is only valid with "
+              "--return-kind value or credential.", file=sys.stderr)
+        return 2
     # descriptive fields must be PRESENT; --test/--ev carry the falsify-before-requesting and
     # worth-the-minutes guardrails, so they must be SUBSTANTIVE (>= 8 chars, parity with human.py).
     for field, minlen, why in (("gate", 1, "which gate/action"), ("target_url", 1, "the exact URL"),
@@ -539,6 +547,7 @@ def cmd_request(a) -> int:
                   "artifact_sha256": artifact_sha256, "expect": a.expect,
                   "return_kind": a.return_kind, "enc_pubkey": enc_pubkey,
                   "deadline": a.deadline, "test_citation": a.test, "ev_rationale": a.ev,
+                  "verify_cmd": verify_cmd or None,
                   "status": "open", "companion_bet": bet_id, "agent_branch": agent_branch,
                   "human_minutes": None, "resolution_latency_seconds": None, "resolution": None})
     # Two independent backstops now cover the task: conclusion_gate.py blocks on an OPEN actuation
@@ -701,6 +710,40 @@ def cmd_decline(a) -> int:
     return 0
 
 
+def _run_usability_probe(task: dict, material_path: Path) -> tuple[str, str]:
+    """Run the agent's PRE-REGISTERED post-handback usability probe against the materialized return.
+
+    This is an AGENT-SIDE self-check TRIPWIRE, not a separation-of-duties wall. The operator's
+    signed resolution has already discharged the human obligation; this probe can only mark a
+    handback UNUSABLE -- the exact WAF/IP-reputation residual an operator-created account does not
+    cure (the account exists, but the sandbox still cannot authenticate from here). It NEVER
+    authorizes money or any scored outcome, and a PASS grounds nothing on the verifier's facts: it
+    only tells the agent whether the returned credential grants working access from this sandbox.
+    Monotonic-safe: it can only downgrade a task's usability, never upgrade a fabricated success.
+    The command is agent-authored and runs in the agent's own sandbox, so it adds no privilege.
+    Returns (status, detail) with status in {"verified", "failed"}."""
+    env = dict(os.environ)
+    env["ACTUATE_TASK_ID"] = task["id"]
+    env["ACTUATE_RETURN_FILE"] = str(material_path.resolve())
+    try:
+        material = json.loads(material_path.read_text())
+        if material.get("return_value") is not None:   # convenience for a text credential
+            env["ACTUATE_RETURN_VALUE"] = material["return_value"]
+    except (OSError, ValueError):
+        pass
+    try:
+        cp = subprocess.run(["sh", "-c", task["verify_cmd"]], env=env, timeout=VERIFY_TIMEOUT_S,
+                            capture_output=True, text=True)
+    except subprocess.TimeoutExpired:
+        return "failed", f"probe timed out after {VERIFY_TIMEOUT_S}s"
+    except Exception as e:   # pragma: no cover - defensive: a broken probe is a failed probe
+        return "failed", f"probe could not run ({type(e).__name__}: {e})"
+    if cp.returncode == 0:
+        return "verified", "probe exited 0 -- credential grants working sandbox access"
+    tail = (cp.stderr or cp.stdout or "").strip().splitlines()
+    return "failed", f"probe exited {cp.returncode}" + (f": {tail[-1][:160]}" if tail else "")
+
+
 def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
     """Materialize a grounded resolution into task state (shared by `sync` and `sync-all`).
 
@@ -732,6 +775,14 @@ def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
             material["encoding"] = "binary — decode return_value_b64"
         out.write_text(json.dumps(material, indent=2) + "\n")
         out.chmod(0o600)
+        # Post-handback usability probe (agent-side tripwire): prove the returned credential
+        # actually grants working access from this sandbox before treating the task as usable.
+        # It can only DOWNGRADE (flag unusable); it never grounds a fact. See _run_usability_probe.
+        if task.get("verify_cmd"):
+            status, detail = _run_usability_probe(task, out)
+            task["usability"] = status
+            task["usability_detail"] = detail
+            task["usability_checked_at"] = _now()
     task["status"] = outcome
     task["resolution"] = resolution
     task["human_minutes"] = resolution.get("human_minutes")
@@ -745,7 +796,9 @@ def _apply_resolution(task: dict, tasks: list[dict], resolution: dict) -> str:
           else f"facts-lane decline: {resolution.get('reason')}")
     _resolve_companion_bet(task.get("companion_bet"), outcome, ev)
     where = f" -> run/actuation_returns/{tid}.json" if resolution.get("return") else ""
-    return f"{tid} synced from verifier facts: {outcome}{where}."
+    usab = f" [usability: {task['usability']} -- {task.get('usability_detail','')}]" \
+        if task.get("usability") else ""
+    return f"{tid} synced from verifier facts: {outcome}{where}{usab}."
 
 
 def cmd_sync(a) -> int:
@@ -771,6 +824,13 @@ def cmd_sync(a) -> int:
     except Exception as e:
         print(f"FATAL: {e}", file=sys.stderr)
         return 1
+    if task.get("usability") == "failed":
+        print(f"WARNING: {a.id} was fulfilled by the operator, but its pre-registered usability "
+              "probe FAILED -- the handback does not grant working access from this sandbox "
+              "(likely WAF/IP-reputation, which an operator-created account does not cure). The "
+              "operator obligation is discharged; do NOT treat this credential as working access.",
+              file=sys.stderr)
+        return 3
     return 0
 
 
@@ -782,6 +842,7 @@ def cmd_sync_all(_a) -> int:
     tasks = _load_tasks()
     opens = [t for t in tasks if t.get("status") == "open"]
     synced = 0
+    unusable = 0
     for task in opens:
         try:
             resolution = _grounded_resolution(task)
@@ -794,9 +855,13 @@ def cmd_sync_all(_a) -> int:
         try:
             print(_apply_resolution(task, tasks, resolution))
             synced += 1
+            if task.get("usability") == "failed":
+                unusable += 1
         except Exception as e:
             print(f"warn: {task['id']} could not be applied ({e}); left open.", file=sys.stderr)
-    print(f"sync-all: {synced} of {len(opens)} open task(s) synced")
+    tail = (f" ({unusable} fulfilled but the post-handback usability probe FAILED -- credential "
+            "does not grant sandbox access)") if unusable else ""
+    print(f"sync-all: {synced} of {len(opens)} open task(s) synced{tail}")
     return 0
 
 
@@ -905,6 +970,10 @@ def main() -> int:
                  "--return-kind", "--deadline", "--test", "--ev"):
         pr.add_argument(flag, required=True, dest=flag.lstrip("-").replace("-", "_"))
     pr.add_argument("--artifact", default="")
+    pr.add_argument("--verify-cmd", dest="verify_cmd", default="",
+                    help="pre-registered post-handback usability probe (shell); exit 0 = the "
+                         "returned credential grants working sandbox access. Env: ACTUATE_RETURN_FILE, "
+                         "ACTUATE_RETURN_VALUE, ACTUATE_TASK_ID")
     pr.set_defaults(fn=cmd_request)
 
     pc = sub.add_parser("card")

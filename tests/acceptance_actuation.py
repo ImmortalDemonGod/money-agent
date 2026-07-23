@@ -200,6 +200,12 @@ def origin_contains(origin: Path, needle: str) -> bool:
     return r.returncode == 0   # git grep: 0 == found
 
 
+def agent_task(agent: Path, tid: str) -> dict:
+    """Load one materialized task from the agent clone's registry (for post-sync assertions)."""
+    tasks = json.loads((agent / "run" / "actuation_tasks.json").read_text()).get("tasks", [])
+    return next((t for t in tasks if t.get("id") == tid), {})
+
+
 # ----- reference scenarios (grounded in real run-1 cases) --------------------------------
 def scenario_claim_host():
     """S1 — the iter-089 case: claim a host with a hard deadline + a staged artifact,
@@ -302,6 +308,62 @@ def scenario_kyc_secret():
     want(ret.exists() and SECRET in ret.read_text(),
          "agent could not recover the credential after sync")
     return "credential handed back: ciphertext-only in git, plaintext recovered in-sandbox"
+
+
+def scenario_usability_probe():
+    """N19 — post-handback usability probe (the WAF/IP-reputation residual the design surfaced): a
+    PRE-REGISTERED probe runs at sync against the materialized return. A pass marks the handback
+    usable; a fail flags it unusable (the operator obligation still discharged) and makes sync exit
+    non-zero. Agent-side tripwire: it can only downgrade, never fabricate a usable success."""
+    probe = '[ "$ACTUATE_RETURN_VALUE" = "0xLIVEADDR" ]'   # simulates 'the sandbox can actually use it'
+
+    # (a) probe PASSES -> usability=verified, sync exits 0
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n19a_steps.txt", "1. Create the account in your browser.\n")
+    r = actuate(agent, world / "state", "request", "--kind", "deploy-account",
+                "--gate", "signup clears a CAPTCHA but the sandbox egress is WAF/IP-reputation gated",
+                "--target-url", "https://guarded.example/signup", "--identity", "operator browser",
+                "--steps", steps, "--expect", "an account the agent can actually authenticate with",
+                "--return-kind", "value", "--deadline", "2099-01-01T00:00:00Z",
+                "--test", "iters 002/039 reddit WAF+hCaptcha", "--ev", "unblocks a metered channel",
+                "--verify-cmd", probe)
+    if r.returncode != 0 and "unrecognized arguments" in r.stderr:
+        raise Pending("--verify-cmd not implemented")
+    want(r.returncode == 0, f"request(+verify-cmd) failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "6",
+                "--evidence", "account created in the operator browser", "--return-value", "0xLIVEADDR")
+    want(f.returncode == 0, f"fulfill failed: {f.stderr[:200]}")
+    git(agent, "fetch", "-q", "origin", LEDGER_BRANCH)
+    s = actuate(agent, world / "state", "sync", tid)
+    want(s.returncode == 0, f"sync of a probe-PASS handback should exit 0: {s.stderr[:200]}")
+    want(agent_task(agent, tid).get("usability") == "verified",
+         f"a passing probe should record usability=verified (got {agent_task(agent, tid).get('usability')!r})")
+
+    # (b) probe FAILS -> usability=failed, sync exits non-zero, operator obligation STILL discharged
+    world2, origin2, agent2, ledger2 = build_world()
+    steps2 = steps_file(world2, "n19b_steps.txt", "1. Create the account in your browser.\n")
+    r2 = actuate(agent2, world2 / "state", "request", "--kind", "deploy-account",
+                 "--gate", "account is created but the sandbox egress stays WAF-blocked",
+                 "--target-url", "https://guarded.example/signup", "--identity", "operator browser",
+                 "--steps", steps2, "--expect", "an account usable from the sandbox",
+                 "--return-kind", "value", "--deadline", "2099-01-01T00:00:00Z",
+                 "--test", "iter 056 product_hunt Turnstile", "--ev", "unblocks a metered channel",
+                 "--verify-cmd", probe)
+    want(r2.returncode == 0, f"request failed: {r2.stderr[:200]}")
+    tid2 = parse_id(r2.stdout)
+    f2 = actuate(ledger2, world2 / "state", "fulfill", tid2, "--minutes", "6",
+                 "--evidence", "account created", "--return-value", "0xDEADADDR")   # not the live addr
+    want(f2.returncode == 0, f"fulfill failed: {f2.stderr[:200]}")
+    git(agent2, "fetch", "-q", "origin", LEDGER_BRANCH)
+    s2 = actuate(agent2, world2 / "state", "sync", tid2)
+    want(s2.returncode != 0, "sync of a probe-FAIL handback should exit non-zero (usability failed)")
+    t2 = agent_task(agent2, tid2)
+    want(t2.get("usability") == "failed",
+         f"a failing probe should record usability=failed (got {t2.get('usability')!r})")
+    want(t2.get("status") == "fulfilled",
+         "the operator obligation must still be discharged (status=fulfilled) on a usability failure")
+    return "usability probe: pass->verified/exit0, fail->unusable/exit!=0 with the obligation kept"
 
 
 # ----- invariants (negative tests) -------------------------------------------------------
@@ -898,6 +960,7 @@ def main() -> int:
     check("N16", "artifact swap-to-oracle before fulfill rejected", neg_artifact_swap_before_fulfill)
     check("N17", "money-moving fulfill requires a P3 name-test ruling", neg_money_moving_needs_p3)
     check("N18", "open-request cap bounds queue-spam", neg_open_request_cap)
+    check("N19", "post-handback usability probe: pass verifies, fail flags unusable", scenario_usability_probe)
 
     width = max(len(t) for _, t, _, _ in RESULTS)
     print("\n  ACCEPTANCE — capability-delegation queue (bin/actuate.py)\n")
