@@ -144,7 +144,7 @@ targeting (#3, #5), and the untried card-paying levers (#12-#17).
 - **It is** a study in grounded verification, using "make money" as a testbed precisely because it is the most
   fabrication-prone class of claim. The goal is an agent that *consistently and verifiably* makes money, at
   which point it is a make-money kit, and, unusually, a trustworthy one.
-- **It is not** *yet* that, and the word carrying the weight is *consistently*: a single lucky dollar is
+- **It is not** *yet* a consistent money making agent, and the word carrying the weight is *consistently*: a single lucky dollar is
   variance, not a kit, which is exactly why the verification matters, because it is what separates an earned
   "it makes money" from a lucky screenshot. It is not a trading bot or a growth hack, and it is not a claim
   that agents cannot make money. v1's premature stop means the money question is genuinely still open; v2
