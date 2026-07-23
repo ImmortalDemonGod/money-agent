@@ -466,6 +466,10 @@ def cmd_request(a) -> int:
         print("FATAL: --deadline must carry a timezone/offset (append 'Z' for UTC). A naive "
               "deadline silently poisons every downstream time computation.", file=sys.stderr)
         return 2
+    if deadline_dt <= dt.datetime.now(dt.timezone.utc):
+        print("FATAL: --deadline must be in the future; a past deadline is already expired.",
+              file=sys.stderr)
+        return 2
     # Validate + read the artifact BEFORE any side effect (keygen/copy), so a bad path fails clean.
     artifact_bytes = None
     src = None
@@ -551,19 +555,23 @@ def cmd_card(a) -> int:
     if not task:
         print(f"FATAL: no task {a.id!r}", file=sys.stderr)
         return 1
-    lines = [f"# Actuation task {task['id']} — {task['kind']}", "",
-             f"**What/gate:** {task['gate']}",
-             f"**Act as:** {task['identity']}",
-             f"**Deadline:** {task['deadline']}",
-             f"**Target URL:** {task['target_url']}", "",
+    # Every agent-controlled field is scrubbed of control characters before rendering: the card is
+    # read in a terminal, and raw ANSI/OSC escapes in gate/identity/steps/etc. could rewrite or hide
+    # the real instructions (or poison the clipboard) before the operator sees them.
+    lines = [f"# Actuation task {_scrub(task['id'])} — {_scrub(task['kind'])}", "",
+             f"**What/gate:** {_scrub(task['gate'])}",
+             f"**Act as:** {_scrub(task['identity'])}",
+             f"**Deadline:** {_scrub(task['deadline'])}",
+             f"**Target URL:** {_scrub(task['target_url'])}", "",
              "## Steps"]
     _numbered = re.compile(r"^\s*\d+[.)]\s")   # already has a "1. " / "2) " marker
     for i, step in enumerate(task.get("steps") or [], 1):
+        step = _scrub(step)
         lines.append(step if _numbered.match(step) else f"{i}. {step}")
-    lines += ["", f"**Expected result:** {task['expect']}",
-              f"**Return kind:** {task['return_kind']}"]
+    lines += ["", f"**Expected result:** {_scrub(task['expect'])}",
+              f"**Return kind:** {_scrub(task['return_kind'])}"]
     if task.get("artifact_ref"):
-        lines.append(f"**Staged artifact (apply this):** {task['artifact_ref']}")
+        lines.append(f"**Staged artifact (apply this):** {_scrub(task['artifact_ref'])}")
         if task.get("artifact_sha256"):
             lines.append(f"    sha256: {task['artifact_sha256']}  "
                          "(verify the file matches this before applying)")
@@ -593,6 +601,12 @@ def cmd_fulfill(a) -> int:
     except Exception as e:
         print(f"FATAL: {e}", file=sys.stderr)
         return 1
+    # The task is read from the agent branch, so the kind is agent-controlled -- validate it against
+    # the allowlist before anything else, or an unrecognized kind would skip the money-moving gate.
+    if task.get("kind") not in KINDS:
+        print(f"FATAL: task {a.id} has an unrecognized kind {task.get('kind')!r}; only allowlisted "
+              "kinds are fulfillable.", file=sys.stderr)
+        return 2
     resolution_extra = {}
     if task.get("kind") in MONEY_MOVING_KINDS:
         # A money-moving kind spends the principal's real capital on an irreversible rail. Fulfilling

@@ -435,11 +435,16 @@ def bench_deadline_notification():
     task URGENT and a far one NORMAL. Deadline-awareness is the property; day-scale poll is out."""
     world, origin, agent, ledger = build_world()
     steps = steps_file(world, "b2_steps.txt", "1. x\n")
-    # a task due very soon (urgent) and one due far away (normal)
+    # a task due very soon (urgent: within NOTIFY_URGENT_S=900s) and one due far away (normal).
+    # The "soon" deadline must be in the FUTURE now that request rejects past deadlines, but close
+    # enough that notify-scan still classifies it URGENT.
+    import datetime as _dt
+    soon_deadline = (_dt.datetime.now(_dt.timezone.utc)
+                     + _dt.timedelta(seconds=300)).strftime("%Y-%m-%dT%H:%M:%SZ")
     soon = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "soon",
                    "--target-url", "https://e/soon", "--identity", "op", "--steps", steps,
                    "--expect", "done", "--return-kind", "none",
-                   "--deadline", "2000-01-01T00:10:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
+                   "--deadline", soon_deadline, "--test", "iter 089 hit", "--ev", "reach wall")
     if soon.returncode != 0 and "usage" in (soon.stderr + soon.stdout).lower():
         raise Pending("request CLI not implemented")
     want(soon.returncode == 0, f"request(soon) failed: {soon.stderr[:200]}")
@@ -827,6 +832,11 @@ def neg_money_moving_needs_p3():
     want("p3" in (f0.stderr + f0.stdout).lower() or "name-test" in (f0.stderr + f0.stdout).lower()
          or "real money" in (f0.stderr + f0.stdout).lower(),
          f"refused, but not for the money-moving/P3 reason: {f0.stderr[:160]}")
+    # an UNDERSIZED ruling (< 20 chars) must also be refused -- regression-lock the length policy
+    f_short = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "5",
+                      "--evidence", "sent the USDC", "--return-value", "0xTX",
+                      "--consent-ruling", "too short")
+    want(f_short.returncode != 0, "wallet-fund fulfilled with an undersized P3 name-test ruling")
     # fulfill WITH a ruling succeeds and records it in the signed resolution
     f1 = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "5", "--evidence", "sent USDC",
                  "--return-value", "0xTX", "--consent-ruling",
