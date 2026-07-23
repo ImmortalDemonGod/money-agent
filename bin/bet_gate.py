@@ -103,8 +103,10 @@ def validate_bet(b: dict) -> list[str]:
     if b["type"] == "channel-blocked" and not str(b.get("reproduction_protocol", "")).strip():
         errs.append("type=channel-blocked requires a reproduction_protocol -- a block-claim "
                     "without a repro is an assumption wearing a verdict")
-    if b["type"] == "demand-probe" and (b.get("success_condition") or {}).get("oracle_id") \
-            == "deterministic":
+    sc = b.get("success_condition")
+    if b["type"] == "demand-probe" and isinstance(sc, dict) and sc.get("oracle_id") == "deterministic":
+        # (isinstance guard: a non-dict success_condition is already flagged by the schema loop
+        # above; without it, .get() here would raise AttributeError on a string/list -- CodeRabbit.)
         errs.append("type=demand-probe requires an externally-grounded success oracle "
                     "(instrumented or stripe): demand is a fact about OTHER PEOPLE -- a click, a "
                     "reply, a payment -- never a deterministic self-check, which is a delivery "

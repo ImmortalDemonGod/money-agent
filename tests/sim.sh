@@ -348,6 +348,8 @@ assert_exit_grep 1 "externally-grounded" "bet_gate: demand-probe rejects a deter
   python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'demand-probe','lane':'l','success_condition':{'oracle_id':'deterministic','metric':'built','comparator':'>=','threshold':1,'window_h':24}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
 assert_exit 0 "bet_gate: demand-probe accepts an instrumented (externally-grounded) success oracle (S17)" \
   python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'demand-probe','lane':'l','success_condition':{'oracle_id':'instrumented','metric':'clicks','comparator':'>=','threshold':1,'window_h':24}}; raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit 0 "bet_gate: demand-probe with a non-dict success_condition fails clean, not AttributeError (CodeRabbit)" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; errs=b.validate_bet({'type':'demand-probe','lane':'l','success_condition':'oops'}); raise SystemExit(0 if isinstance(errs,list) and errs else 1)"
 assert_exit_grep 0 "cap exceeded" "bet_gate: cumulative spend cannot cross max_spend_usd" \
   env BET_GATE_ENFORCE=1 python3 -c "import contextlib,sys;sys.path.insert(0,'bin');import bet_gate as g,bets; x={'id':'s','type':'probe','lane':'l','status':'open','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':2},'max_spend_usd':10,'spent_usd':0}; bets._load=lambda:[x]; bets._transaction=lambda _m:contextlib.nullcontext([x]); assert g.authorize('spend',True,bet_id='s',amount_usd=6)[0]; ok,why=g.authorize('spend',True,bet_id='s',amount_usd=5); print(why); assert not ok"
 assert_exit 0 "bets: path-limited save never commits unrelated staged files" \
@@ -369,6 +371,8 @@ assert_exit 0 "spine: demand-probe placeable at stage 0 (S17 probe carve-out, ar
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-probe "fresh/lane"
 assert_exit_grep 1 "demand-probe cap" "spine: demand-probe cap refuses the 3rd in a lane (S17 gaming-safety)" \
   env SPINE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import spine; b=[{'id':x,'lane':'cap/l','type':'demand-probe','status':'open','last_checked':None,'poll_after_h':1,'resolve_by':'2099-01-01T00:00:00Z'} for x in ('a','b')]; e=spine.check_placement('demand-probe','cap/l',b); print(';'.join(e)); raise SystemExit(1 if e else 0)"
+assert_exit_grep 1 "stage" "spine: SPINE_ENFORCE=on arms (yaml spelling not silently off, CodeRabbit)" \
+  env SPINE_ENFORCE=on python3 bin/spine.py check-add demand-confirmed "fresh/lane"
 assert_exit_grep 1 "stage" "spine: armed refuses demand-confirmed in a stage-0 lane (relabel loses permissions)" \
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "fresh/lane"
 assert_exit 0 "spine: armed allows a probe anywhere (stage-0 work)" \

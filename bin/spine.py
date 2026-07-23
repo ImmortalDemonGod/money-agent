@@ -49,11 +49,12 @@ sys.path.insert(0, str(REPO / "bin"))
 
 
 def enforced() -> bool:
-    # Explicit env override wins BOTH ways: SPINE_ENFORCE=0 forces a pure-measurement (un-armed)
-    # run, =1 forces arming -- CI and the operator use it to override the committed default.
+    # Explicit env override wins BOTH ways. Only the documented "off" tokens un-arm; ANY other
+    # non-empty value arms (fail-closed toward the committed default), so `SPINE_ENFORCE=on` -- the
+    # spine.yml spelling -- does NOT silently disable (CodeRabbit). Empty/unset -> the spine.yml default.
     env = os.environ.get("SPINE_ENFORCE")
-    if env is not None:
-        return env == "1"
+    if env is not None and env.strip() != "":
+        return env.strip().lower() not in ("0", "false", "off", "no")
     # No override -> the committed default lives in spine.yml (`enforce:`; S17 flip: default ON).
     # An UNREADABLE config here is treated as ARMED, so a broken config never silently un-arms the
     # spine (check_placement/-resolution then surface the parse error, fail-closed).

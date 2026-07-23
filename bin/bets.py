@@ -294,8 +294,11 @@ def cmd_resolve(a) -> int:
             import spine as _spine
             serrs = _spine.check_resolution(b, bets)
         except Exception as e:
+            # Consistent with spine.enforced(): only the explicit "off" tokens bypass the
+            # fail-closed error; unset/empty or any other value is treated as armed (S17 default).
+            _env = (_os.environ.get("SPINE_ENFORCE") or "").strip().lower()
             serrs = ([f"spine check failed ({type(e).__name__}: {e}) -- fail-closed"]
-                     if _os.environ.get("SPINE_ENFORCE", "1") == "1" else [])
+                     if _env not in ("0", "false", "off", "no") else [])
         if serrs:
             for e in serrs:
                 print(f"FATAL: {e}", file=sys.stderr)

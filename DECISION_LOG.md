@@ -57,4 +57,4 @@ assertions cover the armed default, the stage-0 carve-out, and the per-lane cap)
 **Reversal.** `SPINE_ENFORCE=0` in the environment restores byte-identical pre-S17 (un-armed)
 behavior for any run, with no code change.
 
-Decided by: operator (military.ingram@gmail.com), 2026-07-23. Branch: `claude/project-analysis-aoixmf`.
+Decided by: operator, 2026-07-23. Branch: `claude/project-analysis-aoixmf`.
