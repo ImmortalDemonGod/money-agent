@@ -1,8 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `bin/guard.py`
-**Commit:** `09685db`
-**Generated:** 2026-07-22T22:08:09Z
+**Commit:** `a58520c`
+**Previous:** `bc26d02`
+**Generated:** 2026-07-23T01:48:09Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -15,15 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "bin/guard.py"
-  classification_rationale: "Controls run termination at a payment-obligation safety boundary, an AIV section 5.2 critical surface"
-  classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T22:08:09Z"
+  classification_rationale: "CodeRabbit: the handler collapsed all load errors to absence, unlike the edge handler. R3: P5 safety gate"
+  classified_by: "Claude"
+  classified_at: "2026-07-23T01:48:09Z"
 ```
 
 ## Claim(s)
 
-1. Guard halts when obligation facts are ungrounded, unverified, malformed, stale, or breached
-2. No existing tests were modified or deleted during this change.
+1. The iteration guard halts when the obligation facts are refused for any reason other than genuine absence (signature refusal, lane mismatch, invalid JSON), mirroring the edge-rail handler, so a forged or corrupt promise-book can no longer read as empty and hide a breach
+2. No existing tests were modified or deleted
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,26 +34,28 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** PR 51 promise-book safety must not inherit freshness from an unrelated money heartbeat
+- **Requirements Verified:** A breach must not be hidden by an unverifiable obligations file; only genuine absence stays silent (CodeRabbit Major)
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`09685db`](https://github.com/ImmortalDemonGod/money-agent/tree/09685dba4fe49736f7c477d65df42057500c69f2))
+**Scope Inventory** (SHA: [`a58520c`](https://github.com/ImmortalDemonGod/money-agent/tree/a58520c6507453bbf206dfca524c79a82974655a))
 
-- [`bin/guard.py#L309-L329`](https://github.com/ImmortalDemonGod/money-agent/blob/09685dba4fe49736f7c477d65df42057500c69f2/bin/guard.py#L309-L329)
+- [`bin/guard.py#L305-L312`](https://github.com/ImmortalDemonGod/money-agent/blob/a58520c6507453bbf206dfca524c79a82974655a/bin/guard.py#L305-L312)
 
 ### Class A (Execution Evidence)
 
 **Per-symbol test coverage (AST analysis):**
 
-- **`main`** (L309-L329): FAIL -- WARNING: No tests import or call `main`
+- **`main`** (L305-L312): PASS -- 2 test(s) call `main` directly
+  - `tests/test_v3_hardening.py::test_obligation_watch_checks_open_records_without_agent_claim`
+  - `tests/test_v3_hardening.py::test_obligation_watch_breaches_late_delivery_and_unknown_status_with_refund`
 
-**Coverage summary:** 0/1 symbols verified by tests.
+**Coverage summary:** 1/1 symbols verified by tests.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** All checks passed
-- **mypy:** Found 12 errors in 4 files (checked 1 source file)
+- **ruff:** 0 error(s)
+- **mypy:** 
 
 ### Class C (Negative Evidence)
 
@@ -71,31 +75,32 @@ No covering test files found.
 **Recent test directory history** (`git log --oneline -5 -- tests/`):
 
 ```
-a3d4a5a test(v3): cover adversarial enforcement seams
-937c8d6 [S11] P-generalizations: prereg, decision gate, obligations+watchdog, probe registry, exposure caps
-7b7a7fe [S10] V3 spine: per-lane stage ordering, config-gated off (the contested layer, by explicit switch)
-644f13c [S9] V3 typed bet-spec + action authorization, config-gated off (bet-ledger layer)
-e07aefd [S8] human-actuation queue: request-don't-wait, metered, conclusion-blocking (#31) + the atomic PROMPT amendment
+dfde8e4 test(watchdog): late-reachable delivery and unknown status breach and refund
+b28993c test(gate): note the P3 publish-decision requirement (e2e fixture deferred)
+9c7574d Merge main into run2-e-v3-gated (rebase after #50 merged)
+5b05cc4 test(human): skip signing tests when ssh-keygen is absent (sim portability)
+24ca694 Merge main into run2-d-rails-human (rebase after #49 merged): pick up #49's gate/edge work
 ```
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | Guard halts when obligation facts are ungrounded, unverified... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The iteration guard halts when the obligation facts are refu... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (0/1 symbols verified), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), AST symbol-to-test binding (1/1 symbols verified), anti-cheat scan.
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Require independently fresh and verified obligation facts before continuing
+Only 'no ledger found' is treated as absence; other load failures halt

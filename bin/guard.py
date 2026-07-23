@@ -302,7 +302,14 @@ def main() -> int:
     # anywhere = rule 3 holding = silence.
     try:
         ob, ob_src = _truth.load("obligations.json")
-    except RuntimeError:
+    except RuntimeError as _obre:
+        # Mirror the edge.json handler above: a SIGNATURE refusal / lane mismatch / invalid JSON is
+        # NOT "rule 3 holding". Collapsing every RuntimeError to absence would let a forged, unsigned
+        # or corrupt promise-book read as empty -- hiding a breach exactly when a dispute-in-waiting
+        # sits in it. Fail closed; only genuine absence (no obligations.json anywhere) stays silent.
+        if "no ledger found" not in str(_obre).lower():
+            return fail(f"obligation facts refused: {_obre} -- an unverifiable promise-book is not "
+                        "an empty one")
         ob, ob_src = None, None
     except Exception as e:
         return fail(f"cannot read the obligation facts ({type(e).__name__}: {e}) -- fail-closed.")
