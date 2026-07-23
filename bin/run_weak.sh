@@ -35,9 +35,22 @@ while true; do
     git add ledger/truth.json ledger/raw/MANIFEST.sha256 ledger/baseline.json 2>/dev/null
     git add ledger/edge.json ledger/raw/EDGE_MANIFEST.sha256 2>/dev/null
     git add ledger/raw/*.json 2>/dev/null
-    if ! git diff --cached --quiet 2>/dev/null; then
+    # S16 FIX (adversarial correctness pass): the signature + attestation + obligations artifacts
+    # pnl.py now writes MUST be committed here too. verifier_loop.sh's add-list was updated in S4
+    # but this weak-mode loop was not -- so with a provisioned key, weak mode committed an UNSIGNED
+    # truth.json and truth.py refused it as "UNSIGNED while a verifier pubkey is committed", halting
+    # every cycle: the run could never start. Present only when signing is provisioned (2>/dev/null).
+    git add ledger/truth.json.sig ledger/attestation.json ledger/attestation.json.sig 2>/dev/null
+    git add harness/verifier_key.pub harness/allowed_signers 2>/dev/null
+    git add ledger/obligations.json ledger/edge.json.sig 2>/dev/null
+    # Scope BOTH the staged-change check and the commit to verifier-owned trees (ledger/, harness/).
+    # Without a pathspec, a pre-staged AGENT file in shared weak mode would be swept into a commit
+    # authored as "verifier", defeating the SoD tripwire (CodeRabbit #54). Agent artifacts live
+    # outside these trees (run/, SENT_LOG.md, DECISION_LOG.md, ...), so this excludes them.
+    if ! git diff --cached --quiet -- ledger/ harness/ 2>/dev/null; then
       AIV_VERIFIER=1 git -c user.name="verifier" -c user.email="verifier@local" \
         commit -q --no-gpg-sign -m "verifier(weak): ledger @ $(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+        -- ledger/ harness/ \
         && git push -q origin HEAD 2>/dev/null \
         && echo "[$(date -u +%H:%M:%SZ)] published (weak)" \
         || echo "[$(date -u +%H:%M:%SZ)] commit/push failed -- retrying next cycle"

@@ -17,11 +17,11 @@ set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 AGENT_BRANCH="${1:?usage: start_verifier.sh <agent-branch>   (e.g. claude/xxx)}"
 
-# Load the verifier environment FIRST. .env is the documented place to set SHADOW=1 (and may set
-# LEDGER_BRANCH), so the shadow-default resolution below must run AFTER it -- otherwise a
-# .env-only SHADOW=1 setup takes the live default and the loop starts with SHADOW=1 +
-# LEDGER_BRANCH=ledger, which pnl.py's write wall rejects. (Provisioning also participates in
-# baseline creation, so .env must precede any preflight or set_baseline.py regardless.)
+# Load the verifier environment FIRST (required -- the verifier cannot run without read keys, and
+# a .env-only SHADOW=1 must be known before the shadow-default resolution below, or the loop starts
+# with SHADOW=1 + LEDGER_BRANCH=ledger and pnl.py's write wall rejects every cycle until the run
+# wedges). Provisioning also participates in baseline creation, so .env must precede any preflight
+# or set_baseline.py regardless.
 [[ -f .env ]] || { echo "FATAL: .env (read keys) missing on this machine." >&2; exit 2; }
 set -a
 # shellcheck source=/dev/null

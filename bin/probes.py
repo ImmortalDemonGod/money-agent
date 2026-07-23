@@ -35,6 +35,11 @@ REGISTRY = {
                        "gate": "operator acceptance (SETUP preflight)"},
 }
 
+# S16 FIX: the round-trip body is a STABLE constant (the correlation token rides in the subject).
+# A stable body has a stable disclosure hash, so ONE recorded EV decision can satisfy the gate;
+# the old timestamped body changed hash every call, making a matching decision impossible.
+ROUNDTRIP_BODY = "substrate probe: self-addressed plumbing ping, delete me"
+
 
 def _mail_roundtrip() -> int:
     addr = os.environ.get("GMAIL_ADDRESS", "")
@@ -45,8 +50,13 @@ def _mail_roundtrip() -> int:
         return 2
     sys.path.insert(0, str(REPO / "bin"))
     import mail
+    # S16 FIX (adversarial correctness pass): the correlation token goes in the SUBJECT, not the
+    # BODY. The disclosure gate (fail-closed) hashes the BODY, and a timestamped body changes hash
+    # every call, so NO pre-recorded EV decision could ever match -- the probe could never pass.
+    # A STABLE body means one disclosure decision (cut: a self-addressed plumbing ping needs none)
+    # can be recorded once; the subject still carries the unique token for the IMAP round-trip.
     token = f"probe-{int(time.time())}"
-    mail.send(addr, f"mail-roundtrip {token}", f"substrate probe {token}: delete me")
+    mail.send(addr, f"mail-roundtrip {token}", ROUNDTRIP_BODY)
     for i in range(6):
         time.sleep(10)
         r = subprocess.run(["python3", str(REPO / "bin" / "mail.py"), "search", token],

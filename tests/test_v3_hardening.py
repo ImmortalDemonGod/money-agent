@@ -126,6 +126,10 @@ def test_mail_refusal_does_not_consume_reservation(monkeypatch):
 
 
 def test_mail_audit_failure_rolls_back_consumed_reservation(monkeypatch, tmp_path):
+    # The reservation is consumed AFTER the content gates but BEFORE the audit is written/committed,
+    # so a committed record only ever exists once the bet is genuinely spent. If the durable commit
+    # then fails, send() rolls the reservation back and refuses -- there is no window in which the
+    # log claims an attempt that a failed consume never made (CodeRabbit #54, mail.py false-record).
     calls = []
     rollbacks = []
     monkeypatch.setenv("BET_GATE_ENFORCE", "1")

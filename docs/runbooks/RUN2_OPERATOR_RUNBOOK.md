@@ -16,8 +16,8 @@ sign-off (12) is not complete until every Section 11 probe is done or recorded `
 
 ```bash
 git clone <repo> && cd money-agent
-bash tests/sim.sh          # expect: PASS=118 FAIL=0 SKIP=0 (counts grow as the matrix grows;
-                           # FAIL must be 0)
+bash tests/sim.sh          # expect: FAIL=0 SKIP=0 (the PASS count grows as the matrix grows --
+                           # 119 at the S16 commit; the only value that matters is FAIL=0)
 bash tests/corpus.sh       # expect: CORPUS PASS=11 FAIL=0
 ```
 - Verifier machine: copy `.env.example` -> `.env`, fill per RUN2_DECISIONS.md. Sandbox: `.env.agent`.

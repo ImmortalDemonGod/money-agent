@@ -241,6 +241,11 @@ def main() -> int:
                       {"fields": fields, "baseline_equity_usd": float(acct["equity"]),
                        "baseline_benchmark_price": benchmark_price})
         _write_raw("alpaca_benchmark", benchmark_pull)
+        # S16 FIX (F3): a FRESH freeze is a fresh bet -- reset the peak-equity runtime so it tracks
+        # from THIS bet's baseline, not a prior registration's peak carried across a within-run
+        # prereg.clear/re-register (which would falsely FALSIFY the new bet on inherited drawdown
+        # before a single trade). set_baseline handles the cross-run case; this handles re-register.
+        RUNTIME.unlink(missing_ok=True)
         print(f"edge: registration FROZEN (bar={fields['BAR']} {fields['METRIC']}, "
               f"baseline equity ${float(acct['equity']):.2f})", file=sys.stderr)
 

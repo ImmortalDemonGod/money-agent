@@ -66,6 +66,10 @@ def _load_unlocked() -> list[dict]:
 def _save_unlocked(bets: list[dict], msg: str) -> None:
     BETS.parent.mkdir(parents=True, exist_ok=True)
     BETS.write_text(json.dumps({"bets": bets}, indent=2) + "\n")
+    # S16 FIX (adversarial correctness pass): pathspec the diff-check AND the commit to BETS only.
+    # Without it, a caller with unrelated pre-staged files (e.g. bet_gate consumption inside
+    # mail.send, which stages nothing else but runs mid-flow) would sweep them into a "bets:"
+    # commit -- defeating the pathspec discipline every other _save in this repo already keeps.
     subprocess.run(["git", "add", str(BETS)], cwd=REPO, check=True)
     staged = subprocess.run(["git", "diff", "--cached", "--quiet", "--", str(BETS)], cwd=REPO)
     if staged.returncode != 0:

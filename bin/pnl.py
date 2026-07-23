@@ -677,7 +677,9 @@ def main() -> int:
     # a committed pubkey exists. The signature covers truth.json, which embeds manifest_sha256 --
     # so the raw-pull manifest is integrity-covered transitively. Namespace must match truth.py.
     # `truth["errors"]` aliases `errors`, so preserve the pre-signing state independently: an
-    # append from signing must force the persisted fact record to become unverified.
+    # append from signing must force the persisted fact record to become unverified. (This is the
+    # reference-independent snapshot the S16 correctness pass also called for -- a list COPY, so
+    # the later `!=` cannot compare the list against itself.)
     errors_before_signing = list(errors)
     sign_key = STATE_DIR / "verifier_signing_key"
     pubkey_committed = (REPO / "harness" / "verifier_key.pub").exists()

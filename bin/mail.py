@@ -213,6 +213,12 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     # V3 (S9, BET_GATE_ENFORCE=1 only): a send is an external-effect action and needs a live
     # typed bet's reservation -- the hypothesis-first discipline, consumed atomically so one bet
     # never authorizes unbounded sends. Inert by default; fail-closed when armed.
+    #
+    # S16 FIX (adversarial correctness pass): CHECK the reservation here (consume=False), but do
+    # not BURN it until the send is actually about to happen. The old consume=True ran BEFORE the
+    # em-dash rule, the disclosure gate, and the fail-closed SENT_LOG commit -- so any refused send
+    # permanently spent a reservation for a message that never left, and repeated blocked attempts
+    # would starve a bet that legitimately still authorized sends. Reserve just before the wire.
     def _bet_gate(consume):
         try:
             sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -254,8 +260,11 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
     msg.set_content(body)
 
-    # Reserve before persisting the attempt record. The bet registry serializes this consume
-    # across processes. If the durable audit write fails, compensate before refusing.
+    # BURN the reservation now -- AFTER every content gate has passed (a refused send above never
+    # reached here), but BEFORE the audit record is written or committed. Consuming after the commit
+    # (an earlier S16 variant) left a window where a failed final consume exited with the log already
+    # committed, permanently claiming an attempt that never happened -- a false record under a real
+    # person's name. Consume first; if the durable commit below fails, roll the reservation back.
     ok_bg, why_bg = _bet_gate(consume=True)
     if not ok_bg:
         print(f"REFUSING (bet gate): {why_bg}", file=sys.stderr)
