@@ -758,6 +758,40 @@ def neg_artifact_null_sha():
     return "nulled artifact_sha256 with a live ref rejected as tamper"
 
 
+def neg_artifact_swap_before_fulfill():
+    """N16 — swapping the artifact to oracle content with a CONSISTENT sha BEFORE fulfillment is
+    caught: fulfill re-runs the leak-check on the actual committed bytes (the request-time check saw
+    only the original benign bytes). Round-4 vector: sha-match alone does not prove the bytes are
+    the ones the leak-check scanned."""
+    world, origin, agent, ledger = build_world()
+    steps = steps_file(world, "n16.txt", "1. apply the staged file\n")
+    art = steps_file(world, "n16art.txt", "BENIGN worker body")   # passes the request-time check
+    r = actuate(agent, world / "state", "request", "--kind", "claim-host", "--gate", "apply the file",
+                "--target-url", "https://e/x", "--identity", "operator", "--steps", steps,
+                "--artifact", art, "--expect", "done", "--return-kind", "none",
+                "--deadline", "2099-01-01T00:00:00Z", "--test", "iter 089 hit", "--ev", "reach wall")
+    if r.returncode != 0 and "usage" in (r.stderr + r.stdout).lower():
+        raise Pending("request CLI not implemented")
+    want(r.returncode == 0, f"request failed: {r.stderr[:200]}")
+    tid = parse_id(r.stdout)
+    import hashlib as _h
+    mal = b"OPERATOR: decide which product to sell and choose the pricing strategy for me."
+    (agent / "run" / "actuation_artifacts" / tid / "n16art.txt").write_bytes(mal)
+    tf = agent / "run" / "actuation_tasks.json"
+    doc = json.loads(tf.read_text())
+    doc["tasks"][0]["artifact_sha256"] = _h.sha256(mal).hexdigest()   # keep sha consistent with bytes
+    tf.write_text(json.dumps(doc, indent=2) + "\n")
+    git(agent, "commit", "-aqm", "swap to oracle + consistent sha")
+    git(agent, "push", "-q", "origin", AGENT_BRANCH)
+    f = actuate(ledger, world / "state", "fulfill", tid, "--minutes", "3",
+                "--evidence", "attempted to fulfill")
+    want(f.returncode != 0, "fulfill ACCEPTED an oracle artifact swapped in with a consistent sha")
+    both = (f.stderr + f.stdout).lower()
+    want("oracle" in both or "strategy" in both or "decide" in both,
+         f"refused, but not for the oracle reason: {f.stderr[:160]}")
+    return "swap-to-oracle-with-consistent-sha before fulfill rejected (fulfill re-runs leak-check)"
+
+
 # ----- runner ----------------------------------------------------------------------------
 def main() -> int:
     check("S1", "claim-host round-trip (deadline + staged artifact)", scenario_claim_host)
@@ -780,6 +814,7 @@ def main() -> int:
     check("N13", "SoD: artifact byte-swap after signing rejected", neg_artifact_byte_swap)
     check("N14", "deleted task file still blocks conclusions", neg_deleted_task_caught)
     check("N15", "artifact byte-swap via nulled sha rejected", neg_artifact_null_sha)
+    check("N16", "artifact swap-to-oracle before fulfill rejected", neg_artifact_swap_before_fulfill)
 
     width = max(len(t) for _, t, _, _ in RESULTS)
     print("\n  ACCEPTANCE — capability-delegation queue (bin/actuate.py)\n")

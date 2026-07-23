@@ -564,6 +564,14 @@ def cmd_fulfill(a) -> int:
                   "bytes do not match it -- the request is tampered; refusing to fulfill.",
                   file=sys.stderr)
             return 1
+        # The operator is about to APPLY these bytes. Re-run the actuator-never-oracle check on the
+        # ACTUAL committed artifact: the request-time check saw only the original bytes, and the agent
+        # can swap the file to oracle/strategy content with a consistent sha before fulfillment.
+        hit = leak_check(ab.decode("utf-8", "ignore"))
+        if hit:
+            print(f"FATAL: the staged artifact asks the operator to decide strategy/content "
+                  f"(matched {hit!r}) -- actuator, never oracle; refusing to fulfill.", file=sys.stderr)
+            return 1
     resolution = {"status": "fulfilled", "human_minutes": a.minutes, "evidence": a.evidence}
     rk = task.get("return_kind", "none")
     if rk != "none":
