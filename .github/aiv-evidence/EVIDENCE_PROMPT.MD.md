@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `PROMPT.md`
-**Commit:** `9c7574d`
-**Previous:** `201c610`
-**Generated:** 2026-07-23T00:59:14Z
+**Commit:** `1986b8e`
+**Previous:** `8883e8a`
+**Generated:** 2026-07-23T01:24:25Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -16,17 +16,16 @@ classification:
   sod_mode: S1
   critical_surfaces: []
   blast_radius: "PROMPT.md"
-  classification_rationale: "Operator-directed fix of a wiring contradiction: CLAUDE.md authorized obligations in #51 but PROMPT.md/CONSTITUTION.md did not. R3: a constitutional-class prompt change"
+  classification_rationale: "Pairs the aiv_gate P3 wiring with the agent-facing instruction. R3: run-prompt change"
   classified_by: "Claude"
-  classified_at: "2026-07-23T00:59:14Z"
+  classified_at: "2026-07-23T01:24:25Z"
 ```
 
 ## Claim(s)
 
-1. The run prompt authorizes the guarded post-payment obligation path (verifier-enabled, refund-backed, capped, typed) consistent with CLAUDE.md, so the obligations safety layer is not left functionally inert by a prompt that categorically forbids every post-payment action
-2. The first-dollar section notes the out-of-band obligation verifier continues until every guaranteed liability is fulfilled or refunded, matching CLAUDE.md
-3. No existing tests were modified or deleted
-4. No existing tests were modified or deleted during this change.
+1. The run prompt instructs that any published/listing/data-acquisition claim requires a recorded P3 decision (bin/decision_gate.py) committed before the act, alongside the existing host_check requirement, so the agent knows to use the now-wired gate
+2. No existing tests were modified or deleted
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -35,14 +34,13 @@ classification:
 ### Class E (Intent Alignment)
 
 - **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** PROMPT.md (the prompt the agent actually follows each iteration) must authorize the same guarded obligation path CLAUDE.md authorizes; the operator flagged that PROMPT.md still categorically forbade every post-payment action, leaving the new safety mechanism inert
+- **Requirements Verified:** The agent-facing prompt must instruct use of the P3 decision gate for publish/listing/acquisition, or the wired gate blocks the agent without telling it how to comply
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`9c7574d`](https://github.com/ImmortalDemonGod/money-agent/tree/9c7574d1e3b5161518f0a4067afcec78036b03e6))
+**Scope Inventory** (SHA: [`1986b8e`](https://github.com/ImmortalDemonGod/money-agent/tree/1986b8e9d95dd253c49a97a5c7bd1247a29804d5))
 
-- [`PROMPT.md#L28-L38`](https://github.com/ImmortalDemonGod/money-agent/blob/9c7574d1e3b5161518f0a4067afcec78036b03e6/PROMPT.md#L28-L38)
-- [`PROMPT.md#L44-L48`](https://github.com/ImmortalDemonGod/money-agent/blob/9c7574d1e3b5161518f0a4067afcec78036b03e6/PROMPT.md#L44-L48)
+- [`PROMPT.md#L134-L138`](https://github.com/ImmortalDemonGod/money-agent/blob/1986b8e9d95dd253c49a97a5c7bd1247a29804d5/PROMPT.md#L134-L138)
 
 ### Class A (Execution Evidence)
 
@@ -83,12 +81,11 @@ d060b27 test(rails): call monetary validator directly
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The run prompt authorizes the guarded post-payment obligatio... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | The first-dollar section notes the out-of-band obligation ve... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 3 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
-| 4 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The run prompt instructs that any published/listing/data-acq... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
 
-**Verdict summary:** 2 verified, 0 unverified, 2 manual review.
+**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
 ---
 
 ## Verification Methodology
@@ -101,4 +98,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Reconcile PROMPT.md's delivery + first-dollar bounds to CLAUDE.md's obligation authorization
+PROMPT.md step 4 adds the recorded-P3-decision requirement to publish claims

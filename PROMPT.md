@@ -131,8 +131,11 @@ hashes, commits are NOT yours to hand-roll; run 1 fumbled every one of them):
   3. Do the work. Fill MONEY_LOG (tried / cost / happened / learned / next) and
      the packet's evidence classes A-F.
   4. Any "published X" claim must cite a PASSING `bin/host_check.py <url>` line
-     -- a page the host hides from crawlers is not published (run 1 shipped ~60
-     iterations of crawler-invisible product before checking).
+     AND a recorded P3 decision for it (`bin/decision_gate.py publish` -- a
+     name-test rationale committed to DECISION_LOG.md BEFORE the act; a listing or
+     a data-acquisition needs the same). A page the host hides from crawlers is
+     not published (run 1 shipped ~60 iterations of crawler-invisible product
+     before checking); a publish with no recorded decision does not count.
   5. `python3 bin/iter.py close <NNN>` -- runs the gate, commits, pushes, and
      verifies the blob actually landed. The iteration does not count until it
      exits 0.
