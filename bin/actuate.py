@@ -42,6 +42,24 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "bin"))
 
+
+def _env_pos_int(name: str, default: int) -> int:
+    """A positive-int env override, fail-soft: a malformed or non-positive value warns and falls
+    back to the default rather than raising at module import (which would break every subcommand,
+    including ones that never touch the value)."""
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    try:
+        v = int(raw)
+        if v <= 0:
+            raise ValueError("must be a positive integer")
+    except ValueError as e:
+        print(f"warn: {name}={raw!r} is invalid ({e}); using default {default}.", file=sys.stderr)
+        return default
+    return v
+
+
 TASKS = REPO / "run" / "actuation_tasks.json"
 RESOLUTIONS = REPO / "ledger" / "actuation_resolutions.json"
 RESOLUTION_SIG = REPO / "ledger" / "actuation_resolutions.json.sig"
@@ -56,7 +74,7 @@ KINDS = ("claim-host", "deploy-account", "wallet-fund", "kyc-step", "approval-cl
 MONEY_MOVING_KINDS = ("wallet-fund",)
 RETURN_KINDS = ("none", "confirmation", "value", "credential")
 # Open requests each block conclusions; cap the queue to bound spam (COMPARATIVE_ANALYSIS §12 R1).
-MAX_OPEN_REQUESTS = int(os.environ.get("ACTUATE_MAX_OPEN", "3"))
+MAX_OPEN_REQUESTS = _env_pos_int("ACTUATE_MAX_OPEN", 3)
 SIGN_NAMESPACE = "money-agent-actuation"   # per-purpose domain separation (no cross-protocol replay)
 
 STATE_DIR = Path(os.environ.get("MONEY_AGENT_STATE", str(Path.home() / ".money-agent-verifier")))
@@ -64,8 +82,8 @@ SIGN_KEY = STATE_DIR / "verifier_signing_key"
 KEYS_DIR = STATE_DIR / "actuation_keys"                   # ephemeral private keys (never git)
 AUDIT_DIR = STATE_DIR / "actuation_returns"               # operator's off-repo plaintext retention
 RESOLUTION_LOCK = STATE_DIR / "actuation_resolutions.lock"
-NOTIFY_URGENT_S = int(os.environ.get("NOTIFY_URGENT_S", "900"))
-VERIFY_TIMEOUT_S = int(os.environ.get("ACTUATE_VERIFY_TIMEOUT_S", "120"))  # post-handback probe cap
+NOTIFY_URGENT_S = _env_pos_int("NOTIFY_URGENT_S", 900)
+VERIFY_TIMEOUT_S = _env_pos_int("ACTUATE_VERIFY_TIMEOUT_S", 120)  # post-handback probe cap
 
 # actuator-never-oracle: this is a HEURISTIC TRIPWIRE, not a wall. A denylist cannot catch every
 # paraphrase (an adversary proved synonym bypasses); the real backstop is the human operator, who

@@ -318,7 +318,7 @@ def scenario_usability_probe():
     probe = '[ "$ACTUATE_RETURN_VALUE" = "0xLIVEADDR" ]'   # simulates 'the sandbox can actually use it'
 
     # (a) probe PASSES -> usability=verified, sync exits 0
-    world, origin, agent, ledger = build_world()
+    world, _origin, agent, ledger = build_world()
     steps = steps_file(world, "n19a_steps.txt", "1. Create the account in your browser.\n")
     r = actuate(agent, world / "state", "request", "--kind", "deploy-account",
                 "--gate", "signup clears a CAPTCHA but the sandbox egress is WAF/IP-reputation gated",
@@ -341,7 +341,7 @@ def scenario_usability_probe():
          f"a passing probe should record usability=verified (got {agent_task(agent, tid).get('usability')!r})")
 
     # (b) probe FAILS -> usability=failed, sync exits non-zero, operator obligation STILL discharged
-    world2, origin2, agent2, ledger2 = build_world()
+    world2, _origin2, agent2, ledger2 = build_world()
     steps2 = steps_file(world2, "n19b_steps.txt", "1. Create the account in your browser.\n")
     r2 = actuate(agent2, world2 / "state", "request", "--kind", "deploy-account",
                  "--gate", "account is created but the sandbox egress stays WAF-blocked",

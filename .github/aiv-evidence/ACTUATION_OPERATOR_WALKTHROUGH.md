@@ -32,6 +32,8 @@ capture" below.
 
 ## 2 · The card the operator opens (`credential` / `kyc-step`, delivered via the claims lane)
 
+![The actuation card as the operator opens it](actuation_card.png)
+
 Rendered by `bin/actuate.py card ACT-001` — this is exactly the markdown a no-context operator reads
 (every field control-char-scrubbed; note the `credential` return hint):
 
@@ -59,6 +61,8 @@ Or decline: bin/actuate.py decline ACT-001 --minutes <n> --reason "<why>"
 ```
 
 ## 4 + 5 · The CLI a human runs, and what the agent receives (redacted)
+
+![Operator fulfill then agent sync, on a two-key-custody split](actuation_fulfill_sync.png)
 
 ```text
 # 4. OPERATOR (facts-lane clone, MONEY_AGENT_STATE=$OPERATOR_STATE — holds the signing key)
