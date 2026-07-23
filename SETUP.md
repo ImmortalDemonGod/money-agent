@@ -272,10 +272,11 @@ missing, partial, or stale markers fail closed. Changing any binding requires a 
 }
 ```
 
-### Human actuation queue (issue #31)
+### Capability-delegation (human actuation) queue (issue #31)
 
-The agent creates a request with `bin/human.py request` and keeps working. The operator resolves it
-from the verifier's **ledger checkout**, not from the agent sandbox:
+`bin/actuate.py` is the CANONICAL tool (`bin/human.py` is deprecated). The agent creates a request
+with `bin/actuate.py request` and keeps working. The operator resolves it from the verifier's
+**ledger checkout**, not from the agent sandbox — first rendering the self-contained card:
 
 ```bash
 export MONEY_AGENT_STATE=~/.money-agent-verifier
@@ -283,20 +284,25 @@ ssh-keygen -t ed25519 -N "" -C verifier -f "$MONEY_AGENT_STATE/verifier_signing_
 # Commit the public key as harness/verifier_key.pub and the line
 # "verifier <public-key>" as harness/allowed_signers before the run.
 
+python3 bin/actuate.py card ACT-001            # the no-context operator card: target, steps, deadline
+
 AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE="$MONEY_AGENT_STATE" \
-  python3 bin/human.py fulfill hum-001 --minutes 3 --evidence "completed account CAPTCHA"
+  python3 bin/actuate.py fulfill ACT-001 --minutes 3 --evidence "completed account CAPTCHA"
+# a MONEY-MOVING kind (e.g. wallet-fund) additionally requires a recorded P3 name-test ruling:
+#   ... fulfill ACT-002 --minutes 3 --evidence "sent 10 USDC" --return-value 0xTX \
+#       --consent-ruling "name-test cleared: $10 into the agent's own settlement wallet, bounded"
 # or (declined operator time is measured too):
 AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE="$MONEY_AGENT_STATE" \
-  python3 bin/human.py decline hum-001 --minutes 0.25 \
+  python3 bin/actuate.py decline ACT-001 --minutes 0.25 \
   --reason "identity exposure exceeds this run's bound"
 ```
 
 The signing key is mandatory for operator resolutions. This publishes
-`ledger/human_resolutions.json` plus its detached signature; the agent then runs
-`python3 bin/human.py sync hum-001`. The facts branch must be distinct from the request's claims
-branch, and sync rechecks the signed request hash. Directly editing task state or resolving the
-companion bet does not close the human request. Supervision must name the claims lane so requests
-are visible from the verifier checkout:
+`ledger/actuation_resolutions.json` plus its detached signature; the agent then runs
+`python3 bin/actuate.py sync ACT-001` (or `sync-all`). The facts branch must be distinct from the
+request's claims branch, and sync rechecks the full signed request hash. Directly editing task state
+or resolving the companion bet does not close the request. Supervision must name the claims lane so
+requests are visible from the verifier checkout:
 
 ```bash
 bin/supervise.sh <run-branch>

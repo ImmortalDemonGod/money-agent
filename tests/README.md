@@ -1,7 +1,8 @@
 # tests/ — the committed verification matrix
 
-    bash tests/sim.sh        # exits 0 iff every assertion passes; SIM_KEEP=1 keeps the workdir
-    bash tests/corpus.sh     # Tier-0 regression corpus: run-1's real artifacts vs the v2 gates
+    bash tests/sim.sh                     # exits 0 iff every assertion passes; SIM_KEEP=1 keeps the workdir
+    bash tests/corpus.sh                  # Tier-0 regression corpus: run-1's real artifacts vs the v2 gates
+    python3 tests/acceptance_actuation.py # capability-delegation contract: 23 checks, CI-enforced
 
 `sim.sh` builds a LOCAL bare origin + separate agent/verifier clones + a real ledger branch and
 asserts the harness's load-bearing behaviors: grounded reads, every guard terminal (first dollar,
@@ -38,3 +39,14 @@ the ls-tree safety net is the subject).
 from the archive into the rig, reconstruct any state that postdates the incident's tooling (e.g.
 the bets registry), assert the refusing gate names the incident's SPECIFIC cause, then add a
 discriminator run showing the message disappears when only that cause is repaired.
+
+## acceptance_actuation.py — the capability-delegation contract (`bin/actuate.py`)
+
+The falsifiable definition-of-done for the actuation queue, written RED-first and **bite-verified**
+(a no-op stub makes every check FAIL, not PENDING). It builds a throwaway two-lane git world per
+check and asserts the round-trips (S1–S3), the separation-of-duties / tamper-resistance defenses
+(N1–N18, one regression per adversarial finding), and the usability/notification benchmarks
+(B1–B2). Same honest scope as `sim.sh`: offline and keyless — the one live actuation on a real rail
+is the Tier-L operator gate (see `.github/aiv-evidence/ACTUATION_E2E.md` for the real end-to-end
+push). Human-readable companion contract: `tests/ACCEPTANCE_ACTUATION.md`. Run by CI in the sim job,
+so "23 green" is gate-enforced, not self-reported.
