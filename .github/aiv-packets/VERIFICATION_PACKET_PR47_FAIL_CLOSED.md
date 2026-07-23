@@ -1,6 +1,6 @@
 # AIV Verification Packet (v2.1): PR-47 fail-closed review fixes
 
-**Author:** Miguel Ingram (Author)  
+**Author:** Miguel Ingram (Author)
 **Verification posture:** R3 / S1. This changes verifier-owned payment and audit-log handling;
 independent human review remains required before merge.
 

@@ -14,6 +14,7 @@ you see in this directory on a claims branch are a possibly-stale transparency c
 | `truth.json.sig` | `bin/pnl.py` | detached verifier signature over `truth.json` (present when signing is provisioned, issue #36) |
 | `attestation.json` (+`.sig`) | `bin/pnl.py` | the customer-facing signed summary: verified revenue, policy, provenance hashes (issue #42) |
 | `edge.json` | `bin/edge_pnl.py` | the edge-rail facts: frozen bar, paper P&L, verdict |
+| `human_resolutions.json` (+`.sig`) | operator via `bin/human.py` | signed fulfillment/decline facts bound to claims-lane request hashes and a distinct facts branch |
 | `baseline.json` | `bin/set_baseline.py` | transparency copy of run-start (authoritative copy is off-repo, verifier-side) |
 | `raw/` | both verifiers | immutable timestamped API pulls — the evidence behind every number |
 | `raw/MANIFEST.sha256`, `raw/EDGE_MANIFEST.sha256` | verifiers | per-pull hashes; packets must cite one to make a money/edge claim |
@@ -23,7 +24,7 @@ you see in this directory on a claims branch are a possibly-stale transparency c
 When the operator provisions a signing key (`ssh-keygen -t ed25519 -N "" -C verifier -f
 $MONEY_AGENT_STATE/verifier_signing_key`, then commit the public half as
 `harness/verifier_key.pub` and `harness/allowed_signers` = `verifier <contents of the .pub>`),
-three things become true:
+four things become true:
 
 1. `bin/pnl.py` writes a detached signature beside every `truth.json`, embeds `previous_hash`
    (sha256 of the previously published `truth.json`, a git-independent hash chain; an unreachable
@@ -46,6 +47,11 @@ git show origin/ledger~1:ledger/truth.json | sha256sum
 # If origin/ledger~1 does not resolve, this tip is a LEDGER_MAX_COMMITS rotation boundary:
 # an unreachable parent is the documented chain start, so skip this parent-hash comparison.
 ```
+
+4. `bin/human.py fulfill/decline` uses the same private key and namespace to sign
+   `human_resolutions.json`. The agent's sync and the conclusion gate verify that signature against
+   the claims branch's committed `harness/allowed_signers`; an unsigned, tampered, branch-spoofed,
+   or request-hash-mismatched resolution remains pending.
 
 The same commands with `attestation.json` verify the customer-facing summary. What this does NOT
 prove: that the key belongs to an honest verifier — key custody is the operator's provisioning

@@ -1231,3 +1231,103 @@ vs genuine absence must stay distinguishable in every consumer (guard, conclusio
 
 **Next:** S7 — the rail-adapter refactor (#30 Part 1) with the golden parity artifact, plus the
 stubbed Base/USDC adapter with settlement-event binding.
+
+---
+
+## Entry 027 — 2026-07-20 — S7 rail adapters: the P1 contract, and a Base/USDC rail with settlement-event binding (issue #30 Part 1)
+
+**What:** `bin/rails/` writes down the fact-source contract `pnl.py`'s Stripe path implicitly
+defined (primary source; agent-unwritable inputs; hashed raws through the same manifest flow;
+identity-classified; fail-closed) — the P1 generalization, with onboarding explicitly a reviewed
+harness change the agent cannot perform on itself. `received_usd` is now the sum of customer
+revenue across armed rails, with a per-rail breakdown published ONLY when a second rail is armed
+— which makes parity structural: a stripe-only run's truth.json shape is untouched. The Base/USDC
+adapter (stub-tested; live RPC + wallet funding are runbook items): verifier-frozen baseline
+block (the created_gt discipline on a block clock), inbound-USDC log watch, operator wallet
+addresses in operator_identity.json classifying as self, and the owner-comment's onchain
+wash-trade analogue — a transfer counts as CUSTOMER revenue only when its transaction also
+emitted the provisioned marketplace settlement event; bare transfers land in `unbound_usd`,
+visible and never counted. Missing binding config and a dead chain both poison the pull.
+
+**Edge cases enumerated before coding:** the breakdown key must be ABSENT on stripe-only runs or
+parity breaks by shape; the settlement binding is REQUIRED provisioning (an armed adapter without
+it refuses rather than counting bare transfers); baseline block freezes exactly once (second
+cycle must reuse frozen fromBlock and never re-read eth_blockNumber); receipts are fetched once
+per tx; sender extraction from topic padding; USDC 6-decimal scaling; operator addresses
+lowercased both sides.
+
+**Verified by running (artifacts):**
+- `bash tests/sim.sh` → **PASS=49 FAIL=0 SKIP=0** (aggregate pnl case now covers 13 cases: +
+  stripe-only-no-breakdown, bound/unbound/self classification with received summing 12.34+12.34,
+  frozen-baseline reuse, misprovision fail-closed, dead-chain fail-closed). Corpus **11/0**;
+  shellcheck + compileall clean.
+- **PARITY PROVEN (the S7 golden artifact):** identical stripe-only stub run against HEAD~1 and
+  HEAD in throwaway clones — truth.json field-identical (25 fields; excluding only
+  computed_at/previous_hash/pulls/manifest by design, and even those matched to the second in
+  this capture); `rails` key absent; received_usd 12.34 both sides.
+
+**Critique pass:**
+- The settlement-event topic/address values are PROVISIONING inputs pending S13's read-only
+  probes of the actual marketplace contracts — the adapter is deliberately agnostic about which
+  event signature is "the" acceptance event; the runbook will carry what S13 finds, and until a
+  real value is provisioned the rail simply cannot arm. Stub-tested only, stated plainly.
+- `eth_getLogs` from frozen-block to latest is one unbounded range — fine at run scale, but a
+  long standing run on a busy wallet would want block-windowing; noted, not built.
+- USDC-on-Base is treated 1 USDC = 1 USD (the issue's own framing); a depeg is out of scope and
+  would be visible in the raws.
+- received_gross_usd stays Stripe-scoped (balance_transactions semantics) — the rails breakdown
+  is where cross-rail gross lives; documented in the field comment.
+
+**Next:** S8 — the human-actuation queue (#31): bin/human.py + the atomic PROMPT.md autonomy
+amendment.
+
+---
+
+## Entry 028 — 2026-07-20 — S8 human-actuation queue: request-don't-wait, metered, conclusion-blocking (issue #31)
+
+**What:** `bin/human.py` — the third road past the identity wall (defeating gates is
+constitution-forbidden; provisioning-time gate-guessing was wrong as often as right in run 1):
+the agent requests mechanical actuation of a gate it has EMPIRICALLY hit, and keeps working.
+Guardrails structural where possible: kind allowlist
+(`captcha|approval-click|kyc-step|signup-complete|claim-host`) rejects free-text asks (actuator,
+never oracle); `--test` requires the cited empirical gate-hit (falsify before requesting);
+`--ev` requires the worth-operator-minutes case; fulfillment meters `human_minutes`
+(`human_minutes_total` aggregated — the "autonomous with metered human actuation" number no
+experiment in the field has); declines are recorded, the operator's REFUSALS mirror. Every
+request registers a companion `approval`-clock bet through the existing registry, so the
+due-bets agenda surfaces it every iteration and an open request mechanically blocks "impossible"
+conclusions. `supervise.sh` surfaces the open queue with oldest-age. **Atomic in the same
+commit, as the issue requires:** PROMPT.md's autonomy clause narrows from never-ask to
+never-ask-for-STRATEGY, with mechanical actuation carved out as requesting ≠ waiting — without
+this the tool and the prompt would contradict and the agent would (correctly, per its
+instructions) refuse to use the queue. Operator-negotiated wording: flagged for review.
+
+**Edge cases enumerated before coding:** the companion bet is what makes an open request
+conclusion-blocking (no new gate logic needed — and if the bet registration fails, the request
+REFUSES rather than existing invisibly); fulfill/decline must resolve the companion (won/lost)
+or the gate stays blocked after the human acted — a failed companion-resolve warns loudly;
+minutes are required at fulfill time (metering is the point, not an afterthought);
+`--resolve-by` defaults to +7 days so a forgotten request eventually surfaces as OVERDUE in the
+agenda; supervise reads the working-tree file and stays silent where it is absent (the
+verifier's ledger checkout).
+
+**Verified by running (artifacts):** `bash tests/sim.sh` → **PASS=57 FAIL=0 SKIP=0** (was 49):
+free-text kind rejected; uncited gate-hit rejected; cited request registered; open request
+blocks conclusion_gate naming `human actuation hum-001`; fulfillment meters minutes + resolves
+the companion; supervise surfaces "1 open actuation request"; decline recorded; list totals.
+Corpus **11/0**; shellcheck + compileall clean. Bite is definitional this stack: `bin/human.py`
+did not exist at HEAD~1 (every fixture fails on file-absence) and the OLD prompt forbade the ask
+outright — the behavior change IS the amendment, which is why the issue demands atomicity.
+
+**Critique pass:**
+- The kind allowlist is a tripwire against DRIFT, not a wall against a determined mis-framing
+  (a strategy ask worded as a "captcha" request); the operator sees the gate/test/ev text at
+  fulfillment time and the decline path exists precisely for that. Boundary case from the issue
+  (creative/copyright lending) stays outside the queue by construction — no kind admits it.
+- `human_minutes` are operator-reported at fulfill time — honest-reporting, not measurement;
+  stated here rather than dressed up.
+- The companion-bet linkage derives the bet id from registry length — correct while bets.py
+  allocates sequentially (it does; documented assumption the S16 sweep can challenge).
+
+**Next:** S9 — V3 bet-spec + bet_gate.py (typed conditions, action authorization,
+BET_GATE_ENFORCE default off).

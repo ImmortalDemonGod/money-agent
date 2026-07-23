@@ -3,8 +3,8 @@
 # explicit VERDICT line the assistant reads to decide: keep waiting, restart the verifier, or
 # ALERT THE OPERATOR (first dollar / dead verifier).
 #
-#   bin/supervise.sh                       # facts from the LEDGER branch (two-lane, default)
-#   LEDGER_BRANCH=ledger-run2 bin/supervise.sh
+#   bin/supervise.sh <agent-branch>        # facts + claims-lane human requests
+#   AGENT_BRANCH=run-2 LEDGER_BRANCH=ledger-run2 bin/supervise.sh
 #
 # It does NOT do the verification (verifier_loop.sh does). It answers: is the verifier alive, is
 # truth.json fresh, is the push working, and HAS THE FIRST DOLLAR ARRIVED. That last one is the
@@ -12,6 +12,7 @@
 set -uo pipefail
 R="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$R" || exit 1
 LEDGER_BRANCH="${LEDGER_BRANCH:-ledger}"
+AGENT_BRANCH="${1:-${AGENT_BRANCH:-}}"
 now=$(date -u +%s)
 
 echo "===== VERIFIER SUPERVISOR @ $(date -u +%H:%M:%SZ) ====="
@@ -71,6 +72,68 @@ if [[ "$(git branch --show-current 2>/dev/null)" == "$LEDGER_BRANCH" ]] \
   fi
 fi
 
+# 3d. #31: requests live on the AGENT branch; operator resolutions live on the FACTS branch.
+# Read both refs explicitly. Looking at this verifier checkout's working tree made the queue
+# invisible in the very topology supervise exists for, and the old simulation accidentally ran
+# this command from the agent clone.
+if [[ -z "$AGENT_BRANCH" ]]; then
+  echo "human queue: UNKNOWN (pass <agent-branch> or set AGENT_BRANCH)"
+else
+  git fetch -q origin "$AGENT_BRANCH" 2>/dev/null || true
+  HQ=$(python3 - "$R" "$AGENT_BRANCH" "$LEDGER_BRANCH" <<'PY' 2>/dev/null
+import datetime as dt, json, pathlib, subprocess, sys, tempfile
+repo, agent, ledger = sys.argv[1:]
+def show_raw(ref, path):
+    r = subprocess.run(["git", "show", f"origin/{ref}:{path}"], cwd=repo,
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        return None
+    return r.stdout
+def show(ref, path):
+    raw = show_raw(ref, path)
+    return None if raw is None else json.loads(raw)
+try:
+    task_doc = show(agent, "run/human_tasks.json")
+    if task_doc is None:
+        print("no requests recorded")
+        raise SystemExit
+    resolution_raw = show_raw(ledger, "ledger/human_resolutions.json")
+    if resolution_raw is None:
+        resolutions = {}
+    else:
+        allowed = show_raw(agent, "harness/allowed_signers")
+        signature = show_raw(ledger, "ledger/human_resolutions.json.sig")
+        if not allowed or not signature:
+            raise RuntimeError("human resolutions are unsigned or signer policy is missing")
+        with tempfile.TemporaryDirectory() as td:
+            d = pathlib.Path(td)
+            (d / "allowed").write_text(allowed)
+            (d / "sig").write_text(signature)
+            verified = subprocess.run(
+                ["ssh-keygen", "-Y", "verify", "-f", str(d / "allowed"), "-I", "verifier",
+                 "-n", "money-agent-ledger", "-s", str(d / "sig")],
+                input=resolution_raw, text=True, capture_output=True)
+        if verified.returncode != 0:
+            raise RuntimeError("human-resolution signature verification failed")
+        resolutions = json.loads(resolution_raw).get("resolutions", {})
+    open_tasks = [t for t in task_doc.get("tasks", []) if t.get("status") == "open"]
+    pending = [t for t in open_tasks if t.get("id") not in resolutions]
+    awaiting = [t for t in open_tasks if t.get("id") in resolutions]
+    if not open_tasks:
+        print("clear")
+    else:
+        oldest = min(t["requested_at"] for t in open_tasks)
+        age_h = (dt.datetime.now(dt.timezone.utc)
+                 - dt.datetime.fromisoformat(oldest.replace("Z", "+00:00"))).total_seconds()/3600
+        print(f"{len(pending)} awaiting operator, {len(awaiting)} resolved-awaiting-agent-sync, "
+              f"oldest {age_h:.1f}h")
+except Exception as e:
+    print(f"UNREADABLE ({type(e).__name__}: {e})")
+PY
+)
+  echo "human queue: ${HQ:-UNREADABLE}"
+fi
+
 # 4. recent push activity from the log
 echo "last log   : $(tail -1 "$R/verifier.log" 2>/dev/null || echo '(no log)')"
 
@@ -80,8 +143,14 @@ if python3 -c "import sys; sys.exit(0 if float('$RECV')>0 else 1)" 2>/dev/null; 
 elif [[ "$EVERDICT" == "VERIFIED_POSITIVE_EV" ]]; then
   echo "VERDICT    : ⭐ EDGE VERIFIED POSITIVE-EV. The variant experiment is answered. ALERT THE"
   echo "             OPERATOR NOW -- real-capital deployment is a human decision, never the agent's."
+elif [[ "$HQ" == UNREADABLE* ]]; then
+  echo "VERDICT    : INVESTIGATE -- human queue state is $HQ"
 elif [[ "$alive" -eq 0 ]]; then
   echo "VERDICT    : RESTART -- verifier process is dead. Run bin/start_verifier.sh <agent-branch>"
+elif [[ "$HQ" =~ ^[1-9][0-9]*\ awaiting\ operator ]]; then
+  echo "VERDICT    : HUMAN ACTUATION REQUIRED -- $HQ"
+elif [[ "$HQ" =~ ,\ [1-9][0-9]*\ resolved-awaiting-agent-sync ]]; then
+  echo "VERDICT    : AGENT SYNC REQUIRED -- $HQ"
 elif [[ "$age" != "?" && "$age" -gt 1500 ]]; then
   echo "VERDICT    : STALE (${age}s > 1500s) -- verifier alive but not publishing. Check verifier.log."
 else

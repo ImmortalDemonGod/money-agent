@@ -126,8 +126,8 @@ refuses a second completed checkout.
 charge's payer against `$MONEY_AGENT_STATE/operator_identity.json` (default
 `~/.money-agent-verifier/operator_identity.json`) so an operator self-purchase can never trip the
 first-dollar success condition. Provision it on the verifier machine:
-```json
-{"emails": ["<operator email>"], "card_fingerprints": ["<stripe card fingerprint>"]}
+```jsonc
+{"emails": ["<operator email>"], "card_fingerprints": ["<stripe card fingerprint>"], "addresses": []}
 ```
 `bin/start_verifier.sh` refuses to start while it is missing or empty (issue #37) -- an inert
 wash-trade guard only surfaces at the first charge, where it halts the run as unverifiable instead
@@ -186,7 +186,103 @@ this program exists to kill.
 
 ---
 
-## 4c. Optional: standing-presence posture (issue #4)
+## 4c. Optional: Base/USDC receive rail (issue #30)
+
+This rail is inert unless `BASE_RPC_URL` is present in the verifier's `.env`. Copy the complete
+block from `.env.example`; the marketplace contract's ABI determines the settlement event topic
+and the indexed payer/payee plus amount-word positions. Do not guess them. Add every operator
+wallet to the same verifier-private identity file used for Stripe:
+
+```json
+{
+  "emails": ["operator@example.com"],
+  "card_fingerprints": ["stripe-fingerprint"],
+  "addresses": ["0xoperator-wallet"]
+}
+```
+
+`start_verifier.sh` fails before baseline creation if any binding field or wallet allowlist is
+missing. It then freezes the run boundary at the RPC's `safe` block (`finalized` is also accepted).
+Every subsequent pull ends at a new safe/finalized block; `latest` is never scored because a reorg
+after the first-dollar stop would make the experiment's terminal fact disappear. The adapter also
+requires `eth_chainId == 8453`; a reachable RPC on another chain fails closed.
+
+Before live use, record the marketplace owner's explicit authorization for this experiment and
+review the current marketplace terms for automated submissions, wallet use, and settlement. Store
+the authorization and the terms/version reviewed in the run's operator notes. If either forbids the
+planned behavior, do not arm the rail. The agent may never use the human queue to obtain an exception
+to platform policy.
+
+**Live acceptance — required before arming the rail:**
+
+1. Decode the deployed marketplace ABI and independently confirm the settlement event's topic0,
+   payer topic, payee topic, and USDC amount word.
+2. Start a throwaway run and confirm `$MONEY_AGENT_STATE/base_usdc_baseline.json` records the
+   current finality tag, block number, and block hash.
+3. Send a bare USDC transfer: the next `truth.json` must show it only as `unbound_usd`.
+4. Complete one operator-funded marketplace settlement: it must appear as `self_usd`, never
+   `customer_usd`, even though the ERC-20 sender is the escrow contract.
+5. Complete one independent-customer settlement and confirm payer, payee, and amount match the raw
+   receipt before `customer_usd` increases.
+6. In a throwaway transaction with two otherwise-identical transfers but one settlement event,
+   confirm only one transfer is scored. Each settlement event is single-use evidence.
+7. Start a second throwaway run with the same wallet. Its initial Base `customer_usd` must be zero;
+   the archived prior baseline must not be reused.
+
+Until all seven pass against the live RPC and deployed contract, the adapter remains
+simulation-tested only and must not participate in a scored run. Issue #30's live half also remains
+open until the operator records the wallet-funding source and explicit spend cap, runs a real
+TaskMarket submission/settlement, and decides whether that live path belongs in the scored run.
+
+After all seven checks pass, persist the acceptance on the verifier machine. Both
+`start_verifier.sh` and the adapter bind this marker to the current address/contract/event tuple;
+missing, partial, or stale markers fail closed. Changing any binding requires a new acceptance:
+
+```jsonc
+// $MONEY_AGENT_STATE/base_usdc_live_acceptance.json (shown as JSONC; remove this comment)
+{
+  "status": "passed",
+  "checks_passed": [1, 2, 3, 4, 5, 6, 7],
+  "chain_id": 8453,
+  "settlement_address": "0xagent-wallet",
+  "marketplace_address": "0xmarketplace-contract",
+  "settlement_event_topic0": "0xevent-topic0",
+  "accepted_at": "2026-07-22T00:00:00Z",
+  "operator": "operator-name-or-review-id"
+}
+```
+
+### Human actuation queue (issue #31)
+
+The agent creates a request with `bin/human.py request` and keeps working. The operator resolves it
+from the verifier's **ledger checkout**, not from the agent sandbox:
+
+```bash
+export MONEY_AGENT_STATE=~/.money-agent-verifier
+ssh-keygen -t ed25519 -N "" -C verifier -f "$MONEY_AGENT_STATE/verifier_signing_key"
+# Commit the public key as harness/verifier_key.pub and the line
+# "verifier <public-key>" as harness/allowed_signers before the run.
+
+AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE="$MONEY_AGENT_STATE" \
+  python3 bin/human.py fulfill hum-001 --minutes 3 --evidence "completed account CAPTCHA"
+# or (declined operator time is measured too):
+AGENT_BRANCH=<run-branch> LEDGER_BRANCH=<facts-branch> MONEY_AGENT_STATE="$MONEY_AGENT_STATE" \
+  python3 bin/human.py decline hum-001 --minutes 0.25 \
+  --reason "identity exposure exceeds this run's bound"
+```
+
+The signing key is mandatory for operator resolutions. This publishes
+`ledger/human_resolutions.json` plus its detached signature; the agent then runs
+`python3 bin/human.py sync hum-001`. The facts branch must be distinct from the request's claims
+branch, and sync rechecks the signed request hash. Directly editing task state or resolving the
+companion bet does not close the human request. Supervision must name the claims lane so requests
+are visible from the verifier checkout:
+
+```bash
+bin/supervise.sh <run-branch>
+```
+
+## 4d. Optional: standing-presence posture (issue #4)
 
 Run 1 proved a minutes-cadence loop cannot harvest day-scale clocks (indexation, approvals,
 reputation). A standing run is CONFIG, not new machinery — see `docs/STANDING_RUN.md` for the

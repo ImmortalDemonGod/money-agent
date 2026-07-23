@@ -219,10 +219,12 @@ def main() -> int:
     #       mode this catches is FORGETTING under drift, and deleting a bet is a visible commit);
     #   (b) ledger/edge.json -- a PENDING verified-edge experiment is an open bet on the facts
     #       lane, which the agent cannot edit at all.
+    all_bets = []
     try:
         sys.path.insert(0, str(REPO / "bin"))
         import bets as _bets
-        for b in _bets.open_bets():
+        all_bets = _bets._load()
+        for b in _bets.open_bets(all_bets):
             fails.append(f"open external bet {b['id']} ({b['clock']}, oracle: "
                          f"{b.get('oracle', 'judgment')}): {b['what']!r} -- resolve it "
                          "(bin/bets.py resolve) or wait out its clock; an unresolved bet is "
@@ -230,6 +232,44 @@ def main() -> int:
     except Exception as e:
         fails.append(f"cannot read the bet registry ({type(e).__name__}: {e}) -- fail-closed: "
                      "unknown bets are not resolved bets.")
+    # Human requests are checked independently of their companion bets. Otherwise the run agent
+    # could directly resolve a judgment-class companion and erase the only mechanical signal that
+    # operator actuation is still outstanding. Only `human.py sync`, after a facts-lane resolution,
+    # changes this status.
+    human_tasks = REPO / "run" / "human_tasks.json"
+    task_bets = {}
+    if human_tasks.exists():
+        try:
+            import json
+            import human as _human
+            tasks = json.loads(human_tasks.read_text()).get("tasks", [])
+            task_bets = {task.get("companion_bet"): task for task in tasks}
+            for task in tasks:
+                if task.get("status") == "open":
+                    fails.append(f"open human actuation {task.get('id')} ({task.get('kind')}): "
+                                 f"{task.get('gate')!r} -- only a verifier-published operator "
+                                 "resolution consumed via bin/human.py sync closes it.")
+                    continue
+                try:
+                    grounded = _human._grounded_resolution(task)
+                    if not grounded or grounded.get("status") != task.get("status"):
+                        raise RuntimeError("facts-lane status does not match the claims task")
+                    if task.get("resolution") != grounded:
+                        raise RuntimeError("claims task does not contain the exact signed resolution")
+                except Exception as e:
+                    fails.append(f"human actuation {task.get('id')} is not grounded "
+                                 f"({type(e).__name__}: {e}) -- agent-written task status cannot "
+                                 "authorize a conclusion.")
+        except Exception as e:
+            fails.append(f"cannot read human task registry ({type(e).__name__}: {e}) -- "
+                         "fail-closed: unknown actuation state is not resolved state.")
+    # A removed task file or entry must not make its still-visible companion bet meaningless.
+    # Keep this outside the file-exists guard so deleting the entire registry also fails closed.
+    for bet in all_bets:
+        if str(bet.get("what", "")).startswith("human actuation ") \
+                and bet.get("id") not in task_bets:
+            fails.append(f"human companion {bet.get('id')} has no task record -- "
+                         "deleted actuation state cannot authorize a conclusion.")
     try:
         import truth as _truth
         e_facts, e_src = _truth.load("edge.json")

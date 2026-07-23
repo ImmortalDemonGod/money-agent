@@ -1,6 +1,6 @@
 # AIV Verification Packet — PR49 Stripe Test Delivery
 
-Author: ImmortalDemonGod  
+Author: ImmortalDemonGod
 Verifier: Codex
 
 ## 0. Logical unit

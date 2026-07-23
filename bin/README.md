@@ -13,14 +13,14 @@ remote branch protection.
 
 | Script | What it does |
 |---|---|
-| `pnl.py` | THE verifier: pulls Stripe + card feed, writes `ledger/truth.json` + hashed raw pulls |
+| `pnl.py` | THE verifier: aggregates registered receive/spend adapters (Stripe + card feed + optional Base), writes `ledger/truth.json` + hashed raw pulls |
 | `edge_pnl.py` | the edge-rail verifier: freezes the pre-registered bar, pulls the broker's paper books, writes `ledger/edge.json` |
 | `set_baseline.py` | freezes run-start: baseline OID + timestamp + constitution hash (+ archives any stale edge freeze) |
 | `verifier_loop.sh` | the publish loop: converge facts lane → pnl → edge_pnl → commit/push (+ rotation) |
 | `start_verifier.sh` | one-shot run start: lane creation → baseline → loop launch |
 | `verifier_daemon.sh` | launchd/systemd entrypoint for the loop |
 | `run_weak.sh` | co-located weak-mode loop for fast local trials — tripwire-only, never resets |
-| `supervise.sh` | operator one-screen status + VERDICT line (first dollar / edge verified / stale / dead) |
+| `supervise.sh` | operator one-screen status + VERDICT line (first dollar / edge verified / signed human actuation or sync / stale / dead) |
 | `set_live_keys.sh`, `load_keys.sh` | key plumbing helpers |
 
 ## GATES — run in the agent's environment, adjudicate claims against verifier facts (tripwires by design; the walls are the out-of-band verifier + remote branch protection)
@@ -29,7 +29,7 @@ remote branch protection.
 |---|---|
 | `guard.py` | EVERY iteration start: cap, staleness, SoD authorship, first-dollar stop, edge verdict, constitution, bets agenda |
 | `aiv_gate.sh` | EVERY iteration close: canonical `aiv check`, evidence classes A–F, money/edge claims vs verifier numbers, publish claims re-verified |
-| `conclusion_gate.py` | permission to RECORD an "impossible" conclusion (never a stop): effort floor + packet + fresh-context adversary + no live bets |
+| `conclusion_gate.py` | permission to RECORD an "impossible" conclusion (never a stop): effort floor + packet + fresh-context adversary + no live bets + independently grounded human outcomes |
 | `disclosure_gate.py` | every outbound message: AI-disclosure EV decision recorded, keep-disclosures must lead |
 | `host_check.py` | publish claims: is the page actually served to crawlers (robots/meta/SSRF-guarded fetch) |
 | `sod_hook.sh` | pre-commit: blocks agent writes to `ledger/`, CONSTITUTION, and every script in this table |
@@ -44,6 +44,7 @@ remote branch protection.
 | `bets.py` | day-scale bet registry: `add` / `due` / `checked` / `resolve` — open bets block conclusions |
 | `edge.py` | edge rail claims side: `register` (commit the pre-registered bar), `status` (grounded verdict) |
 | `mail.py` | email under the real name: inbox/read/search/send, disclosure-gated, SENT_LOG fail-closed |
+| `human.py` | request mechanical operator actuation; operator signs/publishes a hash-bound resolution on a distinct facts lane, agent syncs and meters it |
 | `outcome.py` | append structured outcomes to `knowledge/` (strategy-denylisted) |
 | `append_log.py` | durable append: commit-before-action so no reset can eat a log line |
 
