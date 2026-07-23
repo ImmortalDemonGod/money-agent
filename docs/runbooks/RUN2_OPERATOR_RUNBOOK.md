@@ -65,9 +65,11 @@ Legend: [code default] is what happens if you do nothing.
   STATE_DIR -- arms the wash-trade guard; start_verifier refuses to start without it (#37).
   (bin/start_verifier.sh; SETUP.md)
 - [ ] **Fact-lane signing armed (#36)** -- recommended YES: generate the keypair in STATE_DIR,
-  commit harness/verifier_key.pub + allowed_signers on the facts lane (ledger/README.md
-  procedure). With the pubkey committed, a forged ledger can never read as grounded.
-  [no pubkey = legacy unsigned behavior] (bin/pnl.py; bin/truth.py)
+  commit harness/verifier_key.pub + allowed_signers on the harness BEFORE the run (ledger/README.md
+  procedure). Signing is an added integrity check, not a standalone wall: it makes a forged ledger
+  fail to verify, but is a true wall only with the out-of-sandbox provisioning boundary in SETUP.md
+  (canonical origin, verifier-only push, operator-fixed LEDGER_BRANCH); in weak mode a swapped
+  key+sig pair stays a visible tripwire. [no pubkey = legacy unsigned behavior] (bin/pnl.py; bin/truth.py)
 - [ ] **Onchain rail (#30)** -- recommended OFF for run 2 start (see the probe records:
   docs/probes/ -- the Base marketplaces' displayed liquidity does not justify wallet
   provisioning yet; revisit on the runbook's step-4 results). To arm: BASE_RPC_URL +
