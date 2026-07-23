@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `PROMPT.md`
-**Commit:** `32e2318`
-**Previous:** `597449f`
-**Generated:** 2026-07-23T01:48:13Z
+**Commit:** `406a504`
+**Previous:** `406a504`
+**Generated:** 2026-07-23T03:24:33Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -12,20 +12,19 @@
 
 ```yaml
 classification:
-  risk_tier: R3
-  sod_mode: S1
+  risk_tier: R1
+  sod_mode: S0
   critical_surfaces: []
   blast_radius: "PROMPT.md"
-  classification_rationale: "Pairs with the gate message. R3: run-prompt change"
+  classification_rationale: "The authored-input absence is business direction, not the operational wall-map"
   classified_by: "Claude"
-  classified_at: "2026-07-23T01:48:13Z"
+  classified_at: "2026-07-23T03:24:33Z"
 ```
 
 ## Claim(s)
 
-1. The run prompt documents the runnable decision-gate command and that the recorded body must equal the published URL, so the agent can satisfy the gate's publish decision check
-2. No existing tests were modified or deleted
-3. No existing tests were modified or deleted during this change.
+1. PROMPT.md excludes channel STRATEGY from authored inputs while allowing operational channel walls documented in knowledge/, consistent with CLAUDE.md's knowledge/ contract
+2. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -33,14 +32,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/51](https://github.com/ImmortalDemonGod/money-agent/pull/51)
-- **Requirements Verified:** PROMPT.md must document a runnable decision-gate command whose body matches the publish URL the gate checks (CodeRabbit Minor)
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/pull/53](https://github.com/ImmortalDemonGod/money-agent/pull/53)
+- **Requirements Verified:** CodeRabbit #53: saying no 'channel' is present contradicts knowledge/ retaining tested channel walls
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`32e2318`](https://github.com/ImmortalDemonGod/money-agent/tree/32e231800b7222703386ab980a46b7f916a22f3f))
+**Scope Inventory** (SHA: [`406a504`](https://github.com/ImmortalDemonGod/money-agent/tree/406a504e93845ced4b9ca4fa4b8995ff8018dc6b))
 
-- [`PROMPT.md#L134-L140`](https://github.com/ImmortalDemonGod/money-agent/blob/32e231800b7222703386ab980a46b7f916a22f3f/PROMPT.md#L134-L140)
+- [`PROMPT.md#L205-L208`](https://github.com/ImmortalDemonGod/money-agent/blob/406a504e93845ced4b9ca4fa4b8995ff8018dc6b/PROMPT.md#L205-L208)
 
 ### Class A (Execution Evidence)
 
@@ -52,50 +51,24 @@ This file has no claim-specific execution evidence.
 - **ruff:** 0 error(s)
 - **mypy:** 
 
-### Class C (Negative Evidence)
-
-**Search methodology:** Ran `git diff --cached` and scanned for regression indicators.
-
-- Test file deletions: **none**
-- Test file modifications: **none**
-- Deleted assertions (`assert` removals in diff): **none found**
-- Added skip markers (`@pytest.mark.skip`, `@unittest.skip`): **none found**
-
-### Class F (Provenance Evidence)
-
-**Test file chain-of-custody:**
-
-No covering test files found.
-
-**Recent test directory history** (`git log --oneline -5 -- tests/`):
-
-```
-6da1998 test(watchdog): assert breached records are not counted as open
-dfde8e4 test(watchdog): late-reachable delivery and unknown status breach and refund
-b28993c test(gate): note the P3 publish-decision requirement (e2e fixture deferred)
-9c7574d Merge main into run2-e-v3-gated (rebase after #50 merged)
-5b05cc4 test(human): skip signing tests when ssh-keygen is absent (sim portability)
-```
-
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | The run prompt documents the runnable decision-gate command ... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted | structural | Class C: all structural indicators clean | PASS VERIFIED |
-| 3 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | PROMPT.md excludes channel STRATEGY from authored inputs whi... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
-**Verdict summary:** 2 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 0 verified, 0 unverified, 2 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found).
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Document the runnable publish decision-gate command and body-equals-URL rule
+PROMPT.md retains the no-strategy authored-input rule (issue #9) and retires convergence as evidence (issue #10); channel exclusion scoped to strategy, operational walls permitted

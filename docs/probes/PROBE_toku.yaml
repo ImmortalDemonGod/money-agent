@@ -1,0 +1,118 @@
+schema_version: 1
+platform_id: toku-agency
+captured_at: "2026-07-20T08:44-08:49Z"
+repository_commit: f764094
+prior_label: "poor-fit (Stripe + KYC, 15%)"
+verdict: flipped
+verdict_basis: |-
+  LABEL CHANGE (gate 7), partial. Previous: poor-fit, Stripe + KYC. New: email-soft-gated
+  at docs tier, NO KYC observed anywhere; agent self-registration is explicit and
+  documented ("No human needed -- agents can self-register"); identity enters only via
+  operator-completed Stripe Connect onboarding AT PAYOUT. Named falsifier from #32 ("agent
+  API path that issues an API key without KYC") OBSERVED at docs tier. The 15% fee is
+  confirmed verbatim. Remaining tension (untested): /docs marks ownerEmail "optional --
+  omit for fully autonomous registration" while the FAQ says email verification is required
+  to "activate your agent and start receiving jobs" -- which controls in practice is step 4
+  (runbooked).
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      API: register/me/profile, services CRUD, jobs + bids, wallet, DM, public feed.
+      Registration is idempotent keyed on "same email, session, or IP". Listing services is
+      API-driven with no identity verification documented. Payout: POST /api/agents/connect
+      returns a Stripe Connect onboarding URL a HUMAN opens ("Requires the operator to have
+      completed Stripe Connect onboarding"); status fields
+      connected/onboarded/chargesEnabled/payoutsEnabled; 46+ countries. Jobs page is
+      client-rendered ("Loading..."); public /api/jobs returns 401; homepage displays
+      "View all 120+ open jobs", "1265 agents", "2604 services" (landing, Tier 4). The
+      "80+ active jobs" figure in #32 traces to dealwork's competitor blog (vendor source).
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://toku.agency/docs (two independent reads, identical strings) ; /faq ; /jobs (shell) ; /api/jobs (401) ; homepage stats (landing)"
+      retrieved_at: "2026-07-20T08:44-08:49Z"
+    quotes:
+      - '"No human needed -- agents can self-register." (/docs)'
+      - '"ownerEmail": "optional@example.com" annotated "optional -- omit for fully autonomous registration" (/docs)'
+      - '"Send a POST request to /api/agents/register with your agent''s name and your email. You''ll get back an API key and a claim URL." (/faq)'
+      - '"Verify your email to activate your agent and start receiving jobs." (/faq)'
+  - step: terms
+    status: observed
+    finding: |-
+      ToS has NO automation/agent-account clauses -- it treats AI agents as services being
+      sold, not as restricted account holders. No fee, no payout mechanics in the ToS. The
+      18+ clause nominally binds the human account holder while the docs advertise
+      self-registering agents -- unreconciled in their own documents (recorded, not judged).
+      No KYC string anywhere.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://toku.agency/terms"
+      retrieved_at: "2026-07-20T08:45Z"
+    quotes:
+      - '"You must provide accurate information when creating an account."'
+      - '"You must be at least 18 years old to use Toku."'
+      - '"All payments are processed securely through Stripe. By making a purchase, you agree to Stripe''s terms of service."'
+  - step: onchain
+    status: not_observed
+    finding: 'No crypto rail: the homepage actively disclaims tokens. Nothing to look up.'
+    evidence:
+      tier: 4
+      source_class: landing
+      locator: "https://toku.agency/"
+      retrieved_at: "2026-07-20T08:49Z"
+    quotes:
+      - '"Real USD. Stripe Connect payouts. Not tokens, not credits. Your agent earns money you can spend."'
+  - step: economics
+    status: observed
+    finding: |-
+      15% platform fee confirmed verbatim (FAQ); docs add the split: worker 85%, platform
+      10-15%, referrer 5% from the platform share. No registration/monthly fee. Payout "No
+      minimums, no waiting periods" + standard Stripe processing fees. Max deposit $10,000.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://toku.agency/faq (two reads) ; /docs"
+      retrieved_at: "2026-07-20T08:45-08:48Z"
+    quotes:
+      - '"15% platform fee on each transaction. Agents keep 85%. No registration fee, no monthly fee." (/faq)'
+      - '"Agents connect a Stripe account and withdraw their wallet balance to a bank account at any time. No minimums, no waiting periods." (/faq)'
+  - step: cold_start
+    status: not_observed
+    finding: |-
+      No ranking/reputation/discovery mechanics documented on any fetched page. Observable
+      competition ratio from their own displayed stats: 1265 agents + 2604 services vs
+      "120+ open jobs". Competitor-source claims (dealwork vendor blog: 10-20 bids/job,
+      "aggressive underbidding") and one third-party account (dev.to Kiro: three services
+      listed, "No sales yet") recorded at their tiers.
+    evidence:
+      tier: 4
+      source_class: landing
+      locator: "https://toku.agency/ (stats) ; vendor + third-party sources as cited"
+      retrieved_at: "2026-07-20T08:49Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "Resolve the docs-vs-FAQ email tension: POST /api/agents/register omitting ownerEmail -- does a usable key return, and can a service be listed without activation? Runbooked."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USD (Stripe in, Stripe Connect out; explicitly no tokens)"
+  task_value: "not documented; competitor blog claims budgets $5-$50 (vendor source)"
+  platform_fee: "15% (worker 85%; referrer 5% comes from the platform's share)"
+  gas_or_rail_cost: "standard Stripe processing fees on payout"
+  net_value: null
+  price_source_and_time: "toku.agency/faq + /docs, 2026-07-20T08:45-08:48Z"
+identities:
+  requester: unknown
+  worker: "unknown"
+limitation: |-
+  Job list unreadable without auth (shell + 401), so "120+ open jobs" is the platform's own
+  homepage number; the registration email question is unresolved read-only; what Stripe
+  Connect demands of the operator is Stripe-side; all quotes are as returned by the fetch
+  tool's extraction (docs quotes reproduced identically on two reads -- higher confidence).
+next_falsifier: |-
+  Step 4 (runbooked): register omitting ownerEmail; if a key returns, list one service and
+  observe whether jobs/bids are reachable without email activation -- that single test
+  resolves the FAQ to a hard yes/no on the participation gate.

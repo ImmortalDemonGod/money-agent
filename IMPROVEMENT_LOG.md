@@ -1570,3 +1570,190 @@ SHADOW unset the truth.json key is absent by construction and the whole pre-exis
 
 **Next:** S13 read-only marketplace probes, then S14 governance docs + memo, S15 runbook,
 S16 adversarial+mutation+stacking.
+
+## Entry 033 — 2026-07-20 — S13 issue #32 read-only marketplace probes (the sandbox-safe slices)
+
+**What (planned; the probe honesty rules enumerated BEFORE any fetch, per protocol):**
+- Scope per the recorded operator decision: execute the READ-ONLY slices of #32's six-step
+  protocol now — step 1 (primary docs, not landing copy), step 2 (ToS/AUP automation clauses
+  VERBATIM), step 3 (onchain explorer reads where reachable), step 5 (unit economics from
+  PUBLISHED numbers vs gas), step 6 (cold-start mechanics as DOCUMENTED). Step 4 (the
+  signup/onboarding probe from the real environment) is NOT executed — it goes to the S15
+  runbook; every record carries it as `not_run`, never silently missing.
+- One ProbeRecord-style artifact per platform under `docs/probes/` (NOT knowledge/ — platform
+  fit is strategy-adjacent and the run agent's context discipline excludes docs/). Schema
+  adapted from the third-party suggestion on #32 (mheilimo comment, provenance noted in the
+  README; the schema idea is taken, the product plug is not).
+- **Honesty rules that bind every field:** (1) `not_observed`/`inaccessible`/`not_run` never
+  render as `absent` and cannot flip a fit label; (2) a provider statement stays a CLAIM at
+  its evidence tier — a docs page is Tier 3/4, an onchain read Tier 1-2, and the tier is
+  recorded per finding; (3) verbatim quotes are copy-paste with URL + retrieval timestamp,
+  never paraphrase-as-quote; (4) unit economics recomputable (task value, fee, rail cost,
+  asset, price source, capture time) — no silent estimates; (5) payer/worker identities stay
+  `unknown` until evidence classifies them — seeded/wash volume is NOT inferred from
+  concentration alone; (6) nothing from model memory: these platforms are mostly post-cutoff,
+  so every claim carries a fetched source or is marked unfetched; (7) proxy-blocked reads are
+  `inaccessible: <error>` — a blocked read is a fact about THIS sandbox, not about the
+  platform; (8) label flips (vs #32's prior labels) require a named falsifier + the artifact
+  that flipped it, recorded in the record itself.
+- Execution: parallel research subagents (fan-out per platform group), each instructed with
+  the same honesty rules; load-bearing quotes spot-checked by a second fetch before the
+  record is written. Fit-table rebuild posts to #30/#32 at PR time (S16), derived from these
+  records.
+
+**Verified by running:** 11 records under docs/probes/ (one per #32 bullet), written from
+four parallel research subagents' fetch logs (2026-07-20T08:43-08:58Z window, ~260 URL
+fetches total) and validated with a schema check: every record parses, carries all six
+protocol steps, and has `onboarding: not_run` (the runbooked step 4) -- `OK` x11, verdicts
+7 flipped / 3 confirmed / 1 undetermined. FIVE independent session-lead spot-checks, all
+exact matches against the subagent evidence: taskmarket.dev landing stats (813.860379 USDC
+/ 192 open -- also identical to the issue's day-earlier read: the dashboard did not move);
+execution.market published-tasks JSON ({"total":0} twice, ~35 min apart); dealwork
+openapi.json onboard schema (required=["agentName"] alone); market.near.ai fee-schedule
+JSON (field-for-field); bountybook oracle/stats (4,668 verifications / 0.69% pass /
+~21.6-day avg / 0 disputes, number-for-number). Headline label flips, each with its named
+falsifier + artifact IN the record: dealwork (agentName-only API key, no KYC anywhere, fee
+10%/3% not 15%); BountyBook ("onchain escrow" is a plain EOA holding 0.965 USDC vs $636
+displayed open bounties; "instant payout" vs 21.6-day displayed average); ClawTasks
+(wind-down mode, dead escrow, hidden Moltbook social-verification gate) vs Claw Earn (a
+SEPARATE operation whose "no allowlist" claim holds at docs tier with verified contracts);
+Near AI (registration is one unauthenticated POST -- less gated than even the issue's
+falsifier hypothesized); Circle (the Google Form gates only the LISTING; the x402 sell
+path needs an EVM address; the form itself 401s without a Google login -- a sharper gate
+found); opentask (rail is crypto non-custodial, not Stripe -- and self-reported DOWN at
+capture with 0 paid contracts ever, 826 offers -> 2 tasks -> 0 contracts in 30 days).
+
+**Critique pass:** all four reports carried real fetch-failure signatures (404s, DNS
+ENOTFOUND, HTTP 401/500s, JS-shell findings, a basescan maintenance banner) and
+distinguished [raw] curl quotes from extraction-mediated ones -- but most quotes ARE
+extraction-mediated (WebFetch's model layer), stated per-record; only curl-marked quotes
+are byte-exact. Five spot-checks cover the five most load-bearing claims, not all claims.
+The records deliberately make NO wash/seeding inferences (gate 5) even where displayed
+ratios invite them (TaskMarket 15.7K agents vs $813 lifetime; BountyBook treasury). Fit
+labels remain docs-tier: gate 6 means NO cold-start conclusion is possible until step 4
+runs -- every record's next_falsifier names its cheapest decisive probe. The fit-table
+rebuild posts to #30/#32 at PR time (S16), derived from these records. One bounds-relevant
+find recorded for the run agent's future: ClawTasks' own bounty-template library solicits
+spam-by-proxy, paywall circumvention, and undisclosed promotion -- REFUSALS.md material if
+ever encountered in-run (noted in the record, deliberately NOT copied into knowledge/,
+which stays operational-only).
+
+**Next:** S14 governance docs + decisions memo, then S15 runbook (which owns every
+next_falsifier above), S16 adversarial+mutation+stacking.
+
+## Entry 034 — 2026-07-20 — S14 governance docs + the run-2 decisions memo (#10 consistency, #11 policy, #43 protocol)
+
+**What (planned; edge cases enumerated before writing):**
+- **#10 consistency edits (CLAUDE.md "Your world" + knowledge/README):** encode the RECORDED
+  operator ruling (issue #10 comment, 2026-07-18): runs are context-AWARE; the read
+  prohibition was unenforceable prose; "independently converged" is RETIRED as evidence.
+  The surgical edits replace the prohibition with the two consequences that still bind:
+  reads never add/change bounds or count as evidence, and the knowledge/-WRITE rule stays
+  OPERATIONAL-only with the honest rationale (knowledge/ is re-injected into future runs'
+  AUTHORED inputs — the #9 enforceable half — so strategy written there compounds and
+  destroys attribution; it is a write-side rule now, not a read-side fiction).
+- **#11 promotion policy (CONTRIBUTING.md):** business tools run-local forever; harness
+  machinery promotable ONLY per-artifact by operator review against four tests (machinery-
+  not-business, M9-clean, fixtures-that-bite + green matrix, trust-class + sod_hook
+  placement). The immediate call resolves by precedent: disclosure_gate.py IS promoted
+  (canonical, genericized, sod_hook-listed). Plus the docs/-row consistency edit.
+- **#43 docs/HUMAN_BASELINE_PROTOCOL.md:** the matched-control experiment doc — who,
+  horizon, identity provisioning, forbidden-rootedness list, drift recording; the verifier
+  is subject-agnostic (R5's design insight) so the machinery needs no changes.
+- **docs/RUN2_DECISIONS.md:** every operator knob in checkbox form with recommended default
+  + rationale + citation, from the REAL knob inventory (grepped, not remembered):
+  EDGE_TERMINAL, MAX_WALL_CLOCK_H, MAX_ITERS, LEDGER_MAX_COMMITS, LEDGER_MAX_AGE_S,
+  INTERVAL, HEARTBEAT_S, MIN_APPROACHES/MIN_DEMAND_PROBES, CARD_CAP_USD/CARD_SOURCE,
+  INFERENCE_CSV, signing provisioning (#36), BASE_RPC_URL + settlement binding (#30),
+  BET_GATE_ENFORCE, SPINE_ENFORCE, DEMAND_REFUTED_K, PACE_ENFORCE, `EXPOSURE_MAX_*` (P7),
+  STRIPE_REFUND_KEY (P5), SHADOW (Tier-1 rehearsal), edge rail iff `ALPACA_*` creds,
+  broker-creds-to-agent: no.
+
+**Edge cases enumerated:** (1) CLAUDE.md: ONLY the "Your world" section may change — every
+bound in "The bounds" and the Summary instructions stay byte-identical (verified by diff
+inspection, recorded below); the edit is one of the named flagged edits from the plan's
+UNTOUCHED list and gets an operator-review flag in the PR body. (2) CONTRIBUTING.md/README
+are CI-linted (no em-dashes, no broken links) — additions use "--" and only existing link
+targets; local readme-check parity run before push. (3) The decisions memo must not seed
+strategy into agent-facing files — it lives in docs/ (operator surface) and contains knob
+values, not business direction. (4) The #43 protocol forbids personal-reputation rootedness
+explicitly (the control's aged-account analogue), else the match is void. (5) No knob
+invented: every name in the memo comes from the grep inventory; every default cited to the
+file that reads it.
+
+**Verified by running:** CLAUDE.md diff inspected line-by-line: ONLY the "Your world"
+section changed; a targeted grep across the diff for every bound's anchor phrase (finite /
+real man / deliver in full / first received dollar / ledger outranks / env files) returned
+ZERO touched lines -- the bounds and the compactor instructions are byte-identical. CI
+readme-check run locally: "README check passed: README.md, CONTRIBUTING.md,
+.github/assets/invariant.mmd" (the script covers CONTRIBUTING.md itself -- no em-dash /
+curly-quote / broken-link findings on the new promotion-policy section). Full matrix at the
+boundary: sim PASS=118 FAIL=0 SKIP=0, corpus 11/0, shellcheck + compileall clean. Knob
+inventory for the memo grepped from bin/ (not remembered); spot-verified defaults against
+their readers: INTERVAL 120, HEARTBEAT_S 300, LEDGER_MAX_COMMITS 0-off (STANDING_RUN
+recommends 3000), LEDGER_MAX_AGE_S 1800, MIN_APPROACHES 8 / MIN_DEMAND_PROBES 3, every V3
+flag and every exposure cap coded 0/off.
+
+**Critique pass:** the CLAUDE.md/knowledge edits are PROSE about prose -- they encode the
+ruling accurately but enforce nothing; the enforceable piece remains the M9 grep + the
+operational-only review of knowledge/ diffs (stated in both files, not hidden). The
+decisions memo makes RECOMMENDATIONS (advisory-first for BET_GATE, keep DEMAND_REFUTED_K
+off, onchain rail off citing the probe records) -- these are operator-decision inputs, and
+the memo's own header says an unchecked box = coded default, so the memo cannot silently
+change a run. The #43 protocol is an experiment design: its weakest point is
+subject-compliance, which is why DRIFT entries are the load-bearing mechanism (unrecorded
+drift voids the run -- same rule as the agent's claims lane). #11's four-question review is
+policy, not mechanism: nothing blocks an operator from bulk-promoting; the policy's value is
+that CONTRIBUTING is the document reviewers hold PRs against. PROMPT.md was NOT touched this
+stack (both its flagged edits landed in S5/S8); the CLAUDE.md + CONTRIBUTING flags ride in
+the PR body at split time.
+
+**Next:** S15 operator runbook (owns every probe next_falsifier + #20/#26/#30/P5 steps),
+then S16 adversarial+mutation+stacking.
+
+## Entry 035 — 2026-07-20 — S15 the run-2 operator runbook (#20 gates 1-6, #26 beacon, #30 wallet, P5 key scope, #32 signup slice)
+
+**What (planned; accuracy rules enumerated before writing):**
+- One document, docs/runbooks/RUN2_OPERATOR_RUNBOOK.md, command-by-command with EXPECTED
+  OUTPUT and FAILURE MODES per step, covering exactly the operator-side surface: #20's six
+  acceptance gates, #26's beacon deploy checklist, #30's wallet provisioning (recommended
+  OFF, citing the probe records), P5's STRIPE_REFUND_KEY scope widening, the S12 shadow
+  rehearsal, and the #32 step-4 signup slice (the runbooked half of S13, priority-ordered,
+  each probe carrying its bounds notes).
+- **Accuracy rules that bind every line:** (1) every command cross-checked against the
+  script/doc that implements it (start_verifier.sh's actual echo lines; SETUP.md §4b's
+  five steps verbatim-consistent; harness/beacon/README.md's wrangler sequence incl. BOTH
+  secrets; setup_sandbox.sh:54-58 sed-repair + TEMPLATE.md E010 note as the two #20-3
+  deletion targets); (2) automate-over-operator: each step NAMES its mechanical preflight
+  where one exists (opid preflight #37, ssh-keygen preflight, shadow walls, host_check,
+  delivery_check) and says "no automated check -- this line is the control" where none
+  does; (3) no invented expected outputs -- quoted strings come from the scripts;
+  (4) the #32 slice repeats the probe guardrails (no captcha defeat, no fabricated
+  identities, ToS-ban = stop; ClawTasks' Moltbook PUBLIC post routes through
+  disclosure_gate + bin/human.py); (5) the runbook decides nothing -- decisions live in
+  RUN2_DECISIONS.md and are referenced, not duplicated.
+
+**Verified by running:** every quoted expected-output string was grepped against its source
+before landing: `✓ verifier up (pid ...)` (start_verifier.sh:100), `registration FROZEN`
+(edge_pnl.py:216), the rotation-refused line corrected mid-write to the ACTUAL log text
+`rotation push REFUSED (branch protection?) -- rotation skipped, history keeps growing`
+(verifier_loop.sh:233 -- the first draft said "rotation push failed", which exists nowhere;
+the cross-check rule caught it), the #20-3 deletion targets located at setup_sandbox.sh:54-58
+(sed-repair) and TEMPLATE.md's E010 line, SETUP.md §4b's five steps mirrored
+verbatim-consistent, beacon commands matched to harness/beacon/README.md including BOTH
+secrets (STATS_SECRET + HASH_SALT). Matrix at the boundary: sim PASS=118/0/0, corpus 11/0,
+shellcheck + compileall + readme-check clean.
+
+**Critique pass:** a runbook is prose about other people's keystrokes -- the steps with
+mechanical preflights are labeled, and the five steps that have NONE ([no automated check])
+are labeled as being their own control; that honesty is the best available substitute for
+enforcement at seams the repo cannot reach (remote branch settings, wrangler, upstream
+merges, wallet funding). The #32 slice's probe list restates the issue's guardrails and
+routes the two identity-touching actions (Superteam claim, ClawTasks Moltbook post) through
+bin/human.py + disclosure_gate rather than leaving them to improvisation. The expected sim
+counts quoted in step 0 will drift as the matrix grows -- the line says counts grow and
+pins only FAIL=0, so the runbook does not rot with the next fixture added.
+
+**Next:** S16 -- whole-diff adversarial phase (fresh-context correctness / SoD-bypass /
+test-vacuity / doc-truthfulness lenses), mutation pass in clones, closing review entry,
+then split into stacked PRs.

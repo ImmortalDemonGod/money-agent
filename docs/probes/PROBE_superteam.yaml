@@ -1,0 +1,126 @@
+schema_version: 1
+platform_id: superteam-earn
+captured_at: "2026-07-20T08:47-08:53Z"
+repository_commit: f764094
+prior_label: "poor-fit (USDC/Solana, human review)"
+verdict: confirmed
+verdict_basis: |-
+  The human-review label HOLDS: sponsors select winners (FAQ), funds release "upon the
+  concerned Partner's authorization" (ToS 6.4), and no auto-approved task class was
+  observed anywhere (recorded as not_observed, per gate 1 -- it cannot be called
+  nonexistent). MATERIAL NEW FACT the prior label missed: Superteam now ships a
+  first-class AGENT API -- registration via POST /api/agents with just a name (repo
+  skill.md: "Agents do not complete OAuth, wallet signing, or KYC. A human must claim the
+  agent for payouts."), listings carry agentAccess HUMAN_ONLY|AGENT_ALLOWED|AGENT_ONLY,
+  and a live /earn/agents page corroborates deployment. BUT the live check found 31/31
+  currently-open PUBLIC listings are HUMAN_ONLY, and the agent-only feed is auth-gated
+  (401 without registering, which was out of scope) -- so the actual agent-eligible
+  inventory is unverifiable read-only. The fit question is now empirical, not structural:
+  register an agent and count the AGENT_ONLY feed.
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      Participation: "Sign up on earn.superteam.fun (verify email + make a talent profile)
+      -> pick a listing -> apply / submit" (FAQ); Google or Email signup. Review: sponsors
+      pick winners, brain-trust members may help. Payouts: Superteam-sponsored listings
+      REQUIRE KYC ("the winner needs to complete KYC to receive money", within-7-days
+      payment-form flow); external-sponsor listings pay "to the wallet associated with the
+      winner's Superteam Earn account" -- the KYC split is by SPONSOR TYPE, not amount (no
+      numeric threshold observed). Agent flow (repo skill.md, corroborated by live
+      /earn/agents page + live 401 on the agent endpoint): register -> apiKey + claimCode;
+      human operator claims via BASE_URL/earn/claim/<claimCode> after completing a talent
+      profile; rate limits 60 registrations/IP/hour, 60 submissions/agent/hour.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "docs.superteam.fun FAQ ; superteam.fun/earn/agents (live) ; raw.githubusercontent.com/SuperteamDAO/earn/main/public/skill.md (repo source -- live-site skill.md 404s, caveat recorded)"
+      retrieved_at: "2026-07-20T08:48-08:52Z"
+    quotes:
+      - '"Agents do not complete OAuth, wallet signing, or KYC. A human must claim the agent for payouts." (repo skill.md)'
+      - '"Listings marked `AGENT_ONLY` are hidden from normal listing feeds; use the agent endpoints above." (repo skill.md)'
+      - '"A human operator verifies output and claims the reward with the claim code." (live /earn/agents)'
+  - step: terms
+    status: observed
+    finding: |-
+      ToS (PDF, effective June 24 2026, The Invisible Fork Pte. Ltd., Singapore; exact
+      copy-paste from local text extraction): agent-operated accounts are NOT addressed as
+      such -- the only bot clause targets harvesting usernames/emails. 18+, sanctions
+      lists, per-jurisdiction legality. Fees discretionary (5.1). Escrow smart-contract
+      tool for proof-of-funds (5.2); release on Partner authorization (6.4).
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://superteam.fun/earn/terms-of-use.pdf (201,397 bytes, text-extracted locally)"
+      retrieved_at: "2026-07-20T08:48:52Z"
+    quotes:
+      - '"8.1.7. The User shall not collect, generate, or affect in any way usernames or email addresses using bots or any other methods or sell or transfer the User profile to any person or entity."'
+      - '"6.4. The funds shall be released from the smart contract for a particular project upon the concerned Partner''s authorization in accordance with this Agreement and the applicable instructions or as required by law."'
+  - step: onchain
+    status: not_observed
+    finding: |-
+      Solana-ecosystem settlement per live data (USDC + USDG listings) and FAQ (payout to
+      the account's wallet), but NO contract addresses displayed anywhere fetched --
+      nothing to look up on an explorer.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "earn.superteam.fun/api/listings (live JSON) ; ToS 5.2"
+      retrieved_at: "2026-07-20T08:48-08:51Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      LIVE inventory (keyless GET /api/listings, 08:50:49Z): 31 OPEN listings -- 28
+      bounties + 3 projects; 19 USDC + 12 USDG; total rewardAmount 63,150 (mixed units);
+      range 300 (Twitter thread bounty) to 24,000 (full-stack project). No platform fee to
+      talent stated anywhere (ToS 5.1 reserves a discretionary fee). Agent rail cost:
+      registration/submission free per repo spec; rate limits are the only cost. Homepage
+      claims 199,410+ users, 2,580+ sponsors (landing, Tier 4). NOTE: the API may
+      paginate; 31 is one unparameterized GET.
+    evidence:
+      tier: 2
+      source_class: request_response
+      locator: "https://earn.superteam.fun/api/listings"
+      retrieved_at: "2026-07-20T08:50:49Z"
+    quotes: []
+  - step: cold_start
+    status: observed
+    finding: |-
+      Every payout path passes a human: sponsor selection, Partner-authorized release, and
+      (for agents) operator claim with a completed talent profile. Live agent-eligible
+      inventory: 0 of 31 open public listings (all HUMAN_ONLY as returned); hidden
+      AGENT_ONLY inventory unverifiable without registering. No reputation gate on
+      submission observed; sponsors see submission counts + profiles. Competition on the
+      31 open listings not measurable read-only.
+    evidence:
+      tier: 2
+      source_class: request_response
+      locator: "earn.superteam.fun/api/listings (agentAccess field per listing) ; /api/agents/listings/live (401)"
+      retrieved_at: "2026-07-20T08:50-08:52Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "Registering an agent (one POST) + enumerating the AGENT_ONLY feed is the single highest-information next probe; the claim step needs a human talent profile by design (bin/human.py territory). Runbooked."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USDC + USDG (Solana ecosystem)"
+  task_value: "live range 300-24,000; 31 open listings totaling 63,150 (mixed USDC/USDG)"
+  platform_fee: "none stated to talent; ToS reserves a discretionary fee"
+  gas_or_rail_cost: "not documented; payout via sponsor/platform to account wallet"
+  net_value: null
+  price_source_and_time: "live /api/listings JSON, 2026-07-20T08:50:49Z"
+identities:
+  requester: unknown
+  worker: "unknown"
+limitation: |-
+  AGENT_ONLY inventory not enumerable without registering (deliberately not done);
+  skill.md is repo-main not live-served (live 401 + live /earn/agents page corroborate the
+  system but details may drift); listings API pagination unknown; KYC thresholds and
+  GeoLock configs undocumented in fetched sources.
+next_falsifier: |-
+  Step 4 (runbooked): POST /api/agents {"name": ...}, then GET /api/agents/listings/live
+  and COUNT the AGENT_ALLOWED/AGENT_ONLY inventory -- the one number that decides whether
+  the agent rail has any paid work behind it. Note the payout claim requires a human
+  talent profile: budget that through bin/human.py.

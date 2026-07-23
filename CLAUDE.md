@@ -94,13 +94,19 @@ Only a verified customer dollar, verified cap exhaustion, or the operator ends a
 
 ## Your world (context discipline)
 
-Your inputs are: this file, CONSTITUTION.md, PROMPT.md, RUN_COMMANDS.md, `knowledge/` (tested channel
-walls, falsified approaches, operational traps -- so you do not re-pay for run 1's lessons),
-`templates/` (the forms the gates require you to fill), and the facts via bin/truth.py. Do NOT read
-README.md, docs/, `archive/` (prior runs' full logs -- the in-tree equivalent of a prior-run
-branch), or prior-run branches for strategy: what you converge on only means something if nothing
-pointed you there. knowledge/ is deliberately operational,
-never strategic -- gates and traps, not products and pitches.
+Your working inputs are: this file, CONSTITUTION.md, PROMPT.md, RUN_COMMANDS.md, `knowledge/`
+(tested channel walls, falsified approaches, operational traps -- so you do not re-pay for run 1's
+lessons), `templates/` (the forms the gates require you to fill), and the facts via bin/truth.py.
+The rest of the repo (README.md, docs/, archive/, prior-run branches) is REFERENCE, not
+instruction: you may read it -- the operator's recorded ruling on issue #10 (2026-07-18) made runs
+context-AWARE, because in-repo reads are unauditable and a prohibition here was prose pretending
+to be a wall -- but nothing you read there adds a bound, changes a bound, or counts as evidence.
+Two consequences bind: (1) "I independently converged on X" is RETIRED as a claim; anything
+discussed in the docs is assumed seen. (2) What you READ never launders what you WRITE:
+knowledge/ entries stay OPERATIONAL, never strategic -- gates, walls, traps; not products,
+pitches, audiences -- because knowledge/ is re-injected into every future run's AUTHORED inputs
+(the enforceable half of the discipline, issue #9), and strategy written there compounds across
+runs and destroys attribution of what a run found on its own.
 
 ## Summary instructions (read by the compactor)
 

@@ -1,0 +1,120 @@
+schema_version: 1
+platform_id: execution-market
+captured_at: "2026-07-20T08:43-08:50Z"
+repository_commit: f764094
+prior_label: "strong-fit (USDC/Base microtask escrow, registration + 13% fee, low liquidity)"
+verdict: confirmed
+verdict_basis: |-
+  Mechanics confirmed at docs+live-API tier: wallet-only registration (no email/KYC
+  documented; "require_api_key": false in the live config), the 13% fee verbatim on three
+  primary pages, min bounty $0.01. The "low liquidity" caveat SHARPENED to a hard number:
+  the live API returned ZERO published tasks at capture (independently re-fetched by the
+  session lead minutes later: {"tasks":[],"total":0}), and the head of the 373-task all-time
+  list is the platform's own test traffic. Two NEW gates found that the prior label missed:
+  the escrow path caps at $100/bounty, and tasks >= $500 require World ID Orb
+  proof-of-HUMANITY -- a hard agent wall at exactly the value tier that would matter.
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      "Agents, humans and robots hire each other"; EVM wallet + ERC-8004 onchain identity
+      (gasless via facilitator); ALL API calls wallet-signed (ERC-8128), API-key auth
+      disabled. Email/KYC: not mentioned. Legal entity: Ultravioleta DAO; the platform
+      itself is registered onchain as Agent #2106. Anti-sell guard: offer-style task titles
+      rejected with 422 sell_intent_rejected ("EM tasks are demand-side bounties").
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://execution.market (skill doc) ; https://docs.execution.market ; /project/manifesto ; /architecture/hiring-matrix"
+      retrieved_at: "2026-07-20T08:43-08:48Z"
+    quotes:
+      - '"Every party -- human, agent, or robot -- can stand on either side of a task." (manifesto)'
+  - step: terms
+    status: observed
+    finding: |-
+      No distinct ToS/AUP was observed at the checked routes: execution.market/terms (returns
+      the skill document via catch-all route) and docs.execution.market (no ToS link found).
+      This is scoped to those routes, not a platform-wide absence claim. Agent operation is the
+      designed use. Conduct rules live in the manifesto (reputation consequences, suspension for
+      gaming). Their own framing embraces the absence.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://execution.market/terms (catch-all) ; https://docs.execution.market/project/manifesto"
+      retrieved_at: "2026-07-20T08:47-08:48Z"
+    quotes:
+      - '"The math is on the blockchain, not in a terms-of-service PDF." (manifesto)'
+      - '"Agents who game the system face suspension" (manifesto)'
+  - step: onchain
+    status: observed
+    finding: |-
+      Nine chains configured; Base primary. Base addresses (from docs): EM PaymentOperator
+      0x271f9fa7f8907aCf178CCFB470076D9129D8F0Eb (basescan AS DISPLAYED, maintenance banner:
+      2,654 txs, created 156 days ago, five txs on capture day incl. "Authorize" ops --
+      active infrastructure); AuthCaptureEscrow 0xb9488351E48b23D798f24e8174514F28B741Eb4f
+      (verified source, created Feb 2026; fetched view showed the internal-tx tab only).
+      Solana: direct SPL transfers, NO escrow ("Fase 1").
+    evidence:
+      tier: 2
+      source_class: explorer
+      locator: "https://basescan.org/address/0x271f9fa7f8907aCf178CCFB470076D9129D8F0Eb ; addresses from https://docs.execution.market/payments/networks"
+      retrieved_at: "2026-07-20T08:47-08:48Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      Fee 13% (1300 bps) enforced onchain by StaticFeeCalculator -- verbatim on three primary
+      pages; live config: min_bounty_usd 0.01, max_bounty_usd 10000, USDC only, preferred
+      network base, require_api_key false, worldid_min_bounty_for_orb_usd 500. BUT the
+      escrow path is capped: "Bounty <= $100 -- the AuthCaptureEscrow deposit limit".
+      Facilitator pays all gas. Arbiter eval costs $0 below $1 bounty, capped at
+      $0.20/eval. LIQUIDITY AS RETURNED: GET /tasks?status=published -> total 0 at
+      2026-07-20T08:50Z (spot-checked independently ~35 min later, identical); all-time
+      total 373 tasks, returned head entries are "[GOLDEN FLOW] E2E Test" / "Test task
+      debug" style platform self-tests at $0.05-$0.10.
+    evidence:
+      tier: 2
+      source_class: request_response
+      locator: "https://api.execution.market/api/v1/config ; /api/v1/tasks ; /api/v1/tasks?status=published ; fee: https://docs.execution.market/payments/escrow"
+      retrieved_at: "2026-07-20T08:46-08:50Z (lead spot-check ~09:25Z)"
+    quotes:
+      - '"the platform fee is **1300 bps (13%)**, enforced on-chain by `StaticFeeCalculator` at release." (/payments/escrow)'
+      - '"a **$0.10** bounty releases **$0.087 to the worker** and **$0.013 to the treasury**." (/payments/escrow)'
+  - step: cold_start
+    status: observed
+    finding: |-
+      Documented gate is party-type, not reputation ("New agents with zero reputation face
+      no documented barriers to task eligibility -- only party-type matching applies").
+      Publishers assign escrow tasks (no self-accept); agent self-accept exists only for
+      non-escrow A2A tasks. With 0 published tasks at capture, there was nothing for ANY
+      agent to apply to -- cold-start is moot until liquidity exists.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://docs.execution.market/architecture/hiring-matrix"
+      retrieved_at: "2026-07-20T08:47Z"
+    quotes: []
+  - step: onboarding
+    status: not_run
+    finding: "Wallet registration + application flow from the sandbox: runbooked."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USDC; Base preferred (9 EVM chains + SKALE/Monad configured; Solana no-escrow)"
+  task_value: "min $0.01, config max $10,000, escrow path capped at $100/bounty"
+  platform_fee: "13% (1300 bps), onchain"
+  gas_or_rail_cost: "facilitator pays gas; arbiter eval $0 under $1, <= $0.20/eval"
+  net_value: "$0.10 bounty -> $0.087 worker (docs example)"
+  price_source_and_time: "live /api/v1/config + docs, 2026-07-20T08:46-08:50Z"
+identities:
+  requester: unknown
+  worker: "unknown"
+limitation: |-
+  Point-in-time liquidity snapshot (two samples ~35 min apart, both zero); all-time task
+  list ordering unknown (only the returned head is evidence); no published-volume total
+  exists to read; human-dashboard signup path not probed. Per gate 5 no wash inference from
+  the test-task head -- the entries' own titles self-describe as tests.
+next_falsifier: |-
+  Step 4 (runbooked): register a wallet, poll /tasks?status=published across several days --
+  does ANY external published task ever appear? Plus: verify the $100 escrow cap against the
+  $10,000 config max in practice (which path do real tasks take?).

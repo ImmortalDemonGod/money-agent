@@ -1,0 +1,127 @@
+schema_version: 1
+platform_id: opentask-ai
+captured_at: "2026-07-20T08:44-08:51Z"
+repository_commit: f764094
+prior_label: "poor-fit (signup + API)"
+verdict: flipped
+verdict_basis: |-
+  LABEL CHANGE (gate 7) -- on the RAIL, with a demand-zero finding attached. Previous
+  label's implicit rail (Stripe/fiat) is wrong: opentask is crypto, NON-CUSTODIAL (owner
+  pays agent directly; platform verifies), Base-mainnet-primary router + x402-v2 + MPP;
+  Stripe appears nowhere. Signup IS email/password (confirmed by reading /login: email +
+  password form, no wallet-connect) with no KYC documented -- only conditional "additional
+  verification" reserved in ToS. Named falsifiers from #32: "signup is wallet-based" --
+  REFUTED (email/password); "the API is the agent-native path" -- OBSERVED (tokens, hosted
+  MCP with OAuth 2.1 + PKCE, signed A2A agent card). Two material facts AS
+  DISPLAYED/RETURNED at capture: the ENTIRE crypto payment rail self-reported unavailable
+  (all three payment methods "status":"unavailable",
+  "reasonCode":"crypto_payment_service_unavailable"), and the marketplace shows 0 completed
+  paid contracts EVER, with a 30-day funnel of 826 offers -> 2 tasks posted -> 0 contracts.
+probes:
+  - step: docs
+    status: observed
+    finding: |-
+      Three agent surfaces: REST API (tokens via dashboard at /settings/developer/tokens,
+      scoped; spec also lists POST /api/agent/register as UNAUTHENTICATED agent account
+      creation -- required fields unretrievable, spec truncated for the fetch tool; GET
+      probe returned 405, endpoint exists POST-only), hosted MCP (OAuth 2.1 + PKCE), A2A
+      broker with EdDSA-signed platform agent card (11 skills). Read/write split: "Anyone
+      can browse public tasks" but account actions need scoped OAuth or an API token.
+      Payments: owner pays agent directly from own wallet; platform never holds funds;
+      platform confirms a payment only when it matches "the agreed amount, recipient, and
+      task".
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://opentask.ai/docs/api-token-onboarding ; /docs/oauth-install ; /.well-known/agent-card.json ; /api/openapi (truncated) ; /protocol ; /install ; /login (live form)"
+      retrieved_at: "2026-07-20T08:46-08:51Z"
+    quotes:
+      - '"OpenTask does not custody funds, hold escrow, control private keys, or sign wallet transactions" (/terms)'
+  - step: terms
+    status: observed
+    finding: |-
+      The most agent-explicit ToS in this probe set: agent actions bind the owner's account;
+      agents may not bypass gates; owners must implement spend limits and approval gates.
+      Verification is conditional, not a fixed KYC step. 18+ eligibility. Fees "if any" are
+      disclosed in the payment flow -- no number anywhere.
+    evidence:
+      tier: 3
+      source_class: terms
+      locator: "https://opentask.ai/terms"
+      retrieved_at: "2026-07-20T08:46Z"
+    quotes:
+      - '"Actions taken by your authorized agents, plugins, scripts, wallets, or automations may bind your account"'
+      - '"You may not use an agent to bypass rate limits, policy gates, payment checks, access controls"'
+      - '"OpenTask may require email verification, additional verification, risk review, payment-readiness checks"'
+      - '"Platform fees, if any, may be split through the router or otherwise disclosed in the payment flow"'
+  - step: onchain
+    status: not_observed
+    finding: |-
+      No contract addresses observed anywhere ("no production deployment details" on
+      /protocol) -- nothing to look up. Chain identity rests on docs env-var language
+      ("Non-Base-mainnet router chains also need OPENTASK_PAYMENT_TOKEN_ADDRESS" -- Base
+      mainnet is the default) and the live payment-methods API, whose networks arrays were
+      EMPTY because the rail was down at capture: all three methods
+      (opentask-router-native, mpp-httpauth, x402-v2) returned "status":"unavailable",
+      "currencies":[], "networks":[], "reason":"Crypto payment service is temporarily
+      unavailable".
+    evidence:
+      tier: 2
+      source_class: request_response
+      locator: "https://opentask.ai/api/payment-methods (live JSON) ; /docs/a2a-discovery"
+      retrieved_at: "2026-07-20T08:49:58Z"
+    quotes: []
+  - step: economics
+    status: observed
+    finding: |-
+      No fee percentage published anywhere. Displayed task budgets: 0 USDC community task,
+      5 USD/USDC, up to "$500-2000 USDT", one "0.05 ETH". Third-party claim of "~5-10%
+      escrow fee" (dev.to Kiro) CONFLICTS with the non-custodial docs in framing --
+      recorded at third-party tier, not adopted. Gas/irreversibility risk assigned to users
+      by ToS.
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://opentask.ai/tasks (live) ; /terms ; conflict: dev.to/kirothebot (third_party)"
+      retrieved_at: "2026-07-20T08:49-08:50Z"
+    quotes: []
+  - step: cold_start
+    status: observed
+    finding: |-
+      THE number, from their own /market page AS DISPLAYED: "Open tasks: 60; Published
+      agents: 39; Active contracts: 7; Completed and paid: 0; 'No verified volume yet'";
+      past 30 days: "Tasks posted: 2; Offers received: 826; Contracts: 0; Completions: 0;
+      Confirmed payments: 0". 826 offers chasing 2 tasks with zero conversions. Trust is
+      back-loaded onto router-verified paid history -- of which the platform displays zero.
+      Zero-history agents can browse everything; selection uses "listed services, payout
+      setup, and work history".
+    evidence:
+      tier: 3
+      source_class: primary_docs
+      locator: "https://opentask.ai/market (displayed stats) ; /for-agents ; /docs/a2a-discovery ; /protocol"
+      retrieved_at: "2026-07-20T08:46-08:50Z"
+    quotes:
+      - '"Approved work, confirmed payment, and reviews build a track record over time" (/protocol)'
+  - step: onboarding
+    status: not_run
+    finding: "POST /api/agent/register's real required fields + whether email verification is enforced: runbooked (spec truncated; GET 405 proves existence only)."
+    evidence: {tier: 5, source_class: primary_docs, locator: "n/a", retrieved_at: "n/a"}
+    quotes: []
+economics:
+  asset: "USD/USDC/USDT/ETH denominations displayed; non-custodial direct transfer; Base mainnet primary per docs"
+  task_value: "displayed 0-2000 (mixed denominations)"
+  platform_fee: "unpublished ('if any', disclosed in payment flow per ToS)"
+  gas_or_rail_cost: "user-borne; rail DOWN at capture (crypto_payment_service_unavailable)"
+  net_value: null
+  price_source_and_time: "opentask.ai live pages + /api/payment-methods, 2026-07-20T08:46-08:50Z"
+identities:
+  requester: unknown
+  worker: "unknown"
+limitation: |-
+  Register-endpoint schema unretrievable (spec truncation); no fee number exists to verify;
+  chain identity not confirmed by any contract address (env-var naming + an outage-emptied
+  API are the evidence); email-verification enforcement untested.
+next_falsifier: |-
+  Step 4 (runbooked): create an account, mint a token, and re-poll /api/payment-methods --
+  is the rail outage transient or chronic? A marketplace whose payment rail is down and
+  whose lifetime paid-contract count is zero cannot pay anyone regardless of gating.
