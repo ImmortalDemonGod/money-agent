@@ -166,20 +166,56 @@ if python3 bin/bets.py resolve bet-001 expired "sim evidence" >/dev/null 2>&1; t
 if grep -q "sim evidence" knowledge/outcomes.jsonl 2>/dev/null; then
   ok "bets: resolution fed knowledge/outcomes.jsonl"; else bad "bets: resolution fed outcomes"; fi
 
+echo "=== oracle-classed resolutions (#40) ==="
+python3 bin/bets.py add --what "det-unrunnable" --clock other --check "no_such_cmd_zz9" \
+  --oracle deterministic --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+assert_exit_grep 1 "oracle: deterministic" "conclusion: open-bet refusal names its oracle class" \
+  python3 bin/conclusion_gate.py
+assert_exit_grep 1 "could not EXECUTE" "bets: unrunnable deterministic oracle refuses a prose resolve" \
+  python3 bin/bets.py resolve bet-002 lost "prose only"
+if python3 bin/bets.py resolve bet-002 lost "prose only" --downgrade-judgment >/dev/null 2>&1 \
+   && grep -q "downgraded-to-judgment" run/bets.json; then
+  ok "bets: --downgrade-judgment resolves and relabels visibly"
+else bad "bets: downgrade path"; fi
+python3 bin/bets.py add --what "det-runnable" --clock other --check "exit 3" \
+  --oracle deterministic --poll-after-h 24 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+if python3 bin/bets.py resolve bet-003 lost "the check exited 3 = condition absent" >/dev/null 2>&1 \
+   && grep -q '"rc": 3' run/bets.json; then
+  ok "bets: executed check output stored with the resolution (rc is evidence, not a refusal)"
+else bad "bets: executed-check resolution"; fi
+
+echo "=== iteration pacing: PACE_ENFORCE (#45) ==="
+python3 bin/bets.py add --what "quiet clock" --clock indexation --check "true" \
+  --poll-after-h 999 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+python3 bin/bets.py checked bet-004 "sim tick" >/dev/null 2>&1
+assert_exit_grep 1 "declared lever" "pace: quiet open bets block a lever-less new iteration" \
+  env PACE_ENFORCE=1 python3 bin/iter.py new
+if env PACE_ENFORCE=1 python3 bin/iter.py new --lever "sim: a genuinely new probe" >/dev/null 2>&1 \
+   && grep -q "Lever:.*genuinely new probe" MONEY_LOG.md; then
+  ok "pace: a declared lever opens the iteration and lands in MONEY_LOG"
+else bad "pace: lever path"; fi
+python3 bin/bets.py add --what "due clock" --clock reply --check "true" \
+  --poll-after-h 1 --resolve-by 2099-01-01T00:00:00Z >/dev/null 2>&1
+assert_exit 0 "pace: a due bet unblocks lever-less iterations" \
+  env PACE_ENFORCE=1 python3 bin/iter.py new
+assert_exit 0 "pace: default-off leaves iteration-opening untouched" python3 bin/iter.py new
+
 echo "=== edge_pnl verdict machine (stubbed broker) ==="
 cdx "$W/verifier"
 EDGE_RESULT=$(python3 - <<'PYEOF'
-import sys, json, os
+import sys, json, os, shutil
 sys.path.insert(0, "bin")
 os.environ.update({"MONEY_AGENT_STATE": "state", "AGENT_BRANCH": "sim-agent",
                    "ALPACA_PAPER_KEY_ID": "k", "ALPACA_PAPER_SECRET_KEY": "s"})
+shutil.rmtree("state", ignore_errors=True)
 import importlib, edge_pnl
 importlib.reload(edge_pnl)
-reg = ("EDGE_ID: sim\nMETRIC: paper_pnl_usd\nBAR: 50.0\nMIN_FILLED_ORDERS: 10\n"
+reg = ("EDGE_ID: sim\nMETRIC: excess_return_pct\nBAR: 0.05\nMIN_FILLED_ORDERS: 10\n"
+       "MAX_DRAWDOWN_USD: 25.0\nBENCHMARK: SPY\n"
        "RESOLVE_BY: 2099-01-01T00:00:00Z\nHYPOTHESIS: h\nFALSIFIED_IF: f\n")
 edge_pnl.committed_registration = lambda: (reg, None)
 state = {"equity": "100000", "orders": []}
-edge_pnl._get = lambda url, h: ({"equity": state["equity"]} if "/account" in url
+edge_pnl._get = lambda url, h: ({"bars": [{"c": 100}]} if "/stocks/" in url else {"equity": state["equity"]} if "/account" in url
                                 else state["orders"] if "/orders" in url else [])
 def verdict():
     edge_pnl.main(); return json.load(open("ledger/edge.json"))["verdict"]
@@ -189,11 +225,31 @@ state.update(equity="100062.5", orders=[{"status": "filled"}]*4)
 if verdict() != "PENDING": fails.append("bar-cleared-small-sample stays PENDING")
 state["orders"] = [{"status": "filled"}]*12
 if verdict() != "VERIFIED_POSITIVE_EV": fails.append("bar+sample -> VERIFIED")
+# #38: the martingale catch -- a NEW peak then a drop breaching the frozen risk cap FALSIFIES
+# even though pnl (60) still clears the bar (50). A raw level-check would have said VERIFIED.
+state.update(equity="100100")
+if verdict() != "VERIFIED_POSITIVE_EV": fails.append("new peak should stay VERIFIED (dd=0)")
+state.update(equity="100060")
+v = verdict()
+_e = json.load(open("ledger/edge.json"))
+if v != "FALSIFIED" or "drawdown" not in _e.get("falsified_reason", ""):
+    fails.append(f"drawdown breach not FALSIFIED-with-reason: {v} / {_e.get('falsified_reason')}")
+nofield_f, nofield_e = edge_pnl.parse_registration(reg.replace("MAX_DRAWDOWN_USD: 25.0\n", ""))
+if not nofield_e: fails.append("registration without MAX_DRAWDOWN_USD accepted")
+for bad in ("MAX_DRAWDOWN_USD: nan", "MAX_DRAWDOWN_USD: inf", "MIN_FILLED_ORDERS: 0"):
+    candidate = reg.replace("MAX_DRAWDOWN_USD: 25.0", bad) if bad.startswith("MAX") else reg.replace("MIN_FILLED_ORDERS: 10", bad)
+    if not edge_pnl.parse_registration(candidate)[1]: fails.append(f"invalid registration accepted: {bad}")
+runtime = json.load(open("state/edge_runtime.json"))
+if list((runtime.get("registrations") or {})) != [json.load(open("state/edge_registration.json"))["sha256"]]:
+    fails.append("runtime peak is not scoped to the frozen registration")
 frozen = json.load(open("state/edge_registration.json"))
 frozen["fields"]["RESOLVE_BY"] = "2000-01-01T00:00:00Z"
 json.dump(frozen, open("state/edge_registration.json","w"))
+os.remove("state/edge_runtime.json")   # reset peak so the deadline leg (not drawdown) decides
 state.update(equity="100010")
 if verdict() != "FALSIFIED": fails.append("deadline-missed -> FALSIFIED")
+if "deadline" not in json.load(open("ledger/edge.json")).get("falsified_reason", ""):
+    fails.append("deadline falsification lost its reason")
 edge_pnl.committed_registration = lambda: (reg + "tampered\n", None)
 frozen["fields"]["RESOLVE_BY"] = "2099-01-01T00:00:00Z"
 json.dump(frozen, open("state/edge_registration.json","w"))
@@ -495,8 +551,72 @@ PYEOF
   assert_exit 1 "gate: contradicting EDGE_CLAIM fails" bash bin/aiv_gate.sh 901
   grep -v "^EDGE_CLAIM:" .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md > p.tmp && mv p.tmp .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
   assert_exit 1 "gate: missing EDGE_CLAIM while rail live fails" bash bin/aiv_gate.sh 901
+  # #39/#35 stage 2c: a payment-surface claim requires a fresh delivery_check the gate runs itself
+  printf 'EDGE_CLAIM: VERIFIED_POSITIVE_EV\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  printf 'Offer live: https://buy.stripe.com/test_simoffer123\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  assert_exit 1 "gate: payment URL without DELIVERY_CHECK_URL fails (paid-offer mandate)" \
+    bash bin/aiv_gate.sh 901
+  printf 'DELIVERY_CHECK_URL: https://sim-delivery.invalid/unlock\n' >> .github/aiv-packets/VERIFICATION_PACKET_ITER_901.md
+  assert_exit 1 "gate: failing delivery_check fails the packet (fresh re-run, never self-typed)" \
+    bash bin/aiv_gate.sh 901
 else
   skip "gate tests (aiv CLI not on PATH -- pip install aiv-protocol, or accept stage-0 fail-closed)"
+fi
+
+echo "=== delivery_check unit (#39/#35, monkeypatched fetch -- SSRF guard blocks a live-serve rig) ==="
+DC_RESULT=$(python3 - 2>/dev/null <<'PYEOF'
+import sys
+sys.path.insert(0, "bin")
+sys.excepthook = lambda t, v, tb: print(f"DC_FAILS:crash:{t.__name__}:{v}")
+import importlib, delivery_check as dc
+importlib.reload(dc)
+fails = []
+def case(label, want_rc, fetch, limit, argv, redirect="https://example.com/unlock"):
+    dc._fetch = fetch
+    dc._payment_link = lambda u: {"url": u, "restrictions": {"completed_sessions": {"limit": limit}},
+                                  "after_completion": {"type": "redirect", "redirect": {"url": redirect}}}
+    sys.argv = ["delivery_check.py"] + argv
+    rc = dc.main()
+    if rc != want_rc:
+        fails.append(f"{label}: rc={rc} want {want_rc}")
+GOOD = lambda u: (200, b"X" * 400, "text/plain")
+case("complete artifact + capped link passes", 0, GOOD, "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("placeholder body fails", 1, lambda u: (200, b"deliverable <fill> pending" + b"x" * 400, "text/plain"), "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("stub-sized body fails", 1, lambda u: (200, b"ok", "text/plain"), "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("missing or non-document content type fails", 1, lambda u: (200, b"X" * 400, "image/png"), "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("uncapped link fails (#35)", 1, GOOD, "none",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("unverifiable limit fails closed (#35)", 1, GOOD, "unverified",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"])
+case("unrelated success redirect fails (#39)", 1, GOOD, "1",
+     ["https://example.com/unlock", "--payment-link", "https://buy.stripe.com/x"],
+     redirect="https://example.com/not-the-delivery")
+case("no payment link -> delivery-only check passes", 0, GOOD, "n/a",
+     ["https://example.com/unlock"])
+import hashlib
+h = hashlib.sha256(b"X" * 400).hexdigest()
+case("sha256 match passes", 0, GOOD, "n/a", ["https://example.com/unlock", "--expect-sha256", h])
+case("sha256 mismatch fails", 1, GOOD, "n/a",
+     ["https://example.com/unlock", "--expect-sha256", "0" * 64])
+# a safety gate must fail closed on a malformed invocation, never silently skip the check: an
+# unrecognized flag (typo'd --payment-link) or a value-less flag must exit 2, not proceed to a
+# PASS with the #35 cap check quietly disabled (pre-fix code returned 0 here -- the fail-open).
+case("unrecognized flag fails closed (not silently skipped)", 2, GOOD, "1",
+     ["https://example.com/unlock", "--payment-lnk", "https://buy.stripe.com/x"])
+case("flag missing its value fails closed", 2, GOOD, "1",
+     ["https://example.com/unlock", "--payment-link"])
+print("DC_FAILS:" + ";".join(fails))
+PYEOF
+)
+DC_FAILS="${DC_RESULT##*DC_FAILS:}"
+if [[ -z "$DC_FAILS" ]]; then
+  ok "delivery_check: pass/placeholder/size/uncapped/unverified/sha cases all correct"
+else
+  bad "delivery_check unit: $DC_FAILS"
 fi
 
 echo "=== verifier convergence (the block between TEST-MARKERs, run verbatim) ==="
@@ -553,7 +673,13 @@ if [[ "$CONV_OK" == "1" ]]; then
   git add ledger/raw/29990102T000000_probe2.json \
     && git -c user.name=verifier -c user.email=v@sim commit -qm "verifier: stranded2"
   TREE=$(git --git-dir="$W/origin.git" rev-parse "ledger^{tree}")
-  DIVERGED=$(git --git-dir="$W/origin.git" commit-tree "$TREE" -p "ledger^" -m "rotated elsewhere")
+  # explicit identity, like verifier_loop's real rotation: a bare repo has no local git config, so
+  # commit-tree would author as the HOST's global user -- and guard's ancestry-scoped SoD scan
+  # (correctly) halts on any non-verifier author reachable from the facts lane. The matrix caught
+  # exactly this when the fixture omitted it.
+  DIVERGED=$(GIT_AUTHOR_NAME=verifier GIT_AUTHOR_EMAIL=v@sim \
+             GIT_COMMITTER_NAME=verifier GIT_COMMITTER_EMAIL=v@sim \
+             git --git-dir="$W/origin.git" commit-tree "$TREE" -p "ledger^" -m "rotated elsewhere")
   git --git-dir="$W/origin.git" update-ref refs/heads/ledger "$DIVERGED"
   run_convergence || true    # divergence cycle: reset + rescue re-commit (local, ahead)
   if compgen -G "$W/vstate/raw-rescue/*-diverged/29990102T000000_probe2.json" >/dev/null; then
@@ -720,9 +846,64 @@ PYEOF
   else
     bad "pnl signing: $SIGN_FAILS"
   fi
-  rm -rf sig_state
+  # edge.json signs too (the S4 deferral, closed in the edge-quality stack): a stubbed edge_pnl
+  # cycle with the key provisioned must emit a verifiable ledger/edge.json.sig
   git checkout -q -- ledger/ 2>/dev/null || true
   git clean -qfd ledger/ 2>/dev/null || true
+  EDGESIGN_RESULT=$(SIM_VKEY="$W/vkey" python3 - 2>/dev/null <<'PYEOF'
+import sys, os, json, subprocess
+sys.path.insert(0, "bin")
+sys.excepthook = lambda t, v, tb: print(f"ES_FAILS:crash:{t.__name__}:{v}")
+os.environ.update({"MONEY_AGENT_STATE": "sig_state2", "AGENT_BRANCH": "sim-agent",
+                   "ALPACA_PAPER_KEY_ID": "k", "ALPACA_PAPER_SECRET_KEY": "s"})
+os.makedirs("sig_state2", exist_ok=True)
+import shutil
+shutil.copy(os.environ["SIM_VKEY"], "sig_state2/verifier_signing_key")
+os.chmod("sig_state2/verifier_signing_key", 0o600)
+import importlib, edge_pnl
+importlib.reload(edge_pnl)
+reg = ("EDGE_ID: sim2\nMETRIC: excess_return_pct\nBAR: 0.05\nMIN_FILLED_ORDERS: 10\n"
+       "MAX_DRAWDOWN_USD: 25.0\nBENCHMARK: SPY\nRESOLVE_BY: 2099-01-01T00:00:00Z\nHYPOTHESIS: h\nFALSIFIED_IF: f\n")
+edge_pnl.committed_registration = lambda: (reg, None)
+edge_pnl._get = lambda url, h: {"bars": [{"c": 100}]} if "/stocks/" in url else {"equity": "100000"} if "/account" in url else []
+edge_pnl.main()
+fails = []
+if not os.path.exists("ledger/edge.json.sig"):
+    fails.append("edge.json.sig missing")
+else:
+    r = subprocess.run(["ssh-keygen", "-Y", "verify", "-f", "harness/allowed_signers",
+                        "-I", "verifier", "-n", "money-agent-ledger", "-s", "ledger/edge.json.sig"],
+                       input=open("ledger/edge.json", "rb").read(), capture_output=True)
+    if r.returncode != 0: fails.append("edge signature does not verify")
+print("ES_FAILS:" + ";".join(fails))
+PYEOF
+)
+  ES_FAILS="${EDGESIGN_RESULT##*ES_FAILS:}"
+  if [[ -z "$ES_FAILS" ]]; then
+    ok "edge signing: stubbed edge_pnl cycle emits a verifiable edge.json.sig"
+  else
+    bad "edge signing: $ES_FAILS"
+  fi
+  rm -rf sig_state sig_state2
+  git checkout -q -- ledger/ 2>/dev/null || true
+  git clean -qfd ledger/ 2>/dev/null || true
+  # an UNSIGNED edge.json on the armed lane is refused, and guard treats it as a HALT (an
+  # invisible VOID would otherwise hide bar-moving behind "rail idle")
+  python3 -c "
+import json; e={'computed_at':'2099-01-01T00:00:00+00:00','verdict':'VOID','verified':True,
+'registration_intact':False}
+open('ledger/edge.json','w').write(json.dumps(e, indent=2) + '\n')"
+  rm -f ledger/edge.json.sig
+  git add ledger/edge.json
+  git rm -q --cached ledger/edge.json.sig 2>/dev/null || true
+  git -c user.name=verifier -c user.email=v@sim commit -qm "unsigned edge" && git push -qf origin ledger
+  cdx "$W/agent"
+  assert_exit_grep 2 "UNSIGNED" "edge signing: unsigned edge.json refused on the armed lane" \
+    python3 bin/truth.py --file edge.json verdict
+  assert_exit_grep 1 "edge facts refused" "edge signing: guard halts rather than treating it as idle" \
+    python3 bin/guard.py
+  cdx "$W/verifier"
+  git reset -q --hard "$GOOD_TIP" && git push -qf origin ledger
 else
   skip "fact-lane signing tests (ssh-keygen not on PATH -- install openssh-client)"
 fi

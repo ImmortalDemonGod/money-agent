@@ -223,8 +223,9 @@ def main() -> int:
         sys.path.insert(0, str(REPO / "bin"))
         import bets as _bets
         for b in _bets.open_bets():
-            fails.append(f"open external bet {b['id']} ({b['clock']}): {b['what']!r} -- resolve "
-                         "it (bin/bets.py resolve) or wait out its clock; an unresolved bet is "
+            fails.append(f"open external bet {b['id']} ({b['clock']}, oracle: "
+                         f"{b.get('oracle', 'judgment')}): {b['what']!r} -- resolve it "
+                         "(bin/bets.py resolve) or wait out its clock; an unresolved bet is "
                          "not an exhausted approach.")
     except Exception as e:
         fails.append(f"cannot read the bet registry ({type(e).__name__}: {e}) -- fail-closed: "
@@ -235,8 +236,11 @@ def main() -> int:
         if e_src in _truth.GROUNDED_SOURCES and e_facts.get("verdict") == "PENDING":
             fails.append("the verified-edge experiment is PENDING (ledger/edge.json) -- a live "
                          "pre-registered bet. Its deadline resolves it; a conclusion cannot.")
-    except RuntimeError:
-        pass  # no edge.json anywhere: rail idle, nothing pending
+    except RuntimeError as e:
+        if "no ledger found" not in str(e).lower():
+            fails.append(f"edge facts refused: {e} -- unknown edge state cannot "
+                         "authorize a conclusion; fail-closed.")
+        # else: no edge.json anywhere -- rail idle, nothing pending
     except Exception as e:
         fails.append(f"cannot read edge facts ({type(e).__name__}: {e}) -- fail-closed.")
 

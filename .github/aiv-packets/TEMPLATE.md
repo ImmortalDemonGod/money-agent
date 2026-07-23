@@ -29,6 +29,10 @@ keep it.
 > A claim mentioning money with no sha256 from a manifest FAILS the gate. A dashboard URL is not an
 > anchor; the hash of the pulled feed is. (`aiv-protocol#15`: cited content can be rewritten after
 > the evidence points at it. A Stripe dashboard can change; a hash cannot.)
+> A packet naming a Stripe payment/checkout URL is claiming a PAID OFFER: it must carry
+> `DELIVERY_CHECK_URL: <success-redirect url>` -- the gate re-runs `bin/delivery_check.py` on it
+> (delivery seam complete + the link provider-capped at 1 completed session; gate stage 2c,
+> issues #39/#35). A self-typed verdict line is not trusted, same as HOST_CHECK.
 
 ## Evidence
 

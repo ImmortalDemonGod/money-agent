@@ -1,9 +1,9 @@
 # AIV Evidence File (v1.0)
 
 **File:** `tests/sim.sh`
-**Commit:** `d131f6e`
-**Previous:** `4c0df17`
-**Generated:** 2026-07-22T21:15:44Z
+**Commit:** `57f219f`
+**Previous:** `4ff597e`
+**Generated:** 2026-07-23T00:16:21Z
 **Protocol:** AIV v2.0 + Addendum 2.7 (Zero-Touch Mandate)
 
 ---
@@ -12,19 +12,20 @@
 
 ```yaml
 classification:
-  risk_tier: R3
-  sod_mode: S1
+  risk_tier: R1
+  sod_mode: S0
   critical_surfaces: []
   blast_radius: "tests/sim.sh"
-  classification_rationale: "R3 because this regression verifies the payment-fact signature boundary"
-  classified_by: "Miguel Ingram"
-  classified_at: "2026-07-22T21:15:44Z"
+  classification_rationale: "Test-only change (R1): adds coverage for the fail-open fix in 57f219f"
+  classified_by: "Claude"
+  classified_at: "2026-07-23T00:16:21Z"
 ```
 
 ## Claim(s)
 
-1. the signing simulation proves an initial truth-signature failure persists verified=false and leaves no truth signature or attestation artifact
-2. No existing tests were modified or deleted during this change.
+1. The delivery_check unit suite asserts an unrecognized flag and a value-less flag each cause exit 2, so a malformed invocation cannot pass the gate with the cap check skipped
+2. No existing tests were deleted; only new assertions were added
+3. No existing tests were modified or deleted during this change.
 
 ---
 
@@ -32,14 +33,14 @@ classification:
 
 ### Class E (Intent Alignment)
 
-- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/36](https://github.com/ImmortalDemonGod/money-agent/issues/36)
-- **Requirements Verified:** Issue #36 requires signing failures to fail closed before facts are grounded
+- **Link:** [https://github.com/ImmortalDemonGod/money-agent/issues/39](https://github.com/ImmortalDemonGod/money-agent/issues/39)
+- **Requirements Verified:** The delivery gate's fail-closed behavior on malformed invocations must be regression-tested (bite proof)
 
 ### Class B (Referential Evidence)
 
-**Scope Inventory** (SHA: [`d131f6e`](https://github.com/ImmortalDemonGod/money-agent/tree/d131f6e776080914d547e614d41fa2016a33037b))
+**Scope Inventory** (SHA: [`57f219f`](https://github.com/ImmortalDemonGod/money-agent/tree/57f219f0ade9a86a77a18a81306f533342fc7646))
 
-- [`tests/sim.sh#L698-L713`](https://github.com/ImmortalDemonGod/money-agent/blob/d131f6e776080914d547e614d41fa2016a33037b/tests/sim.sh#L698-L713)
+- [`tests/sim.sh#L605-L611`](https://github.com/ImmortalDemonGod/money-agent/blob/57f219f0ade9a86a77a18a81306f533342fc7646/tests/sim.sh#L605-L611)
 
 ### Class A (Execution Evidence)
 
@@ -48,52 +49,28 @@ This file has no claim-specific execution evidence.
 
 ### Code Quality (Linting & Types)
 
-- **ruff:** 11409 error(s)
-- **mypy:** Found 1 error in 1 file (errors prevented further checking)
-
-### Class C (Negative Evidence)
-
-**Search methodology:** Ran `git diff --cached` and scanned for regression indicators.
-
-- Test file deletions: **none**
-- Test file modifications: **none**
-- Deleted assertions (`assert` removals in diff): **none found**
-- Added skip markers (`@pytest.mark.skip`, `@unittest.skip`): **none found**
-
-### Class F (Provenance Evidence)
-
-**Test file chain-of-custody:**
-
-No covering test files found.
-
-**Recent test directory history** (`git log --oneline -5 -- tests/`):
-
-```
-4c0df17 test(verifier): reject unsigned attestation output
-46c2a41 docs(tests): record verifier hardening bug catalog
-54ef777 test(verifier): cover raw paths and inference CSV validation
-abe8811 test(corpus): fail closed on fixture probe crashes
-93a3e7d test(verifier): cover raw quarantine move failure
-```
+- **ruff:** 0 error(s)
+- **mypy:** 
 
 ## Claim Verification Matrix
 
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
-| 1 | the signing simulation proves an initial truth-signature fai... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 1 | The delivery_check unit suite asserts an unrecognized flag a... | unresolved | No automatic binding available | REVIEW MANUAL REVIEW |
+| 2 | No existing tests were deleted; only new assertions were add... | structural | Class C not collected | REVIEW MANUAL REVIEW |
+| 3 | No existing tests were modified or deleted during this chang... | structural | Class C not collected | REVIEW MANUAL REVIEW |
 
-**Verdict summary:** 1 verified, 0 unverified, 1 manual review.
+**Verdict summary:** 0 verified, 0 unverified, 3 manual review.
 ---
 
 ## Verification Methodology
 
 **Zero-Touch Mandate:** Verifier inspects artifacts only.
-Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found), anti-cheat scan.
+Evidence collected by `aiv commit` running: git diff (scope inventory), pytest (no claim-specific tests found).
 Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/types, not behavior.
 
 ---
 
 ## Summary
 
-Cover fail-closed initial truth signing failure
+Add two delivery_check unit cases asserting exit 2 on unrecognized and value-less flags

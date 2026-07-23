@@ -23,7 +23,6 @@ the mechanics move into the harness.
 """
 from __future__ import annotations
 import datetime as dt
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -105,7 +104,37 @@ def _edge_anchor() -> str:
             f"EDGE_CLAIM: {e.get('verdict')}\n")
 
 
-def new() -> int:
+def new(lever: str = "") -> int:
+    # #45 (PACE_ENFORCE, default off): when every open bet is quietly waiting on its clock, a NEW
+    # iteration is only justified by a genuinely new lever -- run 1 burned iterations 091-094
+    # polling not-yet-due clocks as if polling were work. guard's B7 advisory names the smell;
+    # this makes it mechanical where the iteration actually starts. The lever lands in the
+    # MONEY_LOG skeleton, so the declaration is a committed, auditable line -- forging one is a
+    # visible commit, the same tripwire class as every claims-lane artifact. Watch ticks and bet
+    # resolutions are never blocked; enforcement lives here (not guard) because guard runs before
+    # a lever could exist -- deviation from issue #45's wording, recorded there.
+    import os
+    if os.environ.get("PACE_ENFORCE", "0") == "1" and not lever:
+        sys.path.insert(0, str(REPO / "bin"))
+        try:
+            import bets as _b
+        except ImportError:
+            # PACE_ENFORCE is opt-in: the operator asked for pacing, so an unimportable registry
+            # must FAIL CLOSED (block), not silently pass. A merely absent bets.json is NOT this
+            # branch -- open_bets() returns [] for a missing file -- so only a broken or absent
+            # bets MODULE lands here, and opening an iteration on an unverifiable pacing state is
+            # the fail-open this gate exists to prevent.
+            print("PACE_ENFORCE is on but the bets registry could not be imported -- refusing to "
+                  "open an iteration on an unverifiable pacing state. Fix bin/bets.py, or unset "
+                  "PACE_ENFORCE.", file=sys.stderr)
+            return 1
+        _open = _b.open_bets()
+        if _open and not any(_b.is_due(b) for b in _open):
+            print('PACE_ENFORCE: open bets exist and none is due. A NEW iteration needs a '
+                  'declared lever:\n  bin/iter.py new --lever "<one line: the genuinely new '
+                  'thing this iteration tries>"\nWatch ticks (bin/iter.py watch) and bet '
+                  'resolutions are never blocked.', file=sys.stderr)
+            return 1
     t = _truth()
     n = int(COUNTER.read_text().strip()) + 1 if COUNTER.exists() else 1
     nnn = f"{n:03d}"
@@ -131,11 +160,13 @@ def new() -> int:
     COUNTER.parent.mkdir(parents=True, exist_ok=True)
     COUNTER.write_text(f"{n}\n")
 
+    lever_line = f"**Lever:** {lever}\n\n" if lever else ""
     MONEY_LOG.write_text(
         (MONEY_LOG.read_text() if MONEY_LOG.exists() else "# MONEY_LOG\n\n---\n")
         + f"\n## Iteration {nnn} — {_now()} (ledger @ {t.get('computed_at')})\n\n"
-          f"**Tried:** <fill>\n\n**Cost:** <fill>\n\n**Actually happened:** <fill>\n\n"
-          f"**Learned:** <fill>\n\n**Next:** <fill>\n")
+        + lever_line
+        + "**Tried:** <fill>\n\n**Cost:** <fill>\n\n**Actually happened:** <fill>\n\n"
+          "**Learned:** <fill>\n\n**Next:** <fill>\n")
 
     # commit the ALLOCATION immediately: numbering must survive any interruption
     _commit_push([packet, COUNTER, MONEY_LOG], f"iter {nnn}: open (scaffolded)")
@@ -211,7 +242,14 @@ def main() -> int:
         print(__doc__)
         return 2
     if a[0] == "new":
-        return new()
+        lever = ""
+        if "--lever" in a:
+            i = a.index("--lever")
+            lever = " ".join(a[i + 1:]).strip()
+            if not lever:
+                print("FATAL: --lever needs a one-line declaration.", file=sys.stderr)
+                return 2
+        return new(lever)
     if a[0] == "close" and len(a) > 1:
         return close(a[1])
     if a[0] == "watch" and len(a) > 1:

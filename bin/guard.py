@@ -256,6 +256,13 @@ def main() -> int:
     # The rail is optional: no edge.json anywhere = rail idle = silence.
     try:
         e, e_src = _truth.load("edge.json")
+    except RuntimeError as _re:
+        # #36: a SIGNATURE refusal is not "rail idle" -- treating it as absence would make an
+        # unsigned/forged edge.json invisible exactly when a VOID or VERIFIED verdict might be
+        # hiding in it. Fail closed; genuine absence (no edge.json anywhere) stays silent.
+        if "no ledger found" not in str(_re).lower():
+            return fail(f"edge facts refused: {_re}")
+        e, e_src = None, None
     except Exception:
         e, e_src = None, None
     if e is not None:
@@ -306,7 +313,8 @@ def main() -> int:
         _open = _bets.open_bets()
         if _open and not any(_bets.is_due(b) for b in _open):
             print("   pacing: open bets exist and none is due -- if there is no NEW lever this "
-                  "iteration, this should be a watch tick (bin/iter.py watch), not an iteration.")
+                  "iteration, this should be a watch tick (bin/iter.py watch), not an iteration."
+                  " (PACE_ENFORCE=1 makes this mechanical: iter.py new then requires --lever.)")
     except Exception:
         pass  # registry optional; its absence must never block the money rail
 

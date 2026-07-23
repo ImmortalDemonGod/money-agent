@@ -1118,3 +1118,116 @@ move (chain aligns with commits, not cycles).
 
 **Next:** S5 — gates & probes (#39 delivery_check + #35 link-limit fold-in, #40 oracle-classed
 resolutions, #45 PACE_ENFORCE in iter.py).
+
+---
+
+## Entry 025 — 2026-07-20 — S5 gates & probes: the delivery seam, oracle-classed resolutions, mechanical pacing (issues #39, #35, #40, #45)
+
+**What:** (1) `bin/delivery_check.py` (#39/G4, "the headline residual"): verifies the pay→deliver
+seam against the LIVE success-redirect target — status, artifact size floor, placeholder scan,
+optional exact sha256 — reusing host_check's SSRF guard/redirect-vetted opener (consumed, not
+reimplemented). #35 folds in: with `--payment-link`, the link is read back via the Stripe API and
+`restrictions[completed_sessions][limit]` MUST be 1 — the provider-level atomic cap the ~120s
+polling window cannot provide; no key → `unverified` → FAIL (the agent that created the link holds
+the key, so unverifiable = misconfigured, never exempt). (2) `aiv_gate.sh` stage 2c: a packet
+carrying a buy/checkout.stripe.com URL claims a paid offer → must carry `DELIVERY_CHECK_URL:`,
+which the gate re-runs itself (self-typed verdicts untrusted — the 2b precedent). (3) `bets.py
+--oracle deterministic|instrumented|judgment` (#40): non-judgment resolutions EXECUTE the recorded
+`--check`, storing cmd+rc+output in the resolution; rc is EVIDENCE (nonzero may be what "lost"
+looks like), refusal is reserved for an unrunnable oracle (127/126/timeout), with a visible
+`--downgrade-judgment` relabel as the escape hatch; `conclusion_gate` names the oracle class in
+open-bet refusals; `bets.py list` shows it. (4) `iter.py new --lever` + `PACE_ENFORCE` (#45,
+default off): quiet open bets (open, none due) block a lever-less NEW iteration; the declared
+lever lands in the MONEY_LOG skeleton as a committed, auditable line. Enforcement deliberately
+lives at iteration-open, NOT guard — guard runs before a lever could exist; deviation to be noted
+on #45 at PR time. guard's B7 advisory now names the flag. One flagged PROMPT.md line (create
+links with the provider cap) + SETUP rule + TEMPLATE trap note; delivery_check joins the sod_hook
+blocklist.
+
+**Edge cases enumerated before coding:** the EDGE_CLAIM line must be restored before the 2c sim
+tests or the missing-claim failure would make them pass for the wrong reason; the 2c trigger is a
+URL-shaped match (not prose like "stripe"), so ordinary packets never trip it; `.invalid` TLD
+gives an offline-deterministic failing fetch through the real SSRF guard; a check command that
+EXITS nonzero is evidence while one that cannot RUN grounds nothing; PACE must never block watch
+ticks or resolutions; the due-bet case and default-off case both stay unblocked; the delivery
+body read is bounded (5MB) and the size floor (256B) sits below every real deliverable.
+
+**Verified by running (artifacts):**
+- `bash tests/sim.sh` → **PASS=46 FAIL=0 SKIP=0** (was 35): delivery unit walk
+  (pass/placeholder/size/uncapped/unverified/sha), gate-2c wiring (URL without DELIVERY_CHECK_URL
+  fails; failing fresh re-run fails), oracle trio (unrunnable refused / downgrade relabels /
+  executed rc stored), pacing trio (+ default-off untouched), conclusion-gate oracle labeling.
+  Corpus **11/0**; shellcheck + compileall clean.
+- **Retro-bite @ HEAD~1:** old gate has zero delivery references (a paid-offer packet passed with
+  no seam check); old `iter.py new()` has no lever/pacing; old bets ACCEPTED a prose resolve of a
+  deterministic-shaped bet.
+
+**Critique pass:**
+- The positive gate-2c path (packet passing WITH a live delivery URL) is untestable offline by
+  design (SSRF guard blocks a local rig) — covered at the unit layer via monkeypatched fetch, the
+  same honest posture host_check has always had; the live seam belongs to the operator acceptance
+  gates.
+- `_payment_link` paginates the payment-links list via `starting_after` rather than assuming the
+  link is among the first 100 — built, not just noted.
+- The PROMPT.md line is operator-negotiated wording changed by this stack: flagged for explicit
+  review in the PR body (plan ground rule).
+- bets.py's executed check runs under `bash -c` with a 120s timeout in the agent's own
+  environment — no new privilege (the agent already runs arbitrary shell), but the timeout keeps
+  a hung oracle from wedging a resolution.
+
+**Next:** S6 — edge-verdict quality (#38): MAX_DRAWDOWN_USD frozen with the registration, runtime
+peak tracking in a separate state file, drawdown breach → FALSIFIED, BENCHMARK recorded; plus
+edge.json signing (the S4 deferral) if it fits the stack cleanly.
+
+---
+
+## Entry 026 — 2026-07-20 — S6 edge-verdict quality: the frozen risk cap, peak tracking, signed edge facts (issue #38; closes the S4 edge-signing deferral)
+
+**What:** (1) `EDGE_REGISTRATION` requires `MAX_DRAWDOWN_USD`, frozen with the bar; `edge_pnl.py`
+tracks peak equity in a SEPARATE `STATE_DIR/edge_runtime.json` (the frozen registration's hash
+never moves) and a peak-to-current drawdown past the declared cap is `FALSIFIED` — **even when
+pnl still clears the bar**, which is precisely the negative-skew/martingale shape a raw level
+check blesses. `falsified_reason` distinguishes drawdown from deadline; edge.json reports
+`peak_equity_usd`, `max_drawdown_usd_observed`, `unrealized_positions_at_verdict`. Optional
+`BENCHMARK` is parsed + frozen for the record only — enforcement is a documented data-feed-gated
+follow-up, stated, never silently faked. (2) The S4 deferral closes: `edge_pnl` signs `edge.json`
+when the key is provisioned; `truth.py` requires the signature on the armed lane (no chain field
+on edge — documented); `guard.py`/`conclusion_gate.py` treat a signature REFUSAL as halt/blocking
+rather than rail-idle — an invisible `VOID` would otherwise hide bar-moving behind "absent". (3)
+`truth.py`'s chain check no longer false-positives on commits that do not republish truth.json
+(pubkey-only or edge-only commits duplicate the parent's file; identical bytes = no new link).
+
+**Edge cases enumerated before coding:** a pre-upgrade freeze without the field skips the
+drawdown leg (legacy; new runs re-register); the walk's deadline case must reset the runtime peak
+or the drawdown leg shadows the deadline reason (fixture resets it and asserts the reason);
+verdict precedence is breach > cleared > deadline (a recovered breach is still falsified — the
+#38 point); the runtime file initializes peak to max(baseline, first equity); signature refusal
+vs genuine absence must stay distinguishable in every consumer (guard, conclusion_gate).
+
+**Verified by running (artifacts):**
+- `bash tests/sim.sh` → **PASS=49 FAIL=0 SKIP=0** (was 46); corpus **11/0**; shellcheck +
+  compileall clean. New: martingale-catch steps (new peak stays VERIFIED at dd=0; the post-peak
+  drop FALSIFIES with reason "drawdown" while pnl=60 ≥ bar=50), deadline reason preserved,
+  missing-MAX_DRAWDOWN registration rejected, stubbed edge_pnl cycle emits a verifiable
+  `edge.json.sig`, unsigned edge on the armed lane refused + guard halts on it.
+- **Retro-bite @ HEAD~1:** the identical sequence (peak 100100 → equity 100060, pnl 60 ≥ bar 50)
+  returned `VERIFIED_POSITIVE_EV` from the level-only verdict.
+- **The matrix caught my own fixture bug mid-stack:** the divergence fixture's bare-repo
+  `commit-tree` authored as the HOST's global git user, and guard's ancestry-scoped SoD scan
+  halted on the foreign author far downstream (the edge-signing guard assertion). Fix = explicit
+  identity env, exactly like verifier_loop's real rotation. Two lessons banked: bare-repo
+  plumbing commits need explicit identity, and the SoD tripwire genuinely scans full reachable
+  history — the "wrong" failure was the authorship control working.
+
+**Critique pass:**
+- Drawdown is measured at verifier cadence (~INTERVAL): an intra-cycle spike-and-recover between
+  pulls is invisible. Honest bound of a polling verifier — the registration's cap is therefore a
+  cap on OBSERVED drawdown; noted here and in the template's wording ("the verifier tracks peak
+  equity across cycles").
+- Sequential-testing controls (repeated peeking) from #38's "later" list remain open — the issue
+  keeps that as its own follow-up scope.
+- `edge.py register`'s user-facing error for a missing MAX_DRAWDOWN_USD comes from
+  parse_registration's generic missing-fields message — adequate, not hand-held.
+
+**Next:** S7 — the rail-adapter refactor (#30 Part 1) with the golden parity artifact, plus the
+stubbed Base/USDC adapter with settlement-event binding.
