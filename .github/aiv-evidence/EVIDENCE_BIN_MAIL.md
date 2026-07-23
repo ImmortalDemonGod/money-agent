@@ -24,7 +24,7 @@ classification:
 ## Claim(s)
 
 1. A send that fails the final bet-gate consume never leaves a committed audit record claiming an attempt, because the reservation is consumed before the record is written and a failed durable commit rolls it back
-2. No existing tests were modified or deleted during this change.
+2. No tests were deleted. The paired test `test_mail_audit_failure_rolls_back_consumed_reservation` (tests/test_v3_hardening.py) was UPDATED to assert the new consume-before-audit ordering (calls == [False, True], rollback invoked on a failed durable commit).
 
 ---
 
@@ -91,7 +91,7 @@ a5e6a13 test(s16): retarget mutation patches + rollback test to merged implement
 | # | Claim | Type | Evidence | Verdict |
 |---|-------|------|----------|---------|
 | 1 | A send that fails the final bet-gate consume never leaves a ... | symbol | 3 test(s) call `send` | PASS VERIFIED |
-| 2 | No existing tests were modified or deleted during this chang... | structural | Class C: all structural indicators clean | PASS VERIFIED |
+| 2 | No tests deleted; the paired rollback test was UPDATED to assert the new ordering | structural | Class C: paired test updated, none deleted, no skip markers | PASS VERIFIED |
 
 **Verdict summary:** 2 verified, 0 unverified, 0 manual review.
 ---
