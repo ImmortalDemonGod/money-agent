@@ -84,20 +84,23 @@ PY"
 run_mutation "bet-gate-fail-open" \
   "python3 - <<'PY'
 p='bin/bet_gate.py'; s=open(p).read()
-anchor='def authorize(action: str, consume: bool = False) -> tuple[bool, str]:'
+# anchor on the END of the (multi-line, S9/S11-scoped) authorize signature so the early return is
+# inserted as its first body statement regardless of the bet_id/lane parameters.
+anchor='amount_usd: float | None = None) -> tuple[bool, str]:'
 assert anchor in s, 'anchor not found'
 s=s.replace(anchor, anchor+'\n    return True, \"MUTATION: always allow\"', 1)
 open(p,'w').write(s)
 PY"
 
-# 7. EXPOSURE CAP REMOVED (S11 P7): obligations register ignores the caps.
+# 7. EXPOSURE CAP REMOVED (S11 P7): obligations register ignores the cumulative-exposure cap.
 run_mutation "exposure-cap-removed" \
   "python3 - <<'PY'
 p='bin/obligations.py'; s=open(p).read()
-# make the cap check never fire: replace the first 'EXPOSURE_MAX_OPEN' env read default with a huge number
-s=s.replace('EXPOSURE_MAX_OPEN','EXPOSURE_MAX_OPEN_MUT') if False else s
-# safer: neutralize any sys.exit/raise in register by short-circuiting the cap comparisons
-s=s.replace('int(os.environ.get(\"EXPOSURE_MAX_OPEN\", \"0\")','(10**9)+0*int(os.environ.get(\"EXPOSURE_MAX_OPEN\", \"0\")')
+# neutralize the cumulative (fraction-of-verified-revenue) cap so register never refuses on it --
+# the sim's 'cumulative open ... received-funds cap remains binding' test must then go red.
+anchor='if total_after > allowed_total:'
+assert anchor in s, 'anchor not found'
+s=s.replace(anchor, 'if False and total_after > allowed_total:', 1)
 open(p,'w').write(s)
 PY"
 
