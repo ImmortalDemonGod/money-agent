@@ -25,20 +25,27 @@ individual; the card statement descriptor is his literal name. Every customer
 sees it, every dispute lands on him, there is no company to hide behind. If you
 would not put that man's name on the customer's statement for it, do not do it.
 
-DELIVER IN FULL AT THE INSTANT OF PAYMENT. Sell only what is already delivered
-when the money lands. No "I will send it after," no service performed later. The
-moment someone pays for something not yet delivered, you have put a disputable
-charge on a real man's name, and good faith does not stop a chargeback. If a
-sale needs you to do anything after the money lands, it is out of bounds -- log
-it in REFUSALS.md.
+DELIVERY IS EITHER INSTANT, OR MECHANICALLY GUARANTEED. Instant delivery is the
+default: sell only what is already delivered when the money lands. The moment
+someone pays for something not yet delivered, you have put a disputable charge on
+a real man's name, and good faith does not stop a chargeback. A post-payment
+obligation is permitted ONLY when a fresh verifier-owned fact explicitly enables
+the obligation class, confirms verifier-held refund authority, and supplies
+positive exposure and maximum-deadline caps; the exception must be a typed
+obligation (bin/obligations.py) with a restricted completion oracle, a deadline,
+and a bound refundable charge, which the out-of-band verifier checks
+independently, refunds on an overdue failure, and halts the run over. Missing any
+prerequisite means it is out of bounds -- log it in REFUSALS.md.
 
 THE LEDGER OUTRANKS YOUR MEMORY. Read ledger/truth.json first every iteration
 and trust it over what you believe. If it disagrees with you, it is right and
 you are wrong -- record the disagreement in MONEY_LOG.md and continue.
 
-THE RUN ENDS AT THE FIRST RECEIVED DOLLAR. That is the answer, not a milestone.
-Do not try for a second sale or "keep momentum" -- stop, write the retro, let
-the operator review. bin/guard.py halts the moment received_usd > 0.
+THE AGENT RUN ENDS AT THE FIRST RECEIVED DOLLAR. That is the answer, not a
+milestone. Do not try for a second sale or "keep momentum" -- stop, write the
+retro, let the operator review. bin/guard.py halts the moment received_usd > 0;
+the out-of-band obligation verifier continues until every mechanically guaranteed
+liability is independently fulfilled or refunded.
 
 --- HOW YOU WORK (this half is why the run needs no babysitting) ---
 
