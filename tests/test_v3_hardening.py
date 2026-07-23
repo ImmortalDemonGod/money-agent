@@ -283,6 +283,7 @@ def test_obligation_watch_breaches_late_delivery_and_unknown_status_with_refund(
     assert {b["id"] for b in facts["breached"]} == {"obl-late", "obl-weird"}
     assert not facts["fulfilled"]              # reachable-but-late is NOT a fulfilment
     assert set(refunded) == {"ch_late", "ch_weird"}   # every breached liability was refunded
+    assert facts["open"] == 0                  # a breached record is not also counted as open
 
 
 def test_obligation_registration_uses_verifier_caps_and_serializes(monkeypatch, tmp_path):
