@@ -15,7 +15,10 @@ run_mutation() {
   local name="$1" editfn="$2"
   local C="$MUT/$name"
   git clone -q "$SRC" "$C" 2>/dev/null
-  ( cd "$C" && eval "$editfn" ) || { miss "$name (edit failed to apply)"; return; }
+  # write the (hardcoded) edit to a script and run it, rather than eval-ing the string (CWE-78)
+  local editscript="$MUT/$name.edit.sh"
+  printf '%s\n' "$editfn" > "$editscript"
+  ( cd "$C" && bash "$editscript" ) || { miss "$name (edit failed to apply)"; return; }
   # CRITICAL: sim.sh builds its bare origin from the clone's COMMITTED HEAD, so a working-tree
   # mutation is invisible to the rig. Commit it first (the same flow real fixtures use).
   ( cd "$C" && git -c user.name=mut -c user.email=m@mut commit -qam "mutation: $name" ) \

@@ -125,26 +125,29 @@ def test_mail_refusal_does_not_consume_reservation(monkeypatch):
     assert calls == [False]
 
 
-def test_mail_audit_failure_leaves_reservation_unconsumed(monkeypatch, tmp_path):
-    # S16 F2: the reservation is BURNED only at the wire, AFTER the fail-closed SENT_LOG commit.
-    # If the audit commit fails, send() exits before the consume ever runs -- so the reservation is
-    # simply never spent (no compensating rollback is needed, and none exists). This is strictly
-    # safer than the prior consume-then-rollback: there is no window where a bet is spent for a
-    # message that never left.
+def test_mail_audit_failure_rolls_back_consumed_reservation(monkeypatch, tmp_path):
+    # The reservation is consumed AFTER the content gates but BEFORE the audit is written/committed,
+    # so a committed record only ever exists once the bet is genuinely spent. If the durable commit
+    # then fails, send() rolls the reservation back and refuses -- there is no window in which the
+    # log claims an attempt that a failed consume never made (CodeRabbit #54, mail.py false-record).
     calls = []
+    rollbacks = []
     monkeypatch.setenv("BET_GATE_ENFORCE", "1")
     monkeypatch.setattr(disclosure_gate, "check", lambda _body: (True, "ok"))
     monkeypatch.setattr(bet_gate, "authorize",
                         lambda _action, consume=False, **_binding:
                         (calls.append(consume) or (True, "ok")))
+    monkeypatch.setattr(bet_gate, "rollback",
+                        lambda action, **binding:
+                        (rollbacks.append((action, binding)) or (True, "rolled back")))
     monkeypatch.setattr(mail, "SENT_LOG", tmp_path / "SENT_LOG.md")
     monkeypatch.setattr(mail.subprocess, "run",
                         lambda *_args, **_kwargs: (_ for _ in ()).throw(OSError("disk full")))
     with pytest.raises(SystemExit):
         mail.send("buyer@example.com", "subject", "plain body",
                   bet_id="bet-x", lane="audience/offer")
-    # only the up-front check (consume=False) ran; the wire-consume was never reached
-    assert calls == [False]
+    assert calls == [False, True]
+    assert rollbacks == [("send", {"bet_id": "bet-x", "lane": "audience/offer"})]
 
 
 def test_mail_attempt_is_bound_consumed_and_honestly_logged(monkeypatch, tmp_path):

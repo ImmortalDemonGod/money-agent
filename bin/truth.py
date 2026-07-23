@@ -186,7 +186,7 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
         try:
             d = json.loads(show.stdout)
         except json.JSONDecodeError as e:
-            raise RuntimeError(f"origin/{LEDGER_BRANCH}:ledger/{name} is not valid JSON: {e}")
+            raise RuntimeError(f"origin/{LEDGER_BRANCH}:ledger/{name} is not valid JSON: {e}") from e
         # cross-check: the verifier-signed ledger declares which lane it is; if it disagrees with
         # the branch we actually read, something is misconfigured or forged -- do not label it
         # grounded. (Fact files that do not declare a lane, e.g. edge.json, skip the check.)
@@ -207,7 +207,7 @@ def load(name: str = "truth.json") -> tuple[dict, str]:
         try:
             dl = json.loads(show_local.stdout)
         except json.JSONDecodeError as e:
-            raise RuntimeError(f"committed ledger/{name} is not valid JSON: {e}")
+            raise RuntimeError(f"committed ledger/{name} is not valid JSON: {e}") from e
         _enforce_shadow_wall(dl, name, f"HEAD:ledger/{name}")
         _enforce_signature(show_local.stdout, name, "HEAD", dl)
         return dl, "working-tree-committed"
