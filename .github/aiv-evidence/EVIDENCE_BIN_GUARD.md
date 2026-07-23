@@ -99,4 +99,4 @@ Ruff/mypy results are in Code Quality (not Class A) because they prove syntax/ty
 
 ## Summary
 
-Check STRIPE_WRITE_KEY, STRIPE_READ_KEY, PRIVACY_READ_KEY and CARD_NUM separately with a test-key-prefix allowlist
+Check STRIPE_WRITE_KEY, STRIPE_READ_KEY, PRIVACY_READ_KEY and CARD_NUM independently. Stripe keys are allowlisted to test-key prefixes (sk_test_/rk_test_); card credentials are prohibited entirely (any configured non-placeholder PRIVACY_READ_KEY or CARD_NUM is rejected). Independent checks so one benign value cannot mask a live one.
