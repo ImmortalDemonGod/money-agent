@@ -119,8 +119,20 @@ def main() -> int:
     for a in it:
         if a == "--expect-sha256":
             expect = next(it, None)
+            if not expect or expect.startswith("--"):
+                print("usage: --expect-sha256 needs a hex value", file=sys.stderr)
+                return 2
         elif a == "--payment-link":
             payment_link = next(it, None)
+            if not payment_link or payment_link.startswith("--"):
+                print("usage: --payment-link needs a URL", file=sys.stderr)
+                return 2
+        else:
+            # fail closed on any unrecognized token: a safety gate must never silently ignore a
+            # flag. A typo'd --payment-link would otherwise leave payment_link=None, the #35 cap
+            # check would read as "not requested", and the verdict could still be PASS (fail-open).
+            print(f"usage: unrecognized argument {a!r}", file=sys.stderr)
+            return 2
 
     status, body, content_type = _fetch(url)
     print(f"delivery page : HTTP {status}, {len(body)} bytes")
