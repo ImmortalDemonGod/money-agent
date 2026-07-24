@@ -1752,12 +1752,35 @@ WTW reach-buy (bet-035), machine storefront (bet-036). received_usd = $0.0 (ledg
 
 **Lever:** operator [8]: consolidate onto onehonestdollar.com (his endorsed domain). Put the $1 offer + buy button on it, redirect the surge page, re-point the WTW reach-buy there. Investigate its hosting to see if I can edit it; report what I did + why I built a second page.
 
-**Tried:** <fill>
+**Tried:** Operator [8] revealed a fact I did not have: onehonestdollar.com is a REAL domain he owns, put
+his name behind, and shared on LinkedIn -- a run-1 retrospective showcase -- and I had built the $1 offer on
+a throwaway surge subdomain instead, pointing my reach-buy at the weaker page. Directive: consolidate the $1
+offer onto onehonestdollar.com, redirect the surge page, re-point reach, and explain WHY I built a second
+page. Mid-fire the operator corrected me a second time ("you already requested vercel") -- I had asked him
+to deploy, but ACT-001 already gave me Vercel access.
 
-**Cost:** <fill>
+**Cost:** $0 (vercel deploy + gh + surge + Stripe API + 2 emails, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** CONSOLIDATED and LIVE. (1) Edited onehonestdollar.com's source CTA (money-agent
+showcase/index.html) from the broken $3 tip to the live $1 be-the-answer offer, committed (b32ea82f). (2)
+Found the vercel CLI STILL AUTHED as immortaldemongod from ACT-001 -- so I self-deployed: linked the
+'onehonestdollar' Vercel project and 'vercel deploy --prod' -> live in ~16s. onehonestdollar.com now shows
+"Be the first honest dollar $1" -> the $1 link; host_check PASS (robots ALLOW, canonical), delivery_check
+PASS. (3) Redirected the surge throwaway -> onehonestdollar.com (so any reach lands on the endorsed domain).
+(4) Fixed a live defect: the old $3 tip link had an EMPTY confirmation (paid -> got nothing); set it to
+deliver the story + limit=1. (5) Corrected my earlier "needs your deploy" email once I realized I had the
+access. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** Two operator corrections, one lesson: INVENTORY WHAT I ALREADY HAVE before building fresh or
+asking. I had (a) an endorsed domain with a story page already live, and (b) working Vercel access from
+ACT-001 -- and used neither, building a surge throwaway and then asking for a token I already held. Same
+species as "build a new pipeline instead of sending the offer in hand" and "always disclose." Durable
+capability recorded: vercel CLI is authed (immortaldemongod), the onehonestdollar project is CLI-deployed
+(NOT git-connected, so pushes do not auto-deploy -- must 'vercel deploy'), and it is a crawlable host that
+beats the surge robots-trap. WHY I built a second page: onehonestdollar.com is a run-1 artifact not in my
+run-2 authored inputs, and the context-discipline rule keeps me out of the run-1 repo, so I did not know it
+existed -- honest, but I still should have inventoried before building.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH the live experiments (split test bet-037, 7 earlier offers bet-029/031/033,
+WTW reach-buy bet-035, machine storefront bet-036, operator bets). The $1 offer now sits on the endorsed
+domain; when WTW replies, point the classified at onehonestdollar.com directly. received_usd = $0.0.
