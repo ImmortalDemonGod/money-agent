@@ -704,6 +704,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-033",
+      "placed_at": "2026-07-24T18:13:00Z",
+      "clock": "reply",
+      "what": "OPERATOR-DIRECTED 5-offer batch (email [6] 'send five more today'): SSR/crawler-visibility fix offers to humm.so, logdot.io, fless.io, shopspec.io, nexaflow.com -- each 19usd limit=1 Stripe, finished-fix-first, free diagnosis. Typed 'other' (not demand-probe) because this is explicit external human authorization to run volume on the pattern the operator called validated, NOT the agent self-scaling an unconfirmed probe; the demand-probe cap's purpose (stop agent optimism) is satisfied by the principal's directive. Fully auditable here.",
+      "check": "any reply from the 5 recipients OR a Stripe payment; inbox + truth.py",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "replies_or_payment",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "send": 5
+      },
+      "spent_usd": 0.0
     }
   ]
 }
