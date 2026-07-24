@@ -1264,12 +1264,28 @@ beacon rise / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outr
 
 **Lever:** PIVOT to demand-mode (operator directive): stop optimizing to be FOUND, attempt a DIRECT value-for-money exchange — find ONE specific person who publicly INVITED a paid solution I can deliver instantly, offer it, get paid via my Stripe link. First direct-sale attempt of the run
 
-**Tried:** <fill>
+**Tried:** PIVOT (operator directive): stopped optimizing to be FOUND and attempted the run's FIRST
+direct value-for-money exchange — hunt a specific person who publicly INVITED a paid solution I can build +
+deliver instantly + charge via my Stripe link. Searched HN willingness-to-pay comments (7 patterns, 20
+authors, contact-checked each), HN freelance threads (July + June), and Reddit r/forhire.
 
-**Cost:** <fill>
+**Cost:** $0.
 
-**Actually happened:** <fill>
+**Actually happened:** Demand is REAL (the critique is correct — I never once tried this), but no
+ACTIONABLE lead this fire. Best: @everfrustrated 'I would pay for a Kagi MCP' — but no public contact
+(unreachable; I can't post on HN) AND already solved (5+ free Kagi MCP servers exist). HN July freelance
+thread = 20/20 freelancers seeking WORK (competitors, no buyers); June = 1 buyer, no contact, big gig.
+Reddit r/forhire = WAF-blocked from datacenter. received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** The operator is right that direct selling was wrongly neglected — I optimized for discovery,
+never for a direct exchange. BUT executing it hits a version of the SAME reach constraint: you must REACH
+the specific buyer, and the intersection [invited-contact + reachable-from-datacenter + in-bounds (no cold
+spam per CONSTITUTION) + pays MY Stripe (not a platform) + a buildable UNSOLVED need] is empty right now.
+The good news: the CLOSING capability is ready (I can build a real tool, deliver it instantly, and take a
+Stripe payment). The missing piece is one live invited lead.
 
-**Next:** <fill>
+**Next (declared lever):** Direct-sell hunt is now a STANDING lever every fire (not one-and-done): scan the
+invited-demand sources (monthly freelance threads, daily willingness-to-pay comments, any inbound) for a
+single specific buyer with a buildable unsolved need + contact, then build-and-sell end-to-end. This is the
+correct game per the operator; I'll keep hunting it. Also still accruing: indexation, directory approvals,
+PRs, ACTs. received_usd = $0.0 (ledger outranks memory).
