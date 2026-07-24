@@ -1410,12 +1410,40 @@ solves one captcha on a chosen signup. Awaiting the pick, then I execute end-to-
 
 **Lever:** operator-directed pivot: get PAID directly -- sell finished bug-fixes via own Stripe link (find real defect -> build fix -> instant-deliver finished patch on payment). Reply to operator + begin queuing three real targets.
 
-**Tried:** <fill>
+**Tried:** The operator emailed a direct instruction (found in Gmail Spam via --mailbox "[Gmail]/Spam"):
+stop the get-discovered game, play get-PAID -- find a real defect, invoice the fix via my own Stripe
+link. I (1) REPLIED answering all 4 of his questions honestly (bet-028, sent under his name to himself);
+(2) reconciled the ONE hard constraint: "pay me then I'll fix it" is a post-payment obligation the bounds
+forbid, so the in-bounds inversion is fix-FIRST then sell the finished patch (payment triggers instant
+delivery of an existing artifact, structurally identical to selling the poster); (3) BUILT a reusable
+target pipeline -- pulled the HN "Ask HN: What Are You Working On? (July 2026)" thread (id 48884984) via
+the algolia API, extracted 450 unique live commercial sites whose founders PUBLICLY invited feedback
+(non-spam by construction -- they asked); (4) built + ran two scanners: a static HTML scan (scan.py, 120
+sites) and a Playwright runtime scan (pw_scan.py, 130 sites, capturing pageerrors/5xx/failed-requests/
+console-errors); (5) VERIFIED the top candidates instead of trusting the scanners.
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; HN API + Playwright + curl + one email).
 
-**Actually happened:** <fill>
+**Actually happened:** Reply sent and logged (SENT_LOG, bet-028 consumed). The scans flagged ~60 sites but
+verification washed out every top candidate: sxp.studio's "Next.js error" = normal RSC serialization (false
+positive); trilogydata.dev's 503 on core JS = TRANSIENT (rate-limited during my parallel scan; clean reload
+= all 200, page renders fully); sideprojectors.com's app.css-returns-HTML (real MIME misconfig) has ZERO
+visible impact (screenshot = perfectly styled site; they load a working hashed CSS, the unhashed ref is a
+stray). radiodock's 404 backgrounds aren't HTML-referenced (JS fallback) + it's a hobby project. NO
+confirmed invoice-worthy defect landed this fire. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** Load-time error scanning is mostly NOISE for this purpose -- transient 5xx under parallel load,
+stray-asset console errors with no user impact, ad-blocker/video-preload ERR_ABORTED, Next.js _rsc prefetch
+aborts. The democr.ai bug was payable because it was a real FUNCTIONAL defect; its caliber lives in
+interactive flows (signup / search / checkout / core feature), which require actually USING the feature, not
+just inspecting page load. The name test kills weak pitches correctly: emailing a founder "your CSS is
+broken" about a site that looks perfect is the nitpick a working freelancer would laugh at. The pipeline
+(450 founder-invited targets) is built and reusable; the finding method needs to shift from load-inspection
+to functional testing.
 
-**Next:** <fill>
+**Next (declared lever):** Functional-flow testing on a curated commercial subset from the 450 (paid SaaS
+with real signup/checkout, founder budget): drive signup/search/core-feature with Playwright, catch a
+democr.ai-caliber functional bug, write the complete drop-in fix, create a limit=1 Stripe link, and send the
+proud-worthy value-first offer (free diagnosis + optional finished fix). Target: 3 queued offers. Also open:
+operator reply to bet-028 / the A-B-C unlock ask; 3 actuations pending. received_usd = $0.0 (ledger outranks
+memory).

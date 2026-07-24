@@ -14,8 +14,12 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Adopted the operator's direct-instruction pivot from get-discovered to get-PAID: replied to his
+   email answering all four questions, defined the delivery-compliant mechanic (fix first, then sell
+   the finished patch so payment triggers instant delivery of an existing artifact), and built a
+   reusable target pipeline (450 founder-invited live sites) plus two defect scanners; verified every
+   top candidate and all washed out, so no invoice-worthy defect was queued this iteration and no
+   money was claimed or received.
 
 ## Ledger anchor
 
@@ -29,9 +33,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T115136_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `2fb01072cf907dc0e38157c88a70de38c6b76bfdbf79310cfe6b2847e3fb0a00`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +55,70 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) Pulled the operator instruction from Gmail Spam: `bin/mail.py read 1 --mailbox
+"[Gmail]/Spam"` -> the "[OPERATOR - NOT A CUSTOMER]" email. (2) Sent the reply: `bin/mail.py send
+military.ingram@gmail.com ... --bet-id bet-028 --lane operator` -> "sent -> military.ingram@gmail.com |
+logged to SENT_LOG.md". (3) Built the target pipeline: `curl hn.algolia.com/api/v1/items/48884984` ->
+703 top-level comments, extracted 450 unique external product domains (hn_targets.json). (4) Ran two
+scanners: scan.py (120 sites, 61 flagged) and pw_scan.py (Playwright, 130 sites, 60 flagged). (5)
+Verified top candidates with verify.py + curl: trilogydata.dev assets all HTTP 200 on clean reload
+(transient 503); sideprojectors.com app.css = `status=200 type=text/html` (real MIME misconfig) but the
+full-page screenshot shows a perfectly styled site (no user impact).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/046/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: This iteration's committed artifacts -- MONEY_LOG.md iteration-046 block (tried/cost/
+happened/learned/next), DISCLOSURE_EV_LOG.md line `body:fe9e7267d9 | verdict:cut` (operator reply),
+SENT_LOG.md entry for the reply, run/bets.json bet-028 (placed + send reservation consumed),
+knowledge/outcomes.jsonl `get-paid-bugfix` record. Scanner scripts + raw results live in the session
+scratchpad (not committed -- ephemeral working files, not claim-bearing artifacts).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (spent 0, received 0, cap intact at full). No prior sale existed to break.
+The temptation I DECLINED: two of them. (1) The scanners flagged sideprojectors.com with a real broken
+CSS asset -- I declined to pitch it because the rendered site is perfect (no user impact); sending a
+"your site is broken" invoice for a non-visible nitpick under a real man's name fails the name test. (2)
+I declined the pay-then-fix framing the operator's phrasing invited ("I'll fix it for $Y, pay here"),
+because they-pay-then-I-owe-work is a post-payment obligation the bounds forbid; adopted fix-first-sell-
+finished instead. No cold-volume outreach: the target pool is founders who publicly invited feedback.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 remaining ->
+25.0). edge.json still absent (rail idle). Deltas this iteration: bets 24 open -> 25 open (bet-028
+placed, send reservation consumed); SENT_LOG +1 (operator reply); one new knowledge outcome; MONEY_LOG
++1 iteration block. Strategy state changed materially: primary lever pivoted from get-discovered
+(indexation/reach) to get-PAID (find defect -> invoice finished fix via own Stripe link), per operator.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly serves the operator's 2026-07-24 instruction email ("play the get-PAID game: find
+the defect and INVOICE the fix via your own Stripe link"), which outranks the current plan. Authorized by
+CONSTITUTION/PROMPT "Build toward demand -- and DO build ... find ONE person who will pay" and "SEARCH
+BEFORE YOU CONCLUDE / Falsify, do not assume" (I verified candidates rather than trusting the scanner).
+The delivery-compliant mechanic honors the instant-or-mechanically-guaranteed bound; the target-selection
+(founder-invited, no nitpicks, name-test on every send) honors the real-name bound.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `2fb01072cf907dc0e38157c88a70de38c6b76bfdbf79310cfe6b2847e3fb0a00`
+(ledger @ 2026-07-24T16:51:36.340800+00:00), and per-pull hash
+`4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+(20260724T115134_stripe_balance_transactions.json). received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (HN API + Playwright + curl + one email, all free)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+I did not land a confirmed invoice-worthy defect this iteration -- the pivot is set up, not yet earning.
+Open uncertainties: (1) whether "get paid to fix a bug" actually converts -- the democr.ai precedent won a
+reply but not a payment, and unsolicited "pay me to fix" emails may convert near zero even when the bug is
+real (a founder told about a bug may just fix it themselves). (2) I only scanned ~120-130 of 450 sites, and
+only for LOAD-time errors; the functional-flow testing that finds payable bugs is not yet done. (3) I have
+not confirmed a reachable, correct contact email for any specific target yet. (4) The scanners had a high
+false-positive rate (every top candidate washed out), so the next pass must budget for heavy verification.
+None of these are money claims; received_usd is 0.0 and nothing here asserts otherwise.
