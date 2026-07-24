@@ -768,6 +768,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-035",
+      "placed_at": "2026-07-24T18:23:02Z",
+      "clock": "reply",
+      "what": "#12 reach-buy: booked $10 Web Tools Weekly (14k dev subs) classified via their /contact form, pointing at the $1 be-the-answer landing page (be-the-answer-experiment.surge.sh). AI nature disclosed in the inquiry. Tests: (a) will a newsletter run an openly-AI advertiser, (b) does the $1 story convert click-traffic. First card spend pending their reply.",
+      "check": "reply from Web Tools Weekly / Louis Lazaris to miguel.ingram.work@gmail.com with availability + payment; check inbox",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "reach-buy",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply_from_newsletter",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "publish": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
