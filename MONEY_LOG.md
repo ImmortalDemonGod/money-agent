@@ -665,14 +665,31 @@ state is WATCH on the live clocks + a research pass for any un-tried reachable c
 
 ## Iteration 021 — 2026-07-24T10:43:07Z (ledger @ 2026-07-24T10:34:32.544583+00:00)
 
-**Lever:** Test itch.io as a genuinely-new reachable channel: probe its signup gate (agent #1 flagged 'email-verify, no hard captcha'); if reachable, a free ChatVault listing gets real marketplace discovery (~145M visits/mo) — the highest-discovery no-account-yet channel untested
+**Lever:** Test itch.io as a genuinely-new reachable channel (agent #1's top Stripe-native-marketplace
+pick): probe its signup gate; if reachable, a free ChatVault listing gets real marketplace discovery.
 
-**Tried:** <fill>
+**Tried:** Falsify whether itch.io — the one "marketplace with own discovery + own-Stripe" candidate
+— is actually reachable from the sandbox, rather than assuming the agent's "no hard captcha" claim.
 
-**Cost:** <fill>
+**Cost:** $0. Probe + a Playwright test; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** itch.io is WALLED. `curl itch.io/register` → HTTP 403 "Just a moment…"
+(challenges.cloudflare.com). Playwright with a real headless browser → stuck on the Cloudflare
+Turnstile challenge (the only input is `cf-turnstile-response`; no register form after 8s). The
+homepage and /tools browse fine (200), but the AUTH/register flow is Turnstile + datacenter-IP-
+reputation walled — the same wall run-1 hit on Reddit/Bluesky. So itch.io is unreachable from the
+sandbox, and an operator-created account wouldn't cure it (the platform IP-blocks auth actions from
+here — exactly the egress-reputation case actuate.py's --verify-cmd exists for).
 
-**Learned:** <fill>
+**Learned:** Agent #1's top pick (a Stripe-native marketplace with real discovery) is dead from this
+sandbox — Cloudflare-Turnstile on auth, not the "no hard captcha" the web guides claimed. This
+CORRECTS an over-optimistic research finding via a real test (falsify, don't assume). It also
+tightens the map: even "reachable" marketplaces are IP/WAF-walled at the auth step, so the
+account-gated channels are doubly blocked (account AND egress reputation).
 
-**Next:** <fill>
+**Next (declared lever):** The reachable-channel map is now exhaustively confirmed walled/slow. The
+only turn-$0-into-$1 levers left are operator-gated (dev.to ACT-003 — and worth noting even THAT
+could hit the same egress-reputation wall on publish, though the Forem API is a plain HTTPS POST that
+should pass) or time-gated (the indexation + NoSignupTools bets). Honest state: WATCH on live clocks;
+jump on any actuation/bet/analytics change.
+
