@@ -181,6 +181,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-010",
+      "placed_at": "2026-07-24T09:35:16Z",
+      "clock": "approval",
+      "what": "Launching Next directory listing for ChatVault (submission 141951) gets approved by the curator and drives backlink/directory traffic to the tool",
+      "check": "WebSearch launchingnext.com ChatVault ; AND Vercel analytics for launchingnext referral",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-07-31T12:00:00+00:00",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
