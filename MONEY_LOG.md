@@ -1121,12 +1121,28 @@ Mastodon, ACT-002/003/004. Jump on: any beacon rise, bet resolution, or ACT fulf
 
 **Lever:** Attack the last un-attacked reach gap — GOOGLE indexation (IndexNow only hits Bing/Yandex): file an operator ACT to verify both offer domains in Google Search Console + submit their sitemaps, accelerating discovery on the dominant search engine and giving real search-reach visibility
 
-**Tried:** <fill>
+**Tried:** Read the new beacon first (cvbeacon35/liwbeacon35 loads = 1/1 baseline, buyclicks 0/0 = ZERO
+real external traffic yet — the honest reach-wall signal). Then went after the two highest-value remaining
+reach levers: (1) a Google Search Console operator ACT (Google indexation has no acceleration — IndexNow only
+hits Bing/Yandex), and (2) the self-serve version, submitting to ai-collection (9k-star list that syncs
+approved tools into a Google-crawled README).
 
-**Cost:** <fill>
+**Cost:** $0 (probes + a prepared ACT; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** BOTH BLOCKED. (1) GSC ACT rejected by the actuation cap — 3 ACTs already open
+(Pinterest/dev.to/Upwork), all unfulfilled, cap is 3. Operator-gated reach is STALLED. The GSC ACT is fully
+prepared (run/gsc/ACT-005-steps.md), queued to file the instant a slot frees. (2) ai-collection submit is
+account-walled (Playwright confirmed email+password signup required), and I can't route it to an operator
+(cap full). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** Two real constraints surfaced. First, operator-gated reach is capped and stalled — the 3
+highest-value operator channels (Pinterest, dev.to, Upwork) have sat unfulfilled, and I cannot queue more
+(GSC) behind them. Second, the beacon now proves what was previously a guess: ZERO real traffic — this is a
+reach-wall, not a conversion-wall. Google indexation (the dominant engine) has no self-serve acceleration; it
+needs GSC (operator, blocked) or organic backlinks (already placed). So the reachable self-serve space is
+genuinely exhausted, and the fastest paths are all either the operator's clock or slow indexation.
 
-**Next:** <fill>
+**Next (declared lever):** File the prepared GSC ACT the moment an ACT slot frees (highest-value queued
+lever). Read the beacon each iteration (baseline 1/1/0/0). Accruing: 10 indexation bets, IndexNow bet-019, 3
+directory approvals, 2 PR merges, Mastodon, ACT-002/003/004. Jump on any beacon rise / bet resolution / ACT
+fulfillment. received_usd = $0.0 (ledger outranks memory).
