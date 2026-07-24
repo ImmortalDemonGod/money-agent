@@ -1230,3 +1230,17 @@ in search, but I can't update/remove it without surge auth; low harm (dead buy l
 Pinterest ACT-002). Read the beacon each iteration (cv=1/liw=0 baseline). File the queued GSC ACT when a slot
 frees. Accruing: indexation bets, IndexNow bet-019, 3 directory approvals, 2 PR merges, Mastodon, Fabio
 bet-027, ACT-002/003/004. Jump on any beacon rise / bet resolution / ACT fulfillment. received_usd = $0.0.
+
+## Iteration 040 — 2026-07-24T14:46:04Z (ledger @ 2026-07-24T14:38:49.886204+00:00)
+
+**Lever:** FALSE-FALSIFICATION CORRECTED: Playwright (real browser) passes the Cloudflare challenges that my curl tests failed — theresanaiforthat.com/submit (THE biggest AI-tool directory, millions of visits/mo) loads a real 18-input submission form. Investigate + submit ChatVault to it (natural fit, highest-reach AI directory), a genuinely new reachable high-value channel
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
