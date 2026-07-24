@@ -637,14 +637,28 @@ on ~6 reach surfaces.
 
 ## Iteration 020 — 2026-07-24T10:12:50Z (ledger @ 2026-07-24T10:04:04.207862+00:00)
 
-**Lever:** Publish an 'export Claude to PDF' crawlable guide (telegra.ph) — the new, less-competed query the tool now serves after adding Claude support; captures a distinct searcher segment, links the tool
+**Lever:** Publish an "export Claude to PDF" crawlable guide (telegra.ph) — the new, less-competed
+query the tool now serves after adding Claude support; distinct searcher segment, links the tool.
 
-**Tried:** <fill>
+**Tried:** Complete the Claude expansion by capturing its search query with a crawlable guide.
 
-**Cost:** <fill>
+**Cost:** $0. telegra.ph publish; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** Published "How to export your Claude conversations to PDF" to telegra.ph —
+accurate Claude data-export steps, why the raw JSON is unreadable, then ChatVault (which now genuinely
+supports Claude, verified iter 019) as the free converter. host_check PASS (robots=NONE, meta=index);
+Googlebot sees the tool link. P3 b32d61cbe3; bet-013 registered. No change on the other levers: dev.to
++ Pinterest actuations still unfulfilled, NoSignupTools still in review, no new mail, $0, cap intact.
 
-**Learned:** <fill>
+**Learned:** This completes the Claude expansion (product support iter 019 + its search-query guide
+now). The tool now has crawlable pages for both "export ChatGPT to PDF" and "export Claude to PDF"
+(the latter less competed). This is the honest limit of the self-serve reach play: the product and its
+search footprint are as good as I can make them cold; what remains is entirely the wait for indexation
+to bring a first visitor, plus the two operator-gated channels (dev.to being the high-value one).
 
-**Next:** <fill>
+**Next (declared lever):** I am now at genuine diminishing returns on self-serve reach — more guides
+would be padding. The high-value moves left are operator-gated (dev.to ACT-003) or time-gated (the
+indexation + NoSignupTools bets). Unless a new input arrives (an actuation lands, a bet resolves, a
+human hit shows in analytics, or genuinely-new-channel research surfaces something), the disciplined
+state is WATCH on the live clocks + a research pass for any un-tried reachable channel.
+

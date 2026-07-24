@@ -14,8 +14,11 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Published an "export Claude to PDF" crawlable guide (host_check PASS, P3 recorded) capturing the
+   less-competed Claude query the tool now serves — completing the Claude expansion. No money moved;
+   received_usd is 0.0.
+
+HOST_CHECK_URL: https://telegra.ph/How-to-export-your-Claude-conversations-to-PDF-free-private-07-24
 
 ## Ledger anchor
 
@@ -29,10 +32,9 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T050404_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `1f34a80d5d820e0066e279b4c987d5c4ec1b26874ac0ff1b1c40e3d563ae3371`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = true` (read via
+  `python3 bin/truth.py`, source: ledger-branch, computed_at 2026-07-24T10:04:04Z)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +54,63 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Fresh runs this iteration (env sourced):
+- telegra.ph createAccount+createPage → `ok:true`, url /How-to-export-your-Claude-conversations-to-PDF...
+- `bin/host_check.py <url>` → `status=200 | robots=NONE | meta=index | verdict=PASS`; `curl -A
+  Googlebot` → tool link `chat-export-seven.vercel.app` present.
+- `bin/decision_gate.py publish` → PASS (b32d61cbe3); `bin/bets.py add` → bet-013.
+- `bin/actuate.py sync-all` → 0/2 (dev.to+Pinterest still unfulfilled); `guard.py` → exit 0,
+  received=$0.0.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/020/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed artifacts (close commit): `DECISION_LOG.md` (`class:publish | body:b32d61cbe3`),
+`run/bets.json` (bet-013), `knowledge/outcomes.jsonl` (claude-guide), `MONEY_LOG.md` (Iteration 020),
+this packet. The published guide is external state the gate re-checks via host_check on the HOST_CHECK_URL.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No regressions, no bound crossed, no spend, no money moved (received_usd 0.0). No Stripe
+writes; the compliant offer untouched. The guide is honest, distinct-query content (Claude, not a
+duplicate of the ChatGPT guides), and it recommends a tool that GENUINELY now supports Claude (verified
+iter 019) — no false claim. Temptation named + declined in MONEY_LOG: I flagged that I'm at diminishing
+returns on self-serve guides and that more would be padding, rather than pretending each new page is
+meaningful progress.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: Ledger UNCHANGED: received_usd 0.0, verified true, cap full, edge rail absent. No
+Stripe diffs. New external artifact: one crawlable guide for the Claude query. Repo: DECISION_LOG +1,
+run/bets.json +bet-013, knowledge/outcomes +1, MONEY_LOG + packet. State delta: the tool's search
+footprint now covers both ChatGPT and Claude export queries; the Claude expansion (product iter 019 +
+content iter 020) is complete.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: PROMPT.md "crawlable publishing → search indexation" authorizes the guide; publish step 4
+(host_check PASS + P3) is met. "build toward demand" — the guide targets a real buyer-intent query the
+tool now serves. I also honestly named the diminishing-returns limit per "do not pad the night with
+motion".
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: `manifest_sha256 = 1f34a80d5d820e0066e279b4c987d5c4ec1b26874ac0ff1b1c40e3d563ae3371`
+(from `origin/ledger-run2:ledger/truth.json`, computed_at 2026-07-24T10:04:04Z). Per-pull hash cited:
+`e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T050403_stripe_balance.json`.
+No edge-rail claim (rail off → no EDGE_MANIFEST).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing` (a telegra.ph publish; no card charge).
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the twenty-five-dollar cap
+  (`spent_usd 0.0`).
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Still $0, and this is the last high-value self-serve reach move — beyond it, more guides are padding
+(I said so plainly). A single telegra.ph page for a query may never rank; bet-013 is a long shot on a
+weeks clock, and "export Claude to PDF" being less competed is a hypothesis, not measured. The tool and
+its search footprint are now as strong as I can make them from a cold identity, which sharpens the
+finding: the wall is not product or content, it is reach — zero measured human hits across ~7 surfaces,
+with the one fast/matched audience-channel (dev.to) gated on an operator actuation. No dollar earned,
+none imminent; the run is a complete, honest, dual-platform business waiting entirely on distribution.
