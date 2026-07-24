@@ -1524,12 +1524,30 @@ instant-delivery, reach-having path exists. Also open: bet-028/030 (operator), 3
 
 **Lever:** operator lever #13 (demand-side): scan the current HN 'Seeking Freelancer' thread for a SMALL, well-specified, instant-deliverable request with a contact email that I can BUILD FIRST then sell finished (compliant instant delivery); higher-intent than cold supply pitches.
 
-**Tried:** <fill>
+**Tried:** Pursued #13 (answer POSTED paid requests) across two readable demand surfaces + hunted a contact
+for the strongest remaining supply target. (1) HN "Freelancer? Seeking freelancer? (July 2026)" thread (id
+48749020) via algolia API. (2) r/forhire [Hiring] via Reddit JSON API (www + old.reddit). (3) getartcraft.com
+contact hunt (homepage, GitHub org storytold, HN profile).
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; HN API + curl + gh).
 
-**Actually happened:** <fill>
+**Actually happened:** #13 FALSIFIED for now: the July HN freelancer thread is 20 top-level = 19 SEEKING
+WORK (supply) and ZERO SEEKING FREELANCER (nobody hiring); June had 1 (ongoing project help, no email,
+off-instant-rail). r/forhire returns HTTP 403 + a JS interstitial to automated fetch -- walled. getartcraft
+(2nd SSR-invisible target, $3M ARR) has NO reachable email (homepage SSR-blank, GitHub org lists only
+twitter @get_artcraft, HN profile API empty) -> unreachable. No new sendable action this fire; I did NOT
+manufacture one. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The demand-side is symmetric-walled, same as I found pre-redirect: I can SEE demand but the
+reachable, on-rail, instant-deliverable slice is ~empty (HN hiring posts are seasonal/sparse; Reddit is
+403-walled; gig work is off-Stripe-rail + post-payment anyway). #13 is not dead but needs a demand surface
+that is BOTH readable AND has posted paid requests with email contact -- neither HN-freelancer (empty this
+month) nor Reddit (walled) qualifies right now. The one validated, repeatable, deliverable defect I DO have
+is SSR/AI-crawler invisibility (outofpocket proved it real + sendable); scaling genuine offers on THAT is
+more at-bats for the conversion experiment, which is what the operator wants (sends, not pipeline).
 
-**Next:** <fill>
+**Next (declared lever):** Targeted scan of a fresh HN-target batch for the SPECIFIC signature "SSR/AI-crawler
+invisible (raw-fetch body ~= title only) AND reachable contact email AND small enough to care" -> send 2-3
+genuine, personalized SSR-fix offers (reuse the outofpocket machinery: free diagnosis + $19 done-fix, limit=1
+Stripe -> gist, disclosure-as-hook). Primary signal meanwhile = WATCH bet-029 (outofpocket reply/payment,
+resolve 07-31). received_usd = $0.0 (ledger outranks memory).

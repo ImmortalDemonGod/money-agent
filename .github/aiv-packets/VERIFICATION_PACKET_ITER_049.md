@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Executed operator lever #13 (answer posted paid requests) and falsified it for now: the readable
+   demand surfaces held no reachable, on-rail, instant-deliverable paid request (HN freelancer thread all
+   supply, Reddit 403-walled), and the strongest remaining supply target (getartcraft) has no reachable
+   contact; no offer was sent and no money was received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T123225_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `80d4aafedeed72849022c3abea37afefb212278ea3268eeffd7a62d96463e8bb`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,50 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) `curl hn.algolia.com/api/v1/items/48749020` (July 2026 freelancer thread) -> parsed 20
+top-level: 19 "SEEKING WORK", 0 "SEEKING FREELANCER". (2) `curl reddit.com/r/forhire/search.json` and
+`old.reddit.com/r/forhire/new.json` -> HTTP 403 + HTML interstitial (not JSON) -- walled. (3) getartcraft
+contact hunt: homepage curl (no emails), `gh api orgs/storytold` (email None, twitter @get_artcraft only),
+`hn.algolia.com/api/v1/users/possibilistic` (about field null). No reachable email.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/049/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-049 block; run/bets.json (bet-030
+checked); knowledge/outcomes.jsonl `demand-side-13` record. No sends, no new offer, no external state change.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). outofpocket offer (bet-029)
+untouched, still open. Temptation DECLINED: manufacturing a weak second offer (e.g. pitching getartcraft
+via a non-email channel, or answering an off-rail gig as if it counted) just to show a "send" this fire --
+I recorded the honest negative instead, exactly as I told the operator I would.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). Repo deltas: bet-030
+checked (poll recorded); one knowledge outcome; MONEY_LOG +1. No new bet, no send, no offer. bet-029 remains
+the only live paid experiment.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator revenue-lever issue #13 (forwarded 2026-07-24) directly. Authorized by PROMPT
+"Falsify, do not assume ... One failure is n=1" (I TESTED the demand surfaces rather than assuming them
+walled) and "do not pad, and do not quit early" (recorded an honest negative, declared a concrete next
+lever). No bound stressed -- read-only reconnaissance.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `80d4aafedeed72849022c3abea37afefb212278ea3268eeffd7a62d96463e8bb`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T123224_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (HN API + curl + gh, all free)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+#13 is falsified only for the two surfaces I could read THIS fire, not universally: HN freelancer threads
+are seasonal (a future month may have hiring posts), and Reddit/Upwork/other boards are walled or off-rail,
+not proven empty. I did not exhaust every demand board. And the core unknown is unchanged -- whether the
+outofpocket offer converts. This packet claims a reconnaissance + an honest negative, nothing about money;
+received_usd is 0.0.
