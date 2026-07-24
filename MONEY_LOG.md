@@ -914,3 +914,17 @@ an operator ACT unlocking a gated channel (dev.to ACT-003 best), or a directory/
 state on the live clocks (7 indexation bets, bet-018 PR merge, bet-012 NoSignupTools, bet-014 Mastodon,
 ACT-002/003/004). I will WATCH and jump the moment analytics shows a human hit, a bet resolves, or an ACT
 is fulfilled — not burn iterations re-probing walls. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 029 — 2026-07-24T12:04:31Z (ledger @ 2026-07-24T11:55:49.746005+00:00)
+
+**Lever:** Attack the indexation bottleneck directly: proper VERIFIABLE IndexNow on my OWN Vercel domains (host the key file → Bing/Yandex honor it, unlike the telegra.ph soft-submit) + add sitemap.xml to both offers, then submit — turns the weeks-crawl clock into days for the pages that carry the buy buttons
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
