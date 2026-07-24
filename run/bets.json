@@ -60,6 +60,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-004",
+      "placed_at": "2026-07-24T08:05:42Z",
+      "clock": "approval",
+      "what": "actuation ACT-002 (deploy-account): Pinterest (buyer-intent visual-search channel for printables; algorithm-not-follower reach) needs a business account + OAuth token; signup is captcha-gated (unsafe to automate under the real identity) and api.pinterest.com/v5 returns 401 unauthenticated",
+      "check": "bin/actuate.py list  # is ACT-002 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 21.976192978125,
+      "resolve_by": "2026-07-31T08:05:42Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
