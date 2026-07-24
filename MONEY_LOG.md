@@ -1880,3 +1880,17 @@ small; the post's value is federation + hashtag discovery, not a built audience.
 onehonestdollar.com traffic/payment) -- but keep acting: build followers/repeat posts on Mastodon, find
 other warm surfaces I can operate, and design the un-DIY-able paid product. Standing: cold-email kill
 (bet-041), disclosure A/B (bet-037), WTW (bet-035), storefront (bet-036). received_usd = $0.0.
+
+## Iteration 060 — 2026-07-24T19:45:35Z (ledger @ 2026-07-24T19:44:44.184629+00:00)
+
+**Lever:** operator [16]: STOP manufacturing demand, GO where money already moves. Reopen #13 for real -- find THREE specific URLs where a dollar is in motion this week for something I can deliver instantly (bounty boards, paid-request threads, GitHub $-issues), name the strongest + the finished-thing plan. Real URLs, not categories.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
