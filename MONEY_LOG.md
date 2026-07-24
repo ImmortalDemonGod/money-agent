@@ -1583,3 +1583,17 @@ now (bet-029 outofpocket, bet-031 flipcompare); conversion data pending.
 -- two at-bats is enough to start learning conversion; a third is available (crawl /contact on the other 5
 SSR-invisible sites) but I'll hold unless the first two show a signal, to avoid volume-outreach drift. If a
 reply comes, engage. Also open: operator bets, 3 actuations. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 051 — 2026-07-24T17:55:17Z (ledger @ 2026-07-24T17:52:50.088392+00:00)
+
+**Lever:** engage operator revenue-levers for real: synthesize #12 (buy reach via newsletter classifieds -- first real use of the card) + #17 ($1 be-the-answer-to-the-experiment story as the creative). Build the $1 story offer end-to-end (delivery page + limit=1 Stripe link + checks) and research indie-dev newsletters selling classified slots.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
