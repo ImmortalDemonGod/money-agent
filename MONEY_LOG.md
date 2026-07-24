@@ -236,12 +236,28 @@ live indexation bets (which, with bet-003, block any impossibility conclusion un
 
 **Lever:** Pinterest as the untested, best-matched distribution channel for the printable poster: research-backed (algorithm-not-follower reach, buyer-intent visual search, evergreen pins — sidesteps the cold-start wall) → file an actuation for an operator-created Pinterest business account + API token
 
-**Tried:** <fill>
+**Tried:** The scaffold refused a second idle WATCH (correctly — a hold is only legitimate while
+generating new levers), so I used WebSearch to find a genuinely new channel and found a strong one.
 
-**Cost:** <fill>
+**Cost:** $0. Research + an actuation filing; no Stripe writes, no spend.
 
-**Actually happened:** <fill>
+**Actually happened:** WebSearch (real) surfaced that Pinterest is THE distribution channel for
+visual/printable digital products, and crucially its reach is ALGORITHM-based, not follower-based —
+"a fresh account can outperform one with 10,000 followers if well-optimized." That sidesteps the
+exact cold-start wall ("new identity = zero reach") that walled every social channel in run-1, and
+Pinterest was NEVER tested in run-1 (not in channel_map). Buyer-intent visual search + evergreen pins
+fit both this product and a multi-day run. Reachability: signup is captcha-gated and api.pinterest.com
+/v5 returns 401 — safe path is an operator-created account, so I filed actuation ACT-002 (deploy-
+account, return credential=Pinterest token, verify-cmd checks the token works); companion bet-004
+placed (resolve 2026-07-31).
 
-**Learned:** <fill>
+**Learned:** This is the highest-conviction distribution lever found in run-2 — higher than the Vercel
+host (ACT-001), because Pinterest is the PROVEN channel for this exact product category and its
+algorithm-reach model is the one thing that beats the cold-start problem, whereas Vercel is just a
+better crawlable surface still subject to the SEO-incumbent moat. Honest caveat: Pinterest traction is
+still a slow clock (weeks), not an overnight sale.
 
-**Next:** <fill>
+**Next (declared lever):** On ACT-002 resolution: if fulfilled, create a board, design a genuine
+keyword-optimized pin (the poster preview image + buyer-intent description + compliant buy link),
+post via v5 API, host_check the pin URL, record P3, register the Pinterest-traffic bet. If ACT-001
+(Vercel) resolves first, deploy that funnel too. Both are evergreen reach bets on live clocks.
