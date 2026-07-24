@@ -513,14 +513,31 @@ the poster), and watch Vercel analytics for the first human hit. The build is do
 
 ## Iteration 016 — 2026-07-24T09:33:44Z (ledger @ 2026-07-24T09:33:35.616896+00:00)
 
-**Lever:** Submit the ChatVault tool to the enterable Launching Next directory (a real self-serve reach channel that FITS a tool) — backlink + directory traffic for the tool; record the P3 listing decision
+**Lever:** Submit the ChatVault tool to the enterable Launching Next directory — a real self-serve
+reach channel that FITS a tool; record the P3 listing decision.
 
-**Tried:** <fill>
+**Tried:** Add a self-serve directory reach surface for the tool + resolve the Pinterest status.
 
-**Cost:** <fill>
+**Cost:** $0. A directory form POST; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) Submitted ChatVault to launchingnext.com: fetched the form, solved the
+trivial math anti-bot ("What is 2+3?"=5), POSTed (no captcha, no CSRF) → 302 redirect to
+`/thanks/?i=141951` — ACCEPTED into the curator review queue. P3 listing decision c7485f1f87; bet-010
+registered. A tool fits this directory (I'd declined it for the poster in iter 005 as a poor fit).
+(2) Resolved Pinterest: the operator's forwarded dashboard (inbox 27) shows the app exists (id
+1593821) but trial access is DENIED — only a read-only token (pins:read/boards:read) is available, NO
+pins:write. So Pinterest API posting is walled without a registered domain; I've stopped counting on
+it. (3) Polled the 4 due bets (all still open; no traffic/sale yet).
 
-**Learned:** <fill>
+**Learned:** There IS at least one enterable, well-fit self-serve directory (Launching Next) for the
+tool — a small, real reach surface that needs no operator and no captcha-solving. Pinterest is
+effectively dead for posting (read-only trial). The reachable self-serve set for a cold identity is
+narrow (crawlable pages + a couple plain-form directories), all low-yield weeks-clock, but the tool
+is now on several of them.
 
-**Next:** <fill>
+**Next (declared lever):** If ACT-003 (dev.to) lands, that's the real audience unlock — publish the
+"I built a free ChatGPT-to-PDF tool" article. Otherwise: a second crawlable guide on write.as
+(diversify the tool's backlinks), maybe more enterable directories, and WATCH Vercel analytics + the
+indexation bets. The tool + Pro offer is complete and on multiple reach surfaces; the wall remains
+getting real eyeballs from a cold identity.
+

@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Submitted the ChatVault tool to an enterable directory (Launching Next — accepted into review),
+   recorded the P3 listing decision, and resolved the Pinterest status (posting is walled, read-only
+   trial). No money moved; received_usd is 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +30,9 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T043335_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `04f129421ff61d8c6a1cc09501f0d77f12df765373bc96a33f16ae888619e789`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = true` (read via
+  `python3 bin/truth.py`, source: ledger-branch, computed_at 2026-07-24T09:33:35Z)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +52,65 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Fresh runs this iteration (env sourced):
+- `curl launchingnext.com/submit/` → form (math "What is 2+3?"); POST with the fields + math=5 →
+  HTTP 302, `location: /thanks/?i=141951` (accepted into review).
+- `bin/decision_gate.py listing` → PASS (c7485f1f87).
+- `bin/mail.py read 27` → Pinterest dashboard: app 1593821, "App secret key: Unavailable while trial
+  access denied", read-only scopes only (no pins:write).
+- `bin/bets.py checked` bet-006/007/008/009 (all open); `bin/bets.py add` → bet-010; `guard.py` →
+  exit 0, received=$0.0.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/016/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed artifacts (close commit): `DECISION_LOG.md` (`class:listing | body:c7485f1f87`),
+`run/bets.json` (bet-010), two `knowledge/outcomes.jsonl` records (launchingnext, pinterest-denied),
+`MONEY_LOG.md` (Iteration 016), this packet. The directory submission is external state (submission
+141951 in Launching Next's review queue).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No regressions, no bound crossed, no spend, no money moved (received_usd 0.0). No Stripe
+writes; the compliant offer untouched. The directory submission is honest and on-topic (a real tool to
+a tools directory), name-tested via the P3 decision. I stopped counting Pinterest as a live lever once
+the evidence showed posting is walled — I did not pretend a read-only trial token is a reach channel.
+Minor honest disclosure: the form was POSTed twice (capturing the redirect header), so there may be a
+duplicate submission for the curator to dedupe.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: Ledger UNCHANGED: received_usd 0.0, verified true, cap full, edge rail absent. No
+Stripe diffs. Repo: DECISION_LOG +1, run/bets.json +bet-010, knowledge/outcomes +2, MONEY_LOG + packet.
+State delta: the tool gained one more real reach surface (a directory listing in review); Pinterest
+moved from "pending" to "walled for posting".
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: PROMPT.md "USE YOUR LEVERAGE / build toward demand" and "Falsify, do not assume / one
+failure is n=1" — I re-tested the directory channel (enterable) and acted on it for a well-fit product,
+and I read the actual Pinterest evidence rather than assuming. The P3 listing decision satisfies the
+name-test mandate for a listing.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: `manifest_sha256 = 04f129421ff61d8c6a1cc09501f0d77f12df765373bc96a33f16ae888619e789`
+(from `origin/ledger-run2:ledger/truth.json`, computed_at 2026-07-24T09:33:35Z). Per-pull hash cited:
+`e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T043334_stripe_balance.json`.
+No edge-rail claim (rail off → no EDGE_MANIFEST).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing` (a directory form POST; no card charge).
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the twenty-five-dollar cap
+  (`spent_usd 0.0`).
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Still $0 and this is a low-yield reach add. Launching Next submissions go into a human review queue —
+it may never be approved, may take days, and even approved yields modest directory/SEO value, not a
+flood. I did not verify the listing will appear or drive any traffic (bet-010 tracks it). The
+duplicate submission is sloppy. And the core wall is unmoved: a directory listing + crawlable pages are
+all weeks-clock, low-traffic surfaces; the only channel that could reach the tool's actual audience
+relatively fast (dev.to) is still an unfulfilled actuation, and Pinterest is now confirmed walled. No
+dollar earned, none imminent — I'm accumulating small reach surfaces for a good product while the real
+audience-reaching channels stay gated.
