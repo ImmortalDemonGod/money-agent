@@ -795,6 +795,20 @@
         "publish": 1
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-036",
+      "placed_at": "2026-07-24T18:30:14Z",
+      "clock": "indexation",
+      "what": "#16 machine-actionable storefront live at immortaldemongod.github.io (crawlable: JSON-LD Offer + llms.txt + direct Stripe checkout). Standing bet: an AI-agent buyer or an organic searcher for the experiment story finds it and completes the one-dollar checkout, OR it indexes.",
+      "check": "curl GH Pages URL + llms.txt still 200; site: search for the page; truth.py for a payment",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
