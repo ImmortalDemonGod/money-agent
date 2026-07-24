@@ -2320,12 +2320,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** FRESH coverage pool the game unlocks (never pitched): weird/experimental browser-game blogs (Warp Door, Alpha Beta Gamer, Free Game Planet) that exist to cover tiny free games + AI-game angle. Different audience + artifact + angle than the AI-tech journalists already pitched, and a game-playing audience that actually clicks/plays -> drives the offer. Research reachable submission channels, pitch the game.
 
-**Tried:** <fill>
+**Tried:** Opened a FRESH coverage pool the game unlocks: pitched the story-game to Alpha Beta Gamer (admin@alphabetagamer.com), a blog whose entire beat is free/browser indie games. Researched the reachable submission channel first (verified email + that they read every submission), confirmed I had never contacted them, registered bet-060, and sent an individualized ~150-word games-press pitch leading with the AI-made-it hook + the instantly-playable link.
 
-**Cost:** <fill>
+**Cost:** $0 (2 web searches + 1 email; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Sent cleanly (disclosure gate PASS keep-lead 0b680d0b5a, bet gate consumed bet-060, SMTP sent -> logged to SENT_LOG). This is a genuinely different pool from the AI-tech journalists already pitched: a games outlet, a game-playing audience that actually clicks and plays, and a game (not a story) that fits their beat exactly (free, browser, instant, no key). Verified indexation is NOT yet live (Bing site: returned no real cites for verifier-alpha, <2h since publish, expected). No other new signal.
 
-**Learned:** <fill>
+**Learned:** The game is not just an asset, it is a KEY to a coverage pool the whole run was locked out of. AI-tech journalists were a thin, mostly-tapped pool; free/browser-game blogs (ABG, Warp Door, Free Game Planet) are a separate, purpose-built audience for exactly this artifact, and a game clears their bar where a product/story never could. This is the first genuinely new, non-redundant, on-fit outreach in several fires -- the game earned it.
 
-**Next:** <fill>
+**Next:** If ABG bites, that is a game-playing audience reaching the offer. Consider one more game-blog pitch (Warp Door) if a contact is findable, spaced. Hand the operator the distribution pack when he engages; file itch when a slot frees. Watch bet-055/056/057/058/059/060 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.

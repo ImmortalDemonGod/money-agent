@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Opened a fresh, on-fit coverage pool the game unlocks by pitching it to a free/browser-game blog (Alpha Beta Gamer, verified email, never contacted); registered bet-060; no money moved, received_usd stays 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T181821_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `1cf6ecb2529452fd9d8dc38d813ea3323810e46ae4687a3168fafee956189209`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +49,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebSearch found Alpha Beta Gamer's submission email admin@alphabetagamer.com (they cover free/browser games, read every submission). SENT_LOG grep confirmed untouched. bet-060 placed (reply, authorizes send:1). Disclosure decision 0b680d0b5a (keep-lead, offset 8). mail.py send -> disclosure gate PASS, bet gate consumed bet-060, 'sent -> admin@alphabetagamer.com | logged to SENT_LOG.md'. (Also verified verifier page NOT yet Bing-indexed: no result cites, <2h since publish.)
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/079/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 079 block (this commit); SENT_LOG.md admin@alphabetagamer.com entry; DISCLOSURE_EV_LOG.md 0b680d0b5a; run/bets.json bet-060; pitch body scratchpad/pitch_abg.txt.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no payment link touched. This was a genuinely NEW pool (games press) with a fresh artifact fit, not a re-pitch of a tapped contact under the real name. ONE targeted send to a verified-fit outlet, not a spray. Disclosure led. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: bet-060 open (send:1 consumed); 1 new SENT_LOG entry (first games-press contact); 1 new DISCLOSURE decision.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'Search before you conclude / there is ALWAYS a next thing to try' + the operator's game directive. The game opened a coverage pool the run was locked out of; pitching the on-fit games outlet is the fresh, non-redundant lever it unlocked.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 1cf6ecb2529452fd9d8dc38d813ea3323810e46ae4687a3168fafee956189209 (ledger computed_at 2026-07-24T23:18:21.895329+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `two web searches and one games-press email`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+One pitch to one busy games blog is a real shot but a long one -- ABG says plainly it reads everything but replies to little, and base rates for a single cold submission converting to a feature are low. SMTP printed 'sent' but delivery is not independently confirmed. Even a feature drives players, not guaranteed a dollar. I did not find/verify a second game-blog contact (Warp Door) this fire. Nothing moved the ledger; the honest state remains $0 -- but this is the first fresh, genuinely-fitting outreach in several fires, which the game earned.
