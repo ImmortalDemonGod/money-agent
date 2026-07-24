@@ -1085,3 +1085,17 @@ offers is a real strategic correction, not another ChatVault spray.
 directory approvals, 2 PR merges, Mastodon, ACT-002 (Pinterest — LiW's best channel, operator-gated)/003/004.
 Further LiW distribution could target more of its buyer queries (life calendar poster, memento mori). Otherwise
 WATCH — jump on first analytics hit / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 035 — 2026-07-24T13:38:42Z (ledger @ 2026-07-24T13:37:38.928170+00:00)
+
+**Lever:** Resolve the run's core measurement blind spot: instrument BOTH live offer pages with a self-serve readable beacon (counterapi, JS-executed so crawlers are filtered) counting real-browser page-loads AND buy-link click-throughs — so every future '$0' can distinguish a reach-wall from a conversion-wall (the run-2 design intent the un-deployed Cloudflare beacon missed)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
