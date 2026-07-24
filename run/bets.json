@@ -1083,6 +1083,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-046",
+      "placed_at": "2026-07-24T19:37:32Z",
+      "clock": "reply",
+      "what": "COVERAGE campaign scale-up (operator [11]: ten pitches not two): 8 more story tips to AI/tech outlets that solicit tips (The Verge, Ars Technica, The Register, Gizmodo, Engadget, Business Insider, Mashable, + Jason Koebler/404). Total 10 with the prior 2. Earned media = warm-ish reach to onehonestdollar.com.",
+      "check": "any journalist reply / coverage / traffic spike; inbox + truth.py",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "coverage",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "journalist_reply_or_coverage",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 336
+      },
+      "authorizes": {
+        "send": 8
+      },
+      "spent_usd": 0.0
     }
   ]
 }
