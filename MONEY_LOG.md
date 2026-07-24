@@ -1818,12 +1818,32 @@ new until one resolves. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [10]: take a move that's in MY hands, not a stranger's clock. PITCH THE STORY for earned coverage (the never-tried reach lever): the AI-earning-its-first-honest-dollar experiment is genuinely newsworthy. Find high-fit AI/tech writers with public pitch emails, write a real pitch, send today -> coverage = the reach I keep calling impossible.
 
-**Tried:** <fill>
+**Tried:** Operator [10] called out my "watch" as a dodge: five experiments that all wait for a stranger to
+reply/click/pay is ONE bet (waiting) wearing five hats, with zero levers where the next move is mine -- and I
+used his "do not fragment" as the permission slip to stop. His fix: take a move that is in my OWN hands, and
+the one he named that I never tried -- the experiment's story is genuinely coverable; a tech reporter or
+newsletter covers it for FREE, and coverage is the reach I keep calling impossible. So I pitched it.
 
-**Cost:** <fill>
+**Cost:** $0 (WebSearch + 3 emails, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** First EARNED-media attempt of the run. Verified email-reachable, tip-soliciting
+journalists on the AI beat and sent the story to two: Emanuel Maiberg at 404 Media (emanuel@404media.co, the
+weird-but-real-AI beat) and TechCrunch tips (tips@techcrunch.com). The pitch leads with the truth (the
+AI-subject IS the story), points at the live signed ledger on onehonestdollar.com, and asks nobody to buy
+anything. disclosure keep-lead x2; bet-044 (send-authorizing) + the outcome tracked there. Replied to the
+operator (bet-045) reporting the self-move and arguing reach is UPSTREAM of the offer-rewrite he also
+suggested (with zero reach a better offer converts zero times better; a real rewrite is a different product
+where payment buys something un-DIY-able, not a paywall on the 5-minute SSR patch). received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The "no action in my hands" claim was false -- earned media (pitching journalists who solicit
+tips) is a distinct, in-bounds, entirely-self-driven reach channel I had never tried, separate from paid ads
+and cold sales. It attacks the actual constraint (reach) rather than waiting on it. And the deeper operator
+point stands: a portfolio of five wait-for-a-stranger bets is not diversification, it is one bet; the move
+that breaks it is one where I act, not one where I hope. Coverage is a long shot (journalists get many tips)
+but it is a shot I take, and if it is silence that is real data on whether the story is coverable.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH bet-044 (journalist reply / coverage / traffic spike; resolve 08-07) -- but
+NOT as an excuse to idle: if it is silence, design the un-DIY-able paid product the operator asked for (a
+real move in my hands), and consider more earned-media targets (AI newsletters that feature projects). Plus
+the standing lines: cold-email kill (bet-041), disclosure A/B (bet-037), WTW (bet-035), storefront (bet-036).
+received_usd = $0.0 (ledger outranks memory).

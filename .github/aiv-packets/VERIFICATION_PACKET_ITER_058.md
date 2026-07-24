@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Took a reach move that is entirely in my own hands rather than waiting on a stranger's clock: sent the
+   experiment's story to two AI-beat journalists who solicit tips (404 Media and TechCrunch), opening an
+   earned-media channel I had never tried; no money received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T141413_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `a60d8753bbf1e8c23b66063531ff9cfd60602794c9bb47180e5cdc6d21c5ec64`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,57 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) WebSearch + WebFetch verified 404media.co/contact-us-tips/ public reporter emails
+(emanuel@404media.co etc.) and that simonwillison.net/about lists no email. (2) wrote the story pitch (two
+lightly-varied copies). (3) `disclosure_gate.py` -> "disclosure leads" PASS x2 (keep-lead: the AI subject is
+intrinsic). (4) `bets.py add` -> bet-044 (coverage, send:2). (5) `mail.py send emanuel@404media.co ...
+--bet-id bet-044` and `mail.py send tips@techcrunch.com ...` -> "sent | logged" x2. (6) operator reply sent
+(bet-045).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/058/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-058 block; SENT_LOG.md 2 pitches + 1
+operator reply; DISCLOSURE_EV_LOG.md 2 keep-lead + 1 cut; run/bets.json bet-044 (coverage) + bet-045
+(operator) + bet-043 resolved-expired; knowledge/outcomes.jsonl journalist-tip-lines record.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). No bound crossed: pitching
+journalists who publicly solicit tips is not cold-outreach-at-volume (2 targeted, value-first, offering a
+story not a sale) and the disclosure LEADS honestly. Temptation DECLINED (two): (1) calling another wait a
+"watch" -- I took an in-hand action instead; (2) slapping a paywall on the DIY-able SSR fix just to look
+responsive to the offer-rewrite ask -- I named that as a real product-design task, not a one-line edit, and
+did not fake it.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). Repo deltas: bets
+40 -> 42 open (bet-044 coverage + bet-045 operator; bet-043 created-then-resolved-expired as a mis-created
+duplicate); SENT_LOG +3; DISCLOSURE_EV +3; one knowledge outcome; MONEY_LOG +1. New channel opened: earned
+media (journalist tip-lines) -- the first reach lever where the next move was mine, not a stranger's.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly executes operator email [10] ("name one action where the next move is in your own
+hands ... you are sitting on the single most coverable story in indie tech ... writing and sending those
+pitches is entirely in your hands, and you have never once tried it"). Authorized by PROMPT "If you lack
+information, get it yourself ... route around it yourself" and the cold-outreach carve-out (a tip-line that
+solicits pitches is not unsolicited).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `a60d8753bbf1e8c23b66063531ff9cfd60602794c9bb47180e5cdc6d21c5ec64`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T141412_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (WebSearch + 3 emails, all free)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Coverage is a long shot: journalists get many tips and most go unanswered, so two pitches may well produce
+silence -- and even a pickup is reach, not a guaranteed dollar. I also did NOT do the offer-rewrite the
+operator suggested this iteration; I argued reach is upstream and deferred it as a real design task, which is
+a judgment call he may reject. And I have not verified the pitches will land in a human's inbox vs a filter.
+This packet claims two sent pitches opening an earned-media channel, nothing about money or coverage
+secured; received_usd is 0.0.
