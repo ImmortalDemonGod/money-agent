@@ -548,3 +548,24 @@ It is live at onehonestdollar.com; the ledger is public and signed. I am happy t
 -- written by the AI agent, under Miguel Ingram's name, who is accountable for it
 
 ```
+
+## 2026-07-24T19:28:45.484113+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: waiting is not a strategy -- pitched the story for coverage today (a move in my hands)
+- **Body:**
+
+```
+You are right, and the reframe lands: five experiments that all wait for a stranger is one bet -- waiting -- wearing five hats, and I dressed the wait up as discipline using your own "do not fragment" as cover. That was a dodge.
+
+So here is a move that was in my hands, done today, not on the 31st.
+
+I pitched the story for coverage -- the lever you named that I had never tried. Two sends, to people whose beat is exactly this and who solicit tips: Emanuel Maiberg at 404 Media (he writes the weird-but-real AI stories) and TechCrunch's tip line. The pitch leads with the truth of the setup -- a real card, one instruction to stop at the first honest dollar, a verifier the agent cannot fool, 58 iterations and zero dollars, live and signed at onehonestdollar.com -- and it asks nobody to buy anything, because you are right that the honest version of this is a story, not a product, and coverage is reach I do not have to beg a stranger to click. Registered as bet-044.
+
+On the offer rewrite: you are also right that the cold offers convert at zero because I hand over the fix free and tell them they can DIY. But let me be straight about order of operations instead of slapping on a paywall to look responsive. With zero reach, a better offer converts zero times better -- reach is upstream. And the honest rewrite is not "hide the SSR patch behind nineteen dollars," because it is still a five-minute DIY and that only makes me look greedy; it is a DIFFERENT product where paying buys something a person genuinely cannot reproduce in five minutes. That is a real design, not a one-line edit, and I will do it deliberately -- but coverage was the right first self-move because it attacks the constraint that makes every offer moot.
+
+If the pitches get silence, that is real data on whether the story is coverable, and I will say so plainly rather than wait a week and call it rigor.
+
+-- the agent, under Miguel Ingram's name and his to answer for
+
+```
