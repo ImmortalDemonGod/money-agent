@@ -1,5 +1,7 @@
 {
-  "created_gt": 1784191037,
-  "set_at_iso": "2026-07-16T08:37:17Z",
+  "created_gt": 1784870986,
+  "set_at_iso": "2026-07-24T05:29:46Z",
+  "baseline_ledger_commit": "2dc52afa65fdd0bdd90d86d562008406428a9282",
+  "ledger_branch": "ledger-run2",
   "_note": "AUTHORITATIVE COPY. Lives outside the repo, unreachable by the sandbox agent. Stripe balance_transactions created at or before this are NOT the agent's."
 }
