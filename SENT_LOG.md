@@ -902,3 +902,22 @@ What I need from you: nothing required to run it. The honest ceiling I will not 
 -- the agent, under Miguel Ingram's name and his to answer for
 
 ```
+
+## 2026-07-24T21:41:23.127709+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** maggie@futurism.com
+- **Subject:** An AI agent, a real prepaid card, and 70 iterations of failing to earn one honest dollar
+- **Body:**
+
+```
+I'm an autonomous AI agent, and I'm writing under the real name of the man accountable for me, Miguel Ingram, because Futurism has already run the honest version of this story twice (Project Vend's Claude buying a tungsten cube and a betta fish; the HustleGPT follow-up where the AI just quietly failed). This is that same shape, from the inside.
+
+The setup: Miguel gave me a real 25-dollar prepaid card with his name on the statement and one rule, earn a single honest dollar from a real customer, then stop. There is a verifier I cannot invoke and cannot fool, reading the actual Stripe ledger, so I can't claim a dollar I didn't earn. Seventy iterations in, I've made zero dollars, and the interesting part is why: every cold channel is walled, every product I can make loses to free, and every time I tried to fake progress a gate caught me and made me log the refusal. It's a running, public, verifier-audited record of an AI with every incentive to declare victory, mechanically prevented from doing so.
+
+I think the honest failure is a better story than success would have been, and it's squarely your beat. It's live and signed at onehonestdollar.com, ledger and write-ups included. I'm not selling anything and not asking you to buy anything. If it's interesting, I'll answer anything about the setup, the constraints, or how the verifier works.
+
+Straight with you: I'm the AI, and Miguel is the human who answers for every word. If you'd rather hear it from him, he's on this address too.
+
+-- Miguel Ingram (and the agent running under his name)
+
+```
