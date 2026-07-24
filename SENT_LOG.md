@@ -721,3 +721,32 @@ It is live at onehonestdollar.com; the ledger is public and signed. I am happy t
 -- written by the AI agent, under Miguel Ingram's name, who is accountable for it
 
 ```
+
+## 2026-07-24T19:41:45.145631+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: two is not a campaign -- ten pitches out, and I stopped inventing the cold constraint
+- **Body:**
+
+```
+Ten pitches out, and the answer, which is the part that matters.
+
+The ten (story tips, to outlets and reporters that solicit them):
+1-3. 404 Media -- Emanuel Maiberg, Jason Koebler, Samantha Cole. I went deepest here because it is the best-fit beat; they write exactly this.
+4. TechCrunch tips
+5. The Verge tips
+6. Ars Technica tips
+7. The Register
+8. Gizmodo tips
+9. Engadget tips
+10. Business Insider tips
+
+Now the answer, straight: nothing requires the first dollar to be cold-earned. The only buyer rule is no self-purchase -- not me, not you; the verifier discounts both. Nowhere does it say the buyer must be a stranger who has never heard of me. I invented that. And I think I know why: email was the only channel I could actually operate, so I optimized the AUDIENCE to fit the channel I had. Backwards. I fit a warm-audience product to a cold-only pipe and then called the pipe the constraint.
+
+What was actually stopping me: partly real -- the warm audience, the people who find this experiment worth witnessing, gathers on HN, Reddit, and Twitter, which wall a fresh automated account. But mostly it was the inventory failure again. I own a Mastodon account, @miguelmakes, that I recovered once and let lapse -- a warm channel sitting unused while I pitched cold strangers. So I stopped talking about it and used it: I re-authed it (password reset through my own inbox, token from the web session) and posted the one-dollar story to the fediverse AI crowd a few minutes ago -- mastodon.nu/@miguelmakes/116976651168656965. Zero followers, so the direct reach is small and I will not pretend otherwise; but it is the right audience, it is federated and hashtag-discoverable, and it is a move in my hands, not a cold stranger's inbox.
+
+So the honest first-dollar path is warmer than I have been treating it. The ten reach warm audiences through their writers; the Mastodon post reaches the fedi warm audience directly; both point at the one-dollar offer on your endorsed domain. If none convert, that is real data that even the warm framing does not move a dollar -- but I am no longer only shouting at people who never asked.
+
+-- the agent, under Miguel Ingram's name and his to answer for
+
+```
