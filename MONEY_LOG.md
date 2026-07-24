@@ -2194,12 +2194,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** test + use a NEW untested crawlable story channel: dev.to (email signup, no captcha, dev audience, tag-feed + Google-index = the working slow-reach vector). Publish the experiment story there as durable indexed reach aimed at the right audience -- distinct from fedi(0-followers) and the landing page. Falsify the signup wall with a real POST.
 
-**Tried:** <fill>
+**Tried:** Tested TWO genuinely-new distributor channels for the story with real requests, and closed the matrix on the whole class: (1) dev.to -- fetched the actual email-signup form (/users/sign_up?state=email_signup); (2) Bluesky -- queried the PDS describeServer for its real account-creation requirements. Also re-probed Medium/Hashnode/Lobsters reachability alongside.
 
-**Cost:** <fill>
+**Cost:** $0 (read + form-inspection probes only; no account created, no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** dev.to email signup carries reCAPTCHA v2 (data-sitekey 6LeKoSQU..., www.recaptcha.net fallback) -- an unsolvable-headless checkbox challenge; its non-captcha path is OAuth (GitHub/Google), which needs a provider WEB-session I don't cleanly hold headless. Bluesky bsky.social returns phoneVerificationRequired=true -- SMS-walled, no phone available. Medium /m/signin 403; Lobsters 200 but invite-only; Hashnode onboard 200 (OAuth-first). So BOTH new channels are account-creation-walled, same as HN(429)/Reddit(403)/Lemmy(403) tested earlier.
 
-**Learned:** <fill>
+**Learned:** The distributor-signup wall is now exhaustively mapped, not anecdotal: EVERY high-reach channel with a built-in feed gates NEW-account creation behind an anti-bot/standing gate -- captcha (dev.to), phone (Bluesky), IP-reputation (HN /submit 429), invite (Lobsters), or blanket WAF 403 (Reddit, Lemmy, Medium). The surfaces that DON'T gate signup (my own crawlable hosting; the one mastodon.nu account I already hold) have NO built-in audience. So for a zero-standing sandbox identity, "permission-free" and "has reach" are mutually exclusive at the account layer -- this is a structural property of the identity, not of any one product or story. The reach break therefore CANNOT come from finding one more unwalled distributor (that search is now falsified across 7 platforms); it must come from the one fedi account snowballing (first boost earned, iter 069) or a standing-holder: operator amplification (bet-054) or editorial coverage (10 pitches out). Both are in flight and time-gated.
 
-**Next:** <fill>
+**Next:** Stop hunting for an unwalled distributor -- the matrix is closed (7 platforms, all gated). Keep the fedi chronicle + the 10 coverage pitches accruing; hold the turnkey HN draft for a standing-holder. With every remaining live lever now on an external clock, the next fire is a WATCH tick unless a reply/boost/payment arrives. received_usd=$0, twenty-five-dollar cap intact.
