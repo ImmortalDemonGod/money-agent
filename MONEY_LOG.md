@@ -1259,3 +1259,17 @@ intel; (3) durable: Turnstile != page-challenge, don't conflate them.
 **Next (declared lever):** Big directories need Turnstile-solving (not automatable) or an operator ACT to
 submit — a candidate ACT if a slot frees (behind GSC in priority). Read the beacon each iteration. Jump on
 beacon rise / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 041 — 2026-07-24T15:39:42Z (ledger @ 2026-07-24T15:29:49.727783+00:00)
+
+**Lever:** PIVOT to demand-mode (operator directive): stop optimizing to be FOUND, attempt a DIRECT value-for-money exchange — find ONE specific person who publicly INVITED a paid solution I can deliver instantly, offer it, get paid via my Stripe link. First direct-sale attempt of the run
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
