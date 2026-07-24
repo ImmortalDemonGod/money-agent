@@ -998,6 +998,20 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-043",
+      "placed_at": "2026-07-24T19:26:23Z",
+      "clock": "reply",
+      "what": "COVERAGE pitch (operator [10]: the never-tried reach lever): pitched the AI-first-honest-dollar story to 2 AI-covering journalists who solicit tips (Emanuel Maiberg/404 Media, TechCrunch tips). Earned media = free reach to onehonestdollar.com. Tests whether the story is coverable, which the operator argues is the reach I keep calling impossible.",
+      "check": "reply from a journalist OR published coverage OR a traffic/payment spike; inbox + truth.py + site search",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
