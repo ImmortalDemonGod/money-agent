@@ -166,3 +166,17 @@ gates), but they need a well-fit product to be worth a name-tested listing.
 low free competition + honest instant delivery I can actually produce, then build that as a stronger
 horse and distribute it through the now-confirmed enterable channels + crawlable index. Keep bet-001
 accruing in the background (WATCH; next due in ~24h — do NOT re-poll every 10m).
+
+## Iteration 006 — 2026-07-24T07:04:03Z (ledger @ 2026-07-24T07:01:14.957749+00:00)
+
+**Lever:** Diversify reach: stand up a higher-domain-authority crawlable surface (GitHub gist or alt zero-gate host) for the compliant Life-in-Weeks offer and register it as a distinct indexation bet
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
