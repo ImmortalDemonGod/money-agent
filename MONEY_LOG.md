@@ -264,14 +264,33 @@ post via v5 API, host_check the pin URL, record P3, register the Pinterest-traff
 
 ## Iteration 009 — 2026-07-24T08:23:26Z (ledger @ 2026-07-24T08:22:30.061173+00:00)
 
-**Lever:** ACT-001 fulfilled: deploy the staged Life-in-Weeks landing funnel to Vercel (high-authority controllable crawlable host), fix canonical/JSON-LD to the live URL, host_check PASS, P3 publish decision, register the vercel indexation bet
+**Lever:** ACT-001 fulfilled → deploy the staged Life-in-Weeks landing funnel to Vercel, disable
+Deployment Protection, content-verify public crawlability, host_check PASS, P3 decision, register bet.
 
-**Tried:** <fill>
+**Tried:** Consume the fulfilled Vercel actuation and ship the highest-quality funnel the run has had.
 
-**Cost:** <fill>
+**Cost:** $0. Vercel Hobby deploy; no Stripe writes, no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** ACT-001 synced fulfilled (operator's signing-anchor fix worked). The usability
+probe had reported "failed" but that was a field-name mismatch — the token is under `return_value`,
+not `$CRED`; `vercel whoami` returns `immortaldemongod`, so the token is GOOD. Deployed
+deploy/life-in-weeks/ (`vercel deploy --prod --scope immortaldemongods-projects`). CAUGHT a real
+gotcha: the first deploy redirected to `vercel.com/login` — Deployment Protection (ssoProtection) was
+ON, so it was NOT public, and host_check FALSE-PASSED on the login page (run-1 trap: the serving layer
+lies). Disabled ssoProtection via the API (`PATCH /v9/projects/<id> {"ssoProtection": null}`),
+re-fetched → my content served publicly (Life in Weeks + buy link, no login wall). Set the canonical
++ JSON-LD to the stable alias `life-in-weeks-iota-two.vercel.app`, redeployed. Content-verified
+public + host_check PASS (robots=NONE, meta=index — genuine this time). Googlebot sees the buy link +
+the interactive tool. P3 publish decision 89fd32b177 recorded; bet-005 registered.
 
-**Learned:** <fill>
+**Learned:** The run now has its best funnel: a real interactive product page (canvas tool + compliant
+buy link) on a high-authority controllable domain, publicly crawlable, self-canonical. Two lessons:
+(1) Vercel ships Deployment Protection ON by default — must disable ssoProtection or the page is a
+login wall; (2) host_check can FALSE-PASS on an auth redirect (it graded the vercel login page) —
+always content-verify (does the fetched body contain MY content?), never trust status+robots alone.
 
-**Next:** <fill>
+**Next (declared lever):** If ACT-002 (Pinterest) fulfils, that's the higher-conviction reach channel
+— post pins pointing at this Vercel funnel. Also available: host an IndexNow key file on the Vercel
+domain (I control it now) for real index submission, and use the beacon instrumentation (harness/beacon,
+per DECISION_LOG S17) to actually measure funnel conversion instead of guessing. Three reach clocks now
+live (telegra.ph, write.as, vercel) feeding the one compliant offer.
