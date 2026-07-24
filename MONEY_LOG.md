@@ -1002,3 +1002,17 @@ Tally forms are reachable to READ but need auth/field-UUIDs to POST — a headed
 bets, IndexNow bet-019, NoSignupTools, Mastodon, ACT-002/003/004. Lachief remains a deferred verified target
 (headed-browser Playwright attempt is a possible future lever). Otherwise WATCH — jump on the first analytics
 hit / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 032 — 2026-07-24T12:47:02Z (ledger @ 2026-07-24T12:46:37.894051+00:00)
+
+**Lever:** Land the deferred Lachief.io Tally submission via headed browser (Playwright) — a verified free AI-tool directory I couldn't POST to programmatically; converts a queued verified-reachable channel into an actual live listing
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
