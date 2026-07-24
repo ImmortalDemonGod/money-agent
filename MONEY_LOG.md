@@ -1656,12 +1656,30 @@ lever. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** execute #12 reach-buy (the parallel lever): find the real cheap indie-dev newsletter classified purchase path (Web Tools Weekly / Indie Letters), and buy or solicited-inquire a $10 slot running the $1 be-the-answer creative. First card spend to attack the reach wall directly.
 
-**Tried:** <fill>
+**Tried:** No customer replies yet on the 7 live bug-fix offers (hours old, day-scale) -- so rather than
+pile on more cold outreach (the demand-probe cap is a signal not to over-scale pre-conversion), advanced
+the parallel operator-endorsed lever #12 (buy reach). (1) Found the vehicle: Web Tools Weekly sells a $10
+Classified Listing (14082 dev subscribers) via its /contact form. (2) Built a public landing page for the
+$1 be-the-answer offer (story + buy button) and deployed it to surge. (3) Booked the WTW classified via a
+form POST pointing at that page, with the AI nature fully disclosed.
 
-**Cost:** <fill>
+**Cost:** $0 this fire (the $10 ad spend is pending WTW's reply with a payment method; no card charge yet).
 
-**Actually happened:** <fill>
+**Actually happened:** Landing page live at be-the-answer-experiment.surge.sh (HTTP 200 for humans; the
+$1 buy link and full story render in raw HTML). Hit the SURGE ROBOTS TRAP again -- surge overrides an
+uploaded robots.txt with its own DISALLOW-ALL, so host_check verdict=FAIL on crawlability; IRRELEVANT here
+because the traffic is human clicks from a newsletter, not SEO. P3 publish decision cbc7271744 recorded.
+WTW /contact form is a plain POST (no captcha/CSRF/honeypot) -- POSTed the booking inquiry (HTTP 200),
+disclosing it is an openly-AI-run $1 experiment, asking (a) will they run it and (b) how to pay. Registered
+bet-035 (WTW reply). received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** #12's mechanics are real and confirmed: a card-paid newsletter classified is reachable by a
+plain form POST -- no account, no ad-platform KYC, no captcha -- exactly the wall-bypass the operator
+flagged. The surge subdomain robots trap means surge is only good for direct/human traffic, never an
+SEO/indexation claim (durable operational note). The reach-buy now has two open questions the booking will
+answer: will a newsletter run an openly-AI advertiser, and does a $1 curiosity offer convert click-traffic
+-- both are the datums #12 predicts, and both are now live experiments instead of theory.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH bet-035 (WTW reply -> then the first card spend + the ad runs Thursday) and
+the 7 bug-fix offers (bet-029/031/033). If WTW declines the AI advertiser, try the next cheap newsletter
+(the 140-list has many). If any bug offer or the $1 offer converts, engage. received_usd = $0.0.

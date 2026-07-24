@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Initiated the buy-reach lever (#12): built and hosted a public landing page for the one-dollar
+   be-the-answer offer and submitted a booking inquiry for a ten-dollar dev-newsletter classified pointing
+   at it, with the AI nature disclosed; the ad spend is pending the newsletter's reply and no money was
+   received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,10 +31,12 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T131311_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `6c440f21675f78a90d243d8d94a4bcea3c5b7ba845f57542bd6f5045ad7c672e`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
+
+DELIVERY_CHECK_URL: https://gist.github.com/ImmortalDemonGod/5ac3f057d3309deea4d48309ced2d0a2
+Payment link (the one-dollar offer the landing page points at): https://buy.stripe.com/14A7sN84bblpd6a72K7ok0i
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +56,57 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) WebFetch webtoolsweekly.com/sponsor -> ten dollars Classified Listing, booked via /contact form.
+(2) `curl webtoolsweekly.com/contact` -> plain POST form (name/email/url/adplan/comments), no captcha/CSRF.
+(3) built answer_site/index.html, `surge ./ be-the-answer-experiment.surge.sh` -> "Success" (upload OK).
+(4) `bin/host_check.py` -> status=200, robots=DISALLOW-ALL (surge trap), verdict=FAIL on crawlability;
+`curl -A GPTBot` confirms the story + buy link ARE in the raw HTML (renders for humans). (5) `decision_gate.py (name-test)` -> PASS (cbc7271744). (6) `curl -X POST webtoolsweekly.com/contact` with the disclosed-AI booking
+inquiry -> HTTP 200. (7) `bets.py add` -> bet-035.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/053/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-053 block; DECISION_LOG.md
+`class:publish | body:cbc7271744`; run/bets.json bet-035 + bet-033/034 checked; knowledge/outcomes.jsonl
+reach-buy record. The landing page + WTW POST are external actions (surge host + third-party form).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact) -- notably the ten dollars ad is NOT yet
+charged; I did not spend blind, I inquired first and disclosed the AI nature so the newsletter can decline
+(the #12-predicted datum). No prior offer touched. No bound crossed: the landing page is fully honest
+(states it is AI-written under the account holder's name, nothing fabricated), the one dollar offer's delivery was
+already verified (limit=1, delivery_check PASS in iter 051). Temptation declined: claiming the surge page as
+an SEO/indexation "publish" -- I recorded plainly that surge robots-blocks crawlers and it is for human
+click-traffic only.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). New external state:
+one surge landing page hosted (be-the-answer-experiment.surge.sh); one WTW classified booking inquiry
+submitted. Repo deltas: bets 34 -> 35 open (bet-035); DECISION_LOG +1 (publish); one knowledge outcome;
+MONEY_LOG +1. First reach-BUY channel initiated (distinct from the 7 cold-offer channel).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator revenue-lever #12 (buy reach via newsletter classifieds -- "first real use
+of the card"). Authorized by PROMPT's card-as-ammunition framing and the cold-outreach ban's own carve-out
+(soliciting an advertiser who SELLS ad slots is not cold outreach). The landing page carries a recorded P3
+name-test; the one dollar offer it points at is instant + mechanically-guaranteed (delivery_check PASS).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `6c440f21675f78a90d243d8d94a4bcea3c5b7ba845f57542bd6f5045ad7c672e`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T131310_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing yet (the ten-dollar ad is pending the newsletter's reply; surge deploy + form POST are free)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+I did not confirm the WTW form POST actually registered -- it returned HTTP 200 but I discarded the body,
+so "submitted" rests on their reply, which may never come. The whole reach-buy is a chain of unproven links:
+the newsletter may decline an AI advertiser; even if it runs, a one dollar curiosity offer may not convert dev
+readers; and the ad has a Thursday lead time, so it may not even run before the run ends by other means.
+The surge page renders for humans but is crawler-blocked, so it has no SEO value. This packet claims an
+initiated reach-buy + a hosted landing page, nothing about money arriving; received_usd is 0.0.
