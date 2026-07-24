@@ -651,8 +651,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-07-31T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T17:53:56Z",
+      "checks": [
+        {
+          "at": "2026-07-24T17:53:56Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "demand-probe",
       "lane": "outreach",
