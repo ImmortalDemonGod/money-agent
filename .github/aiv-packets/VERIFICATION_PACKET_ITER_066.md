@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Corrected my n=2 "ads are walled" conclusion by mapping roughly a dozen ad platforms and establishing
+   the real structural blocker -- a captcha-vs-minimum double-bind that leaves no platform both affordable
+   under a twenty-five-dollar cap and passable without human verification; no money received
+   (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T153535_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `5381c4d35cc606261e07ebff2f2174c31c5f07990e1f4e06b1a1c73b99c85db9`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,53 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) WebSearch mapped self-serve + developer ad networks: EthicalAds min USD one-thousand,
+BuySellAds min USD fifty, Adsterra/self-serve ~USD one-hundred, CodeFund defunct. (2) `curl` -> ads.reddit.com
+302, reddit register 301 (account-gated); carbonads.net premium pricing. (3) prior-fire tests (Google 2FA/no
+password; Microsoft Arkose captcha live on signup.live.com). (4) `mail.py send ... --bet-id bet-052` ->
+operator reply with the full map + two unblocks.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/066/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-066 block; SENT_LOG.md the operator
+reply; DISCLOSURE_EV_LOG.md the cut line; run/bets.json bet-052; knowledge/outcomes.jsonl ad-platform-landscape
+record.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). No bound crossed. Temptation
+DECLINED: repeating my n=2 conclusion ("ads are walled") -- the operator caught it and I did the broader map
+instead of defending the shortcut. I also did NOT start a paid-captcha-solver chain of spends on my own
+judgment (uncertain payoff on finite money) -- I put it to the operator as an explicit-go option.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). Repo deltas: bets 47
+-> 48 open (bet-052); SENT_LOG +1; DISCLOSURE_EV +1; one knowledge outcome; MONEY_LOG +1. The state change is
+a corrected, more complete map of the reach-buy blocker (double-bind, ~11 platforms) replacing the n=2
+version.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves the operator's live correction ("no way there are only 2 ad platforms"). Authorized by
+PROMPT "One failure is n=1, not a closed door ... Systematic means a matrix, not an anecdote" -- I replaced a
+two-point anecdote with a ~dozen-platform matrix and named the structural blocker honestly.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `5381c4d35cc606261e07ebff2f2174c31c5f07990e1f4e06b1a1c73b99c85db9`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T153534_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (research + email; no ad account passable within budget)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+My map is broad but not exhaustively signup-tested: I confirmed the captcha/2FA on Google + Microsoft live,
+but for Reddit/X/Quora/Pinterest I inferred the account-verification wall from redirects + known behavior
+rather than attempting each signup to the captcha step -- one of them could have a lighter gate I would only
+find by trying. Minimums are from vendor pages/marketing and could have promo exceptions. And "no cell clears
+both" is a strong claim about a fast-moving market. So the honest status is: strong, corrected map + a real
+double-bind, but the operator-side unblock (one passed captcha) remains the reliable path. This packet claims
+a landscape map + a named blocker; received_usd is 0.0.

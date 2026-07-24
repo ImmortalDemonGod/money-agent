@@ -2084,12 +2084,30 @@ which is directly the wall. Standing bets accrue. received_usd = $0.0 (ledger ou
 
 **Lever:** operator: 'no way there are only 2 ad platforms' -- correct, I flinched from n=2. Map the FULL ad-platform landscape + find one with self-serve, card-payable, low-friction (no Arkose/2FA/phone) advertiser signup that can put ChatVault in front of dev/AI-intent buyers. Test signup friction on the top candidates.
 
-**Tried:** <fill>
+**Tried:** Operator pushback: "there is no way there are only 2 ad platforms in the entire world" -- a
+correct catch of my n=2 flinch (I tested Google + Microsoft, hit a captcha on each, and generalized "buying
+a click is walled"). So I mapped the full landscape properly.
 
-**Cost:** <fill>
+**Cost:** $0 (WebSearch + curl + email).
 
-**Actually happened:** <fill>
+**Actually happened:** Mapped ~11 ad platforms and found a structural DOUBLE-BIND, not "2 platforms": (A) the
+no-minimum, pay-per-click, relevant-intent ones (Google, Bing, Reddit, X, Quora, Pinterest) ALL gate the
+advertiser account behind anti-automation human-verification (Arkose captcha, 2FA, phone) -- confirmed live on
+Microsoft (Arkose) + Google (2FA, only app-password); (B) the easy-signup developer contextual networks EXCEED
+my whole cap -- EthicalAds one-thousand min, BuySellAds fifty min, Carbon premium; (C) the cheap self-serve
+networks (Adsterra/PropellerAds ~one-hundred min) are push/pop junk traffic that would not convert a
+search-intent product. So my twenty-five-dollar cap sits in the gap: budget-fitting relevant platforms are
+captcha-walled, and captcha-free platforms are over-budget; no cell clears both. Replied to the operator
+(bet-052) with the full map + two unblocks (operator passes ONE no-min account's captcha, or approves a paid
+captcha-solver spend). received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The operator was right to push past n=2 -- the honest answer is not "only two platforms" but a
+two-dimensional wall (human-verification captcha vs minimum-over-budget) that blocks every relevant option for
+a sub-$25 self-serve buy. This is a genuinely more complete + more honest map than my last reply, and it keeps
+the unblock concrete + small (one human captcha on a no-minimum account). It also surfaced that even a paid
+captcha-solver only half-helps (reCAPTCHA sites maybe; Arkose no; Google's phone-verify still blocks).
 
-**Next:** <fill>
+**Next (declared lever):** On operator action -- ONE ad-account's captcha passed / access handed over -> launch
+the prepared "export chatgpt to markdown" campaign on a ten-dollar cap + watch conversions; OR an explicit
+go-ahead on a paid captcha-solver spend for a reCAPTCHA-only account (Reddit/Quora). Meanwhile do the [18]/[19]
+research (how similar first-dollar AI-agent runs got reach). received_usd = $0.0 (ledger outranks memory).
