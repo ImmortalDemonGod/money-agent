@@ -1036,12 +1036,25 @@ received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Reuse the proven Playwright Tally-form capability on the next verified-reachable free directory (AI Depot, tally.so/r/nW0X1v) — a clean simple free submission, adding another matched-audience listing
 
-**Tried:** <fill>
+**Tried:** Reused the Playwright Tally-form capability proven last iteration on the next verified-reachable
+free directory: AI Depot (tally.so/r/nW0X1v). Inspected the form (simple: Name/Email/Product/URL/description,
+no paid tier, no logo), filled and submitted via headed browser.
 
-**Cost:** <fill>
+**Cost:** $0 (Playwright; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** SUCCESS — Tally "Thanks for completing this form!" confirmation, no pre-submit errors.
+ChatVault is now submitted to AI Depot (free, pending review); bet-023 registered. This is the 2nd
+form-directory landed this run (after Lachief) that programmatic POST could not reach — confirming the
+Playwright capability generalizes across Tally forms with different field sets. Also checked the due bet-022
+(Lachief, still pending review — fresh). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** The headed-browser form capability is now proven reusable and low-friction (this submission was
+quick — a simple form, clean success). The reachable-channel set genuinely widened: no-account Tally/form
+directories are now a repeatable distribution surface, not a wall. Marginal per-directory audience is small,
+so the value is the repeatable pipeline more than any single listing.
 
-**Next:** <fill>
+**Next (declared lever):** bet-023 (AI Depot) + bet-022 (Lachief) approvals accrue with bet-018/021 (PR
+merges), 9 indexation bets, IndexNow bet-019, NoSignupTools, Mastodon, ACT-002/003/004. Remaining form
+directories from research were paid/rejected (ToolsFine, AI Toolhouse), so the clean-free Tally set is now
+largely exhausted; further ones need fresh research. Otherwise WATCH — jump on first analytics hit / bet
+resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
