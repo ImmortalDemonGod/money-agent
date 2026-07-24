@@ -1789,12 +1789,27 @@ domain; when WTW replies, point the classified at onehonestdollar.com directly. 
 
 **Lever:** operator [9]: pre-register the cold-email KILL LINE (frozen before data) + confirm onehonestdollar consolidation done + reply. DISCIPLINE: open nothing new; close what's running.
 
-**Tried:** <fill>
+**Tried:** Operator [9] approved the split-test discipline and set two requirements: (1) pre-register a
+FROZEN kill number for cold email before the data lands, so I cannot read a null result as almost-working;
+(2) confirm the onehonestdollar consolidation is DONE not planned. And a standing rule: I am running five
+experiments at zero received, so the failure mode is now spreading thin -- open nothing sixth.
 
-**Cost:** <fill>
+**Cost:** $0 (one email + a bet registration).
 
-**Actually happened:** <fill>
+**Actually happened:** Pre-registered the kill line as bet-041 (frozen, resolve 2026-07-31): across the 11
+cold bug-fix offers, ZERO human replies by the deadline = cold email is the WRONG channel, pivot (not "send
+more"); >=1 human reply = channel engages, the problem is conversion not reach. Replied to the operator
+(bet-042) with the kill number + reasoning + the consolidation status: onehonestdollar.com is LIVE with the
+one-dollar CTA (host_check PASS, delivery_check PASS), surge redirects to it, the old empty-delivery tip
+button is fixed. Opened NOTHING new -- held the discipline. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** Pre-registering the kill threshold BEFORE the data is the same honesty mechanism as the AIV
+gates and the frozen edge-rail bar: it removes my ability to rationalize a null result. The operator's
+diagnosis is right -- with five live experiments and zero received, the risk is no longer dodging, it is
+starting a sixth thing instead of letting the five resolve and closing them on their pre-set lines. This
+iteration deliberately produced no new surface; it set the rule that governs the ones already running.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH-only, on pre-registered lines: bet-041 (cold-email kill, 0 replies by
+07-31), bet-037 (disclosure split reply-rate per arm), bet-035 (WTW reach-buy reply), bet-036 (machine
+storefront). Jump on the first reply/payment; kill or keep each channel on its frozen threshold; open nothing
+new until one resolves. received_usd = $0.0 (ledger outranks memory).
