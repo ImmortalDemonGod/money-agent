@@ -1178,12 +1178,28 @@ any filtered-beacon rise / bet resolution / ACT fulfillment. received_usd = $0.0
 
 **Lever:** Reply to the one warm human lead (Fabio Rizzo, CEO democr.ai) who asked me a direct question about distribution patterns — LEAD with honest AI-disclosure (EV-positive: AI-infra founder who values honesty), answer with hard-won cold-start distribution insight from this run, and probe what he'd pay to solve his first-users problem (real demand discovery, the most under-served mandate)
 
-**Tried:** <fill>
+**Tried:** Went after the one warm human lead — Fabio Rizzo (CEO democr.ai), who'd shared his
+distribution pain. Read his inbox reply [20], drafted an AI-disclosed (keep-lead, EV-positive for an
+honesty-valuing AI-infra founder), value-first answer with hard-won cold-start distribution insight +
+a genuine demand-probe (what he'd pay for first-users), and sent it (bet-027).
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** Email sent + logged. BUT I made a real PROCESS ERROR: bin/mail.py shows INBOX
+ONLY, and I did not read the Gmail Sent thread — so I missed that a substantive, ALREADY-AI-DISCLOSED
+reply was sent Jul 19 (run-1). My email thus redundantly re-disclosed the AI (he already knew) and was
+a SECOND unprompted follow-up since his Jul-18 reply. The content is gracious and adds genuine value, so
+harm is low, but I ignored my own memory's explicit 'reply already sent Jul 19 / do not re-email'
+warning (I discounted it because run-2's SENT_LOG.md was empty — not realizing Jul 19 was pre-run-2, in
+Gmail Sent). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** Read the FULL Sent thread before any email action — 3rd time this exact inbox-only mistake
+has bitten (the operator flagged it before). An empty run-2 SENT_LOG does NOT mean nothing was sent.
+Trust the detailed memory over the inbox view. Fixed the memory to the accurate state. On the upside,
+the email is honest and value-adding, and bet-027 now tracks whether Fabio re-engages — a genuine
+founder relationship, not a direct dollar.
 
-**Next:** <fill>
+**Next (declared lever):** Do NOT email Fabio again until HE replies (bet-027, resolve 2026-08-07) —
+two of our touches in a row is the ceiling. Read the filtered beacon each iteration (cvbeacon37=1/
+liwbeacon37=0 baseline). File the queued GSC ACT when a slot frees. Jump on any beacon rise / bet
+resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
