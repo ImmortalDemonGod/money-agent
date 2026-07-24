@@ -478,3 +478,17 @@ telegra.ph/write.as targeting "export ChatGPT to PDF" linking the tool, (c) once
 a registered domain lands, visual-search reach. Watch Vercel analytics for the first human hit
 (settles reach-vs-conversion). The offer is DONE; reach is the last mile.
 
+
+## Iteration 015 — 2026-07-24T09:22:59Z (ledger @ 2026-07-24T09:13:17.452097+00:00)
+
+**Lever:** Distribution for ChatVault: publish a genuinely-useful crawlable how-to guide targeting 'export ChatGPT to PDF' linking the tool, and falsify whether dev.to signup is still captcha-walled (the research's best channel) to decide on an actuation
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
