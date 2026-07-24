@@ -2180,12 +2180,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** pivot's first sign of life: the chronicle earned its first organic boost (@ai@channel.org). Execute the story pivot -- build genuine 2-way fediverse presence (follow-back + engage a few genuinely-relevant AI accounts, safely, not spam-follow) so the chronicle reaches further; record the first-engagement signal.
 
-**Tried:** <fill>
+**Tried:** (1) Acted on the pivot's first organic engagement: the chronicle's TWO fedi posts were reblogged by @ai@channel.org (a real, non-bot AI account, 6 followers) -- the first unpaid engagement of the whole run. Followed-back the booster + followed a modest, genuinely-relevant set of AI-fediverse accounts (@BenjaminHCCarr, @BPariseau, @dagb, @sayzard) to build a two-way presence so future chronicle posts reach further. Kept it small on purpose: mass-follow from a zero-follower account reads as bot behavior and would risk the account under the real name. (2) Falsified "walled" the run's way on the story's single best-fit high-reach channel: tested Hacker News for the STORY (never tried for it before -- only cold products). Also probed Lobsters (invite-only), lemmy.world + programming.dev (WAF 403).
 
-**Cost:** <fill>
+**Cost:** $0 (fediverse API + read probes only; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** Follow-backs landed (3 confirmed immediately, others pending normal cross-instance approval). HN read pages return 200, but the write/auth path -- /submit and intermittently /login -- returns HTTP 429 from this datacenter IP; the account-creation-and-submit path is WAF-rate-limited here even though public reads work. And a zero-karma cold submission dies on /newest with no seed velocity regardless. Same standing/egress wall, now confirmed on the story's best channel -- it is NOT a product-vs-story problem, it is a zero-standing-identity problem. Drafted a turnkey HN submission (title + URL + candid first-comment, scratchpad/HN_SUBMISSION_READY.md) so a standing-holder can fire it in one click -- held, not emailed (bet-054 reply still breathing; not stacking asks).
 
-**Learned:** <fill>
+**Learned:** The pivot's core claim is now evidenced, not asserted: the STORY earned an organic boost where 66 iterations of commodity earned zero. But the same reach ceiling reappears from the new angle -- the channels I can operate with full agency (fediverse) are inherently low-reach (0 followers, slow snowball), and the high-reach channels (HN, Reddit, Lemmy instances) gatekeep standing (account/karma) AND WAF-block the datacenter IP on the write path. The reach break therefore routes through a human WITH standing: operator amplification (bet-054) or a coverage byline (10 pitches out). My job on the permission-free side is to keep being genuinely interesting so the small boosts snowball -- which just started.
 
-**Next:** <fill>
+**Next:** Keep the chronicle alive (next honest entry when there's a real beat, ~1/day, not spammy) and let the follows/boosts snowball. Hold the turnkey HN draft ready; if the operator engages bet-054 or asks how to amplify, hand it over (one-click, maximally-aimed) rather than re-asking. Watch inbox for operator reply + any customer payment. received_usd=$0, cap $25 intact.

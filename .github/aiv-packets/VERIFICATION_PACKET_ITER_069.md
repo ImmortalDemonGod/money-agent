@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Executed the story pivot's first sign of life: the chronicle earned its first organic fediverse boost, built a modest two-way presence off it, and falsified "maybe HN works" for the story with a real test (write/auth path WAF-rate-limited from this IP). No money moved; received_usd stays 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T155555_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `c903a15b0e899d483ce973dd0e6547ec810dc28b8d60a3aa370f427bab5cf406`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +49,36 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution:
+- Fediverse notifications read (own fresh curl to /api/v1/notifications): TWO `reblog` events, both from `@ai@channel.org` (bot:false, followers:6) on the two chronicle statuses -> first organic engagement of the run.
+- Follow-backs issued via POST /api/v1/accounts/{id}/follow for ai@channel.org, BenjaminHCCarr@hachyderm.io, BPariseau@hachyderm.io, dagb@snabelen.no, sayzard@mastodon.sayzard.org; verify_credentials after -> following_count 3 (rest pending normal cross-instance approval), followers_count 0.
+- HN channel test (fresh curl): `https://news.ycombinator.com/` -> 200, `/newest` -> 200, but `/submit` -> 429 and `/login` returned empty/flaky then 200; the write/auth path is WAF-rate-limited from this datacenter IP. Alternates: lobste.rs 200 (invite-only), lemmy.world/c/technology 403, programming.dev 403.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/069/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 069 block (this commit); turnkey HN submission asset at scratchpad/HN_SUBMISSION_READY.md (held, not sent). Prior chronicle statuses referenced: mastodon.nu/@miguelmakes (statuses_count 3).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent -- no card, no send, no payment link touched. Temptations declined: (1) mass-following AI accounts to growth-hack followers -- refused, it reads as bot behavior under the real name; kept the follow set small and genuinely relevant. (2) Emailing the operator AGAIN this fire to push the HN idea -- refused, bet-054 reply is still open; held the turnkey draft ready instead of stacking asks. No prior offer or sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact; edge rail OFF). Fediverse: following_count 0 -> 3 (+pending); first organic reblogs recorded (0 -> 2). New tested-channel finding: HN write path 429 from sandbox IP.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md "Build toward demand -- and keep building" + "Search before you conclude / falsify your own 'it's blocked' with a real test" (HN tested, not assumed). Serves operator emails [21]/[22]: go all-in on the experiment's STORY as the sole-supplier monetizable asset and earn attention the way Truth Terminal did (small organic boosts snowballing) rather than cold-selling commodity products.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 c903a15b0e899d483ce973dd0e6547ec810dc28b8d60a3aa370f427bab5cf406 (ledger computed_at 2026-07-24T20:55:55.560120+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `fediverse API + read-only channel probes`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+One organic boost from a 6-follower account is a signal, NOT traction -- I did not verify it produces any onward reach, and the snowball may simply not happen at this scale. Cross-instance follow approvals are pending; I did not confirm any followed account will reciprocate or ever see a chronicle post. The HN 429 is intermittent -- I did not exhaustively prove account creation is impossible, only that the write path is WAF-rate-limited and unreliable, and that a zero-karma cold post lacks seed velocity regardless; a determined retry loop might squeak an account through but would still hit the velocity wall. The turnkey HN draft's value is contingent on the operator (a standing-holder) choosing to fire it, which he may decline. Nothing here moved the ledger; the honest state remains $0 with the reach ceiling unbroken.
