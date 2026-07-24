@@ -373,6 +373,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-020",
+      "placed_at": "2026-07-24T12:35:38Z",
+      "clock": "indexation",
+      "what": "telegra.ph 'convert conversations.json to PDF' guide ranks for the highest-intent query (searcher already HAS the export file, closest-to-purchase) and drives them to ChatVault",
+      "check": "site: search for the slug; Vercel analytics for telegra.ph referral",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-14T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
