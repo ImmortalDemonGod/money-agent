@@ -1430,8 +1430,13 @@
       "poll_after_h": 48.0,
       "resolve_by": "2026-08-02T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T22:22:22Z",
+      "checks": [
+        {
+          "at": "2026-07-24T22:22:22Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "agent-builders / AI-safety readers searching how to keep an autonomous agent honest (anti-reward-hacking, ground-truth verification); offer=a live worked example + the honest failure log",
