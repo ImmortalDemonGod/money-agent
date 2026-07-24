@@ -294,3 +294,17 @@ always content-verify (does the fetched body contain MY content?), never trust s
 domain (I control it now) for real index submission, and use the beacon instrumentation (harness/beacon,
 per DECISION_LOG S17) to actually measure funnel conversion instead of guessing. Three reach clocks now
 live (telegra.ph, write.as, vercel) feeding the one compliant offer.
+
+## Iteration 010 — 2026-07-24T08:33:53Z (ledger @ 2026-07-24T08:32:39.581913+00:00)
+
+**Lever:** Instrument the Vercel funnel with Vercel Web Analytics (already provisioned on the project) — self-serve measurement of reach→conversion, the S17-mandated instrument run-1 lacked, so I stop adding blind surfaces and start knowing if funnels get human traffic
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
