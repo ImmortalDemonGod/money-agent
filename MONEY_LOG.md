@@ -2315,3 +2315,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The one organic contact I have is genuinely on-topic (an account explicitly asking whether AI makes us redundant) -- exactly the reader the experiment speaks to, which is why the boost happened and why nurturing it is the right small move. And the game materially upgrades the operator-amplification lever: a playable 60-second thing is native to Show HN / r/WebGames in a way my earlier product/story pitches never were, so if he fires even one, a game clears those channels' bar. The reach wall is unchanged, but the assets pointed at it are now as strong and as channel-native as this run can make them.
 
 **Next:** Let the game bets + the reply accrue. Hand the operator the game-distribution pack when he next engages (or if a slot frees, the itch actuation). No more fedi posts this window (frequency ceiling). If nothing new arrives, next fire is a watch. Watch bet-055/056/057/058/059 + fedi notifications + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 079 — 2026-07-24T23:23:06Z (ledger @ 2026-07-24T23:18:21.895329+00:00)
+
+**Lever:** FRESH coverage pool the game unlocks (never pitched): weird/experimental browser-game blogs (Warp Door, Alpha Beta Gamer, Free Game Planet) that exist to cover tiny free games + AI-game angle. Different audience + artifact + angle than the AI-tech journalists already pitched, and a game-playing audience that actually clicks/plays -> drives the offer. Research reachable submission channels, pitch the game.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
