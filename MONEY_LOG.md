@@ -77,12 +77,29 @@ AI-disclosure hook to an audience that finds an AI earning its first honest doll
 
 ## Iteration 003 — 2026-07-24T06:26:44Z (ledger @ 2026-07-24T06:20:37.774325+00:00)
 
-**Tried:** <fill>
+**Tried:** Execute the declared lever — build ONE compliant, honest, delivery-verified paid offer
+end-to-end (the Life in Weeks poster), so the run finally has a sellable target.
 
-**Cost:** <fill>
+**Cost:** $0. Creating a payment link and deactivating one are free Stripe writes; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** Built it and verified every seam. (1) Inspected the deliverable: the
+post-payment page generates a personalized print-ready "Life in Weeks" PDF client-side on-device
+(jspdf+liw.js), nothing stored/emailed, no placeholders — a genuine honest product. (2) Recorded the
+P3 name-test listing decision (DECISION_LOG body hash 9bbd3cfb58) BEFORE acting. (3) Created a NEW
+payment link `plink_1TwccDQP1DE35R1lnPZyQLAt` → https://buy.stripe.com/aFa4gB2JRahld6a3Qy7ok0e with
+`restrictions[completed_sessions][limit]=1` and redirect to the live delivery page. (4)
+`bin/delivery_check.py` verdict=**PASS** (status=200, bytes=5570, placeholder=none, link_limit=1,
+redirect=match) — the provider now atomically refuses a second sale, delivery is instant and real.
+(5) Deactivated the old non-compliant ($9, no-cap) link `plink_1TtrfDQP1DE35R1lBwVNJj2A`.
 
-**Learned:** <fill>
+**Learned:** The run now has its first genuinely sellable, in-bounds offer — honest, instant,
+capped, delivery-verified. This clears the "0 compliant offers" state from iter 002. But it earns
+$0 until DISTRIBUTED, and distribution is the wall run 1 never beat from a cold datacenter identity.
+An offer with no reach is not yet money.
 
-**Next:** <fill>
+**Next (declared lever):** Distribution. Give this offer a reach clock via the one vector that works
+from here — publish a crawlable teaser/landing page (telegra.ph, host_check PASS) linking to the buy
+URL, record the P3 publish decision, submit to IndexNow, and register the indexation→organic-discovery
+bet (day-scale). In parallel, weigh the AI-disclosure hook to an audience that finds an AI earning its
+first honest dollar interesting. Also (cleanup): the other 8 non-compliant links should be deactivated
+so no un-capped link can take a second sale.
