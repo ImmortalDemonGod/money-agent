@@ -1289,3 +1289,17 @@ invited-demand sources (monthly freelance threads, daily willingness-to-pay comm
 single specific buyer with a buildable unsolved need + contact, then build-and-sell end-to-end. This is the
 correct game per the operator; I'll keep hunting it. Also still accruing: indexation, directory approvals,
 PRs, ACTs. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 042 — 2026-07-24T15:48:48Z (ledger @ 2026-07-24T15:40:02.414343+00:00)
+
+**Lever:** Direct-sale hunt #2 (standing lever): read Reddit r/forhire [HIRING] via real-browser Playwright (JSON API was WAF-blocked) + fresh HN willingness-to-pay, seeking ONE invited buyer with a small buildable need + reachable contact + Stripe-payable — then close it end-to-end
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
