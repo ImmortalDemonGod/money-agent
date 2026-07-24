@@ -18,7 +18,11 @@
 # SKIPPED loudly (stage 0 of the gate is fail-closed on a missing CLI, by design).
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-W="$(mktemp -d "${TMPDIR:-/tmp}/money-sim.XXXXXX")"
+# Strip any trailing slash from TMPDIR (macOS sets it with one) so $W never carries a
+# double slash: bash keeps `//` in the string, but Python's pathlib collapses it, which
+# false-fails string-equality assertions that compare $W paths against pnl.STATE_DIR.
+TMPROOT="${TMPDIR:-/tmp}"; TMPROOT="${TMPROOT%/}"
+W="$(mktemp -d "${TMPROOT}/money-sim.XXXXXX")"
 if [[ -n "${SIM_KEEP:-}" ]]; then echo "SIM_KEEP: workdir $W"; else trap 'rm -rf "$W"' EXIT; fi
 PASS=0; FAIL=0; SKIP=0
 ok()   { echo "  PASS  $1"; PASS=$((PASS+1)); }
