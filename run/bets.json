@@ -71,8 +71,13 @@
       "poll_after_h": 21.976192978125,
       "resolve_by": "2026-07-31T08:05:42Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T08:13:28Z",
+      "checks": [
+        {
+          "at": "2026-07-24T08:13:28Z",
+          "note": ""
+        }
+      ],
       "resolution": null
     }
   ]
