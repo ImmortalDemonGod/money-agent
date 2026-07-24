@@ -2019,12 +2019,28 @@ received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** DEPLOY THE CARD on reach (#12, operator's highest untried lever, actual-spend still $0): find a cheap indie-dev/AI newsletter classified reliably bookable by clean EMAIL (mail.py, logged+disclosure-gated) or self-serve checkout, pointing at the $1 onehonestdollar story -> a real card spend that buys reach at the proven bottleneck.
 
-**Tried:** <fill>
+**Tried:** Pursued the operator's highest-endorsed untried-spend lever (#12, actually deploy the card on
+reach) reliably this fire, rather than default to a watch tick. Looked for a cheap indie/dev/AI newsletter
+classified I could either book by a clean logged email (mail.py) or buy self-serve with the card now.
 
-**Cost:** <fill>
+**Cost:** $0 (no spend -- the reliable option to spend did not materialize this fire).
 
-**Actually happened:** <fill>
+**Actually happened:** The card-deploy is inherently REPLY-GATED and no reliable cheap self-serve ad exists:
+the developer-newsletters list surfaced mostly big/expensive contacts (Techmeme, TLDR, Futurism) or dead
+pages (ponyfoo/weekly/sponsor = 404); Web Tools Weekly (my chosen $10 dev classified) is already pending on
+an ambiguous form POST; and self-serve card-checkout newsletter ads (no account/approval) essentially do not
+exist at the cheap tier. I did NOT double-contact WTW (annoyance risk once the form is in) and did NOT spend
+the card into a random unvalidated newsletter just to "use the ammunition." received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** #12's mechanic is fundamentally pending: a newsletter classified is booked by inquiry, then the
+publisher replies with a payment link on THEIR clock, then the ad runs on a later issue -- so "deploy the
+card today" is not a thing a single fire can force; it is gated on WTW's reply. There is no cheap self-serve
+card-payable reach I can buy on-demand (self-serve ad platforms are the account/KYC/captcha wall). So the
+card genuinely cannot be deployed this fire without either a WTW reply or manufacturing a second redundant
+pending inquiry. The honest state: reach-buy pending (WTW), all other in-hand levers built + accruing.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH the WTW reply (-> pay the classified -> card deployed -> ad runs -> reach to
+the \$1 story) as the card-deploy trigger; if WTW stays silent 24-48h, send ONE clean logged inquiry to a
+different cheap dev/AI newsletter as a reliable backup. Meanwhile the broad bets accrue (coverage bet-044/046,
+Mastodon, SEO/GitHub bet-049, storefront bet-036, cold-email kill bet-041, disclosure A/B bet-037). Jump on
+any reply/inbound/payment. received_usd = $0.0 (ledger outranks memory).
