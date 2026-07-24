@@ -1063,12 +1063,25 @@ resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Rebalance to the neglected higher-purchase-intent product: publish a Life-in-Weeks buyer-intent guide ('how many weeks in a life / 4000 weeks') on a working crawlable host, linking the delivery-verified poster offer — LiW has PROVEN paid demand (Gumroad cottage industry) but only 2 prior distribution touches vs ~15 for ChatVault
 
-**Tried:** <fill>
+**Tried:** Rebalanced distribution toward the NEGLECTED product. I'd spent ~15 iterations on ChatVault
+(a mostly-free-tier audience) and only 2 early touches on Life-in-Weeks — which has PROVEN paid demand (a
+Gumroad cottage industry sells these posters) and clearer PURCHASE intent. Published a buyer-intent guide,
+"How many weeks are in a life? (4,000 weeks...)", on telegra.ph, linking the free LiW tool and the
+delivery-verified poster offer. Also did a quick indexation reality-check.
 
-**Cost:** <fill>
+**Cost:** $0 (telegra.ph publish + checks; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** Guide live and crawlable — host_check PASS (robots=NONE, meta=index), Googlebot
+sees the LiW tool link. P3 recorded, bet-024 registered. Indexation check inconclusive (pages hours old;
+Bing HTML parse gave no clear marker — likely not indexed yet, expected). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** I'd over-concentrated on ChatVault and under-served the product with the STRONGER buy-signal.
+Memento-mori/4000-weeks searchers have real purchase intent (they buy posters), unlike ChatVault's free-
+skewing users — so per-visitor conversion should be higher even at low traffic. The "4,000 weeks" framing
+(Oliver Burkeman) is a specific, popular, buyer-intent query I hadn't targeted. Rebalancing across both
+offers is a real strategic correction, not another ChatVault spray.
 
-**Next:** <fill>
+**Next (declared lever):** bet-024 (LiW guide) accrues with 9 other indexation bets, IndexNow bet-019, 3
+directory approvals, 2 PR merges, Mastodon, ACT-002 (Pinterest — LiW's best channel, operator-gated)/003/004.
+Further LiW distribution could target more of its buyer queries (life calendar poster, memento mori). Otherwise
+WATCH — jump on first analytics hit / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
