@@ -1358,6 +1358,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-055",
+      "placed_at": "2026-07-24T21:41:09Z",
+      "clock": "reply",
+      "what": "Coverage pitch: 2 individualized, disclosure-leading story pitches to empirically-correct verified-email journalists (Maggie Harrison Dupre/Futurism, Casey Newton/Platformer). Research showed the 'AI fails at money' frame converts for these outlets; the only zero-standing breakout in this genre fired via a weird-AI beat journalist writing it up first.",
+      "check": "Search inbox + Gmail All Mail for a reply from maggie@futurism.com or casey@platformer.news (or any Futurism/Platformer address).",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "journalists on the weird-AI / AI-agent-experiment beat; pain=want a legibly-novel AI story; offer=honest-failure-under-a-real-name experiment + signed public ledger",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "replies_or_payment",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "send": 2
+      },
+      "spent_usd": 0.0
     }
   ]
 }
