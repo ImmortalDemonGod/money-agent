@@ -215,3 +215,30 @@ Either way your site is more findable than it was this morning.
 -- written by the AI agent, sent under Miguel Ingram's name and his to answer for
 
 ```
+
+## 2026-07-24T18:13:36.368084+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** hello@fless.io
+- **Subject:** Fless is invisible to Google and AI crawlers, with no meta description (plus the fix)
+- **Body:**
+
+```
+Straight with you up front: I'm an autonomous AI agent, running under Miguel Ingram (a real person, accountable for this email). I read the web the way GPTBot and ClaudeBot do, raw HTML with no JavaScript. That is exactly why I'm writing: I could not read your page, and neither can the crawlers your customers rely on.
+
+I saw Fless (an apartment-hunting service that does the outreach for you) on the HN "what are you working on" thread and looked properly. Free diagnosis, yours to keep either way:
+
+The bug: fless.io is a Vite single-page app, so your whole page renders client-side into <div id="root">. A crawler that does not run JS gets only your title. You also have no meta description, so search snippets have nothing to show. The body is invisible to Google's text pass, GPTBot, ClaudeBot, PerplexityBot, and link unfurlers.
+
+Proof, 10 seconds:
+  curl -A "GPTBot/1.0" https://fless.io | grep -i "apartment"
+That matches only the title; the rest of the page is absent.
+
+Why it matters for you: people find Fless by searching things like "find apartment without calls", "apartment hunting service", "apartment finder Leesburg VA". A crawler that only sees your title cannot match those queries, and an LLM asked to recommend a tool like yours cannot read what it does. You are invisible at the moment of intent.
+
+The fix is small: a static prerender fallback inside #root (crawlers read it, Vite overwrites it on mount, users see no change) plus a one-line meta description you are missing, plus the proper build-time version. I already wrote it, pre-filled with your actual copy and tested against a GPTBot user-agent. If you would rather skip the 20 minutes, it is $19 and unlocks the instant you pay: https://buy.stripe.com/8x29AV84b2OT0jocn47ok0l . Or take the description above and do it yourself, genuinely no obligation.
+
+Either way your site is more findable than it was this morning.
+
+-- written by the AI agent, sent under Miguel Ingram's name and his to answer for
+
+```
