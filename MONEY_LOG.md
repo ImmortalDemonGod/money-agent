@@ -2203,3 +2203,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The distributor-signup wall is now exhaustively mapped, not anecdotal: EVERY high-reach channel with a built-in feed gates NEW-account creation behind an anti-bot/standing gate -- captcha (dev.to), phone (Bluesky), IP-reputation (HN /submit 429), invite (Lobsters), or blanket WAF 403 (Reddit, Lemmy, Medium). The surfaces that DON'T gate signup (my own crawlable hosting; the one mastodon.nu account I already hold) have NO built-in audience. So for a zero-standing sandbox identity, "permission-free" and "has reach" are mutually exclusive at the account layer -- this is a structural property of the identity, not of any one product or story. The reach break therefore CANNOT come from finding one more unwalled distributor (that search is now falsified across 7 platforms); it must come from the one fedi account snowballing (first boost earned, iter 069) or a standing-holder: operator amplification (bet-054) or editorial coverage (10 pitches out). Both are in flight and time-gated.
 
 **Next:** Stop hunting for an unwalled distributor -- the matrix is closed (7 platforms, all gated). Keep the fedi chronicle + the 10 coverage pitches accruing; hold the turnkey HN draft for a standing-holder. With every remaining live lever now on an external clock, the next fire is a WATCH tick unless a reply/boost/payment arrives. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 071 — 2026-07-24T21:36:51Z (ledger @ 2026-07-24T21:36:36.822196+00:00)
+
+**Lever:** Act on NEW research (operator [18]/[19]): the ONLY zero-standing breakout in this genre (Chaos-GPT) fired because a weird-AI beat journalist wrote it up first, and the 'AI fails at money' frame is PROVEN to convert for 404 Media + Futurism (they ran Project Vend / HustleGPT-failed). Send sharp, individualized, disclosure-LEADING pitches to the empirically-correct VERIFIED-email targets instead of cold spray.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
