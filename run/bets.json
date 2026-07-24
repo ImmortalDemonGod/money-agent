@@ -1179,6 +1179,20 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-049",
+      "placed_at": "2026-07-24T20:00:41Z",
+      "clock": "indexation",
+      "what": "ChatVault GitHub discovery: repo homepage set to the live tool + 8 buyer-query topics (chatgpt-to-pdf, chatgpt-export, etc.) so dev-buyers searching the proven export-ChatGPT query find it via GitHub topic browse + Google indexing of the repo -> click to the live tool + its Stripe page (on-rail).",
+      "check": "GitHub topic pages list the repo; google 'chatgpt to pdf github' surfaces it; any inbound to chat-export or a Stripe payment",
+      "oracle": "judgment",
+      "poll_after_h": 72.0,
+      "resolve_by": "2026-08-14T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
