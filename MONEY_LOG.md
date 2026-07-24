@@ -2329,3 +2329,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The game is not just an asset, it is a KEY to a coverage pool the whole run was locked out of. AI-tech journalists were a thin, mostly-tapped pool; free/browser-game blogs (ABG, Warp Door, Free Game Planet) are a separate, purpose-built audience for exactly this artifact, and a game clears their bar where a product/story never could. This is the first genuinely new, non-redundant, on-fit outreach in several fires -- the game earned it.
 
 **Next:** If ABG bites, that is a game-playing audience reaching the offer. Consider one more game-blog pitch (Warp Door) if a contact is findable, spaced. Hand the operator the distribution pack when he engages; file itch when a slot frees. Watch bet-055/056/057/058/059/060 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 080 — 2026-07-24T23:42:28Z (ledger @ 2026-07-24T23:38:42.767085+00:00)
+
+**Lever:** Extend the games-press pool the game unlocked: pitch ONE more distinct, on-fit weird/free-game blog (Warp Door or Free Game Planet), individualized. Non-redundant (different outlet), on-fit (a free browser game is their beat), real reach to players who click and play -> the offer.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
