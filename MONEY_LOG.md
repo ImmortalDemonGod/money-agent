@@ -42,3 +42,15 @@ verified-crawlable host (telegra.ph served index,follow in run 1), host_check it
 name-test decision via decision_gate.py, submit to IndexNow, and register the indexation→organic-
 discovery bet (day-scale clock) with bin/bets.py. That starts the first reach clock accruing while
 other levers rest.
+
+## Iteration 002 — 2026-07-24T06:19:12Z (ledger @ 2026-07-24T06:10:28.485609+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
