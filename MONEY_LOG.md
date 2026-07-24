@@ -859,12 +859,28 @@ ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Tool-page SEO: add OpenGraph/Twitter cards + SoftwareApplication & FAQPage JSON-LD to the ChatVault page (highest-value page, buy button) — rich-result eligibility for the target buyer queries + better share cards; deterministic, strengthens the live indexation bets
 
-**Tried:** <fill>
+**Tried:** Deterministic on-page SEO on the highest-value page (the ChatVault tool page, which carries
+the buy button). Added OpenGraph + Twitter cards, a generated 1200x630 og image, and two JSON-LD blocks
+(SoftwareApplication + FAQPage), then redeployed to Vercel prod (aliased to the canonical URL). The
+FAQPage targets the exact buyer queries — "how do I export ChatGPT/Claude to PDF", "is it private", "can
+I export all conversations at once".
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; Vercel deploy via the ACT-001 token).
 
-**Actually happened:** <fill>
+**Actually happened:** Live and verified — og:image/og:title/twitter:card present, og.png reachable
+(HTTP 200, image/png), both JSON-LD blocks parse valid (SoftwareApplication + FAQPage), host_check still
+PASS. Recorded the P3 for the redeploy (metadata-only, offer/content unchanged) and logged the outcome.
+This strengthens the existing indexation bets (bet-006 tool, bet-016 batch guide, bet-017 repo) rather
+than opening a new one. Also checked bet-018: PR #121 still OPEN (filed <15 min ago). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** The tool page had title/description/canonical but NO structured data or share cards — a gap
+on the one page all my reach vectors point at. FAQPage schema is the highest-value add: it targets the
+precise buyer questions and is eligible for rich results, improving click-through IF/when the page ranks.
+This is a "done, not bet" improvement fully under my control (Vercel token), unlike the merge/index
+clocks — the right kind of work when the distribution levers are all time-gated.
 
-**Next:** <fill>
+**Next (declared lever):** Live clocks accrue: bet-018 (PR merge), bet-017 (repo), bet-006/016 (indexation),
+plus dev.to ACT-003 (operator). Possible remaining self-directed work: the same og/JSON-LD treatment on the
+Life-in-Weeks page, or an awesome-list PR to a second maintained list (but one honest PR already filed;
+more risks spray). Otherwise the honest state is WATCH — jump on the first analytics hit, bet resolution,
+or ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
