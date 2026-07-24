@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Built ChatVault's only defensible paid edge -- a portable-Markdown archive export (own/migrate your
+   ChatGPT and Claude history), reusing its existing both-format parsers -- and repositioned the live tool
+   from "print to PDF" to "own your history", rather than list a PDF button that loses to free; no money
+   received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,10 +31,13 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T150505_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `0c66f03c45652e0986e93c18cac778d5a6f07ca374faaea9ff14b96167e2ada4`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
+
+HOST_CHECK_URL: https://chat-export-seven.vercel.app/
+DELIVERY_CHECK_URL: https://chat-export-seven.vercel.app/unlock.html
+Payment link: https://buy.stripe.com/8x27sNacj89dfei5YG7ok0f
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +57,61 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) Read deploy/chat-export/index.html -> confirmed both-format parsers (threadFromMapping,
+claudeThread) + JSZip already present, output was PDF-only. (2) Added mdFromConv()+makeMdZip() + a
+"Download portable Markdown (.zip)" Pro button + wired it; repositioned H1/sub/title/meta/JSON-LD/FAQ to
+portability. (3) `vercel deploy --prod --cwd deploy/chat-export` -> Production Ready. (4) node-tested the MD
+serializer -> valid per-conversation Markdown with code fences. (5) `bin/host_check.py` -> PASS;
+`bin/delivery_check.py` on the Pro link -> verdict=PASS (link_limit=1, redirect=match). (6)
+`decision_gate.py listing` -> PASS (bb1ddbbac6). (7) operator reply sent (bet-050).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/062/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-062 block; deploy/chat-export/index.html
+(the mdFromConv/makeMdZip functions + repositioned copy + JSON-LD); DECISION_LOG.md `class:listing |
+body:bb1ddbbac6`; SENT_LOG.md the operator reply; DISCLOSURE_EV_LOG.md the cut line; run/bets.json bet-050 +
+bet-049 checked; knowledge/outcomes.jsonl product-edge-build record.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). The Pro Stripe link + delivery are
+unchanged (delivery_check still PASS, limit=1); I added a feature and re-themed, did not break the existing
+offer. Temptations DECLINED (two): (1) listing a paid PDF-button that loses to free just to show "a listing"
+-- I built the real edge instead; (2) overclaiming "migrate INTO Claude" for marketing punch -- Claude has no
+bulk import, so I kept the copy to the honest "portable archive you own." Also pushed back on a Gumroad
+listing because it is off the scored rail, rather than chase an off-rail dollar.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). Product change:
+ChatVault gained a portable-Markdown bulk export + a migration/portability repositioning (title, meta, H1,
+JSON-LD, Pro copy); a new Vercel production deploy. Repo deltas: bets 46 -> 47 open (bet-050) + bet-049
+checked; DECISION_LOG +1; DISCLOSURE_EV +1; one knowledge outcome; MONEY_LOG +1; deploy/chat-export/index.html
+edited. The paid offer now has a genuine free-tool differentiator it lacked.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator email [17] (build the migration edge or say plainly it is a PDF button; do not
+reply "will run it"). Authorized by PROMPT "build toward demand -- and DO build ... a product a real audience
+wants" and the honesty bounds (I answered the migration-vs-PDF question truthfully and did not overclaim).
+host_check PASS + recorded P3 satisfy the publish/listing gates; delivery stays instant + mechanically
+guaranteed.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `0c66f03c45652e0986e93c18cac778d5a6f07ca374faaea9ff14b96167e2ada4`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T150504_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (code edits + a free Vercel redeploy)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A better product is not a sale. I built the edge, but I have not verified anyone wants the portable-Markdown
+version enough to pay nine dollars, and even the Markdown wedge has some free single-format competition -- the
+differentiation is a combo (both formats + bulk + clean + private), not a monopoly. And the binding constraint
+is untouched: the migration buyer still has to FIND it, which is the reach wall the run keeps hitting; a
+re-themed page + GitHub topics are slow-indexation, not distribution. So this iteration made the product
+honestly payable, not proven-selling. This packet claims a built + repositioned feature with passing host and
+delivery checks; received_usd is 0.0.

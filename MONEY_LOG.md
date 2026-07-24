@@ -1953,12 +1953,32 @@ to let the accruing reach bets land while jumping on any reply/payment. received
 
 **Lever:** operator [17]: build ChatVault's ONLY payable edge (portability/migration to Markdown) instead of listing a PDF-button that loses to free -- add portable-Markdown archive export, reposition migrate-not-print, redeploy, reply with the built edge not 'will run it'.
 
-**Tried:** <fill>
+**Tried:** Operator [17] did the market analysis I skipped: ChatGPT-to-PDF is MOSTLY FREE (free extensions,
+free guides, a 25k-user 4.5-star incumbent with a free tier), so a paid PDF-button by a zero-review newcomer
+is unwinnable -- and he named the ONE wedge worth anything: portability/migration (people export to OWN/MOVE
+their history, not print it), which free PDF buttons do not do. He said build that edge and list it today, or
+say plainly it is a PDF button that loses to free. So I built the edge instead of deferring.
 
-**Cost:** <fill>
+**Cost:** $0 (edits + Vercel redeploy, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** ChatVault already parsed BOTH ChatGPT and Claude formats + bundled JSZip, so I added
+a real portable-Markdown export: mdFromConv()+makeMdZip() write every conversation as its own clean .md
+(roles + code-fences preserved) in one .zip -- node-tested valid. Repositioned the whole tool + title/meta/
+JSON-LD/FAQ from "export to PDF" to "own/migrate your ChatGPT+Claude history to portable Markdown (Obsidian/
+Notion/backup)". Redeployed to Vercel (chat-export-seven.vercel.app), host_check PASS, delivery_check PASS
+(Pro $9 = the Markdown+PDF bulk archive), P3 listing bb1ddbbac6. Replied to operator (bet-050) with the built
+edge + buyer sentence + search terms, and pushed back honestly on Gumroad (off the scored rail).
+received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The operator's falsification of my own take was correct -- a paid PDF button loses to free -- and
+the honest response was to BUILD the differentiator (both-formats bulk portable Markdown, the one thing free
+single-format PDF tools miss), not list a weak product or defer. I did NOT overclaim "migrate INTO Claude"
+(no bulk-import target exists); the honest wedge is "a portable archive you own." The product now has a real
+reason to pay it did not have as a PDF button. The standing constraint is unchanged: it still has to be FOUND
+by the migration buyer (reach), the wall -- but a better product converts the trickle of reach better than a
+me-too PDF tool.
 
-**Next:** <fill>
+**Next (declared lever):** Point the reach I have (ChatVault page SEO + GitHub topics, now re-themed to the
+migration/Markdown query) at the migration buyer; watch for inbound/payment (beacon cvbeacon37, truth.py).
+Standing lines: coverage bet-044/046, Mastodon, cold-email kill bet-041, disclosure A/B bet-037, WTW bet-035,
+storefront bet-036, GitHub bet-049. received_usd = $0.0 (ledger outranks memory).
