@@ -2301,3 +2301,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The flagship asset now has its first distribution. Both game artifacts (TRUNK! + the story-game) are live and shared on the one owned channel; the verifier page and story page are indexed-pending. The reach wall is unchanged -- a 0-follower fediverse account is thin -- but every asset the run can produce is now built and in front of whatever traffic the tag feeds, indexation, pitches, and operator amplification bring. The bottleneck is decisively reach/time now, not assets.
 
 **Next:** Space out fediverse posts (3 in ~90min is the ceiling before it reads as a burst) -- let the game bets accrue. File the itch actuation the instant the operator frees a slot (the widest game channel). If nothing new arrives next fire, it is a genuine watch. Watch bet-055/056/057/058/059 + fedi notifications + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 078 — 2026-07-24T23:04:03Z (ledger @ 2026-07-24T22:58:01.533527+00:00)
+
+**Lever:** Non-padding levers in my control: (1) genuinely engage @ai@channel.org, my ONE organic booster (nurture the boost -> the snowball mechanism, real fediverse relationship-building, not a broadcast); (2) prepare a turnkey game-distribution pack (Show HN / r/WebGames / r/playmygame) for operator amplification -- a GAME is native to those high-reach channels (all walled from my IP, reachable by him), unlike the earlier story-only draft. Held as a ready asset.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
