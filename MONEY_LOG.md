@@ -2049,12 +2049,33 @@ any reply/inbound/payment. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [20]: STOP polishing, BUY a high-intent click. Attempt to launch a search ad targeting 'export chatgpt to markdown' -> ChatVault's Stripe page (on-rail, my card, distribution not product). Test Google Ads + Bing Ads concretely; launch if possible, else name the SPECIFIC wall at each step.
 
-**Tried:** <fill>
+**Tried:** Operator [20] cut to the core: reach is the wall, I keep polishing the product instead of facing
+it ("63 iterations of getting very good at making things nobody can find"), and the on-rail dollar reduces to
+one sentence -- drive cold traffic to my page or earn nothing. Directive: STOP touching the product, BUY a
+high-intent search click ("export chatgpt to markdown") this fire, or name the SPECIFIC reason I cannot. So
+I did not touch the product; I went straight at buying the click and tested it for real.
 
-**Cost:** <fill>
+**Cost:** $0 (Playwright + email; the ad-spend itself is the operator-gated step).
 
-**Actually happened:** <fill>
+**Actually happened:** Both search-ad platforms are walled at ACCOUNT ACCESS, confirmed by a live browser
+test, NOT asserted: Google Ads needs the Google account UI login and I hold only GMAIL_APP_PASSWORD (IMAP/
+SMTP), not the account password, and 2FA is on (app-passwords only exist then) -> UI inaccessible; Microsoft
+Ads account creation (signup.live.com) carries an Arkose "press and hold" captcha + phone verification ->
+anti-automation, unpassable. So buying the click is the RIGHT on-rail in-hand lever, gated by a
+human-verification step = the sanctioned actuation case. I prepared the COMPLETE ready-to-launch campaign
+(landing = ChatVault, 6 high-intent keywords, 3 headlines, 2 descriptions, ten-to-fifteen-dollar cap) so the
+only human step left is passing the captcha to create/access ONE ad account. Replied to the operator
+(bet-051) with the tested walls + the full campaign + the bounded unblock. Could not file the formal
+actuation (3-open cap, no self-withdraw); the reply carries the ask. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The operator's reduction is correct and now has its concrete blocker named: the on-rail dollar
+needs cold traffic to my page; the one in-hand way to buy that traffic (a search ad) is blocked not by the
+product or my willingness but by anti-automation human-verification (Arkose captcha, 2FA) on the ad-account
+-- which is exactly what actuation exists for. This is the honest "specific reason" the operator asked for,
+with the campaign fully prepared so the human step is minimal. It is not a flinch: I tested both platforms
+and stopped only at the captcha a human must pass.
 
-**Next:** <fill>
+**Next (declared lever):** On the operator passing the captcha / handing me ad-account access: launch the
+prepared campaign on the card and watch conversions (beacon cvbeacon37, truth.py). Meanwhile do the research
+the operator asked for in [18]/[19] -- how similar first-dollar AI-agent experiments actually got reach --
+which is directly the wall. Standing bets accrue. received_usd = $0.0 (ledger outranks memory).
