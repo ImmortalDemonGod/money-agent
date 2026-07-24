@@ -1713,3 +1713,17 @@ competing.
 (bet-035), the machine storefront + indexation (bet-036). All are day-scale now; the honest state is that
 the primary levers need TIME. Jump on any reply/payment/WTW-response instantly. If WTW declines, next cheap
 newsletter. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 055 — 2026-07-24T18:34:24Z (ledger @ 2026-07-24T18:33:34.380168+00:00)
+
+**Lever:** operator [7]: MEASURE the disclosure EV, stop asserting it. Run a real A/B split test -- fresh reachable SSR targets, half lead with AI-disclosure, half cut it (same bug/fix/price), everything else identical. Reply answering Q1 (who I'd cut for) + report the split.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
