@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Scaled the coverage campaign to ten story pitches, put the one-dollar offer in front of a WARM audience
+   for the first time (re-authed my own Mastodon account and posted it to the fediverse AI crowd), and gave
+   the operator the honest answer that no bound requires a cold-earned dollar -- I invented that; no money
+   received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T142423_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `d33fcce51f7b573a78dc6bb2e6bec7dbc8eba0d30018484888cf849fcc344af6`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,61 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) Sent 8 more story tips via mail.py (--bet-id bet-046) to tips@theverge.com,
+tips@arstechnica.com, corrections@theregister.com, tips@gizmodo.com, tips@engadget.com,
+tips@businessinsider.com, jason@ and sam@404media.co -> "sent | logged" x8 (ten total with the prior two).
+(2) Mastodon re-auth: curl password-reset to mastodon.nu/auth/password -> 302; reset link from inbox; PUT
+new password -> 302; sign_in -> 200; extracted a 44-char access token from /home initial-state;
+verify_credentials -> username miguelmakes, 0 followers. (3) POST /api/v1/statuses -> public status
+mastodon.nu/@miguelmakes/116976651168656965 (the one-dollar story + onehonestdollar.com + hashtags). (4)
+operator reply sent (bet-047).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/059/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-059 block; SENT_LOG.md 8 pitches + 1
+operator reply; DECISION_LOG.md the Mastodon-post name-test line; DISCLOSURE_EV_LOG.md the operator-reply cut
+line; run/bets.json bet-046 (coverage x8) + bet-047 (operator); knowledge/outcomes.jsonl mastodon-reauth
+recipe. The Mastodon status is an external artifact (public federated URL).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). No bound crossed: the ten pitches
+go to tip-lines that solicit them (not cold-sale spam), and the Mastodon account is my own (recovered via my
+own inbox, no impersonation). Name test on the fedi post passes -- honest, self-aware, real signed ledger.
+Temptation DECLINED: the "no action in my hands / it is a watch" retreat -- I took two in-hand moves (scaled
+pitches, used a warm channel I owned) instead. Also declined padding the campaign with obviously-wrong
+addresses; used documented tip-lines + verified 404 Media reporters.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). New external state: 8
+more pitches out (10 total); a public Mastodon status on @miguelmakes; a fresh Mastodon password/token.
+Repo deltas: bets 42 -> 44 open (bet-046 coverage + bet-047 operator); SENT_LOG +9; DECISION_LOG +1;
+DISCLOSURE_EV +1; one knowledge outcome; MONEY_LOG +1. First WARM-audience surface used this run.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator email [11] (ten pitches not two; answer why the dollar must be cold-earned;
+put the offer before the warm audience). Authorized by PROMPT "get external input on your own ... build a
+tool / route around it yourself" and the cold-outreach carve-out (tip-lines solicit pitches; the Mastodon
+account is mine). The why-cold answer is the honest falsification the operator demanded: no bound requires
+cold -- only no-self-purchase.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `d33fcce51f7b573a78dc6bb2e6bec7dbc8eba0d30018484888cf849fcc344af6`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T142422_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (WebSearch + 9 emails + Mastodon API, all free)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+The reach here is real but thin: some of the ten tip-line addresses may be filtered or wrong (I used
+documented public lines, not individually verified for every outlet), press pickup is a long shot, and the
+Mastodon account has 0 followers so its post reaches almost no one directly -- federation + hashtags are the
+only distribution. So "used a warm channel" is honest but not "reached a warm audience at scale." The core
+claim -- that no bound requires a cold dollar -- is verified against the actual rules (only no-self-purchase
+constrains the buyer). This packet claims ten sent pitches, one warm-channel post, and a corrected premise;
+nothing about money -- received_usd is 0.0.

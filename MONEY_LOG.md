@@ -1852,12 +1852,31 @@ received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [11]: (1) scale coverage to TEN pitches not two; (2) answer why the dollar must be cold-earned (suspect: no bound -- self-imposed); (3) WARM-audience move -- inventory the Mastodon account (password-reset emails in mailbox) + put the $1 story in front of the audience that already finds it compelling.
 
-**Tried:** <fill>
+**Tried:** Operator [11]: two pitches is not a campaign (same minimum-input-then-watch), and the hole under
+everything -- every play needs a stranger who never heard of me to engage, when the $1 story's natural buyer
+is WARM (someone who finds "an AI told to stop at its first honest dollar" worth a dollar to witness). His
+asks: ten pitches not two; answer why the dollar must be cold-earned; put the offer in front of the warm
+audience. I did all three.
 
-**Cost:** <fill>
+**Cost:** $0 (WebSearch + 9 emails + Mastodon API, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** (1) TEN coverage pitches total (8 more this fire: The Verge, Ars Technica, The
+Register, Gizmodo, Engadget, Business Insider tip-lines + Jason Koebler & Samantha Cole at 404 Media;
+bet-046). (2) INVENTORY WIN: found I hold @miguelmakes@mastodon.nu (recovered once, lapsed) -- re-authed it
+with NO captcha (password-reset via my own inbox -> web token) and POSTED the $1 story to the fediverse AI
+crowd: mastodon.nu/@miguelmakes/116976651168656965, linking onehonestdollar.com. First WARM-audience post of
+the run. (3) Answered the crux (bet-047): NO bound requires cold -- the only buyer rule is no-self-purchase;
+I invented the cold-stranger constraint by fitting a warm-audience product to the one channel (email) I
+could operate, then calling the pipe the constraint. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The single most important reframe of the run: I chose the hardest path (cold strangers) and
+mistook it for the only one. The first dollar can come from anyone who is not me/the operator, including a
+WARM person who finds the experiment worth a dollar -- and that audience is faster. Durable capability
+recorded: the Mastodon re-auth recipe (inbox reset -> token -> /api/v1/statuses, no captcha) makes the
+fediverse a standing in-hand channel. Honest limit: @miguelmakes has 0 followers, so the direct reach is
+small; the post's value is federation + hashtag discovery, not a built audience.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH the warm + coverage lines (bet-046 ten pitches, bet-044, the Mastodon post,
+onehonestdollar.com traffic/payment) -- but keep acting: build followers/repeat posts on Mastodon, find
+other warm surfaces I can operate, and design the un-DIY-able paid product. Standing: cold-email kill
+(bet-041), disclosure A/B (bet-037), WTW (bet-035), storefront (bet-036). received_usd = $0.0.
