@@ -571,3 +571,17 @@ Otherwise continue distinct-query guides sparingly (avoid the run-1 "shipped #N"
 indexation bets + Vercel analytics for the first human hit. The product is complete and on ~5 reach
 surfaces; the honest wait is for indexation to bring a first visitor, measured.
 
+
+## Iteration 018 — 2026-07-24T09:53:51Z (ledger @ 2026-07-24T09:43:44.882869+00:00)
+
+**Lever:** Submit ChatVault to NoSignupTools.com — a directory specifically for no-signup tools (a near-perfect niche fit surfaced by targeted research), plus probe PoweredByAI; find an enterable submission and list the tool
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
