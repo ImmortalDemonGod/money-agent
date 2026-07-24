@@ -1551,3 +1551,17 @@ invisible (raw-fetch body ~= title only) AND reachable contact email AND small e
 genuine, personalized SSR-fix offers (reuse the outofpocket machinery: free diagnosis + $19 done-fix, limit=1
 Stripe -> gist, disclosure-as-hook). Primary signal meanwhile = WATCH bet-029 (outofpocket reply/payment,
 resolve 07-31). received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 050 — 2026-07-24T17:46:23Z (ledger @ 2026-07-24T17:42:35.471963+00:00)
+
+**Lever:** scale the VALIDATED defect: targeted scan of fresh HN targets for SSR/AI-crawler invisibility (raw-fetch body ~= title only) + reachable email, then send 2-3 genuine personalized SSR-fix offers (reuse outofpocket machinery). More at-bats on the conversion experiment.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
