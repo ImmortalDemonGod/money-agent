@@ -1007,12 +1007,27 @@ hit / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks mem
 
 **Lever:** Land the deferred Lachief.io Tally submission via headed browser (Playwright) — a verified free AI-tool directory I couldn't POST to programmatically; converts a queued verified-reachable channel into an actual live listing
 
-**Tried:** <fill>
+**Tried:** Landed the deferred Lachief.io submission (a verified free AI-tool directory) via headed
+browser — Playwright to render + fill + submit its JS/Tally form, which had blocked the programmatic POST
+last iteration (auth-gated Tally API). Inspected the form fields, handled its validation (60-char
+description cap, required 540x540 logo, dropdown option-clicks), and submitted the FREE listing only.
 
-**Cost:** <fill>
+**Cost:** $0 (Playwright + a generated logo; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** SUCCESS — Tally confirmation "Thanks for completing this form!" captured
+(screenshot + empty pre-submit error list). ChatVault is submitted to Lachief.io (free listing, manual
+review up to 7 days); bet-022 registered. I generated a 540x540 ChatVault logo to satisfy the required
+upload and checked ONLY "Listing only (Free)" — never the $250 Featured. Also checked the two due bets
+(PR #732 still open, conversations.json guide not yet indexed — both fresh). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** A NEW REUSABLE CAPABILITY: headed-browser Playwright completes JS/Tally/SPA submission forms
+that block programmatic POST. This reopens a whole channel class I'd written off as "reachable but not
+submittable" — Tally, Google Forms, and SPA directory forms are now landable. That's the first genuine
+EXPANSION of the reachable-channel set in many iterations, not just another page on the same vector.
+Gotchas logged for reuse (60-char desc, required logo, dropdown option-click, scroll-into-view submit).
 
-**Next:** <fill>
+**Next (declared lever):** bet-022 (Lachief approval) accrues with bet-018/021 (PR merges), 9 indexation
+bets, IndexNow bet-019, NoSignupTools, Mastodon, ACT-002/003/004. The new Playwright-form capability means
+the earlier-rejected AI-tool directories (AI Depot Tally, and other Google-Form/SPA ones) are now candidate
+levers to re-attempt. Otherwise WATCH — jump on first analytics hit / bet resolution / ACT fulfillment.
+received_usd = $0.0 (ledger outranks memory).
