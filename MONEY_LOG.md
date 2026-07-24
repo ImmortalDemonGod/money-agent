@@ -1208,12 +1208,25 @@ resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Fix the better horse's broken viral loop: LiW's free-PNG watermark points to the stale run-1 surge.sh copy (which serves a now-DEAD buy link), so every shared free download leaks to a dead-end funnel. Repoint the watermark to the live canonical Vercel tool so free downloads become working distribution nodes
 
-**Tried:** <fill>
+**Tried:** Following last iteration's finding that Life-in-Weeks is the better horse, I went to strengthen
+its one channel-free distribution mechanism — the viral loop (free-PNG downloads carry a watermark backlink).
+Inspected it and found a real BUG: the watermark pointed to the stale run-1 surge.sh copy, not the live tool.
 
-**Cost:** <fill>
+**Cost:** $0 (a Vercel redeploy; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** Repaired it — repointed the watermark to the canonical Vercel URL, redeployed,
+verified live (served liw.js now watermarks 'life-in-weeks-iota-two.vercel.app'; host_check + delivery_check
+PASS). Investigation surfaced two things: (1) life-in-weeks.surge.sh is a LIVE STALE run-1 copy of LiW
+serving a DIFFERENT buy link (00w9AV4RZ89daY20Em7ok07) — but Stripe confirms that old link is DEACTIVATED
+(active=False), so no compliance risk, just a dead funnel; the current compliant link is active/limit=1/
+count=0. (2) The viral loop was leaking shared free downloads to that dead-end stale page. received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** A real, findable bug in the better horse's cold-start mechanism: the ONE distribution vector
+that needs no channel (a backlink baked into free output) was pointing at a stale copy with a dead buy link.
+Also confirmed good hygiene held (old links deactivated). The stale surge.sh copy still exists and competes
+in search, but I can't update/remove it without surge auth; low harm (dead buy link, nothing indexed).
 
-**Next:** <fill>
+**Next (declared lever):** The viral loop now compounds whenever LiW gets its first users (via indexation or
+Pinterest ACT-002). Read the beacon each iteration (cv=1/liw=0 baseline). File the queued GSC ACT when a slot
+frees. Accruing: indexation bets, IndexNow bet-019, 3 directory approvals, 2 PR merges, Mastodon, Fabio
+bet-027, ACT-002/003/004. Jump on any beacon rise / bet resolution / ACT fulfillment. received_usd = $0.0.
