@@ -1858,6 +1858,11 @@ if grep -q "shadowing a stdlib module" <<<"$HK" && grep -q "rc=1" <<<"$HK"; then
   ok "S16 SoD: sod_hook blocks a stdlib-shadowing bin python file (import-hijack defense)"
 else bad "S16 SoD: sod_hook allowed bin/datetime.py"; dump "$HK"; fi
 
+# S18 (#65): the beacon-tag instrumentation tool self-tests deterministically -- inject adds the tag,
+# is idempotent, fails closed on a page with no </body>, and tag-detection has no false pos/neg.
+assert_exit 0 "S18 instrument_check: --selftest (inject / idempotent / fail-closed / detection)" \
+  python3 bin/instrument_check.py --selftest
+
 echo
 echo "=============================================="
 echo "  PASS=$PASS  FAIL=$FAIL  SKIP=$SKIP"

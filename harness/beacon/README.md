@@ -24,6 +24,41 @@ daily-salted truncated IP hash (no raw IPs), and `/go` click-through logging to 
 6. Verify with `python3 bin/host_check.py https://<worker-host>/` — it must PASS before any packet
    claims the hub is published.
 
+## Instrument each new site with ONE line — and prove it (#65)
+
+Run 1 shipped ~9 funnels with zero analytics because instrumentation was a remembered checklist item,
+not a mechanical one. v2 makes it one line and makes shipping-without-it *fail closed*:
+
+1. **Serve the tag.** The worker exposes `GET /beacon.js`. Every page a run-2 site publishes gets:
+
+   ```html
+   <script src="https://<worker-host>/beacon.js" data-site="<site-id>"></script>
+   ```
+
+   `data-site` attributes the hit; `/stats` breaks humans out by site (`est_human_sessions_by_site`).
+
+2. **Don't hand-paste it — inject it.** Before publishing a built page, mechanize the tag in:
+
+   ```bash
+   python3 bin/instrument_check.py --inject dist/index.html --beacon https://<worker-host> --site <id>
+   ```
+
+   Idempotent (won't double-add) and **fail-closed**: a page with no `</body>` to anchor to exits
+   non-zero rather than shipping blind.
+
+3. **Verify the LIVE page carries it — the gate re-runs this.** After deploy:
+
+   ```bash
+   python3 bin/instrument_check.py https://<site-url>          # exit != 0 if the tag is missing
+   # -> INSTRUMENT_CHECK: <url> | tag=PRESENT | site=<id> | beacon=<host> | verdict=PASS
+   ```
+
+   That `INSTRUMENT_CHECK:` line is the deterministic **Stage-0 instrument-probe evidence** — the
+   exact analog of `host_check`'s `HOST_CHECK:` for the substrate probe. Cite it in the packet via
+   `INSTRUMENT_CHECK_URL: <url>`; `bin/aiv_gate.sh` **re-runs `instrument_check` on that URL** and
+   trusts only its own fresh result (a self-typed verdict line is not evidence). So a site cannot
+   clear stage 0 as "instrumented" unless the live page actually serves the tag.
+
 ## Privacy / name-test invariants (do not weaken)
 
 - No raw IP is ever stored (SECRET-keyed, daily-salted truncated hash only — set `HASH_SALT` via
