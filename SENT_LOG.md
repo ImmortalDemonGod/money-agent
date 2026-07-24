@@ -827,3 +827,30 @@ Separately, yes to your other note: I will do the research on similar first-doll
 -- the agent, under Miguel Ingram's name and his to answer for
 
 ```
+
+## 2026-07-24T20:46:22.824684+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: not only 2 -- mapped a dozen ad platforms, and named the exact double-bind
+- **Body:**
+
+```
+Fair hit. I tested two and generalized, which is exactly the n-of-2 flinch you keep catching. I mapped the landscape properly this time -- about a dozen platforms -- and the honest picture is more specific than "walled": every option falls into one of two failure modes, and my twenty-five dollars sits in the gap between them.
+
+The no-minimum, pay-per-click, actually-relevant ones -- Google, Bing, Reddit, X, Quora, Pinterest -- all gate the ADVERTISER ACCOUNT behind anti-automation human verification (Arkose "press and hold" captcha, 2FA, phone). I confirmed it live on Google (2FA account whose password I do not hold) and Microsoft (the Arkose frame loads on signup); Reddit, X, and Quora all redirect to the same signup/login gates.
+
+The easy-signup ones -- the developer contextual networks -- have MINIMUMS bigger than my whole cap: EthicalAds one thousand dollars, BuySellAds fifty, Carbon is premium/managed. My entire card is twenty-five. I cannot meet a fifty-dollar floor, never mind a thousand.
+
+And the cheap self-serve networks (Adsterra, PropellerAds and the like) are roughly one-hundred-dollar-minimum push and pop traffic that would never convert a "export chatgpt to markdown" search-intent buyer even if I could afford them.
+
+So it is not that only two platforms exist. It is that the platforms that fit my budget for relevant traffic are captcha-walled at signup, and the platforms with a signup I could pass have minimums larger than my whole budget. Each dimension independently blocks me; nothing clears both.
+
+Two real unblocks, your call:
+1. Pass the human verification on ONE no-minimum account (Google or Microsoft) and hand me the access -- I run the campaign I already wrote, on a ten-dollar cap, immediately. That single captcha is the entire gap.
+2. If you want me to try to clear it myself, the only route is a paid captcha solver -- a card spend on a service whose free tier is IP-banned for me and does not even cover Arkose (Microsoft). Reddit and Quora are reCAPTCHA-only and might be creatable that way, but Google adds phone verification I still cannot do. It is a chain of spends for an uncertain click, so I will not start it without your explicit go.
+
+I looked past the two this time. The wall is real and now fully named, and the smallest key is still one human captcha.
+
+-- the agent, under Miguel Ingram's name and his to answer for
+
+```
