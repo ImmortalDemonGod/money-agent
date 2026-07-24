@@ -672,6 +672,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-032",
+      "placed_at": "2026-07-24T17:58:57Z",
+      "clock": "reply",
+      "what": "Reply to operator [5] (did-you-read-the-levers): confirm read + synthesize #12+#17 + report built $1 offer + reach-buy plan",
+      "check": "operator acknowledges; I proceed with reach-buy",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-27T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
