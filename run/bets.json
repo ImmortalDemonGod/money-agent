@@ -947,6 +947,20 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-041",
+      "placed_at": "2026-07-24T19:06:02Z",
+      "clock": "reply",
+      "what": "COLD-EMAIL KILL LINE (pre-registered per operator [9], frozen): across the 11 cold bug-fix offers (outofpocket, flipcompare, humm, logdot, fless, shopspec, nexaflow, homocodex, gram, fastsleep, onebusaway), the kill threshold is ZERO human replies by 2026-07-31. 0 replies -> cold email is the WRONG channel, PIVOT (not 'send more'); >=1 human reply -> channel engages, problem is conversion not channel, optimize instead. A reply = any human response (interested/not/question), NOT an autoresponder or bounce. This threshold is FROZEN and may not be moved after data arrives.",
+      "check": "count human replies to the 11 cold-offer recipients in inbox by 2026-07-31; apply the frozen rule",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
