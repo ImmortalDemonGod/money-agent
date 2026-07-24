@@ -634,3 +634,17 @@ query the tool now serves). Poll bet-012 (NoSignupTools approval, 24-48h) and wa
 If ACT-003 (dev.to) lands, publish the tool article. The tool is now a stronger, dual-platform product
 on ~6 reach surfaces.
 
+
+## Iteration 020 — 2026-07-24T10:12:50Z (ledger @ 2026-07-24T10:04:04.207862+00:00)
+
+**Lever:** Publish an 'export Claude to PDF' crawlable guide (telegra.ph) — the new, less-competed query the tool now serves after adding Claude support; captures a distinct searcher segment, links the tool
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
