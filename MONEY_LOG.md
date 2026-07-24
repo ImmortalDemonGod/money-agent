@@ -409,3 +409,17 @@ the first arrival is measurable (settles run-1's reach-vs-conversion question). 
 priority: itch.io (Stripe Connect OAuth) and dev.to field-manual (account). Plan: build the converter
 next, register its indexation+conversion bet, ensure it's measured.
 
+
+## Iteration 013 — 2026-07-24T09:03:24Z (ledger @ 2026-07-24T09:03:08.478316+00:00)
+
+**Lever:** BUILD the AI-chat export converter MVP (self-serve, honest, own-Stripe, viral-backlink distribution) — a client-side ChatGPT-export→styled-PDF tool, deploy to Vercel, render-and-verify with Playwright
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
