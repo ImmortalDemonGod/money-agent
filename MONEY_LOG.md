@@ -136,3 +136,15 @@ hook as its own honest artifact aimed at an AI/indie audience (where disclosure 
 second high-search-intent crawlable asset for a different query, (c) real value-first outreach to a
 specific person who already wants a life-calendar. Keep the offer + reach clock live in the
 background.
+
+## Iteration 005 — 2026-07-24T06:55:21Z (ledger @ 2026-07-24T06:51:05.286802+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
