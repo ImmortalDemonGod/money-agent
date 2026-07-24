@@ -1031,3 +1031,17 @@ bets, IndexNow bet-019, NoSignupTools, Mastodon, ACT-002/003/004. The new Playwr
 the earlier-rejected AI-tool directories (AI Depot Tally, and other Google-Form/SPA ones) are now candidate
 levers to re-attempt. Otherwise WATCH — jump on first analytics hit / bet resolution / ACT fulfillment.
 received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 033 — 2026-07-24T12:57:13Z (ledger @ 2026-07-24T12:56:48.690478+00:00)
+
+**Lever:** Reuse the proven Playwright Tally-form capability on the next verified-reachable free directory (AI Depot, tally.so/r/nW0X1v) — a clean simple free submission, adding another matched-audience listing
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
