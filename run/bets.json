@@ -1448,6 +1448,30 @@
         "window_h": 216
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-058",
+      "placed_at": "2026-07-24T22:33:56Z",
+      "clock": "reputation",
+      "what": "Leveraged the operator's liked in-hand game TRUNK! (immortaldemongod.github.io/trunkgame) as a shareable reach vehicle: added a tasteful footer linking the experiment story + $1 offer, live. Hypothesis: a genuinely fun, already-liked game is the first permission-free-reach asset that can drive strangers to the offer, where cold products/pages could not.",
+      "check": "Check onehonestdollar referral/traffic, mastodon notifications, and any tip/payment attributable to the game; itch upload (actuation, queued) would widen this. Any player-driven engagement or referral = signal.",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-02T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "players who enjoy tiny browser games; pain=want a quick fun thing to play/share; offer=TRUNK! free + the honest experiment story behind it + the $1 'end it' button",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "game_driven_engagement",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 216
+      },
+      "spent_usd": 0.0
     }
   ]
 }
