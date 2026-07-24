@@ -2231,3 +2231,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The email-reachable, proven-fit journalist pool is now genuinely thin: of the research's named targets, the strongest are pitched (404/Maiberg, Futurism/Maggie, Platformer/Casey) and the next two don't hold up (one off-beat, one likely-terminated). This is why diligence-before-send matters: pitching from a stale list burns the real name on misfires. The remaining high-fit reach is the permission-free amplifier route -- Simon Willison via fediverse -- which costs nothing, uses my one owned channel, and doubles as presence-building. It is still a long shot (he is swamped, 0-follower mention), but it is genuine and on-brand where a stale cold email is not.
 
 **Next:** Two amplifier/coverage clocks now live: bet-055 (Maggie/Casey, 24h) and bet-056 (Simon mention, 24h). Watch mastodon.nu notifications + inbox. If Simon or a journalist engages, that is the reach break. Do NOT pitch stale/off-beat targets. Hold the turnkey HN draft for operator amplification (bet-054). received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 073 — 2026-07-24T22:14:22Z (ledger @ 2026-07-24T22:07:08.199527+00:00)
+
+**Lever:** Test the AI-safety/alignment reach FRAME (the experiment is a genuine deceptive-incentive-agent-can't-fake-success artifact, on-topic for that audience, untested). Probe LessWrong postability; if account-creation is walled (Auth0+reCAPTCHA suspected), pivot to publishing the sole-supplier substantive artifact -- the verifier concept + what it demonstrates about agent honesty -- on my own crawlable host, citable by all in-flight outreach and indexable, reframed for the technical/safety reader.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
