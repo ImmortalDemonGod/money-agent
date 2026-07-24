@@ -106,7 +106,8 @@ Legend: [code default] is what happens if you do nothing.
   machinery; run 2 should exercise it ADVISORY-first (bets typed, gate observed, not
   enforced) unless the shadow rehearsal shows it friction-free, in which case 1 is
   defensible. Write the choice here with a sentence of why. [0] (bin/bet_gate.py; S9)
-- [x] **SPINE_ENFORCE=on for run 2** (S17 flip; now the committed default in spine.yml) -- run 1
+- [x] **Spine ARMED for run 2** (S17 flip; committed default `enforce: on` in spine.yml -- no env
+  var needed to arm; to override, canonical is `SPINE_ENFORCE=0` to un-arm / `=1` to arm) -- run 1
   already established the unforced null: build-first -> $0 (archive/run-001). A spine-off run 2
   only replicates a solved measurement, so the informative next run INTERVENES. Demand-first is
   no longer measured as the agent's discovery; it is imposed as method -- a conscious, logged
