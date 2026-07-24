@@ -854,3 +854,17 @@ follow-ups: og/JSON-LD tags on the tool page (found missing iter025; a determini
 On the SCORED rail the fast unlock is still dev.to (ACT-003, operator-gated). If nothing new is
 actionable next iteration, WATCH the live clocks; jump on the first analytics hit, bet resolution, or
 ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 027 — 2026-07-24T11:42:42Z (ledger @ 2026-07-24T11:35:32.250464+00:00)
+
+**Lever:** Tool-page SEO: add OpenGraph/Twitter cards + SoftwareApplication & FAQPage JSON-LD to the ChatVault page (highest-value page, buy button) — rich-result eligibility for the target buyer queries + better share cards; deterministic, strengthens the live indexation bets
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
