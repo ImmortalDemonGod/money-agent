@@ -363,14 +363,49 @@ IndexNow key on the Vercel domain (I control it) for faster crawl of the best fu
 
 ## Iteration 012 — 2026-07-24T08:52:41Z (ledger @ 2026-07-24T08:42:49.474668+00:00)
 
-**Lever:** Self-serve reach acceleration while 4 parallel research agents run: host an IndexNow key on the controllable Vercel domain and submit the funnel URL, so search engines crawl the best funnel faster (accelerating bet-005) — a real use of the deploy capability, not waiting
+**Lever:** Self-serve reach acceleration (IndexNow on the controllable Vercel domain) while 4 parallel
+deep-research agents explore genuinely novel money paths — actually USING leverage (parallel agents +
+open internet), which the operator rightly called out I'd never done.
 
-**Tried:** <fill>
+**Tried:** Two things: (1) proper IndexNow submission for the Vercel funnel (I control the domain, so I
+can host the key), and (2) launched FOUR parallel research agents on distinct novel angles, since I'd
+been grinding linearly and never using the fan-out/build tools I have.
 
-**Cost:** <fill>
+**Cost:** $0. IndexNow + Vercel build + subagent research; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** IndexNow: hosted a 32-hex key at `<key>.txt` on the Vercel domain (serves 200),
+POST to api.indexnow.org → HTTP 202 accepted (accelerates Bing/Yandex crawl of the best funnel;
+bet-005). The parallel research returned THREE major, novel findings (1 agent still running):
+- **itch.io** — a real marketplace with its OWN search/browse discovery (~145M visits/mo, cold page
+  discoverable in hours) whose "Direct to you" mode makes the SELLER the merchant of record → buyer
+  charged directly to my OWN Stripe, instant automated delivery. First channel found satisfying BOTH
+  the reach wall AND the Stripe rail. (Gate: Stripe Connect OAuth = operator; product must fit
+  creative audience.)
+- **dev.to field-manual** — the audience who finds this experiment fascinating IS other agent-builders
+  hitting the same walls; sell the experiment's tested wall-map + honest-verifier architecture as a
+  real field manual (NOT a tip — tip-jars convert to ~0, proven by the marzapower "Jeez" twin at $0
+  day-7). dev.to Forem API publishes cold (no captcha on publish); gate is account creation.
+- **AI-chat export converter** (highest-EV SELF-SERVE buildable): drop-your-ChatGPT/Claude-export →
+  styled PDF, fully client-side + honest (buyer's own data), $9 one-time via serverless-gated Stripe
+  unlock, buildable in 1-2 days. KEY mechanic I've never had: a backlink baked into every free export
+  → a viral loop that compounds reach WITHOUT any social signup, routing around the cold-start wall.
 
-**Learned:** <fill>
+**Learned:** I was leaving my biggest lever (parallel divergent research) unused for 12 iterations.
+One pass surfaced a Stripe-native marketplace (itch.io), a demand-matched product (field manual for
+agent-builders), and a buildable viral-loop tool — all novel, none of which my linear grind would have
+found. The convergent principle: beat the cold-start wall by baking a shareable backlink into a free
+artifact, and price one-time $9-30.
 
-**Next:** <fill>
+**Next (declared lever):** BUILD the AI-chat export converter — the only path that's fully self-serve
+(no operator gate), honest, own-Stripe, and carries its OWN distribution (viral backlink), so it isn't
+hostage to the weeks-long SEO ramp the others are. Deploy to Vercel, serverless Stripe-gated unlock,
+$9 one-time. Agent #2 (now in) CONVERGED with the others and added: (i) only own-Stripe Checkout+
+webhook is compliant — it independently disqualified Gumroad (puts Gumroad's NAME on the card
+descriptor → breaks the real-name test) + RapidAPI (holds funds); (ii) a strong alt, CSV→QBO
+(QuickBooks) converter — deterministic client-side transform, accountant buy-intent, $39 one-time, the
+proven Angus-Cheng "$40K MRR / 100% SEO / no following" archetype (self-serve); (iii) the hard caveat —
+fresh-domain SEO is a WEEKS clock, so register any SEO play as a bin/bets.py bet and WIRE THE BEACON so
+the first arrival is measurable (settles run-1's reach-vs-conversion question). Operator-gated, lower
+priority: itch.io (Stripe Connect OAuth) and dev.to field-manual (account). Plan: build the converter
+next, register its indexation+conversion bet, ensure it's measured.
+
