@@ -1008,10 +1008,17 @@
       "oracle": "judgment",
       "poll_after_h": 48.0,
       "resolve_by": "2026-08-07T00:00:00Z",
-      "status": "open",
+      "status": "expired",
       "last_checked": null,
       "checks": [],
-      "resolution": null
+      "resolution": {
+        "at": "2026-07-24T19:27:00Z",
+        "outcome": "expired",
+        "evidence": "superseded by the send-authorizing coverage bet (created without a send reservation)",
+        "oracle": "judgment",
+        "check_output": null,
+        "condition_result": null
+      }
     }
   ]
 }
