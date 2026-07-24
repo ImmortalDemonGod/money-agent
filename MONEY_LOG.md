@@ -446,14 +446,35 @@ poster) so first traffic is measured (settles reach-vs-conversion).
 
 ## Iteration 014 — 2026-07-24T09:13:07Z (ledger @ 2026-07-24T09:03:08.478316+00:00)
 
-**Lever:** Add the compliant PAID unlock to ChatVault: a Pro tier (no-watermark + batch ZIP of per-conversation PDFs) behind a Stripe payment link (limit=1) whose success redirect delivers the unlock; delivery_check PASS, P3 paid-offer decision, register the money bet — the reach engine finally gets something to convert
+**Lever:** Add the compliant PAID unlock to ChatVault — a Pro tier behind a Stripe payment link
+(limit=1) whose success redirect delivers it; delivery_check PASS, P3, money bet.
 
-**Tried:** <fill>
+**Tried:** Turn the free reach-engine tool into a real business: a compliant, delivery-verified paid
+offer, so the run finally has a buildable + honest + own-Stripe product that carries its own reach.
 
-**Cost:** <fill>
+**Cost:** $0. Stripe writes + Vercel build; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** Built + verified the full paid tier. (1) Added a Pro mode to the tool
+(localStorage-gated): removes the footer link and adds batch export — every conversation as its own
+named PDF in a `.zip` (JSZip). (2) Built `unlock.html` (the post-payment delivery page: confirms,
+activates Pro on the device, links back). (3) Created a Stripe product/price and a payment link
+`plink_1TwfCB…` (nine dollars, `restrictions[completed_sessions][limit]=1`, success redirect →
+unlock.html). (4) `bin/delivery_check.py` verdict=**PASS** (status=200, placeholder=none,
+link_limit=1, redirect=match). (5) RENDER-VERIFIED the full Pro flow with Playwright on the LIVE
+deploy: visiting unlock.html sets `cv_pro=1`; the tool then shows "✨ Pro is active" and batch export
+produces a **valid .zip** (3789 bytes, `PK` header), 0 page errors. (6) Wired Vercel analytics onto
+the tool. P3 listing decision 83612b3596; bet-007 (conversion) registered.
 
-**Learned:** <fill>
+**Learned:** The run now has its first offer that satisfies EVERYTHING at once: buildable by me,
+honest (buyer's own data, fully-functional free tier, real convenience wedge), own-Stripe, capped,
+delivery-verified, AND carrying its own viral-backlink distribution — none of the earlier offers
+(poster, datasets) had all of these. The money question is now purely: does the free tool get
+initial users so the loop starts? That's measurable (Vercel analytics wired) and a live bet.
 
-**Next:** <fill>
+**Next (declared lever):** DISTRIBUTION for the tool — get the free tool its first users so the
+viral loop and SEO can start. Options: (a) the no-captcha publish channels the research found (dev.to
+Forem API — needs an account; npm-adjacent), (b) genuinely-useful crawlable write-ups on
+telegra.ph/write.as targeting "export ChatGPT to PDF" linking the tool, (c) once ACT-002/Pinterest or
+a registered domain lands, visual-search reach. Watch Vercel analytics for the first human hit
+(settles reach-vs-conversion). The offer is DONE; reach is the last mile.
+
