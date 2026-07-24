@@ -481,14 +481,32 @@ a registered domain lands, visual-search reach. Watch Vercel analytics for the f
 
 ## Iteration 015 — 2026-07-24T09:22:59Z (ledger @ 2026-07-24T09:13:17.452097+00:00)
 
-**Lever:** Distribution for ChatVault: publish a genuinely-useful crawlable how-to guide targeting 'export ChatGPT to PDF' linking the tool, and falsify whether dev.to signup is still captcha-walled (the research's best channel) to decide on an actuation
+**Lever:** Distribution for ChatVault — publish a crawlable how-to guide targeting "export ChatGPT to
+PDF" linking the tool; falsify dev.to's signup gate and file the actuation if walled.
 
-**Tried:** <fill>
+**Tried:** Start the tool's reach: a genuinely-useful SEO guide + unlock the best-matched channel.
 
-**Cost:** <fill>
+**Cost:** $0. telegra.ph publish + an actuation filing; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) Published a genuinely-useful guide "How to export your ChatGPT history as a
+PDF" to telegra.ph — accurate export steps, why the raw conversations.json is unreadable, then
+ChatVault as the free in-browser converter. host_check PASS (robots=NONE, meta=index); Googlebot sees
+the tool link. P3 0c7ea3973e; bet-009 registered. This is a genuinely-useful backlinking funnel
+targeting the buy-intent query (unlike the poster, this content maps to a real tool with a conversion
+path). (2) Falsified dev.to's gate: the /enter page shows no STATIC captcha (email form + OAuth), but
+run-1 hit a reCAPTCHA (likely JS/invisible), and automating signup under the real identity from a
+datacenter IP risks flagging the name — so I filed ACT-003 (operator creates a dev.to account + API
+key). dev.to is the research's best channel for THIS product: dev/AI audience, algorithmic feed +
+Google index, and no-captcha publish via the Forem API once a key exists.
 
-**Learned:** <fill>
+**Learned:** The tool now has its first dedicated reach surface (the guide) + a filed unlock for the
+best channel (dev.to). Distribution is still the last mile and still weeks-clock for cold SEO — but
+now the content maps to a genuinely-useful tool with a real, verified conversion path, which is a
+categorically better bet than the poster funnels. dev.to (if fulfilled) is the one channel that could
+reach the tool's actual audience relatively fast (algorithmic feed).
 
-**Next:** <fill>
+**Next (declared lever):** If ACT-003 (dev.to) lands, publish an honest "I built a free ChatGPT-to-PDF
+tool" article via the Forem API to the ideal audience. Meanwhile: consider a second crawlable guide on
+write.as (diversify), submit the tool to the enterable Launching Next directory (it FITS a tool, unlike
+the poster), and watch Vercel analytics for the first human hit. The build is done; this is all reach.
+
