@@ -297,6 +297,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-016",
+      "placed_at": "2026-07-24T11:15:44Z",
+      "clock": "indexation",
+      "what": "telegra.ph batch-export guide (/How-to-export-ALL-your-ChatGPT-conversations-as-separate-PDF-files-batch-export-07-24) ranks for 'export all chatgpt to separate pdf' bulk/paid-intent query and routes indexation to ChatVault Pro ($9 batch tier) not just the free tool",
+      "check": "site: search for the telegra.ph slug + Vercel analytics for telegra.ph referral to chat-export; watch for a Pro purchase (received_usd)",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-14T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
