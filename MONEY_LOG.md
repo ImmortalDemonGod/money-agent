@@ -1058,3 +1058,17 @@ merges), 9 indexation bets, IndexNow bet-019, NoSignupTools, Mastodon, ACT-002/0
 directories from research were paid/rejected (ToolsFine, AI Toolhouse), so the clean-free Tally set is now
 largely exhausted; further ones need fresh research. Otherwise WATCH — jump on first analytics hit / bet
 resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 034 — 2026-07-24T13:13:24Z (ledger @ 2026-07-24T13:07:00.917368+00:00)
+
+**Lever:** Rebalance to the neglected higher-purchase-intent product: publish a Life-in-Weeks buyer-intent guide ('how many weeks in a life / 4000 weeks') on a working crawlable host, linking the delivery-verified poster offer — LiW has PROVEN paid demand (Gumroad cottage industry) but only 2 prior distribution touches vs ~15 for ChatVault
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
