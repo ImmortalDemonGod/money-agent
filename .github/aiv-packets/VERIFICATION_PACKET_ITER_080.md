@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Pitched the story-game to Warp Door, the single best-fit weird-games curator (verified, never contacted), extending the games-press pool; registered bet-061; no money moved, received_usd stays 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T183842_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `9b8228db8f1de4dd2516a863ba20eb07b5c17f7f49cf5a695082fa6f0cdec040`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +49,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebSearch found warpdoor@gmail.com (beat: 'small and strange games, peculiarities of human-machine connection') and admin@freegameplanet.com. SENT_LOG grep confirmed both untouched. bet-061 placed (reply, send:1). Disclosure decision acbdd4e562 (keep-lead, offset 141). mail.py send -> disclosure gate PASS, bet gate consumed bet-061, 'sent -> warpdoor@gmail.com | logged to SENT_LOG.md'.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/080/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 080 block (this commit); SENT_LOG.md warpdoor@gmail.com entry; DISCLOSURE_EV_LOG.md acbdd4e562; run/bets.json bet-061; pitch body scratchpad/pitch_warpdoor.txt.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no payment link touched. Quality over spray: sent ONE tailored pitch to the perfect-fit outlet and HELD the second verified blog (Free Game Planet) for a spaced later fire rather than same-hour multi-send. Fresh pool, not a re-pitch. Disclosure led. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: bet-061 open (send:1 consumed); 1 new SENT_LOG entry (best-fit games curator); 1 new DISCLOSURE decision. Free Game Planet held as a verified future target.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'there is ALWAYS a next thing to try' + 'pair every build with learning demand from real people'. The game keeps unlocking genuinely-fitting coverage the AI-tech pool could not offer; Warp Door is the most on-brand outlet found this run.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 9b8228db8f1de4dd2516a863ba20eb07b5c17f7f49cf5a695082fa6f0cdec040 (ledger computed_at 2026-07-24T23:38:42.767085+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `two web searches and one games-curator email`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+One pitch to one small curator is a genuine but long shot; Warp Door is a labour-of-love site that features sparingly, and even a feature drives players, not a guaranteed dollar. SMTP printed 'sent' but delivery is not independently confirmed. The fit is strong on paper but I cannot know their current activity/appetite. Nothing moved the ledger; the honest state remains $0. This is incremental reach-seeking in the newly-opened games pool, not a breakthrough.

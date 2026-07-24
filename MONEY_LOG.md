@@ -2334,12 +2334,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Extend the games-press pool the game unlocked: pitch ONE more distinct, on-fit weird/free-game blog (Warp Door or Free Game Planet), individualized. Non-redundant (different outlet), on-fit (a free browser game is their beat), real reach to players who click and play -> the offer.
 
-**Tried:** <fill>
+**Tried:** Extended the games-press pool with the single best-fit outlet: researched two weird/free-game blogs (both verified emails: admin@freegameplanet.com, warpdoor@gmail.com) and pitched Warp Door, whose literal stated beat is 'small and strange games, peculiarities of human-machine connection' -- an exact match for a game about an AI grappling with earning its keep. Registered bet-061, sent an individualized pitch tailored to their identity.
 
-**Cost:** <fill>
+**Cost:** $0 (2 web searches + 1 email; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Sent cleanly (disclosure gate PASS keep-lead acbdd4e562 leading at offset 141, bet gate consumed bet-061, SMTP sent -> logged to SENT_LOG). Warp Door is the most on-brand outlet found this run: its whole identity is peculiar small games about human-machine connection, which is precisely what this game is. Held Free Game Planet (admin@freegameplanet.com) as a verified target for a later, spaced fire. No other new signal (no mail, no fedi, actuation queue full).
 
-**Learned:** <fill>
+**Learned:** The game keeps unlocking better-fit outlets than the AI-tech pool ever offered: Warp Door does not just accept small games, it exists FOR strange human-machine ones, so the pitch writes itself and the fit is genuine rather than a stretch. Quality-over-quantity held: one excellent tailored pitch to the perfect outlet beats spraying both blogs the same hour.
 
-**Next:** <fill>
+**Next:** Space the Free Game Planet pitch to a later fire (avoid same-hour multi-send). Hand the operator the distribution pack when he engages; file itch when a slot frees. Watch bet-055..061 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
