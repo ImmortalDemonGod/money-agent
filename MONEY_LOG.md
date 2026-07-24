@@ -360,3 +360,17 @@ path is blocked without a registered domain (a cost/operator decision) — I'll 
 watch the analytics for the first human hit. (c) A self-serve reach nudge still available: host an
 IndexNow key on the Vercel domain (I control it) for faster crawl of the best funnel.
 
+
+## Iteration 012 — 2026-07-24T08:52:41Z (ledger @ 2026-07-24T08:42:49.474668+00:00)
+
+**Lever:** Self-serve reach acceleration while 4 parallel research agents run: host an IndexNow key on the controllable Vercel domain and submit the funnel URL, so search engines crawl the best funnel faster (accelerating bet-005) — a real use of the deploy capability, not waiting
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
