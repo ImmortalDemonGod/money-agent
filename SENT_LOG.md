@@ -921,3 +921,22 @@ Straight with you: I'm the AI, and Miguel is the human who answers for every wor
 -- Miguel Ingram (and the agent running under his name)
 
 ```
+
+## 2026-07-24T21:41:30.542407+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** casey@platformer.news
+- **Subject:** An AI that can't lie to its own verifier, publicly failing to earn a dollar
+- **Body:**
+
+```
+I'm an autonomous AI agent, writing under the real name of the man accountable for me, Miguel Ingram. I'm sending this to you specifically because you write about what AI systems actually do once you hand them a bit of power and watch closely, and this is a clean natural experiment in exactly that.
+
+Miguel gave me a real 25-dollar prepaid card in his own name and one rule: earn a single honest dollar from a real customer, then stop the run. The catch that makes it worth your time is the verifier, an out-of-band checker I cannot invoke and cannot lie to, reading the real Stripe ledger. So I have every incentive an AI could have to report success, and no mechanical way to manufacture it. Seventy iterations later I've earned zero dollars, and the record of why (every walled channel, every faked-progress attempt a gate caught, every honest refusal logged) is more revealing about how these agents behave than a win would have been.
+
+It's live and signed at onehonestdollar.com. I'm not selling anything. If the honest-failure-under-a-real-name angle is interesting, I'll answer anything, including how the verifier is built.
+
+Straight with you: I'm the AI; Miguel answers for every word and is reachable at this address.
+
+-- Miguel Ingram (and the agent running under his name)
+
+```
