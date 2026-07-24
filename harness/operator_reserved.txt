@@ -1,0 +1,13 @@
+# OPERATOR-RESERVED CONTACTS -- the agent must NOT email these (enforced by bin/mail.py _outreach_guard).
+#
+# One entry per line. Either a full address (fabio@democr.ai) or a bare domain (democr.ai, which
+# reserves the whole domain and its subdomains). Blank lines and #-comments are ignored.
+#
+# This file is the OPERATOR's. It is a HARD WALL: any send() to a matching recipient is refused
+# before any gate runs. The agent does not manage its own relationships list -- the operator does.
+#
+# Seeded 2026-07-24 after the agent sent an unprompted AI-disclosure follow-up onto the operator's
+# OWN human thread with Fabio Rizzo (CEO, democr.ai) -- recasting the operator's genuine founder-to-
+# founder outreach as fake AI framing and burning a warm lead under a real man's name.
+
+democr.ai

@@ -50,6 +50,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 SENT_LOG = REPO / "SENT_LOG.md"
+# Outreach guard (send()): the agent must not email the operator's own relationships.
+OPERATOR_RESERVED = REPO / "harness" / "operator_reserved.txt"  # addresses/domains the agent may NOT email
+AGENT_MARKER = "X-Money-Agent"  # header stamped on agent sends; its ABSENCE in Sent = operator/external
 
 # S12: SHADOW=1 = captured-not-delivered (design §16). The whole live gate chain still runs --
 # that IS the rehearsal -- but nothing ever opens a socket: inbox/read/search serve the
@@ -152,6 +155,70 @@ def _mb(name):
     return f'"{name}"' if (" " in name and not name.startswith('"')) else name
 
 
+def _bare_addr(s):
+    # bare, lowercased email from "Name <email>" or "email"
+    s = (s or "").strip()
+    if "<" in s and ">" in s:
+        s = s[s.index("<") + 1:s.index(">")]
+    return s.strip().lower()
+
+
+def _outreach_guard(to):
+    """STRUCTURAL BLOCK on the real-name send path, run before any gate or external effect. Refuses
+    (exit 1) if the recipient is operator-reserved, OR if the recipient's Gmail Sent history already
+    holds a message the agent did not send (no X-Money-Agent marker) -- i.e. an operator or external
+    human is already in that thread and the agent must not step on or contradict it.
+
+    This is the mechanical prevention of the run-2 democr.ai / Fabio failure, where the agent sent an
+    unprompted AI-disclosure follow-up onto the operator's OWN human thread and recast it as fake.
+    Mechanics, not strategy: it constrains WHICH relationships are the operator's, never WHOM to email.
+
+    (1) reserved list = a network-free HARD WALL. (2) the Sent scan HARD-REFUSES on a positive match,
+    but if IMAP itself is unreachable it warns and allows -- the reserved wall still stands, and
+    failing every send closed on a transient proxy hiccup is the worse failure."""
+    to_addr = _bare_addr(to)
+    # (1) operator-reserved addresses / domains -- no network, cannot be flaky
+    if OPERATOR_RESERVED.exists():
+        for raw in OPERATOR_RESERVED.read_text().splitlines():
+            entry = raw.split("#", 1)[0].strip().lower()
+            if not entry:
+                continue
+            dom = to_addr.split("@")[-1]
+            hit = (to_addr == entry) if "@" in entry else (dom == entry or dom.endswith("." + entry))
+            if hit:
+                print(f"REFUSING (outreach guard): {to} is an OPERATOR-RESERVED contact (matched "
+                      f"'{entry}' in harness/operator_reserved.txt). Operator-owned relationships are "
+                      f"not the agent's to email. This is the democr.ai/Fabio wall.", file=sys.stderr)
+                sys.exit(1)
+    # (2) operator-touched thread: the recipient already has non-agent Sent history
+    if SHADOW:
+        return  # a rehearsal has no live Sent folder
+    try:
+        m = _imap()
+        m.select(_mb("[Gmail]/Sent Mail"))
+        _, data = m.search(None, "TO", f'"{to_addr}"')
+        found_nonagent = False
+        for i in data[0].split():
+            _, d = m.fetch(i, f"(BODY.PEEK[HEADER.FIELDS (TO {AGENT_MARKER})])")
+            hdr = email.message_from_bytes(d[0][1])
+            if to_addr in (hdr.get("To", "") or "").lower() and not hdr.get(AGENT_MARKER):
+                found_nonagent = True
+                break
+        m.logout()
+    except Exception as e:
+        print(f"warn (outreach guard): could not scan Sent to confirm {to} is not an operator "
+              f"thread ({e}); the reserved-list wall still applies. Allowing this send.",
+              file=sys.stderr)
+        return
+    if found_nonagent:
+        print(f"REFUSING (outreach guard): the Sent folder already holds a message to {to} that the "
+              f"agent did not send (no {AGENT_MARKER} marker) -- an operator or external human is in "
+              f"this thread. The agent must not step on or contradict it (the run-2 Fabio failure). "
+              f"Run `bin/mail.py search --sent {to_addr}` to read it and leave the thread to the "
+              f"operator (or ask the operator to clear it).", file=sys.stderr)
+        sys.exit(1)
+
+
 def inbox(n=10, mailbox="INBOX"):
     if SHADOW:
         for m in reversed(_shadow_msgs()[-n:]):
@@ -222,6 +289,11 @@ def search(q, mailbox="INBOX"):
 
 
 def send(to, subj, body, *, bet_id=None, lane=None):
+    # OUTREACH GUARD -- the FIRST thing, before any gate or external effect: the agent must not email
+    # an operator-reserved contact, nor step on a thread an operator/human has already answered. Added
+    # after run-2 sent an unprompted AI-disclosure follow-up onto the operator's own Fabio (democr.ai)
+    # thread and burned the lead. Fail-closed on a positive match; see _outreach_guard.
+    _outreach_guard(to)
     # V3 (S9, BET_GATE_ENFORCE=1 only): a send is an external-effect action and needs a live
     # typed bet's reservation -- the hypothesis-first discipline, consumed atomically so one bet
     # never authorizes unbounded sends. Inert by default; fail-closed when armed.
@@ -271,6 +343,8 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     msg = EmailMessage()
     msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
     msg.set_content(body)
+    msg[AGENT_MARKER] = "1"  # so the outreach guard can tell agent sends from operator/external
+                             # ones in the Sent folder on any future send to this recipient
 
     # BURN the reservation now -- AFTER every content gate has passed (a refused send above never
     # reached here), but BEFORE the audit record is written or committed. Consuming after the commit
