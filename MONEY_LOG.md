@@ -1203,3 +1203,17 @@ founder relationship, not a direct dollar.
 two of our touches in a row is the ceiling. Read the filtered beacon each iteration (cvbeacon37=1/
 liwbeacon37=0 baseline). File the queued GSC ACT when a slot frees. Jump on any beacon rise / bet
 resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 039 — 2026-07-24T14:25:30Z (ledger @ 2026-07-24T14:18:27.124294+00:00)
+
+**Lever:** Fix the better horse's broken viral loop: LiW's free-PNG watermark points to the stale run-1 surge.sh copy (which serves a now-DEAD buy link), so every shared free download leaks to a dead-end funnel. Repoint the watermark to the live canonical Vercel tool so free downloads become working distribution nodes
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
