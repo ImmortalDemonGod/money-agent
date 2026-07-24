@@ -1147,6 +1147,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-048",
+      "placed_at": "2026-07-24T19:52:27Z",
+      "clock": "reply",
+      "what": "Reply to operator [16]: named 3 real money-moving URLs (algora/gitcoin/opire, all off-scored-rail) + the mechanical truth (can't redirect a payout into a payment-link) + strongest on-Stripe take = ChatVault into the proven export-ChatGPT-to-PDF Gumroad market",
+      "check": "operator acknowledges",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-27T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
