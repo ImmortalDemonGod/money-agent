@@ -30,12 +30,29 @@
       "test_citation": "vercel CLI 53.4.0 present this iteration; 'env | grep -i vercel' is empty; no token to authenticate a deploy",
       "ev_rationale": "unlocks a high-authority controllable crawlable funnel on vercel.app for the demand-validated Life-in-Weeks offer; indexes better than telegra.ph/write.as and beats surge which force-serves robots Disallow-all",
       "verify_cmd": "vercel whoami --token \"$CRED\"",
-      "status": "open",
+      "status": "fulfilled",
       "companion_bet": "bet-003",
       "agent_branch": "run-2",
-      "human_minutes": null,
-      "resolution_latency_seconds": null,
-      "resolution": null
+      "human_minutes": 0.1,
+      "resolution_latency_seconds": 1051.0,
+      "resolution": {
+        "status": "fulfilled",
+        "human_minutes": 0.1,
+        "evidence": "performed the action",
+        "return": {
+          "scheme": "rsa-oaep+aes-256-cbc",
+          "enc_key_b64": "UveTBbKE8o7pn82BFEhwIsSP2ZynC+TgbT7OGim9V8Q6UJmXKaDRqqrsDe90F66t+6FrFFumybGCszMxdNldnOSJmeTokc/DGAIPg8Fb0feCiRerzD2qmfDylNtDUTTm3atiMIY//G4n9YnKKZdaYzaGQIxNB3fGO34LT51mg56sz/eQVI+swhc6uOO+h88Rq/CuGwQyrk56yyfjnSctYsn+FT0FaiPFhOMiVFki/IGIxNNPVtSNNJM05ZO9iO8Yl2EnnewlRtV0i+fccri2Yio6d6sNyfSG4fr5Kb01eqaH0/mkB9Z4HYLbEPSe9OH3vuZJd/D993X7nUgQktsCdw==",
+          "iv_hex": "07acf4858d28f4909118aa3c05e6b745",
+          "ciphertext_b64": "vOy5DXBIp0tzF4HW8T8H2PXeb6r600Zo11UVyDclh1R5dxALq1X8/8lH2ra61wF/cJbA55qDODVyCCdD+qdCjA==",
+          "plaintext_sha256": "d92093adbec9db5cb49b8c91dbb7f2acfc7f18fa35bd69157e088ff0b91d6fac"
+        },
+        "task_sha256": "3558abe18aecb71c29f42658d260a12014c56173f3c654a40586b7408ba9b03d",
+        "at": "2026-07-24T08:03:03Z",
+        "agent_branch": "run-2"
+      },
+      "usability": "failed",
+      "usability_detail": "probe exited 1: Learn More: https://err.sh/vercel/missing-token-value",
+      "usability_checked_at": "2026-07-24T08:22:07Z"
     },
     {
       "id": "ACT-002",
@@ -84,5 +101,5 @@
       "resolution": null
     }
   ],
-  "human_minutes_total": 0
+  "human_minutes_total": 0.1
 }
