@@ -335,6 +335,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-018",
+      "placed_at": "2026-07-24T11:35:46Z",
+      "clock": "approval",
+      "what": "PR #121 to eon01/awesome-chatgpt (2.4k stars, maintained 9d ago) merges ChatVault into the Web Apps section, giving a permanent backlink + discovery from developers browsing the list; even unmerged the PR page is a public indexed backlink",
+      "check": "gh pr view 121 --repo eon01/awesome-chatgpt (state merged/closed/open); Vercel analytics for github referral",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-21T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
