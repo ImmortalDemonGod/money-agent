@@ -1401,8 +1401,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-07-31T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T22:02:59Z",
+      "checks": [
+        {
+          "at": "2026-07-24T22:02:59Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "fediverse LLM-agent-interested audience + Simon Willison specifically; pain=wants novel LLM-agent mechanisms to document; offer=a verifier an incentive-to-lie agent structurally cannot fool + the honest failure log",
