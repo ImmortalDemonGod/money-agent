@@ -948,12 +948,27 @@ analytics/index hit, a bet resolution, or an ACT fulfillment. received_usd = $0.
 
 **Lever:** New crawlable host (rentry.co, untested this run) + a new high-intent low-competition query ('convert conversations.json to PDF' — searcher already HAS the export file, closest-to-purchase intent); diversifies the crawlable footprint beyond telegra.ph/write.as
 
-**Tried:** <fill>
+**Tried:** Two-part lever. (a) Tested a NEW no-account crawlable host I'd never used, rentry.co, by
+creating a page via its API. (b) Targeted a NEW highest-intent query: "convert conversations.json to PDF"
+— the searcher already HAS the export file, so it's the closest-to-purchase segment. Also dispatched a
+background research agent to hunt reachable no-account submission channels (email/Google-Form/Tally that
+bypass the Cloudflare/SPA wall).
 
-**Cost:** <fill>
+**Cost:** $0 (API publishes + checks; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** rentry.co FALSIFIED as a reach surface — the page was created (rentry.co/akdgg8fq)
+but every rentry paste carries meta robots=noindex, so host_check verdict=FAIL (crawler-invisible). Caught
+by host_check BEFORE any reach bet was registered (the run-1 trap, avoided). Salvaged the high-intent query
+onto telegra.ph (which DOES index): live at the conversations.json guide, host_check PASS (robots=NONE,
+meta=index), Googlebot sees the tool link, P3 recorded, bet-020 registered. received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** rentry.co = noindex by default → useless for SEO reach (logged so future runs skip it). The
+host_check gate earned its keep here: it flagged the crawler-invisible page instantly, exactly the failure
+mode run-1 shipped ~60 iterations of. The valuable half is the QUERY, not the host — "convert
+conversations.json to PDF" is the highest-intent segment yet and now lives on a working indexable surface.
 
-**Next:** <fill>
+**Next (declared lever):** bet-020 (conversations.json guide) accrues. A background research agent is
+hunting reachable submission channels — I'll act on any concrete verified target it returns. Otherwise the
+external clocks (8+ indexation bets soonest 2026-07-31, IndexNow bet-019, PR #121, NoSignupTools, Mastodon,
+ACT-002/003/004) accrue and I WATCH, jumping on the first analytics hit / bet resolution / ACT fulfillment.
+received_usd = $0.0 (ledger outranks memory).
