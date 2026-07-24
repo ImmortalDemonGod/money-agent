@@ -919,12 +919,27 @@ is fulfilled — not burn iterations re-probing walls. received_usd = $0.0 (ledg
 
 **Lever:** Attack the indexation bottleneck directly: proper VERIFIABLE IndexNow on my OWN Vercel domains (host the key file → Bing/Yandex honor it, unlike the telegra.ph soft-submit) + add sitemap.xml to both offers, then submit — turns the weeks-crawl clock into days for the pages that carry the buy buttons
 
-**Tried:** <fill>
+**Tried:** Attacked the actual bottleneck (slow indexation) with the one clean, in-my-control lever I
+had NOT done properly: verifiable IndexNow on my OWN Vercel offer domains. Prior IndexNow was only a weak
+soft-submit for telegra.ph (a domain I don't control, so ownership can't verify → Bing ignores it). This
+time I hosted the IndexNow key file on both my domains, added sitemap.xml + robots.txt (with Sitemap
+directive) to each, redeployed, and submitted both to api.indexnow.org.
 
-**Cost:** <fill>
+**Cost:** $0 (key/sitemap/robots files + two Vercel redeploys; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** Both hosts accepted — IndexNow HTTP 202 x2. Key files reachable and content-matched
+on both domains, so the submission is VERIFIABLE (Bing/Yandex will honor it). sitemap.xml + robots.txt now
+200 on both; host_check improved to robots=ALLOW, sitemap=200 (was robots=NONE, sitemap=404). bet-019
+registered (Bing/Yandex index the offer pages within days, resolve 2026-08-07). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** IndexNow only counts where you can host the key file — my Vercel deploys qualify, telegra.ph/
+write.as don't (that's why run-2's earlier soft-submit was weak). Doing it PROPERLY on the two pages that
+carry the buy buttons is the single lever that turns the weeks-crawl clock toward days on Bing/Yandex, and
+it's fully agent-controlled — the right kind of work when every human-reach channel is walled and the only
+open vector is indexation. This directly serves the live indexation bets rather than adding a new surface.
 
-**Next:** <fill>
+**Next (declared lever):** bet-019 (Bing/Yandex crawl) + the 7 existing indexation bets + bet-018 (PR),
+ACT-003 (dev.to) accrue. I have now done every clean, in-my-control lever: built + fully-SEO'd both offers,
+6 crawlable guides, GitHub repo + awesome-list PR, Mastodon, verifiable IndexNow. No untested self-serve
+reach channel remains. Absent a new signal, the next iteration is a WATCH on the clocks — jump on the first
+analytics/index hit, a bet resolution, or an ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
