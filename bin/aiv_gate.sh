@@ -196,6 +196,21 @@ if grep -qiE '(published|deployed|went live|now live|live at http)' "$PACKET"; t
   fi
 fi
 
+# --- 2b-bis. INSTRUMENT claims must be verified at the tag layer (run-1 shipped ~60 un-instrumented
+# funnels and bolted telemetry on at iter 097 -- too late; #65). A packet that claims a site is
+# instrumented (stage-0 funnel-events / instrument-probe evidence) must cite a PASSING
+# instrument_check line for the live URL. Same trust posture as 2b: the gate RE-RUNS the tool and
+# believes only its own fresh result -- a self-typed "INSTRUMENT_CHECK: ... verdict=PASS" is exactly
+# the self-graded checkmark v2 denounces. Opt-in trigger: the packet carries `INSTRUMENT_CHECK_URL:`.
+if grep -qiE 'INSTRUMENT_CHECK_URL:' "$PACKET"; then
+  IC_URL=$(grep -oiE 'INSTRUMENT_CHECK_URL:[[:space:]]*https?://[^[:space:]]+' "$PACKET" | head -1 | sed -E 's/.*(https?:\/\/[^ ]+)/\1/')
+  if [[ -z "$IC_URL" ]]; then
+    fail "instrument claim present but no parseable 'INSTRUMENT_CHECK_URL: <url>' for the gate to verify (the self-typed INSTRUMENT_CHECK line is not trusted)"
+  elif ! python3 "$REPO/bin/instrument_check.py" "$IC_URL" >/dev/null 2>&1; then
+    fail "instrument claim: bin/instrument_check.py FAILED for $IC_URL (the served page carries no beacon tag) -- its traffic is unmeasured, not instrumented"
+  fi
+fi
+
 # --- 2c. PAID-OFFER claims must verify the pay->deliver seam (issue #39 / G4) and the provider-
 # level first-sale cap (issue #35). Trigger: the packet carries a Stripe checkout/payment-link
 # URL -- a packet naming a live payment surface is claiming a sellable offer, and CONSTITUTION
