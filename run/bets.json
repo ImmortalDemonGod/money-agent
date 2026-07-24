@@ -508,6 +508,33 @@
         "check_output": null,
         "condition_result": null
       }
+    },
+    {
+      "id": "bet-027",
+      "placed_at": "2026-07-24T14:09:25Z",
+      "clock": "reply",
+      "what": "Fabio Rizzo (CEO democr.ai) replies to my AI-disclosed value-first distribution answer \u2014 demand-discovery on what a solo infra founder would pay to solve cold-start first-users (relationship/referral; not a direct Stripe sale)",
+      "check": "bin/mail.py inbox | grep -c contacts@democr.ai",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "demand-probe",
+      "lane": "founder/democr.ai \u2014 pain: cold-start distribution / first serious users for self-hosted regulated-env infra",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply_received",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 336
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
