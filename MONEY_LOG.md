@@ -1146,3 +1146,17 @@ genuinely exhausted, and the fastest paths are all either the operator's clock o
 lever). Read the beacon each iteration (baseline 1/1/0/0). Accruing: 10 indexation bets, IndexNow bet-019, 3
 directory approvals, 2 PR merges, Mastodon, ACT-002/003/004. Jump on any beacon rise / bet resolution / ACT
 fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 037 — 2026-07-24T13:56:19Z (ledger @ 2026-07-24T13:47:50.000286+00:00)
+
+**Lever:** Harden the primary signal: the beacon just moved (cvbeacon35 1->2) but counterapi has no attribution, so a human is indistinguishable from an automated renderer (or my own Playwright). Add client-side bot-filtering (navigator.webdriver / bot-UA / no-languages) + fresh namespaces so future counts approximate real-ish humans and exclude my test pollution
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
