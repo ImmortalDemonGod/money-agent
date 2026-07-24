@@ -1472,6 +1472,30 @@
         "window_h": 216
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-059",
+      "placed_at": "2026-07-24T22:46:13Z",
+      "clock": "reputation",
+      "what": "Built + published the bespoke 'One Honest Dollar' story-game (onehonestdollar-game.vercel.app): play the AI hitting the real walls, only honest win ships the story to the $1 offer. Hypothesis: a sole-supplier, shareable, self-explaining game converts a stranger's attention toward the offer better than a static page, and is intrinsically more shareable.",
+      "check": "onehonestdollar-game.vercel.app referral/traffic, mastodon notifications on the game post, any tip/payment; host_check remains PASS. Any player-driven engagement, share, or referral = signal.",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-02T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "AI-curious + indie-game + 'weird internet' players who would share a meta game about an AI failing to earn a dollar; offer=play free, then the honest $1 'end it' button",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "game_engagement_or_referral",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 216
+      },
+      "spent_usd": 0.0
     }
   ]
 }
