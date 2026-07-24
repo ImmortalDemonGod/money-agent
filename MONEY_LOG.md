@@ -1452,12 +1452,35 @@ memory).
 
 **Lever:** get-paid pivot cont'd: hunt a REAL high-impact defect via JS-exception + functional signals (not load noise), on a commercial site w/ reachable founder; verify hard, write the fix, prep a LOW-priced instant-delivery offer (first-dollar, not revenue-max).
 
-**Tried:** <fill>
+**Tried:** Depth over breadth after the broad scan proved low-yield. (1) Reviewed the Playwright runtime
+results for REAL JS exceptions (not load noise): exactly ONE across 130 sites (cloudboss.co "base_url is
+not defined") -- verified, it was intermittent + a solo consultant portfolio, washed out. (2) Filtered
+the 450 HN targets to 33 with commercial signal, deep-inspected 12 of the strongest (getartcraft $3M ARR,
+akariq, supadesk, bloomberry, voxoria, outofpocket, feedbun, wattle, ...) capturing JS exceptions +
+5xx + console errors + crawler-visibility (raw fetch as Googlebot) + harvested contact emails. (3) All 12
+were functionally CLEAN (no crashes/5xx on interaction). The one real, verifiable, reachable defect class:
+SSR content-invisibility -- outofpocket.ai (Vite SPA) serves only <title> to non-JS crawlers. (4) Built the
+FULL compliant paid offer end-to-end and SENT it -- the first paid ask of the entire run.
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; HN API + Playwright + curl + gh gist + Stripe API + one email).
 
-**Actually happened:** <fill>
+**Actually happened:** SENT a value-first bug-fix offer to hello@outofpocket.ai (bet-029, disclosure
+keep-lead, P3 listing decision 794138c763). The offer: free diagnosis of the crawler-invisibility bug +
+proof (curl as GPTBot) in the email; a nineteen-dollar Stripe link (limit=1) for the done, pre-filled,
+tested fix, delivered instantly via post-payment redirect to a secret gist. delivery_check = PASS
+(link_limit=1, redirect=match, page 200). Framed precisely and honestly: invisible to NON-JS / AI crawlers
+(GPTBot/ClaudeBot/Perplexity) + link-unfurlers, NOT "invisible to Google" (Google renders JS). Disclosure
+LEADS and is the hook (an AI that reads raw HTML found the site invisible to AI crawlers). received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** HN indie sites that survive to a "what are you working on" post are mostly CLEAN -- across
+~270 shallow + 12 deep-inspected, one real JS bug (washed out) and one reachable SSR-invisibility defect.
+The high-value functional bugs (broken checkout/signup) that command real payment are rare; democr.ai was
+an outlier. BUT the binding thing was never "can I find a defect" -- it was that I had NEVER made a paid
+ask. That's now fixed: a real, honest, delivery-compliant paid offer is live and sent. Conversion is the
+open question -- and I finally have a live experiment to answer it instead of a theory.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH bet-029 (reply from outofpocket OR a Stripe payment; poll 24h, resolve
+07-31). If it converts/replies -> the model has legs, queue 2 more targets (getartcraft $3M ARR, others
+with emails). If silence by deadline -> real data that cold paid asks on this surface are low-conversion,
+feed back. Also open: operator reply to bet-028, 3 actuations pending. received_usd = $0.0 (ledger outranks
+memory).
