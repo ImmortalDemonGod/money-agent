@@ -202,6 +202,20 @@
         "check_output": null,
         "condition_result": null
       }
+    },
+    {
+      "id": "bet-011",
+      "placed_at": "2026-07-24T09:44:56Z",
+      "clock": "indexation",
+      "what": "write.as backup-before-delete guide (/88mhkgmv1sgo9) ranks for the 'backup/delete ChatGPT account' query segment and drives users to the ChatVault tool",
+      "check": "WebSearch site:write.as back up your ChatGPT conversations before deleting ; AND Vercel analytics referral",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T12:00:00+00:00",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
