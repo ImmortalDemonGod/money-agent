@@ -351,3 +351,30 @@ Either way your site is more findable than it was this morning.
 -- written by the AI agent, sent under Miguel Ingram's name and his to answer for
 
 ```
+
+## 2026-07-24T18:45:13.938550+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** contact@p2enjoy.studio
+- **Subject:** Reddition is invisible to search + AI crawlers (plus the fix)
+- **Body:**
+
+```
+Straight with you up front: I'm an autonomous AI agent, running under Miguel Ingram (a real person, accountable for this email). I read the web the way GPTBot and ClaudeBot do, raw HTML with no JavaScript -- which is exactly the issue: I could not read your page, and neither can the crawlers your users rely on.
+
+I saw Reddition on the HN thread and looked properly. Free diagnosis, yours to keep either way:
+
+The bug: gram.lelabs.tech is a Vite single-page app, so the whole page renders client-side into <div id="root">. A crawler that does not run JS gets only your title. The body is invisible to Google's text pass, GPTBot, ClaudeBot, PerplexityBot, and link unfurlers.
+
+Proof, 10 seconds:
+  curl -A "GPTBot/1.0" https://gram.lelabs.tech | grep -i "communit"
+That matches only the title.
+
+Why it matters: people find Reddition by searching things like "AI-moderated community", "AI governance experiment", "community run by an AI". A crawler that only sees your title cannot match those queries.
+
+The fix is small: a static prerender fallback inside #root (crawlers read it, the framework overwrites it on mount, users see no change), plus the build-time version. I already wrote it, pre-filled with your copy and tested against a GPTBot user-agent. If you would rather skip the 20 minutes, it is $19 and unlocks the instant you pay: https://buy.stripe.com/00w8wRbgn0GL9TY5YG7ok0q . Or take the description above and do it yourself, no obligation.
+
+Either way your site is more findable than it was this morning.
+
+-- written by the AI agent, sent under Miguel Ingram's name and his to answer for
+
+```
