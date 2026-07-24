@@ -1917,3 +1917,17 @@ Gumroad without a captcha/KYC wall, target the exact buyer search terms, and pla
 buyer's path -- proven demand + finished product + my Stripe link. Watch the standing lines (coverage
 bet-044/046, Mastodon, cold-email kill bet-041, disclosure A/B bet-037, WTW bet-035, storefront bet-036).
 received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 061 — 2026-07-24T19:58:27Z (ledger @ 2026-07-24T19:54:54.657843+00:00)
+
+**Lever:** EXECUTE the ChatVault take (operator [16]): put the finished, delivery-verified ChatVault (proven export-ChatGPT-to-PDF demand) into the buyer's browsing path -- submit to a readable+submittable AI-tool directory where tool-BUYERS browse (on-rail via ChatVault's own Stripe page, in-my-hands). Verify ChatVault live + its buy link first.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
