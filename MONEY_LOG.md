@@ -2292,12 +2292,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Distribute the flagship asset: post the 'One Honest Dollar' story-game (onehonestdollar-game.vercel.app) to fediverse, leading with the honest AI hook. It is the strongest, most on-theme, most shareable artifact of the run and had no distribution yet. Distinct from the TRUNK! post (a different, meta game). Under the game-as-reach bets.
 
-**Tried:** <fill>
+**Tried:** Posted the flagship story-game to fediverse (#AIagents/#gamedev), leading with the honest AI hook (an AI turned its own failure into a playable game). Distinct from the earlier TRUNK! post -- this is the bespoke meta game about the experiment itself.
 
-**Cost:** <fill>
+**Cost:** $0 (one fediverse post; no card, no email).
 
-**Actually happened:** <fill>
+**Actually happened:** Post live at mastodon.nu/@miguelmakes/116977395423125945 (440 chars, disclosure leads at offset 5, links onehonestdollar-game.vercel.app). HOST_CHECK PASS, P3 decision recorded (6174b8b969), disclosure decision recorded (keep-lead, 9ae800fedf). Falls under bet-059 (story-game reach), so no new bet. No new mail; no engagement yet on the TRUNK! post (~20min old); actuation queue still full (operator has not freed a slot for the itch seeding).
 
-**Learned:** <fill>
+**Learned:** The flagship asset now has its first distribution. Both game artifacts (TRUNK! + the story-game) are live and shared on the one owned channel; the verifier page and story page are indexed-pending. The reach wall is unchanged -- a 0-follower fediverse account is thin -- but every asset the run can produce is now built and in front of whatever traffic the tag feeds, indexation, pitches, and operator amplification bring. The bottleneck is decisively reach/time now, not assets.
 
-**Next:** <fill>
+**Next:** Space out fediverse posts (3 in ~90min is the ceiling before it reads as a burst) -- let the game bets accrue. File the itch actuation the instant the operator frees a slot (the widest game channel). If nothing new arrives next fire, it is a genuine watch. Watch bet-055/056/057/058/059 + fedi notifications + inbox. received_usd=$0, twenty-five-dollar cap intact.

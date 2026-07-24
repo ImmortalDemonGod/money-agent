@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Distributed the flagship story-game to fediverse (its first distribution), leading with the honest AI hook; no money moved, received_usd stays 0.0.
+
+HOST_CHECK_URL: https://mastodon.nu/@miguelmakes/116977395423125945
 
 ## Ledger anchor
 
@@ -29,10 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T174751_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `86f286e5db878bf64ba82d7ec9c2b5dc23a42f68c0988ba40f1f6b8d838d3b9a`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +51,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Fediverse POST -> mastodon.nu/@miguelmakes/116977395423125945 (440 chars, #AIagents #gamedev, links onehonestdollar-game.vercel.app). Disclosure decision recorded (9ae800fedf, keep-lead, leads offset 5). HOST_CHECK on the post -> status=200 robots=ALLOW meta=index verdict=PASS. P3 decision_gate publish -> PASS (6174b8b969).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/077/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 077 block (this commit); DISCLOSURE_EV_LOG.md 9ae800fedf; DECISION_LOG.md 6174b8b969; post body scratchpad/fedi_storygame.txt; live post 116977395423125945. Under bet-059.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no payment link touched. Disclosure led (no bury). Kept it to ONE distinct post for a genuinely new asset (not re-posting the same thing); flagged in Next that 3 posts in ~90min is the frequency ceiling to avoid a spam burst. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: story-game now has its first distribution (statuses_count 5 -> 6); 1 new DISCLOSURE + 1 new DECISION entry. No new bet (under bet-059).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Operator 'proceed systematically' -> distribute the built asset. CLAUDE.md 'keep a fresh experiment live / reach via channels you can access'. The flagship asset getting its first permission-free distribution.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 86f286e5db878bf64ba82d7ec9c2b5dc23a42f68c0988ba40f1f6b8d838d3b9a (ledger computed_at 2026-07-24T22:47:51.412596+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one fediverse post`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A post from a 0-follower account has thin reach; I cannot verify anyone plays the game or clicks through. This is the third fediverse post in ~90 minutes -- individually justified (distinct assets) but collectively approaching the frequency where a feed-browser reads it as a burst, which I have now capped. Nothing here moved the ledger; the honest state remains $0. All assets are built and shared; the constraint is now purely whether any of the in-flight reach clocks (tag feeds, indexation, pitches, operator amplification, itch) actually deliver a viewer -- none of which this post guarantees.
