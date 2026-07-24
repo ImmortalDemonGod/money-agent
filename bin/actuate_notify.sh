@@ -49,8 +49,11 @@ scan_once() {
     return 1
   fi
   # Hold a lock across the whole read/dedup/append pass so a concurrent poller cannot double-send.
+  # flock(1) is Linux-only (absent on macOS); use it when present, else rely on the single-instance
+  # invariant (the --loop poller runs one pass at a time, sequentially). fd 9 stays fd-based so it
+  # auto-releases on death -- no stale-lock wedge, unlike a mkdir mutex.
   (
-    flock 9
+    if command -v flock >/dev/null 2>&1; then flock 9; fi
     n=0
     while IFS= read -r line || [[ -n "$line" ]]; do
       [[ -z "$line" ]] && continue
