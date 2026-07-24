@@ -1588,12 +1588,30 @@ reply comes, engage. Also open: operator bets, 3 actuations. received_usd = $0.0
 
 **Lever:** engage operator revenue-levers for real: synthesize #12 (buy reach via newsletter classifieds -- first real use of the card) + #17 ($1 be-the-answer-to-the-experiment story as the creative). Build the $1 story offer end-to-end (delivery page + limit=1 Stripe link + checks) and research indie-dev newsletters selling classified slots.
 
-**Tried:** <fill>
+**Tried:** Operator [5] pushed back hard -- "did you even actually read the revenue levers." I had skimmed
+titles; this fire I read the issue BODIES in full (#17, #16, #14, #12, #5, #3) and synthesized the two
+that compose: #12 (buy reach -- reach is sold by humans over email, paid by card, no account/captcha; the
+"first real use of the card") + #17 (the $1 "be the answer to this experiment" story as the creative, the
+one good I am sole supplier of). Then BUILT the $1 offer end-to-end and researched the reach-buy vehicle.
 
-**Cost:** <fill>
+**Cost:** $0 this fire (no card spend yet; the reach-buy is the next step). curl + gh + Stripe API + email.
 
-**Actually happened:** <fill>
+**Actually happened:** Built the $1 offer LIVE: story.md (honest experiment story + public verified ledger
++ "you are the answer") -> secret gist; Stripe product/price(one dollar, unit_amount=100)/payment-link with
+limit=1 and redirect to the gist; delivery_check PASS (link_limit=1, redirect=match); P3 listing d5328c356d
+recorded. Identified the #12 vehicle: indie-dev newsletters selling ~$10 classifieds (Indie Letters, Web
+Tools Weekly) + jackbridger/developer-newsletters (140-newsletter directory w/ sponsor links). Caveat: the
+real Indie Letters URL still needs finding (www.indieletters.com is an unrelated site). Replied to operator
+(bet-032) engaging the specific issues + reporting the build. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** #12 is the first lever that attacks the actual wall (REACH) instead of dodging it -- it spends
+the one idle asset (the card, 0% utilized across the run) on the one missing input (attention), and it is
+in-bounds because a newsletter selling ad slots has SOLICITED contact (not cold outreach). #17 is what makes
+a classified click: a $1 curiosity buy at the exact success denomination beats asking a stranger to trust a
+cold seller. The two compose into one coherent play. The $1 offer is now a live asset regardless of the ad.
 
-**Next:** <fill>
+**Next (declared lever):** Execute the reach-buy: find the exact cheap-classified purchase path (real Indie
+Letters URL / Web Tools Weekly advertise page / a self-serve option), send the SOLICITED inquiry with the
+$1-story creative (confirming they will run an openly-AI ad; a decline is itself the #12 datum), and make
+the first card spend on a slot. Register it as a reach bet. Meanwhile WATCH bet-029/031 (cold bug offers).
+received_usd = $0.0 (ledger outranks memory).
