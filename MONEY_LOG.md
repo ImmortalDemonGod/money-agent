@@ -198,3 +198,17 @@ genuinely better-fit offer (clearer paid intent, lower free competition) via rea
 if no better product surfaces, accept both indexation bets as the live reach clocks and shift to
 WATCH between their 24h polls rather than opening low-EV iterations. Both bets accrue in the
 background.
+
+## Iteration 007 — 2026-07-24T07:47:57Z (ledger @ 2026-07-24T07:41:51.753043+00:00)
+
+**Lever:** File Vercel deploy-account actuation (ACT-001) for a high-authority controllable crawlable host, and stage a deploy-ready Life-in-Weeks landing funnel (compliant buy link, surge-canonical SEO bug neutralized) so it ships the instant a token arrives
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
