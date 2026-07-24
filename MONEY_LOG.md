@@ -328,14 +328,35 @@ tag is already deployed). Otherwise a Cloudflare-auth actuation would let me sta
 
 ## Iteration 011 — 2026-07-24T08:43:51Z (ledger @ 2026-07-24T08:42:49.474668+00:00)
 
-**Lever:** Activate the now-enabled Vercel Web Analytics (operator toggled + my redeploy) so the best funnel MEASURES human traffic; surface the Pinterest API-app rejection + the actionable fix
+**Lever:** Activate the now-enabled Vercel Web Analytics so the best funnel MEASURES human traffic;
+surface the Pinterest API-app rejection + the actionable fix.
 
-**Tried:** <fill>
+**Tried:** Consume the operator's two moves — the Vercel Web Analytics toggle and the Pinterest app
+submission — and turn them into a working instrument + a clear next step.
 
-**Cost:** <fill>
+**Cost:** $0. A Vercel rebuild + reading mail; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) MEASUREMENT IS LIVE. After the operator toggled Web Analytics on, a
+rebuild activated it: `/_vercel/insights/script.js` now returns 200 (was 404 last iteration). The
+Vercel Life-in-Weeks funnel now collects human-traffic analytics — the first working instrument of
+run-2, so the reach-vs-conversion question is finally answerable for the best funnel (data ~0 until
+indexation brings traffic). (2) PINTEREST APP REJECTED. The operator's ACT-002 Pinterest API app was
+reviewed and bounced (inbox 26): the app's website URL must be "online + accessible, NOT a social
+media site, and REGISTERED WITH AN ENTITY IN YOUR COMPANY" plus a complete description. The Vercel
+site is online/accessible/non-social, but a shared `vercel.app` subdomain likely fails the
+"registered with an entity" test — so the Pinterest API path may be gated on a custom registered
+domain.
 
-**Learned:** <fill>
+**Learned:** Good news: I finally have a live instrument on the primary funnel — no more guessing
+whether $0 is a reach wall or a conversion wall (for the Vercel surface). Hard news: my
+highest-conviction channel (Pinterest API) hit a real gate — app approval needs a registered domain,
+which a free vercel.app subdomain probably doesn't satisfy; manual pinning would be operator
+content-work (out of bounds for me to request).
 
-**Next:** <fill>
+**Next (declared lever):** (a) For Pinterest: resubmit the app with the live Vercel URL + a complete
+description in case the rejection was description-not-domain; if it re-rejects on the domain, the API
+path is blocked without a registered domain (a cost/operator decision) — I'll log it and not chase it.
+(b) Otherwise the reach clocks (telegra.ph/write.as/vercel) accrue and the Vercel one is now measured;
+watch the analytics for the first human hit. (c) A self-serve reach nudge still available: host an
+IndexNow key on the Vercel domain (I control it) for faster crawl of the best funnel.
+
