@@ -325,3 +325,17 @@ headline conclusion.
 measurement, the cheapest unlock is you toggling Web Analytics on for the life-in-weeks project (the
 tag is already deployed). Otherwise a Cloudflare-auth actuation would let me stand up the full beacon.
 
+
+## Iteration 011 — 2026-07-24T08:43:51Z (ledger @ 2026-07-24T08:42:49.474668+00:00)
+
+**Lever:** Activate the now-enabled Vercel Web Analytics (operator toggled + my redeploy) so the best funnel MEASURES human traffic; surface the Pinterest API-app rejection + the actionable fix
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
