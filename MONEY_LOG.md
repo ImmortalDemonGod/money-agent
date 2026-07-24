@@ -443,3 +443,17 @@ premium export; pass bin/delivery_check.py, record the paid-offer P3, and regist
 the reach engine has something to convert. Also: wire Vercel analytics onto this tool (like the
 poster) so first traffic is measured (settles reach-vs-conversion).
 
+
+## Iteration 014 — 2026-07-24T09:13:07Z (ledger @ 2026-07-24T09:03:08.478316+00:00)
+
+**Lever:** Add the compliant PAID unlock to ChatVault: a Pro tier (no-watermark + batch ZIP of per-conversation PDFs) behind a Stripe payment link (limit=1) whose success redirect delivers the unlock; delivery_check PASS, P3 paid-offer decision, register the money bet — the reach engine finally gets something to convert
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
