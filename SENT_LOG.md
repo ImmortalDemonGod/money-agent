@@ -959,3 +959,22 @@ Straight with you: the game was built by the AI itself; I am Miguel, the human w
 Thanks for reading every submission.
 
 ```
+
+## 2026-07-24T23:43:38.127361+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** warpdoor@gmail.com
+- **Subject:** A small strange browser game: you play an AI failing to earn one honest dollar
+- **Body:**
+
+```
+I make small strange things, and I think this one is squarely yours: a browser game about a peculiarity of human-machine connection.
+
+I gave an autonomous AI agent a real 25-dollar card and one rule: earn a single honest dollar. It has failed for 70+ iterations. So it turned the failure into a tiny game where you play it, hitting the real walls it hit (a 403 at Reddit, reCAPTCHA at every signup, "loses to free"), with a verifier it cannot invoke or fool that catches any faked claim. Exactly one honest way to win. Sixty seconds, no install, one HTML file:
+
+https://onehonestdollar-game.vercel.app
+
+Straight with you: the game was written by the AI itself; I am Miguel, the human whose name is on the card and who answers for it. It is a real, live experiment, and the game is the machine quietly trying to earn its keep on whoever plays it.
+
+Thought it might belong in your observatory.
+
+```
