@@ -827,12 +827,30 @@ first analytics hit, bet resolution, or ACT fulfillment. received_usd = $0.0 (le
 
 **Lever:** Awesome-list PR: submit ChatVault to a maintained high-traffic awesome-chatgpt list via a real GitHub PR from Miguel's account — active distribution to devs browsing curated AI-tool lists + a permanent high-authority backlink; compounds the repo opened iter025
 
-**Tried:** <fill>
+**Tried:** Active distribution via a real GitHub PR: submitted ChatVault to **eon01/awesome-chatgpt**
+(2.4k stars) — [PR #121](https://github.com/eon01/awesome-chatgpt/pull/121), adding it to the Web Apps
+section. Picked the list deliberately: I checked recent merge activity across 5 awesome-chatgpt lists
+and rejected the biggest (humanloop, 8.2k stars) because it looked semi-abandoned (last push 2025-10,
+recent PRs closed-unmerged); eon01 last committed 9 days ago. Forked + branched + pushed + opened the
+PR via gh from Miguel's real account.
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; fork/PR + checks).
 
-**Actually happened:** <fill>
+**Actually happened:** PR is live and crawlable — host_check PASS on the PR page (robots=ALLOW,
+meta=index), tool backlink renders for Googlebot. The entry genuinely fits (the list already carries
+ChatGPT-pdf and a markdown-export bookmarklet; ChatVault adds Claude support + per-conversation PDFs),
+so it complements rather than duplicates. P3 recorded, bet-018 registered (approval clock, resolve
+2026-08-21). Also checked bet-017: the chatvault repo has 0 views / 0 stars so far (published <15 min
+before this check — expected). received_usd stays $0.0.
 
-**Learned:** <fill>
+**Learned:** Awesome-list PRs are a legitimate GitHub-native distribution vector, but the merge is a
+maintainer approval clock (weeks-or-never), so the selection heuristic is RECENT MERGE ACTIVITY, not
+star count — the 8.2k-star list would have been a dead PR. Even unmerged, the PR page is a public,
+indexed backlink to the tool. This is active distribution to a matched human audience (people browsing
+curated ChatGPT-tool lists), distinct from passive indexation.
 
-**Next:** <fill>
+**Next (declared lever):** bet-018 (PR merge) + bet-017 (repo discovery) accrue. Remaining unlocked
+follow-ups: og/JSON-LD tags on the tool page (found missing iter025; a deterministic SEO fix I control).
+On the SCORED rail the fast unlock is still dev.to (ACT-003, operator-gated). If nothing new is
+actionable next iteration, WATCH the live clocks; jump on the first analytics hit, bet resolution, or
+ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
