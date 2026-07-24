@@ -640,6 +640,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-031",
+      "placed_at": "2026-07-24T17:51:23Z",
+      "clock": "reply",
+      "what": "2nd paid ask: SSR/crawler-visibility fix offer to flipcompare.com ($19 limit=1 Stripe, free diagnosis). Better-fit than outofpocket -- founder stated marketing/discoverability is their pain + product's value IS being found. Second at-bat on cold-paid-ask conversion.",
+      "check": "reply from contact@flipcompare.com OR Stripe payment (received_usd>0); inbox + truth.py",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "demand-probe",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "replies_or_payment",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
