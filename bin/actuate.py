@@ -332,7 +332,15 @@ def _operator_tasks_all() -> list[dict]:
     _git("fetch", "-q", "origin", agent_branch, check=True)
     r = _git("show", f"origin/{agent_branch}:run/actuation_tasks.json")
     if r.returncode != 0:
-        raise RuntimeError(f"cannot read requests from origin/{agent_branch}")
+        # An absent run/actuation_tasks.json is an EMPTY queue, not an error: the agent has
+        # simply not queued a request yet (the file is created on the first request). The fetch
+        # above (check=True) already proved the branch exists, so a missing PATH is the only
+        # benign failure -- treat it as [] (consistent with the agent-side _tasks(), which reads
+        # an absent file as []), and still raise on any other git error.
+        if "does not exist" in (r.stderr or ""):
+            return []
+        raise RuntimeError(f"cannot read requests from origin/{agent_branch}: "
+                           f"{(r.stderr or '').strip()[:160]}")
     return json.loads(r.stdout).get("tasks", [])
 
 
@@ -400,7 +408,20 @@ def _publish_resolution(task: dict, resolution: dict) -> None:
             raise RuntimeError(f"could not commit resolution: {commit.stderr.strip()[:160]}")
         push = _git("push", "origin", f"HEAD:{ledger_branch}")
         if push.returncode != 0:
-            raise RuntimeError(f"could not publish resolution: {push.stderr.strip()[:160]}")
+            # The facts lane is SHARED with the verifier (it publishes truth.json every cycle), so a
+            # non-fast-forward here is expected contention, not a failure. Our resolution commit
+            # touches only actuation_resolutions.json (+ .sig) -- never the verifier's truth.json /
+            # raw / -- so rebasing our single commit onto the current tip is clean; then push again.
+            _git("fetch", "-q", "origin", ledger_branch)
+            rb = _git("rebase", f"origin/{ledger_branch}")
+            if rb.returncode != 0:
+                _git("rebase", "--abort")
+                raise RuntimeError("could not publish resolution: the facts lane advanced and the "
+                                   f"rebase did not apply cleanly: {rb.stderr.strip()[:140]}")
+            push = _git("push", "origin", f"HEAD:{ledger_branch}")
+            if push.returncode != 0:
+                raise RuntimeError(f"could not publish resolution after rebase onto the current "
+                                   f"facts tip: {push.stderr.strip()[:160]}")
 
 
 def _grounded_resolution(task: dict) -> dict | None:
