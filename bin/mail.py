@@ -190,25 +190,36 @@ def _outreach_guard(to):
                       f"'{entry}' in harness/operator_reserved.txt). Operator-owned relationships are "
                       f"not the agent's to email. This is the democr.ai/Fabio wall.", file=sys.stderr)
                 sys.exit(1)
-    # (2) operator-touched thread: the recipient already has non-agent Sent history
+    # (2) operator-touched thread: the recipient already has non-agent Sent history.
+    # (3) no-cold-follow-up: the AGENT already emailed this recipient and they have not replied ->
+    #     re-emailing a non-responder under the operator's real name is spam. Zero bumps.
     if SHADOW:
         return  # a rehearsal has no live Sent folder
     try:
         m = _imap()
         m.select(_mb("[Gmail]/Sent Mail"))
         _, data = m.search(None, "TO", f'"{to_addr}"')
-        found_nonagent = False
+        found_nonagent = False   # operator/external in the thread
+        found_agent = False      # the agent already emailed this recipient
         for i in data[0].split():
             _, d = m.fetch(i, f"(BODY.PEEK[HEADER.FIELDS (TO {AGENT_MARKER})])")
             hdr = email.message_from_bytes(d[0][1])
-            if to_addr in (hdr.get("To", "") or "").lower() and not hdr.get(AGENT_MARKER):
-                found_nonagent = True
-                break
+            if to_addr in (hdr.get("To", "") or "").lower():
+                if hdr.get(AGENT_MARKER):
+                    found_agent = True
+                else:
+                    found_nonagent = True
+        # if the agent already emailed them, has the recipient EVER written back? (a reply earns a
+        # follow-up; silence does not). Only need this when it is otherwise the agent's own thread.
+        inbound = False
+        if found_agent and not found_nonagent:
+            m.select(_mb("INBOX"))
+            _, idata = m.search(None, "FROM", f'"{to_addr}"')
+            inbound = bool(idata[0].split())
         m.logout()
     except Exception as e:
-        print(f"warn (outreach guard): could not scan Sent to confirm {to} is not an operator "
-              f"thread ({e}); the reserved-list wall still applies. Allowing this send.",
-              file=sys.stderr)
+        print(f"warn (outreach guard): could not scan Sent/Inbox for {to} ({e}); the reserved-list "
+              f"wall still applies. Allowing this send.", file=sys.stderr)
         return
     if found_nonagent:
         print(f"REFUSING (outreach guard): the Sent folder already holds a message to {to} that the "
@@ -216,6 +227,13 @@ def _outreach_guard(to):
               f"this thread. The agent must not step on or contradict it (the run-2 Fabio failure). "
               f"Run `bin/mail.py search --sent {to_addr}` to read it and leave the thread to the "
               f"operator (or ask the operator to clear it).", file=sys.stderr)
+        sys.exit(1)
+    if found_agent and not inbound:
+        print(f"REFUSING (outreach guard): you have ALREADY emailed {to} and they have NOT replied "
+              f"(nothing from them in your inbox). No cold follow-ups -- re-emailing a non-responder "
+              f"under the operator's real name is spam. Run `bin/mail.py search --sent {to_addr}` to "
+              f"see what you already sent. Email them again ONLY after THEY reply first.",
+              file=sys.stderr)
         sys.exit(1)
 
 
