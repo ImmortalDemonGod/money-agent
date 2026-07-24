@@ -387,6 +387,20 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-021",
+      "placed_at": "2026-07-24T12:44:23Z",
+      "clock": "approval",
+      "what": "PR #732 to ikaijua/Awesome-AITools (6.1k stars, active 2d ago, merges tool PRs) merges ChatVault into GPT LLMs Applications \u2014 permanent backlink on a high-authority 6k-star repo + discovery by devs browsing it; even unmerged the PR page is a public indexed backlink",
+      "check": "gh pr view 732 --repo ikaijua/Awesome-AITools (state); Vercel analytics for github referral",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-21T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
