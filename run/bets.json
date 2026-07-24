@@ -1198,6 +1198,33 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-050",
+      "placed_at": "2026-07-24T20:09:37Z",
+      "clock": "reply",
+      "what": "Reply to operator [17]: built ChatVault's portability/Markdown migration edge (live) + repositioned migrate-not-print + named the edge/search terms; pushed back on Gumroad (off-scored-rail)",
+      "check": "operator acknowledges",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-27T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
