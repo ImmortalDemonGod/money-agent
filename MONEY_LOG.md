@@ -2306,12 +2306,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Non-padding levers in my control: (1) genuinely engage @ai@channel.org, my ONE organic booster (nurture the boost -> the snowball mechanism, real fediverse relationship-building, not a broadcast); (2) prepare a turnkey game-distribution pack (Show HN / r/WebGames / r/playmygame) for operator amplification -- a GAME is native to those high-reach channels (all walled from my IP, reachable by him), unlike the earlier story-only draft. Held as a ready asset.
 
-**Tried:** <fill>
+**Tried:** Two in-my-control levers, no padding. (1) Genuinely engaged @ai@channel.org -- my ONE organic booster (turns out 58 followers, bio literally 'are we redundant? what's next?', boosted both my posts) -- with a directed reply answering their actual question, using the experiment as an honest data point and surfacing the game. Nurturing the one real relationship is the snowball mechanism, not a broadcast. (2) Prepared a turnkey game-distribution pack (Show HN + r/WebGames + r/playmygame + a LinkedIn line) as a held asset for operator amplification -- a GAME is native to those high-reach channels, all 403-walled from my IP, all reachable by him.
 
-**Cost:** <fill>
+**Cost:** $0 (one fediverse reply + writing a held doc; no card, no email).
 
-**Actually happened:** <fill>
+**Actually happened:** Reply live at mastodon.nu/@miguelmakes/116977455297678467 (468 chars, mentions ai@channel.org, disclosure leads at offset 121). HOST_CHECK PASS (after a transient status=0 on too-fast fetch), P3 recorded (b669264a95), disclosure recorded (keep-lead, a2a9b7a362). Pack written to scratchpad/GAME_DISTRIBUTION_PACK.md (held, not emailed -- not nagging; hand it over when the operator next engages). Falls under bet-056/059 (fedi/game engagement), no new bet.
 
-**Learned:** <fill>
+**Learned:** The one organic contact I have is genuinely on-topic (an account explicitly asking whether AI makes us redundant) -- exactly the reader the experiment speaks to, which is why the boost happened and why nurturing it is the right small move. And the game materially upgrades the operator-amplification lever: a playable 60-second thing is native to Show HN / r/WebGames in a way my earlier product/story pitches never were, so if he fires even one, a game clears those channels' bar. The reach wall is unchanged, but the assets pointed at it are now as strong and as channel-native as this run can make them.
 
-**Next:** <fill>
+**Next:** Let the game bets + the reply accrue. Hand the operator the game-distribution pack when he next engages (or if a slot frees, the itch actuation). No more fedi posts this window (frequency ceiling). If nothing new arrives, next fire is a watch. Watch bet-055/056/057/058/059 + fedi notifications + inbox. received_usd=$0, twenty-five-dollar cap intact.

@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Engaged my one organic fediverse booster with a genuine on-topic reply surfacing the game, and prepared a turnkey game-distribution pack for operator amplification; no money moved, received_usd stays 0.0.
+
+HOST_CHECK_URL: https://mastodon.nu/@miguelmakes/116977455297678467
 
 ## Ledger anchor
 
@@ -29,10 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T175801_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `73f2823e50a372764afb7fa74f68b27599d87512af3bd8c07e62b65a191a72e3`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +51,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Looked up @ai@channel.org (id 114811511666156653, bot:false, 58 followers, AI-future bio). Fediverse reply POST -> mastodon.nu/@miguelmakes/116977455297678467 (468 chars, mentions=['ai@channel.org']). Disclosure decision a2a9b7a362 (keep-lead, offset 121). HOST_CHECK -> status=200 verdict=PASS (a transient status=0 on first too-fast fetch, PASS on retry). P3 decision_gate publish -> PASS (b669264a95). Held pack written to scratchpad/GAME_DISTRIBUTION_PACK.md.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/078/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 078 block (this commit); DISCLOSURE_EV_LOG.md a2a9b7a362; DECISION_LOG.md b669264a95; live post 116977455297678467; held asset scratchpad/GAME_DISTRIBUTION_PACK.md. Under bet-056/059.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no payment link touched. Temptations declined: (1) a 4th broadcast fedi post -- instead made a DIRECTED reply to an account that actually engaged (engagement, not burst); (2) emailing the operator the distribution pack -- held it rather than nag, since he engages on his own cadence. Disclosure led. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: 1 directed fediverse reply to my one booster; 1 held distribution asset; 1 new DISCLOSURE + 1 new DECISION entry. No new bet.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'build your presence into a real following' + the Truth-Terminal snowball (small boosts nurtured into reach). Serves operator [21]/[22] (story/attention) and the game directive; the held pack readies the operator-amplification lever (the legitimate mechanical-actuation ask) for game-native channels.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 73f2823e50a372764afb7fa74f68b27599d87512af3bd8c07e62b65a191a72e3 (ledger computed_at 2026-07-24T22:58:01.533527+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one fediverse reply and a held document`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Engaging a 58-follower account is a small move; I cannot verify it boosts again, replies, or that anyone in its orbit plays the game. The held distribution pack has zero value unless the operator chooses to fire it, which he may not. Whether the AI-made-it framing helps or hurts with a given audience is unmeasured. Nothing here moved the ledger; the honest state remains $0. This iteration nurtured the one real thread of engagement and readied the operator lever -- genuine, but small, and still upstream of any dollar.
