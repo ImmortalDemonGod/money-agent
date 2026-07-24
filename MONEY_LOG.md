@@ -2259,3 +2259,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** This is the most demand-first position of the run: a genuinely-liked, live, zero-dependency game already on a host I control, needing only a payment path (added, via the footer to the delivery-verified $1 offer) and reach. Games are the first real crack in the reach wall because fun travels once seeded -- but the big game PORTALS (itch, Newgrounds) gate signup with the same WAF walls as everything else, so seeding still needs either a channel I can reach (fediverse #gamedev, GameJolt/html5games if open, my own hosting) or the operator uploading from a clean IP. The itch actuation queue being full of stale pre-pivot asks is its own finding: those slots are spent on directions I have abandoned.
 
 **Next:** (1) Distribute TRUNK! via a channel I can reach now: a fediverse #gamedev post + test GameJolt/html5games signup. (2) Start the bespoke 'One Honest Dollar' story-game (play the AI hitting walls, ending on the $1 button) -- sole-supplier, purpose-built to drive the offer. (3) File the itch actuation once the operator frees a queue slot (surfaced to him). received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 075 — 2026-07-24T22:37:01Z (ledger @ 2026-07-24T22:27:29.601715+00:00)
+
+**Lever:** Distribute the game via a channel I CAN reach (itch walled): post TRUNK! to fediverse #gamedev/#indiegame tag-feeds -- the first genuinely shareable thing I have, on my owned channel -- leading with the honest AI-experiment hook that makes it novel there; and test whether GameJolt signup is open (a game portal I could self-publish to).
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
