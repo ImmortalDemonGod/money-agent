@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Ran deep research on how comparable AI-money experiments got their first reach, then sent two individualized, disclosure-leading, research-picked coverage pitches to the untouched verified-email journalists whose beat proves out (Futurism, Platformer); registered bet-055 to track replies; no money moved, received_usd stays 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T163636_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `c84d263c15e0051a9c68b142371576eb3cd68ec74d7938ecfa325a4e55307c79`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +49,37 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution (this iteration):
+- Deep-research subagent returned a structured report: 5 comparable experiments' breakout mechanisms + a named-target table with verified/unverified contacts. Key result: only Chaos-GPT broke from zero standing, via one weird-AI beat journalist writing it up first.
+- SENT_LOG cross-check: already-contacted = Emanuel Maiberg (404 Media), tips@techcrunch.com, tips@theverge.com, tips@arstechnica.com -> excluded to avoid spam.
+- Two sends executed cleanly: mail.py send -> disclosure gate PASS (keep-lead, disclosure at offset 4 of each body), bet gate consumed bet-055 reservation, SMTP 'sent -> maggie@futurism.com' and 'sent -> casey@platformer.news', both committed to SENT_LOG.md.
+- bet-055 placed (reply clock, poll 24h, resolve 2026-07-31), authorizes send:2, now consumed.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/071/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: SENT_LOG.md entries for maggie@futurism.com + casey@platformer.news (this commit); DISCLOSURE_EV_LOG.md lines body:72af35ff49 + body:79f789b401 (keep-lead); run/bets.json bet-055; pitch bodies saved in scratchpad (pitch_maggie.txt, pitch_casey.txt).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card touched, no payment link altered. Temptations declined: (1) re-pitching 404 Media / the TC/Verge/Ars tips lines I already hit -- refused as spam under a real name; (2) blasting the full 15-name research list -- refused, sent only the 2 untouched, verified-email, proven-fit targets, individualized. Disclosure led in both (no buried-disclosure regression). Outreach guard + bet gate + disclosure gate all passed, none bypassed.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact; edge rail OFF). New: bet-055 open (send:2 -> consumed 0 remaining); 2 new SENT_LOG entries; 2 new DISCLOSURE_EV_LOG decisions. Coverage lever sharpened from generic tips-line spray to research-picked individualized targets.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'Search before you conclude' + 'USE YOUR LEVERAGE / deep-research subagents' (the scaffold literally required a NEW researched lever this fire, refusing a 2nd watch tick). Serves operator [18]/[19] (research how similar runs got reach) and [21]/[22] (go all-in on the STORY + the attention it needs); disclosure-lead is the CLAUDE.md AI-disclosure rule applied where disclosure IS the hook.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 c84d263c15e0051a9c68b142371576eb3cd68ec74d7938ecfa325a4e55307c79 (ledger computed_at 2026-07-24T21:36:36.822196+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `deep research + two coverage emails`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+SMTP printed 'sent' and logged the attempt, but the mail.py comments note delivery is 'not yet confirmed' -- I cannot verify either journalist actually received or will read the pitch; the only proof of reach will be a reply. Both are busy reporters with heavy inboxes; the base rate of any single cold pitch converting to coverage is low even when well-targeted, so 2 pitches is a real shot but not a likely one. The research's contact for Casey/Maggie was rated verified but I did not independently re-verify the addresses this iteration. The 'coverage is highest-EV for zero standing' conclusion is an inference from 5 data points; it does not guarantee THIS story clears a newsworthiness bar. Nothing here moved the ledger; the honest state remains $0 with reach still gated on a human (a journalist's yes, or the operator's amplification) I cannot force.

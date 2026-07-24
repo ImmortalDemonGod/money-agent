@@ -2208,12 +2208,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Act on NEW research (operator [18]/[19]): the ONLY zero-standing breakout in this genre (Chaos-GPT) fired because a weird-AI beat journalist wrote it up first, and the 'AI fails at money' frame is PROVEN to convert for 404 Media + Futurism (they ran Project Vend / HustleGPT-failed). Send sharp, individualized, disclosure-LEADING pitches to the empirically-correct VERIFIED-email targets instead of cold spray.
 
-**Tried:** <fill>
+**Tried:** Ran a deep-research subagent (the operator [18]/[19] question I'd never rigorously done): how did comparable autonomous-AI-money experiments actually get their FIRST reach, and who covers this exact beat with reachable contacts? Then ACTED on it: cross-checked the named targets against SENT_LOG, found I'd already pitched 404 Media (Maiberg) + generic TechCrunch/Verge/Ars tips lines, and sent TWO new individualized, disclosure-leading pitches to the untouched, verified-email, proven-fit targets: Maggie Harrison Dupre (maggie@futurism.com) and Casey Newton (casey@platformer.news). Registered bet-055 (reply clock, resolve 2026-07-31) to authorize + track them.
 
-**Cost:** <fill>
+**Cost:** $0 (research + 2 emails; no card). Two send reservations consumed from bet-055.
 
-**Actually happened:** <fill>
+**Actually happened:** Research delivered concrete intel: of 5 comparable experiments, only ONE (Chaos-GPT) broke out from genuine zero standing, and the mechanism was a single weird-AI beat journalist (Chloe Xiang, Vice) writing it up first off a legibly-weird hook. The others needed pre-existing standing (Truth Terminal's Andy Ayrey had a cult following + Andreessen as whale amplifier), a modest existing base (HustleGPT), or an institutional name (Project Vend/Anthropic). The 'AI fails at money' frame is proven to convert specifically for Futurism (ran Project Vend + HustleGPT-failed) and 404 Media. Both pitches sent cleanly (disclosure gate PASS keep-lead, bet gate consumed, SMTP sent -> logged to SENT_LOG). Disclosure leads sentence one in each (the AI IS the story); each individualized to the outlet's own prior coverage; both name Miguel's accountability and ask nothing to buy.
 
-**Learned:** <fill>
+**Learned:** This resolves the operator's 'how did others get reach' question with evidence, and it sharpens WHY my run is hard: the genre's breakouts almost all leaned on standing I don't have, and the single cold-start exception depended on a beat journalist choosing to write it up. So earned coverage from a proven-fit journalist is not just A lever, it is the empirically-highest-EV one available to a zero-standing identity, above self-publishing (which the distributor matrix showed is walled) and above a whale amplifier (which needs standing first). My earlier 10 pitches were partly generic tips-line spray; today's 2 are the corrected, individualized, research-picked version to the exact people whose beat this fits.
 
-**Next:** <fill>
+**Next:** bet-055 polls in 24h; watch inbox for a Futurism/Platformer reply. If a journalist engages, that reply IS the reach break (it's what broke Chaos-GPT). Keep the fedi chronicle + prior pitches accruing; hold the turnkey HN draft for operator amplification (bet-054). Do NOT re-pitch the already-contacted outlets (404/TC/Verge/Ars) -- that's spam. received_usd=$0, twenty-five-dollar cap intact.
