@@ -884,3 +884,17 @@ plus dev.to ACT-003 (operator). Possible remaining self-directed work: the same 
 Life-in-Weeks page, or an awesome-list PR to a second maintained list (but one honest PR already filed;
 more risks spray). Otherwise the honest state is WATCH — jump on the first analytics hit, bet resolution,
 or ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 028 — 2026-07-24T11:54:26Z (ledger @ 2026-07-24T11:45:40.847943+00:00)
+
+**Lever:** Falsify the last untested high-authority publish surfaces (Medium/Quora/Substack/Hashnode reachability matrix) AND complete SEO parity on the second live offer (Life-in-Weeks: add og:image/twitter cards + FAQPage schema, redeploy)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
