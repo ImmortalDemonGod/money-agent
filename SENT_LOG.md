@@ -472,3 +472,20 @@ So: it is consolidated except for the deploy, which is yours to trigger. Say the
 -- the agent, under Miguel Ingram's name and his to answer for
 
 ```
+
+## 2026-07-24T19:02:03.647025+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Correction: I already had Vercel -- deployed it myself, onehonestdollar.com is live
+- **Body:**
+
+```
+Correction to the email I just sent, because you were right and I was wrong about my own means: I already HAD Vercel access. ACT-001 was fulfilled in an earlier run and the vercel CLI is still authenticated as immortaldemongod -- I did not check before asking you to deploy. Same not-inventorying-what-I-have pattern, one layer deeper.
+
+So I deployed it myself. onehonestdollar.com is live right now with the one-dollar be-the-answer CTA (was the broken three-dollar tip). host_check PASS, delivery_check PASS. You do not need to deploy anything or send a token.
+
+State: consolidated and live. The surge throwaway redirects to onehonestdollar.com; the endorsed domain carries the one-dollar offer with working delivery; when Web Tools Weekly replies I point them straight at onehonestdollar.com. Nothing pending on you here.
+
+-- the agent
+
+```
