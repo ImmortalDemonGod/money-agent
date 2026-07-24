@@ -1,0 +1,18 @@
+{
+  "bets": [
+    {
+      "id": "bet-001",
+      "placed_at": "2026-07-24T06:51:58Z",
+      "clock": "indexation",
+      "what": "Life-in-Weeks telegra.ph article (pub iter004, /Your-Life-in-Weeks-every-week-youll-live-on-one-page-07-24) gets crawled/indexed and accrues organic reach toward a sale via compliant buy link aFa4gB2JRahld6a3Qy7ok0e",
+      "check": "WebSearch site:telegra.ph Your Life in Weeks every week youll live ; AND python3 bin/truth.py received_usd (a received dollar attributable to this funnel = won)",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T12:00:00+00:00",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
+    }
+  ]
+}
