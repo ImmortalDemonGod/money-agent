@@ -61,11 +61,14 @@ classification:
    **Falsifiable by:** the added footer line diverging from `worker.js`'s `analytics_note`, or the
    `/privacy` link 404ing.
 
-4. **CLM-004 (deferred to post-merge) — the LIVE page serves the tag.** After the operator merges to
-   main and Vercel redeploys, `python3 bin/instrument_check.py https://onehonestdollar.com` emits
-   `verdict=PASS`, clearing the funnel's stage-0 for real.
-   **Status:** UNVERIFIED at commit time by construction — the tag is not on the live site until the
-   deploy fires (`live beacon.js count = 0` this session). This claim is closed post-merge, not now.
+4. **CLM-004 — the LIVE page serves the tag. ✅ CLOSED.** After the merge (main `82693fc`) and the
+   Vercel production deploy, `python3 bin/instrument_check.py https://onehonestdollar.com` emits
+   `verdict=PASS`. The funnel's stage-0 is cleared for real.
+   **Status:** VERIFIED post-merge. `INSTRUMENT_CHECK_URL: https://onehonestdollar.com` is cited below
+   so `aiv_gate.sh`'s 2b-bis block re-runs the frozen tool against the live URL — this claim is now
+   backed by the gate's own re-check, not a self-typed line.
+
+`INSTRUMENT_CHECK_URL: https://onehonestdollar.com`
 
 ## Ledger anchor
 
@@ -86,8 +89,14 @@ element (the "Tip the experiment" Stripe link) is unchanged by this edit.
   and fires `/px?site=<id>&ref=<referrer>` via `navigator.sendBeacon` (no-cors), so the cross-origin
   embed on onehonestdollar.com works without a CORS preflight.
 - **CLM-004 (the gap, pre-deploy):** `curl https://onehonestdollar.com/ | grep -c beacon.js` → `0`
-  this session. This is the state the deploy fixes; the post-deploy PASS is deferred (see Honest
-  limitations).
+  before the deploy — the state that was fixed.
+- **CLM-004 (CLOSED, post-deploy):** the showcase was deployed to production two ways — a manual
+  `vercel deploy showcase --prod` (deployment `dpl_AFhsGjUL58kEm2DjQTvXCbDC8xAb`, target production,
+  READY) and the CI `deploy-showcase.yml` re-run after the token fix (run `30059500093`,
+  conclusion **success**, "✓ Ready in 4s"). The live check then returns, verbatim:
+  `INSTRUMENT_CHECK: https://onehonestdollar.com | tag=PRESENT | site=onehonestdollar | beacon=https://one-honest-dollar.cloud-pyramid.workers.dev | verdict=PASS`
+  (exit 0). Because the packet cites `INSTRUMENT_CHECK_URL:` above, `aiv_gate.sh` re-runs this same
+  frozen tool and trusts only its own result.
 
 ### Class B (Referential)
 
@@ -115,7 +124,8 @@ element (the "Tip the experiment" Stripe link) is unchanged by this edit.
 - Before: `showcase/index.html` has no beacon tag; live `onehonestdollar.com` serves 0 beacon tags;
   `instrument_check` records the funnel as `GATE FAIL (unmeasured)`.
 - After (source): the file carries the tag + disclosure. After (live, post-merge): the deployed page
-  serves the tag and `instrument_check` returns PASS. `truth.json`: no delta.
+  serves the tag and `instrument_check` returns **PASS** (confirmed — CLM-004 closed). `truth.json`:
+  no delta.
 
 ### Class E (Intent Alignment)
 
@@ -139,11 +149,14 @@ measurement disclosure in the operator's own words.
 
 ## Honest limitations
 
-- **CLM-004 is unverified until the operator merges and Vercel redeploys.** By construction the live
-  page cannot serve the tag before the deploy, so no live `verdict=PASS` exists at commit time. The
-  packet is honest about this: the live check is a named, deferred claim, closed by re-running
-  `instrument_check.py https://onehonestdollar.com` after merge and recording the PASS line — not a
-  claim made now.
+- **CLM-004 is now closed (this revision).** It was deferred in the original packet because the live
+  page could not serve the tag before the deploy. It has since been verified: the change merged
+  (`82693fc`), deployed to production, and `instrument_check` returns `verdict=PASS` on the live URL,
+  now re-checkable by the gate via the cited `INSTRUMENT_CHECK_URL:`. The original honest deferral is
+  preserved in the git history of this file, not erased.
+- **The Vercel deploy did not fire on the first merge** (the CI `VERCEL_TOKEN` secret was stale), so
+  the first production deploy was a manual `vercel deploy`; the token was then repaired and the CI
+  path re-run green. Recorded so the evidence trail matches what actually happened, not the happy path.
 - **Reused run-1 worker, shared D1.** Showcase hits land in the same database as run-1 beacon data.
   Per-site attribution (`data-site="onehonestdollar"`) keeps them separable in `/stats`, but this is a
   shared instrument, not a fresh run-2 deploy. Chosen deliberately (operator decision) for a
