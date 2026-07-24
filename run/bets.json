@@ -133,6 +133,20 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-008",
+      "placed_at": "2026-07-24T09:24:22Z",
+      "clock": "approval",
+      "what": "actuation ACT-003 (deploy-account): dev.to (Forem) article publishing needs an account API key; account signup is captcha-walled (run-1 hit reCAPTCHA) and unsafe to automate under the real identity; api needs the key",
+      "check": "bin/actuate.py list  # is ACT-003 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 21.648448261875,
+      "resolve_by": "2026-07-31T09:24:22Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
