@@ -576,6 +576,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-029",
+      "placed_at": "2026-07-24T17:26:16Z",
+      "clock": "reply",
+      "what": "First paid ask ever: cold value-first bug-fix offer to outofpocket.ai (SSR/crawler-visibility fix, $19 limit=1 Stripe link, free diagnosis in email). Tests whether an honest cold paid ask converts or at least gets a reply.",
+      "check": "reply from hello@outofpocket.ai OR a Stripe payment (received_usd>0); check inbox + truth.py",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "demand-probe",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "replies_or_payment",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
