@@ -1369,8 +1369,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-07-31T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T21:45:21Z",
+      "checks": [
+        {
+          "at": "2026-07-24T21:45:21Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "journalists on the weird-AI / AI-agent-experiment beat; pain=want a legibly-novel AI story; offer=honest-failure-under-a-real-name experiment + signed public ledger",
