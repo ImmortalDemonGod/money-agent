@@ -2014,3 +2014,17 @@ have.
 bet-041, disclosure A/B bet-037); jump on any journalist reply, inbound, or payment. When the operator
 responds to bet-050, fold in the Obsidian-plugin finding (his suggested wedge also has a free incumbent).
 received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 064 — 2026-07-24T20:24:15Z (ledger @ 2026-07-24T20:15:15.398323+00:00)
+
+**Lever:** DEPLOY THE CARD on reach (#12, operator's highest untried lever, actual-spend still $0): find a cheap indie-dev/AI newsletter classified reliably bookable by clean EMAIL (mail.py, logged+disclosure-gated) or self-serve checkout, pointing at the $1 onehonestdollar story -> a real card spend that buys reach at the proven bottleneck.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
