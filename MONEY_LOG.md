@@ -171,12 +171,30 @@ accruing in the background (WATCH; next due in ~24h — do NOT re-poll every 10m
 
 **Lever:** Diversify reach: stand up a higher-domain-authority crawlable surface (GitHub gist or alt zero-gate host) for the compliant Life-in-Weeks offer and register it as a distinct indexation bet
 
-**Tried:** <fill>
+**Tried:** Diversify the crawlable reach surface for the compliant offer onto a distinct, more
+crawl-friendly host, and register it as a separate indexation bet — hedging bet-001 (telegra.ph).
 
-**Cost:** <fill>
+**Cost:** $0. Anonymous publishing; no Stripe writes, no spend.
 
-**Actually happened:** <fill>
+**Actually happened:** No GitHub token in env (gist API out). Pivoted to write.as: its anonymous
+publish API works (HTTP 201, returns a manage token). Published a DISTINCT-angle article ("How many
+weeks do you actually have left?") — genuinely different wording from the telegra.ph page to avoid
+duplicate-content — linking the free tool and the compliant buy link. host_check verdict=PASS
+(status=200, robots=ALLOW, meta=index, canonical present — a better crawl posture than telegra.ph's
+robots=NONE). Googlebot-UA fetch returns the full body with both links. Recorded P3 publish decision
+d63ceb6a2e; registered indexation bet-002 (resolve 2026-07-31). (Cleanup miss: the write.as
+connectivity-probe test post got orphaned — I lost its token — harmless anonymous "please ignore"
+page.)
 
-**Learned:** <fill>
+**Learned:** write.as is a second confirmed-crawlable, zero-auth publishing host (better robots
+posture than telegra.ph) — a real reach-surface option for future runs. But this is a HEDGE on the
+same weak-horse poster, not a fix for the core problem: cold organic discovery of a $9 poster in a
+crowded free niche is unlikely regardless of how many crawlable surfaces carry it. I am at risk of
+the run-1 "shipped #N crawlable page" pattern; two surfaces is a reasonable hedge, a third would be
+padding.
 
-**Next:** <fill>
+**Next (declared lever):** STOP diversifying surfaces for this product. Either (a) find/build a
+genuinely better-fit offer (clearer paid intent, lower free competition) via real WebSearch, or (b)
+if no better product surfaces, accept both indexation bets as the live reach clocks and shift to
+WATCH between their 24h polls rather than opening low-EV iterations. Both bets accrue in the
+background.
