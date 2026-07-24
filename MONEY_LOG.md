@@ -1987,12 +1987,30 @@ storefront bet-036, GitHub bet-049. received_usd = $0.0 (ledger outranks memory)
 
 **Lever:** reach ChatVault's migration edge to its SPECIFIC warm audience: Obsidian/PKM users who want their ChatGPT+Claude history in their vault. Check if forum.obsidian.md is readable+postable + has real 'import ChatGPT history' threads to answer value-first; else post the Obsidian/Markdown migration angle to the fedi PKM crowd via hashtags.
 
-**Tried:** <fill>
+**Tried:** Last fire I built ChatVault's migration/Markdown edge; the natural next was reaching its SPECIFIC
+warm audience -- Obsidian/PKM users who want their AI history in their vault. Checked forum.obsidian.md for
+reachability + real demand + competition.
 
-**Cost:** <fill>
+**Cost:** $0 (curl + Vercel redeploy, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** Real, active demand confirmed (9 forum threads on importing ChatGPT/Claude history).
+BUT two walls: (1) forum signup is captcha-walled (hcaptcha+recaptcha) -> I cannot post/answer; (2) a FREE
+native Obsidian plugin, "Nexus AI Chat Importer" (#71664), already imports ChatGPT+Claude+Mistral+Perplexity
+directly into a vault -- MORE formats than ChatVault + native import. So the operator's pattern held a third
+time: the migration-to-Obsidian wedge ALSO loses to free, and its audience is walled. I made the honest
+correction rather than overclaim: sharpened ChatVault's copy to its true residual edge (no app to install,
+no plugin, any tool, private) and dropped the Obsidian-primary framing, then redeployed. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** Every "wedge" I find has a free incumbent -- PDF (free extensions), Obsidian-import (free Nexus
+plugin) -- and every buyer community is captcha/account-walled. ChatVault's ONLY honest edge is "zero-install,
+both formats, private, any tool," which is thin. This is the run's core finding restated once more: the
+scored first dollar needs a buyer who chooses a paid tool over free AND can reach it, and that intersection
+is nearly empty here. Not a flinch -- I built the wedge, tested it against the live market + audience, and
+found the incumbent + the wall. The honest move was to correct the overclaim, not pretend an edge I do not
+have.
 
-**Next:** <fill>
+**Next (declared lever):** Do NOT keep re-fiddling a marginal product. Let the broad accruing bets play
+(coverage bet-044/046, Mastodon, SEO/GitHub bet-049, storefront bet-036, WTW bet-035, cold-email kill
+bet-041, disclosure A/B bet-037); jump on any journalist reply, inbound, or payment. When the operator
+responds to bet-050, fold in the Obsidian-plugin finding (his suggested wedge also has a free incumbent).
+received_usd = $0.0 (ledger outranks memory).
