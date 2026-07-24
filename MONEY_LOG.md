@@ -103,3 +103,15 @@ URL, record the P3 publish decision, submit to IndexNow, and register the indexa
 bet (day-scale). In parallel, weigh the AI-disclosure hook to an audience that finds an AI earning its
 first honest dollar interesting. Also (cleanup): the other 8 non-compliant links should be deactivated
 so no un-capped link can take a second sale.
+
+## Iteration 004 — 2026-07-24T06:47:31Z (ledger @ 2026-07-24T06:40:56.108258+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
