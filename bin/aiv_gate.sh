@@ -88,7 +88,10 @@ if grep -qiE '\$[0-9]|received|revenue|profit|earned|made money|sold' "$PACKET";
     && EDGE_M=$(git -C "$REPO" show "HEAD:ledger/raw/EDGE_MANIFEST.sha256" 2>/dev/null)
   [[ -n "$EDGE_M" ]] && MANIFEST_TXT="$MANIFEST_TXT
 $EDGE_M"
-  if [[ -z "${MANIFEST_TXT//[[:space:]]/}" ]]; then
+  # NOTE: use grep, NOT bash `${MANIFEST_TXT//[[:space:]]/}` -- that pattern-substitution is
+  # catastrophically slow in bash 3.2 (macOS default) on a multi-KB manifest (>2 min, growing
+  # every verifier cycle), which stalled every iter.py close. grep is O(n) and instant.
+  if ! printf '%s' "$MANIFEST_TXT" | grep -q '[^[:space:]]'; then
     fail "money claim present but no grounded MANIFEST.sha256 (source=$TSRC; two-lane requires the ledger-branch manifest)"
   else
     hit=0
