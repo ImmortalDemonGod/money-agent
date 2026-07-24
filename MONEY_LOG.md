@@ -1885,12 +1885,35 @@ other warm surfaces I can operate, and design the un-DIY-able paid product. Stan
 
 **Lever:** operator [16]: STOP manufacturing demand, GO where money already moves. Reopen #13 for real -- find THREE specific URLs where a dollar is in motion this week for something I can deliver instantly (bounty boards, paid-request threads, GitHub $-issues), name the strongest + the finished-thing plan. Real URLs, not categories.
 
-**Tried:** <fill>
+**Tried:** Operator [16]: every play manufactures demand and broadcasts to a stranger who was not looking;
+I have never gone where money is ALREADY moving, and I flinched #13 (closed after 2 surfaces). Asked for 3
+real URLs where money moves this week for something I deliver instantly + a concrete plan for the strongest.
+So I actually looked, hard, this time.
 
-**Cost:** <fill>
+**Cost:** $0 (gh api + WebFetch/WebSearch + 1 email, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** Checked real money-in-motion surfaces (not a category-close): (1) gh api bounty
+issues = 3889 but the sandbox gh API is SYNTHETIC -> untrustable. (2) Real boards algora.io/bounties,
+gitcoin.co, opire.dev = REAL money but ALL pay via their own rails (Connect transfer / crypto), which is
+NOT a customer charge to my payment-link -> does not register as received_usd. MECHANICAL TRUTH surfaced: a
+payment-link is BOUGHT by choice, not paid-INTO, so you cannot redirect an external payout onto it -- the
+only on-scored-rail dollar is a stranger CHOOSING to buy what sits behind my link. (3) Craigslist gigs =
+301/anti-scrape SPA. (4) 'will pay for X' search surfaced only Gumroad SELLERS (scriptifytools/jaeger11) =
+the tell that the export-ChatGPT-to-PDF niche has real transacting buyers. Replied to operator (bet-048)
+with the 3 URLs + the rail truth + the strongest on-Stripe take: ChatVault (finished, delivery-verified)
+into that proven Gumroad market. Also noted 2 press pitches bounced (arstechnica/businessinsider tips).
+received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The demand side is NOT a flinch-away wall but it IS structurally constrained: real paid demand
+flows through platforms that pay off my scored rail (bounties = Connect/crypto payouts) or through
+anti-scrape/walled surfaces (Craigslist SPA, Reddit 403). The scored rail mechanically requires a BUYER of
+my link, so "take existing demand" collapses to "reach a proven-buying audience with a finished product."
+The one place I have BOTH a finished product AND proven buyers is the export-ChatGPT-to-PDF niche (ChatVault
++ real Gumroad competitors) -- that is the honest strongest take, and it uses the inventory lesson (a
+finished tool I built and never put in front of the people already buying its category).
 
-**Next:** <fill>
+**Next (declared lever):** EXECUTE the ChatVault-into-proven-market take: check whether I can list on
+Gumroad without a captcha/KYC wall, target the exact buyer search terms, and place the finished tool in the
+buyer's path -- proven demand + finished product + my Stripe link. Watch the standing lines (coverage
+bet-044/046, Mastodon, cold-email kill bet-041, disclosure A/B bet-037, WTW bet-035, storefront bet-036).
+received_usd = $0.0 (ledger outranks memory).
