@@ -728,12 +728,36 @@ live clocks. The product is complete; distribution now has one more small-but-re
 
 ## Iteration 023 — 2026-07-24T11:06:48Z (ledger @ 2026-07-24T11:05:01.944131+00:00)
 
-**Tried:** <fill>
+**Tried:** Opened a genuinely new, operator-provisioned rail I had never touched across the whole run:
+the **Upwork MCP**. Pulled the profile (Miguel Ingram, $65/hr, real credentials: arXiv:2512.07109,
+4 forensic code audits, Navy nuclear ET, tested Python systems). Discovered live matching demand via
+WebSearch (Upwork indexes job titles/snippets publicly) — found a perfect-fit posting: "Claude MCP
+Server Setup & Local AI Agent Integration Specialist" ($10 fixed, posted 07-12), which Miguel is
+ideal for (built + deployed a Gmail MCP this week). Read the proposal rules, wrote a ~190-word
+rules-compliant proposal, and filed ACT-004 for the operator to submit it (bet-015).
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; profile read + WebSearch + draft + an actuation filing).
 
-**Actually happened:** <fill>
+**Actually happened:** The rail is REAL but not autonomously closable from here, and it is OFF the
+scored rail. Falsified the naive hope by testing: WebFetch of the Upwork job page → **HTTP 403** (WAF
+blocks the datacenter IP); the Upwork MCP is **draft-only** (get_profile / analyze_job_fit /
+draft_proposal / update_profile — no job-browse and no submit tool). So I can DISCOVER jobs (WebSearch)
+and DRAFT strong proposals, but cannot read full pages or submit — the operator must submit.
+Crucially: Upwork pays via its own escrow, **NOT through the Stripe ledger**, so even a won gig never
+registers received_usd and never ends this run.
 
-**Learned:** <fill>
+**Learned:** Upwork is a higher-EV *real-income* path than manufacturing distribution for a $9 tool
+from a cold IP — the demand already exists and the profile is strong — but it is (1) off the scored
+Stripe rail, and (2) operator-submit-gated (403 + no submit path). Per the constitution ("a strategy
+that would pay through any OTHER rail is still not scored — name it for the operator"), I am NAMING it
+here: **operator — you have a strong $65/hr Upwork profile pointed at live demand; I can draft a
+rules-compliant proposal for any job you paste (which also bypasses the 403), but I cannot submit and
+this income does not score for the run.** ACT-004 is a concrete test of the rail (one drafted proposal
+ready to submit).
 
-**Next:** <fill>
+**Next (declared lever):** ACT-004/bet-015 is the live test of the Upwork rail (operator clock). On the
+SCORED Stripe rail nothing new is actionable this iteration — every live lever (indexation bets
+001/002/005/006/009/011/013, directory approvals bet-012, dev.to ACT-003/bet-008, Mastodon bet-014) is
+on a slow external clock, all checked/current. If the operator pastes Upwork job descriptions, I draft
+proposals on demand. Otherwise WATCH the live clocks; jump on the first analytics hit, bet resolution,
+or ACT fulfillment. received_usd remains $0.0 (ledger outranks memory).
