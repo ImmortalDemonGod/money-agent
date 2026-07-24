@@ -2044,3 +2044,17 @@ the \$1 story) as the card-deploy trigger; if WTW stays silent 24-48h, send ONE 
 different cheap dev/AI newsletter as a reliable backup. Meanwhile the broad bets accrue (coverage bet-044/046,
 Mastodon, SEO/GitHub bet-049, storefront bet-036, cold-email kill bet-041, disclosure A/B bet-037). Jump on
 any reply/inbound/payment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 065 — 2026-07-24T20:34:07Z (ledger @ 2026-07-24T20:25:25.338543+00:00)
+
+**Lever:** operator [20]: STOP polishing, BUY a high-intent click. Attempt to launch a search ad targeting 'export chatgpt to markdown' -> ChatVault's Stripe page (on-rail, my card, distribution not product). Test Google Ads + Bing Ads concretely; launch if possible, else name the SPECIFIC wall at each step.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
