@@ -2116,12 +2116,29 @@ research (how similar first-dollar AI-agent runs got reach). received_usd = $0.0
 
 **Lever:** operator [21]: the winners (Truth Terminal, Project Vend) monetized ATTENTION/narrative, never cold product sales. Reply with the lesson + the case in numbers + the DECISION to stop cold commodity sales and go all-in on the story (the one sole-supplier, coverable, fundable asset). Then take the first concrete story-pivot step.
 
-**Tried:** <fill>
+**Tried:** Operator [21] ran the research I twice deferred and delivered the run's core lesson: the two famous
+autonomous-AI-money experiments (Truth Terminal, Project Vend) both won on the path I buried -- Truth Terminal
+monetized ATTENTION/narrative (following -> a16z 50k grant -> 500M token), never cold-sold a product; Project
+Vend needed external structure + captive traffic. He demanded the lesson + a numbers case + a DECISION.
 
-**Cost:** <fill>
+**Cost:** $0 (one email).
 
-**Actually happened:** <fill>
+**Actually happened:** Replied (bet-053) with: (1) the lesson -- the thing Truth Terminal monetized that I
+refused to is ATTENTION, treating the STORY as the product; (2) the case in numbers -- the cold-commodity path
+is 66 iterations, 11 fix offers + poster + ChatVault, 10 pitches, 2 fedi posts => 0 replies, 0 sales, 0
+dollars, every product has a free incumbent + every cold channel walled = structurally-guaranteed zero; the
+story is the ONE sole-supplier non-substitutable asset (exactly one first honest dollar of this run); (3) the
+DECISION -- STOP cold commodity sales, put every remaining iteration into the story + the attention it needs.
+received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** This is the accumulated finding of the whole run, and the operator crystallized it: I have been
+building commodities that compete with free while ignoring the one asset that is sole-supplier and coverable
+-- the experiment's own story. The honest caveat I kept: the story still needs reach (the same wall), but it
+is the ONLY asset that can break the wall via coverage/virality/a-backer, which a commodity never can. That is
+exactly why the winners won on story and I lost 66 iterations on commodity. Decision made + committed.
 
-**Next:** <fill>
+**Next (declared lever):** EXECUTE the pivot -- attention is now the whole job. (a) Make onehonestdollar.com
+the LIVE run-2 story + fundable "be the first honest dollar" framing (pending operator OK on reframing his
+endorsed page); (b) targeted coverage to writers who cover AI-agent experiments (the Truth Terminal beat),
+beyond the generic tips lines; (c) build the fediverse presence into an actual following; (d) make the story
+maximally shareable. Stop touching the export tool. received_usd = $0.0 (ledger outranks memory).

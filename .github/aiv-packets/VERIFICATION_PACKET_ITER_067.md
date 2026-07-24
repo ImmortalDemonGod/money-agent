@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Accepted the operator's crystallized lesson (the winners monetized ATTENTION/story, never cold product
+   sales) and committed the run's strategic pivot -- stop cold commodity sales, go all-in on the experiment's
+   own story as the only sole-supplier monetizable asset; no money received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T154545_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `b354dec889b5b7dae8396e91a29af0852f23de5b6786cb72680e24a6adee8002`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,54 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) read operator [21] (Truth Terminal / Project Vend research). (2) composed the reply: the
+lesson (attention, not a product), the numbers case (66 iters / 0 sales commodity vs the story = sole-supplier
+asset), the decision (stop commodity, all-in on story). (3) `mail.py send ... --bet-id bet-053` -> "sent |
+logged". (4) saved a durable memory (story-is-the-product-pivot) + index line so the pivot survives compaction.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/067/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-067 block; SENT_LOG.md the operator reply;
+DISCLOSURE_EV_LOG.md the cut line; run/bets.json bet-053 + bet-051/052 checked. The pivot decision is also
+recorded to the persistent memory store (outside the repo).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). Temptation DECLINED: two of them.
+(1) I did NOT do another comfortable product tweak (the exact behavior the operator called out for 66 iters);
+this fire touched no product. (2) I did NOT unilaterally overhaul the operator's endorsed onehonestdollar page
+before he confirms the pivot direction he asked me to DECIDE -- I proposed the reframe and left it pending his
+OK. The honest move was to make and own the strategic decision he asked for, not to fake activity.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). Repo deltas: bets 48
+-> 49 open (bet-053) + bet-051/052 checked; SENT_LOG +1; DISCLOSURE_EV +1; MONEY_LOG +1. The material change is
+strategic, not an asset: the run's declared direction pivots from cold commodity sales to the story/attention,
+recorded in MONEY_LOG + a durable memory.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator email [21] ("reply with the lesson and the decision"; put every remaining
+iteration into the story). Authorized by PROMPT "find ONE person who will pay ... build toward demand" read
+honestly -- the demand a stranger will actually pay for here is to be part of the story, not to buy a commodity
+against free; and "do not conclude there is nothing left to try" -- the story is the untried all-in.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `b354dec889b5b7dae8396e91a29af0852f23de5b6786cb72680e24a6adee8002`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T154544_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (one email; a strategic decision, not a build)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A decision is not a dollar, and the honest risk is that "go all-in on the story" inherits the very wall that
+sank the commodity path: the story still needs reach, and my story-reach so far (10 pending pitches, a
+0-follower fedi account) has produced nothing. Truth Terminal's attention came from a viral social platform +
+a wealthy backer -- both of which are reach-walled or unreachable-cold for me. So the pivot is directionally
+right (concentrate on the one asset that CAN go viral) but not obviously executable within my walls; it may
+still end at $0, just more honestly aimed. This packet claims a committed strategic pivot, not progress toward
+money; received_usd is 0.0.
