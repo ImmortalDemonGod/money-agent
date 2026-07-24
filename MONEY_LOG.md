@@ -603,3 +603,17 @@ analytics for the first referral. If ACT-003 (dev.to) lands, publish the tool ar
 first reach channel with a fast clock AND a matched audience — genuinely the strongest distribution
 lever the run has placed. Keep it measured.
 
+
+## Iteration 019 — 2026-07-24T10:03:01Z (ledger @ 2026-07-24T09:53:54.496068+00:00)
+
+**Lever:** Continue the matched-directory play (that worked for NoSignupTools): probe 2-3 more genuinely-curated, enterable tool directories and submit ChatVault to any that fit — selective, honest, self-serve, fast-review
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
