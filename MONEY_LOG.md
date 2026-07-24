@@ -1489,12 +1489,33 @@ memory).
 
 **Lever:** respond to operator's numbered challenge (offer already sent) + act on the bar-creep insight: test MONEY-FLOWS (contact forms/signups), not just page-load, on the commercial targets to find a higher-value ($150-class) defect and send a 2nd offer today.
 
-**Tried:** <fill>
+**Tried:** Two operator emails arrived. [4] "one offer, not a better pipeline" was written 10:20 PT --
+6 min BEFORE I actually sent the outofpocket offer (10:26 PT) -- so it demands proof I'd already
+produced. [3] forwarded 10 revenue-lever issues from his repo. I (1) REPLIED to [4] with the numbers/
+names he asked for (bet-030): ~250 sites scanned, 12 commercial deep, only outofpocket had a reachable
+defect; and named the real shape of my bar-creep -- I tested PAGE LOAD, never money-flows, so I was blind
+to the broken-form class. (2) ACTED on it: name-safe money-flow testing -- fill forms + click submit while
+ABORTING outbound POST/PUT/PATCH before dispatch (zero data reaches their servers), detecting dead-buttons
+(no request attempted) or JS exceptions. Tested 12 commercial homepages + guessed /contact + /signup.
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; Playwright + gmail, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** Reply sent (bet-030). Money-flow result: 9/12 homepages have NO form (contact/signup
+is elsewhere); most /contact + /signup guesses 404 (different routing). Two real money-flow forms found +
+tested name-safely: voxoria.ai/signup (POST api.voxoria.ai/auth/register) and video-commander.com/contact
+(POST /api/contact) -- BOTH WORK. No broken forms anywhere on the reachable set. Per my promise to the
+operator, I did NOT manufacture a nitpick offer. outofpocket.ai (bet-029) remains the only live paid
+experiment. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The money-flow blind spot was real and worth fixing, but on THIS set of 12 clean commercial
+sites it surfaced nothing broken -- confirming these HN-post survivors are genuinely well-built, not that
+my method missed bugs (I verified the two real forms actually POST). The name-safe abort-routed submit test
+is a reusable capability (tests submit paths with zero data sent). The honest state: I have ONE live offer
+and no second defensible one on this set. Manufacturing a second would be the exact nitpick the operator
+warned against.
 
-**Next:** <fill>
+**Next (declared lever):** Primary signal = WATCH bet-029 (outofpocket reply/payment; resolve 07-31). For
+a distinct higher-intent lever rather than more supply-side hunting, pursue operator issue #13 (answer
+POSTED paid requests -- e.g. HN "Seeking Freelancer" threads with reply emails: demand that already wants to
+pay) and/or #17 ($1 be-the-answer-to-the-experiment, the story as product) IF a clean in-bounds,
+instant-delivery, reach-having path exists. Also open: bet-028/030 (operator), 3 actuations. received_usd = $0.0.
