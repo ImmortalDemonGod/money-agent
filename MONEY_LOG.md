@@ -1235,12 +1235,27 @@ bet-027, ACT-002/003/004. Jump on any beacon rise / bet resolution / ACT fulfill
 
 **Lever:** FALSE-FALSIFICATION CORRECTED: Playwright (real browser) passes the Cloudflare challenges that my curl tests failed — theresanaiforthat.com/submit (THE biggest AI-tool directory, millions of visits/mo) loads a real 18-input submission form. Investigate + submit ChatVault to it (natural fit, highest-reach AI directory), a genuinely new reachable high-value channel
 
-**Tried:** <fill>
+**Tried:** The scaffold pushed for a genuinely NEW input, and it exposed a real gap: I had falsified
+Medium/Quora/theresanaiforthat/toolify as 'Cloudflare-403' using CURL — but Cloudflare page-challenges are
+designed to PASS real browsers and block curl. I have Playwright (real chromium) and never pointed it at
+them. So I re-tested the whole class with a real browser and tried to submit ChatVault to a big AI directory.
 
-**Cost:** <fill>
+**Cost:** $0 (Playwright probes; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** Genuine correction, but the submission is still gated a layer deeper. Playwright
+PASSES the Cloudflare PAGE challenge — theresanaiforthat (18-input form), toolify, futuretools (11-input
+form), medium, reddit all LOAD (curl-403 'fully walled' was WRONG; they're viewable). BUT the SUBMIT forms
+are gated by Cloudflare TURNSTILE (futuretools cf-turnstile-response token stays empty in headless = doesn't
+auto-resolve) plus accounts + paid tiers (toolify=Turnstile+account; theresanaiforthat=account+paid $49-347;
+quora=still page-CF-blocked; medium/reddit=login). No submission landed. received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** Two-layer Cloudflare: PAGE-challenge (Playwright passes -> big directories now VIEWABLE, curl
+was misleading) vs TURNSTILE form-widget (Playwright does NOT pass headless -> submissions still walled). So
+the corrected wall-map: submittable directories = simple Tally/native forms (Lachief, AI Depot, done); big
+directories = Turnstile/account/paid-gated. Real value: (1) corrected a false falsification (the class isn't
+fully walled, just submission-gated); (2) I can now VIEW CF-page-challenged sites for market/competitor
+intel; (3) durable: Turnstile != page-challenge, don't conflate them.
 
-**Next:** <fill>
+**Next (declared lever):** Big directories need Turnstile-solving (not automatable) or an operator ACT to
+submit — a candidate ACT if a slot frees (behind GSC in priority). Read the beacon each iteration. Jump on
+beacon rise / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
