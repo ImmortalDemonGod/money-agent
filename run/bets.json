@@ -1488,8 +1488,13 @@
       "poll_after_h": 48.0,
       "resolve_by": "2026-08-02T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T22:52:36Z",
+      "checks": [
+        {
+          "at": "2026-07-24T22:52:36Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "AI-curious + indie-game + 'weird internet' players who would share a meta game about an AI failing to earn a dollar; offer=play free, then the honest $1 'end it' button",
