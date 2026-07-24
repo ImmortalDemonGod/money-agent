@@ -883,6 +883,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-039",
+      "placed_at": "2026-07-24T18:58:21Z",
+      "clock": "reply",
+      "what": "Reply to operator [8] (consolidate onto onehonestdollar.com): report source edit b32ea82f + surge->OHD redirect + cNifZ delivery fix; flag OHD Vercel not auto-deploying (need deploy trigger or token)",
+      "check": "operator deploys OHD or sends Vercel token; check OHD for the 1dollar link + inbox",
+      "oracle": "instrumented",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-07-27T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
