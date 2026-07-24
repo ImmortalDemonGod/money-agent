@@ -337,7 +337,7 @@ assert_exit 0 "bet_gate: reservation 2 of 2 consumed" \
   env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw" --consume
 assert_exit_grep 1 "no unconsumed" "bet_gate: exhausted reservations refuse (consumption is real)" \
   env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --consume
-python3 -c "import json,pathlib; p=pathlib.Path('run/bets.json'); d=json.loads(p.read_text()); d['bets'][7]['authorizes']['send']=1; p.write_text(json.dumps(d))"
+python3 -c "import json,pathlib; p=pathlib.Path('run/bets.json'); d=json.loads(p.read_text()); next(x for x in d['bets'] if x.get('id')=='bet-008')['authorizes']['send']=1; p.write_text(json.dumps(d))"
 assert_exit_grep 1 "not requested lane" "bet_gate: lane mismatch is refused" \
   env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane other/lane
 assert_exit_grep 1 "finite" "bet_gate: NaN typed thresholds fail schema validation" \
@@ -388,8 +388,10 @@ for M in instrument-probe substrate-probe; do
     --success "{\"oracle_id\":\"deterministic\",\"metric\":\"$M\",\"comparator\":\">=\",\"threshold\":1,\"window_h\":24}" \
     >/dev/null 2>&1
 done
-python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK line in output)" >/dev/null 2>&1
-python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)" >/dev/null 2>&1
+assert_exit 0 "bets: resolve instrument probe (E2 fixture prerequisite)" \
+  python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK line in output)"
+assert_exit 0 "bets: resolve substrate probe (E2 fixture prerequisite)" \
+  python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)"
 assert_exit 0 "spine: ladder cleared -> demand-confirmed placeable at stage 2" \
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "$L"
 python3 bin/bets.py add --what "demand probe" --clock reply --check "printf '{\"replies\":0}'" --oracle instrumented \
