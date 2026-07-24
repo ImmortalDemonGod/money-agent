@@ -273,6 +273,20 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-015",
+      "placed_at": "2026-07-24T11:09:27Z",
+      "clock": "approval",
+      "what": "actuation ACT-004 (deploy-account): Upwork job pages return 403 from the sandbox datacenter IP (WAF) and submitting a proposal needs the account holder's authenticated Upwork session; the provisioned Upwork MCP drafts proposals but has no browse/submit path, so a proposal can only be submitted by the operator",
+      "check": "bin/actuate.py list  # is ACT-004 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T11:09:27Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
