@@ -354,6 +354,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-019",
+      "placed_at": "2026-07-24T12:05:50Z",
+      "clock": "indexation",
+      "what": "verifiable IndexNow (key file hosted on my own Vercel domains, content-matched) + sitemaps get Bing/Yandex to crawl+index the two OFFER pages (chat-export, life-in-weeks) within days rather than weeks \u2014 accelerating every downstream indexation bet on the pages that carry the buy buttons",
+      "check": "site:chat-export-seven.vercel.app and site:life-in-weeks-iota-two.vercel.app on Bing; Bing Webmaster URL inspection if available; Vercel analytics for bing/yandex referral",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
