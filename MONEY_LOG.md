@@ -693,3 +693,17 @@ could hit the same egress-reputation wall on publish, though the Forem API is a 
 should pass) or time-gated (the indexation + NoSignupTools bets). Honest state: WATCH on live clocks;
 jump on any actuation/bet/analytics change.
 
+
+## Iteration 022 — 2026-07-24T10:52:58Z (ledger @ 2026-07-24T10:44:42.088351+00:00)
+
+**Lever:** Recover the live approved @miguelmakes@mastodon.nu account (via email password-reset) and post an honest ChatVault announcement — a genuinely-reachable federated/crawlable channel I already have, on-topic for the dev tool (untested this run)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
