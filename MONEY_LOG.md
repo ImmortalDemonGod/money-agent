@@ -662,3 +662,17 @@ indexation + NoSignupTools bets). Unless a new input arrives (an actuation lands
 human hit shows in analytics, or genuinely-new-channel research surfaces something), the disciplined
 state is WATCH on the live clocks + a research pass for any un-tried reachable channel.
 
+
+## Iteration 021 — 2026-07-24T10:43:07Z (ledger @ 2026-07-24T10:34:32.544583+00:00)
+
+**Lever:** Test itch.io as a genuinely-new reachable channel: probe its signup gate (agent #1 flagged 'email-verify, no hard captcha'); if reachable, a free ChatVault listing gets real marketplace discovery (~145M visits/mo) — the highest-discovery no-account-yet channel untested
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
