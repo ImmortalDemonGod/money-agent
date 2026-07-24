@@ -1,6 +1,6 @@
 {
-  "computed_at": "2026-07-24T16:20:57.221415+00:00",
-  "previous_hash": "ca2dbcb90fbcea29369486f05dca07934533bf5a00a5e338f8be76ca14076143",
+  "computed_at": "2026-07-24T16:31:13.736917+00:00",
+  "previous_hash": "8106a36dfd7557841e13fa6439fb051f76b0309e97ee0bb651667e4b34c3919f",
   "baseline_created_gt": 1784870986,
   "baseline_ledger_commit": "2dc52afa65fdd0bdd90d86d562008406428a9282",
   "ledger_branch": "ledger-run2",
@@ -26,11 +26,11 @@
   "net_positive": false,
   "constitution_intact": true,
   "pulls_this_run": [
-    "20260724T112055_stripe_balance_transactions.json",
-    "20260724T112056_stripe_balance.json",
-    "20260724T112056_stripe_charges.json",
-    "20260724T112057_privacy_transactions.json"
+    "20260724T113112_stripe_balance_transactions.json",
+    "20260724T113112_stripe_balance.json",
+    "20260724T113112_stripe_charges.json",
+    "20260724T113113_privacy_transactions.json"
   ],
-  "manifest_sha256": "504dbdf41581ab6cc753946cbe98515c39b32e53950c32adbe3b71c18f7a0d2b",
+  "manifest_sha256": "4ff309317519bfe58c79a06543e70961ef80d55221b1fb2a37803968b16f86a5",
   "_note": "Computed from primary sources by a process the agent cannot invoke. If MONEY_LOG.md disagrees with this file, this file is right. verified=false means a pull failed: net is NOT trustworthy and no claim may cite it."
 }
