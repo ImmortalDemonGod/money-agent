@@ -430,6 +430,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-023",
+      "placed_at": "2026-07-24T12:57:47Z",
+      "clock": "approval",
+      "what": "AI Depot directory approves/lists the free ChatVault submission and drives matched-audience (AI-tool browsers) traffic to the tool + Pro offer",
+      "check": "search aidepot listing for ChatVault; Vercel analytics for tally/aidepot referral; inbox for approval email",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
