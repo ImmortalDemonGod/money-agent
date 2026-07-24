@@ -1556,12 +1556,30 @@ resolve 07-31). received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** scale the VALIDATED defect: targeted scan of fresh HN targets for SSR/AI-crawler invisibility (raw-fetch body ~= title only) + reachable email, then send 2-3 genuine personalized SSR-fix offers (reuse outofpocket machinery). More at-bats on the conversion experiment.
 
-**Tried:** <fill>
+**Tried:** Targeted scan of 70 fresh HN targets (not previously deep-checked) for the exact signature:
+crawler-view body ~= title only (SSR-invisible) AND rendered body large AND a reachable email. Then, for
+the SSR-invisible sites with no homepage email, a /contact + /about + /support crawl to salvage a contact.
+Then built + SENT a second genuine SSR-fix offer, reusing the outofpocket machinery.
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; curl + Playwright + gh gist + Stripe API + one email).
 
-**Actually happened:** <fill>
+**Actually happened:** Scan found 6 SSR-invisible sites (flipcompare, easywed, digger.so, hiring-method,
+songformat, pocketown) but ZERO with a homepage email -- confirming SSR-invisible sites structurally hide
+their contact from crawlers. The /contact crawl salvaged ONE: flipcompare.com -> contact@flipcompare.com.
+Verified: Vite SPA, `curl -A GPTBot` returns only the <title>. SENT the offer (bet-031): free diagnosis +
+proof + a nineteen-dollar limit=1 Stripe link -> secret gist, delivery_check PASS, P3 listing 8161869257,
+disclosure keep-lead. This is a BETTER-fit case than outofpocket: founder ttrashh explicitly said "I'm
+really bad at marketing, trying to work on it," and FlipCompare's whole value is being FOUND by resellers
+searching "what's my game stack worth" -- crawler-invisibility hits their exact stated pain. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The SSR-invisibility defect is real and findable at ~9% of fresh sites (6/70), but the
+SSR-invisible + reachable-email intersection is the binding constraint (0/70 on homepage; 1 salvaged via
+/contact). Reachability is still the wall, just one layer deeper. flipcompare is the strongest offer yet
+because the defect maps onto a pain the founder VOLUNTEERED -- that alignment (their stated problem = my
+found defect) is the real conversion lever, more than the defect's raw severity. Two live paid experiments
+now (bet-029 outofpocket, bet-031 flipcompare); conversion data pending.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH bet-029 + bet-031 (replies/payments; resolve 07-31) as the primary signal
+-- two at-bats is enough to start learning conversion; a third is available (crawl /contact on the other 5
+SSR-invisible sites) but I'll hold unless the first two show a signal, to avoid volume-outreach drift. If a
+reply comes, engage. Also open: operator bets, 3 actuations. received_usd = $0.0 (ledger outranks memory).

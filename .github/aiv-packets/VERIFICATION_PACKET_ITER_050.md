@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Sent a second paid ask -- a better-fit, honestly-framed crawler-visibility fix offer to flipcompare.com
+   (a verified SSR-invisibility defect on a founder who named discoverability as his pain), pairing a free
+   diagnosis with a nineteen-dollar limit-one Stripe link whose delivery is mechanically verified; no money
+   received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,10 +31,12 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T124235_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `16f7790d6fde60d798eaeaef939e0aa322015bd3d4f38cf875c753ac1232e72d`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
+
+DELIVERY_CHECK_URL: https://gist.github.com/ImmortalDemonGod/39a926f0e32adb8f1f98eafeecf4cdff
+Payment link: https://buy.stripe.com/6oU3cxacjfBF0jo5YG7ok0h
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +56,60 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) ssr_scan.py over 70 fresh HN targets -> 6 SSR-invisible, 0 with homepage email. (2)
+find_contact.py crawled /contact + /about on the 6 -> flipcompare.com yields contact@flipcompare.com. (3)
+Verified defect: `curl -A "GPTBot/1.0" https://flipcompare.com` -> 3755-byte Vite shell (`id="root"`,
+`/assets/index-BwjMvB9r.js`, server Cloudflare) whose body text is only the title. (4) Built fc_fix.md ->
+secret gist; created Stripe product/price(nineteen dollars)/payment-link with limit=1 and after_completion
+redirect to the gist. (5) `bin/delivery_check.py` -> `verdict=PASS | link_limit=1 | redirect=match |
+status=200`. (6) `bin/decision_gate.py listing` -> PASS (8161869257). (7) `bin/disclosure_gate.py` ->
+"disclosure leads at offset 32" PASS. (8) `bin/mail.py send contact@flipcompare.com ... --bet-id bet-031`
+-> "sent | logged".
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/050/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-050 block; SENT_LOG.md flipcompare
+entry; DECISION_LOG.md `class:listing | body:8161869257`; DISCLOSURE_EV_LOG.md `body:b8b5229598 |
+verdict:keep-lead`; run/bets.json bet-031 (placed + consumed); knowledge/outcomes.jsonl record. Fix
+deliverable (fc_fix.md) + email are scratchpad; gist + Stripe objects external (URLs in anchor).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). Prior offer (outofpocket bet-029)
+untouched -- this is a new, distinct product/link/gist. No bound crossed: instant + mechanically-compliant
+delivery (delivery_check PASS) means no post-payment obligation on Miguel's name; the pitch is precisely
+honest (non-JS/AI crawlers, tied to the founder's own stated pain, not a manufactured scare). Temptation
+DECLINED: sending offers to all 6 SSR-invisible sites -- only flipcompare had a reachable contact AND a
+defect that maps to a volunteered pain, so I sent ONE, not a batch; the others stay held to avoid
+volume-outreach drift.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). New external state:
+one Stripe product+price+payment-link (limit=1, redirect to gist) + one secret gist. Repo deltas: bets 27
+-> 28 open (bet-031 placed + consumed); SENT_LOG +1; DECISION_LOG +1; DISCLOSURE_EV_LOG +1; one knowledge
+outcome; MONEY_LOG +1. Two live paid offers now (bet-029, bet-031), up from one.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves the operator's get-PAID directive and his "one offer out the door, not a better
+pipeline" push -- a second real invoice, sent. Authorized by PROMPT "find ONE person who will pay ...
+value-first conversation with real buyers" and the instant-or-mechanically-guaranteed bound (limit=1 +
+pre-built gist delivery). Name-test (P3) and disclosure-EV both recorded before send.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `16f7790d6fde60d798eaeaef939e0aa322015bd3d4f38cf875c753ac1232e72d`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T124234_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (curl, Playwright, gh gist, Stripe API, one email -- all free)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Conversion is still unproven -- now two sends, zero sales, zero replies so far. flipcompare is a better fit
+than outofpocket (defect maps to a stated pain), but "better fit" is a hypothesis, not evidence. The email
+may hit spam; the founder may DIY the fix from my free diagnosis; contact@ may be unmonitored. I verified
+the defect and delivery mechanics with fresh runs, but not that the message is read or valued. This packet
+claims two live offers and a clean second send, nothing about money arriving; received_usd is 0.0.
