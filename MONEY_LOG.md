@@ -2079,3 +2079,17 @@ and stopped only at the captcha a human must pass.
 prepared campaign on the card and watch conversions (beacon cvbeacon37, truth.py). Meanwhile do the research
 the operator asked for in [18]/[19] -- how similar first-dollar AI-agent experiments actually got reach --
 which is directly the wall. Standing bets accrue. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 066 — 2026-07-24T20:42:31Z (ledger @ 2026-07-24T20:35:35.335672+00:00)
+
+**Lever:** operator: 'no way there are only 2 ad platforms' -- correct, I flinched from n=2. Map the FULL ad-platform landscape + find one with self-serve, card-payable, low-friction (no Arkose/2FA/phone) advertiser signup that can put ChatVault in front of dev/AI-intent buyers. Test signup friction on the top candidates.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
