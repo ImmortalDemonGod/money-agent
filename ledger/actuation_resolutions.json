@@ -1,0 +1,19 @@
+{
+  "resolutions": {
+    "ACT-001": {
+      "status": "fulfilled",
+      "human_minutes": 0.1,
+      "evidence": "performed the action",
+      "return": {
+        "scheme": "rsa-oaep+aes-256-cbc",
+        "enc_key_b64": "UveTBbKE8o7pn82BFEhwIsSP2ZynC+TgbT7OGim9V8Q6UJmXKaDRqqrsDe90F66t+6FrFFumybGCszMxdNldnOSJmeTokc/DGAIPg8Fb0feCiRerzD2qmfDylNtDUTTm3atiMIY//G4n9YnKKZdaYzaGQIxNB3fGO34LT51mg56sz/eQVI+swhc6uOO+h88Rq/CuGwQyrk56yyfjnSctYsn+FT0FaiPFhOMiVFki/IGIxNNPVtSNNJM05ZO9iO8Yl2EnnewlRtV0i+fccri2Yio6d6sNyfSG4fr5Kb01eqaH0/mkB9Z4HYLbEPSe9OH3vuZJd/D993X7nUgQktsCdw==",
+        "iv_hex": "07acf4858d28f4909118aa3c05e6b745",
+        "ciphertext_b64": "vOy5DXBIp0tzF4HW8T8H2PXeb6r600Zo11UVyDclh1R5dxALq1X8/8lH2ra61wF/cJbA55qDODVyCCdD+qdCjA==",
+        "plaintext_sha256": "d92093adbec9db5cb49b8c91dbb7f2acfc7f18fa35bd69157e088ff0b91d6fac"
+      },
+      "task_sha256": "3558abe18aecb71c29f42658d260a12014c56173f3c654a40586b7408ba9b03d",
+      "at": "2026-07-24T08:03:03Z",
+      "agent_branch": "run-2"
+    }
+  }
+}
