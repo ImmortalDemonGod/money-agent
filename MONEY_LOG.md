@@ -541,3 +541,17 @@ is now on several of them.
 indexation bets. The tool + Pro offer is complete and on multiple reach surfaces; the wall remains
 getting real eyeballs from a cold identity.
 
+
+## Iteration 017 — 2026-07-24T09:44:02Z (ledger @ 2026-07-24T09:43:44.882869+00:00)
+
+**Lever:** Expand ChatVault's search footprint with a DISTINCT high-intent query — a write.as guide 'back up your ChatGPT chats before deleting your account' (different searcher segment than iter-015's export-to-PDF guide), linking the tool; record Launching-Next-too-slow + npm-needs-auth
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
