@@ -1390,6 +1390,30 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-056",
+      "placed_at": "2026-07-24T21:55:08Z",
+      "clock": "reputation",
+      "what": "Targeted fediverse mention to a high-fit LLM-space amplifier (Simon Willison) centered on the verifier-it-cannot-fool mechanism, post 116977178242888663, cc @simon@simonwillison.net. Hypothesis: an on-platform genuine technical share to the single best-fit amplifier converts better than cold email.",
+      "check": "Check mastodon.nu notifications for a reply/boost/favourite from @simon@simonwillison.net or any notable account on post 116977178242888663; any engagement or onward writeup = won.",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "fediverse LLM-agent-interested audience + Simon Willison specifically; pain=wants novel LLM-agent mechanisms to document; offer=a verifier an incentive-to-lie agent structurally cannot fool + the honest failure log",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "amplifier_engagement",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "spent_usd": 0.0
     }
   ]
 }
