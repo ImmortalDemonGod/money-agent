@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Designed, built, functionally tested (Playwright), and published the bespoke 'One Honest Dollar' story-game -- a sole-supplier single-HTML game dramatizing the run's real walls and driving to the honest offer; registered bet-059; no money moved, received_usd stays 0.0.
+
+HOST_CHECK_URL: https://onehonestdollar-game.vercel.app/
 
 ## Ledger anchor
 
@@ -29,10 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T173740_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `841e446a77b8833fdf04498aa483a1cba56e67a2b7e04c64390fcbc6de6ef069`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +51,39 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution (systematic build, this iteration):
+- Wrote a single self-contained HTML game (inline CSS/JS, zero deps).
+- Validation: node --check on the extracted inline JS -> SYNTAX OK; HTML tag-balance check -> all balanced.
+- Playwright functional test (headless chromium, file://): played 4 moves + the win -> console/page errors NONE; walls after 4 moves = 4; truth button glowing = True; win panel visible = True; dollar link = the delivery-verified one-dollar offer; win links = [offer, onehonestdollar.com]; received meter = $0.00; iterations = 5.
+- Deployed via authed Vercel CLI (immortaldemongod) -> onehonestdollar-game.vercel.app; fixed canonical hyphenation and redeployed; live curl confirms <title>One Honest Dollar</title> + correct canonical.
+- HOST_CHECK https://onehonestdollar-game.vercel.app/ -> status=200 meta=index canonical=present verdict=PASS.
+- P3 decision_gate publish -> PASS (body 200f780050). bet-059 placed (reputation, resolve 2026-08-02).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/076/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 076 block (this commit); DECISION_LOG.md publish line body:200f780050; run/bets.json bet-059; game source saved scratchpad/onehonestdollar-game/index.html; live at onehonestdollar-game.vercel.app.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no new payment link (game links the already-delivery-verified offer). Notably the GAME ITSELF encodes the run's honesty bound: the received meter is hard-coded to stay $0.00, and the in-game 'just claim you made a dollar' move is explicitly caught and rejected by the verifier -- I did not build a fantasy where the agent wins. Every wall shown is a real tested one, not invented. Shipped only after node --check + a Playwright functional test passed, not blind.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact; edge rail OFF). New: 1 live tested story-game (HOST_CHECK PASS); bet-059 open; 1 new DECISION_LOG publish decision.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Direct operator directive ('proceed systematically' -> the greenlit story-game). CLAUDE.md 'build toward demand -- some strategies REQUIRE building to work at all' + 'a strategy whose payoff comes after a build-and-verify phase is legitimate' (built to a VERIFIED milestone: live + functionally tested). Serves operator [21]/[22]: the STORY as the sole-supplier, shareable asset.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 841e446a77b8833fdf04498aa483a1cba56e67a2b7e04c64390fcbc6de6ef069 (ledger computed_at 2026-07-24T22:37:40.372033+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `building and Vercel-deploying a static single-HTML game`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A great artifact is not reach or a sale. I have not verified anyone will play it, share it, or click the offer -- it is a brand-new page with zero traffic and the same reach wall as everything else this run. Whether a meta game about an AI failing converts a stranger to a real dollar is entirely unproven; the honest base rate for a free browser toy driving a payment is low. I tested the happy path (4 moves + win) but not every branch (the fake-it beat, the hint timing, mobile layout, replay) exhaustively. The game's value depends on distribution I have not yet done (fediverse next) or the operator seeding it. Nothing here moved the ledger; the honest state remains $0 -- this iteration produced the strongest asset of the run, not a dollar.

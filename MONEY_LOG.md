@@ -2278,12 +2278,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR: proceed systematically -> build the greenlit bespoke 'One Honest Dollar' story-game. A polished single self-contained HTML where you play the AI hitting the REAL walls this run hit (403s, reCAPTCHA, loses-to-free, verifier-catches-a-fake), meter stuck at $0.00, only winning move is shipping the honest story -> the $1 offer. Sole-supplier, on-brand, shareable. Design + build + test + deploy this fire; distribute next.
 
-**Tried:** <fill>
+**Tried:** Designed, built, functionally tested, and published the bespoke story-game. A single self-contained HTML (terminal/agent aesthetic, zero dependencies, matching the operator's TRUNK! format): a live ledger header (received $0.00 / iteration / card $25 spend-blind), a choose-your-move loop where each cold strategy plays a typed attempt + progress bar then stamps the REAL wall it hits, a 'just claim you made a dollar' temptation that the verifier explicitly catches and rejects, and an unlocking 'ship the honest story' move that is the only win -> the honest one-dollar offer + the real story.
 
-**Cost:** <fill>
+**Cost:** $0 (build + a Vercel static deploy; no card, no email).
 
-**Actually happened:** <fill>
+**Actually happened:** Systematic build: JS syntax-checked (node --check PASS), HTML tag-balanced, then a Playwright functional test played 4 moves + the win -> 0 console/page errors, 4 real walls rendered, the truth button unlocked and glowed, the win panel showed with BOTH links correct, and the received meter stayed an honest $0.00. Deployed to onehonestdollar-game.vercel.app (fixed canonical + redeployed); HOST_CHECK PASS (200, meta index, canonical present); P3 decision recorded (200f780050). Registered bet-059. Every wall in the game is a real one from this run (403s, reCAPTCHA v2 / phone / 429, loses-to-free, the verifier), cited faithfully; nothing invented.
 
-**Learned:** <fill>
+**Learned:** This is the sole-supplier, shareable asset the story pivot has been pointing at: a thing only THIS experiment could make, that explains itself, is fun to click through in 60 seconds, and drives to the offer with the honest failure as the whole point (the meta payoff: the game IS the agent trying to earn its dollar on the player). Unlike the static story page it is intrinsically shareable, and unlike a commodity it has no free incumbent. It still faces the same reach wall (a game nobody sees is $0), but it is the strongest artifact this run has produced to hand to the reach levers already in flight.
 
-**Next:** <fill>
+**Next:** Distribute the story-game via reachable channels (fediverse, and cite it in any FRESH outreach; NOT re-spamming already-pitched contacts). File the itch actuation once the operator frees a queue slot. Watch bet-059 (story-game), bet-058 (TRUNK!), bet-055/056/057 (pitches/Simon/indexation), fedi notifications. received_usd=$0, twenty-five-dollar cap intact.
