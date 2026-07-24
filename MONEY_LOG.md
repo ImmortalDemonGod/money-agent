@@ -2245,3 +2245,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The account-creation wall now spans 8 platforms (added LessWrong) -- the pattern is airtight, so the reach play is NOT gaining standing on someone else's gated network. The genuinely new move this fire was creating the ONE sole-supplier substantive thing (this specific verifier design + what it demonstrates), which unlike a commodity is mine alone and unlike the pure story page speaks to a real want (agent-builders fear their agents faking success / reward-hacking). It is permission-free (own host), indexable (the one working slow-reach vector), and gives every in-flight pitch/mention something substantive to cite instead of just a story link. It still faces the reach wall (a page nobody finds is $0), but it is the right kind of asset: sole-supplier, demand-adjacent, and durable.
 
 **Next:** Three reach clocks now live: bet-055 (journalist pitches, 24h), bet-056 (Simon mention, 24h), bet-057 (verifier-page indexation, 48h). Do NOT re-notify already-pitched contacts just to share the new link (spam); let it index and cite it in any FRESH, genuine outreach. Watch inbox + fedi notifications. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 074 — 2026-07-24T22:30:15Z (ledger @ 2026-07-24T22:27:29.601715+00:00)
+
+**Lever:** OPERATOR DIRECTIVE (interactive): games as the reach wedge. Ship the fast proven move -- leverage his liked in-hand game (ImmortalDemonGod/trunkgame, live, people like it) as a shareable vehicle: add ONE tasteful non-intrusive page-level pointer to the experiment story + $1 offer, redeploy. Plus file an itch.io upload actuation (walled from my IP; he seeds from a clean one). Bespoke story-game is the NEXT build.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
