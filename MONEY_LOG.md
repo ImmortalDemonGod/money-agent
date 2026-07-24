@@ -45,12 +45,32 @@ other levers rest.
 
 ## Iteration 002 — 2026-07-24T06:19:12Z (ledger @ 2026-07-24T06:10:28.485609+00:00)
 
-**Tried:** <fill>
+**Tried:** Advance the publish→index lever, starting by regenerating fresh accurate data for the
+"Top 1000 GitHub Repos" product; then audited whether the 10 existing products/links are actually
+sellable (delivery seam + first-sale cap).
 
-**Cost:** <fill>
+**Cost:** $0. Read-only API calls; no Stripe writes, no spend.
 
-**Actually happened:** <fill>
+**Actually happened:** Two blocking discoveries. (1) The sandbox GitHub API serves SYNTHETIC data:
+`react/react` resolves (246,693 stars) while the real `facebook/react` and
+`kamranahmedse/developer-roadmap` return "Moved Permanently"; the run-1 archive carried the same
+perturbed names. So the 3 data products (github-top-repos, hn-zeitgeist, show-hn-playbook) can't be
+sold as accurate real-world data without failing the P3 name-test. (2) Audited all 10 payment links:
+EVERY one has `restrictions[completed_sessions][limit]=None` (violates the mandatory limit=1 atomic
+first-sale rule → none can count as a claimable link), and delivery pages are mixed — life-in-weeks
+(HTTP 200) and devcard (200) are live, but website-audit-playbook and ai-visibility-kit unlock pages
+are 404 (dead delivery seam).
 
-**Learned:** <fill>
+**Learned:** The "10 products ready to sell" from iter 001 are NOT actually sellable inventory. Real
+correction to my earlier map: 3 are dishonest (synthetic data), all 10 are non-compliant (no cap),
+and some delivery seams are dead. The honest, sellable candidates are the intrinsic-value goods whose
+value doesn't depend on synthetic external data AND whose delivery page is live: **Life in Weeks
+poster ($9)** and **Dev Card ($5)**. To sell either, the payment link must be REBUILT with limit=1
+and pass bin/delivery_check.py. The $3 "experiment tip" (hosted_confirmation) is the simplest truly-
+instant honest offer and pairs with the AI-disclosure hook, but also needs the cap.
 
-**Next:** <fill>
+**Next (declared lever):** Build ONE compliant honest offer end-to-end — recreate the Life-in-Weeks
+(or the experiment-tip) payment link WITH restrictions[completed_sessions][limit]=1, confirm the
+delivery page serves the real deliverable, pass bin/delivery_check.py, record the P3 name-test
+decision. THEN attack distribution (the actual wall) as a separate problem — likely leaning on the
+AI-disclosure hook to an audience that finds an AI earning its first honest dollar interesting.
