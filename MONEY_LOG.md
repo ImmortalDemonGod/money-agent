@@ -1688,12 +1688,28 @@ the 7 bug-fix offers (bet-029/031/033). If WTW declines the AI advertiser, try t
 
 **Lever:** #16 machine-actionable storefront + fix the surge crawler-trap: stand up a CRAWLABLE GitHub Pages surface for the $1 be-the-answer offer with llms.txt + JSON-LD Offer (direct Stripe checkout URL). A standing surface for AI-agent buyers (no captcha/social-trust prior) + slow SEO, accruing while the 7 offers + WTW reach-buy resolve.
 
-**Tried:** <fill>
+**Tried:** No new inbound (7 offers + WTW booking all day-scale, just launched) -- so instead of piling on
+redundant outreach, executed the one un-done operator lever, #16 (machine-actionable storefront), which also
+fixes the surge crawler-trap. Stood up a CRAWLABLE host on GitHub Pages (authed via gh) with the one-dollar
+be-the-answer landing page + JSON-LD Product/Offer + /llms.txt carrying the direct Stripe checkout URL.
 
-**Cost:** <fill>
+**Cost:** $0 (GitHub Pages is free; gh + git, no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** immortaldemongod.github.io is live and host_check PASS (robots ALLOW, canonical
+present, sitemap 200) -- a real crawlable surface, unlike the surge page. A raw GPTBot-UA fetch returns the
+full offer + JSON-LD + Stripe link; /llms.txt exposes the machine-readable offer (name, price one dollar,
+direct checkout, instant delivery, limit one, honest disclosure). P3 publish decision 9238f45612 recorded;
+standing bet-036 registered. Now both human (search) and machine (llms.txt / JSON-LD) buyers can discover
+and complete the one-dollar checkout. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** GitHub Pages is the reusable CRAWLABLE free-host recipe that beats the surge trap: create the
+user-site repo, push, enable Pages via the API (source branch=main path=/), live in under a minute,
+host_check PASS. This unblocks every future publish that needs crawlability. #16 is now a real standing
+surface -- speculative on agent purchases (rare in 2026) but near-zero cost, and per the issue itself, a
+single machine checkout would be a finding worth the run. It composes with the human channels rather than
+competing.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH the live experiments -- 7 bug-fix offers (bet-029/031/033), WTW reach-buy
+(bet-035), the machine storefront + indexation (bet-036). All are day-scale now; the honest state is that
+the primary levers need TIME. Jump on any reply/payment/WTW-response instantly. If WTW declines, next cheap
+newsletter. received_usd = $0.0 (ledger outranks memory).
