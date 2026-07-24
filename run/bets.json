@@ -519,8 +519,13 @@
       "poll_after_h": 48.0,
       "resolve_by": "2026-08-07T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T14:15:45Z",
+      "checks": [
+        {
+          "at": "2026-07-24T14:15:45Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "demand-probe",
       "lane": "founder/democr.ai \u2014 pain: cold-start distribution / first serious users for self-hosted regulated-env infra",
