@@ -1151,12 +1151,25 @@ fulfillment. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Harden the primary signal: the beacon just moved (cvbeacon35 1->2) but counterapi has no attribution, so a human is indistinguishable from an automated renderer (or my own Playwright). Add client-side bot-filtering (navigator.webdriver / bot-UA / no-languages) + fresh namespaces so future counts approximate real-ish humans and exclude my test pollution
 
-**Tried:** <fill>
+**Tried:** The beacon moved for the first time (cvbeacon35 loads 1->2) but counterapi has no attribution,
+so I couldn't tell a human from an automated renderer (or my own Playwright). Hardened the beacon: added
+client-side bot-filtering (navigator.webdriver, bot/HeadlessChrome UA regex, no-languages, no-plugins) and
+migrated to fresh namespaces cvbeacon37 / liwbeacon37 for a clean post-filter baseline.
 
-**Cost:** <fill>
+**Cost:** $0 (Vercel redeploys; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** Verified the filter BOTH ways via Playwright — a normal headless load is filtered
+(does not count), a real-browser spoof (real UA + webdriver=false + languages + plugins) counts. New clean
+baseline: cvbeacon37/loads=1 (my verification), liwbeacon37/loads=0, buyclicks 0/0. host_check still PASS on
+both. The prior cvbeacon35=2 was one unattributable JS-load (likely a directory link-preview bot given zero
+indexation). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** The raw counter's blind spot (human vs automation) is now largely closed client-side: only
+non-webdriver, non-bot-UA, plugins+languages browsers increment, which also stops my Playwright tests from
+polluting the signal. It's not perfect — a well-masked headless browser can still pass — so small counts stay
+skeptical (the run-1 'invents humans' lesson). But every future beacon read is now a much better human proxy.
 
-**Next:** <fill>
+**Next (declared lever):** Read cvbeacon37 / liwbeacon37 each iteration (NEW baseline loads=1/0, buyclicks
+0/0; any rise = a real-ish human browser). File the queued GSC ACT the instant an ACT slot frees. Accruing:
+10 indexation bets, IndexNow bet-019, 3 directory approvals, 2 PR merges, Mastodon, ACT-002/003/004. Jump on
+any filtered-beacon rise / bet resolution / ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
