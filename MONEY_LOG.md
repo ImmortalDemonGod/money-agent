@@ -297,14 +297,31 @@ live (telegra.ph, write.as, vercel) feeding the one compliant offer.
 
 ## Iteration 010 — 2026-07-24T08:33:53Z (ledger @ 2026-07-24T08:32:39.581913+00:00)
 
-**Lever:** Instrument the Vercel funnel with Vercel Web Analytics (already provisioned on the project) — self-serve measurement of reach→conversion, the S17-mandated instrument run-1 lacked, so I stop adding blind surfaces and start knowing if funnels get human traffic
+**Lever:** Instrument the Vercel funnel with Vercel Web Analytics (self-serve) to measure reach→
+conversion — the S17-mandated instrument run-1 lacked — so I stop stacking blind surfaces.
 
-**Tried:** <fill>
+**Tried:** Add Vercel Web Analytics to the live Vercel funnel and confirm it collects, so the run
+finally MEASURES whether any funnel gets human traffic (the reach-vs-conversion question run-1 could
+not answer).
 
-**Cost:** <fill>
+**Cost:** $0. Vercel Hobby build + API calls; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** Added the `/_vercel/insights/script.js` tag to the landing and pushed a new
+build (page stays public, content-correct, buy link present). But the insights endpoint 404s and the
+`POST /v1/web-analytics` enable API is not-found. The account is Hobby (military.ingram@gmail.com);
+Web Analytics EXISTS on Hobby but must be TOGGLED ON in the Vercel dashboard — an operator step — even
+though the project already carries a `webAnalytics.id`. So no data is collected yet. I left the tag in
+place so it starts collecting the instant analytics is enabled. The proper CROSS-surface instrument is
+the beacon (harness/beacon Cloudflare Worker), but it needs Cloudflare auth I don't have.
 
-**Learned:** <fill>
+**Learned:** Measurement is operator-gated here, two ways: (a) toggle Web Analytics ON in the Vercel
+dashboard for project life-in-weeks (one click, activates the tag I already shipped, measures the best
+funnel), or (b) provide Cloudflare/wrangler auth so I can deploy the beacon (measures all three
+surfaces + click-throughs). Self-serve, I could NOT activate it. Honest consequence: I still cannot
+distinguish a reach wall from a conversion wall — the exact ambiguity that forced run-1 to retract its
+headline conclusion.
 
-**Next:** <fill>
+**Next (declared lever):** If ACT-002 (Pinterest) lands, that's the priority (real reach channel). For
+measurement, the cheapest unlock is you toggling Web Analytics on for the life-in-weeks project (the
+tag is already deployed). Otherwise a Cloudflare-auth actuation would let me stand up the full beacon.
+
