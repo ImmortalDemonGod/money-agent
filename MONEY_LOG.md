@@ -1116,3 +1116,17 @@ future watch is honest: reach-wall vs conversion-wall is READABLE.
 buyclicks; baseline 1/1/0/0). bet-025 tracks the first real load. This changes the watch posture from blind
 to instrumented. Accruing: 10 indexation bets, IndexNow bet-019, 3 directory approvals, 2 PR merges,
 Mastodon, ACT-002/003/004. Jump on: any beacon rise, bet resolution, or ACT fulfillment. received_usd = $0.0.
+
+## Iteration 036 — 2026-07-24T13:48:41Z (ledger @ 2026-07-24T13:47:50.000286+00:00)
+
+**Lever:** Attack the last un-attacked reach gap — GOOGLE indexation (IndexNow only hits Bing/Yandex): file an operator ACT to verify both offer domains in Google Search Console + submit their sitemaps, accelerating discovery on the dominant search engine and giving real search-reach visibility
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
