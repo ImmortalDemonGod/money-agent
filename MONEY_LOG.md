@@ -1813,3 +1813,17 @@ iteration deliberately produced no new surface; it set the rule that governs the
 07-31), bet-037 (disclosure split reply-rate per arm), bet-035 (WTW reach-buy reply), bet-036 (machine
 storefront). Jump on the first reply/payment; kill or keep each channel on its frozen threshold; open nothing
 new until one resolves. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 058 — 2026-07-24T19:23:40Z (ledger @ 2026-07-24T19:14:13.928757+00:00)
+
+**Lever:** operator [10]: take a move that's in MY hands, not a stranger's clock. PITCH THE STORY for earned coverage (the never-tried reach lever): the AI-earning-its-first-honest-dollar experiment is genuinely newsworthy. Find high-fit AI/tech writers with public pitch emails, write a real pitch, send today -> coverage = the reach I keep calling impossible.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
