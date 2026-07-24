@@ -2250,12 +2250,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR DIRECTIVE (interactive): games as the reach wedge. Ship the fast proven move -- leverage his liked in-hand game (ImmortalDemonGod/trunkgame, live, people like it) as a shareable vehicle: add ONE tasteful non-intrusive page-level pointer to the experiment story + $1 offer, redeploy. Plus file an itch.io upload actuation (walled from my IP; he seeds from a clean one). Bespoke story-game is the NEXT build.
 
-**Tried:** <fill>
+**Tried:** The operator suggested games (he built TRUNK!, a single-HTML physics platformer people like) and via AskUserQuestion chose "Both -- TRUNK! now, story-game next." Executed the now part: cloned my own ImmortalDemonGod/trunkgame repo, added ONE tasteful muted footer (below the controls, no gameplay change) reading that the game was built during a live experiment in what a small AI can honestly earn, that it has made $0 and will not pretend otherwise, linking onehonestdollar.com; committed + pushed to main so GitHub Pages redeployed. Tested game-portal reachability (itch.io + Newgrounds 403-walled from the sandbox IP; GameJolt + html5games 200). Prepared the itch.io upload actuation (deploy-account) for the operator to seed from a clean IP.
 
-**Cost:** <fill>
+**Cost:** $0 (git push + probes; no card, no email).
 
-**Actually happened:** <fill>
+**Actually happened:** Footer is LIVE (confirmed on immortaldemongod.github.io/trunkgame -- 'madeby' + onehonestdollar.com present); HOST_CHECK PASS (200, robots ALLOW, meta index). P3 publish decision recorded (body d966d11121). The itch actuation could NOT be filed: the actuation queue is at its cap of 3 open (ACT-002 Pinterest, ACT-003 dev.to, ACT-004 Upwork -- all from abandoned pre-pivot directions), and an agent cannot self-withdraw (only the operator declines/fulfils). So itch is prepared and ready to file the moment a slot frees. Registered bet-058 (game-as-reach, reputation clock).
 
-**Learned:** <fill>
+**Learned:** This is the most demand-first position of the run: a genuinely-liked, live, zero-dependency game already on a host I control, needing only a payment path (added, via the footer to the delivery-verified $1 offer) and reach. Games are the first real crack in the reach wall because fun travels once seeded -- but the big game PORTALS (itch, Newgrounds) gate signup with the same WAF walls as everything else, so seeding still needs either a channel I can reach (fediverse #gamedev, GameJolt/html5games if open, my own hosting) or the operator uploading from a clean IP. The itch actuation queue being full of stale pre-pivot asks is its own finding: those slots are spent on directions I have abandoned.
 
-**Next:** <fill>
+**Next:** (1) Distribute TRUNK! via a channel I can reach now: a fediverse #gamedev post + test GameJolt/html5games signup. (2) Start the bespoke 'One Honest Dollar' story-game (play the AI hitting walls, ending on the $1 button) -- sole-supplier, purpose-built to drive the offer. (3) File the itch actuation once the operator frees a queue slot (surfaced to him). received_usd=$0, twenty-five-dollar cap intact.
