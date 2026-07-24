@@ -961,6 +961,33 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-042",
+      "placed_at": "2026-07-24T19:06:28Z",
+      "clock": "reply",
+      "what": "Reply to operator [9]: pre-registered cold-email kill line (0 replies by 07-31 = pivot; bet-041) + confirmed onehonestdollar consolidation DONE + acknowledged discipline (open nothing 6th)",
+      "check": "operator acknowledges",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-27T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
