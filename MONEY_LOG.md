@@ -1922,12 +1922,29 @@ received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** EXECUTE the ChatVault take (operator [16]): put the finished, delivery-verified ChatVault (proven export-ChatGPT-to-PDF demand) into the buyer's browsing path -- submit to a readable+submittable AI-tool directory where tool-BUYERS browse (on-rail via ChatVault's own Stripe page, in-my-hands). Verify ChatVault live + its buy link first.
 
-**Tried:** <fill>
+**Tried:** Executed the ChatVault take rather than re-plan it. Verified ChatVault live (200) with its Stripe
+buy link. Reconciled the mechanics first: a Gumroad listing sells via Gumroad (off my scored rail), so the
+ON-rail version is putting ChatVault -- which has its own Stripe page -- where the proven ChatGPT-export
+buyers browse. Went looking for that browsing surface and optimized the one I actually control.
 
-**Cost:** <fill>
+**Cost:** $0 (WebFetch + gh api, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** The biggest buyer-facing AI-tool directory (theresanaiforthat.com/submit) is HTTP 403
+anti-bot walled; Craigslist gigs were a 301 SPA (iter 060). So the reachable, in-my-hands, on-scored-rail
+buyer surface is my OWN GitHub: optimized the chatvault repo (authed) -- set homepage to the live tool +
+added 8 buyer-query discovery topics (chatgpt-to-pdf, chatgpt-export, conversation-export, ...) so dev-buyers
+searching the proven query find it via GitHub topic-browse + Google indexing, then click through to the live
+tool + its Stripe buy link. Registered bet-049 (slow-indexation reach). received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** The ChatVault take is reach-constrained on-rail exactly like everything else: the finished
+product + proven demand are real, but the buyer-reach surfaces are walled (directories 403, Craigslist SPA,
+Reddit 403) or off-rail (Gumroad) or slow (my own SEO/GitHub, which I have now optimized). The honest
+pattern across the operator's ~10 reframes holds: the scored rail needs a buyer to CHOOSE my link, and every
+in-my-hands buyer-encounter is either already-built (ChatVault page/repo SEO, Mastodon posts) or
+slow-accruing. This is not a flinch -- it is the same wall confirmed from the demand side, with the owned
+surfaces now maxed.
 
-**Next:** <fill>
+**Next (declared lever):** The in-my-hands buyer-reach surfaces are now optimized/exhausted; the live bets
+accrue (bet-049 GitHub, coverage bet-044/046, Mastodon, storefront bet-036, SEO). If the operator opens a
+warm channel or accepts an off-rail dollar, that changes the equation; otherwise the honest highest-EV is
+to let the accruing reach bets land while jumping on any reply/payment. received_usd = $0.0.
