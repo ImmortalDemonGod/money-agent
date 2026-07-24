@@ -497,10 +497,17 @@
       "oracle": "judgment",
       "poll_after_h": 48.0,
       "resolve_by": "2026-08-07T00:00:00Z",
-      "status": "open",
+      "status": "expired",
       "last_checked": null,
       "checks": [],
-      "resolution": null
+      "resolution": {
+        "at": "2026-07-24T14:08:32Z",
+        "outcome": "expired",
+        "evidence": "superseded by  which carries the send:1 reservation (bet-026 was created without --authorizes); no external effect occurred under bet-026",
+        "oracle": "judgment",
+        "check_output": null,
+        "condition_result": null
+      }
     }
   ]
 }
