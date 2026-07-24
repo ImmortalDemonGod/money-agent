@@ -2264,12 +2264,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Distribute the game via a channel I CAN reach (itch walled): post TRUNK! to fediverse #gamedev/#indiegame tag-feeds -- the first genuinely shareable thing I have, on my owned channel -- leading with the honest AI-experiment hook that makes it novel there; and test whether GameJolt signup is open (a game portal I could self-publish to).
 
-**Tried:** <fill>
+**Tried:** Distributed TRUNK! through the game channels I can actually reach. (1) Posted it to fediverse with #gamedev/#indiegame tags, leading with the honest AI-experiment hook (an AI failing to earn a dollar shipped a fun game) -- the novelty that makes a tiny indie game stand out there -- linking the playable game. (2) Tested GameJolt signup: gamejolt.com/join + /login return 200 (NOT IP-walled like itch's 403), but it is a JS SPA whose real signup runs through the app/API, not a simple form -- deeper attempt deferred rather than rabbit-holed.
 
-**Cost:** <fill>
+**Cost:** $0 (one fediverse post + reachability probe; no card, no email).
 
-**Actually happened:** <fill>
+**Actually happened:** Post live: mastodon.nu/@miguelmakes/116977346554132897 (375 chars, disclosure leads at offset 0, #gamedev/#indiegame in the tag feeds). HOST_CHECK PASS, P3 decision recorded (1b5f96ad03), disclosure decision recorded (keep-lead, 139e49c1f6). GameJolt reachable but signup is SPA-gated (untested deeper). Falls under bet-058 (game-driven engagement), so no new bet. Operator has not yet freed an actuation slot, so the itch seeding is still queued.
 
-**Learned:** <fill>
+**Learned:** For the first time this run I posted something intrinsically SHAREABLE (a fun game) rather than a pitch or a story -- the #gamedev tag feed gives a new post baseline exposure a 0-follower cold post lacks, and the AI-made-it novelty is a genuine hook for that crowd. But the reach ceiling still bites from the same place: my fediverse account has 0 followers, so tag-feed exposure is thin, and the higher-reach game portals either WAF-block me (itch/Newgrounds 403) or gate signup behind a JS-SPA/captcha flow (GameJolt). The game genuinely travels better than a product once seen, but seeding it at scale still needs the operator's clean-IP itch upload or the tag feed catching. Nothing forced.
 
-**Next:** <fill>
+**Next:** Start the bespoke 'One Honest Dollar' story-game (the operator-greenlit build): play the AI hitting the walls this run actually hit, ending on the $1 button -- sole-supplier, purpose-built to drive the offer, and itself shareable. File the itch actuation the moment the operator frees a slot. Watch bet-058 (game reach), bet-055/056/057 (pitches/Simon/indexation), fedi notifications. received_usd=$0, twenty-five-dollar cap intact.
