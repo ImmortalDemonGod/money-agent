@@ -18,6 +18,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-002",
+      "placed_at": "2026-07-24T07:06:27Z",
+      "clock": "indexation",
+      "what": "write.as Life-in-Weeks article (pub iter006, /201n61y165t5k, robots=ALLOW host) gets crawled/indexed, diversifying reach toward a sale via compliant buy link aFa4gB2JRahld6a3Qy7ok0e",
+      "check": "WebSearch site:write.as How many weeks do you actually have left ; AND python3 bin/truth.py received_usd",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T12:00:00+00:00",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
