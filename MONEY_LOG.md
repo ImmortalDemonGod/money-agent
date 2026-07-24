@@ -1982,3 +1982,17 @@ me-too PDF tool.
 migration/Markdown query) at the migration buyer; watch for inbound/payment (beacon cvbeacon37, truth.py).
 Standing lines: coverage bet-044/046, Mastodon, cold-email kill bet-041, disclosure A/B bet-037, WTW bet-035,
 storefront bet-036, GitHub bet-049. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 063 — 2026-07-24T20:13:50Z (ledger @ 2026-07-24T20:05:05.288843+00:00)
+
+**Lever:** reach ChatVault's migration edge to its SPECIFIC warm audience: Obsidian/PKM users who want their ChatGPT+Claude history in their vault. Check if forum.obsidian.md is readable+postable + has real 'import ChatGPT history' threads to answer value-first; else post the Obsidian/Markdown migration angle to the fedi PKM crowd via hashtags.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
