@@ -316,6 +316,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-017",
+      "placed_at": "2026-07-24T11:25:41Z",
+      "clock": "indexation",
+      "what": "GitHub repo ImmortalDemonGod/chatvault (aged real account, topics tagged) gets Google-indexed AND discovered via GitHub search for 'chatgpt/claude export pdf', driving developer-audience traffic to the live ChatVault tool + Pro offer",
+      "check": "site:github.com/ImmortalDemonGod/chatvault in Google; GitHub search rank for the topics; Vercel analytics for github referral; repo stars/traffic (gh api repos/.../traffic/views)",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-14T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
