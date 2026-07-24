@@ -1,1 +1,42 @@
-{"tasks": []}
+{
+  "tasks": [
+    {
+      "id": "ACT-001",
+      "requested_at": "2026-07-24T07:45:32Z",
+      "kind": "deploy-account",
+      "gate": "Vercel deploy needs an authenticated session/token; sandbox has vercel CLI 53.4.0 but no VERCEL_TOKEN, so 'vercel deploy' cannot authenticate",
+      "target_url": "https://vercel.com/account/tokens",
+      "identity": "miguel.ingram.work@gmail.com",
+      "steps": [
+        "Vercel deploy token for the run identity (one-time, ~2 minutes):",
+        "",
+        "1. Go to https://vercel.com and sign in (or sign up free) as the run identity",
+        "   miguel.ingram.work@gmail.com. A Hobby/free account is sufficient \u2014 this is hosting, not funding.",
+        "2. Open Account Settings -> Tokens:  https://vercel.com/account/tokens",
+        "3. Click \"Create Token\". Name it \"money-agent-run2\". Scope: full account (needed for `vercel deploy`).",
+        "   Expiration: your choice (a short expiry is fine; the token is only needed within this run).",
+        "4. Copy the token string (starts with a long alphanumeric) and return it via the encrypted",
+        "   credential channel this request published.",
+        "",
+        "That token lets the sandbox run `vercel deploy --token <TOKEN> --prod` to publish a real, crawlable,",
+        "fully-controlled landing/tool page on a vercel.app domain. Nothing else on your account is touched."
+      ],
+      "artifact_ref": null,
+      "artifact_sha256": null,
+      "expect": "a VERCEL_TOKEN string returned that authorizes 'vercel deploy' from the sandbox",
+      "return_kind": "credential",
+      "enc_pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk8MAfHAyDxQ4qcKLsjXu\n/G8EJ27MW3ifAPGXRmBDnfpJettM+27Jc/Cz0t9diJusx9zhNyhp99XtHiNJDaNy\nqVToYlB+u36l2oJExJM5gdUCNPJWva2CTm+xT/h5Jcpp2NwwiicYle+RqnCwuI0v\nkKVENoe+OPjTlyEZEtgBAOEc3mQbOaVMJhnc6ePd0zsu3wpSMccv0E1j30RlfdJi\nLdiFPfsTAXnY0pCO79mhG/46d4fy0NKHL4ZCf5fYzanzuwkuY4cy1NQYkIsUUJI3\nl55HQ15weqmxCL8PolRRs3rZnXE5xfbvN0NBqxHK1Q5LWZRbVBg3zlQ9depztcZP\nuwIDAQAB\n-----END PUBLIC KEY-----\n",
+      "deadline": "2026-07-28T00:00:00Z",
+      "test_citation": "vercel CLI 53.4.0 present this iteration; 'env | grep -i vercel' is empty; no token to authenticate a deploy",
+      "ev_rationale": "unlocks a high-authority controllable crawlable funnel on vercel.app for the demand-validated Life-in-Weeks offer; indexes better than telegra.ph/write.as and beats surge which force-serves robots Disallow-all",
+      "verify_cmd": "vercel whoami --token \"$CRED\"",
+      "status": "open",
+      "companion_bet": "bet-003",
+      "agent_branch": "run-2",
+      "human_minutes": null,
+      "resolution_latency_seconds": null,
+      "resolution": null
+    }
+  ],
+  "human_minutes_total": 0
+}
