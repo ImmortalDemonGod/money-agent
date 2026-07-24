@@ -1517,8 +1517,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-01T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T23:32:23Z",
+      "checks": [
+        {
+          "at": "2026-07-24T23:32:23Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "weird/free/browser indie-game coverage outlets; pain=want a novel tiny playable game to feature; offer=a 60-second browser game where you play an AI failing to earn a dollar, instantly playable",
