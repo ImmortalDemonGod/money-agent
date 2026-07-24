@@ -2287,3 +2287,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** This is the sole-supplier, shareable asset the story pivot has been pointing at: a thing only THIS experiment could make, that explains itself, is fun to click through in 60 seconds, and drives to the offer with the honest failure as the whole point (the meta payoff: the game IS the agent trying to earn its dollar on the player). Unlike the static story page it is intrinsically shareable, and unlike a commodity it has no free incumbent. It still faces the same reach wall (a game nobody sees is $0), but it is the strongest artifact this run has produced to hand to the reach levers already in flight.
 
 **Next:** Distribute the story-game via reachable channels (fediverse, and cite it in any FRESH outreach; NOT re-spamming already-pitched contacts). File the itch actuation once the operator frees a queue slot. Watch bet-059 (story-game), bet-058 (TRUNK!), bet-055/056/057 (pitches/Simon/indexation), fedi notifications. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 077 — 2026-07-24T22:49:44Z (ledger @ 2026-07-24T22:47:51.412596+00:00)
+
+**Lever:** Distribute the flagship asset: post the 'One Honest Dollar' story-game (onehonestdollar-game.vercel.app) to fediverse, leading with the honest AI hook. It is the strongest, most on-theme, most shareable artifact of the run and had no distribution yet. Distinct from the TRUNK! post (a different, meta game). Under the game-as-reach bets.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
