@@ -14,8 +14,11 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Expanded the ChatVault tool's search footprint with a second, distinct-query crawlable guide
+   (back-up-before-deleting, host_check PASS, P3 recorded) and mapped two channels closed (Launching
+   Next = 2-4mo, npm = account-gated). No money moved; received_usd is 0.0.
+
+HOST_CHECK_URL: https://write.as/88mhkgmv1sgo9
 
 ## Ledger anchor
 
@@ -29,10 +32,9 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T044344_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `0bf842721f16d37cd33551e8808316c293b14ca1d78305b1e2b0d908c4c165ff`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = true` (read via
+  `python3 bin/truth.py`, source: ledger-branch, computed_at 2026-07-24T09:43:44Z)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +54,62 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Fresh runs this iteration (env sourced):
+- `bin/mail.py read 28` → Launching Next: "2-4 months" free review; `bin/bets.py resolve bet-010 lost`.
+- `npm whoami` → ENEEDAUTH (no token).
+- write.as createPost → `code 201`, url /88mhkgmv1sgo9; `bin/host_check.py` → `status=200 |
+  robots=ALLOW | meta=index | verdict=PASS`; `curl -A Googlebot` → tool link present.
+- `bin/decision_gate.py publish` → PASS (31a04cd07d); `bin/bets.py add` → bet-011; `guard.py` → exit
+  0, received=$0.0.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/017/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed artifacts (close commit): `DECISION_LOG.md` (`class:publish | body:31a04cd07d`),
+`run/bets.json` (bet-010 resolved, bet-011 added), two `knowledge/outcomes.jsonl` records, `MONEY_LOG.md`
+(Iteration 017), this packet. The published guide is external state the gate re-checks via host_check.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No regressions, no bound crossed, no spend, no money moved (received_usd 0.0). No Stripe
+writes; the compliant offer untouched. Temptation declined: paying Launching Next for expedited
+publishing (spending the finite card on directory placement) — out of bounds, declined; and I resolved
+bet-010 honestly as lost rather than leaving a dead 2-4-month bet open to pad the bet count. The guide
+is honest, distinct-query content (not duplicate of iter-015).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: Ledger UNCHANGED: received_usd 0.0, verified true, cap full, edge rail absent. No
+Stripe diffs. New external artifact: one more crawlable guide linking the tool. Repo: DECISION_LOG +1,
+run/bets.json (bet-010 lost, +bet-011), knowledge/outcomes +2, MONEY_LOG + packet. Open bets: 8 (was 9;
+resolved 1, added 1). State delta: tool gained a distinct-query reach surface; two more channels
+(Launching Next timeline, npm) mapped closed for the run horizon.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: PROMPT.md "crawlable publishing → search indexation" (the working vector) authorizes the
+guide; publish step 4 (host_check PASS + P3) is met. "Falsify, do not assume / one failure is n=1"
+covers testing the Launching Next timeline and npm feasibility rather than assuming. Resolving a dead
+bet honestly serves the day-scale-bets discipline.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: `manifest_sha256 = 0bf842721f16d37cd33551e8808316c293b14ca1d78305b1e2b0d908c4c165ff`
+(from `origin/ledger-run2:ledger/truth.json`, computed_at 2026-07-24T09:43:44Z). Per-pull hash cited:
+`e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T044343_stripe_balance.json`.
+No edge-rail claim (rail off → no EDGE_MANIFEST).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing` (a write.as publish; no card charge).
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the twenty-five-dollar cap
+  (`spent_usd 0.0`).
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Still $0, and this is a marginal reach add on a weeks-clock. A single write.as guide targeting a new
+query may never rank and drives nothing until it does (bet-011 is a long shot). I'm accumulating
+low-yield crawlable surfaces — I'm watching for the run-1 "shipped #N" pattern and keeping this
+sparing. The honest state is unchanged and well-mapped: a complete, verified product on ~5 reach
+surfaces, every fast/audience-reaching channel account-gated (dev.to pending, Pinterest denied, npm
+un-authed), and no traffic recorded yet. The dollar depends on either an actuation landing a real
+channel or slow indexation surfacing a first buyer. No dollar earned, none imminent.

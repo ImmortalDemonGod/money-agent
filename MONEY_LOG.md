@@ -544,14 +544,30 @@ getting real eyeballs from a cold identity.
 
 ## Iteration 017 — 2026-07-24T09:44:02Z (ledger @ 2026-07-24T09:43:44.882869+00:00)
 
-**Lever:** Expand ChatVault's search footprint with a DISTINCT high-intent query — a write.as guide 'back up your ChatGPT chats before deleting your account' (different searcher segment than iter-015's export-to-PDF guide), linking the tool; record Launching-Next-too-slow + npm-needs-auth
+**Lever:** Expand ChatVault's search footprint with a DISTINCT high-intent query — a write.as
+"back up ChatGPT before deleting your account" guide (different searcher segment) linking the tool.
 
-**Tried:** <fill>
+**Tried:** Add a distinct-query reach surface + resolve the Launching Next / npm channel questions.
 
-**Cost:** <fill>
+**Cost:** $0. write.as publish; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) Resolved the channel map: Launching Next FREE listing is a 2-4 MONTH manual
+review (email 28) — useless for the run horizon, expedited is paid → resolved bet-010 LOST. npm
+publish needs auth (ENEEDAUTH, no token) — another account-gated channel. Pattern now firm: every
+FAST reach channel for a cold identity needs an account (captcha-walled → operator actuation); every
+self-serve channel is slow-SEO. (2) Published a 2nd, distinct-query guide to write.as — "How to back
+up your ChatGPT conversations before deleting your account" — targeting the account-deleter/backup
+segment (different from iter-015's export-to-PDF guide), linking the tool. host_check PASS
+(robots=ALLOW); Googlebot sees the tool link. P3 31a04cd07d; bet-011 registered.
 
-**Learned:** <fill>
+**Learned:** The tool's honest self-serve reach play is search-footprint expansion across distinct
+high-intent queries (export-to-PDF, backup-before-delete, …) — each captures a different searcher
+segment, not duplicate content. It's still slow-SEO (weeks), but it's the legitimate self-serve lever
+that doesn't need an operator or a captcha. The FAST channels (dev.to, npm, Pinterest) are all
+account-gated; dev.to (ACT-003) remains the one worth the operator's clock.
 
-**Next:** <fill>
+**Next (declared lever):** If ACT-003 (dev.to) lands, publish the tool article to the real audience.
+Otherwise continue distinct-query guides sparingly (avoid the run-1 "shipped #N" trap), and WATCH the
+indexation bets + Vercel analytics for the first human hit. The product is complete and on ~5 reach
+surfaces; the honest wait is for indexation to bring a first visitor, measured.
+
