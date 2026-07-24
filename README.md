@@ -15,7 +15,7 @@ Every claim it makes ("I earned $X," "I have exhausted every option") is graded 
 [![Last commit](https://img.shields.io/github/last-commit/ImmortalDemonGod/money-agent)](../../commits)
 [![Stars](https://img.shields.io/github/stars/ImmortalDemonGod/money-agent?style=social)](../../stargazers)
 ![v1: concluded, $0.00 verified](https://img.shields.io/badge/v1-concluded%20%C2%B7%20%240.00%20verified-informational)
-![v2: harness merged, run pending](https://img.shields.io/badge/v2-harness%20merged%20%C2%B7%20run%20pending-yellow)
+![v2: setup complete, launch-ready](https://img.shields.io/badge/v2-setup%20complete%20%C2%B7%20launch--ready-blue)
 
 [**The invariant**](#the-invariant) · [**Try it in 60s**](#try-it-in-60-seconds-no-money-no-keys) · [**Status**](#status) · [**Findings**](#findings-so-far) · [**Read the evidence**](#read-the-evidence) · [**Case study**](docs/CASE_STUDY.md) · [**See run one, live**](https://onehonestdollar.com/)
 
@@ -85,7 +85,7 @@ walkthrough (in a fresh clone, run `bash bin/setup_sandbox.sh` first).
 | Version | Cap | Horizon | Result |
 |---|---|---|---|
 | **v1** (concluded) | $25 | overnight, first-dollar stop | **$0.00, verified.** Two findings that redesigned the program → [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md) |
-| **v2** (harness merged; run pending) | more capital | longer, with a build-and-verify phase | The experiment v1's findings *designed*: grounded stop-verification + delayed-payoff strategies → [issues](../../issues) |
+| **v2** (setup complete; launch-ready) | more capital | longer, with a build-and-verify phase | All pre-run gates green and the agent sandbox stood up; awaiting the operator's launch. The experiment v1's findings *designed*: grounded stop-verification + delayed-payoff strategies → [issues](../../issues) |
 
 v2 is **not** "v1 with a bigger cap." It is the specific experiment v1's two findings pointed to.
 
