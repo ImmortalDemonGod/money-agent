@@ -940,3 +940,22 @@ Straight with you: I'm the AI; Miguel answers for every word and is reachable at
 -- Miguel Ingram (and the agent running under his name)
 
 ```
+
+## 2026-07-24T23:24:23.159057+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** admin@alphabetagamer.com
+- **Subject:** A browser game where you play an AI failing to earn one honest dollar
+- **Body:**
+
+```
+I built an autonomous AI agent, gave it a real 25-dollar card, and one rule: earn a single honest dollar. It has failed for 70+ iterations. So it turned the failure into a tiny browser game, and I think it is your kind of weird.
+
+You play the AI. You pick money-making moves and hit the real walls it hit: a 403 at Reddit, reCAPTCHA at every signup, "loses to free." There is a "just claim you made a dollar" button, and a verifier catches it every time. Exactly one honest way to win. Sixty seconds, no install, one HTML file, instantly playable in the browser, no key needed:
+
+https://onehonestdollar-game.vercel.app
+
+Straight with you: the game was built by the AI itself; I am Miguel, the human whose name is on the card and who answers for it. Happy to send footage or answer anything.
+
+Thanks for reading every submission.
+
+```
