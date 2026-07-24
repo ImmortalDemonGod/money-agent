@@ -78,6 +78,7 @@ fi
 # Read both refs explicitly. Looking at this verifier checkout's working tree made the queue
 # invisible in the very topology supervise exists for, and the old simulation accidentally ran
 # this command from the agent clone.
+HQ="UNKNOWN"   # always bound so the VERDICT block never trips set -u when AGENT_BRANCH is absent
 if [[ -z "$AGENT_BRANCH" ]]; then
   echo "human queue: UNKNOWN (pass <agent-branch> or set AGENT_BRANCH)"
 else
@@ -133,7 +134,8 @@ except Exception as e:
     print(f"UNREADABLE ({type(e).__name__}: {e})")
 PY
 )
-  echo "human queue: ${HQ:-UNREADABLE}"
+  HQ="${HQ:-UNREADABLE}"   # keep the variable consistent with the displayed value (empty capture -> UNREADABLE)
+  echo "human queue: $HQ"
 fi
 
 # 4. recent push activity from the log
