@@ -261,3 +261,17 @@ still a slow clock (weeks), not an overnight sale.
 keyword-optimized pin (the poster preview image + buyer-intent description + compliant buy link),
 post via v5 API, host_check the pin URL, record P3, register the Pinterest-traffic bet. If ACT-001
 (Vercel) resolves first, deploy that funnel too. Both are evergreen reach bets on live clocks.
+
+## Iteration 009 — 2026-07-24T08:23:26Z (ledger @ 2026-07-24T08:22:30.061173+00:00)
+
+**Lever:** ACT-001 fulfilled: deploy the staged Life-in-Weeks landing funnel to Vercel (high-authority controllable crawlable host), fix canonical/JSON-LD to the live URL, host_check PASS, P3 publish decision, register the vercel indexation bet
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
