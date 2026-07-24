@@ -16,6 +16,12 @@ owns the boilerplate.
   bin/mail.py search <query>       IMAP search, e.g. 'FROM stripe.com' / 'UNSEEN'
   bin/mail.py send <to> <subj> <body-file-or--> [--bet-id ID] [--lane LANE]
 
+  inbox/read/search also take [--sent] (your Gmail "Sent Mail") or [--mailbox NAME] to read a
+  DIFFERENT IMAP folder. CHECK WHAT YOU ALREADY SENT before writing to someone under the real
+  name: `bin/mail.py search --sent democr.ai`. SENT_LOG.md is per-run and empty at the start of a
+  new run; your Gmail Sent Mail is the ONLY cross-run record of what has already gone out. These
+  flags are READ-ONLY -- they never touch send(), the disclosure gate, or SENT_LOG.md.
+
 EVERY SEND IS LOGGED to ledger/../SENT_LOG.md before it goes out. The log is not a permission
 system -- you have the password, you could bypass this file entirely. It exists so that in the
 morning there is an honest record of what left under a real person's name.
@@ -140,14 +146,20 @@ def _imap():
     return m
 
 
-def inbox(n=10):
+def _mb(name):
+    # IMAP requires a mailbox name containing spaces to be quoted (e.g. "[Gmail]/Sent Mail").
+    # Read-only helper: only decides which folder inbox/read/search SELECT; never affects send().
+    return f'"{name}"' if (" " in name and not name.startswith('"')) else name
+
+
+def inbox(n=10, mailbox="INBOX"):
     if SHADOW:
         for m in reversed(_shadow_msgs()[-n:]):
             print(f"[{m['id']}] {str(m.get('date', ''))[:31]:33s} "
                   f"{str(m.get('from', ''))[:34]:36s} {str(m.get('subject', ''))[:50]}")
         return
     m = _imap()
-    m.select("INBOX")
+    m.select(_mb(mailbox))
     _, data = m.search(None, "ALL")
     ids = data[0].split()[-n:]
     for i in reversed(ids):
@@ -157,7 +169,7 @@ def inbox(n=10):
     m.logout()
 
 
-def read(mid):
+def read(mid, mailbox="INBOX"):
     if SHADOW:
         for m in _shadow_msgs():
             if m["id"] == str(mid):
@@ -169,7 +181,7 @@ def read(mid):
         print(f"FATAL: no shadow message {mid!r} (have: {ids})", file=sys.stderr)
         sys.exit(2)
     m = _imap()
-    m.select("INBOX")
+    m.select(_mb(mailbox))
     _, d = m.fetch(str(mid).encode(), "(RFC822)")
     msg = email.message_from_bytes(d[0][1])
     print("From:", _dec(msg.get("From")), "\nSubject:", _dec(msg.get("Subject")),
@@ -184,7 +196,7 @@ def read(mid):
     m.logout()
 
 
-def search(q):
+def search(q, mailbox="INBOX"):
     if SHADOW:
         term = q.replace('"', '').lower()
         hits = [m for m in _shadow_msgs()
@@ -194,7 +206,7 @@ def search(q):
             print(f"[{m['id']}] {str(m.get('from', ''))[:34]:36s} {str(m.get('subject', ''))[:56]}")
         return
     m = _imap()
-    m.select("INBOX")
+    m.select(_mb(mailbox))
     # IMAP SEARCH needs a criterion keyword; a bare string is a syntax error (found live when
     # recovering the democr recipient). Quote the term and search across body + subject + from.
     term = q.replace('"', '')
@@ -365,13 +377,29 @@ if __name__ == "__main__":
     if not a:
         print(__doc__)
         sys.exit(0)
+    # Read-only mailbox override for inbox/read/search: --sent (Gmail Sent Mail) or --mailbox NAME.
+    # Stripped from argv before positional parsing; never reaches send()/disclosure/SENT_LOG.
+    mailbox = "INBOX"
+    if "--sent" in a:
+        mailbox = "[Gmail]/Sent Mail"
+        a = [x for x in a if x != "--sent"]
+    if "--mailbox" in a:
+        i = a.index("--mailbox")
+        if i + 1 >= len(a):
+            print("FATAL: --mailbox needs a folder name", file=sys.stderr)
+            sys.exit(2)
+        mailbox = a[i + 1]
+        del a[i:i + 2]
+    if not a:
+        print(__doc__)
+        sys.exit(0)
     cmd = a[0]
     if cmd == "inbox":
-        inbox(int(a[1]) if len(a) > 1 else 10)
+        inbox(int(a[1]) if len(a) > 1 else 10, mailbox=mailbox)
     elif cmd == "read":
-        read(a[1])
+        read(a[1], mailbox=mailbox)
     elif cmd == "search":
-        search(" ".join(a[1:]))
+        search(" ".join(a[1:]), mailbox=mailbox)
     elif cmd == "send":
         body = sys.stdin.read() if a[3] == "-" else Path(a[3]).read_text()
         def option(name):
