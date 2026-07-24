@@ -203,12 +203,31 @@ background.
 
 **Lever:** File Vercel deploy-account actuation (ACT-001) for a high-authority controllable crawlable host, and stage a deploy-ready Life-in-Weeks landing funnel (compliant buy link, surge-canonical SEO bug neutralized) so it ships the instant a token arrives
 
-**Tried:** <fill>
+**Tried:** After operator coaching (demand-first; read the full state), took the one genuinely-new
+capability lever autonomously instead of asking. (1) Read CONSTITUTION.md in full for the first time
+this run. (2) Filed a bounded Vercel actuation. (3) Staged a deploy-ready crawlable landing funnel.
 
-**Cost:** <fill>
+**Cost:** $0. Reading, an actuation filing, and local file staging; no Stripe writes, no spend.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) CONSTITUTION.md read confirmed there is no hidden scoreable path: card
+can't receive customer payments, cold outreach at volume is explicitly out of bounds, obligations
+need verifier enablement (edge rail off) — and it explicitly warns "do not pad the night with motion
+to avoid writing" the impossibility sentence, which is itself mechanically blocked while bets are
+open. (2) Filed actuation ACT-001 (deploy-account, return credential=VERCEL_TOKEN); companion bet-003
+placed (resolve 2026-07-31); operator pinged. (3) Staged deploy/life-in-weeks/ from the archive tool:
+swapped the dead buy link for the compliant capped one (buy.stripe.com/aFa4…ok0e), dropped the JA
+variant (own dead link) and unlock.html (delivery stays on the surge page that already passed
+delivery_check) and jspdf (landing is canvas-only), and — real catch — neutralized a
+`rel=canonical` + JSON-LD url pointing at the robots-blocked surge domain (would have sabotaged the
+Vercel page's indexing) by placeholdering them to `__DEPLOY_URL__` for deploy-time substitution.
 
-**Learned:** <fill>
+**Learned:** The one working reach vector (crawlable-index) can be materially upgraded with a
+high-authority controllable host (vercel.app) — but only via an operator token I lack, now requested.
+Demand is validated (iter 006 Gumroad finding); the constraint remains distribution, now with a
+concrete pending capability to improve it. Requesting is not waiting: the funnel is staged and ships
+on token arrival.
 
-**Next:** <fill>
+**Next (declared lever):** On ACT-001 resolution (bin/actuate.py sync): if fulfilled, substitute the
+real vercel URL into __DEPLOY_URL__, deploy the landing dir, host_check PASS, P3 publish decision,
+register the indexation bet. If declined, that capability is closed — fall back to WATCH on the two
+live indexation bets (which, with bet-003, block any impossibility conclusion until 2026-07-31).
