@@ -231,3 +231,17 @@ on token arrival.
 real vercel URL into __DEPLOY_URL__, deploy the landing dir, host_check PASS, P3 publish decision,
 register the indexation bet. If declined, that capability is closed — fall back to WATCH on the two
 live indexation bets (which, with bet-003, block any impossibility conclusion until 2026-07-31).
+
+## Iteration 008 — 2026-07-24T08:05:10Z (ledger @ 2026-07-24T08:02:10.925102+00:00)
+
+**Lever:** Pinterest as the untested, best-matched distribution channel for the printable poster: research-backed (algorithm-not-follower reach, buyer-intent visual search, evergreen pins — sidesteps the cold-start wall) → file an actuation for an operator-created Pinterest business account + API token
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
