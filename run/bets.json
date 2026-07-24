@@ -819,6 +819,33 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-037",
+      "placed_at": "2026-07-24T18:45:00Z",
+      "clock": "reply",
+      "what": "OPERATOR-DIRECTED disclosure A/B SPLIT TEST (email [7] 'measure the ev'): 4 SSR-fix offers, same bug/fix/19usd, split 2 disclose (homocodex, gram) / 2 no-disclosure (fastsleep, onebusaway). Measures whether cutting the AI disclosure converts better (reply-rate leading indicator). Typed 'other' = explicit operator directive, cap-exempt + auditable.",
+      "check": "replies/payments per arm; compare disclose vs no-disclose; inbox + truth.py",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "split-test",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "replies_or_payment",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "send": 4
+      },
+      "spent_usd": 0.0
     }
   ]
 }
