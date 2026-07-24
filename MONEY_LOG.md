@@ -943,3 +943,17 @@ ACT-003 (dev.to) accrue. I have now done every clean, in-my-control lever: built
 6 crawlable guides, GitHub repo + awesome-list PR, Mastodon, verifiable IndexNow. No untested self-serve
 reach channel remains. Absent a new signal, the next iteration is a WATCH on the clocks — jump on the first
 analytics/index hit, a bet resolution, or an ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 030 — 2026-07-24T12:33:57Z (ledger @ 2026-07-24T12:26:17.055524+00:00)
+
+**Lever:** New crawlable host (rentry.co, untested this run) + a new high-intent low-competition query ('convert conversations.json to PDF' — searcher already HAS the export file, closest-to-purchase intent); diversifies the crawlable footprint beyond telegra.ph/write.as
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
