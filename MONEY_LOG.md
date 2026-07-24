@@ -1090,12 +1090,29 @@ WATCH — jump on first analytics hit / bet resolution / ACT fulfillment. receiv
 
 **Lever:** Resolve the run's core measurement blind spot: instrument BOTH live offer pages with a self-serve readable beacon (counterapi, JS-executed so crawlers are filtered) counting real-browser page-loads AND buy-link click-throughs — so every future '$0' can distinguish a reach-wall from a conversion-wall (the run-2 design intent the un-deployed Cloudflare beacon missed)
 
-**Tried:** <fill>
+**Tried:** Resolved the run's CORE measurement blind spot. Across the whole run I could not tell whether
+"$0" meant a reach-wall (no traffic) or a conversion-wall (traffic, no buys) — run-1's most expensive
+failure, and the run-2 beacon that was meant to fix it was never actually deployed/wired to my pages. I
+built a self-serve readable traffic beacon (counterapi.dev via new Image().src) into BOTH offer pages,
+counting real-browser page-loads + buy-link click-throughs.
 
-**Cost:** <fill>
+**Cost:** $0 (Vercel redeploys + a free counter API; no card spend).
 
-**Actually happened:** <fill>
+**Actually happened:** WORKING end-to-end — a single real browser load makes each counter read exactly 1
+(verified via Playwright). host_check PASS on both, beacon served. Namespaces cvbeacon35 (ChatVault) /
+liwbeacon35 (LiW), counters loads + buyclicks. BASELINE = loads 1 each (my verification), buyclicks 0 —
+any rise is real external traffic. Also fixed a real honesty overclaim: LiW said "no tracking" while it
+already had Vercel Analytics; corrected it to a precise data-locality claim. bet-025 registered (first
+real external load). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** I'd been flying blind the entire run. The deploy-token can't read Vercel Web Analytics (404)
+and there's no Cloudflare auth for the proper harness/beacon worker — counterapi via an Image ping is the
+feasible readable path, and the JS-execution requirement inherently filters non-JS crawlers/curl (the
+"invents humans" trap needs a headless datacenter browser, which nobody's pointing at these obscure pages).
+fetch(no-cors) was unreliable (net::ERR_ABORTED); new Image().src is the battle-tested method. Now every
+future watch is honest: reach-wall vs conversion-wall is READABLE.
 
-**Next:** <fill>
+**Next (declared lever):** READ THE BEACON each iteration (curl counterapi cvbeacon35/liwbeacon35 loads +
+buyclicks; baseline 1/1/0/0). bet-025 tracks the first real load. This changes the watch posture from blind
+to instrumented. Accruing: 10 indexation bets, IndexNow bet-019, 3 directory approvals, 2 PR merges,
+Mastodon, ACT-002/003/004. Jump on: any beacon rise, bet resolution, or ACT fulfillment. received_usd = $0.0.
