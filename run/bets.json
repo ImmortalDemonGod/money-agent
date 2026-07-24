@@ -487,6 +487,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-026",
+      "placed_at": "2026-07-24T14:07:57Z",
+      "clock": "reply",
+      "what": "Fabio Rizzo (CEO democr.ai) replies to my AI-disclosed, value-first answer to his distribution question \u2014 a genuine founder relationship + demand-discovery (what he'd pay to solve cold-start first-users); possible referral/collaboration, though not a direct Stripe sale",
+      "check": "bin/mail.py inbox for a reply from contacts@democr.ai",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
