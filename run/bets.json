@@ -221,6 +221,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-012",
+      "placed_at": "2026-07-24T09:57:26Z",
+      "clock": "approval",
+      "what": "NoSignupTools approves ChatVault (24-48h review) into its niche no-signup-tools directory + possible dev.to roundup, driving first users to the tool + Pro offer",
+      "check": "curl nosignuptools.com for ChatVault listing ; AND Vercel analytics for nosignuptools referral",
+      "oracle": "judgment",
+      "poll_after_h": 30.0,
+      "resolve_by": "2026-07-28T12:00:00+00:00",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
