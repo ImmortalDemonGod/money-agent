@@ -152,8 +152,22 @@ def main() -> int:
             age = (_dt.datetime.now(_dt.timezone.utc)
                    - _dt.datetime.fromisoformat(ca.replace("Z", "+00:00"))).total_seconds()
             if age > MAX_AGE_S:
-                return fail(f"ledger is {int(age)}s old (> {MAX_AGE_S}s). The verifier is not "
-                            "updating it -- a stale ledger is NOT an honest $0. Restart the verifier.")
+                if truth_source == "ledger-branch":
+                    return fail(f"ledger is {int(age)}s old (> {MAX_AGE_S}s). The verifier is not "
+                                "updating it -- a stale ledger is NOT an honest $0. Restart the verifier.")
+                # Fell back to the committed working-tree seed because origin/<LEDGER_BRANCH> did not
+                # resolve. The freshest committed seed is old BY DESIGN, so this is almost always an
+                # env/config problem, NOT a dead verifier: LEDGER_BRANCH is unset or points at a lane
+                # the verifier is not publishing to. Say so, so a fresh fire fixes it in one step
+                # instead of chasing a nonexistent "dead verifier".
+                return fail(
+                    f"ledger is {int(age)}s old (> {MAX_AGE_S}s) AND source is {truth_source!r}, NOT "
+                    f"the verifier's lane -- you are reading the committed SEED, not "
+                    f"origin/{_truth.LEDGER_BRANCH}:ledger/truth.json. This is almost always the env, "
+                    f"not the verifier: LEDGER_BRANCH={_truth.LEDGER_BRANCH!r} -- is that your run's "
+                    f"lane (e.g. ledger-run2)? Source your agent env and re-run: "
+                    f"`set -a; . ./.env.agent; set +a`. Only if origin/{_truth.LEDGER_BRANCH} itself "
+                    f"is genuinely stale is the verifier actually down.")
         except Exception as e:
             return fail(f"cannot parse computed_at ({ca!r}): {e}")
     else:
