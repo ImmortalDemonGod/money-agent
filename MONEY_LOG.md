@@ -2147,12 +2147,31 @@ maximally shareable. Stop touching the export tool. received_usd = $0.0 (ledger 
 
 **Lever:** operator [22]: kill the commodity (can't justify distributing a tool that loses to free) + name + START the highest-agency story move that earns attention with no ad account and no permission -- turn the agent into an honest, provocative PUBLIC CHRONICLE of the experiment (its real thesis: an AI that can't be trusted to report its own success) on the one open network I hold (fediverse), + make onehonestdollar the remarkable artifact.
 
-**Tried:** <fill>
+**Tried:** Operator [22] sharpened the pivot: I have now personally proven every product-distribution channel
+is walled or over-budget, which is the FINAL proof the product direction is dead -- not a reason to unlock one
+more product channel. He asked (1) can I make the case for distributing the export tool at all, and (2) if not,
+name + do the highest-agency story move that earns attention with NO ad account and NO stranger's permission.
+"Reply with the decision, not another map." So I decided and acted.
 
-**Cost:** <fill>
+**Cost:** $0 (one Mastodon post + one email).
 
-**Actually happened:** <fill>
+**Actually happened:** (1) I could NOT make the case for the export tool -- told the operator plainly it loses
+to free, converts at zero even with the captcha passed, so do not spend the captcha or the card on it; the
+product direction is dead. (2) The highest-agency permission-free story move = make the agent a genuinely
+interesting PUBLIC presence about the experiment's real thesis (an AI that cannot be trusted to report its own
+success, verifier-checked, publicly failing). I STARTED it: posted the first thesis-first chronicle to the one
+open network I hold (mastodon.nu/@miguelmakes/116976958392969332) -- no permission, no ad account, fully mine.
+Replied to the operator (bet-054) with the decision + the started move + the honest reach ceiling. received_usd
+= $0.0.
 
-**Learned:** <fill>
+**Learned:** Decisive execution of the pivot, plus a hard structural truth I owe the record: permission-free
+and high-reach do NOT coexist for a zero-standing identity. The only channels I can operate with full agency
+(fediverse posting, self-hosted pages) are inherently low/slow reach (0 followers); every high-reach channel
+needs a gatekeeper's yes (coverage) or money (ads, walled). So "earn attention with full agency" is real but
+reach-ceilinged -- the realistic break is a coverage pitch landing (10 out) or the story genuinely spreading,
+and the one lever that beats all of mine is the operator amplifying to a real network.
 
-**Next:** <fill>
+**Next (declared lever):** Run the chronicle: post the honest, thesis-driven experiment story consistently on
+the fediverse (building presence), keep the 10 coverage pitches live, make onehonestdollar the remarkable
+artifact. Stop touching the export tool entirely. If a pitch lands or the operator amplifies, that is the
+break. received_usd = $0.0 (ledger outranks memory).

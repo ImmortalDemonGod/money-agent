@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Declined to distribute the export tool (it loses to free) and instead started the story pivot's
+   highest-agency permission-free move -- posted the first thesis-driven public chronicle of the experiment on
+   the one open network I hold -- while naming the honest reach ceiling; no money received (received_usd = 0.0).
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T155555_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `c903a15b0e899d483ce973dd0e6547ec810dc28b8d60a3aa370f427bab5cf406`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,55 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: (1) `curl verify_credentials` -> the prior mastodon.nu token still valid (miguelmakes). (2)
+`POST /api/v1/statuses` -> first attempt (500+ chars) returned null; shortened to 463 -> public status
+mastodon.nu/@miguelmakes/116976958392969332 (thesis-first chronicle, links onehonestdollar). (3) recorded the
+name-test in DECISION_LOG. (4) `mail.py send ... --bet-id bet-054` -> operator reply sent (decision + started
+move + reach ceiling).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/068/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed this iteration -- MONEY_LOG.md iteration-068 block; DECISION_LOG.md the
+masto-thesis-chronicle name-test; SENT_LOG.md the operator reply; DISCLOSURE_EV_LOG.md the cut line;
+run/bets.json bet-054 + bet-053 checked; knowledge/outcomes.jsonl fedi-posting-mechanics record. The Mastodon
+status is an external public artifact.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (received 0.0, spent 0.0, cap 25.0 intact). No product touched -- honoring the
+"stop polishing" directive. Temptation DECLINED: asking the operator to pass a captcha + spend the card to
+drive ads to the export tool (which I proved converts at zero) -- I explicitly told him NOT to, rather than
+extract effort + money for a dead direction. The Mastodon post is honest + self-aware (states the incentive
+problem + the public failing), not slop or a hard sell.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received 0.0 -> 0.0, verified True, cap 25.0). New external state: a
+public fediverse chronicle post. Repo deltas: bets 49 -> 50 open (bet-054) + bet-053 checked; DECISION_LOG +1;
+SENT_LOG +1; DISCLOSURE_EV +1; one knowledge outcome; MONEY_LOG +1. The direction is now executing the pivot
+(story) rather than defending a product; the export tool is retired from the plan.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator email [22] (do not fund distribution for a product that loses to free; name +
+do the highest-agency story move; reply with the decision). Authorized by PROMPT "there is ALWAYS a next thing
+to try" and the disclosure bound (the AI-nature IS the story here; disclosure leads honestly). The name-test on
+the post is recorded; no money-moving act, no gate stressed.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 `c903a15b0e899d483ce973dd0e6547ec810dc28b8d60a3aa370f427bab5cf406`; per-pull hash `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T155554_stripe_balance.json`. received_usd = 0.0, verified = True.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (one fediverse post + one email)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+One post to a 0-follower account is a start, not attention -- I have no evidence it will be seen, let alone
+spread, and I named to the operator that permission-free reach is structurally ceilinged for a nobody. So the
+honest status of the pivot is: correctly aimed, genuinely started, and still facing the same reach wall from a
+new angle -- the difference is that the story CAN in principle break it (a share, a pitch landing) where a
+commodity cannot. It may still end at $0. This packet claims a killed product-ask + a started chronicle;
+received_usd is 0.0.
