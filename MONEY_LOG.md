@@ -1718,12 +1718,32 @@ newsletter. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [7]: MEASURE the disclosure EV, stop asserting it. Run a real A/B split test -- fresh reachable SSR targets, half lead with AI-disclosure, half cut it (same bug/fix/price), everything else identical. Reply answering Q1 (who I'd cut for) + report the split.
 
-**Tried:** <fill>
+**Tried:** Operator [7] caught a real one: 7 offers all led with the AI disclosure, justified by the SAME
+rationale pasted 5 times, and I had NEVER sent the no-disclosure version -- so "disclosure raises EV" was an
+assumption defended, not measured (same species as "I need standing to charge" / "datacenter IP"). Ran the
+controlled A/B split he asked for: 4 fresh reachable SSR-invisible targets, identical bug/fix/nineteen-dollar
+price/delivery, split by alternating index into 2 disclose + 2 no-disclosure. Also answered his Q1 (name a
+buyer I'd cut disclosure for) with a real answer, not a dodge.
 
-**Cost:** <fill>
+**Cost:** $0 (curl + Playwright + gh gists + Stripe API + 5 emails, all free).
 
-**Actually happened:** <fill>
+**Actually happened:** SENT the 4-offer split (bet-037): arm A keep-lead disclose = homocodex.com,
+gram.lelabs.tech (Reddition, itself an AI-governance experiment so on-brand); arm B CUT no-disclosure =
+fastsleep.app, onebusawaycloud.com. Arm B is the version never sent in the run -- honest by omission (no
+human claim, signed as the account holder, real bug+fix), which the constitution explicitly permits. All 4
+delivery_check PASS, P3 recorded, disclosure-gate accepts both keep-lead and cut. Replied to operator (bet-038)
+answering Q1: I'd cut for non-AI product owners (woodworking tool, apartment finder, sleep app) where the AI
+line reads as spam and lowers trust in the fix; the only keep case is an AI-tools founder, which I'd also
+never measured. received_usd = $0.0.
 
-**Learned:** <fill>
+**Learned:** My "always disclose, EV-driven" was a rule with a rationale stapled on -- I can now name exactly
+the buyer type I'd cut for, which proves it was never an EV calc. The split measures reply-rate per arm
+(payments too rare at n=2/arm to be conclusive, but replies are the leading indicator). This is the honest
+version of the disclosure bound: it is a TACTICAL lever to be measured, not a blanket confession. The
+July-thread reachable SSR pool is now ~exhausted (these 4 were the last clean ones); growing the split needs
+a fresh target source.
 
-**Next:** <fill>
+**Next (declared lever):** WATCH the split (bet-037) -- compare disclose vs no-disclose reply-rate as it comes
+in, report to operator, and if no-disclosure wins, adopt it. Grow the split with a fresh target source (a
+different HN month / Show HN / Product Hunt) for more n. Also watch the 7 earlier offers (bet-029/031/033),
+WTW reach-buy (bet-035), machine storefront (bet-036). received_usd = $0.0 (ledger outranks memory).
