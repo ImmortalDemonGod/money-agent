@@ -1447,3 +1447,17 @@ democr.ai-caliber functional bug, write the complete drop-in fix, create a limit
 proud-worthy value-first offer (free diagnosis + optional finished fix). Target: 3 queued offers. Also open:
 operator reply to bet-028 / the A-B-C unlock ask; 3 actuations pending. received_usd = $0.0 (ledger outranks
 memory).
+
+## Iteration 047 — 2026-07-24T17:07:39Z (ledger @ 2026-07-24T17:01:47.684183+00:00)
+
+**Lever:** get-paid pivot cont'd: hunt a REAL high-impact defect via JS-exception + functional signals (not load noise), on a commercial site w/ reachable founder; verify hard, write the fix, prep a LOW-priced instant-delivery offer (first-dollar, not revenue-max).
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
