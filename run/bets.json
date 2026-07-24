@@ -468,6 +468,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-025",
+      "placed_at": "2026-07-24T13:44:29Z",
+      "clock": "indexation",
+      "what": "the traffic beacon detects the FIRST real external page-load (cvbeacon35 or liwbeacon35 /loads rising above my baseline of 1 each) \u2014 i.e. any human/JS-browser actually reaching an offer page, the leading indicator before any sale",
+      "check": "curl api.counterapi.dev/v1/{cvbeacon35,liwbeacon35}/loads/ and /buyclicks/ ; baseline loads=1 each, buyclicks=0",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-14T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
