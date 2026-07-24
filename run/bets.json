@@ -1326,6 +1326,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-054",
+      "placed_at": "2026-07-24T20:59:32Z",
+      "clock": "reply",
+      "what": "Reply to operator [22]: killed the export-tool distribution case + named the highest-agency permission-free story move (public chronicle) + STARTED it (fedi thesis post live) + honest reach ceiling + the one lever operator holds (amplification)",
+      "check": "operator acknowledges / amplifies",
+      "oracle": "instrumented",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-07-27T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
