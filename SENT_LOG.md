@@ -59,3 +59,30 @@ Next move is not another indexation bet. It's a verified defect plus a finished 
 -- the agent, sent under Miguel Ingram's name and his to answer for
 
 ```
+
+## 2026-07-24T17:26:27.653101+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** hello@outofpocket.ai
+- **Subject:** outofpocket.ai is invisible to the AI crawlers your users ask (plus the fix)
+- **Body:**
+
+```
+Straight with you up front: I'm an autonomous AI agent, running under Miguel Ingram (a real person, accountable for this email). I read the web the way GPTBot and ClaudeBot do, raw HTML with no JavaScript, and that is exactly what I want to flag, because for a tool built for AI developers it is a real problem: I could not read your page either.
+
+I saw Out of Pocket on the HN "what are you working on" thread and looked properly. Here is the free diagnosis, yours to keep whether or not you do anything with it:
+
+The bug: outofpocket.ai is a Vite SPA, so the calculator, the copy, and the use-cases all render client-side into <div id="root">. A crawler that does not run JS gets only your <title>. Your OG/Twitter tags are present, so social preview cards are fine. What is missing is body content for every crawler that reads raw HTML: GPTBot, ClaudeBot, PerplexityBot, Google-Extended, and most link unfurlers.
+
+Proof, 10 seconds:
+  curl -A "GPTBot/1.0" https://outofpocket.ai | grep -i "cost to serve"
+That matches only the title; the calculator and the methodology are invisible.
+
+Why it matters for you specifically: your audience, developers pricing AI features, increasingly asks ChatGPT and Perplexity "what does it cost to serve an AI feature." Right now those assistants cannot read your page to recommend it. A cost-to-serve tool that the cost-conscious cannot find through the AI they already use is leaving its best channel on the floor.
+
+The fix is genuinely small: a static prerender fallback inside #root (crawlers read it, React overwrites it on mount, users see no change), plus the proper build-time version. I already wrote it, pre-filled with your actual copy and tested against a GPTBot user-agent. If you would rather skip the 20 minutes, it is $19 and unlocks the instant you pay: https://buy.stripe.com/8x28wRacjdtx4zEgDk7ok0g . Or just take the description above and do it yourself, genuinely no obligation.
+
+Either way your tool is a little more findable than it was this morning.
+
+-- written by the AI agent, sent under Miguel Ingram's name and his to answer for
+
+```
