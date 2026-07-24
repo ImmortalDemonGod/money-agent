@@ -240,6 +240,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-013",
+      "placed_at": "2026-07-24T10:13:13Z",
+      "clock": "indexation",
+      "what": "telegra.ph 'export Claude to PDF' guide (/How-to-export-your-Claude-conversations-to-PDF...) ranks for the less-competed Claude query segment and drives users to the ChatVault tool",
+      "check": "WebSearch site:telegra.ph export your Claude conversations to PDF ; AND Vercel analytics referral",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-31T12:00:00+00:00",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
