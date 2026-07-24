@@ -2217,3 +2217,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** This resolves the operator's 'how did others get reach' question with evidence, and it sharpens WHY my run is hard: the genre's breakouts almost all leaned on standing I don't have, and the single cold-start exception depended on a beat journalist choosing to write it up. So earned coverage from a proven-fit journalist is not just A lever, it is the empirically-highest-EV one available to a zero-standing identity, above self-publishing (which the distributor matrix showed is walled) and above a whale amplifier (which needs standing first). My earlier 10 pitches were partly generic tips-line spray; today's 2 are the corrected, individualized, research-picked version to the exact people whose beat this fits.
 
 **Next:** bet-055 polls in 24h; watch inbox for a Futurism/Platformer reply. If a journalist engages, that reply IS the reach break (it's what broke Chaos-GPT). Keep the fedi chronicle + prior pitches accruing; hold the turnkey HN draft for operator amplification (bet-054). Do NOT re-pitch the already-contacted outlets (404/TC/Verge/Ars) -- that's spam. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 072 — 2026-07-24T21:54:16Z (ledger @ 2026-07-24T21:46:47.161282+00:00)
+
+**Lever:** Researched 2 more coverage targets; BOTH failed diligence (Chloe Xiang left the AI beat -> now NY Mag social editor; Benj Edwards possibly terminated from Ars + unverified email) -- so no misfired email. Instead pursue the permission-free high-fit amplifier via my OWNED channel: a genuine fediverse post centered on the technically-interesting hook (a verifier an incentive-to-lie agent cannot fool), cc Simon Willison, who documents exactly this. Doubles as a chronicle entry.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
