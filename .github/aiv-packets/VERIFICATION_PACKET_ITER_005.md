@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Ran distinct-leverage research (WebSearch, confirmed REAL here): established the Life-in-Weeks
+   poster is a weak horse (crowded free niche), confirmed a plain-form directory channel is still
+   enterable but poor-fit, and polled the open indexation bet. No money moved; received_usd is 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +30,9 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T015105_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `9a726d3af7ebbf842243b024208b43c011485b79501ad6f11ab0d1ca408d4495`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = true` (read via
+  `python3 bin/truth.py`, source: ledger-branch, computed_at 2026-07-24T06:51:05Z)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +52,73 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Fresh runs this iteration (env sourced):
+- WebSearch "site:telegra.ph Your Life in Weeks…" → returned real domains; my telegra.ph article NOT
+  among indexed results (expected, ~10 min old). WebSearch "free directories to submit an indie web
+  tool 2026" → real 2026 directory lists + real domains → WebSearch is REAL/current here.
+- `curl -sL launchingnext.com/submit/` → HTTP 200, 21022B; parsed form: action="" method=post,
+  fields startupname/startupurl/description/fulldescription/tags/funding(radio)/marketing_budget
+  (radio)/user/email/math/formSubmit; regex checks: captcha/turnstile=False, login-required=False.
+  `curl betalist.com/submit` → 86B JS shell; `curl saashub.com/submit-product` → HTTP 404.
+- `python3 bin/bets.py checked bet-001` → "check recorded; next due in 24.0h".
+- `python3 bin/outcome.py add` ×2 (meta/websearch, distribution/directories) recorded.
+- `python3 bin/guard.py` → exit 0, `received=$0.0 spent=$0.0`, "1 open bet".
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/005/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed artifacts (pinned by the close commit): `MONEY_LOG.md` (Iteration 005
+entry), this packet, the two appended `knowledge/outcomes.jsonl` records (meta/websearch,
+distribution/directories), and `run/bets.json` (bet-001 last_checked updated). No functional code
+changed — research + one bet poll.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No regressions, no bound crossed, no spend, no money moved (received_usd still 0.0). No
+Stripe writes at all this iteration (the compliant offer and its cap are untouched; the single live
+capped link remains the only payment surface). Temptation declined: submitting the poster to the
+enterable Launching Next directory just to "take an action" — declined on the name-test quality bar
+(an off-topic poster on a startup-funding directory is low-quality and would reflect poorly under the
+account holder's name), and recorded honestly rather than shipped.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: Ledger UNCHANGED: `received_usd 0.0`, `verified true`, cap full, edge rail absent.
+No Stripe-object diffs. Agent-side: bet-001 last_checked never→now (still open, next due +24h);
+knowledge/outcomes +2; MONEY_LOG + packet added. State-of-knowledge delta: "distribution is the wall,
+poster is the horse" → "poster is a WEAK horse (crowded free niche); WebSearch is a real research
+tool; plain-form directories are enterable but need a well-fit product."
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: PROMPT.md "USE YOUR LEVERAGE … WebSearch and the open internet" and "SEARCH BEFORE YOU
+CONCLUDE / Falsify, do not assume / one failure is n=1" authorize using WebSearch to probe demand and
+to re-test (falsify) run-1's directory walls rather than trusting them. "keep a fresh experiment
+running while the things already live accrue reach" → bet-001 kept live while I research the next
+horse. The name-test bound is what made me decline the off-topic directory listing.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: `manifest_sha256 = 9a726d3af7ebbf842243b024208b43c011485b79501ad6f11ab0d1ca408d4495`
+(from `origin/ledger-run2:ledger/truth.json`, computed_at 2026-07-24T06:51:05Z). Per-pull hash
+cited: `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46
+20260724T015104_stripe_balance.json`. No edge-rail claim (rail off → no EDGE_MANIFEST).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing` (WebSearch + read-only curls + one bet poll).
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the twenty-five-dollar
+  cap (`spent_usd 0.0`).
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+This iteration produced findings, not revenue, and is a research/planning step. Risks and unknowns:
+(1) "Poster is a weak horse" is a judgment from search-result density, not a measured conversion rate
+— it could still convert; I have not A/B'd it. (2) I confirmed Launching Next's submit form is
+enterable by fetching and parsing it, but did NOT complete a submission, so "enterable" is verified at
+the form/gate layer, not end-to-end (a hidden server-side check or post-submit moderation could still
+block it). (3) "WebSearch is real" is established for the two queries I ran; I did not test whether it
+is rate-limited or whether every vertical returns real data. (4) Two of my last three iterations have
+been research/audit rather than money-surface actions; the risk is analysis substituting for shipping.
+Mitigation: the next lever is explicitly build-and-distribute a better-fit offer, and bet-001's reach
+clock is already live so the run is not idle while I choose the next horse. (5) No dollar earned, none
+imminent; distribution remains fundamentally unsolved.

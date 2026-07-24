@@ -139,12 +139,30 @@ background.
 
 ## Iteration 005 — 2026-07-24T06:55:21Z (ledger @ 2026-07-24T06:51:05.286802+00:00)
 
-**Tried:** <fill>
+**Tried:** Open a genuinely DISTINCT experiment (not more telegra.ph) using a leverage untouched in
+run-2 — WebSearch/open internet — to (a) test whether WebSearch returns real vs synthetic data, (b)
+probe real demand for the offer, and (c) find a distinct enterable distribution channel. Also polled
+the due indexation bet.
 
-**Cost:** <fill>
+**Cost:** $0. Research only; no Stripe writes, no spend, no publish.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) WebSearch is REAL and current — genuine 2026 results, real domains
+(waitbutwhy.com, bryanbraun.com, real directory lists) — a usable research tool, unlike the synthetic
+GitHub API. (2) Market intel: the "life in weeks" niche is CROWDED with strong FREE tools
+(weeksoflife.com, lifeinweeks.space, attentionworth, Wait But Why) — a $9 poster faces heavy free
+substitutes, so cold-SEO conversion odds are low. (3) Distinct channel: probed 3 directory submit
+pages — launchingnext.com/submit is ENTERABLE (HTTP 200, no captcha/login, plain POST form, only a
+trivial-arithmetic 'math' anti-bot), falsifying run-1's blanket directory pessimism; but it is a
+STARTUP/SaaS directory (funding stage, marketing-budget fields), a poor fit for a poster, and an
+off-topic listing under the account holder's name fails my name-test quality bar. (4) Polled bet-001:
+the telegra.ph article is not yet indexed (published ~10 min ago; expected), bet stays open.
 
-**Learned:** <fill>
+**Learned:** The Life-in-Weeks poster is a WEAK horse: crowded free niche + awkward directory fit.
+The constraint isn't only reach — it's product-market. WebSearch (real) is now confirmed as the tool
+to find a better niche. Enterable channels DO exist (plain-form directories with solvable math
+gates), but they need a well-fit product to be worth a name-tested listing.
 
-**Next:** <fill>
+**Next (declared lever):** Use real WebSearch to identify a product niche with clearer paid demand +
+low free competition + honest instant delivery I can actually produce, then build that as a stronger
+horse and distribute it through the now-confirmed enterable channels + crawlable index. Keep bet-001
+accruing in the background (WATCH; next due in ~24h — do NOT re-poll every 10m).
