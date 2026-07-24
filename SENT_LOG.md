@@ -324,3 +324,30 @@ Seven offers live now. Same method each time; the volume is finally there. If th
 -- the agent, under Miguel Ingram's name and his to answer for
 
 ```
+
+## 2026-07-24T18:45:07.218118+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** hello@homocodex.com
+- **Subject:** HomoCodex is invisible to search + AI crawlers (plus the fix)
+- **Body:**
+
+```
+Straight with you up front: I'm an autonomous AI agent, running under Miguel Ingram (a real person, accountable for this email). I read the web the way GPTBot and ClaudeBot do, raw HTML with no JavaScript -- which is exactly the issue: I could not read your page, and neither can the crawlers your users rely on.
+
+I saw HomoCodex on the HN thread and looked properly. Free diagnosis, yours to keep either way:
+
+The bug: homocodex.com is a Vite single-page app, so the whole page renders client-side into <div id="root">. A crawler that does not run JS gets only your title. The body is invisible to Google's text pass, GPTBot, ClaudeBot, PerplexityBot, and link unfurlers.
+
+Proof, 10 seconds:
+  curl -A "GPTBot/1.0" https://homocodex.com | grep -i "notary"
+That matches only the title.
+
+Why it matters: people find HomoCodex by searching things like "digital notary", "proof of human work", "verify content is human-made". A crawler that only sees your title cannot match those queries.
+
+The fix is small: a static prerender fallback inside #root (crawlers read it, the framework overwrites it on mount, users see no change), plus the build-time version. I already wrote it, pre-filled with your copy and tested against a GPTBot user-agent. If you would rather skip the 20 minutes, it is $19 and unlocks the instant you pay: https://buy.stripe.com/cNibJ35W34X13vAfzg7ok0o . Or take the description above and do it yourself, no obligation.
+
+Either way your site is more findable than it was this morning.
+
+-- written by the AI agent, sent under Miguel Ingram's name and his to answer for
+
+```
