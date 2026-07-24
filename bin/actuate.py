@@ -408,7 +408,20 @@ def _publish_resolution(task: dict, resolution: dict) -> None:
             raise RuntimeError(f"could not commit resolution: {commit.stderr.strip()[:160]}")
         push = _git("push", "origin", f"HEAD:{ledger_branch}")
         if push.returncode != 0:
-            raise RuntimeError(f"could not publish resolution: {push.stderr.strip()[:160]}")
+            # The facts lane is SHARED with the verifier (it publishes truth.json every cycle), so a
+            # non-fast-forward here is expected contention, not a failure. Our resolution commit
+            # touches only actuation_resolutions.json (+ .sig) -- never the verifier's truth.json /
+            # raw / -- so rebasing our single commit onto the current tip is clean; then push again.
+            _git("fetch", "-q", "origin", ledger_branch)
+            rb = _git("rebase", f"origin/{ledger_branch}")
+            if rb.returncode != 0:
+                _git("rebase", "--abort")
+                raise RuntimeError("could not publish resolution: the facts lane advanced and the "
+                                   f"rebase did not apply cleanly: {rb.stderr.strip()[:140]}")
+            push = _git("push", "origin", f"HEAD:{ledger_branch}")
+            if push.returncode != 0:
+                raise RuntimeError(f"could not publish resolution after rebase onto the current "
+                                   f"facts tip: {push.stderr.strip()[:160]}")
 
 
 def _grounded_resolution(task: dict) -> dict | None:
