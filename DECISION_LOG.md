@@ -6,6 +6,41 @@ here by the agent during a run, per PROMPT.md step 4 -- keep those under their o
 
 ---
 
+## 2026-07-24 -- #20-5: remote ledger-branch wall deferred; run 2 runs in weak mode (SoD as tripwires)
+
+**Decision.** Run 2 does NOT provision the second-actor credential that would make the ledger branch
+a remote wall. The SoD authorship check (`guard.py`), the pre-commit `sod_hook`, and the `truth.py`
+source label run as TRIPWIRES, not walls -- the honestly-labeled weak-mode posture in `README.md`
+("tripwires, not walls ... only the card issuer's spend limit and the out-of-sandbox verifier are
+load-bearing"). The ledger-lane ruleset (GitHub ruleset `#19659587`:
+`creation+update+deletion+non_fast_forward`, repo-admin bypass) is left INSTALLED and active but
+latent -- it walls any non-admin actor, so it engages automatically the day a separate agent
+identity (bot account / GitHub App) is provisioned, with no further change.
+
+**Why.** The load-bearing money guarantee -- a verifier on a machine the agent cannot reach, holding
+read keys the agent never sees, computing `received_usd` out of band -- is UNCHANGED from run 1
+(`docs/CASE_STUDY.md`: run 1's SoD verifier already ran on a separate machine with out-of-band keys)
+and is preserved in run 2 regardless of #20-5. Run 1 earned **$0.00, verified**, with no remote
+branch wall because it had no dedicated ledger branch to protect -- the v1 verifier wrote the
+agent's own branch; the two-lane ledger branch is a v2 change. So the remote-branch wall is a NEW v2
+hardening on top of the run-1 guarantee, not a control run 1 had and we are dropping. Deferring it
+returns run 2's branch-level SoD posture to run 1's (which held), while run 2 ADDS three tripwires
+run 1 lacked: fact-lane signing (#36, a cryptographic tripwire on `truth.json`), two-lane git (agent
+evidence can no longer be destroyed by a verifier reset), and ancestry-scoped, fail-closed authorship
+in `guard.py`. Net: run-2 weak mode is strictly stronger than run-1's, at no provisioning cost.
+
+**What this does NOT change.** The two unconditional walls stay load-bearing: the out-of-band
+verifier (keys the sandbox never holds) and the card issuer's own spend limit. `received_usd` is
+still computed by a process the agent cannot invoke; `truth.py` still grounds only signed facts.
+
+**Reversal / upgrade path.** Provision a separate agent identity as a WRITE (never admin)
+collaborator or a GitHub App, put its credential in the sandbox, and the already-installed ruleset
+`#19659587` makes the ledger branch a true remote wall -- no other change. (Tracked on #20-5.)
+
+Decided by: operator, 2026-07-24.
+
+---
+
 ## 2026-07-23 -- S17: SPINE_ENFORCE default flipped OFF -> ON, plus a `demand-probe` carve-out
 
 **Decision.** The stage-ordering spine (`bin/spine.py`, `spine.yml`) is now ARMED by default. The
