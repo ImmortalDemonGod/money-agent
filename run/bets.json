@@ -1419,6 +1419,30 @@
         "window_h": 168
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-057",
+      "placed_at": "2026-07-24T22:17:50Z",
+      "clock": "indexation",
+      "what": "Published verifier-alpha.vercel.app: sole-supplier substantive artifact (out-of-band-verifier mechanism + what the run demonstrates about agent honesty), reframed for the technical/safety reader; citable by in-flight outreach + indexable. Hypothesis: a substantive on-topic technical artifact earns indexation and gives every pitch/mention something citable, unlike the pure story page.",
+      "check": "site:verifier-alpha.vercel.app in a search engine returns the page; and/or referral/citation appears; host_check remains PASS.",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-02T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "agent-builders / AI-safety readers searching how to keep an autonomous agent honest (anti-reward-hacking, ground-truth verification); offer=a live worked example + the honest failure log",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "indexed_or_referral",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 216
+      },
+      "spent_usd": 0.0
     }
   ]
 }
