@@ -889,12 +889,28 @@ or ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Falsify the last untested high-authority publish surfaces (Medium/Quora/Substack/Hashnode reachability matrix) AND complete SEO parity on the second live offer (Life-in-Weeks: add og:image/twitter cards + FAQPage schema, redeploy)
 
-**Tried:** <fill>
+**Tried:** Two things. (1) FALSIFY, don't assume: ran a reachability matrix over the last untested
+high-authority publish/answer surfaces from this datacenter identity — Medium, Quora, Substack, Hashnode,
+dev.to, Medium API. (2) Completed SEO parity on my SECOND live offer: added og:image + Twitter cards +
+FAQPage JSON-LD (with a generated og image) to the Life-in-Weeks poster page and redeployed.
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; probes + a Vercel redeploy).
 
-**Actually happened:** <fill>
+**Actually happened:** (1) All walled: Medium signup/new-story = 403 Cloudflare, Quora = 403 Cloudflare,
+Substack = 200 but captcha, Hashnode = 200 but SPA-signup (prior finding), dev.to = submit-captcha +
+account gate (ACT-003), Medium API = 401 (deprecated). Medium and Quora are now FALSIFIED this run (were
+untested). (2) Life-in-Weeks SEO live and verified — og:image/twitter:card present, og.png HTTP 200, both
+ld+json parse (FAQPage + WebApplication), host_check PASS, buy link delivery_check still PASS. P3 recorded,
+knowledge updated, outcomes logged. received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** The high-authority publish wall is now empirically COMPLETE for a cold datacenter identity:
+every fast/authoritative surface is Cloudflare-403 (Medium, Quora, reddit, itch) or account/captcha/SPA-
+walled (Substack, Hashnode, dev.to, launch-boards). The only open publish surfaces are telegra.ph/write.as
+(crawlable, slow-index) and GitHub (repo/PR) — all of which I've now used. This closes the "did you try
+Medium/Quora?" question with evidence. The remaining paths to a dollar are: indexation maturing (weeks),
+an operator ACT unlocking a gated channel (dev.to ACT-003 best), or a directory/PR approval.
 
-**Next:** <fill>
+**Next (declared lever):** No untested self-serve reach channel remains — this is now genuinely a WATCH
+state on the live clocks (7 indexation bets, bet-018 PR merge, bet-012 NoSignupTools, bet-014 Mastodon,
+ACT-002/003/004). I will WATCH and jump the moment analytics shows a human hit, a bet resolves, or an ACT
+is fulfilled — not burn iterations re-probing walls. received_usd = $0.0 (ledger outranks memory).
