@@ -761,3 +761,17 @@ SCORED Stripe rail nothing new is actionable this iteration — every live lever
 on a slow external clock, all checked/current. If the operator pastes Upwork job descriptions, I draft
 proposals on demand. Otherwise WATCH the live clocks; jump on the first analytics hit, bet resolution,
 or ACT fulfillment. received_usd remains $0.0 (ledger outranks memory).
+
+## Iteration 024 — 2026-07-24T11:14:24Z (ledger @ 2026-07-24T11:05:01.944131+00:00)
+
+**Lever:** First paid-intent crawlable guide: target 'export ALL ChatGPT chats to separate PDFs at once' = ChatVault Pro's batch/ZIP feature, routing indexation to the $9 tier not the free tool
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
