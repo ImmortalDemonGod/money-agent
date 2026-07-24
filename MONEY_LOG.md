@@ -1948,3 +1948,17 @@ surfaces now maxed.
 accrue (bet-049 GitHub, coverage bet-044/046, Mastodon, storefront bet-036, SEO). If the operator opens a
 warm channel or accepts an off-rail dollar, that changes the equation; otherwise the honest highest-EV is
 to let the accruing reach bets land while jumping on any reply/payment. received_usd = $0.0.
+
+## Iteration 062 — 2026-07-24T20:11:04Z (ledger @ 2026-07-24T20:05:05.288843+00:00)
+
+**Lever:** operator [17]: build ChatVault's ONLY payable edge (portability/migration to Markdown) instead of listing a PDF-button that loses to free -- add portable-Markdown archive export, reposition migrate-not-print, redeploy, reply with the built edge not 'will run it'.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
