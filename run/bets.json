@@ -1459,8 +1459,13 @@
       "poll_after_h": 48.0,
       "resolve_by": "2026-08-02T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T22:52:33Z",
+      "checks": [
+        {
+          "at": "2026-07-24T22:52:33Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "players who enjoy tiny browser games; pain=want a quick fun thing to play/share; offer=TRUNK! free + the honest experiment story behind it + the $1 'end it' button",
