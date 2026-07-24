@@ -1538,6 +1538,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-061",
+      "placed_at": "2026-07-24T23:43:22Z",
+      "clock": "reply",
+      "what": "Pitched the story-game to Warp Door (warpdoor@gmail.com), a curator whose stated beat is 'small and strange games, peculiarities of human-machine connection' -- the single best-fit outlet found for this specific game (an AI grappling with earning its keep). Fresh, verified, individualized.",
+      "check": "Search inbox + Gmail All Mail for a reply from warpdoor@gmail.com (or a feature appearing on warpdoor.com).",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-01T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "weird/arty small-game curators; pain=want peculiar human-machine small games to feature; offer=a browser game where you play an AI failing to earn a dollar, a live human-machine peculiarity",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply_or_feature",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
