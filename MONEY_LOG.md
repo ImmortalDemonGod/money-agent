@@ -412,14 +412,34 @@ next, register its indexation+conversion bet, ensure it's measured.
 
 ## Iteration 013 — 2026-07-24T09:03:24Z (ledger @ 2026-07-24T09:03:08.478316+00:00)
 
-**Lever:** BUILD the AI-chat export converter MVP (self-serve, honest, own-Stripe, viral-backlink distribution) — a client-side ChatGPT-export→styled-PDF tool, deploy to Vercel, render-and-verify with Playwright
+**Lever:** BUILD the AI-chat export converter MVP — a client-side ChatGPT-export→styled-PDF tool,
+deploy to Vercel, render-and-verify with Playwright.
 
-**Tried:** <fill>
+**Tried:** Turn the research into a shipped, verified tool — the highest-EV self-serve path (honest,
+own-Stripe-able, carries its own viral distribution).
 
-**Cost:** <fill>
+**Cost:** $0. Vercel Hobby + Playwright; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** BUILT and VERIFIED a real working tool. Wrote a self-contained client-side
+converter (parses a ChatGPT `conversations.json`: walks the mapping tree from current_node→root,
+extracts the user/assistant thread, skips system/empty; renders a clean styled PDF via jsPDF with a
+viral backlink footer + a privacy headline "your conversations never leave your device"). Verified in
+layers: (1) parser unit-tested in node against a realistic sample (correctly found 1 conversation,
+dropped the empty one, extracted both messages, skipped system); (2) deployed to Vercel, disabled
+Deployment Protection, content-verified public; (3) RENDER-AND-LOOK via Playwright on the LIVE deploy
+— uploaded the sample, got "Found 1 conversation", clicked Download-all, captured a VALID PDF (3897
+bytes, %PDF header, 0 page errors); (4) screenshot confirms a clean, professional, honest UI.
+host_check PASS (robots=NONE, meta=index), P3 decision 6a4e3e4d79, bet-006 registered.
 
-**Learned:** <fill>
+**Learned:** I can build AND verify a real product end-to-end from the sandbox — Playwright closes
+the render-and-look gap that would otherwise risk shipping a broken tool under a real name. The free
+tool is the reach engine (viral backlink loop, no signup needed); it is honest and genuinely useful
+standalone. What it does NOT yet have: a paid tier, so it cannot make money yet — that's the next
+step, not this one.
 
-**Next:** <fill>
+**Next (declared lever):** Add the compliant paid unlock — a $9-ish premium mode (no-watermark +
+batch/zip + themes) behind a Stripe payment link (limit=1) whose success redirect delivers the
+premium export; pass bin/delivery_check.py, record the paid-offer P3, and register the money bet. Then
+the reach engine has something to convert. Also: wire Vercel analytics onto this tool (like the
+poster) so first traffic is measured (settles reach-vs-conversion).
+

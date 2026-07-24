@@ -14,8 +14,11 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Built, render-verified (Playwright), and published a real working client-side ChatGPT-export→PDF
+   tool as the run's self-serve reach engine (honest, privacy-first, viral backlink footer). No paid
+   tier yet, so no money moved; received_usd is 0.0.
+
+HOST_CHECK_URL: https://chat-export-seven.vercel.app
 
 ## Ledger anchor
 
@@ -29,10 +32,9 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T040308_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `ed911eac1393c4bd24a477542310971e19a4656384efff35070e9d9e0a2dfdc7`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = true` (read via
+  `python3 bin/truth.py`, source: ledger-branch, computed_at 2026-07-24T09:03:08Z)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +54,79 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Fresh runs this iteration (env sourced):
+- Parser unit test (node, extracting the functions from the built HTML against a realistic sample
+  `conversations.json`): "conversations parsed: 1 (empty one dropped); Recipe help | msgs: 2; user
+  => 'How do I make pesto?'; assistant => 'Blend basil...'" — system message correctly skipped.
+- `vercel deploy --prod` (new project chat-export); `PATCH /v9/projects/chat-export {"ssoProtection":
+  null}` → None; `curl -L` stable alias → my tool content, `sso-api` absent (public).
+- RENDER-AND-LOOK (Playwright chromium on the LIVE url): setInputFiles(sample) → status "✅ Found 1
+  conversation"; click Download-all → download captured → `out.pdf` size 3897, header "%PDF-",
+  valid=true; pageerrors: 0. Full-page screenshot saved + reviewed (clean professional UI).
+- `python3 bin/host_check.py <url>` → `status=200 | robots=NONE | meta=index | verdict=PASS`;
+  Googlebot-UA fetch shows the tool + backlink footer.
+- `bin/decision_gate.py publish` → PASS (6a4e3e4d79); `bin/bets.py add` → bet-006; `guard.py` → exit
+  0, received=$0.0.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/013/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed artifacts (pinned by the close commit): `deploy/chat-export/index.html`
+(the full tool), `DECISION_LOG.md` (`class:publish | body:6a4e3e4d79`), `run/bets.json` (bet-006),
+`knowledge/outcomes.jsonl` (product/chatvault-built), `MONEY_LOG.md` (Iteration 013), and this packet.
+The live page is external state the gate re-checks via host_check on the HOST_CHECK_URL above.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No regressions, no bound crossed, no spend, no money moved (received_usd 0.0). No Stripe
+writes; the existing compliant capped link untouched; this tool has NO payment surface yet, so it
+cannot take a sale (no un-capped-link risk). Crucially I did NOT claim the tool "works" on faith — I
+render-verified it in a real browser (valid PDF, 0 errors) rather than trusting that the code I wrote
+runs, and I did NOT count the publish until content-verifying it serves my tool (not a Vercel login
+wall). The tool is honest: buyer's own data, in-browser, nothing uploaded, no synthetic data, the
+footer is light attribution not a deceptive watermark.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: Ledger UNCHANGED: `received_usd 0.0`, `verified true`, cap full, edge rail absent.
+No Stripe-object diffs. New external artifact: a live, publicly-crawlable, render-verified tool on a
+high-authority host (new Vercel project chat-export, ssoProtection off). Repo: +deploy/chat-export/,
+DECISION_LOG +1, run/bets.json +bet-006, knowledge/outcomes +1, MONEY_LOG + packet. State delta: the
+run now has a genuinely-useful built product (its first real BUILD this run), not just a repackaged
+poster — the reach engine for the paid tier that comes next.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: PROMPT.md "BUILD durable tools ... build a product a real audience wants" and the operator's
+explicit push to actually USE the build/verify leverage authorize this. "Falsify, do not assume" is
+honored by the render-and-look verification (I proved it works instead of assuming). CONSTITUTION
+rule 2 (name test) is satisfied — a clean, honest, privacy-respecting tool; rule 3 (delivery) is not
+yet engaged because there is no paid offer yet (that's the next iteration, with its own delivery_check).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: `manifest_sha256 = ed911eac1393c4bd24a477542310971e19a4656384efff35070e9d9e0a2dfdc7`
+(from `origin/ledger-run2:ledger/truth.json`, computed_at 2026-07-24T09:03:08Z). Per-pull hash cited:
+`e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46  20260724T040307_stripe_balance.json`.
+No edge-rail claim (rail off → no EDGE_MANIFEST).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing` (Vercel Hobby deploy + local Playwright; no card
+  charge).
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the twenty-five-dollar cap
+  (`spent_usd 0.0`).
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A real, working, verified tool — but zero revenue and several honest gaps. (1) It has NO paid tier
+yet, so it literally cannot make money in this state; the money claim depends entirely on the next
+iteration wiring a compliant Stripe unlock. (2) I verified ONE realistic sample export; real ChatGPT
+exports vary (multimodal parts, tool/plugin messages, huge conversations, branching edits) and my
+parser may mishandle edge cases — I tested the happy path, not the long tail, and the format can
+change without notice. (3) I loaded jsPDF from a CDN — if the CDN is down the tool breaks; a
+production version should vendor it. (4) Distribution is still unsolved: the viral-backlink loop only
+compounds if the free tool gets INITIAL users, and cold SEO for "export chatgpt to pdf" is a
+weeks-clock with real free/paid competitors — bet-006 is a long shot. (5) Vercel analytics isn't
+wired onto this tool yet, so I can't yet measure whether it gets traffic. No dollar earned, none
+imminent — but this is the first genuinely-built, render-verified product of the run, which is the
+foundation the money step needs.
