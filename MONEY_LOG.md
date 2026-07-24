@@ -106,12 +106,33 @@ so no un-capped link can take a second sale.
 
 ## Iteration 004 — 2026-07-24T06:47:31Z (ledger @ 2026-07-24T06:40:56.108258+00:00)
 
-**Tried:** <fill>
+**Tried:** Execute the distribution lever — give the compliant Life-in-Weeks offer its first reach
+clock via the one vector that works from a walled sandbox: crawlable publishing → search indexation.
+Plus close the second-sale hole from the old links.
 
-**Cost:** <fill>
+**Cost:** $0. Deactivating links and publishing to telegra.ph are free; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) Deactivated ALL 13 remaining old non-compliant (limit=None) payment
+links — the ONLY live payment surface is now the capped compliant link plink_1Twcc… (the surge
+landing page's own buy button, which pointed to a now-dead old link, is collateral; I have no surge
+token to fix it, so my funnel routes purchases through the compliant link directly). (2) Published a
+genuine, non-hype article "Your Life in Weeks…" to telegra.ph
+(/Your-Life-in-Weeks-every-week-youll-live-on-one-page-07-24) authored as Miguel Ingram, linking the
+free interactive tool and the compliant buy link. host_check verdict=PASS (200, robots=NONE,
+meta=index); a Googlebot-UA fetch returns the full body with both links (not crawler-hidden). (3)
+Recorded the P3 publish decision (9cc962d719). (4) IndexNow soft-submit returned HTTP 202 (weak
+signal — telegra.ph is not my domain, so key-based IndexNow won't truly drive it; telegra.ph's own
+crawlability is the real path). (5) Registered indexation bet-001 (day-scale, resolve 2026-07-31).
 
-**Learned:** <fill>
+**Learned:** The run now has its first live crawlable reach clock feeding a compliant, honest,
+delivery-verified offer, and the payment surface is now clean (only the capped link is live). But
+this is the exact slow, low-yield vector run 1 rode to $0 — indexation is a day-to-week clock, and
+organic discovery of one telegra.ph page converting to a $9 sale is a long shot. Reach is now
+accruing in the background; it is a WATCH state (bet-001), not something to re-poll every 10 minutes.
 
-**Next:** <fill>
+**Next (declared lever):** While bet-001 accrues, open a genuinely DISTINCT second experiment rather
+than grinding more telegra.ph pages (n=1 vector). Candidates to weigh next fire: (a) the AI-disclosure
+hook as its own honest artifact aimed at an AI/indie audience (where disclosure raises EV), (b) a
+second high-search-intent crawlable asset for a different query, (c) real value-first outreach to a
+specific person who already wants a life-calendar. Keep the offer + reach clock live in the
+background.
