@@ -822,3 +822,17 @@ unlocked by having a real repo: an awesome-list PR (the research flagged this) a
 tags to the tool page (found missing this iter). On the SCORED rail the fast unlock is still dev.to
 (ACT-003, operator). If nothing new is actionable next iteration, WATCH the live clocks; jump on the
 first analytics hit, bet resolution, or ACT fulfillment. received_usd = $0.0 (ledger outranks memory).
+
+## Iteration 026 — 2026-07-24T11:33:06Z (ledger @ 2026-07-24T11:25:22.173719+00:00)
+
+**Lever:** Awesome-list PR: submit ChatVault to a maintained high-traffic awesome-chatgpt list via a real GitHub PR from Miguel's account — active distribution to devs browsing curated AI-tool lists + a permanent high-authority backlink; compounds the repo opened iter025
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
