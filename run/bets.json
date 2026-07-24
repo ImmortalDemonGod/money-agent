@@ -1126,8 +1126,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-07-27T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T19:45:32Z",
+      "checks": [
+        {
+          "at": "2026-07-24T19:45:32Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "operator",
