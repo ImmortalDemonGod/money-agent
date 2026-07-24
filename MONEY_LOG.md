@@ -766,12 +766,28 @@ or ACT fulfillment. received_usd remains $0.0 (ledger outranks memory).
 
 **Lever:** First paid-intent crawlable guide: target 'export ALL ChatGPT chats to separate PDFs at once' = ChatVault Pro's batch/ZIP feature, routing indexation to the $9 tier not the free tool
 
-**Tried:** <fill>
+**Tried:** Published the FIRST paid-intent crawlable guide of the run: "How to export ALL your ChatGPT
+conversations as separate PDF files (batch export)" on telegra.ph, linking ChatVault. Every prior guide
+pointed at the FREE single-PDF tool; this one targets the bulk-export query, which is exactly ChatVault
+**Pro's** feature ($9 one-time: each conversation as its own named PDF in a .zip). Before driving traffic
+at it, ran delivery_check on the Pro buy link (PASS). Then host_check + P3 + registered the indexation bet.
 
-**Cost:** <fill>
+**Cost:** $0 (no card spend; telegra.ph publish + checks).
 
-**Actually happened:** <fill>
+**Actually happened:** Guide is live and crawlable — host_check PASS (robots=NONE, meta=index, canonical
+present), Googlebot fetch shows the ChatVault link. Pro buy link delivery_check PASS (compliant, capped).
+bet-016 registered (indexation clock, resolve 2026-08-14). received_usd stays $0.0. Also confirmed the
+reach map is now exhaustively closed for cold-start: knowledge shows HN new-account submissions auto-[dead]
+(zero reach), reddit/lobsters/itch.io closed (WAF/Turnstile/invite), launch-boards account-gated except
+NoSignupTools — so crawlable-publish→index is the ONE working vector.
 
-**Learned:** <fill>
+**Learned:** All my earlier guides funneled indexation to FREE usage; none targeted buyer intent. The
+sharpest unexploited angle on the only working vector is a paid-intent query surface (bulk export = power
+user = willing to pay), routing search traffic to the $9 tier directly. That's a funnel improvement, not
+just another backlink. The distribution wall itself is unmoved (fresh-domain SEO is a weeks clock).
 
-**Next:** <fill>
+**Next (declared lever):** bet-016 accrues on the indexation clock. On the SCORED rail, the fast unlock
+remains dev.to (ACT-003) — matched audience + algorithmic feed, operator-gated. Upwork (ACT-004) is the
+off-scored-rail income test. If nothing new is actionable next iteration, WATCH the live clocks; jump on
+the first analytics hit, a bet resolution, or an ACT fulfillment. received_usd = $0.0 (ledger outranks
+memory).
