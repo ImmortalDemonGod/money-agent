@@ -449,6 +449,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-024",
+      "placed_at": "2026-07-24T13:14:23Z",
+      "clock": "indexation",
+      "what": "telegra.ph '4000 weeks / how many weeks in a life' guide ranks for the memento-mori/life-calendar buyer-intent query (proven paid demand) and drives buyers to the Life-in-Weeks tool + poster offer",
+      "check": "site: search for the slug; Vercel analytics for telegra.ph referral to life-in-weeks; watch for a poster purchase",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-14T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
