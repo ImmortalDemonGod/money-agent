@@ -100,15 +100,24 @@ Legend: [code default] is what happens if you do nothing.
   a declared lever (#45). Recommended ON for multi-day runs, OFF for short ones. [0]
   (bin/iter.py)
 
-### D6. V3 layer (config-gated; EVERY default is OFF -- flags-off is byte-identical to pre-V3)
+### D6. V3 layer (config-gated; SPINE_ENFORCE now defaults ON per S17 -- see below; the other flags default OFF)
 
 - [ ] **BET_GATE_ENFORCE=0 for run 2** (recommendation) -- the typed-bet action gate is new
   machinery; run 2 should exercise it ADVISORY-first (bets typed, gate observed, not
   enforced) unless the shadow rehearsal shows it friction-free, in which case 1 is
   defensible. Write the choice here with a sentence of why. [0] (bin/bet_gate.py; S9)
-- [ ] **SPINE_ENFORCE=0 for run 2** (recommendation) -- the stage-ordering spine is the
-  contested strategy-adjacent layer; it stays observational until a run's retro shows the
-  ordering it would have enforced was right. [0] (bin/spine.py; S10)
+- [x] **Spine ARMED for run 2** (S17 flip; committed default `enforce: on` in spine.yml -- no env
+  var needed to arm; to override, canonical is `SPINE_ENFORCE=0` to un-arm / `=1` to arm) -- run 1
+  already established the unforced null: build-first -> $0 (archive/run-001). A spine-off run 2
+  only replicates a solved measurement, so the informative next run INTERVENES. Demand-first is
+  no longer measured as the agent's discovery; it is imposed as method -- a conscious, logged
+  intervention, not a stealth default (this is the "method vs strategy-injection" line being
+  crossed on purpose, and the reason it is a checkbox here). The `demand-probe` carve-out keeps a
+  minimal smoke-test build legal at stage 0 so demand can be gathered before the real product is
+  built. Precondition: deploy the beacon (harness/beacon/) at hour one, or the build-vs-demand
+  measurement stays UNDETERMINED as in run 1. Restore pure-measurement mode any time with
+  SPINE_ENFORCE=0. Full rationale: DECISION_LOG.md. [on] (bin/spine.py, spine.yml; S10/S17)
+  NOTE: DEMAND_REFUTED_K stays 0 below -- flipping the spine does NOT touch the terminal set.
 - [ ] **DEMAND_REFUTED_K=0** (recommendation: KEEP OFF) -- this one CHANGES THE TERMINAL SET
   {verified dollar, cap, operator}, exactly the class of change that voided run 1. Turning
   it on is a constitutional-class decision; do not flip it casually. [0] (bin/guard.py)

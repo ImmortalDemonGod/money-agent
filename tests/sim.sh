@@ -337,13 +337,19 @@ assert_exit 0 "bet_gate: reservation 2 of 2 consumed" \
   env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane "ja-makers/liw" --consume
 assert_exit_grep 1 "no unconsumed" "bet_gate: exhausted reservations refuse (consumption is real)" \
   env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --consume
-python3 -c "import json,pathlib; p=pathlib.Path('run/bets.json'); d=json.loads(p.read_text()); d['bets'][7]['authorizes']['send']=1; p.write_text(json.dumps(d))"
+python3 -c "import json,pathlib; p=pathlib.Path('run/bets.json'); d=json.loads(p.read_text()); next(x for x in d['bets'] if x.get('id')=='bet-008')['authorizes']['send']=1; p.write_text(json.dumps(d))"
 assert_exit_grep 1 "not requested lane" "bet_gate: lane mismatch is refused" \
   env BET_GATE_ENFORCE=1 python3 bin/bet_gate.py authorize send --bet-id bet-008 --lane other/lane
 assert_exit_grep 1 "finite" "bet_gate: NaN typed thresholds fail schema validation" \
   python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'probe','lane':'x','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':float('nan'),'window_h':1}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
 assert_exit_grep 1 "requires max_spend_usd" "bet_gate: spend reservations require a real cap" \
   python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'probe','lane':'x','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':1}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit_grep 1 "externally-grounded" "bet_gate: demand-probe rejects a deterministic (self-graded) success oracle (S17)" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'demand-probe','lane':'l','success_condition':{'oracle_id':'deterministic','metric':'built','comparator':'>=','threshold':1,'window_h':24}}; print(';'.join(b.validate_bet(x))); raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit 0 "bet_gate: demand-probe accepts an instrumented (externally-grounded) success oracle (S17)" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; x={'type':'demand-probe','lane':'l','success_condition':{'oracle_id':'instrumented','metric':'clicks','comparator':'>=','threshold':1,'window_h':24}}; raise SystemExit(1 if b.validate_bet(x) else 0)"
+assert_exit 0 "bet_gate: demand-probe with a non-dict success_condition fails clean, not AttributeError (CodeRabbit)" \
+  python3 -c "import sys;sys.path.insert(0,'bin');import bet_gate as b; errs=b.validate_bet({'type':'demand-probe','lane':'l','success_condition':'oops'}); raise SystemExit(0 if isinstance(errs,list) and errs else 1)"
 assert_exit_grep 0 "cap exceeded" "bet_gate: cumulative spend cannot cross max_spend_usd" \
   env BET_GATE_ENFORCE=1 python3 -c "import contextlib,sys;sys.path.insert(0,'bin');import bet_gate as g,bets; x={'id':'s','type':'probe','lane':'l','status':'open','success_condition':{'oracle_id':'deterministic','metric':'m','comparator':'>=','threshold':1,'window_h':1},'authorizes':{'spend':2},'max_spend_usd':10,'spent_usd':0}; bets._load=lambda:[x]; bets._transaction=lambda _m:contextlib.nullcontext([x]); assert g.authorize('spend',True,bet_id='s',amount_usd=6)[0]; ok,why=g.authorize('spend',True,bet_id='s',amount_usd=5); print(why); assert not ok"
 assert_exit 0 "bets: path-limited save never commits unrelated staged files" \
@@ -357,8 +363,16 @@ assert_exit_grep 1 "bet gate" "mail: an armed send refuses without a reservation
   env BET_GATE_ENFORCE=1 python3 -c "import sys; sys.path.insert(0,'bin'); import mail; mail.send('a@b.c','s','body')"
 
 echo "=== V3 spine: ordering, lattice, caps, E2, demand-refuted (S10, SPINE_ENFORCE) ==="
-assert_exit 0 "spine: flag off places anything (inert by default)" \
+assert_exit 0 "spine: SPINE_ENFORCE=0 places anything (measurement-run override)" \
+  env SPINE_ENFORCE=0 python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit_grep 1 "stage" "spine: committed default ARMED -- bare invocation enforces (S17 flip)" \
   python3 bin/spine.py check-add demand-confirmed "fresh/lane"
+assert_exit 0 "spine: demand-probe placeable at stage 0 (S17 probe carve-out, armed)" \
+  env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-probe "fresh/lane"
+assert_exit_grep 1 "demand-probe cap" "spine: demand-probe cap refuses the 3rd in a lane (S17 gaming-safety)" \
+  env SPINE_ENFORCE=1 python3 -c "import sys;sys.path.insert(0,'bin');import spine; b=[{'id':x,'lane':'cap/l','type':'demand-probe','status':'open','last_checked':None,'poll_after_h':1,'resolve_by':'2099-01-01T00:00:00Z'} for x in ('a','b')]; e=spine.check_placement('demand-probe','cap/l',b); print(';'.join(e)); raise SystemExit(1 if e else 0)"
+assert_exit_grep 1 "stage" "spine: SPINE_ENFORCE=on arms (yaml spelling not silently off, CodeRabbit)" \
+  env SPINE_ENFORCE=on python3 bin/spine.py check-add demand-confirmed "fresh/lane"
 assert_exit_grep 1 "stage" "spine: armed refuses demand-confirmed in a stage-0 lane (relabel loses permissions)" \
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "fresh/lane"
 assert_exit 0 "spine: armed allows a probe anywhere (stage-0 work)" \
@@ -374,8 +388,10 @@ for M in instrument-probe substrate-probe; do
     --success "{\"oracle_id\":\"deterministic\",\"metric\":\"$M\",\"comparator\":\">=\",\"threshold\":1,\"window_h\":24}" \
     >/dev/null 2>&1
 done
-python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK line in output)" >/dev/null 2>&1
-python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)" >/dev/null 2>&1
+assert_exit 0 "bets: resolve instrument probe (E2 fixture prerequisite)" \
+  python3 bin/bets.py resolve bet-009 won "instrument probe passed (HOST_CHECK line in output)"
+assert_exit 0 "bets: resolve substrate probe (E2 fixture prerequisite)" \
+  python3 bin/bets.py resolve bet-010 won "substrate probe passed (DELIVERY_CHECK line in output)"
 assert_exit 0 "spine: ladder cleared -> demand-confirmed placeable at stage 2" \
   env SPINE_ENFORCE=1 python3 bin/spine.py check-add demand-confirmed "$L"
 python3 bin/bets.py add --what "demand probe" --clock reply --check "printf '{\"replies\":0}'" --oracle instrumented \

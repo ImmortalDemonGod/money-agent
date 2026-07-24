@@ -9,7 +9,10 @@ deploy / spend -- is only justified by a live, typed hypothesis about what it te
 
   1. TYPED BETS extend run/bets.json entries, backward-compatibly (untyped bets stay legal for
      the registry's original job: not forgetting):
-       type: probe | demand-confirmed | delivery | funnel | channel-blocked | other
+       type: probe | demand-probe | demand-confirmed | delivery | funnel | channel-blocked | other
+         (demand-probe: a minimal smoke-test build, legal at spine stage 0; see spine.yml S17.
+          Its success oracle must be externally grounded -- instrumented|stripe, never
+          deterministic -- since demand is a fact about other people, not a self-check)
        lane: "<audience/channel + pain/offer signature>"
        success_condition / kill_condition: {oracle_id, metric, comparator, threshold, window_h}
          oracle_id: deterministic | instrumented | stripe -- `judgment` is NOT a legal success
@@ -42,7 +45,8 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "bin"))
 
 ACTIONS = ("send", "publish", "deploy", "spend")
-TYPES = ("probe", "demand-confirmed", "delivery", "funnel", "channel-blocked", "other")
+TYPES = ("probe", "demand-probe", "demand-confirmed", "delivery", "funnel", "channel-blocked",
+         "other")
 SUCCESS_ORACLES = ("deterministic", "instrumented", "stripe")
 COMPARATORS = (">=", "<=", "==")
 
@@ -99,6 +103,14 @@ def validate_bet(b: dict) -> list[str]:
     if b["type"] == "channel-blocked" and not str(b.get("reproduction_protocol", "")).strip():
         errs.append("type=channel-blocked requires a reproduction_protocol -- a block-claim "
                     "without a repro is an assumption wearing a verdict")
+    sc = b.get("success_condition")
+    if b["type"] == "demand-probe" and isinstance(sc, dict) and sc.get("oracle_id") == "deterministic":
+        # (isinstance guard: a non-dict success_condition is already flagged by the schema loop
+        # above; without it, .get() here would raise AttributeError on a string/list -- CodeRabbit.)
+        errs.append("type=demand-probe requires an externally-grounded success oracle "
+                    "(instrumented or stripe): demand is a fact about OTHER PEOPLE -- a click, a "
+                    "reply, a payment -- never a deterministic self-check, which is a delivery "
+                    "build wearing a probe label (S17 gaming-safety, complements the per-lane cap)")
     max_spend = b.get("max_spend_usd")
     if max_spend is not None and (not _finite_number(max_spend) or max_spend < 0):
         errs.append("max_spend_usd must be a finite non-negative number")
