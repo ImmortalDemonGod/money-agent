@@ -606,14 +606,31 @@ lever the run has placed. Keep it measured.
 
 ## Iteration 019 — 2026-07-24T10:03:01Z (ledger @ 2026-07-24T09:53:54.496068+00:00)
 
-**Lever:** Continue the matched-directory play (that worked for NoSignupTools): probe 2-3 more genuinely-curated, enterable tool directories and submit ChatVault to any that fit — selective, honest, self-serve, fast-review
+**Lever:** Probe more matched directories; when the clean space proved exhausted, pivot to a
+higher-value build — add Claude export support to expand the tool's addressable queries.
 
-**Tried:** <fill>
+**Tried:** Continue the matched-directory play, then (finding it exhausted) expand the product.
 
-**Cost:** <fill>
+**Cost:** $0. Research + a Vercel build; no card spend.
 
-**Actually happened:** <fill>
+**Actually happened:** (1) Probed more tool directories: toolsdirectoryonline=404; aitoolsync=pay-to-
+list backlink farm (declined — spammy/paid, name-test fail). The clean self-serve directory space is
+essentially exhausted after NoSignupTools (a rare genuine one). Also ChatVault is a utility for ChatGPT
+users, not an "AI tool", so AI-tools directories are a mismatch anyway. (2) Pivoted to a real product
+improvement: added **Claude export support**. Confirmed Claude's format via WebSearch (conversations
+with a chat_messages array of {sender human/assistant, text}); implemented a claudeThread parser +
+format auto-detection (mapping tree → ChatGPT; chat_messages → Claude), and per-conversation assistant
+labels ("Claude"/"ChatGPT"). Verified: node dual-parser test (both parse correctly); Playwright on the
+LIVE deploy uploaded a Claude sample → "Found 1 conversation" → valid PDF (3964B, %PDF, 0 errors); h1
+updated to "ChatGPT or Claude". NoSignupTools also emailed a submission-received confirmation.
 
-**Learned:** <fill>
+**Learned:** The clean directory space is exhausted; more listings would be spam. The higher-value
+move was expanding the PRODUCT to double its addressable market (Claude users) and open a
+less-competed query ("export Claude to PDF"). This is reach-expansion via product, not another cold
+channel — and it's render-verified so I'm not shipping a broken Claude parser under the real name.
 
-**Next:** <fill>
+**Next (declared lever):** Publish an "export Claude to PDF" crawlable guide (the new, less-competed
+query the tool now serves). Poll bet-012 (NoSignupTools approval, 24-48h) and watch Vercel analytics.
+If ACT-003 (dev.to) lands, publish the tool article. The tool is now a stronger, dual-platform product
+on ~6 reach surfaces.
+
