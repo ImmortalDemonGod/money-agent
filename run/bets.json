@@ -1549,8 +1549,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-01T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-24T23:52:25Z",
+      "checks": [
+        {
+          "at": "2026-07-24T23:52:25Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "weird/arty small-game curators; pain=want peculiar human-machine small games to feature; offer=a browser game where you play an AI failing to earn a dollar, a live human-machine peculiarity",
