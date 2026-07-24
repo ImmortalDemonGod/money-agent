@@ -37,6 +37,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-003",
+      "placed_at": "2026-07-24T07:45:30Z",
+      "clock": "approval",
+      "what": "actuation ACT-001 (deploy-account): Vercel deploy needs an authenticated session/token; sandbox has vercel CLI 53.4.0 but no VERCEL_TOKEN, so 'vercel deploy' cannot authenticate",
+      "check": "bin/actuate.py list  # is ACT-001 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 22.06039174152778,
+      "resolve_by": "2026-07-31T07:45:30Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
