@@ -49,9 +49,14 @@ sys.path.insert(0, str(REPO / "bin"))
 
 
 def enforced() -> bool:
-    # Explicit env override wins BOTH ways. Only the documented "off" tokens un-arm; ANY other
-    # non-empty value arms (fail-closed toward the committed default), so `SPINE_ENFORCE=on` -- the
-    # spine.yml spelling -- does NOT silently disable (CodeRabbit). Empty/unset -> the spine.yml default.
+    """True when spine ordering/caps are armed.
+
+    Precedence: an explicit `SPINE_ENFORCE` env override wins in both directions (the off-tokens
+    0/false/off/no un-arm; any other non-empty value arms, fail-closed toward the committed
+    default so `SPINE_ENFORCE=on` -- the spine.yml spelling -- never silently disables). With no
+    override, the committed spine.yml `enforce:` default decides (S17: ON), and an unreadable
+    config is treated as ARMED so a broken config cannot silently un-arm the spine.
+    """
     env = os.environ.get("SPINE_ENFORCE")
     if env is not None and env.strip() != "":
         return env.strip().lower() not in ("0", "false", "off", "no")
