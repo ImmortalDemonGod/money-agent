@@ -411,6 +411,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-022",
+      "placed_at": "2026-07-24T12:54:04Z",
+      "clock": "approval",
+      "what": "Lachief.io approves the free ChatVault listing (manual review, up to 7 days) and it drives matched-audience traffic to the tool + Pro offer from an AI-tool directory",
+      "check": "search lachief.io for ChatVault listing; Vercel analytics for lachief referral; watch inbox for approval/rejection email",
+      "oracle": "judgment",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-07T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
