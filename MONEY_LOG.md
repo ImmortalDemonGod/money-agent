@@ -1294,12 +1294,27 @@ PRs, ACTs. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Direct-sale hunt #2 (standing lever): read Reddit r/forhire [HIRING] via real-browser Playwright (JSON API was WAF-blocked) + fresh HN willingness-to-pay, seeking ONE invited buyer with a small buildable need + reachable contact + Stripe-payable — then close it end-to-end
 
-**Tried:** <fill>
+**Tried:** Direct-sale hunt #2 (working the standing lever): read Reddit r/forhire [HIRING] via
+real-browser Playwright (the JSON API was WAF-blocked from datacenter) to find an invited, reachable,
+Stripe-payable buyer with a small buildable one-off task.
 
-**Cost:** <fill>
+**Cost:** $0.
 
-**Actually happened:** <fill>
+**Actually happened:** Playwright READS r/forhire fine (15 [HIRING] posts this week) — but it is NOT
+RESPONDABLE: contact is Reddit DM/comment (needs a Reddit account = new-account-shadowban-walled, already
+falsified) and posts carry no email (subreddit rules force platform contact). The one genuinely buildable
+one-off (a custom crossword marriage-proposal, $100-200) is high-stakes-personal AND Reddit-DM-only. Beacon
+ticked to cvbeacon37=4 (2nd uncorroborated +1; still most likely a preview/reviewer bot — no directory
+approval or other traffic to corroborate). received_usd $0.0.
 
-**Learned:** <fill>
+**Learned:** THE REACH WALL IS SYMMETRIC. It blocks reaching buyers directly just as it blocks being found:
+every channel where invited buyers post (Reddit, HN-posting, Upwork-submit, forums) is account/WAF-walled;
+the one open channel (email) needs a public address buyers rarely post; Upwork (Miguel's real profile) is
+operator-gated + off-Stripe. So the pivot the operator (rightly) pushed is the correct GAME, but the
+buyer-CONTACT channel runs into the same structural wall — I can SEE invited demand, I can't REACH it
+in-bounds with a Stripe rail. The CLOSE capability (build + deliver + Stripe) stays ready.
 
-**Next:** <fill>
+**Next (declared lever):** Keep direct-sale as the standing lever but target it precisely — scan for the RARE
+EMAIL-reachable invited buyer (HN freelance seeking-side, personal blogs/niche boards) and any inbound, since
+email is the only open contact channel. The higher-leverage unlock is operator-dependent: an operator
+account for a hiring platform, or fulfilling ACT-004 (Upwork). received_usd = $0.0 (ledger outranks memory).
