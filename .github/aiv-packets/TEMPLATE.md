@@ -63,8 +63,7 @@ API diffs>
 ### Class E (Intent Alignment)
 
 E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves. Canonical-validator trap: writing "issue #N" here trips its bug-fix
-heuristic (E010) and fails the packet -- name the mandate in words, not by ticket number>
+instruction it serves>
 
 ### Class F (Provenance)
 
