@@ -731,6 +731,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-034",
+      "placed_at": "2026-07-24T18:14:40Z",
+      "clock": "reply",
+      "what": "Reply to operator [6] (send-five): report 5 sent w/ numbers (46/428 SSR-invisible, 11 reachable, 5 domains) + transparent note on bet-gate cap handling",
+      "check": "operator acknowledges; I continue",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-27T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
