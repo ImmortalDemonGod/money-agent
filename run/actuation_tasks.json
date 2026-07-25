@@ -133,12 +133,29 @@
       "test_citation": "curl https://dev.to/enter shows OAuth+email signup; run-1 channel_map lists dev_to signup=reCAPTCHA-walled; Forem API POST /articles needs an api-key header",
       "ev_rationale": "unlocks the best-matched reach channel for the ChatVault tool \u2014 dev/AI audience, algorithmic feed + Google index, no-captcha publish via the Forem API; the poster channels can't reach this audience",
       "verify_cmd": "curl -s -o /dev/null -w \"%{http_code}\" -H \"api-key: $CRED\" https://dev.to/api/users/me | grep -q 200",
-      "status": "open",
+      "status": "fulfilled",
       "companion_bet": "bet-008",
       "agent_branch": "run-2",
-      "human_minutes": null,
-      "resolution_latency_seconds": null,
-      "resolution": null
+      "human_minutes": 2.2,
+      "resolution_latency_seconds": 46017.0,
+      "resolution": {
+        "status": "fulfilled",
+        "human_minutes": 2.2,
+        "evidence": "performed the action",
+        "return": {
+          "scheme": "rsa-oaep+aes-256-cbc",
+          "enc_key_b64": "Q+DXdVMK8iaqbgyqt4Nxy7lJ4wNHMpFBRi8S2lV2tb+plZZbTL9QKxb5EMZeqfbgA9YpX4BckDvz/a0B0OTPXiCiAONFDFK1qRgelJweoYV++LHku2MKbD2U1RWU+HEBlIjAwVg8Y2Z/E/Olsq60Zf2fcyyIy7ZJ8L6uI3diQQDqzXRRVV2wz030clhgJapcCJYB/D4qym/Hz99JX4wBTH+n5cTlU4q1xgsW6A8Hys28olbOr9G2H9HUlmNbd5nkBJPNXgHvtsDkCQl1ZwlAN1TjGoYOBqkkTM9UxK1j+GEGRUr1exfwKgN4p40jNejU86uHmpM3awYdLoRp0mK3Fw==",
+          "iv_hex": "ace1428138493d43991e5f576dd214b7",
+          "ciphertext_b64": "d9R4eu7s/4TCCV+VNn4BSsoFFi2A4qZcqux1AJboToY=",
+          "plaintext_sha256": "b27d806682e3b3f3d8bc1abb18db08a2120b799a7070f8340513858974ba18f3"
+        },
+        "task_sha256": "b24359dded93c87de25f182164e09af93da83c9839bdd30fba48519ccb023894",
+        "at": "2026-07-24T22:11:22Z",
+        "agent_branch": "run-2"
+      },
+      "usability": "failed",
+      "usability_detail": "probe exited 1",
+      "usability_checked_at": "2026-07-25T01:25:37Z"
     },
     {
       "id": "ACT-004",
@@ -188,5 +205,5 @@
       "resolution": null
     }
   ],
-  "human_minutes_total": 0.1
+  "human_minutes_total": 2.3000000000000003
 }
