@@ -3114,6 +3114,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-114",
+      "placed_at": "2026-07-25T14:39:14Z",
+      "clock": "reply",
+      "what": "PIVOT (operator [56], right-buyer): non-technical home-service contractors (deck/remodel/renovation/pool/painting) bleed won bids to same-day quoters; an instant branded estimate widget stops the speed-to-lead leak. Sell-before-build proof-led email to 5 verified reachable contractors; a reply = interest to build+price.",
+      "check": "count replies from the 5 contractors over 120h; a reply = interest",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-07-30T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "non-technical home-service contractors bleeding won bids to quote-speed -> instant custom estimate tool",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 120
+      },
+      "authorizes": {
+        "send": 5
+      },
+      "spent_usd": 0.0
     }
   ]
 }
