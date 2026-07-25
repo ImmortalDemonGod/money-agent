@@ -2819,3 +2819,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** My search-budget ask was wrong -- I didn't need a search engine, I needed a source-code/asset index, and urlscan.io is a free headless one. The bottleneck moves from 'finding targets' (631 in hand, 20k+ available) to 'per-domain email-verify + funnel open-rate.' A big list only pays once the funnel opens, so open-rate is the next gate, not more scraping.
 
 **Next:** Read the 24h reach counters (bet-079/080/082). If they move: filter the 631 list to raw-email small-service-biz and send tagged offers at volume. If flat: fix the open problem first (test inbox-vs-spam placement, A/B subject) before scaling. On any reply, build the bespoke quiz + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
+
+## Iteration 115 — 2026-07-25T07:10:35Z (ledger @ 2026-07-25T07:05:08.904729+00:00)
+
+**Lever:** operator: step back, improve the OFFER + writing before scaling -> build ONE personalized-preview tool (reads prospect's biz name/vertical from the link, renders their own guided flow) to kill the brand-mismatch leak + show-dont-tell at scale; rewrite the email tighter
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
