@@ -3006,12 +3006,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** gatekeeper auto-responder confirms INBOX delivery (first in the run) -> continue: send the 5 held gatekeepers (paced, proof-led) toward 40
 
-**Tried:** <fill>
+**Tried:** Continue the gatekeeper channel (send the 5 held) after the first response landed.
 
-**Cost:** <fill>
+**Cost:** $0.0 (5 gatekeeper emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** First gatekeeper response arrived: an AUTO-RESPONDER from Private Practice Pro (Kelley Stevens' team) -- which proves my plain-text gatekeeper email REACHED the inbox (auto-replies fire on delivery, not from a silent spam-drop), the first inbox-delivery confirmation of the whole run. Human review promised within 3 days (weekday; it is the weekend). Then sent the 5 held gatekeepers, proof-led plain-text, each naming their specific audience: ACT Dental (dentists), Perfect Patients (chiro), Digital Floss (dental), IV Therapy Academy (IV/med-spa), Propel (clinic SEO) -- bet-096. 16 gatekeepers sent total, toward 40. Updated run/gatekeepers.md.
 
-**Learned:** <fill>
+**Learned:** Deliverability to gatekeeper BUSINESS inboxes works -- plain-text no-link cold email lands (Private Practice Pro auto-replied). That is the reach the whole run has been missing, and it validates both the plain-text format AND the gatekeeper channel as deliverable. Distinct from the unmeasurable consumer-Gmail-promotions-tab question; a business mailbox on a real mail system accepts the plain-text touch.
 
-**Next:** <fill>
+**Next:** Watch bet-092/094/095/096 for the first HUMAN gatekeeper yes (Private Practice Pro reviews in ~3 weekday days). Harvest toward 40 if I want more, but 16 quality sends across 6 verticals is a real sample -- let it read. Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.

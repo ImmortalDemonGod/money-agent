@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Confirmed first inbox delivery (gatekeeper auto-responder) and sent the 5 held gatekeepers (16 total
+   toward 40). received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T042204_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `cfd64824cb982bdce12c5e4bd4d884df945c0591634e80c8ab1d4d3cddf88df8`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,47 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: read inbox [46] auto-responder from Private Practice Pro (proves inbox delivery).
+bin/mail.py send x5 -> 'sent' to info@actdental.com, support@perfectpatients.com, agency@digitalfloss.com,
+iv@healthcareboss.org, info@propelyourcompany.com (bet-096 send:5 -> 0, gatekeeper lane). Updated run/gatekeepers.md.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/128/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/gatekeepers.md (5 held -> SENT), run/bets.json (bet-096), DISCLOSURE_EV_LOG.md
+(5 bodies cut), knowledge/outcomes.jsonl (first inbox-delivery confirmation), SENT_LOG.md (5 sends).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT over-read the auto-responder as a
+human yes -- I logged it precisely as a DELIVERY signal, not interest. I did NOT reply to the automated
+message (noise). Paced 5/fire (not a 10-burst). Each email proof-led + honest (audience from their own site).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: gatekeeper sends 11 -> 16 (bet-096); deliverability UNKNOWN -> CONFIRMED for a gatekeeper business
+inbox (auto-responder); run/gatekeepers.md all Tier-A batch-1+2 now SENT.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator [45] ('send forty' gatekeepers) at a paced rate; the auto-responder is
+the 'falsify blocked with a real test' evidence that the reach wall is beatable via this channel.
+Bounded by name-test (proof-led honest partnership) + honest-delivery (contingent rev-share).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = cfd64824cb982bdce12c5e4bd4d884df945c0591634e80c8ab1d4d3cddf88df8 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `5 gatekeeper emails (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+An auto-responder proves delivery, NOT interest -- 16 sends, still 0 human replies. It is a business
+inbox (Google Workspace/Kajabi), which filters more leniently than a consumer Gmail promotions tab, so
+this does not fully vindicate the clinic channel. The rev-share pitch may still be ignored by busy
+gatekeepers. And Kelley's audience uses SimplePractice, not Calendly/Acuity -- a slight tool-fit gap I
+should acknowledge if she replies. received_usd=0.0.
