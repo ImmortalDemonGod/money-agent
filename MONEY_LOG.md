@@ -2665,3 +2665,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The real screen for a cold digital-tool sale is not 'has a website' -- it is 'already embeds a PAID tool of this category', which is visible in their HTML and proves both halves (pain + wallet) at once. And the winning motion is SHOW not tell: build the working thing (I can, instantly), hand them the live link to use, invoice after -- a working tool in-hand beats a priced cold proposal. This is a materially better strategy than the 9 offers already out; those were aimed at the stadium doors before the crowd let out.
 
 **Next:** When the widget-screen agent returns already-paying-for-category targets, BUILD one of them a genuinely better working tool, host it live (host_check + P3), and send the live link (show, then invoice). Watch bet-072/071/069 for any reply to the offers already out. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 104 — 2026-07-25T05:22:01Z (ledger @ 2026-07-25T05:19:22.451951+00:00)
+
+**Lever:** OPERATOR [36] SHOW-DON'T-TELL: build Repair Wizards (proven category-payer: embeds Calendly, owner Gmail) a genuinely-better working tool -- an instant repair-triage+booking widget -- host it live, send the owner the link to USE, then invoice
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
