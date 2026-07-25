@@ -2571,8 +2571,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-08-01T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T09:25:11Z",
+      "checks": [
+        {
+          "at": "2026-07-25T09:25:11Z",
+          "note": "Private Practice Pro auto-responder [46]: my plain-text gatekeeper email REACHED the inbox (not spam/bounce); Kelley/team reviews within ~3 days (weekday). First inbox-delivery confirmation of the run."
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
