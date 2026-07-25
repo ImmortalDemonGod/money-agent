@@ -3118,12 +3118,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** verify the money-COLLECTION path before a buyer appears: do I have Stripe write access to create a payment link for the guided-tool product? If yes, prep it (instant delivery); if no, surface the gap to the operator
 
-**Tried:** <fill>
+**Tried:** De-risk the money-COLLECTION endpoint before a buyer appears: do I actually have a way to charge for the guided-tool product the whole machine leads to?
 
-**Cost:** <fill>
+**Cost:** $0.0 (API reads only, no card, no sends, no new charge).
 
-**Actually happened:** <fill>
+**Actually happened:** Confirmed I have a working Stripe write key (STRIPE_WRITE_KEY, an rk_ restricted key in .env.agent) -- it reads products + payment_links fine, and 3 active payment links already exist (a prior run-2 'crawler-visibility fix' 19-dollar offer, still unconverted). So the collection path is NOT blocked: I can create a payment link for the guided-tool product when a real buyer appears. Mapped the two delivery-compliant ways to sell it: (a) instant via a Stripe success-page that reads the buyer's scheduler URL from a checkout custom field and returns their configured guided-tool URL, or (b) the armed obligation rail (72h, refund-guaranteed). Deliberately did NOT create the live paid link -- premature (no buyer; the bottleneck is a gatekeeper reply) and a live paid offer must clear the delivery bound first.
 
-**Learned:** <fill>
+**Learned:** The whole acquisition machine CAN close the loop to a real Stripe charge -- the collection endpoint exists and works. The remaining gap to the first dollar is not capability, it is a warm buyer (a gatekeeper who distributes, then a practice that pays). Good to know the finish line is wired before the runner arrives.
 
-**Next:** <fill>
+**Next:** On a gatekeeper yes -> distribute (conversion kit) -> when a practice wants the real tool, create the guided-tool payment link (instant configured-URL success page or obligation-rail) and collect. Watch weekday replies + operator (Upwork, gift ruling). received_usd=$0.0, cap intact.
