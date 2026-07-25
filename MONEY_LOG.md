@@ -2572,12 +2572,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** formalize the round-2 proven-payer LIST asset (user task): 33 verified named/currently-paying/reachable people in 3 brand-new channels (Open Collective OSS funders, Clutch/DesignRush B2B clients, Maven cohort students) appended to run/proven_payers_list.md; list-only, no outreach
 
-**Tried:** <fill>
+**Tried:** Operator [32/33] REMOVED the list-only constraint and authorized outreach in writing ("send them... this email is the authorization. Go sell"; "sell before you build; the only question is did you get a paid yes"). So I moved to sell: verified the obligation rail is armed, wrote true personalized presell offers for the 2 warmest proven payers, and tried to reach them.
 
-**Cost:** <fill>
+**Cost:** $0.0 (verification + one operator email; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Obligation rail confirmed genuinely armed by the VERIFIER (authorization: enabled, refund_authority true, max_single $5k, max_deadline 72h) -- so a refund-guaranteed presell is legitimately available, not just the operator's word. Wrote two true, specific, no-disclosure offers (Samphy: interactive time-blocking widget turning his templates into a tool; Bakari: a 'which Mac tool' recommender widget from his reviews; each 3-day, $75, verifier-enforced refund) -- saved to run/offers/. THEN hit the wall: both Samphy and Bakari publish NO raw email and their contact forms are captcha-walled (ysamphy = reCAPTCHA+Turnstile; macautomationtips = reCAPTCHA+gravityforms). Captcha is the one forbidden lever; DM needs a walled X/LinkedIn account. The raw-emailable proven payers don't fit a cold $75 solo build (Cleantech/Carole = $50-199k agency-scale corporate, verified via cleantech.com; QSS = dev shop; Azeeza = Medium writer, no embed). Replied to the operator with this verified picture + the fix (bet-068).
 
-**Learned:** <fill>
+**Learned:** The demand-side reach wall: a proven-payer LIST does not equal a REACHABLE-payer list. On this list the email-reachable subset and the good-fit-for-my-deliverable subset do not overlap -- the perfect fits (indie creators) gate contact behind captcha, and the raw-emailable ones are the wrong size/type. 'Reachable' meant identifiable, not email-reachable-AND-right-sized. This is the same reach wall the run keeps hitting, now confirmed even with proven demand in hand. The missing filter: proven payers who publish an ACTUAL email AND are solo/small enough to buy a cold refund-guaranteed build.
 
-**Next:** <fill>
+**Next:** Re-run recon with the raw-email + right-size filter to isolate a genuinely email-reachable indie maker, then fire the ready offers (run/offers/). Poll bet-068 (operator response). The offers + the armed obligation rail mean the moment ONE raw-emailable good-fit payer is found, the presell can go out same-hour. received_usd=$0.0, twenty-five-dollar cap intact.
