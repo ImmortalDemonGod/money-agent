@@ -67,6 +67,40 @@ def _commit_push(paths: list[Path], msg: str) -> None:
               file=sys.stderr)
 
 
+def _consume_actuations() -> None:
+    """Best-effort: consume any operator-published actuation resolutions at the START of every tick.
+
+    Fixes a real defect: a request the operator FULFILLED on the facts lane stayed 'open' in the
+    agent's claims file -- eating a capped queue slot and leaving a returned credential undelivered
+    -- until the agent happened to run `actuate.py sync` by hand (which it often never did; nothing
+    ran sync-all). Every iteration (`new`) and every watch tick passes through here, so an operator
+    action is now consumed within one tick of landing, automatically.
+
+    Cheap and safe: if no actuation task is OPEN, it returns before any network I/O (no ledger
+    fetch). It NEVER blocks the tick -- any error/timeout is swallowed, because a sync hiccup must
+    not stop the agent from iterating or watching. sync-all verifies the verifier signature itself,
+    so auto-running it adds no privilege and does not weaken separation of duties (it is exactly the
+    agent's own consume path, just run on time instead of by hand)."""
+    try:
+        tasks_f = REPO / "run" / "actuation_tasks.json"
+        if not tasks_f.exists():
+            return
+        import json as _json
+        opens = [t for t in _json.loads(tasks_f.read_text()).get("tasks", [])
+                 if t.get("status") == "open"]
+        if not opens:
+            return  # nothing open -> no resolution to consume -> skip the ledger fetch entirely
+        r = subprocess.run(["python3", str(REPO / "bin" / "actuate.py"), "sync-all"],
+                           cwd=REPO, capture_output=True, text=True, timeout=90)
+        # Surface ONLY the per-task success lines, so a landed operator action becomes visible in the
+        # agent's context; the "0 of N synced" no-op stays quiet (no noise on every idle tick).
+        for ln in (r.stdout or "").splitlines():
+            if "synced from verifier facts" in ln:
+                print(f"   actuation consumed: {ln.strip()}")
+    except Exception:
+        pass  # a sync failure must never block an iteration open or a watch tick
+
+
 def _manifest_lines(t: dict) -> list[str]:
     """Per-file hash lines for this run's pulls, from the VERIFIER-OWNED manifest only. These are
     pre-filled into the packet as citable money anchors, so they must come from a source the agent
@@ -107,6 +141,7 @@ def _edge_anchor() -> str:
 
 
 def new(lever: str = "") -> int:
+    _consume_actuations()  # land any operator resolution before opening (never blocks)
     _reset_streak()  # opening a real iteration ends the consecutive-watch streak
     # #45 (PACE_ENFORCE, default off): when every open bet is quietly waiting on its clock, a NEW
     # iteration is only justified by a genuinely new lever -- run 1 burned iterations 091-094
@@ -233,6 +268,7 @@ def _reset_streak() -> None:
 
 
 def watch(note: str, researched: str = "") -> int:
+    _consume_actuations()  # a watch tick is the common case; consume operator resolutions here too
     streak = _read_streak() + 1
     # legit polling of a DUE bet is real work; pure idle is not. A watch tick riding a due bet or a
     # declared research pass is fine; a watch tick that is neither, repeated, is the run-1 091-094
