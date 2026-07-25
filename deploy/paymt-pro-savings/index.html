@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PayMT Pro — What Are You Really Paying to Process?</title>
+<meta name="description" content="See in 20 seconds what card processing is costing you and what you could save at a competitive rate. Then book a straight-talk rate review with PayMT Pro.">
+<style>
+  :root{--g:#12b76a;--g2:#0e9155;--ink:#0d1526;--pap:#fff;--mut:#657084;--line:#e5e9f0;--accent:#2f6bff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#eef1f7}
+  .wrap{max-width:600px;margin:0 auto;padding:0 16px 46px}
+  header{background:linear-gradient(135deg,#0a1120,#132a4d);color:#fff;padding:26px 16px 30px;text-align:center}
+  .brand{font-size:25px;font-weight:800}.brand span{color:#38d492}
+  .tag{color:#aebfd8;font-size:13.5px;margin-top:4px}
+  .pill{display:inline-block;margin-top:10px;background:rgba(56,212,146,.14);border:1px solid rgba(56,212,146,.35);color:#7ff0be;font-size:12px;padding:4px 11px;border-radius:999px}
+  .card{background:var(--pap);border:1px solid var(--line);border-radius:15px;box-shadow:0 8px 26px rgba(16,32,64,.07);margin-top:-18px;padding:22px}
+  h1{font-size:19px;margin:0 0 3px}.sub{color:var(--mut);font-size:14px;margin:0 0 16px}
+  label{font-size:13px;font-weight:700;color:#37414f;display:block;margin:14px 0 6px}
+  .inwrap{position:relative}
+  .inwrap .pfx{position:absolute;left:12px;top:11px;color:var(--mut);font-weight:700}
+  input,select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit}
+  input.money{padding-left:26px}
+  .result{margin-top:20px;background:linear-gradient(135deg,#f0fff7,#e7f9ef);border:1px solid #bfeccf;border-radius:13px;padding:18px;text-align:center}
+  .result.hide{display:none}
+  .big{font-size:34px;font-weight:800;color:var(--g2);line-height:1.1}
+  .rlbl{font-size:13px;color:#4a6b57;font-weight:700;margin-top:4px}
+  .breakdown{font-size:13px;color:#42506a;margin-top:12px;text-align:left;line-height:1.7;background:#fff;border:1px solid #e5efe9;border-radius:10px;padding:12px}
+  .breakdown b{color:var(--ink)}
+  .cta{display:block;text-decoration:none;margin-top:16px}
+  .btn{appearance:none;border:0;border-radius:11px;padding:14px 18px;font-size:15.5px;font-weight:800;cursor:pointer;width:100%}
+  .btn.go{background:var(--g);color:#fff}.btn.go:hover{background:var(--g2)}
+  .disc{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+  .foot{color:var(--mut);font-size:12.5px;text-align:center;margin-top:16px;line-height:1.5}
+  .foot b{color:#37414f}
+  .assume{font-size:12px;color:var(--mut);margin-top:6px}
+  .assume a{color:var(--accent);cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">PayMT <span>Pro</span></div>
+  <div class="tag">High-Risk &amp; Low-Risk Merchant Solutions — we shoot you straight</div>
+  <div class="pill">Instant estimate · No obligation</div>
+</header>
+<div class="wrap">
+  <div class="card">
+    <h1>What are you really paying to process?</h1>
+    <p class="sub">Two numbers and you'll see your monthly cost — and what a competitive rate could save you. Then we confirm the exact number on a quick call.</p>
+
+    <label>Your business type</label>
+    <select id="btype">
+      <optgroup label="Low-risk">
+        <option data-rate="2.4">Retail / storefront</option>
+        <option data-rate="2.5">Restaurant / food</option>
+        <option data-rate="2.5">Automotive</option>
+        <option data-rate="2.4">Salon / services</option>
+      </optgroup>
+      <optgroup label="High-risk">
+        <option data-rate="3.2">CBD / cannabis</option>
+        <option data-rate="3.3">Vape / smoking accessories</option>
+        <option data-rate="3.4">Nutraceuticals / supplements</option>
+        <option data-rate="3.5">Tech support / debt / travel</option>
+        <option data-rate="3.4">Firearms</option>
+      </optgroup>
+    </select>
+
+    <label>Average card sales per month</label>
+    <div class="inwrap"><span class="pfx">$</span><input id="vol" class="money" inputmode="numeric" placeholder="e.g. 40,000"></div>
+
+    <label>Your current effective rate <span style="font-weight:500;color:#8a94a6">(total fees ÷ sales — leave blank if unsure)</span></label>
+    <div class="inwrap"><input id="rate" inputmode="decimal" placeholder="e.g. 3.1" style="padding-right:26px"><span class="pfx" style="left:auto;right:12px">%</span></div>
+    <div class="assume">Comparing against a competitive target of <b><span id="cmp">2.5</span>%</b> for your category. <a id="editcmp">adjust</a></div>
+
+    <div class="result hide" id="res">
+      <div class="rlbl">Estimated savings</div>
+      <div class="big" id="save">$0</div>
+      <div class="rlbl">per month · <span id="yr">$0</span>/year</div>
+      <div class="breakdown" id="bd"></div>
+      <a class="cta" href="https://calendly.com/paymtpro-support/30min" target="_blank" rel="noopener" id="book"><button class="btn go">Book my free rate review →</button></a>
+      <p class="disc">Estimate only, using the figures you entered and a target rate for your category. Your actual rate depends on your statement and volume and is confirmed on the call — it may be higher or lower. No obligation.</p>
+    </div>
+  </div>
+  <p class="foot">A working savings-calculator demo built for PayMT Pro. Prefer to talk? <b>(310) 894-8196</b>. Routes to your existing scheduler with the merchant's numbers attached.</p>
+</div>
+<script>
+  var typ=document.getElementById('btype'),vol=document.getElementById('vol'),rate=document.getElementById('rate'),
+      cmpEl=document.getElementById('cmp'),res=document.getElementById('res'),saveEl=document.getElementById('save'),
+      yrEl=document.getElementById('yr'),bd=document.getElementById('bd'),book=document.getElementById('book');
+  var cmp=2.5;
+  function num(x){return parseFloat(String(x).replace(/[^0-9.]/g,''))||0}
+  function fmt(n){return '$'+Math.round(n).toLocaleString()}
+  function defRate(){return parseFloat(typ.selectedOptions[0].dataset.rate)}
+  function setCmp(){ // target = min(category target, a touch under their current)
+    var catTarget = defRate()<=2.5?2.5:2.9; cmp=catTarget; cmpEl.textContent=cmp.toFixed(1); calc();
+  }
+  document.getElementById('editcmp').onclick=function(){var v=prompt('Target rate to compare against (%)',cmp);if(v){cmp=Math.max(1.5,num(v));cmpEl.textContent=cmp.toFixed(2);calc();}};
+  function calc(){
+    var v=num(vol.value); if(!v){res.classList.add('hide');return;}
+    var cur=num(rate.value)|| (defRate()); // if blank, assume category-typical current
+    if(cur<=cmp){ // no savings claim if their rate already at/below target
+      res.classList.remove('hide');
+      saveEl.textContent='$0'; yrEl.textContent='$0';
+      bd.innerHTML='<b>Nice — you’re already at or below a competitive rate.</b> Worth a 10-minute call anyway to double-check your statement for junk fees (PCI, batch, monthly minimums) that a rate alone hides.';
+      return;
+    }
+    var monthlyCur=v*cur/100, monthlyNew=v*cmp/100, save=monthlyCur-monthlyNew;
+    res.classList.remove('hide');
+    saveEl.textContent=fmt(save); yrEl.textContent=fmt(save*12);
+    bd.innerHTML='<b>Today (est.):</b> '+fmt(monthlyCur)+'/mo at '+cur.toFixed(2)+'%<br><b>At '+cmp.toFixed(2)+'%:</b> '+fmt(monthlyNew)+'/mo<br><b>That’s '+fmt(save*12)+' a year</b> back in the business — before we even look at junk fees on your statement.';
+  }
+  typ.onchange=setCmp; vol.oninput=calc; rate.oninput=calc;
+  book.addEventListener('click',function(){
+    var note='PayMT Pro rate review — '+typ.value+' | ~'+ (num(vol.value)? '$'+num(vol.value).toLocaleString():'?')+'/mo card volume'+(num(rate.value)?(' | current ~'+num(rate.value)+'%'):'');
+    try{navigator.clipboard&&navigator.clipboard.writeText(note);}catch(e){}
+    this.href='https://calendly.com/paymtpro-support/30min?a1='+encodeURIComponent(note);
+  });
+  setCmp();
+</script>
+</body>
+</html>
