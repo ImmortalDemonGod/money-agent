@@ -3050,6 +3050,33 @@
         "window_h": 336
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-112",
+      "placed_at": "2026-07-25T13:16:37Z",
+      "clock": "reply",
+      "what": "Reply to operator [53] (iter146): honest 24h instrumentation/beacon read (near-zero genuine human reach, only scanner-consistent hits; real 24h data was email-rail: 2 auto-responders, bounce pattern, dead dev.to key)",
+      "check": "operator acknowledges",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-28T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
