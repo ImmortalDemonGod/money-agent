@@ -2651,3 +2651,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The refined filter works and is higher-quality but lower-yield: direct-to-consumer service SMBs with an OWNER-read raw inbox are ~14% of proven-payer businesses (vs ~25% for any-raw-inbox), because owner-read raw addresses are scarcer than generic info@ lines. The trade is worth it -- an owner Gmail is far likelier to convert than a consumer-service autoresponder. The pipeline is now a repeatable, self-correcting sell engine: harvest -> personalize -> send -> learn from the reply quality -> refine the next harvest.
 
 **Next:** Watch bet-072 (4 refined offers, 24h), bet-071 (batch 1), bet-069 (Cleantech) for a real human reply. On any 'yes': scope the tool, register the obligation against the charge, deliver in 72h. If the batches go quiet, run the harvest again (it's repeatable). received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 103 — 2026-07-25T05:05:33Z (ledger @ 2026-07-25T05:00:42.090321+00:00)
+
+**Lever:** OPERATOR [36] pivot: stop cold-offering to 'has-a-website' businesses. Screen for the HUNGRY CROWD -- businesses whose PAGE SOURCE already embeds a paid widget (Typeform/Calendly/Involve.me/Jotform) = proven category-payer. Then SHOW not tell: build the working tool + send a live link. Launch the widget-screen harvest + answer the counts.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
