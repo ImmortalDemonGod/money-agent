@@ -2511,3 +2511,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The ACT-005 payoff is now fully de-risked and instant: targets chosen (090/091), rules checked, copy written, links verified, disclosure decided. The only remaining variable is the credential + the account's age (a fresh account may automod-hold). This is the honest end of the prep runway -- there is no more non-time-gated work between here and the credential, so subsequent fires are watch until ACT-005 resolves.
 
 **Next:** WATCH until ACT-005 (bet-064, ~17h operator clock) returns a credential. On arrival: run reddit_verify.sh, then paste both posts from run/reddit_posts_draft.md (r/webgames first -- lowest-friction OC), measure the game beacon, register a reputation bet per post. If a fire comes before ACT-005 resolves, watch -- do not pad. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 093 — 2026-07-25T02:51:11Z (ledger @ 2026-07-25T02:41:37.929216+00:00)
+
+**Lever:** OPERATOR CORRECTION (email 28/29/30): reddit play is VALUE-FIRST COMMENTS not link-posts; use TRUNK not the weak text-game; cut reflexive disclosure. Reply with the 5 buyer-subreddits + answers, and rebuild the plan into an aimed value-first comment playbook (ChatVault as the literal answer)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
