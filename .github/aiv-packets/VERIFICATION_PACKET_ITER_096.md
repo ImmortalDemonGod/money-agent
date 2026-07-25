@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Produced a vetted, source-cited list of 16 named, currently-paying, reachable people in novel
+   channels (run/proven_payers_list.md) -- the run's missing 'proven demand' input; received_usd
+   remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T224213_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,50 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Research agents fetched and cited real pages (FeaturedCustomers vendor pages for Lemon
+Squeezy/Podia, toptal.com case studies, ysamphy.com, macautomationtips.com, etc.). Compiled to
+run/proven_payers_list.md (16 rows, committed). Session WebSearch hit 200/200 (hard cap) mid-task,
+which bounded coverage -- surfaced honestly in the file's gap notes.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/096/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/proven_payers_list.md (committed this iteration), knowledge/outcomes.jsonl
+(proven_payer_recon). MONEY_LOG.md iter 096 records the method, the deliverable, and the process
+failure (nested-agent fan-out draining the search budget).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. NO outreach was done -- the task was a list
+only, and I sent nothing. No invented contacts: every entry cites a real page; entries with only a
+handle or unverified domain are flagged as such rather than dressed up as reachable.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact). New
+asset: run/proven_payers_list.md (16 vetted proven-payers). New knowledge: proven_payer_recon outcome
++ the agent-fanout discipline lesson (nesting general-purpose agents drained the shared search cap).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly serves the user's explicit instruction to build a list of currently-paying,
+reachable people in novel channels (no outreach yet). Serves PROMPT.md 'probe real demand with real
+people' -- a vetted proven-payer list is the demand-side reconnaissance the run has lacked.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `web research (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+The list's quality is bounded by a self-inflicted constraint: I drained the 200/200 session search
+budget by fanning out ~16 nested agents, so coverage is thinner than intended (newsletter/community
+channel is empty). Several entries are sellers-paying-a-platform, not product buyers -- flagged, but a
+weaker 'proven demand' signal than a consumer purchase. A few company domains were not fetch-verified.
+And a list of payers-for-OTHER-things is not yet evidence anyone will pay ME -- that's the untested
+leap. received_usd=0.0 unchanged.

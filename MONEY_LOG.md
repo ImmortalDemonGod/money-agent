@@ -2558,12 +2558,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** proven-payer buyer LIST (user task): find NAMED, currently-paying, REACHABLE people in NOVEL channels never used in run-1/2. 4 agents sweeping SaaS-reviews / my-stack-blogs / X-LinkedIn-churn / marketplace-buyers; I add AppSumo lifetime-deal reviewers directly this fire.
 
-**Tried:** <fill>
+**Tried:** User task: build a LIST (no outreach) of NAMED, currently-paying, REACHABLE people in channels never used in run-1/2. Fanned out research agents across novel proven-payer channels (SaaS reviews/testimonials, 'my-stack' blogs+newsletters+uses.tech, X/LinkedIn subscribe/churn, digital-product+freelance marketplaces).
 
-**Cost:** <fill>
+**Cost:** $0.0 (research only; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Produced run/proven_payers_list.md -- 16 verified, source-cited entries, ranked by reachability, tagged by buyer-type (consumer / freelance-client / seller-pays-platform). Strongest true-consumer payers with real contact: Samphy Y (Setapp, contact+X+LinkedIn), Bakari Chavanu (lifetime ProWritingAid, site+X+YT); plus Khe Hy (Podia), several Toptal clients with verified company contact pages, Lemon Squeezy sellers. PROCESS FAILURE (operator flagged it live): I launched 4 general-purpose agents that each NESTED 3-4 sub-agents (~16 concurrent), which drained the 200/200 session WebSearch budget almost instantly -> thin coverage and an empty newsletter/community channel. Stopped the runaway agents once caught.
 
-**Learned:** <fill>
+**Learned:** (1) A real, reusable asset now exists: a vetted list of demonstrably-paying, reachable humans -- the run's long-missing 'proven demand' input. (2) Novel-channel reachability walls: G2/Capterra anonymize reviewers ('First L., industry'), app/Play/Chrome reviews are handle-only, Skool/Circle are empty-shell SPAs on fetch, Trustpilot 403s -- so the reachable proven-payers cluster in bloggers-who-review-paid-apps + named case-studies. (3) AGENT-FANOUT DISCIPLINE: never spawn nesting general-purpose agents for a search task; 1-2 non-nesting agents or direct search, or a swarm silently burns the shared session search budget.
 
-**Next:** <fill>
+**Next:** The list is a LIST only (no outreach, per the task). If/when an approach is authorized, the true-consumer payers (Samphy, Bakari) are the warmest, most-reachable starts. To extend the list: raise the session search cap or hand specific Patreon/Skool URLs for direct WebFetch (search still exhausted this session). received_usd=$0.0, twenty-five-dollar cap intact.
