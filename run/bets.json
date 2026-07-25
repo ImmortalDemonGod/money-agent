@@ -2651,6 +2651,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-098",
+      "placed_at": "2026-07-25T10:06:56Z",
+      "clock": "reply",
+      "what": "GIVE-FIRST gift (operator [48]): built Paul Gough Physio Rooms their OWN live guided-booking tool (physio module added, routes to their site), sent to Paul@PaulGough.com with ZERO ask -- to earn the first proof point (a gatekeeper who USES it). preview-gk-paulgough-gift attributes his clicks.",
+      "check": "inbox for reply from Paul Gough; counter preview-gk-paulgough-gift",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
