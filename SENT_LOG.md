@@ -2633,3 +2633,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T12:11:19.724727+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** hello@addoaesthetics.com
+- **Subject:** a free perk for the practices you coach
+- **Body:**
+
+```
+Hi,
+
+Addo Aesthetics coaches aesthetics entrepreneurs, physicians and spa business leaders, so you have the trust of exactly the owners I built something for. That is why I am bringing this to you, not selling to them.
+
+I built a short guided step that sits in front of a business's own Calendly or Acuity: a client answers a couple of quick questions, gets pointed to the right appointment, and lands on the existing scheduler with their answers attached. Fewer wrong bookings, fewer no-shows, more of the appointments they already work to earn actually happening.
+
+Here is the idea, and it is not a pitch. I would like to give this to the aesthetic practices you coach, free, personalized to each of their businesses, as a perk of being with you. I do not want a cut and I am not selling them anything. If it works, the only things I would love back are the case study, one whose booking numbers improved, and an introduction to the ones who want it set up. You look generous, your people get a real result, and "the tools in my program visibly move your numbers" is exactly the retention story you are in the business of telling.
+
+Want me to build a version with your program name on it so you can see exactly what your members would get?
+
+Best,
+Miguel Ingram
+
+```
