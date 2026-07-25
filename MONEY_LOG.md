@@ -3281,3 +3281,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The instrumentation's real signal is REPLIES, not beacon pings, and replies concentrate entirely in the gatekeeper channel -- so "where to focus" is answered by the reply data, not the (uniformly scanner-consistent, single-digit) beacon data. The beacon is instrumenting the wrong channels. Concrete fix: future gatekeeper sends should carry a tracked link where deliverability allows, to stop flying blind on the one channel that responds. Also operational: CounterAPI rate-limits a burst; read counters spaced (curl -L, trailing slash).
 
 **Next:** Act on the data: keep the gatekeeper channel as the focus (institutional ones like ACT Dental / Private Practice Pro that auto-acknowledged are the warmest), stop press + crawler-fix, and instrument the gatekeeper sends. Watch bet-107 (v2 retention) + bet-111 (guided-tool conversion) for the first weekday reply; bet-109 (dev.to re-issue) + ACT-005 (reddit) remain the reach unblocks. received_usd=$0.0, cap intact.
+
+## Iteration 148 — 2026-07-25T13:33:47Z (ledger @ 2026-07-25T13:31:03.254929+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
