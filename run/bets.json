@@ -2801,8 +2801,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-08-01T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T10:34:33Z",
+      "checks": [
+        {
+          "at": "2026-07-25T10:34:33Z",
+          "note": "gray gift click=2 but at 10:26Z ~6min post-send = scanner/preview bot, not human; no reply"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
