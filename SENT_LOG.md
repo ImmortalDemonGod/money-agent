@@ -1503,3 +1503,26 @@ Market is wide, understood. The reachable seam that actually pays for a widget A
 Miguel Ingram
 
 ```
+
+## 2026-07-25T06:41:49.297744+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** kevinjoseph@bloomfunctionalmedicine.com
+- **Subject:** a guided step before your Bloom membership booking
+- **Body:**
+
+```
+Hi Dr. Joseph,
+
+Quick one. On your plans-and-pricing page a prospective patient reads a flat tier table and then has to self-select an Acuity appointment type. That asks someone who is not a clinician to diagnose which tier and which visit fits them, and that hesitation is where a lot of them quietly leave.
+
+I build a short guided step that sits in front of that: the patient answers a few questions (main concern, what they have already tried, goals), gets a clear "here is the Bloom tier and first visit that fits you," and then lands on your existing Acuity scheduler with the right appointment type pre-selected and their answers attached. Fewer mismatched bookings, more people who actually start.
+
+Here is a live example of the kind of guided fit-quiz I build. It was built for a different kind of practice, so yours would be functional-medicine specific, but click it on your phone and you will see the idea in about 20 seconds:
+https://host-salon-application.vercel.app/?s=bloom
+
+If it is useful, I will build your version and send you the live link to try, free, no commitment. If it routes better-fit patients than the flat table, we can talk then. Reply and I will start on it.
+
+Best,
+Miguel Ingram
+
+```
