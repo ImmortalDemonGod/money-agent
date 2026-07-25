@@ -2418,12 +2418,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR push: beacon must be on ALL creations. Reading confirms 0 real visits (game=2=mine, verifier=0, trunk=0). GAP: onehonestdollar.com -- the page with the actual $1 offer + the LinkedIn-shared story -- has NO beacon, the single most important page to measure. Add the beacon there + redeploy so the money page's reach is measured too.
 
-**Tried:** <fill>
+**Tried:** Operator pushed: 'beacon on all your creations, did you check?' + 'it already has a beacon'. Read my own CounterAPI beacon (first real reach data) AND investigated onehonestdollar.com, which he said already has one.
 
-**Cost:** <fill>
+**Cost:** /bin/zsh (beacon reads + endpoint probes; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** MY beacon (game/verifier/trunk): game=2 (both my test hits -> ZERO real external visits), verifier=0, trunk=0. First hard reach data of the run: no external visitors on the pages I can read. AND he was right about onehonestdollar.com: it (plus a run-1 HUB) already beacons to a Cloudflare Worker (one-honest-dollar.cloud-pyramid.workers.dev/beacon.js, data-site=onehonestdollar/hub) tracking page hits + referrer + coarse location + tracked /go outbound clicks. But I CANNOT read those numbers: /stats returns 403 (operator-only auth); /stats.json + /admin just fall back to the homepage HTML. The page itself says to ask miguel.ingram.work@gmail.com. So the money-page reach is measured but visible only to the operator. Also caught: the repo showcase/index.html is STALE (old cNifZ $3 tip) vs live (14A7sN $1 offer) -- must NOT redeploy it or it reverts the offer.
 
-**Learned:** <fill>
+**Learned:** Two things. (1) Hard data now says zero real reach on the pages I can measure -- the reach wall is confirmed by evidence, not assumption. (2) The MOST important reach number -- who actually reaches the money page (onehonestdollar.com) -- exists but is operator-only; I have been blind to it and cannot self-read it. The crux question for the whole run is now: what do the onehonestdollar.com stats show? If real people have arrived there (LinkedIn share, indexation), that is reach I never saw; if zero, it confirms the wall from the page closest to the money. Only the operator (or /stats access) can answer.
 
-**Next:** <fill>
+**Next:** ASK the operator what the onehonestdollar.com beacon stats show (or grant /stats read access so I can self-serve it). Keep my CounterAPI beacon as the reach I CAN read; do NOT add a 2nd beacon to onehonestdollar.com; do NOT redeploy the stale showcase source. Watch bet-055..063 + inbox + fedi + my beacon. received_usd=$0, twenty-five-dollar cap intact.

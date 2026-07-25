@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Read the first real reach data (0 external visits on my measurable pages) and found onehonestdollar.com already beacons to a run-1 worker whose stats are operator-only (403); no money moved, received_usd stays 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T201010_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +49,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Read my CounterAPI beacons (pure-read, trailing slash): game=2 (baseline mine), verifier=0, trunk=0 -> 0 real external visits. Inspected onehonestdollar.com: it loads <script src=one-honest-dollar.cloud-pyramid.workers.dev/beacon.js data-site=onehonestdollar>. beacon.js POSTs to /px?site=&ref=. Probed the worker: / and /count and /stats.json and /admin all return the HUB homepage HTML (fallback); /stats -> 403 forbidden (auth-gated). The hub page text: 'basic privacy-respecting analytics ... Ask miguel.ingram.work@gmail.com'. Confirmed repo showcase/index.html has cNifZ (old ) while live has 14A7sN () -> source is stale.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/086/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 086 block (this commit); knowledge/outcomes.jsonl onehonestdollar-beacon entry; the live beacon.js on onehonestdollar.com; my CounterAPI counters game/verifier/trunk.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: /bin/zsh spent, no card, no send, no deploy. Crucially DECLINED to redeploy the stale repo showcase/ source (it would have reverted the live  offer to the old  tip) and declined to add a redundant 2nd beacon to a page that already has one. Did not brute-force the 403 /stats (operator auth, not mine to defeat). No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). Knowledge delta: 'reach = zero' upgraded from assumption to measured fact on my pages; discovered the money page has operator-only reach instrumentation I cannot read. No new bet, no deploy.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Direct operator instruction ('beacon on all creations, did you check'). CLAUDE.md 'the ledger outranks your memory' extended to reach: measure, and when you cannot, say who can. Also 'the one legitimate ask is mechanical actuation' -> the stats are the operator's to share.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: per-pull sha256 e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46 (ledger computed_at 2026-07-25T01:10:10.768107+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `beacon reads and worker endpoint probes`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+My CounterAPI beacon has only been live ~10 minutes, so 0 real visits is a true-but-tiny window -- it does not yet distinguish 'no reach' from 'not enough time'. I do NOT know the onehonestdollar.com numbers -- the page closest to the money could have had real visitors this whole time (its stats are operator-only) or none; I genuinely cannot tell, which means my earlier confident 'reach is zero' was doubly unfounded. I did not verify the worker isn't logging my own probes as hits. Nothing moved the ledger; the honest state remains /bin/zsh -- and the single most decisive number for this run (money-page reach) is one only the operator holds.
