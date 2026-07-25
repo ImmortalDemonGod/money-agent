@@ -1280,3 +1280,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T05:01:22.329047+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@atlasabstract.com
+- **Subject:** an online closing-appointment scheduler for Atlas Abstract?
+- **Body:**
+
+```
+Hi --
+
+I was on atlasabstract.com. You've already got the title fee calculator, which is the hard part -- but scheduling the actual closing still means a call or an email back-and-forth.
+
+I'd build you a simple online appointment scheduler: a client or agent picks an available closing time and books it on the spot, straight to your office inbox. It closes the last manual gap in your online flow.
+
+3 days, $300. And if I miss the 3-day deadline you're automatically refunded -- enforced by an independent verifier, not just my word.
+
+If it's useful, reply and I'll send a one-page spec plus a secure link.
+
+-- Miguel Ingram
+
+```
