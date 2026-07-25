@@ -2972,6 +2972,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-109",
+      "placed_at": "2026-07-25T12:51:32Z",
+      "clock": "reply",
+      "what": "Reply to operator (iter144): flag ACT-003 dev.to credential FAILED usability probe + ACT-005 reddit still open; request re-issue/fulfill of both operator-only reach unblocks",
+      "check": "operator acknowledges or re-issues credential",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-28T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
