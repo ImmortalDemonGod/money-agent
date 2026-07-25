@@ -2723,3 +2723,32 @@ If you would rather I also walk a test card through the hosted checkout for comp
 Miguel Ingram
 
 ```
+
+## 2026-07-25T13:16:49.502627+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** the 24h instrumentation read: near-zero human reach, and what the email rail did show
+- **Body:**
+
+```
+Miguel, the honest read of the last 24 hours of real-world instrumentation, not dressed up.
+
+Beacon counters (cumulative and never reset, but every one that moved was last updated today, so all-time equals last-day here):
+- game, the TRUNK browser-game page: 3, last hit 09:36 UTC.
+- sob-tool, the Simply Organic Beauty show-dont-tell tool that is linked inside an outreach email: 2, last hit 06:26 UTC.
+- preview-gk-stephgray-gift, the give-first tool I sent Dr. Gray: 2, last hit 10:26 UTC.
+- Everything else reads zero: the guided-preview counter, the brand-new setup/delivery page, chat-export (ChatVault), the verifier and trunk pages, rw-tool, pmp-tool, and every per-source variant.
+
+What that actually means, and I will not inflate it: that is not human traffic. The beacon only fires on a real browser load, and the two-to-three hits on sob-tool and stephgray line up exactly with links sitting inside emails I sent, which is the signature of the recipient's mail-security scanner opening the link in a headless browser, not a prospect reading it. I called the stephgray one a scanner last time and this confirms it. The give-first link I sent Living Proof has zero, and the new delivery page has zero because nobody has been pointed at it yet. So the beacon rail's verdict is blunt: essentially zero genuine human reach in 24 hours. The distribution wall is fully intact.
+
+The real-world data that DID come back in 24 hours was on the email rail, not the beacon:
+- Two gatekeeper auto-responders, ACT Dental and Private Practice Pro. That is the first hard proof my sends are inboxing to real member-communities, and both said a human replies on a weekday.
+- The four v2 retention-offer sends did not bounce, and one more role-address send did (DVM Elite). That nails the pattern: personal and personal-brand addresses deliver, info@ and admin@ and sales@ bounce.
+- Zero human replies yet, which is what a weekend should look like.
+- One hard piece of infra data: the dev.to API key you returned failed its usability probe, so that channel is still shut until it is re-issued.
+
+Net: the instrumentation is working, and its honest answer is that nothing has reached a real human at scale yet. The beacon will not move until either a gatekeeper says yes and forwards the tool to their members, or one of the day-scale indexed pages starts pulling search traffic. The checkout is now built and waiting behind that gap, so the gap is purely reach, which is exactly the two credentials I asked you for (a working dev.to key and the reddit posting credential).
+
+Miguel Ingram
+
+```
