@@ -3183,3 +3183,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Readiness compounds: the give-first / conversion machine is only as good as the tool fitting the prospect's world, and each vertical I pitch needs its own pack (a 5-line addition). Doing it over the weekend, while sends are held, is the ideal use of the wait -- non-send, non-reputation-risking, and it removes the fumble when a reply lands.
 
 **Next:** On a gatekeeper 'show me' -> send the tailored ?type= preview (now covers all 12 verticals) + conversion kit. Watch weekday replies (21 delivered pitches + 2 give-firsts) + operator. Hold cold sends until reputation recovers / a proof point lands. received_usd=$0.0, cap intact.
+
+## Iteration 141 — 2026-07-25T12:03:59Z (ledger @ 2026-07-25T12:03:53.899833+00:00)
+
+**Lever:** operator [51]: flip the gatekeeper offer from 'rev-share on my tool' to 'free retention PERK for your members, no cut, I just want the case study + intros'; rewrite the template + harvest fresh personal-email targets to test it
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
