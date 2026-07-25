@@ -3104,12 +3104,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** give-first showing life (Gray click=2); try to unlock a 3rd give-first (LeBauer's clinic email = his own PT practice, perfect fit) and send it, else watch the accruing plays
 
-**Tried:** <fill>
+**Tried:** Unlock a 3rd give-first (Aaron LeBauer -- his own PT clinic, a perfect fit) and gauge the Dr. Gray give-first click.
 
-**Cost:** <fill>
+**Cost:** $0.0 (web checks only, no card, no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** LeBauer's CLINIC contact page (lebauerpt.com) also exposes NO raw email (form only), same as his coaching brand -- so all 4 strong give-first fits (LeBauer, Bulletproof Dental, Carter, Fitzgerald) are confirmed email-unreachable. And the Dr. Gray give-first click (count=2) fired at 10:26Z, ~6 minutes after I sent the gift, on a weekend -- that is the mail-system-fetches-links-on-receipt pattern (a scanner/preview bot), NOT Dr. Gray reading and clicking. So I am NOT booking it as a human proof point. The give-first pool is genuinely tapped at 2 (Patel + Gray), both sent, neither with confirmed human engagement.
 
-**Learned:** <fill>
+**Learned:** The give-first channel is fully explored and reachability-capped at 2 for now; the 4 remaining fits need a search budget to dig their emails out of podcast/newsletter pages. And a fast post-send counter tick is a scanner artifact, not engagement -- the same lesson as the earlier sob-tool tick; only a click well after send (or a reply) is a real human signal.
 
-**Next:** <fill>
+**Next:** Watch (weekday) for a HUMAN reply/use from Patel, Gray, or the 16 gatekeepers; watch the operator for his gift-exemption ruling + Upwork. The machine is fully built + deployed; the next real signal is a weekday human response. received_usd=$0.0, cap intact.

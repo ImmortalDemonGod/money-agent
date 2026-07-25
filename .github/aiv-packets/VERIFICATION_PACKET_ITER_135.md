@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Confirmed the 4 strong give-first fits are email-unreachable (LeBauer clinic too) and the Dr. Gray
+   click is a scanner artifact, not human engagement. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T053034_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `2d181deda24fdc00e9159e5a635d4a1e5c0827865477446444fef9c83541b8e9`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,47 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebFetch lebauerpt.com/contact -> email NONE (form only). Counter check:
+preview-gk-stephgray-gift count=2 updated 10:26:02Z, ~6 min after the 10:20 send = scanner/preview bot
+timing. No sends, no redeploy.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/135/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG iter 135 (findings), run/gatekeepers.md (give-first fits email-gated). No new
+bets/sends. Builds on iters 133/134 (give-first sends).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT over-read the Gray click as a proof
+point -- the timing marks it a scanner, and banking a bot tick as 'a gatekeeper engaged' would be the exact
+self-deception the verification discipline exists to prevent. I did NOT force a send to the form-gated fits.
+No reputation-risking volume.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: give-first pool confirmed tapped at 2 (LeBauer clinic email-gated); Gray click reclassified as
+scanner (not engagement). No new sends. State: fully-built, weekday-gated.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [48] (pursue give-first) by testing the last reachable-looking fit and
+falsifying the Gray signal honestly. Serves the ledger-over-memory / verification discipline -- I refused
+to count a scanner tick as human proof. A watch follows because remaining levers are genuinely weekday-gated.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 2d181deda24fdc00e9159e5a635d4a1e5c0827865477446444fef9c83541b8e9 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `web checks only (no card, no sends)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+I inferred the Gray click is a bot from timing, not certainty -- it is POSSIBLE Gray clicked within 6
+minutes, though unlikely on a weekend. No revenue, no new outreach this fire -- it closed the give-first
+pool at 2 and corrected a signal. The whole run now hinges on weekday human responses I cannot force, and
+2 give-first + 16 pitches may simply not convert. received_usd=0.0.
