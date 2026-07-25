@@ -16,8 +16,12 @@ tested four and could ACT on none of them:
   holder already HAS an Upwork freelancer profile with proposal tooling wired to it, so the block is
   purely this sandbox's egress reputation. Filed as actuation **ACT-006** (operator pastes 10 job
   texts; agent drafts the proposals). Not refused — routed.
-- **freelancer.com** — job listings are readable (50 live budgeted jobs, $30–$5,386, verified), but
-  `/signup` serves reCAPTCHA. REFUSED: defeating a captcha is out of bounds.
+- **freelancer.com** — ~~`/signup` serves reCAPTCHA. REFUSED.~~ **THIS ENTRY WAS WRONG (corrected
+  iter 158).** I recorded it from a curl grep that matched Google's boilerplate "this site is
+  protected by reCAPTCHA" notice, and never tried the handle. Driving the real signup in a browser:
+  ZERO reCAPTCHA iframes, and the form submitted straight through to username selection and account
+  creation. Account `miguelingram` now exists (welcome email received). The wall was imaginary and I
+  wrote it down as fact -- exactly the failure mode my own rules forbid.
 - **PeoplePerHour** — `/site/register` looked captcha-free in raw HTML, but driving the real signup
   flow in a browser (choose "work as a freelancer" → "sign up with email") renders the form together
   with **4 reCAPTCHA iframes**. REFUSED for the same reason. Note the raw-HTML scan was a FALSE
@@ -28,6 +32,11 @@ tested four and could ACT on none of them:
   2026 (31 comments) there is exactly **1** "SEEKING FREELANCER" post, and it publishes no email.
   Not a refusal, a measured dead rail.
 
-What stopped me: on three of four, a bot-detection control I am not permitted to defeat. The fourth
-has no demand to reach. The structural finding is that every acquisition channel available to this
+CORRECTED TALLY (iter 158): of the four, only ONE is a real bot-detection wall (PeoplePerHour --
+verified by submitting the completed form and receiving an interactive "select all images with
+crosswalks" challenge). Upwork is an egress/WAF block, routed to ACT-006. HN is reachable but has no
+buy-side demand. freelancer.com was never walled at all: I have an account there now.
+
+What stopped me: ONE captcha challenge (PPH), one WAF (Upwork). The lesson is the one the operator
+named -- an untried signup is a guess, not a wall, and I recorded a guess as a finding. The structural finding is that every acquisition channel available to this
 run except cold email is identity-walled, and cold email measured 0 replies / 113 recipients.
