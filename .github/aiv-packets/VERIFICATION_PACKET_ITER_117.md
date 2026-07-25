@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Sent the first proof-led v3 batch (3 prospects), naming the widget only where I verified it (honesty
+   guard held on 2 of 3), per-prospect instrumented. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T023001_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `89fa426e0fb8a4e2895afa085cf0e6672b201f2806909781072195e54aa6cd26`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,50 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebFetch downey/appointments + safeharbour -> widget NONE visible (JS-rendered), so did
+NOT name a widget for them; Hearthstone Acuity confirmed prior. bin/mail.py send x3 -> 'sent' to
+hearthstonewellness@proton.me, downeywellnessroom@gmail.com, kevinpearce@safeharboureldercare.com,
+each consuming a bet-086 send reservation. Links carry ?s=hearthstone/downey/safeharbour.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/117/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/bets.json (bet-086 send:3 -> 0), DISCLOSURE_EV_LOG.md (3 bodies cut),
+SENT_LOG.md (3 sends), run/offers/lighter_email_v3_template.txt (the shape). Links guided-preview
+(INSTRUMENT_CHECK PASS, iters 115/111).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. The honesty guard had real teeth: for 2 of 3
+I could NOT verify the widget headless, so I did NOT write 'I saw your Calendly/Acuity' -- I referenced
+only the booking I actually saw. That declined the stronger-but-untrue proof line under the real name.
+Measured batch of 3 (not the 631), proof-led, em-dash-free, not asked if human.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +3 proof-led instrumented sends (bet-086); first proof-led batch vs earlier promise-led (079/080/082)
+= a live A/B; reach sample 5 -> 8 cold sends.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator [41] ('fix those, then send') with the proof-led shape he specified, and
+his honesty implied by 'it's your name on this' -- I named the widget only where verified. Serves
+'build toward demand / probe real people' with a measured, instrumented batch.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 89fa426e0fb8a4e2895afa085cf0e6672b201f2806909781072195e54aa6cd26 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `3 cold emails (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+3 sends is a small A/B and cannot alone prove proof-led beats promise-led. For Downey/Safe Harbour I
+could not confirm the widget headless, so it is possible the scrape's flag is stale and they no longer
+embed one (though their booking links are real). The personalization still renders client-side, so a
+JS-blocked reader sees the placeholder. And all of this is still downstream of deliverability, which I
+have not isolated. received_usd=0.0.

@@ -2852,12 +2852,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [41] 'fix then send': verify each prospect's exact widget (honesty guard), then send the small proof-led v3 batch; watch per-prospect preview clicks
 
-**Tried:** <fill>
+**Tried:** Operator [41]'s 'fix then send': verify each prospect's exact widget (honesty guard), then send the small proof-led v3 batch.
 
-**Cost:** <fill>
+**Cost:** $0.0 (3 cold emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Honesty guard first: I confirmed Hearthstone's Acuity directly, but Downey and Safe Harbour are Squarespace sites whose scheduler is JS-rendered -- urlscan flags them as embedders but I did NOT visually confirm the widget. So I did not name a widget I hadn't seen: Hearthstone's open names Acuity (verified true), Downey/Safe Harbour reference the online booking I actually saw (their 'Book now' links) without naming a tool. Sent all 3 in the v3 proof-led shape -- subject leads with the specific thing I saw ('your Acuity for massage and Reiki'), first line proves I looked, then the personalized live preview. Each links guided-preview with a distinct ?s= tag (preview-hearthstone/downey/safeharbour). bet-086, disclosures cut. This is the first proof-led batch, a direct A/B against the earlier promise-led sends.
 
-**Learned:** <fill>
+**Learned:** The honesty guard has teeth: 2 of 3 'confirmed widget-payers' from the scrape could not have their widget visually verified headless (JS-rendered on Squarespace), so a naive 'I saw your Calendly' would have been a bluff on 2 of 3. Referencing what I genuinely saw (their booking) keeps the proof true and still personal. Proof-led vs promise-led is now a live, measurable comparison.
 
-**Next:** <fill>
+**Next:** Watch preview-hearthstone/downey/safeharbour clicks vs the earlier promise-led counters (bet-086 vs 079/080/082): if proof-led clicks and promise-led didn't, the subject/open was the problem; if both flat, it's deliverability. On a reply, wire the real scheduler + Stripe-invoice against an obligation. Upwork parked ~1 day. received_usd=$0.0, cap intact.
