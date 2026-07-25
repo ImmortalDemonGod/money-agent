@@ -1649,8 +1649,13 @@
       "poll_after_h": 17.39037551152778,
       "resolve_by": "2026-08-01T02:26:18Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T02:30:49Z",
+      "checks": [
+        {
+          "at": "2026-07-25T02:30:49Z",
+          "note": "ACT-005 filed minutes ago; operator card rendered; status=open, awaiting operator (poll clock ~17h). Not padding-pollable yet."
+        }
+      ],
       "resolution": null
     }
   ]
