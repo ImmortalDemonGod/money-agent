@@ -3412,6 +3412,33 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-126",
+      "placed_at": "2026-07-25T20:49:58Z",
+      "clock": "reply",
+      "what": "GIFT-FIRST MESSAGE A/B (operator [68] q3): 13 fresh un-tooled contractors get the rewritten first touch -- free working branded tool + link in sentence one, explicit 'I am not asking you for anything to use it', diagnosis moved BELOW the gift, $49 a single optional closing line. Control arm is the 26 diagnosis-first sends at 0 replies. This tests the MESSAGE, not volume: the send count is not being raised.",
+      "check": "python3 bin/mail.py inbox 30 for replies from the 13 domains; counterapi estimate-<slug> click counters",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-08-01T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "non-technical home-service contractors bleeding won bids to quote-speed -> instant custom estimate tool",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 120
+      },
+      "authorizes": {
+        "send": 13
+      },
+      "spent_usd": 0.0
     }
   ]
 }
