@@ -2603,11 +2603,15 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-08-01T00:00:00Z",
       "status": "open",
-      "last_checked": "2026-07-25T09:44:31Z",
+      "last_checked": "2026-07-25T10:13:49Z",
       "checks": [
         {
           "at": "2026-07-25T09:44:31Z",
           "note": "no human gatekeeper replies yet (weekend; ACT/PPP promised weekday follow-up); no bounces on batch 3"
+        },
+        {
+          "at": "2026-07-25T10:13:49Z",
+          "note": "no human gatekeeper replies yet (weekend); no new bounces on the 16"
         }
       ],
       "resolution": null,
