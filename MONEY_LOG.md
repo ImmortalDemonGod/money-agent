@@ -2684,12 +2684,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** build-and-show target #2 (operator [36]): build PayMT PRO (proven Calendly-payer, merchant payment processor) a live working merchant-savings calculator + book-qualified-consult flow, host it, send support@ the link to USE
 
-**Tried:** <fill>
+**Tried:** Build-and-show target #2 (operator [36] motion): build a proven-category-payer a live working tool and send the owner the link.
 
-**Cost:** <fill>
+**Cost:** $0.0 (build + deploy + one email; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Built PayMT Pro (a merchant payment processor that already pays for Calendly, high-risk + low-risk accounts, 'we shoot you straight') a transparent merchant-savings calculator: pick business type -> enter volume + current rate -> see estimated monthly/annual savings with the math shown and honestly labeled, then book the rate review with the numbers attached. Deployed live to Vercel (paymt-pro-savings.vercel.app, HOST_CHECK PASS, P3 recorded), emailed support@paymtpro.com the link to try, no upfront price. Second show-dont-tell -- two live tools now out (Repair Wizards + PayMT Pro) alongside the 9 cold offers.
 
-**Learned:** <fill>
+**Learned:** The screen->build->host->show pipeline is fully repeatable at roughly one target per iteration, and it is honest at each step: the calculator shows its math, labels the estimate, and gracefully handles a merchant already at a good rate (no fake-savings claim). The Vercel deploy path is reliable now. This is the strongest motion the run has had -- a working, tailored tool in a proven-payer's hands for the cost of a build.
 
-**Next:** <fill>
+**Next:** Watch bet-074 (Repair Wizards) + bet-075 (PayMT Pro). One reachable widget-payer remains to build-and-show (Simply Organic Beauty / Jotform salon-partner app). Ruedi Wealth is form-only (no email). On any reply: hand over / integrate + invoice (register the obligation). Also watch the 9 prior offers. received_usd=$0.0, twenty-five-dollar cap intact.

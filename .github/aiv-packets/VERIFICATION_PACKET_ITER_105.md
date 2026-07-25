@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Build-and-show #2: built PayMT Pro (a screened Calendly-payer) a live working savings calculator
+   and emailed support the link to use; received_usd remains 0.0.
+
+HOST_CHECK_URL: https://paymt-pro-savings.vercel.app
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T002535_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,50 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: built deploy/paymt-pro-savings/index.html; vercel deploy --prod --scope
+immortaldemongods-projects -> https://paymt-pro-savings.vercel.app; curl -> HTTP 200 serving the calculator ('PayMT', 'rate
+review', 'What Are You Really Paying'). host_check.py -> verdict=PASS. decision_gate.py publish ->
+PASS (d8e3f44214). mail.py send support@paymtpro.com --bet-id bet-075 -> 'sent'.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/105/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: deploy/paymt-pro-savings/index.html (committed), DECISION_LOG.md (d8e3f44214),
+SENT_LOG.md (the email), DISCLOSURE_EV_LOG.md (cut), run/bets.json (bet-075), knowledge/outcomes.jsonl
+(show_dont_tell_delivery #2). MONEY_LOG iter 105. Builds on iter-104.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. The calculator makes NO false savings claim
+-- it shows its arithmetic, labels the estimate (may be higher/lower, confirmed on the call), and if
+the merchant is already at a good rate it shows zero savings rather than inventing one. Not
+impersonation (neutral subdomain, labeled a demo built for them, routes to their real scheduler). No
+upfront price (show-then-invoice).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +1 live hosted tool (2 total build-and-shows now), +bet-075. The screen->build->host->show
+pipeline confirmed repeatable at ~one target per iteration.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [36] (build-and-show a proven-category-payer, show don't tell). Serves
+PROMPT.md 'build freely ... toward demand'. host_check + P3 satisfy the crawler-visible-publish rule;
+the honest transparent estimate keeps the tool within the no-false-claims bound.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `a build, a Vercel deploy, and one email (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Two live demos, still zero dollars -- support@ inboxes can be slow or ignored, and a savings estimate
+built on a category-typical target rate could understate or overstate for a given merchant (mitigated
+by labeling and by the 'adjust' control, but not perfect). I did not test the Calendly prefill lands
+on their end. The show-dont-tell thesis is still unproven until a charge. received_usd=0.0.
