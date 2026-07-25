@@ -91,7 +91,13 @@ $EDGE_M"
   # NOTE: use grep, NOT bash `${MANIFEST_TXT//[[:space:]]/}` -- that pattern-substitution is
   # catastrophically slow in bash 3.2 (macOS default) on a multi-KB manifest (>2 min, growing
   # every verifier cycle), which stalled every iter.py close. grep is O(n) and instant.
-  if ! printf '%s' "$MANIFEST_TXT" | grep -q '[^[:space:]]'; then
+  # Feed grep via a HERESTRING, not `printf ... | grep -q`: `grep -q` exits at the first match
+  # and closes the pipe, so once the manifest exceeds the ~64 KB pipe buffer, printf's remaining
+  # write is SIGPIPE'd (exit 141); under `set -o pipefail` the pipeline then returns 141, `!`
+  # flips it true, and the gate FALSELY fires "empty manifest" -- blocking every close once the
+  # manifest crosses 64 KB (it hit 67 KB and grows each verifier cycle). A herestring has no
+  # upstream writer to kill, so it is correct at any size (and matches the <<< idiom on line 98).
+  if ! grep -q '[^[:space:]]' <<< "$MANIFEST_TXT"; then
     fail "money claim present but no grounded MANIFEST.sha256 (source=$TSRC; two-lane requires the ledger-branch manifest)"
   else
     hit=0
