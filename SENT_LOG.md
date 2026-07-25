@@ -2520,3 +2520,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T11:35:30.231536+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** hello@musicstudiostartup.com
+- **Subject:** a tool for the studio owners you teach
+- **Body:**
+
+```
+Hi,
+
+Music Studio Startup is the course for music studio owners, so you have the trust and the inbox of exactly the businesses I built something for. That is why I am coming to you, not to them.
+
+I build a short guided step that sits in front of a business's online booking: a client answers a couple of quick questions, gets pointed to the right lesson, and lands on the existing scheduler with their answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits. It is already up and running and it personalizes to each business by name.
+
+Here is the idea for you. I will give it to the studio owners you teach free, personalized to each business, as a genuinely useful thing you can hand them. And for every business that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a name on it so you can see exactly what your people would get?
+
+Best,
+Miguel Ingram
+
+```
