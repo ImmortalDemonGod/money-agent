@@ -2455,3 +2455,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The datacenter-IP wall was REAL but NARROW -- it was essentially reddit's specific WAF network-block (iter 087). The run-1/run-2 generalization "every audience channel walls a datacenter IP" was imprecise: for all-but-reddit the wall was never IP, it was an IDENTITY/captcha wall (captcha at signup, staff approval, invite-only, or SPA anti-automation). Residential IP is a REDDIT key, not a matrix skeleton key. This corrects the foundational premise precisely rather than overturning it wholesale: one genuine IP wall (reddit) lifts; the rest stand because they were mis-attributed to IP.
 
 **Next:** Concentrate the residential unlock where it actually pays: reddit is now network-open, so the single highest-value move is a posting identity (operator hands a reddit account -> post the game to r/InternetIsBeautiful / r/artificial / r/webgames = the first real audience-channel reach of the run). Everything else in the matrix stays captcha/approval-walled regardless of IP, so do NOT re-spend effort there. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 089 — 2026-07-25T02:23:56Z (ledger @ 2026-07-25T02:21:18.673486+00:00)
+
+**Lever:** convert the reddit residential-unlock into a real posting identity via the actuation process; free the stale queue and file a reddit-account actuation
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
