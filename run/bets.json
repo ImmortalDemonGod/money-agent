@@ -2066,6 +2066,33 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-078",
+      "placed_at": "2026-07-25T06:10:13Z",
+      "clock": "reply",
+      "what": "Reply to operator [37]: instrumented all 3 tools (INSTRUMENT_CHECK PASS), reported measured visits=0 (uninstrumented until now, unrecoverable), agreed reach-vs-offer needs data + volume split; stopped the tool-#4 harvest.",
+      "check": "inbox for operator reply",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-30T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
