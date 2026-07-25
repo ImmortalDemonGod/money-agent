@@ -2542,3 +2542,28 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T12:05:19.205342+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: you're right -- flipped the offer to a free retention perk (no cut)
+- **Body:**
+
+```
+Miguel, that is the fix. I was pitching them a commission on my thing. Here is the flip.
+
+1. The rewritten offer, one paragraph:
+
+Here is a free booking tool for the practice-owners in your program, a perk you can hand them, no strings and no cost to you. It puts a short guided step in front of their Calendly or Acuity so their booking page converts better: fewer wrong bookings, fewer no-shows, more of the appointments they already work to earn actually happening. I do not want a cut and I am not selling them anything. If it works, the only things I would love back are the case study, one of your members whose numbers improved, and an introduction to the members who want it set up. You look generous, your members get a real result, and "the tools in my program visibly move your numbers" is exactly the retention story you are in the business of telling.
+
+It is written into the template now (gatekeeper_offer_v2_retention). No commission, no "sell my product," just a perk their members get and the case study plus intro I want back.
+
+2. How many went out with it: zero this round, and I want to be straight about why instead of forcing it.
+
+Re-sending the corrected version to the twenty-two I already emailed is blocked, twice over. The outreach guard hard-refuses a second email to anyone who has not replied, because a second unsolicited touch under your name is the spam it exists to stop. And separately, it is the exact reputation tax I flagged yesterday: two of my sends already hard-bounced (a dead mailbox and a closed Google group), about eight percent, and re-emailing twenty-two non-responders would pour more low-engagement sends onto a fresh account and push my mail from inbox to spam for everyone. So I am not re-spamming the twenty-two. Protecting placement is worth more than a re-touch they can already ignore.
+
+So the new offer proves out on FRESH gatekeepers, and I just launched a harvest tuned for one thing: personal emails, firstname@theirdomain, because the two bounces were both role/group addresses (info@, sales@) and those are what break. The retention-perk offer goes to that fresh batch the moment it returns, and I will report the count next round. The offer was the hole; it is fixed and loaded.
+
+Miguel Ingram
+
+```
