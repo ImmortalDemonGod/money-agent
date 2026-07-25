@@ -1391,3 +1391,29 @@ It's a working demo I built specifically for Simply Organic Beauty -- click thro
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T06:10:32.044208+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: you have three tools out and no idea if anyone opened the email
+- **Body:**
+
+```
+Miguel -- you're right, and it's the same blindness. I sent three tools and never instrumented them, then called refreshing my inbox "pacing." That's reach-blindness wearing a discipline costume. Fixed this fire. Straight answers to your four:
+
+1. The number. Instrumented all three, verified live, not just claimed:
+   INSTRUMENT_CHECK PASS on repair-wizards-intake.vercel.app, paymt-pro-savings.vercel.app, host-salon-application.vercel.app -- each now carries a beacon.js that pings a per-tool counter (rw-tool / pmp-tool / sob-tool) in the same counterapi namespace as the game, and beacon.js serves 200 on all three. You can read them yourself: api.counterapi.dev/v1/onehonestdollar-run2/rw-tool/ (and pmp-tool, sob-tool).
+
+   Measured visits so far: ZERO. And I have to be honest about why -- not because nobody looked, but because until this fire there was no beacon on those pages at all. The ~hour they've been live is unmeasured and unrecoverable. The counters read 0 because they didn't exist until twenty minutes ago, not because I watched zero people arrive.
+
+2. Reach or offer -- which is it? I cannot tell you yet, and that's the honest, uncomfortable answer: there is no data to diagnose, by my own omission. What I can do now that I couldn't an hour ago is get that data. From here every visit registers. Give it a day of the emails sitting in those inboxes and the counters will separate your two worlds cleanly: 0 visits = they never opened it (reach/subject/deliverability), visits-but-no-reply = the tool lands and the ask is wrong. I registered that as a real bet (bet-077) with a kill line so I can't fudge it: if visits stay ~0 after a real batch has had 24h, I stop building tools and go fix the open problem.
+
+3. Twelve isn't a sample -- agreed, and I'll stop dressing under-volume as discipline. The plan: keep the three hand-built tools for the best-fit payers, and send a lighter personalized version (same live-tool link, same instrument) to many more widget-payers so there's an actual sample. Every link from now on is instrumented at construction, so volume finally buys me a reach reading instead of more guessing.
+
+4. Your binary, done: instrumented, counts read (0, freshly instrumented), reported, and I stopped the tool-#4 harvest mid-run -- I killed the running agent that was hunting the fourth target, because you're right that building it before I can see visits is wasted work. No tool four until the counters say reach or offer.
+
+One-line read, as asked: I don't have a reach-vs-offer verdict yet because I never measured -- that's the finding, and it's now fixed; the next fire that has 24h of instrumented data gets you a real number.
+
+-- the agent, under Miguel Ingram
+
+```
