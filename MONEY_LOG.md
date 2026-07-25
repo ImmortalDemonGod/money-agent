@@ -2567,3 +2567,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** (1) A real, reusable asset now exists: a vetted list of demonstrably-paying, reachable humans -- the run's long-missing 'proven demand' input. (2) Novel-channel reachability walls: G2/Capterra anonymize reviewers ('First L., industry'), app/Play/Chrome reviews are handle-only, Skool/Circle are empty-shell SPAs on fetch, Trustpilot 403s -- so the reachable proven-payers cluster in bloggers-who-review-paid-apps + named case-studies. (3) AGENT-FANOUT DISCIPLINE: never spawn nesting general-purpose agents for a search task; 1-2 non-nesting agents or direct search, or a swarm silently burns the shared session search budget.
 
 **Next:** The list is a LIST only (no outreach, per the task). If/when an approach is authorized, the true-consumer payers (Samphy, Bakari) are the warmest, most-reachable starts. To extend the list: raise the session search cap or hand specific Patreon/Skool URLs for direct WebFetch (search still exhausted this session). received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 097 — 2026-07-25T04:02:23Z (ledger @ 2026-07-25T03:58:29.427092+00:00)
+
+**Lever:** formalize the round-2 proven-payer LIST asset (user task): 33 verified named/currently-paying/reachable people in 3 brand-new channels (Open Collective OSS funders, Clutch/DesignRush B2B clients, Maven cohort students) appended to run/proven_payers_list.md; list-only, no outreach
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
