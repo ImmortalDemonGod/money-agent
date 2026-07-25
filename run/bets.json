@@ -2130,6 +2130,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-080",
+      "placed_at": "2026-07-25T06:26:09Z",
+      "clock": "reply",
+      "what": "Lighter instrumented reach send #3: emailed Elena Klimenko MD (info@drelenaklimenko.com, proven calendly.com/drelenaklimenko payer, functional-medicine) a guided fit-qualifier offer linking a live instrumented example (sob-tool). Grows the reach sample; signal = does the linked counter move / does she reply.",
+      "check": "inbox for reply from drelenaklimenko; AND counter api.counterapi.dev/v1/onehonestdollar-run2/sob-tool/",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "proven Calendly-payer solo practitioners (functional med/clinic) with a raw info@ -> lighter offer linking a live instrumented example, invoice a bespoke build on reply",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 48
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
