@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Ran the exact cold email through deliverability tests: SPF/DKIM/DMARC PASS + delivery confirmed, but
+   the /10 and Gmail-tab were not obtainable headless; reported honestly. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T030107_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `efd064425d43f0b4864dc7268f0278118b71eb92ab0fd640caa3eac1f4f8c2f3`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,49 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: sent exact v3 to check-auth@verifier.port25.com -> report [43] SPF=pass DKIM=pass DMARC=pass.
+Created mail.tm inbox via API (POST /accounts,/token) and sent exact v3 there -> arrived intact (1 message,
+correct subject/from). mail-tester address JS-only (fetch gets no address); isnotspam no reply. Operator
+reply sent (bet-089). Test-sends via bet-087/088.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/119/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: knowledge/outcomes.jsonl (deliverability method + finding), run/bets.json (bet-087/088/089),
+DISCLOSURE_EV_LOG.md (bodies cut), SENT_LOG.md (port25/isnotspam/mail.tm/operator sends). port25 report is
+inbox msg [43].
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT invent a spam score -- I told the
+operator exactly which numbers I could not get and why, rather than fabricate the /10 he asked for. I did
+NOT send email nine to a prospect before checking deliverability (his explicit instruction). Test-sends
+went only to automated verifiers + a throwaway inbox, not to people.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: deliverability now PARTIALLY known -- auth PASS + delivery CONFIRMED (was fully unknown); /10 and
+Gmail-tab still unknown (tooling-gated); +knowledge outcome (headless deliverability method); +bet-087/088/089.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly executes operator [42] (measure deliverability before the subject A/B; run the exact
+template + gmail through a test; report the number and placement). Serves the honest-reporting bound -- I
+reported the measurement GAP rather than a fabricated score, and named the residual risk precisely.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = efd064425d43f0b4864dc7268f0278118b71eb92ab0fd640caa3eac1f4f8c2f3 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `3 test-sends to automated verifiers (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+I proved auth + delivery but NOT the thing that actually decides the reach read: Gmail's inbox/promotions/spam
+tab. So I cannot confirm the operator's spam-tab thesis, only that it's consistent and unrefuted. The /10 is
+genuinely absent. My recommended fix (plain-text first touch) is a hypothesis, not a measured win, and it
+trades away the first-touch click metric. The 8 sends' zero clicks remain ambiguous (tab vs copy). received_usd=0.0.

@@ -2880,12 +2880,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [42]: deliverability is upstream -- run the EXACT v3 email from the exact gmail through a deliverability test, report the spam score + where it landed, then fix the biggest trigger (likely the raw vercel link)
 
-**Tried:** <fill>
+**Tried:** Operator [42]'s mandate: deliverability is upstream of the subject A/B -- measure whether the email even reaches an inbox before anything else. Ran the exact v3 email + real gmail through headless deliverability tests.
 
-**Cost:** <fill>
+**Cost:** $0.0 (3 test-sends to automated verifiers, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** SPF+DKIM+DMARC all PASS (sent the exact v3 to check-auth@verifier.port25.com; its report replied to my inbox, readable). Delivery CONFIRMED: created a readable throwaway inbox via the mail.tm API and the exact vercel-link email arrived intact. So auth + transport are NOT the wall. Could NOT get the SpamAssassin /10 (mail-tester's test address is JS-injected, ungettable headless; isnotspam never replied) or the Gmail inbox/promotions/spam tab (the only Gmail I control is the sender, and a self-send never filters). Replied to the operator with the honest findings + the gap (no invented number) + a recommended fix: move the link out of the cold touch entirely (plain-text first email, proof-of-looking + idea + 'want the preview?', link only after a reply), which removes the vercel-link trigger he flagged, at the cost of the first-touch click metric (bet-089).
 
-**Learned:** <fill>
+**Learned:** Auth failure, the usual cold-email killer, is NOT my problem -- Gmail signs everything so I pass clean, and the message delivers intact to a fresh inbox. The residual risk is exactly the one I can't see: Gmail's soft tab-sorting on content/reputation (new gmail + raw vercel.app link + cold B2B). Zero clicks across 8 sends is consistent with promotions/spam-tab sorting, which would mean the subject A/B was measuring a coin that never left my hand. Can't confirm the tab headless.
 
-**Next:** <fill>
+**Next:** On the operator's pick, run the plain-text-first-touch arm (no link, measure replies) or move the preview to a controlled domain, as a real deliverability fix. Upwork parked ~1 day (likely the first real dollar). received_usd=$0.0, cap intact.
