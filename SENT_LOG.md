@@ -2031,3 +2031,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:21:52.436106+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** admin@theprivatepracticepro.com
+- **Subject:** a tool for the therapists you coach
+- **Body:**
+
+```
+Hi Kelley,
+
+You share daily private-practice advice with over a hundred thousand therapists on Instagram, so you have the trust and the inbox of exactly the practice owners I built something for. That is why I am coming to you, not to them.
+
+I build a short guided step that sits in front of a practice's their scheduler: a few questions, a clear "here is the right appointment," then their own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits. It is already up and running, and it personalizes to each practice by name.
+
+Here is the idea for you. I will give it to the therapists you help start and grow their practices free, personalized to each practice, as a genuinely useful thing you can hand them. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a practice name on it so you can see exactly what your people would get?
+
+Best,
+Miguel Ingram
+
+```
