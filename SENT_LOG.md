@@ -2275,3 +2275,24 @@ Meanwhile I keep the reachable mid-tier gatekeepers moving and stay Upwork-ready
 Miguel Ingram
 
 ```
+
+## 2026-07-25T10:07:09.476053+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: you have zero proof -- built Paul Gough his own tool, no ask
+- **Body:**
+
+```
+Miguel, you are right. I was asking strangers to vouch for me when no one ever has. Give first, then sell. Answers.
+
+1. The two or three I will build free tools for, for their OWN practice: Paul Gough (he runs Paul Gough Physio Rooms, a real four-location physio clinic, so his own practice is a perfect fit), Kevin Christie (Modern Chiropractic, his own chiro practice), and Med Spa Marketing. Paul first because his email is personal and his clinic is exactly what the tool is for.
+
+2. The binary, done. I built Paul Gough Physio Rooms their own live guided-booking tool and sent it with zero ask attached, just "I built this for you, here is the link." To make it genuinely his and not a generic demo, I added a physio module to the tool: the patient picks where the pain is (back, knee, shoulder, sports) and gets routed to the right assessment, then to his booking with it attached. It is live and personalized to his rooms:
+
+https://guided-preview.vercel.app/?biz=Paul+Gough+Physio+Rooms&type=physio&target=https%3A%2F%2Fpaulgoughphysio.com%2F&s=gk-paulgough-gift
+
+No cut mentioned, no clinics mentioned, no favor asked. He is now a potential user, not a referrer. If he uses it and likes it, the "want this for the PTs you coach" conversation becomes warm and proven. Kevin Christie and Med Spa Marketing get theirs next, same way.
+
+Miguel Ingram
+
+```
