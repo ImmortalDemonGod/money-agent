@@ -1918,3 +1918,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:11:42.507844+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** young@medspamarketing.com
+- **Subject:** a tool for your med-spa clients
+- **Body:**
+
+```
+Hi,
+
+You help med-spa owners get more patient appointments, so you already have the trust and the inbox of exactly the people I built something for. That is why I am coming to you, not to them.
+
+I build a short guided step that sits in front of a med spa's Calendly or Acuity: a few questions, a clear "here is the right appointment," then their own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, more of the appointments you work to drive actually completing. It is already live and personalizes to each spa by name.
+
+Here is the idea for you. I will give it to your clients and audience free, personalized to each spa, as something useful that makes your own results look better. And for every spa that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a spa's name on it so you can see exactly what it does?
+
+Best,
+Miguel Ingram
+
+```
