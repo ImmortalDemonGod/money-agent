@@ -2446,12 +2446,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** systematic residential re-probe of the full walled-channel matrix (extends iter-087 reddit finding: which run-1 'closed' channels were datacenter-IP walls that now lift on residential)
 
-**Tried:** <fill>
+**Tried:** From the confirmed residential IP (149.76.79.26), curl-probed network reachability + residual-captcha for the previously-"closed" matrix: Japanese platforms (qiita/zenn/note), Product Hunt, Bluesky, Lemmy, Indie Hackers, Lobsters.
 
-**Cost:** <fill>
+**Cost:** $0.0 (curl probes; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** Almost the whole matrix is network-reachable from residential: qiita.com/zenn.dev/note.com=200, bsky.app=200, lemmy.world/signup=200, indiehackers.com=200, lobste.rs=200. The ONLY residual network-level blocks: Product Hunt=403 (edge Turnstile persists) and HN write-path=429 (from iter 087). Residual NON-IP walls confirmed intact where checked: qiita signup carries reCAPTCHA. So the recorded walls for these channels were captcha / approval / invite / SPA-onboarding -- NOT IP -- and residential does not touch them.
 
-**Learned:** <fill>
+**Learned:** The datacenter-IP wall was REAL but NARROW -- it was essentially reddit's specific WAF network-block (iter 087). The run-1/run-2 generalization "every audience channel walls a datacenter IP" was imprecise: for all-but-reddit the wall was never IP, it was an IDENTITY/captcha wall (captcha at signup, staff approval, invite-only, or SPA anti-automation). Residential IP is a REDDIT key, not a matrix skeleton key. This corrects the foundational premise precisely rather than overturning it wholesale: one genuine IP wall (reddit) lifts; the rest stand because they were mis-attributed to IP.
 
-**Next:** <fill>
+**Next:** Concentrate the residential unlock where it actually pays: reddit is now network-open, so the single highest-value move is a posting identity (operator hands a reddit account -> post the game to r/InternetIsBeautiful / r/artificial / r/webgames = the first real audience-channel reach of the run). Everything else in the matrix stays captcha/approval-walled regardless of IP, so do NOT re-spend effort there. received_usd=$0.0, twenty-five-dollar cap intact.
