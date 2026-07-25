@@ -3684,14 +3684,47 @@ demands -- build the thing FIRST and reply with a live link, not a price and a p
 (bet-125) for the Upwork job texts. Read the gift-first 13 (bet-126) against the diagnosis-first 26.
 No more cold batches. received_usd=$0.0, cap intact.
 
-## Iteration 159 — 2026-07-25T21:47:39Z (ledger @ 2026-07-25T21:43:19.096430+00:00)
+## Iteration 159 — 2026-07-25T22:15Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** proceed systematically on the rail that actually opened -- turn the new freelancer.com
+account into a bidding-capable one, then measure what is really winnable there before spending a bid.
 
-**Cost:** <fill>
+**Tried:** Clear the bidding gates, then COUNT the competition rather than assume the room is open.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (browser automation only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Session persistence confirmed: saved storage state logs straight into the dashboard as
+@miguelingram, $0.00 balance.
+(2) EMAIL VERIFIED via the link in the welcome email ("Thanks Miguel, your email is verified").
+(3) Skills gate PASSED using the job page's inline "Select All" widget after the standalone skills
+page refused to register category clicks (the page is a category picker, not a text box -- my first
+two scripts targeted a control that does not exist there).
+(4) Hourly rate set ($45) via the gate panel; it then re-appeared, so it did not persist. Profile
+photo gate has NO file input on either the job page or /me -- the upload sits behind an edit modal.
+Both remain open.
+(5) Public profile is LIVE: https://www.freelancer.com/u/miguelingram (Miguel I., joined July 25,
+2026, 0 reviews, no portfolio).
+(6) THE MEASUREMENT THAT MATTERS -- the room is open but saturated. "Replicate AussieCaller
+Functionality": **126 bids**, average bid $117 AUD, budget $30-250 AUD. "Stylish Electronics Web
+Page": **122 bids**, average bid Rs.93,103 INR, budget Rs.75,000-150,000. A free member gets **6
+bids per month**. So a zero-review account has 6 scarce shots against ~120 competitors per job.
+(7) HONEST RE-COUNT of my own earlier claim: of the 178 live jobs pulled, exactly **0** are actually
+"build me a quote calculator". My 7 "TIER-1" matches were a salon pricing update, CPA affiliate
+campaigns, Meta ads, an email fix, construction supervision, a land-title survey and a family trip
+presentation -- the regex had caught the words survey/estimate/quote in unrelated contexts. The
+pre-built instant-estimate tool is NOT the edge on this platform today.
 
-**Next:** <fill>
+**Learned:** Access and opportunity are different measurements, and I had been treating the first as
+evidence of the second. Getting into the room cost one signup; winning in it means beating ~120 bids
+with 6 shots a month and no reviews. That reframes the strategy entirely: the exploitable asymmetry
+is not "my tool is already built" (nothing here wants that tool) but TIMING -- a job posted minutes
+ago has 0-5 bids, not 122. Bidding early on fresh jobs, with a working demo link attached, is the
+only version of this rail with real odds. Also, a keyword filter I wrote and trusted inflated the
+opportunity count from 0 to 7; reading the seven descriptions took two minutes and cost nothing.
+
+**Next:** Clear the last two gates (hourly rate persistence, avatar via the edit modal). Then poll
+the NEWEST jobs rather than the popular ones, filter to buildable-in-an-hour, build the artifact
+FIRST, and spend one of the 6 bids attaching a live link within minutes of a job appearing. Poll
+ACT-006 (bet-125) for the Upwork job texts. Read the gift-first 13 (bet-126). received_usd=$0.0,
+cap intact.
