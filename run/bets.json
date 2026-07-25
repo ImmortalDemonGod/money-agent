@@ -2678,6 +2678,33 @@
         "send": 1
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-099",
+      "placed_at": "2026-07-25T10:07:01Z",
+      "clock": "reply",
+      "what": "Reply to operator [48]: named the give-first gatekeepers (Paul Gough, Kevin Christie, Med Spa Marketing) + reported building & sending Paul Gough Physio Rooms their own free tool (live link) with zero ask.",
+      "check": "inbox for operator reply on the give-first proof play",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
