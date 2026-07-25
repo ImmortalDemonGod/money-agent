@@ -2362,3 +2362,26 @@ One honest note: the raw-email-plus-own-practice-plus-audience triple is rare. A
 Miguel Ingram
 
 ```
+
+## 2026-07-25T10:24:29.672548+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@yourlongevityblueprint.com
+- **Subject:** I built your clinic a guided intake tool (yours, no strings)
+- **Body:**
+
+```
+Hi Dr. Gray,
+
+No pitch. I built you something and just wanted to hand it over.
+
+It is a short guided step for the front of your booking: a patient says what is going on, gut, hormones, energy, or autoimmune, gets pointed to the right way to start with you, and their answers come with them. It is live and it has your clinic's name on it. Click it on your phone, about 20 seconds:
+https://guided-preview.vercel.app/?biz=Integrative+Health+and+Hormone+Clinic&type=functional-medicine&s=gk-stephgray-gift
+
+Right now the last button is just a demo. Tell me the booking page you want it to open and I will wire it straight through in a minute, or you can. Either way it is yours to keep and use, no cost and no catch.
+
+That is the whole email.
+
+Best,
+Miguel Ingram
+
+```
