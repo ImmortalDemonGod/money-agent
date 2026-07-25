@@ -1259,3 +1259,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T05:01:14.718099+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** BoxOfficeLevittPavilion@gmail.com
+- **Subject:** an online RSVP widget for Levitt Pavilion?
+- **Body:**
+
+```
+Hi --
+
+I was on levittpavilion.com. Reservations and inquiries run through the box-office phone, email, and Google Forms right now -- a lot of manual handling, especially in season.
+
+I'd build you a simple online RSVP / seat-reservation widget (and, if useful, a venue-rental request scheduler): a patron reserves a spot or requests a rental date right on the site and it lands in your box-office inbox, no phone tag. Smoother for the team and for patrons.
+
+3 days, $300 -- and happy to keep it simple given you're a nonprofit. If I miss the 3-day deadline you're automatically refunded, enforced by an independent verifier, not just my word.
+
+If it's useful, reply and I'll send a one-page spec plus a secure link.
+
+-- Miguel Ingram
+
+```
