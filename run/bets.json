@@ -2854,6 +2854,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-105",
+      "placed_at": "2026-07-25T11:34:47Z",
+      "clock": "reply",
+      "what": "New-vertical gatekeeper batch (operator [45] 'send forty', toward 22 sent): 6 proof-led plain-text pitches to fresh gatekeepers across vet/acupuncture/salon/gym/law/music (DVM Elite, Michelle Grasek, Salon Owners Collective, Two-Brain, Great Legal Marketing, Music Studio Startup). Extends the channel to 6 new verticals; the tool fits any online-booking business.",
+      "check": "inbox for replies from dvmelite/michellegrasek/salonownerscollective/twobrainbusiness/greatlegalmarketing/musicstudiostartup",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-02T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 6,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 6
+      },
+      "spent_usd": 0.0
     }
   ]
 }
