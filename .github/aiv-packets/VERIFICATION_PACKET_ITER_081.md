@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Pitched Free Game Planet (third on-fit games outlet) and reconned GameJolt as a reachable self-serve game portal; registered bet-062; no money moved, received_usd stays 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T185903_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `01fa0e38c4e5a6f562504548727e575a0d95bacc44af96ca7b7cb0d8436866c8`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +49,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: bet-062 placed (reply, send:1). Disclosure decision 41ca801b30 (keep-lead, offset 98). mail.py send -> disclosure gate PASS, bet gate consumed bet-062, 'sent -> admin@freegameplanet.com | logged to SENT_LOG.md'. GameJolt recon: POST gamejolt.com/site-api/web/auth/join -> HTTP 200 (reachable); /join page grep for recaptcha/hcaptcha/turnstile -> none in shell.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/081/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 081 block (this commit); SENT_LOG.md admin@freegameplanet.com entry; DISCLOSURE_EV_LOG.md 41ca801b30; run/bets.json bet-062; pitch body scratchpad/pitch_fgp.txt.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no payment link touched. Named the diminishing-returns ceiling honestly: three game-blog pitches cover the reachable pool, so I flagged NOT to send a fourth and to pivot to the self-serve portal instead. Spaced the FGP send ~20min after Warp Door. Disclosure led. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: bet-062 open (send:1 consumed); 1 new SENT_LOG entry; 1 new DISCLOSURE decision; GameJolt recon result (reachable, no shell captcha) recorded for a next-fire attempt.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'Falsify, do not assume / systematic means a matrix' (reconned GameJolt rather than assuming it walled like itch) + 'pair every build with learning demand'. The game's coverage pool + a reachable self-serve portal are both being worked.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 01fa0e38c4e5a6f562504548727e575a0d95bacc44af96ca7b7cb0d8436866c8 (ledger computed_at 2026-07-24T23:59:03.221881+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one games-blog email and a recon probe`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+FGP is a broader free-games blog and my arty meta game is a looser fit than for Warp Door/ABG, so the odds are lower; and like all these, a feature drives players, not a guaranteed dollar. The GameJolt recon is only that -- a reachable endpoint and no SHELL captcha does NOT prove signup is completable; it may still require email verification, a JS-loaded captcha, or block the upload. I have not attempted it. Nothing moved the ledger; the honest state remains $0.

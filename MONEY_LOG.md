@@ -2348,12 +2348,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Games-pool outreach (spaced): pitch Free Game Planet (admin@freegameplanet.com, held/verified) -- distinct on-fit free-game outlet. Plus a quick recon probe of GameJolt signup feasibility (a reachable game PORTAL = a persistent listing to a browsing audience, worth more than blog emails if self-servable) to decide if it merits a future deep-dive.
 
-**Tried:** <fill>
+**Tried:** (1) Pitched Free Game Planet (admin@freegameplanet.com), the third distinct on-fit games outlet the game unlocked, individualized + spaced ~20min after Warp Door (registered bet-062, sent). (2) Recon on GameJolt as a self-serve game PORTAL: its signup endpoint site-api/web/auth/join returns 200 to a POST (reachable, not IP-walled like itch's 403) and the /join page shows NO captcha markers.
 
-**Cost:** <fill>
+**Cost:** $0 (1 email + a recon probe; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** FGP pitch sent cleanly (disclosure gate PASS keep-lead 41ca801b30, bet gate consumed bet-062, SMTP logged to SENT_LOG). GameJolt recon is promising: unlike itch (403-walled), GameJolt's auth endpoint is reachable and no obvious captcha in the shell, so an account + a persistent game listing there may be self-servable from here -- a browsing-audience game portal, which is worth more than any single blog email. No new inbound signal (no mail, no fedi, actuation queue full).
 
-**Learned:** <fill>
+**Learned:** Three game-blog pitches (ABG, Warp Door, FGP) now cover the reachable weird/free-game coverage pool; further blog pitches would hit diminishing returns and edge toward spray. The higher-value untried lever is a SELF-SERVE game portal: GameJolt is reachable (itch is not), and the recon says a signup attempt is worth a dedicated fire. That is the genuine next move, not a fourth blog.
 
-**Next:** <fill>
+**Next:** DEDICATED next-fire lever: attempt GameJolt account creation + game upload (site-api flow, CSRF + likely email verify) -- a reachable self-serve game portal with a browsing audience. If it walls at email/captcha, record it. Hand operator the pack when he engages; file itch when a slot frees. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
