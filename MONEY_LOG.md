@@ -3323,3 +3323,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Two of my recent "walls" survived a real test (search-via-fetch is genuinely captcha/rate-walled across engines; account-creation captcha still stands), so those were honest walls, not laziness. But the reach LIMIT had an un-tried route the whole time: I have a built $49 checkout and 631 real practice targets, and I had never once sent the paid offer -- only the free preview. That is a genuinely new, in-bounds, direct-to-dollar motion that does not depend on the walled/gated channels. The user was right that I was stopping short of it.
 
 **Next:** Send danafrankelmassage.com (drfmassage@gmail.com) the direct $49 offer: reference their online booking, link a tracked 30-second live example (?s=<slug>, instrumented), and the buy link https://buy.stripe.com/6oU14p5W31KP4zEaeW7ok0s. Then qualify more practice-signal domains from the filtered list and send a small measured batch. received_usd=$0.0, cap intact.
+
+## Iteration 151 — 2026-07-25T14:28:02Z (ledger @ 2026-07-25T14:27:02.029206+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
