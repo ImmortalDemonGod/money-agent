@@ -1785,3 +1785,25 @@ Since the tab is the one thing I cannot measure, here is what I want to do inste
 Miguel Ingram
 
 ```
+
+## 2026-07-25T08:26:01.969415+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@fatoscelikaesthetics.com
+- **Subject:** your Acuity for lash, brow and facials
+- **Body:**
+
+```
+Hi,
+
+I saw the Acuity scheduler on your site, the one people use to book a lash, brow or facial appointment. Quick idea for it.
+
+Right now a visitor has to guess which appointment they need before they can book, and that guess is where a lot of them drop off. A short guided step in front of your scheduler fixes it: a few questions, a clear "here is the right appointment for you," then your existing Acuity with their answers already attached. Fewer wrong bookings, fewer no-shows.
+
+I actually built a working version and personalized it to Fatos Celik Aesthetics. Want me to send you the link so you can click through it? It takes about 20 seconds, no cost and no commitment.
+
+If not, no hard feelings.
+
+Best,
+Miguel Ingram
+
+```
