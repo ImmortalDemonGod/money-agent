@@ -1238,3 +1238,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T05:01:05.725535+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** team@exclusivedogtraining.com
+- **Subject:** an online eval scheduler for Exclusive Dog Training?
+- **Body:**
+
+```
+Hi --
+
+I was looking at exclusivedogtraining.com. Today a new client has to fill out the "Request a Behavioral Evaluation" form and then wait for you to coordinate a time -- and that's a step where interested owners drop off.
+
+I'd build you a simple online scheduler: an owner picks an available evaluation slot and books it instantly, and it lands in your inbox. If useful, I can add a short "which program fits my dog" quiz that routes them to the right program first. Fewer missed evals, less coordination on your end.
+
+3 days, $300. And if I miss the 3-day deadline you're automatically refunded -- enforced by an independent verifier, not just my word.
+
+If it's useful, reply and I'll send a one-page spec plus a secure link.
+
+-- Miguel Ingram
+
+```
