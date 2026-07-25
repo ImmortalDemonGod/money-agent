@@ -2924,8 +2924,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-08-02T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T12:22:50Z",
+      "checks": [
+        {
+          "at": "2026-07-25T12:22:50Z",
+          "note": "v2 retention batch: no bounces, no replies yet (weekend). preview-gk counters flat. A/B (4 retention vs 22 rev-share) reads weekday."
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
