@@ -3225,3 +3225,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The deliverability discipline is paying: selecting personal/personal-brand-domain emails yielded 0 bounces on the v2 batch, so the ~8% was driven by role/group addresses -- a concrete, actionable filter for all future sends. And the run now has a clean, honest A/B in market (retention-perk vs rev-share) that the weekday will read.
 
 **Next:** Watch bet-107 (4 v2 retention) vs the 22 v1 rev-share for the first reply -- that read tells us if the offer flip works. If a v2 gatekeeper replies -> build their program-branded preview + set up their members (the case-study/intro loop). If v2 pulls interest, send the 4 staged + more. received_usd=$0.0, cap intact.
+
+## Iteration 144 — 2026-07-25T12:44:44Z (ledger @ 2026-07-25T12:41:14.137409+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
