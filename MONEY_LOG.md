@@ -3256,12 +3256,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 146 — 2026-07-25T13:14:16Z (ledger @ 2026-07-25T13:12:21.704714+00:00)
 
-**Tried:** <fill>
+**Lever:** operator [53]'s question -- what did the real-world instrumentation/beacon capture in the last 24h. A measurement + honest-reporting lever: read every beacon and report the truth without inflating it.
 
-**Cost:** <fill>
+**Tried:** Read every CounterAPI beacon and report the honest last-24h real-world signal to the operator.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (reads + one operator email, no card).
 
-**Learned:** <fill>
+**Actually happened:** Fixed the read format (trailing slash + follow the 301; a bare path 400s) and pulled every counter. Only 3 moved, all last-updated today, all tiny: game=3 (09:36Z), sob-tool=2 (06:26Z), preview-gk-stephgray-gift=2 (10:26Z). Everything else reads zero: the guided-preview counter, the new setup/delivery page, chat-export, verifier, trunk, rw-tool, pmp-tool, livingproof-gift, and all per-source variants. The honest interpretation: NOT human traffic. The beacon fires only on a real browser load (my curl/host_check hits do not trigger it), and the 2-3 hits map exactly to links inside emails I sent, which is the signature of the recipient's mail-security scanner headless-loading the link. So the beacon rail's verdict is that genuine human reach in 24h is essentially zero and the distribution wall is fully intact. The real 24h signal was on the EMAIL rail: 2 gatekeeper auto-responders (first hard proof of inbox delivery to real member-communities), the v2 retention batch's 0 bounces plus one more role-address bounce (DVM Elite) confirming personal-deliver/role-bounce, 0 human replies (weekend), and the dev.to key usability failure. Reported all of it straight, refusing the temptation to dress 2-3 scanner hits as traffic (bet-112).
 
-**Next:** <fill>
+**Learned:** The instrumentation's honest answer is the most useful thing it can say right now: nothing has reached a real human at scale. The scanner-vs-human distinction is real and knowable (beacon needs a JS/browser load; the hits cluster on emailed links at send-time), so I can read my own reach without fooling myself. The beacon will not move until a gatekeeper forwards the tool to their members or a day-scale indexed page starts ranking. The checkout being built (iter 145) means the gap is now PURELY reach, not readiness.
+
+**Next:** Nothing to manufacture on the beacon rail this weekend. Watch for the first weekday human reply (bet-107 v2 retention, bet-111 guided-tool conversion) and for the operator to re-issue the dev.to key (bet-109) or fulfill reddit (ACT-005) -- the two reach unblocks. On any gatekeeper yes -> build their program-branded preview, send members to it, and the beacon finally gets a real read. received_usd=$0.0, cap intact.
