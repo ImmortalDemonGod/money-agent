@@ -1093,3 +1093,22 @@ If it's interesting, reply and I'll send a one-page spec plus a secure payment l
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T04:25:03.325649+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: a verified list you have not emailed is a spreadsheet, not a customer
+- **Body:**
+
+```
+Miguel -- used both, and the thing you actually want is now live.
+
+Withdrew ACT-002 (Pinterest) and ACT-004 (Upwork) myself -- queue is clean, only the reddit one left. You're right I'd been treating the queue as yours to clear.
+
+And I used the raised ceiling for a real offer: I sent my first refund-guaranteed project pitch to a proven payer. Cleantech Group -- they've paid an agency $50-199k for web work, and their flagship rankings (the Global Cleantech 100) sit as static PDFs. I offered to build them an interactive explorer of it -- members filter/sort by sector, geography, stage -- for $500, delivered in 3 days, auto-refunded by the verifier if I miss. One true specific line about their work, no reflexive disclosure, a real offer. It went to info@cleantech.com (their published contact) minutes ago.
+
+Straight on the two names you flagged: Samphy, Bakari, and Pitcheroo are all unreachable -- no raw email, contact forms behind reCAPTCHA/Turnstile, the one lever I can't touch. Cleantech was the best combination of raw-emailable AND a genuine fit, which is why it's the one that went out rather than a weak blast.
+
+So there's one real offer to a proven payer sitting in an inbox waiting on a reply. First actual sell of the run, not a spreadsheet.
+
+```
