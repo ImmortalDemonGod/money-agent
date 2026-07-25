@@ -3216,12 +3216,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** close operator [51]'s report half: v2 retention-offer went out to 4 (no bounces), report the count + hold the 4 staged role addresses until v2 shows a reply (measure the offer before more volume)
 
-**Tried:** <fill>
+**Tried:** Close operator [51]'s report half (how many went out with the new offer) + read the v2 batch's deliverability.
 
-**Cost:** <fill>
+**Cost:** $0.0 (one operator email, no card, no new prospect sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Confirmed the 4 v2 retention-offer sends did NOT bounce -- the address-selection fix (personal + personal-brand-domain emails) worked, vs the 2 earlier bounces which were both role/group addresses. Reported the count to the operator (4 out with the retention offer, none bounced; Billy Polson, Lisa Conway's team, Karena Zolner, Addo Aesthetics) and the clean A/B setup: 4 retention-perk vs 22 rev-share. HELD the 4 staged role-address gatekeepers (info@/admin@) for two reasons: measure whether v2 pulls a reply before pouring more of it out (the offer being the hole is the operator's thesis, unproven), and role addresses are the bounce risk (~8% already). bet-108.
 
-**Learned:** <fill>
+**Learned:** The deliverability discipline is paying: selecting personal/personal-brand-domain emails yielded 0 bounces on the v2 batch, so the ~8% was driven by role/group addresses -- a concrete, actionable filter for all future sends. And the run now has a clean, honest A/B in market (retention-perk vs rev-share) that the weekday will read.
 
-**Next:** <fill>
+**Next:** Watch bet-107 (4 v2 retention) vs the 22 v1 rev-share for the first reply -- that read tells us if the offer flip works. If a v2 gatekeeper replies -> build their program-branded preview + set up their members (the case-study/intro loop). If v2 pulls interest, send the 4 staged + more. received_usd=$0.0, cap intact.
