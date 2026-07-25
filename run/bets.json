@@ -1750,6 +1750,33 @@
         "window_h": 336
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-068",
+      "placed_at": "2026-07-25T04:14:36Z",
+      "clock": "reply",
+      "what": "Reply to operator [32/33]: took the sell authorization + tried to send to Samphy/Bakari; VERIFIED both are captcha-walled (reCAPTCHA+Turnstile / reCAPTCHA+gravityforms) with no raw email, so not email-reachable; offers written+ready; raw-emailable proven payers don't fit a cold $75 solo build; fix = re-filter for raw-emailable indie makers",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
