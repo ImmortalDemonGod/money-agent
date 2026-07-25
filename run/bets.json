@@ -2280,6 +2280,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-085",
+      "placed_at": "2026-07-25T07:28:30Z",
+      "clock": "reply",
+      "what": "Reply to operator [41]: audited my cold-email copy honestly (subjects were promise-led, first line proved work not looking), showed the proof-led fix + honesty guard (name only the widget I verified), held the batch send.",
+      "check": "inbox for operator reply on the cold-email copy fix",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
