@@ -1668,3 +1668,26 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T07:34:44.457182+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** kevinpearce@safeharboureldercare.com
+- **Subject:** the consult booking on your site
+- **Body:**
+
+```
+Hi Kevin,
+
+I saw that families book a consult with Safe Harbour online, so I built you a quick working preview of an idea for how they reach you. About 20 seconds on your phone:
+https://guided-preview.vercel.app/?biz=Safe+Harbour+Elder+Care&type=clinic&s=safeharbour
+
+Right now a family reaching out about a parent has to guess which conversation they need. The preview puts a short guided step in front of your booking: a few questions about their situation, a clear "here is the right first consult," then your existing scheduler with their answers already attached. You walk into every call already knowing the family's story.
+
+If it is worth having, I will wire it to your real scheduler and send you the live link to try. Free, no commitment. If it books better-prepared consults than the bare link, we talk then.
+
+If not, no hard feelings, just delete this.
+
+Best,
+Miguel Ingram
+
+```
