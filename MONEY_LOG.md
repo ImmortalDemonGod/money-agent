@@ -2782,12 +2782,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** harvest returned 2 functional-med keepers -> send lighter offers with PER-SOURCE tagged links (first use of the new attribution), grow the reach sample (operator [38] market-is-wide)
 
-**Tried:** <fill>
+**Tried:** Put the new per-source instrumentation to work: send the harvest's 2 fresh functional-medicine keepers with per-prospect tagged links, growing the reach sample (operator [38] market-is-wide).
 
-**Cost:** <fill>
+**Cost:** $0.0 (2 cold emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** The functional-medicine harvest returned 2 keepers (both the proven Acuity + raw-email pattern): Bloom Functional Medicine (Dr. Kevin Joseph, kevinjoseph@bloomfunctionalmedicine.com) and Planet Naturopath (Michael Smith, support@planetnaturopath.com); 7 near-misses excluded for non-target booking systems (athenahealth, Square, JaneApp, plain forms). Sent each a short lighter offer referencing their exact Acuity flow and the specific quiz I'd build (tier-fit for Bloom, 30-vs-60 triage for Planet Naturopath), linking sob-tool with a distinct ?s= tag (sob-tool-bloom / sob-tool-planetnat) -- the first live use of per-source attribution. bet-082, disclosures cut, both sent. Reach sample now = 5 cold instrumented sends, 2 per-prospect attributed.
 
-**Learned:** <fill>
+**Learned:** The as.me/Acuity + desk-email pattern held on every solo functional-medicine site I could actually load; the ONLY bottleneck is the search layer (every engine but Brave is CAPTCHA/DNS-locked, Brave 429s after a few queries), so target discovery -- not the pattern, not sending -- is the ceiling. Per-source tagging now means the next counter read is per-prospect, not blended.
 
-**Next:** <fill>
+**Next:** After ~24h read the tagged counters (bet-082: sob-tool-bloom / sob-tool-planetnat) + bet-079/080: a specific prospect's counter moving = that offer reached + interested. On a reply, build the bespoke quiz + invoice against an obligation. Discovery ceiling: a working SERP endpoint or a fresh WebSearch budget would convert the pattern faster. received_usd=$0.0, cap intact.
