@@ -3090,12 +3090,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** advance operator [48] give-first toward 2-3: dig raw emails for the 4 form-gated give-first fits (LeBauer/Bulletproof Dental/Carter/Fitzgerald) from podcast/newsletter pages; give-first-send any I can reach
 
-**Tried:** <fill>
+**Tried:** Advance the operator [48] give-first toward 2-3 proof points: dig raw emails for the 4 form-gated strong fits, and give-first-send any reachable one.
 
-**Cost:** <fill>
+**Cost:** $0.0 (1 gift email, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Checked the 4 strong give-first fits (LeBauer/CashPT, Boulden+Spodak/Bulletproof Dental, Kara Fitzgerald/New Frontiers, + Carter) on their about/contact/podcast-contact pages -- all confirmed perfect fits (own practice + coach practice owners) but NONE exposes a raw email (Cloudflare/forms), exactly as the harvest warned; their raw emails would be in podcast show-notes / newsletter archives that need a search budget I do not have. So I sent give-first #2 to the one reachable practitioner the harvest surfaced: Dr. Stephanie Gray, a real integrative/hormone clinic (info@yourlongevityblueprint.com, fresh) -- her own guided intake tool, zero ask, demo mode with an invite to wire her booking (bet-103). Two give-first proof points now out (Patel + Gray).
 
-**Learned:** <fill>
+**Learned:** The give-first channel's ceiling is reachability, same wall as everywhere: strong give-first fits (a practitioner who both practices and coaches) overwhelmingly hide email behind contact forms / Cloudflare, so only ~1 in 5-6 is email-reachable. So the operator's '2-3' is roughly the ceiling of what is cleanly reachable right now (Patel + Gray), not a volume I can push past without unlocking the form-gated ones.
 
-**Next:** <fill>
+**Next:** Watch preview-gk-livingproof-gift / preview-gk-stephgray-gift + replies from Patel/Gray -> a practitioner USING + liking it is the proof point. Weekday: watch the 16 gatekeeper pitches. If search budget returns, dig the 4 form-gated fits' emails from podcast/newsletter pages. received_usd=$0.0, cap intact.
