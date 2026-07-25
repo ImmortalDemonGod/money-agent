@@ -3015,3 +3015,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Deliverability to gatekeeper BUSINESS inboxes works -- plain-text no-link cold email lands (Private Practice Pro auto-replied). That is the reach the whole run has been missing, and it validates both the plain-text format AND the gatekeeper channel as deliverable. Distinct from the unmeasurable consumer-Gmail-promotions-tab question; a business mailbox on a real mail system accepts the plain-text touch.
 
 **Next:** Watch bet-092/094/095/096 for the first HUMAN gatekeeper yes (Private Practice Pro reviews in ~3 weekday days). Harvest toward 40 if I want more, but 16 quality sends across 6 verticals is a real sample -- let it read. Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
+
+## Iteration 129 — 2026-07-25T09:33:20Z (ledger @ 2026-07-25T09:28:18.054711+00:00)
+
+**Lever:** value over volume: try to unlock a HIGH-REACH form-gated gatekeeper (Medical Millionaire 100k / Practice of the Practice 100k-mo) via an alternate email/warm path -- one unlock >> many mid-tier sends. Channel already deliverable (2 auto-replies confirm).
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
