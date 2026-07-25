@@ -3780,14 +3780,44 @@ cheap check passed; the pattern is now unambiguous.
 **Next:** On ACT-007 clearing, submit the bid immediately (text ready). Poll ACT-006 (Upwork job
 texts). Read the gift-first 13 (bet-126). received_usd=$0.0, cap intact.
 
-## Iteration 161 — 2026-07-25T22:49:25Z (ledger @ 2026-07-25T22:45:57.548478+00:00)
+## Iteration 161 — 2026-07-25T23:05Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator supplied the address (2407 Southwest A Avenue, Lawton OK 73505) and said to use
+the Upwork info — then corrected mid-iteration: TAILOR the profile to where the bids go, "you
+wouldn't put plumbing info on a graphic design job."
 
-**Cost:** <fill>
+**Tried:** Complete the profile gate and submit the bid on project 40604596.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (browser automation only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) ACT-007 confirmed FULFILLED on the verifier lane (bet-128 won) and the profile photo is live on
+the CDN — verified by reading the actual image elements, not by trusting the "done".
+(2) Filled the profile with the Upwork credentials, then TOOK THE CORRECTION and rewrote it: the
+Upwork framing leads with Python/AI-ML/Navy-nuclear/arXiv, which is real and impressive and WRONG for
+a "visually-striking e-commerce page" buyer. Rewrote headline and summary front-end-forward
+(responsive pages, interactive components, WCAG-AA type/colour systems, modular hand-off), keeping
+Python as a closing line rather than the lead. The research/Navy credentials stay on Upwork where the
+buyer is technical.
+(3) Diagnosed the real address blocker: it is an AUTOCOMPLETE. Typing fills the box but leaves the
+field invalid — "Please enter your address." persists until a suggestion is chosen from its dropdown.
+My first suggestion-picker made it worse by grabbing the LANGUAGE dropdown and clicking "English";
+scoping the picker to options containing the street/city cleared the address error.
+(4) BUT THE FORM NEVER PERSISTS. After every save the panel reloads with First Name, Last Name,
+Headline, Summary and Hourly Rate all blank again. Eleven distinct attempts across four URLs (project
+panel, /me, /users/profile.php, /u/miguelingram) plus autocomplete handling and keyboard selection.
+The logged-out profile is signup-walled so I cannot even read back what saved.
+(5) STOPPED rather than continue selector archaeology, and wrote run/freelancer_profile_paste.md —
+the exact field-by-field text for a human to paste in about a minute, including the note that the
+address must be chosen from the dropdown.
 
-**Next:** <fill>
+**Learned:** I corrected the same class of error twice in one iteration. First: a suggestion-picker
+that matched ANY visible [role=option] clicked the Language dropdown, because "the first visible
+option" is not the same as "the option belonging to this field" — scope selectors to the field, not
+the page. Second, and the operator's point: profile copy is not a fixed asset, it is per-audience. I
+had pasted a technical-buyer profile in front of a design buyer because the credentials were
+impressive, which is optimising for how the profile reads to ME rather than to the person hiring.
+
+**Next:** On the profile saving, submit the bid immediately (text ready at
+run/freelancer_bid_40604596.txt, artifact live at voltedge-ten.vercel.app). Poll ACT-006 (Upwork job
+texts, bet-125). Read the gift-first 13 (bet-126). received_usd=$0.0, cap intact.
