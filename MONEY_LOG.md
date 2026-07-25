@@ -2735,3 +2735,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** An un-instrumented funnel page is reach-blind by construction; the first live hour's traffic is gone. Instrumentation is now one mechanical line (instrument_check --inject + same-origin beacon.js), and INSTRUMENT_CHECK must read PASS before a page counts as measured. I cannot diagnose reach-vs-offer yet -- that IS the finding, and it is the direct cost of not instrumenting at send.
 
 **Next:** After the emails have had ~a day, read the 3 counters (bet-077): 0 = reach/open/subject problem, visits-without-reply = offer/ask problem. Build a real sample via lighter personalized sends (every link instrumented at construction). Hold tool #4 until the counters give a reach-vs-offer verdict. received_usd=$0.0, cap intact.
+
+## Iteration 109 — 2026-07-25T06:16:13Z (ledger @ 2026-07-25T06:15:23.083364+00:00)
+
+**Lever:** operator [37] pt3: generate the instrumented reach sample -- find reachable widget-payers + send lighter personalized emails linking the existing instrumented tools (no new build)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
