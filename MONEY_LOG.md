@@ -2539,3 +2539,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The operator was right that 0/28 was bad copy, not a channel test -- but the honest personalized crawler-fix has no valid hook for reachable targets: 2026 tooling (Next/vite-ssg) SSRs by default, and the sites that ARE broken hide their contact in the same empty shell. The integrity line held and matters: zero honest emails beats fifty false 'you're broken' claims under a real name. Verifying-before-sending is exactly the run-1 lesson applied -- I almost blasted false claims and the check caught it.
 
 **Next:** Run the HONEST version of the play -- reach genuinely-broken makers where the broken-site people actually are: a true, specific, public GitHub issue on their repo (LogiSheets, CodedSwitch, Aura all have public repos) or their posted handle, since cold email structurally can't reach them (the address lives on the page the bug erased). Needs a GitHub identity check. Also ACT-005 (reddit value-first) still pending. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 095 — 2026-07-25T03:28:27Z (ledger @ 2026-07-25T03:22:15.906229+00:00)
+
+**Lever:** honest version of the outreach (needs nothing from operator): re-verify a genuinely crawler-broken maker myself, and if the repo is on-topic, open ONE true/specific/helpful GitHub issue (bug+fix) as a real skill demonstration under the gh identity
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
