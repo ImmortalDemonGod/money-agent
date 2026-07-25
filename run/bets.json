@@ -2452,6 +2452,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-091",
+      "placed_at": "2026-07-25T09:05:27Z",
+      "clock": "reply",
+      "what": "GATEKEEPER lever (operator [45]): launched harvester for ~40 people/newsletters/communities whose audience = med-spa/aesthetic/wellness/functional-med CLINIC OWNERS; will email a proof-led partnership offer (free personalized preview for their audience + tracked rev-share per converted clinic, per-gatekeeper ?s= tag). One yes = warm distribution to their whole list. Deliver count + 3 named next round + start outreach.",
+      "check": "inbox for operator reply on the gatekeeper plan",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
