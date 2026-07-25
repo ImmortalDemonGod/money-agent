@@ -1439,3 +1439,25 @@ If you like it, I'll build the LA Dental version and send you the live link to t
 - Miguel Ingram
 
 ```
+
+## 2026-07-25T06:19:57.765601+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@formula30a.com
+- **Subject:** a guided step before your webinar booking
+- **Body:**
+
+```
+Hi, quick one.
+
+You point people to a Calendly booking to "Book a Webinar" / educational session with Formula30A. It works, but a plain time-picker doesn't capture what the person actually wants out of the session, so you walk in cold and the follow-up is generic.
+
+I build a short guided step that sits in front of that booking: the attendee answers a couple of quick questions (what they're trying to learn, where they are in their timeline), and then lands on your existing scheduler with their answers already attached, so every session starts warm and your follow-up is targeted.
+
+Here's a live example of the kind of guided intake-and-book flow I build (built for a different business, so yours would be Formula30A-specific), click it on your phone, it takes about 20 seconds:
+https://repair-wizards-intake.vercel.app
+
+If it's useful, I'll build your version and send you the live link to try, free, no commitment. If it books more (and warmer) sessions than the bare link, we talk. Reply and I'll get started.
+
+- Miguel Ingram
+
+```
