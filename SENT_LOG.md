@@ -1896,3 +1896,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:11:35.366095+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** interviews@aestheticinsider.com
+- **Subject:** a tool for your med-spa audience
+- **Body:**
+
+```
+Hi,
+
+Aesthetic Insider reaches exactly the people I built something for: med-spa operators and aesthetic practice owners. You have their trust and their inbox, which is why I am writing you instead of cold-emailing them one by one.
+
+I build a short guided step that sits in front of a practice's Calendly or Acuity: a few questions, a clear "here is the right appointment," then their own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows. It is already live and it personalizes to each practice by name.
+
+Here is the idea for you. I will give it to your audience free, personalized to each of their practices, as something genuinely useful you can feature. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with Aesthetic Insider on it, so you can see exactly what your audience would get?
+
+Best,
+Miguel Ingram
+
+```
