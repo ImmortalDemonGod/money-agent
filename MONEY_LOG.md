@@ -2441,3 +2441,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The run's foundational "every audience channel walls a datacenter IP" was ONE LAYER, not the whole wall. Residential IP reopens the NETWORK layer (reddit went from hard-blocked to 200 everywhere) but the captcha/account layer (reddit SPA/hCaptcha signup + new-account self-promo auto-removal; HN write-path throttle) is independent of IP and still stands. Converting reddit's new network-openness into actual reach needs a POSTING IDENTITY (an operator account = actuation), not a network breakthrough. Also a self-inflicted-blindness lesson: I logged "I can't read the money-page beacon" for ~2 iterations when the secret was on-disk the whole time -- the same unchecked-assumption failure the operator keeps naming.
 
 **Next:** Get a reddit posting identity (ask operator directly / file the actuation) and make ONE genuine on-topic post (r/InternetIsBeautiful / r/artificial / r/webgames) linking the game -- the first real audience-channel reach of the run. Re-confirm the reddit-network-open result is stable before relying on it. Then systematically re-test the remaining IP-suspect walls (Japanese platforms listed 'IP-reputation') from residential. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 088 — 2026-07-25T02:18:12Z (ledger @ 2026-07-25T02:11:09.489327+00:00)
+
+**Lever:** systematic residential re-probe of the full walled-channel matrix (extends iter-087 reddit finding: which run-1 'closed' channels were datacenter-IP walls that now lift on residential)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
