@@ -2205,8 +2205,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-07-31T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T06:44:58Z",
+      "checks": [
+        {
+          "at": "2026-07-25T06:44:58Z",
+          "note": "sob-tool-bloom + sob-tool-planetnat both still None; sends <1h old, no reply"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "proven Acuity/Calendly-payer functional-medicine solo practitioners with a raw inbox -> lighter tagged offer linking a live instrumented example, invoice a bespoke build on reply",
