@@ -93,12 +93,14 @@
       "test_citation": "curl api.pinterest.com/v5/ -> HTTP 401 (needs OAuth); pinterest.com signup page carries a captcha/challenge; Pinterest untested in run-1 channel_map",
       "ev_rationale": "highest-relevance UNTESTED distribution channel for the live printable poster: algorithm-based reach sidesteps the cold-start wall that walled every run-1 social channel; evergreen buyer-intent pins fit a multi-day run",
       "verify_cmd": "curl -s -o /dev/null -w \"%{http_code}\" -H \"Authorization: Bearer $CRED\" https://api.pinterest.com/v5/user_account | grep -q 200",
-      "status": "open",
+      "status": "withdrawn",
       "companion_bet": "bet-004",
       "agent_branch": "run-2",
       "human_minutes": null,
       "resolution_latency_seconds": null,
-      "resolution": null
+      "resolution": null,
+      "withdrawn_at": "2026-07-25T04:22:05Z",
+      "withdraw_reason": "abandoned pre-pivot direction (Pinterest); operator confirmed I can self-clear the queue"
     },
     {
       "id": "ACT-003",
