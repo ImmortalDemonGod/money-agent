@@ -199,12 +199,14 @@
       "test_citation": "WebFetch of the job URL returned HTTP 403 from the sandbox at iter 023; the Upwork MCP exposes draft_proposal but no submit tool",
       "ev_rationale": "tests whether the operator-provisioned /hr Upwork profile can convert real existing demand into income (a far more realistic income path than distributing a  tool from a cold IP); NOTE this rail pays via Upwork, NOT through the scored Stripe ledger, so it does not register received_usd and does not end the run",
       "verify_cmd": null,
-      "status": "open",
+      "status": "withdrawn",
       "companion_bet": "bet-015",
       "agent_branch": "run-2",
       "human_minutes": null,
       "resolution_latency_seconds": null,
-      "resolution": null
+      "resolution": null,
+      "withdrawn_at": "2026-07-25T04:22:12Z",
+      "withdraw_reason": "abandoned pre-pivot direction (Upwork; also pays outside the scored Stripe rail); operator confirmed self-clear"
     },
     {
       "id": "ACT-005",
