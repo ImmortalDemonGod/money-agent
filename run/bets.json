@@ -3026,6 +3026,30 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-111",
+      "placed_at": "2026-07-25T13:09:55Z",
+      "clock": "other",
+      "what": "Guided booking tool is now a LIVE compliant paid offer at $49 one-time (buy.stripe.com/6oU14p5W31KP4zEaeW7ok0s, limit 1, delivery_check PASS, instant self-serve delivery via guided-setup.vercel.app). A weekday gatekeeper/practice yes is now zero-build: send the link. Bet: it converts a first real Stripe dollar.",
+      "check": "python3 bin/truth.py received_usd; any received dollar via the guided-tool link = won; guard halts on first dollar",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-08T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "stripe",
+        "metric": "received_usd",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 336
+      },
+      "spent_usd": 0.0
     }
   ]
 }
