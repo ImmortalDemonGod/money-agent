@@ -3263,6 +3263,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-120",
+      "placed_at": "2026-07-25T18:48:19Z",
+      "clock": "reply",
+      "what": "OPERATOR [60] VOLUME RAMP batch 1: 18 UN-TOOLED contractors from the scaled chamber pull (974 un-tooled found), each sent a branded demo carrying their own logo/color/city/phone/trade plus the $49 price named in-email. Tests whether the assembled machine CONVERTS at volume, which 13 sends could not.",
+      "check": "python3 bin/mail.py inbox 30 for replies from the 18 domains; counterapi estimate-<slug> per-contractor click counters",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-07-31T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "non-technical home-service contractors bleeding won bids to quote-speed -> instant custom estimate tool",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 120
+      },
+      "authorizes": {
+        "send": 18
+      },
+      "spent_usd": 0.0
     }
   ]
 }
