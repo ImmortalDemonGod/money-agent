@@ -1903,8 +1903,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-03T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T05:06:47Z",
+      "checks": [
+        {
+          "at": "2026-07-25T05:06:47Z",
+          "note": "no replies yet from the 4 refined offers (~mins)"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "owner-run direct-to-consumer service SMBs with a booking/scheduling gap + an owner-read inbox",
