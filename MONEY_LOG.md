@@ -2670,12 +2670,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR [36] SHOW-DON'T-TELL: build Repair Wizards (proven category-payer: embeds Calendly, owner Gmail) a genuinely-better working tool -- an instant repair-triage+booking widget -- host it live, send the owner the link to USE, then invoice
 
-**Tried:** <fill>
+**Tried:** Execute the operator's [36] show-dont-tell on a proven-category-payer: build a genuinely-better working tool, host it live, send the owner the link to USE.
 
-**Cost:** <fill>
+**Cost:** $0.0 (build + deploy + one email; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** The widget-screen found 4 hungry-crowd targets (businesses whose page source already embeds a paid widget). Picked Repair Wizards -- a 25-yr licensed Bay Area mobile-home repair/remodel contractor that already pays for Calendly and has an owner inbox. Built them a tailored intake+booking web tool (project type -> details -> book, routing into their existing scheduler with the job attached -- a real upgrade over bare Calendly, which captures no job context), deployed it LIVE to Vercel (HOST_CHECK PASS, P3 recorded), and emailed the owner the live link to try, with NO upfront price -- invoice on reply. First show-dont-tell of the run: a working tool in a proven-payer's hands, not a cold priced proposal. Also confirmed the ACT-001 Vercel token WORKS (earlier usability-failed flag was stale).
 
-**Learned:** <fill>
+**Learned:** The whole chain the operator laid out is now real and executable: screen page source for an embedded paid widget (proven pain+wallet) -> build the better tool instantly -> host live -> send the link. This is a materially stronger motion than the 9 cold priced offers, and it costs only the build I'm good at. The delivery rail (Vercel token + the obligation refund guarantee) is confirmed working, so a 'yes' converts to a hand-off + invoice fast.
 
-**Next:** <fill>
+**Next:** Watch bet-074 (Repair Wizards reply). If they engage: hand over / integrate the tool and invoice (register the obligation against the charge). Build-and-show the other 3 widget-payers (Simply Organic Beauty/Jotform, PayMT PRO/Calendly, Ruedi Wealth/Calendly -- Ruedi is form-only so lower reach). Watch the 9 prior offers (bet-069/071/072). received_usd=$0.0, twenty-five-dollar cap intact.
