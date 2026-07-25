@@ -1916,7 +1916,7 @@
         "window_h": 48
       },
       "authorizes": {
-        "send": 1
+        "send": 0
       },
       "spent_usd": 0.0
     }
