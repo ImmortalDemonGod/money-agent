@@ -2307,6 +2307,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-086",
+      "placed_at": "2026-07-25T07:34:12Z",
+      "clock": "reply",
+      "what": "Proof-led v3 batch (operator [41] shape): emailed Hearthstone Wellness (hearthstonewellness@proton.me, Acuity named), Downey Massage (downeywellnessroom@gmail.com), Safe Harbour Elder Care (kevinpearce@safeharboureldercare.com), each opening with proof I looked + a personalized preview link (preview-hearthstone/downey/safeharbour). Signal = which per-prospect preview counter moves / who replies; tests proof-led vs the earlier promise-led sends.",
+      "check": "inbox for replies; AND counters api.counterapi.dev/v1/onehonestdollar-run2/{preview-hearthstone,preview-downey,preview-safeharbour}/",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "proven widget-payer small practices, proof-led open naming their exact booking + personalized live preview, invoice a wired build on reply",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 3,
+        "window_h": 48
+      },
+      "authorizes": {
+        "send": 3
+      },
+      "spent_usd": 0.0
     }
   ]
 }
