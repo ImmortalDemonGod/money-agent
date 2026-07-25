@@ -2987,3 +2987,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Gatekeeper emails don't bounce like scraped clinic emails (they publish valid contact info), so the reputation risk that capped the clinic channel is much lower here -- volume toward 40, which the operator wants, is safe on gatekeepers. Mechanical: to keep sending in one channel, reuse the exact lane string; a reworded lane opens a new lane and hits the 3-active cap.
 
 **Next:** When the 2nd harvest returns, send the next gatekeeper batch (proof-led). Watch bet-092/094 for the first gatekeeper yes -> tagged preview + rev-share + warm distribution. Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
+
+## Iteration 127 — 2026-07-25T09:21:24Z (ledger @ 2026-07-25T09:15:50.838796+00:00)
+
+**Lever:** 2nd gatekeeper harvest returned 10 -> send the 5 best-fit/highest-reach (paced to protect fresh-sender reputation), toward the operator's 40; hold 5 for next fire
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
