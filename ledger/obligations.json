@@ -1,19 +1,19 @@
 {
-  "computed_at": "2026-07-25T03:41:06.214040+00:00",
+  "computed_at": "2026-07-25T03:42:14.355384+00:00",
   "open": 0,
   "fulfilled": [],
   "completion_errors": [],
   "breached": [],
   "verified": true,
   "authorization": {
-    "enabled": false,
-    "operator_enabled": false,
-    "refund_authority": false,
-    "max_open": 0,
-    "max_single_usd": 0.0,
-    "max_total_fraction": 0.0,
-    "max_deadline_hours": 0.0,
-    "reason": "EXPOSURE_MAX_OPEN must be positive; max_single_usd must be positive; max_total_fraction must be positive; max_deadline_hours must be positive; OBLIGATION_CLASS_ENABLE is not 1; STRIPE_REFUND_KEY is not provisioned"
+    "enabled": true,
+    "operator_enabled": true,
+    "refund_authority": true,
+    "max_open": 1,
+    "max_single_usd": 20.0,
+    "max_total_fraction": 1.0,
+    "max_deadline_hours": 72.0,
+    "reason": "enabled"
   },
   "_note": "Computed by the verifier from the agent's COMMITTED register. A breach halts the run (guard.py); authorization is verifier-owned and default-off."
 }
