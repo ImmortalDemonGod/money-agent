@@ -1217,3 +1217,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T05:00:56.359703+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** djajfalcon@gmail.com
+- **Subject:** a real-time booking widget for DJ AJ Falcon?
+- **Body:**
+
+```
+AJ --
+
+I came across djajfalcon.com -- weddings and events across Miami and the Keys. Right now the only way for a couple to lock you in is the "Request a Quote" form or a text, which means back-and-forth before anything's actually booked, and some of them drift off.
+
+I'd build you a simple real-time booking widget for your site: a couple picks their date, sees whether you're open, chooses a package, and holds/books it on the spot -- straight to your inbox. Less phone tag, fewer lost gigs.
+
+3 days, $300. And to take the risk off you: if I miss the 3-day deadline you're automatically refunded -- enforced by an independent verifier, not just my word.
+
+If it's useful, reply and I'll send a one-page spec plus a secure link.
+
+-- Miguel Ingram
+
+```
