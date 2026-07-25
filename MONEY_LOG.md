@@ -3057,3 +3057,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The conversion bottleneck for a gatekeeper channel is not the yes, it is the gap between yes and them actually emailing their list -- a done-for-them forward blurb closes it. And the delivery-bound question had a clean answer: a param-configured hosted tool is an INSTANT deliverable, keeping the practice sale on the simple scored rail instead of the obligation rail.
 
 **Next:** On a gatekeeper yes -> send reply-2 + the forward blurb (tagged). On a practice purchase -> hand the ?biz&target URL = instant delivery. Watch for the first weekday human gatekeeper reply. Keep Upwork + widget arms warm. received_usd=$0.0, cap intact.
+
+## Iteration 132 — 2026-07-25T10:03:00Z (ledger @ 2026-07-25T09:59:25.263112+00:00)
+
+**Lever:** operator [48] give-first: build a gatekeeper their OWN free guided-booking tool (routed to their real scheduler, no ask) to earn the first proof point. Find booking links, build ONE, send it.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
