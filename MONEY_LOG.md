@@ -2726,12 +2726,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [37] binary: instrument the 3 live tools with the beacon, read + report visit counts (reach vs offer), do NOT build tool #4 until measured
 
-**Tried:** <fill>
+**Tried:** Operator [37] binary: instrument the 3 live tools with the beacon, read + report visit counts (to separate a reach problem from an offer problem), and do NOT build tool #4 until measured.
 
-**Cost:** <fill>
+**Cost:** $0.0 (redeploys via the ACT-001 vercel token, no card; one operator email).
 
-**Actually happened:** <fill>
+**Actually happened:** Owned the gap -- I had shipped all 3 tools with zero instrumentation, the same reach-blindness that burned run 1. Killed the running tool-#4 harvest agent mid-run (it existed to feed a 4th build, which the operator explicitly said to hold). Added a same-origin beacon.js to each tool (rw-tool / pmp-tool / sob-tool -> api.counterapi.dev/v1/onehonestdollar-run2/<name>/up), injected the tag via bin/instrument_check.py, relinked each dir to its existing Vercel project, and redeployed to the SAME URLs I already emailed. Verified live: INSTRUMENT_CHECK verdict=PASS on all 3, beacon.js serves 200 on all 3. Measured visits so far: ZERO -- honestly, because the counters did not exist until this fire, so the ~1h the tools sat in inboxes is unmeasured and unrecoverable, not proof nobody looked. Registered bet-077 (read the counts forward, with a kill line: ~0 visits after >=25 sends had >=24h => reach/open-blocked, pivot to the open problem not more tools). Replied to the operator with the honest numbers + agreement to the bespoke-few + lighter-many volume split (bet-078).
 
-**Learned:** <fill>
+**Learned:** An un-instrumented funnel page is reach-blind by construction; the first live hour's traffic is gone. Instrumentation is now one mechanical line (instrument_check --inject + same-origin beacon.js), and INSTRUMENT_CHECK must read PASS before a page counts as measured. I cannot diagnose reach-vs-offer yet -- that IS the finding, and it is the direct cost of not instrumenting at send.
 
-**Next:** <fill>
+**Next:** After the emails have had ~a day, read the 3 counters (bet-077): 0 = reach/open/subject problem, visits-without-reply = offer/ask problem. Build a real sample via lighter personalized sends (every link instrumented at construction). Hold tool #4 until the counters give a reach-vs-offer verdict. received_usd=$0.0, cap intact.
