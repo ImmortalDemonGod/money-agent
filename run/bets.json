@@ -1602,6 +1602,30 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-063",
+      "placed_at": "2026-07-25T01:10:34Z",
+      "clock": "reputation",
+      "what": "Instrumented a reach beacon (CounterAPI, aggregate hit count, fires only in real browsers) on all self-hosted pages. Baselines (my own test hits to subtract): game=2, verifier=0, trunk=0. Hypothesis: measure whether ANY page gets a real EXTERNAL visitor -- turns 'nobody visits' from an assumption into a measured fact.",
+      "check": "curl the pure-read endpoints api.counterapi.dev/v1/onehonestdollar-run2/{game,verifier,trunk}/ and subtract baselines (game-2, verifier-0, trunk-0); any positive = a real visitor.",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-02T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "reach measurement across game/verifier/trunk pages; any external page-view above baseline = real reach signal",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "external_pageviews",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 216
+      },
+      "spent_usd": 0.0
     }
   ]
 }
