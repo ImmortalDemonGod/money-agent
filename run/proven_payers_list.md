@@ -47,3 +47,56 @@ Constraint: session WebSearch cap hit (200/200), so depth is bounded by what age
 - App/Play/Chrome store reviews: handles only.
 
 ## Gap: paid newsletter/community channel = 0 (search-bound; Skool/Circle SPAs empty on fetch, Trustpilot 403, Patreon paywalled). Supply a Patreon/Skool URL to mine via WebFetch, or raise the search cap.
+
+---
+
+# ROUND 2 — 4 non-nesting agents, brand-new channels (prior locations banned). ~33 new verified entries. Source: WebFetch only (search capped). No outreach.
+
+## Channel A — Open-source recurring funders (Open Collective; demonstrably paying monthly; GitHub/site reachable)
+| Name (company) | Backs (source) | Contact | Type |
+|---|---|---|---|
+| Keith Mifsud (SwellAI CEO) | Nuxt Agency Partner $250/mo — opencollective.com/keith-mifsud | keith-mifsud.me contact form; GitHub keithmifsud; X @keithmifsud; LinkedIn | seller/founder, strong |
+| James Lee (LA, fullstack dev) | Nuxt.js $10/mo — opencollective.com/jlee | GitHub uptownhr; uptownhr.com; X @uptownhr; LinkedIn | consumer, strong |
+| Shanea Leven (CodeSee founder/CEO) | Babel $8k — opencollective.com/babel | codesee.io; X @codeseeio | founder |
+| Guillermo Rauch (Vercel CEO) | Prettier $10k — opencollective.com/prettier | GitHub rauchg; X @rauchg; vercel.com | founder (high-profile) |
+| Adrien Menoret | Nuxt.js $100/mo — opencollective.com/nuxtjs | netkin.fr | consumer dev |
+| Akinori Fukumura | Vue $10/mo + Nuxt $100/mo — opencollective.com/nuxtjs | X @fukumura; FB | consumer dev |
+| Wimadev (Vue/Nuxt agency) | Nuxt Silver $250/mo — opencollective.com/nuxtjs | nuxt.wimadev.de | agency |
+| Martin Omander | Vue $100/mo + Vitest — opencollective.com/vuejs | name only (weak reach) | consumer dev |
+
+## Channel B — B2B agency clients (Clutch / DesignRush verified reviews; paid for a service, spend ranges shown)
+| Name | Role @ Company | Paid for (review URL) | Contact |
+|---|---|---|---|
+| Carole Jacques | Marketing Dir, Cleantech Group | Goji Labs $50-199k — clutch.co/profile/goji-labs#reviews | info@cleantech.com; +1 415-233-9700 |
+| Jon Shaivitz | CEO, Pitcheroo | Goji Labs (app+web) — clutch.co/profile/goji-labs#reviews | pitcheroo.com contact form |
+| Will Hu | GM, Katzkin Leather | Goji Labs $50-199k — clutch.co/profile/goji-labs#reviews | katzkin.com/contact; 1-877-811-8840 |
+| Keith Niehaus | Founder/ED, NextGen Prosperity Foundation | Goji Labs $1M-9.9M — clutch.co/profile/goji-labs#reviews | via company site |
+| Sam Lazraus | Presidential Special Asst, Council on Foreign Relations | Goji Labs $50-199k — clutch.co/profile/goji-labs#reviews | cfr.org |
+| Sanjay Pandey | Web-dev lead, QSS Technosoft | Goji Labs <$10k — clutch.co/profile/goji-labs#reviews | hello@qsstechnosoft.com (note: QSS is a dev shop) |
+| Heather Martz-Keller | Marketing Mgr, Pak-Tec | Digital Silk — designrush.com/agency/profile/digital-silk#reviews | via company |
+| Michael Hamilton | VP Experience, NeuroAnimation | Digital Silk — designrush.com/agency/profile/digital-silk#reviews | neuroanimation.com (403 on fetch) |
+| Danil R. Kasimov | CEO, Limo Service Miami | Digital Silk — designrush.com/agency/profile/digital-silk#reviews | via company |
+| Sarwat Siddique | Sr PM, Watts Water Technologies | Lounge Lizard — designrush.com/agency/profile/lounge-lizard#reviews | watts.com (public co) |
+(backups: Marissa Cossolini/My Potential Kids, Robin Baradarian/ExoClinic, Ted Eleftheriou/National Golf Foundation, Myke Ortiz/YachtLuxe, Roxana Vinueza/Ace and Jack, Dan Regan/Aspen Dental — all named+company, contact unverified)
+
+## Channel C — Paid Maven cohort students ($1-3k tuition; named + role + company; reachable via LinkedIn/company)
+| Name | Role @ Company | Paid course (source) |
+|---|---|---|
+| Samuel Kramer | Fwd Deployed SWE, OpenAI | Wes Kao Exec Comms — maven.com/wes-kao/executive-communication-influence |
+| Caitlin Hudon | Data Scientist, Figma | Wes Kao Exec Comms — (same) |
+| Jordan Cutler | Sr SWE, Pinterest | Wes Kao Exec Comms — (same) |
+| Kevin Ha | Director Sales Analysis, Sephora | Wes Kao Exec Comms — (same) |
+| Harshul Madan | Staff PM, Apple | Wes Kao Exec Comms — (same) |
+| Sally Ivester | Chief of Staff, Google | Dave Kline MGMT Accelerator — maven.com/dave-kline/mgmt-accelerator |
+| Brandon Jeup | Head of Detection & Response, Zoom | Dave Kline MGMT Accelerator — (same) |
+| Katie Seiffert | Director & COO, Catalyst Opportunity Funds | Dave Kline MGMT Accelerator — (same) |
+| Dylan Lewis | Experimentation Leader, Atlassian | Kohavi A/B Testing — maven.com/kohavi/abtesting |
+| Sharath Bulusu | Director PM, Google | Kohavi A/B Testing — (same) |
+| Scott Theisen | Experimentation PM, Ford Credit | Kohavi A/B Testing — (same) |
+| Pavan Gangisetty | Staff Data Analyst, Intuit | Kohavi A/B Testing — (same) |
+| Erin Peterson | Head of Talent, Great Hill Partners | Talgo Hiring Mastery — maven.com/talgo/hiring-mastery |
+| Samuel Baker | Director of Product, Underdog Fantasy | Talgo Hiring Mastery — (same) |
+| Scott LaVelle | Head of Manager Research, PNC | Annie Duke Make Better Decisions — maven.com/annie-duke/make-better-decisions |
+Reachability note: no clickable LinkedIn on the pages; each is full name + exact role + exact company (LinkedIn name-search / company reachable).
+
+## Channel D — StackShare / Wellfound: 0 (both hard-block WebFetch: 403/429). GoodFirms also 403.
