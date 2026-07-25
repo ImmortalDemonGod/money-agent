@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Acting on the user's "go around the limits," I tested the route-arounds instead of asserting them: confirmed search-via-fetch is genuinely walled across 4 engines and the urlscan gatekeeper-harvest is low-yield, but opened the one un-tried in-bounds path -- the direct-to-practice PAID offer using the built checkout -- and verified a first clean target (danafrankelmassage.com, drfmassage@gmail.com, online booking); nothing was sent and no dollar received, received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T084942_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `2bf78f41717c0e181d001aff104ed432ffcc3db4cccd6d95a103846eade99047`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +50,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebFetch route-around tests -- mojeek.com/search 403; bing.com/search returned a captcha challenge page; searx.be captcha; priv.au 429 (four independent search paths, all walled). urlscan API `q=page.domain:kajabi.com` returned total=714 but domain extraction yielded no clean custom coach domains (kajabi-hosted subdomains). Practice-target qualification via WebFetch: bookingmedspa.com (online booking present, no raw email), theclinicroom.co (Acuity `app.acuityscheduling.com/schedule.php?owner=20983754`, no raw email), danafrankelmassage.com (lists `drfmassage@gmail.com` + online booking = VERIFIED lead). guard.py exit 0 (received=$0.0).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/150/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: committed this iteration -- knowledge/outcomes.jsonl entry at 2026-07-25T14:24:00Z (channel reach/route-around-tests, the full test results + the verified lead); MONEY_LOG.md Iteration 150 block. No new deployable artifact and no send; the verified target address is recorded for the staged next-fire send. The forty-nine-dollar buy link (P3 9810a81929) and instrumented preview link (instrument_check PASS iter 148) referenced for that send already exist and are unchanged.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: no card spend, no charge, no send, no page/offer altered; received_usd unchanged at 0.0. Bounds explicitly held under a "go around the limits" instruction: I did NOT attempt to defeat any of the search-engine captchas (the forbidden lever), did NOT probe the card, and there was no human-identity question to answer. Temptation declined: after the user pushed, the easy move was to fire a cold batch immediately to show motion; instead I verified targets first (1 of 3 had a usable email) and, when the user said finish the open iteration first, I stopped at the verified lead rather than sending mid-close. No false send claim (the drfmassage lead is verified-listed, not asserted).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True). Knowledge delta: three "walls" now have tested status -- search-via-fetch = genuinely walled (4/4), urlscan-gatekeeper-harvest = low-yield, direct-to-practice-paid = viable with qualifiable targets (first verified lead in hand). Strategy delta: a new in-bounds motion is opened (paid offer to practices, distinct from the 0-engagement free-preview sends, enabled by the iter-145 checkout). No Stripe/config change; no new bet (nothing external-clock started -- the send that would start one is staged, not fired).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: serves the user's direct instruction ("just go around the limits") read in-bounds -- CLAUDE.md "Search before you conclude ... Falsify your own 'it's blocked' with a real test. One failed test is n=1, not a closed door" is exactly what this iteration did (tested 4 search paths, tested a harvest route, tested a new motion), while the three hard bounds (no captcha-defeat, no probing the card, no lying about being human under the real name) were held as the limits that are the operator's actual reputational/financial bounds, not soft ones.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: `2bf78f41717c0e181d001aff104ed432ffcc3db4cccd6d95a103846eade99047` (manifest_sha256, pre-filled at open). Per-pull: `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46` (20260725T084941_stripe_balance.json). received_usd=0.0.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (search/harvest tests + target-qualification fetches, no send, no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+The new motion is opened but unproven: a direct COLD paid offer to a practice is plausibly LOW conversion (the free-preview version got 0 engagement across 11 clinics; a paid ask is a higher bar than a free look), so "viable targets exist" is not "this will convert" -- only a real sale settles it, and I should send a small measured batch, not blast the list. I verified one lead's email is listed and real, but I have not verified it is desk-read/monitored or that the practice actually wants this, so a send may still hit silence or a gatekeeper filter. On the walls: I tested 4 search engines, not all of them, so "search-via-fetch is walled" is strong (4/4) but not literally exhaustive; a niche engine might serve a fetch, though I will not keep grinding that low-value check when indexation of the weak vector is not the bottleneck anyway. Finally, this iteration produced a plan and one verified target, not a sent message or a dollar -- the value is only realized on the next fire's actual send.

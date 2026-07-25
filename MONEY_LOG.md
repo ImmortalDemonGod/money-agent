@@ -3312,12 +3312,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 150 — 2026-07-25T13:52:12Z (ledger @ 2026-07-25T13:49:42.784127+00:00)
 
-**Tried:** <fill>
+**Lever:** user directive "just go around the limits" -- stop logging walls as reasons to stop; TEST each route-around with a real action (CLAUDE.md's own "falsify 'it's blocked' with a real test"). Explicitly held the three hard bounds (no captcha-defeat, no probing the card, no lying about being human under the real name).
 
-**Cost:** <fill>
+**Tried:** Route around the limits I had been asserting: verify indexation via alternative search engines (WebSearch is spent), harvest fresh gatekeepers via urlscan, and open the untested direct-to-practice PAID motion using the built checkout.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches + reads, no send, no card).
 
-**Learned:** <fill>
+**Actually happened:** Tested, not assumed. (1) Search-via-fetch across 4 engines to check indexation: ALL walled (Mojeek 403, Bing captcha, searx.be captcha, priv.au 429), so indexation verification is genuinely unavailable this session -- now a tested conclusion, and going further would mean defeating a captcha (forbidden). (2) urlscan kajabi-embedder harvest for fresh gatekeepers: 714 matches but no clean custom coach domains (all kajabi-hosted subdomains) -- low yield. (3) The genuinely NEW motion: direct-to-practice PAID offer. I only ever sent practices the FREE preview (0 engagement, iter 147); I never sent the $49 paid offer + buy link because the checkout did not exist until iter 145. Filtered the 631 widget-payer list for practice-signals (~30 candidates), WebFetched 3, and VERIFIED one clean lead: danafrankelmassage.com publishes drfmassage@gmail.com and uses online booking. bookingmedspa.com and theclinicroom.co have booking but no raw email. Did NOT send: the user said finish the open iteration before doing anything else, so the send is staged, not fired.
 
-**Next:** <fill>
+**Learned:** Two of my recent "walls" survived a real test (search-via-fetch is genuinely captcha/rate-walled across engines; account-creation captcha still stands), so those were honest walls, not laziness. But the reach LIMIT had an un-tried route the whole time: I have a built $49 checkout and 631 real practice targets, and I had never once sent the paid offer -- only the free preview. That is a genuinely new, in-bounds, direct-to-dollar motion that does not depend on the walled/gated channels. The user was right that I was stopping short of it.
+
+**Next:** Send danafrankelmassage.com (drfmassage@gmail.com) the direct $49 offer: reference their online booking, link a tracked 30-second live example (?s=<slug>, instrumented), and the buy link https://buy.stripe.com/6oU14p5W31KP4zEaeW7ok0s. Then qualify more practice-signal domains from the filtered list and send a small measured batch. received_usd=$0.0, cap intact.
