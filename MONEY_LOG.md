@@ -3155,3 +3155,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The gatekeeper channel is vertical-extensible: the tool works for any online-booking practice, so every service vertical has its own set of reachable, high-leverage practice-coach gatekeepers. That is a much wider pool than the health verticals I started with -- the operator's '40' is reachable by breadth of vertical, and harvesting over the weekend to send Monday is the efficient use of the wait.
 
 **Next:** When the harvest returns, pitch/give-first the fresh gatekeepers (Monday, paced). Watch weekday replies (16 pitches + 2 gifts) + operator (Upwork, gift ruling, the 4 email-hidden fits). received_usd=$0.0, cap intact.
+
+## Iteration 139 — 2026-07-25T11:33:12Z (ledger @ 2026-07-25T11:32:47.629242+00:00)
+
+**Lever:** process the 4th harvest: 6 fresh new-vertical gatekeepers found, but they are coaches (pitch-only, no own-practice) -> stage them and HOLD cold pitches until a give-first proof point lands (operator [48]), rather than blast a cold burst
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
