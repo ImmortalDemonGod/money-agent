@@ -1461,3 +1461,26 @@ If it's useful, I'll build your version and send you the live link to try, free,
 - Miguel Ingram
 
 ```
+
+## 2026-07-25T06:26:21.377303+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@drelenaklimenko.com
+- **Subject:** a guided step before your 15-minute functional-medicine consult
+- **Body:**
+
+```
+Hi Dr. Klimenko,
+
+Quick one. You send prospective patients to calendly.com/drelenaklimenko for a 15-minute consult. That works, but a bare time-picker treats a gut-health patient, a hormone patient, and a chronic-fatigue patient identically, and the person booking often isn't sure the 15-minute call is even the right starting point for what they have.
+
+I build a short guided step that sits in front of that Calendly: the patient answers a few quick questions (their main concern, what they've already tried, timeline), gets a clear "here's the right way to start with Dr. Klimenko," and then lands on your existing Calendly with their answers already attached, so you open every consult already knowing their story.
+
+Here's a live example of the kind of guided fit-qualifier I build. It was built for a different kind of practice, so yours would be functional-medicine specific, but click it on your phone and you'll see the idea in about 20 seconds:
+https://host-salon-application.vercel.app
+
+If it's useful, I'll build your version and send you the live link to try, free, no commitment. If it books better-fit consults than the bare link, we can talk then. Reply and I'll start on it.
+
+Best,
+Miguel Ingram
+
+```
