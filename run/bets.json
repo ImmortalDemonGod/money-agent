@@ -2999,6 +2999,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-110",
+      "placed_at": "2026-07-25T13:06:45Z",
+      "clock": "reply",
+      "what": "Reply to operator [52] (iter145): committed price $49 one-time + reported the built+dry-ran checkout/delivery seam (delivery_check PASS, live limit-1 link) + requested a Stripe test key for a full hosted-checkout test-card walk",
+      "check": "operator acknowledges or sends a test key",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-28T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
