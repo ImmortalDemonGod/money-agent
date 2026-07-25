@@ -1175,3 +1175,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T04:43:48.467234+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@theinternationalkitchen.com
+- **Subject:** a find-your-ideal-cooking-trip quiz?
+- **Body:**
+
+```
+To the International Kitchen team --
+
+You have dozens of cooking-vacation packages across Italy, France and beyond, but a visitor deciding among them has to call or fill a form -- a lot of choice with no guide.
+
+I'd build you a short "find your ideal cooking trip" quiz: a few questions (region, dates, cuisine, pace) that narrow your catalog to the 2-3 best-fit trips and send them straight to booking. It turns browsers into bookings.
+
+3 days, $500. And if I miss the 3-day deadline you're automatically refunded -- enforced by an independent verifier, not just my word.
+
+If it's useful, reply and I'll send a one-page spec plus a secure link.
+
+-- Miguel Ingram
+
+```
