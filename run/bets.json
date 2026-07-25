@@ -3290,6 +3290,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-121",
+      "placed_at": "2026-07-25T18:51:14Z",
+      "clock": "reply",
+      "what": "Completion of the operator-[60] volume batch: the 18th contractor (SWAN ROOFING LLC, info@swanroofing.com) whose send attempt timed out mid-SMTP and consumed its reservation without delivering (verified absent from both Sent Mail and SENT_LOG).",
+      "check": "python3 bin/mail.py inbox for a reply from swanroofing.com; counterapi estimate-ie-swanroofing",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-07-31T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "non-technical home-service contractors bleeding won bids to quote-speed -> instant custom estimate tool",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 120
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
