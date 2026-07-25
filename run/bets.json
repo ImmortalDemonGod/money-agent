@@ -1967,8 +1967,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-03T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T05:43:12Z",
+      "checks": [
+        {
+          "at": "2026-07-25T05:43:12Z",
+          "note": "no Repair Wizards reply yet"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "businesses already paying for a widget in the category (proven pain+wallet) -> a better working tool shown, not offered",
