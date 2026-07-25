@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simply Organic Beauty — Become a Host Salon</title>
+<meta name="description" content="See if your salon is a fit for Simply Organic Beauty's Host Salon program in under a minute — clean, professional organic products made for holistic stylists.">
+<style>
+  :root{--sage:#7d9773;--sage2:#5f7a57;--ink:#2b322a;--pap:#fff;--mut:#77806f;--line:#e6e8df;--cream:#f6f5ee}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--cream)}
+  .wrap{max-width:620px;margin:0 auto;padding:0 16px 46px}
+  header{background:linear-gradient(135deg,#4c5f46,#6d8563);color:#fff;padding:28px 16px 32px;text-align:center}
+  .brand{font-size:24px;font-weight:700;letter-spacing:.4px}
+  .tag{color:#e4ecdd;font-size:13.5px;margin-top:5px;font-style:italic}
+  .pill{display:inline-block;margin-top:11px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#eef4e8;font-size:12px;padding:4px 11px;border-radius:999px}
+  .card{background:var(--pap);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 26px rgba(60,70,50,.07);margin-top:-18px;padding:24px}
+  h1{font-size:19px;margin:0 0 3px}.sub{color:var(--mut);font-size:14px;margin:0 0 16px}
+  .steps{display:flex;gap:6px;margin:0 0 18px}.dot{height:5px;border-radius:99px;background:var(--line);flex:1}.dot.on{background:var(--sage)}
+  label{font-size:13px;font-weight:700;color:#4a5343;display:block;margin:14px 0 6px}
+  input,select,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff}
+  textarea{min-height:64px;resize:vertical}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt{border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:.12s}
+  .opt:hover{border-color:var(--sage);background:#f4f7f1}.opt.sel{border-color:var(--sage);background:#eef4e9;box-shadow:inset 0 0 0 1px var(--sage)}
+  .row{display:flex;gap:10px;margin-top:18px}
+  .btn{appearance:none;border:0;border-radius:11px;padding:13px 18px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--sage);color:#fff;flex:1}.btn.primary:hover{background:var(--sage2)}
+  .btn.ghost{background:#eef0e8;color:#4a5343}.btn[disabled]{opacity:.45;cursor:not-allowed}
+  .hide{display:none}
+  .fitbox{background:#eef4e9;border:1px solid #cfe0c4;border-radius:12px;padding:16px;text-align:center}
+  .fit{font-size:22px;font-weight:800;color:var(--sage2)}
+  .sum{background:#f7f7f1;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:13.5px;line-height:1.6;text-align:left;margin-top:12px}
+  .sum b{color:var(--ink)}
+  .final{text-align:center}.ok{width:50px;height:50px;border-radius:50%;background:#e5f1de;color:var(--sage2);display:flex;align-items:center;justify-content:center;font-size:24px;margin:4px auto 10px}
+  .foot{color:var(--mut);font-size:12.5px;text-align:center;margin-top:16px;line-height:1.5}
+  a.go{display:block;text-decoration:none;margin-top:14px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Simply Organic Beauty</div>
+  <div class="tag">Made for holistic hair stylists &amp; salons</div>
+  <div class="pill">Host Salon Program · 60-second fit check</div>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="steps"><div class="dot on" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
+
+    <section id="s1">
+      <h1>Is your salon a fit?</h1>
+      <p class="sub">A quick, values-first check — better than a blank form, and it tells you right away.</p>
+      <label>Salon name</label><input id="sname" placeholder="Your salon">
+      <label>City &amp; state</label><input id="loc" placeholder="e.g. Austin, TX">
+      <label>How many stylists / chairs?</label>
+      <select id="size"><option>Solo / booth renter</option><option>2–4 stylists</option><option>5–10 stylists</option><option>10+ stylists</option></select>
+      <div class="row"><button class="btn primary" id="n1" disabled>Continue</button></div>
+    </section>
+
+    <section id="s2" class="hide">
+      <h1>Where are you on clean beauty?</h1>
+      <p class="sub">We partner with salons who care about what they put on clients' hair and the planet.</p>
+      <div class="grid" id="fitq">
+        <button class="opt" data-v="Already all-clean">We're already all-clean / organic</button>
+        <button class="opt" data-v="Switching to clean">Actively switching to clean lines</button>
+        <button class="opt" data-v="Curious / starting">Curious and starting to explore</button>
+        <button class="opt" data-v="Client-driven">Our clients are asking for it</button>
+      </div>
+      <label>What are you most interested in? (pick any)</label>
+      <div class="grid" id="want">
+        <button class="opt" data-v="Clean color line">Clean hair color</button>
+        <button class="opt" data-v="Retail / affiliate">Retail to my clients</button>
+        <button class="opt" data-v="Education">Education &amp; support</button>
+        <button class="opt" data-v="Full switchover">A full clean switchover</button>
+      </div>
+      <div class="row"><button class="btn ghost" id="b2">Back</button><button class="btn primary" id="n2">See my fit</button></div>
+    </section>
+
+    <section id="s3" class="hide">
+      <h1 style="text-align:center">Your fit</h1>
+      <div class="fitbox">
+        <div class="fit" id="fitline">Strong fit ✦</div>
+        <p class="sub" style="margin:8px 0 0" id="fitmsg"></p>
+        <div class="sum" id="sum"></div>
+      </div>
+      <label>Best email for your Host Salon welcome kit</label><input id="email" placeholder="you@yoursalon.com">
+      <a class="go" id="apply" href="https://form.jotform.com/231796845133160" target="_blank" rel="noopener"><button class="btn primary" style="width:100%">Apply to become a Host Salon →</button></a>
+      <button class="btn ghost" id="b3" style="width:100%;margin-top:10px">Back</button>
+    </section>
+
+    <section id="s4" class="hide final">
+      <div class="ok">✦</div>
+      <h1>Welcome aboard the review</h1>
+      <p class="sub" id="doneMsg">Simply Organic Beauty has your salon's profile. We'll follow up about your Host Salon welcome kit — free shipping over $400, affiliate retail, and the partner community.</p>
+      <div class="sum" id="sum2"></div>
+      <p class="foot">Questions? <b>help@simplyorganicbeauty.com</b>. Over 2,000 clean, vegan, cruelty-free professional products.</p>
+    </section>
+  </div>
+  <p class="foot">A working Host-Salon application demo built for Simply Organic Beauty — a values-first funnel that qualifies salons before they hit your inbox.</p>
+</div>
+<script>
+  var st={sname:"",loc:"",size:"",fit:"",want:[]};
+  function show(n){for(var i=1;i<=4;i++)document.getElementById('s'+i).classList.toggle('hide',i!==n);
+    document.getElementById('d1').className='dot on';document.getElementById('d2').className='dot'+(n>=2?' on':'');document.getElementById('d3').className='dot'+(n>=3?' on':'');}
+  var sn=document.getElementById('sname');
+  sn.oninput=function(){document.getElementById('n1').disabled=!sn.value.trim()};
+  document.getElementById('n1').onclick=function(){st.sname=sn.value.trim();st.loc=document.getElementById('loc').value.trim();st.size=document.getElementById('size').value;show(2)};
+  document.getElementById('b2').onclick=function(){show(1)};
+  var fitq=document.getElementById('fitq');
+  fitq.onclick=function(e){var b=e.target.closest('.opt');if(!b)return;[].forEach.call(fitq.children,function(c){c.classList.remove('sel')});b.classList.add('sel');st.fit=b.dataset.v};
+  var want=document.getElementById('want');
+  want.onclick=function(e){var b=e.target.closest('.opt');if(!b)return;b.classList.toggle('sel');st.want=[].filter.call(want.children,function(c){return c.classList.contains('sel')}).map(function(c){return c.dataset.v})};
+  document.getElementById('b3').onclick=function(){show(2)};
+  document.getElementById('n2').onclick=function(){
+    var strong = st.fit==='Already all-clean'||st.fit==='Switching to clean'||st.fit==='Client-driven';
+    document.getElementById('fitline').textContent = strong? 'Strong fit ✦':'Good fit ✦';
+    document.getElementById('fitmsg').textContent = strong
+      ? "You're exactly who the Host Salon program is built for — clean-forward and ready."
+      : "Great starting point — the program is designed to make the switch easy, with education and support.";
+    document.getElementById('sum').innerHTML='<b>'+(st.sname||'Your salon')+'</b>'+(st.loc?(' &middot; '+st.loc):'')+'<br>'+st.size+(st.fit?('<br><b>Clean stance:</b> '+st.fit):'')+(st.want.length?('<br><b>Wants:</b> '+st.want.join(', ')):'');
+    show(3);
+  };
+  document.getElementById('apply').addEventListener('click',function(){
+    var em=document.getElementById('email').value.trim();
+    var note='Host Salon applicant — '+(st.sname||'')+' | '+(st.loc||'')+' | '+st.size+' | '+st.fit+(st.want.length?(' | wants: '+st.want.join(', ')):'')+(em?(' | '+em):'');
+    try{navigator.clipboard&&navigator.clipboard.writeText(note);}catch(e){}
+    var s2=document.getElementById('sum2');if(s2)s2.innerHTML=document.getElementById('sum').innerHTML+(em?('<br><b>Email:</b> '+em):'');
+    setTimeout(function(){show(4)},400);
+  });
+</script>
+</body>
+</html>
