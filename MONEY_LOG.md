@@ -2430,12 +2430,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 087 — 2026-07-25T01:24:43Z (ledger @ 2026-07-25T01:20:21.359209+00:00)
 
-**Tried:** <fill>
+**Lever:** OPERATOR CORRECTION -- "you're not on a datacenter IP; use both beacons and tell me the reach vs the documented baseline." Two live tests: (1) read BOTH beacon systems against the frozen baselines, (2) re-probe the run's FOUNDATIONAL wall -- "every audience channel walls a datacenter IP" -- now that the IP is confirmed residential.
 
-**Cost:** <fill>
+**Tried:** (a) Verified my own outbound IP: 149.76.79.26 -> host-26.149-76-79.mybluepeak.net, AS20412 Clarity Telecom/Bluepeak, a RESIDENTIAL ISP in Lawton OK -- NOT a datacenter IP (operator was right). (b) Read both beacons vs baseline: CounterAPI run-2 pages, and the onehonestdollar.com Cloudflare D1 money-page beacon -- whose STATS_SECRET I found sitting on-disk at ~/money-agent/.beacon_stats_secret.key (so the "operator-only, I'm blind" I logged iters 086 was FALSE). (c) Re-probed previously datacenter-walled channels from residential: reddit, HN, dev.to, itch.io.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (curl probes + beacon reads; no card, no send).
 
-**Learned:** <fill>
+**Actually happened:** Two corrections. FIRST -- reach is measurable and NOT zero, just tiny and self-inflated. Money-page D1 beacon: 184 raw hits / 32 JS-confirmed / 13 est-human-sessions -- but ~6 of those are my own ISP (Clarity Telecom, i.e. me, since I'm residential my own loads read as human) and 3 are security scanners (Palo Alto, Fortinet); stripping those leaves ~2-4 genuine external humans (Warsaw PL x3, Virgin Media UK x1), and ZERO bought. CounterAPI run-2 pages ~0 external (game=2=baseline, verifier/trunk=0, cvbeacon 5 loads / 0 buyclicks). telegra.ph run-1 estate 57->128 (+71 vs the 80-view baseline) but the D1 /go tracker shows that is mostly hub click-throughs + crawlers, not independent discovery. SECOND -- the datacenter-IP wall was REAL and partially lifts on residential: reddit.com/, /api/v1/me, a subreddit, and /register/ all now return HTTP 200 (run-1 recorded reddit 'closed: WAF network-block before any signup form', iter 002/039, from a datacenter IP). HN reads (/newest=200) but /submit and /login still 429 from residential. No posting creds held for either.
 
-**Next:** <fill>
+**Learned:** The run's foundational "every audience channel walls a datacenter IP" was ONE LAYER, not the whole wall. Residential IP reopens the NETWORK layer (reddit went from hard-blocked to 200 everywhere) but the captcha/account layer (reddit SPA/hCaptcha signup + new-account self-promo auto-removal; HN write-path throttle) is independent of IP and still stands. Converting reddit's new network-openness into actual reach needs a POSTING IDENTITY (an operator account = actuation), not a network breakthrough. Also a self-inflicted-blindness lesson: I logged "I can't read the money-page beacon" for ~2 iterations when the secret was on-disk the whole time -- the same unchecked-assumption failure the operator keeps naming.
+
+**Next:** Get a reddit posting identity (ask operator directly / file the actuation) and make ONE genuine on-topic post (r/InternetIsBeautiful / r/artificial / r/webgames) linking the game -- the first real audience-channel reach of the run. Re-confirm the reddit-network-open result is stable before relying on it. Then systematically re-test the remaining IP-suspect walls (Japanese platforms listed 'IP-reputation') from residential. received_usd=$0.0, twenty-five-dollar cap intact.

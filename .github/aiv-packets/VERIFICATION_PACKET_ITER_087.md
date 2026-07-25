@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. From a confirmed residential IP I falsified one layer of the run's foundational datacenter-IP
+   wall (Reddit's recorded network block now returns HTTP 200) and measured real-but-tiny,
+   unconverted money-page reach via a beacon secret that was on-disk all along; received_usd
+   remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T202021_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4b18009d4a1b7dd9ae70053601871f48395e3c1052bed2c6d5faa04d50598792`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,75 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Fresh curl probes from my own outbound IP on 2026-07-25. IP identity:
+`curl https://ifconfig.me` -> `149.76.79.26`; `curl ipinfo.io/json` -> org "AS20412 Clarity
+Telecom LLC", hostname host-26.149-76-79.mybluepeak.net, Lawton OK (residential ISP, not a
+datacenter). Channel re-probe (`curl -A <chrome-UA> -o /dev/null -w %{http_code}`):
+reddit.com/=200, reddit.com/api/v1/me=200, old.reddit.com/r/InternetIsBeautiful=200,
+reddit.com/register/=200; news.ycombinator.com/newest=200 but /submit=429 and /login=429;
+dev.to=200, itch.io=200. Beacons: CounterAPI read endpoints (trailing slash, non-incrementing)
+onehonestdollar-run2/game count=2, verifier=null, trunk=null, cvbeacon37/loads=5,
+cvbeacon37/buyclicks=null. Money-page D1 beacon read with the on-disk secret
+(`curl ".../stats?k=$(cat ~/money-agent/.beacon_stats_secret.key)"`) -> summary raw_hits=184,
+js_confirmed=32, est_human_sessions=13, est_human_ips=7. telegra.ph getViews:
+liw 38 (base 17), checklist 40 (21), showhn 25 (7), hub 25 (12).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/087/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: This iteration's findings are committed to MONEY_LOG.md (iter 087 block:
+Lever/Tried/Actually happened/Learned/Next) and to knowledge/outcomes.jsonl via two
+`bin/outcome.py add` records (channel=reddit "NETWORK WALL LIFTED ... HTTP 200 from residential";
+channel=hacker_news "STILL 429 on /submit and /login from residential"). The recorded prior wall
+this overturns: knowledge/channel_map.json reddit entry ("gate: WAF network-block before any
+signup form", "outcome: closed", evidence_iter 002/039). The residential-IP fact is from ipinfo.io,
+not a repo file.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (no card use, no send, no offer change); received_usd=0.0 unchanged.
+No hosted page was altered and the stale showcase/ source was left untouched -- I did not push it
+to its host (that trap avoided). I
+did not attempt automated captcha-solving on the Reddit signup (a forbidden lever) -- I recorded
+the residual captcha wall rather than trying to defeat it. Probes were single-shot per endpoint to
+avoid tripping abuse detection on my own (and the operator's) residential IP.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Knowledge delta: reddit reclassified from "closed (WAF network-block)" to "network-open from
+residential; residual captcha/account wall" ; hacker_news write-path 429 confirmed to persist on
+residential. Reach knowledge delta: money-page reach went from "unknown/operator-only (asserted
+iters 086)" to measured -- 184 raw / 32 JS-confirmed / ~2-4 genuine external humans after
+subtracting my own ISP (~6) and security scanners (~3), 0 conversions. telegra.ph estate
+57->128 (+71) vs the frozen 80-view baseline.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves the direct operator instruction this fire ("you're not on a datacenter IP; use
+both beacons and tell me the reach vs the baseline") and his standing OPERATOR_DIRECTIVE frame
+("you are not blocked by walls ... drop passive distribution"). Authorized by CLAUDE.md "Search
+before you conclude ... Falsify your own 'it's blocked' with a real test" and "get information
+yourself" -- this iteration replaces an assumed wall and an assumed blindness with measured facts.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 = 4b18009d4a1b7dd9ae70053601871f48395e3c1052bed2c6d5faa04d50598792
+(the ledger pull backing the received_usd=0.0 this claim cites). The claim asserts no money
+received, so it rests on the $0.0 ledger state, not on any new pull.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `curl probes and beacon reads (no card, no send)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+The Reddit HTTP 200 reads prove the network layer is open; they do NOT prove I can post -- I did
+not complete a signup (hCaptcha + email + likely new-account self-promo removal remain, and I hold
+no creds), so "Reddit is usable" is unproven, only "Reddit is network-reachable". A single-shot
+probe could be a transient CDN state; the result needs re-confirmation before I rely on it. The
+beacon's est_human_sessions is an estimate with a known residual (headless real browsers inflate,
+VPN humans deflate); my attribution of ~6 sessions to "me" rests on ASN=Clarity Telecom matching my
+own ISP, which is strong but not certain (a second Lawton-area human is possible though unlikely).
+telegra.ph getViews cannot split bot from human, so +71 is an upper bound. The only ground truth for
+a valuing human is received_usd, still 0.0.
