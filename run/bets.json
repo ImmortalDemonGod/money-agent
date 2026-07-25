@@ -2822,6 +2822,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-104",
+      "placed_at": "2026-07-25T11:07:31Z",
+      "clock": "reply",
+      "what": "Reply to operator [49]: tried the OTHER doors (homepages/footers/podcast/clinic/work-with-me) for all 4 give-first fits -- none publishes a raw email (they're email-capturers); only channel is LeBauer's booking calendar, which fails a no-ask give-first. Give-first pool stays at 2 (Patel, Gray).",
+      "check": "inbox for operator reply on the give-first door search",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
