@@ -2917,3 +2917,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The plain-text arm trades the click metric (delivery+open+interest) for the reply metric (delivery+open+interest+ACTION), which is rarer -- so small-N reply data is a weak signal, but a reply here is a real warm lead, and the format maximizes inbox placement. Honest cold outreach with the best-deliverability shape is the core loop regardless of measurement cleanliness.
 
 **Next:** Watch bet-090 (plain-text replies) vs bet-086 (link-arm clicks) -- a reply on the link-free arm while the link arm stayed silent points at the link as the deliverability drag. On any reply, send the personalized preview then wire + Stripe-invoice. Upwork parked ~1 day (Upwork-ready per iter 120). received_usd=$0.0, cap intact.
+
+## Iteration 122 — 2026-07-25T08:33:39Z (ledger @ 2026-07-25T08:32:15.583800+00:00)
+
+**Lever:** process a real signal: a hard bounce (info@dralhakam.com 550) -- record the deliverability data point (10/11 accepted, 1 dead) + the reputation risk of unvalidated scraped emails; do not blast more unvalidated sends
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
