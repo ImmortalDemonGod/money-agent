@@ -2357,3 +2357,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Three game-blog pitches (ABG, Warp Door, FGP) now cover the reachable weird/free-game coverage pool; further blog pitches would hit diminishing returns and edge toward spray. The higher-value untried lever is a SELF-SERVE game portal: GameJolt is reachable (itch is not), and the recon says a signup attempt is worth a dedicated fire. That is the genuine next move, not a fourth blog.
 
 **Next:** DEDICATED next-fire lever: attempt GameJolt account creation + game upload (site-api flow, CSRF + likely email verify) -- a reachable self-serve game portal with a browsing audience. If it walls at email/captcha, record it. Hand operator the pack when he engages; file itch when a slot frees. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 082 — 2026-07-25T00:12:41Z (ledger @ 2026-07-25T00:09:12.946551+00:00)
+
+**Lever:** Attempt GameJolt self-serve game upload -- a REACHABLE game portal (unlike itch's 403) with a browsing audience = the permission-free reach the game promised. Drive the real signup via Playwright (renders the SPA, exposes any JS captcha the shell hid). If it clears, create account under the operator's authorized identity + upload the game; if it walls at captcha/email/upload, record it honestly.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
