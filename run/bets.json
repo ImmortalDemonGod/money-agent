@@ -1732,8 +1732,13 @@
       "poll_after_h": 48.0,
       "resolve_by": "2026-08-08T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T03:37:11Z",
+      "checks": [
+        {
+          "at": "2026-07-25T03:37:11Z",
+          "note": "baseline just after publish: guide telegra.ph views=2, cvbeacon37 loads=5 (baseline 5). No referral yet; 48h indexation clock running."
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "search: people querying 'export ChatGPT history to PDF/Markdown' (buyer-intent, problem-aware) -> ChatVault free tool",
