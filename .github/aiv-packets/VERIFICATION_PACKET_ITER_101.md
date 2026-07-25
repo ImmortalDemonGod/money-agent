@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Processed the first offer reply (an auto-responder, not a lead), derived an inbox-quality filter
+   for the sell channel, and launched a refined harvest for the next batch; received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T234202_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,48 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: bin/mail.py read 35 -> LOOP-LOC auto-reply (FAQ bounce, 'rely on our network of
+Swimming Pool Professionals'). bin/bets.py checked bet-071 (1 auto-reply, 4 pending). bin/outcome.py
+add business_inbox_quality. Launched one Explore harvest agent (WebFetch-only, non-nesting) for
+direct-to-consumer service SMBs.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/101/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: knowledge/outcomes.jsonl (business_inbox_quality), run/bets.json (bet-071 check),
+SENT_LOG.md (the iter-100 batch these replies answer). MONEY_LOG iter 101 records the reasoning.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT count the LOOP-LOC auto-reply as
+a lead or reply to a machine as if it were a human -- I identified it as an auto-responder and a
+model-mismatch and recorded it honestly. No send this iteration (the next batch waits on the harvest).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Knowledge delta: business_inbox_quality -- the raw-email seam gains a decision-maker-inbox filter
+(avoid consumer-service autoresponders + dealer-network manufacturers). bet-071 polled (1 auto, 4
+pending). A refined harvest is in flight.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves the operator's sell directive (keep real offers flowing to proven payers) and
+CLAUDE.md 'falsify, do not assume / one failure is n=1' -- one auto-reply refines the targeting, it
+does not close the channel. The refined harvest improves offer quality before the next volume.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `reading a reply and launching a research agent (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+No send and no revenue this iteration -- it's a processing/refinement step, and the operator wants a
+paid yes, not a refined pipeline. The inbox-quality lesson is from a single auto-reply (n=1); the
+other 4 generic inboxes may still reach a human. I have not confirmed the refined harvest will find
+better-quality targets -- that's the hypothesis being tested. received_usd=0.0.

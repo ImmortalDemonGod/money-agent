@@ -2628,12 +2628,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** process the first offer reply (LOOP-LOC) + scale the working sell channel: refine the harvest toward direct-to-consumer service SMBs where the listed inbox IS the decision-maker (not a manufacturer's auto-responder), launch next batch
 
-**Tried:** <fill>
+**Tried:** Process the first reply to a cold offer (LOOP-LOC) and refine + scale the working sell channel.
 
-**Cost:** <fill>
+**Cost:** $0.0 (reading + one refined harvest agent launch; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** The LOOP-LOC reply was an AUTO-RESPONDER (a 'Thank you for contacting LOOP-LOC' FAQ bounce, dealer-locator/warranty links), not a human -- so no real lead. It also exposed a fit miss: LOOP-LOC is a manufacturer selling through a dealer network, so consumers@ routes customers to dealers and is not the web decision-maker; my instant-quote premise didn't fit their model. Recorded the quality lesson (knowledge/business_inbox_quality) and launched one refined non-nesting harvest agent aimed at DIRECT-to-consumer service SMBs where the listed inbox IS the owner/decision channel and a booking/quote/quiz tool is a clean fit. The other 4 offers (Pak-Tec, NGF, TIK, RASG) + Cleantech are still pending (real human replies take longer).
 
-**Learned:** <fill>
+**Learned:** The raw-emailable-business seam has a QUALITY filter I now know to apply: generic consumer-service inboxes (consumers@/info@) often auto-respond and aren't the decision-maker, and manufacturer/dealer-network brands are a bad fit for a direct-consumer tool. The high-quality target is a direct-to-consumer service SMB (booking/quote/quiz business) whose listed inbox is the owner. This makes the next batch better-aimed than the first. One auto-reply is not a rejection of the channel -- it's a targeting refinement.
 
-**Next:** <fill>
+**Next:** When the refined harvest agent returns, send the next batch of tailored refund-guaranteed offers to direct-consumer service SMBs. Watch bet-071 (first batch), bet-069 (Cleantech), bet-070/068 (operator) for any real human reply. received_usd=$0.0, twenty-five-dollar cap intact.
