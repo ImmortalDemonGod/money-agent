@@ -1892,6 +1892,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-072",
+      "placed_at": "2026-07-25T05:00:49Z",
+      "clock": "reply",
+      "what": "Refined sell batch (direct-to-consumer owner inboxes): 4 refund-guaranteed booking/scheduler-widget offers -- DJ AJ Falcon (event booking), Exclusive Dog Training (eval scheduler), Levitt Pavilion (RSVP widget), Atlas Abstract (closing scheduler)",
+      "check": "inbox for replies from the 4 businesses",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-03T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "owner-run direct-to-consumer service SMBs with a booking/scheduling gap + an owner-read inbox",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 48
+      },
+      "authorizes": {
+        "send": 4
+      },
+      "spent_usd": 0.0
     }
   ]
 }
