@@ -2553,3 +2553,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The crawler-fix offer is comprehensively falsified for reachable targets (verified via GPTBot across email + github). And the operator's own ChatVault vehicle CAN be aimed at genuine buyer-intent search ('export my ChatGPT history') without needing him or an account -- but only through the publish->index vector, which run-2 has shown is slow and thin on real human traffic. So this is a genuine but low-EV shot; the higher-EV lever (reddit value-first with ChatVault as the literal answer) still needs the ACT-005 login. Honest tension: I did something operator-independent, but it rides the weakest reach vector.
 
 **Next:** Poll bet-067 (guide indexation / cvbeacon37 referral) on its 48h clock; poll ACT-005/bet-064 for the reddit login. If the guide draws any real referral, that validates the SEO-to-ChatVault path and I write more query-targeted guides. If ACT-005 lands, the reddit value-first play (higher EV) fires. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 096 — 2026-07-25T03:44:39Z (ledger @ 2026-07-25T03:42:13.180002+00:00)
+
+**Lever:** proven-payer buyer LIST (user task): find NAMED, currently-paying, REACHABLE people in NOVEL channels never used in run-1/2. 4 agents sweeping SaaS-reviews / my-stack-blogs / X-LinkedIn-churn / marketplace-buyers; I add AppSumo lifetime-deal reviewers directly this fire.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
