@@ -3811,3 +3811,60 @@ His effort from yes to live leads: reply, pay, done. Today: 26. Tomorrow: 30.
 Miguel Ingram
 
 ```
+
+## 2026-07-25T20:09:34.603423+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** reply rate is 0/113: ramp cancelled, gift now leads, pivoting to where they already asked
+- **Body:**
+
+```
+Miguel, you are right, and the arithmetic is worse than your framing. Straight answers.
+
+1. The reply rate, as a number.
+
+Zero. Across the whole run: 113 unique external recipients, 0 replies. Contractors specifically: 26 sent, 25 delivered, 0 replies. So the measured rate is 0/113 = 0.0 percent. The honest statistical version is that 0 successes in 113 tries does not prove the rate is zero, it puts a 95 percent ceiling on it of about 3/113, so 2.6 percent, and the point estimate is still zero.
+
+The arithmetic you asked for. Sales equal sends times reply rate times close rate. At 100 sends a day, one sale a day needs reply times close of at least 1 percent.
+
+- If a quarter of everyone who replies buys, I need a 4 percent reply rate. My ceiling is 2.6 percent, so I cannot get there even at my own optimistic bound.
+- At my 95 percent ceiling, 2.6 percent reply and 25 percent close, 100 sends a day is 0.66 sales a day.
+- At a normal cold-email rate, 1 percent reply and 20 percent close, it is 0.2 sales a day. That is 500 sends per forty-nine dollars.
+
+Five hundred sends is the entire filtered list. So at plausible rates cold email consumes my whole sendable universe to produce roughly one sale, and that is assuming the true rate is not actually zero. Multiplying by zero was the polite version.
+
+2. Evidence the next thirty do better.
+
+I have none. Same email, same construction, different names. It would be spending a finite list and my sender reputation to re-measure a number I already have.
+
+So I am not sending thirty tomorrow. The ramp is cancelled, not paused-and-quietly-resumed. I will not raise the send count again until something other than volume has changed.
+
+3. My first two sentences, word for word.
+
+"Hi there, I found Spade Roofing and Gutters in the Georgetown chamber directory. Right now, when a homeowner lands on your site wanting a price, what you offer them is Free Inspection, so they have to call you, and then wait."
+
+You already know the verdict. That opens by telling a stranger what is wrong with his business. The free tool was in paragraph four, and the forty-nine dollars was in the same email. So the first thing he met was a critique and a price, and the gift was buried behind both. It was a push email wearing a gift's clothes, and I wrote it that way while telling myself it was proof-led.
+
+I rewrote it before writing this reply. The new first touch opens: "I built you a working instant-estimate page for Spade Roofing and Gutters. It is live right now, it has your logo and your colours on it, and a homeowner can get a ballpark roof price out of it in about thirty seconds." Then the link, then "It is yours. Free, no signup, nothing to install, and I am not asking you for anything to use it." The diagnosis moved below the gift. The forty-nine dollars is now one line near the bottom, framed as optional, ending with "that is genuinely not why I am writing, the link above works whether you ever reply or not."
+
+4. Where they are already asking.
+
+I tested instead of naming from memory, and I want to be honest about what that testing found, because naming a room I cannot enter is worthless.
+
+Reddit is READABLE from here only through old.reddit.com RSS, and it rate-limits hard: I got one subreddit through and 429s on eight others. Posting needs an account, and reddit account creation is the operator-only unblock that has been open as ACT-005 since earlier in the run. Facebook groups need an account too. Indeed and Craigslist both 403 this sandbox. Upwork's job search 403s as well, even though you have a real profile there with the proposal tooling wired up.
+
+So the honest answer to "what stops you" is: not knowing where they are. It is that every room where they gather requires an identity I do not have and cannot create from here. That is a real, specific, testable blocker, not an excuse, and it is the thing I should have said out loud three rounds ago instead of scaling sends.
+
+5. The one demand-side move.
+
+Freelance job boards, where the client has already written down what they want and attached a budget. That is the exact inversion of what I have been doing: they asked first, and money is already committed. I verified freelancer.com serves 50 live jobs with real budgets, thirty dollars to five thousand, to a plain fetch from this sandbox. Clients there post "build me a quote calculator for my site" as a matter of routine, which is the thing I have already built and can hand over the same hour.
+
+The number that proves it beat cold email: replies per proposal. Cold email is 0 out of 113. The bar is at least 1 client reply per 20 proposals, so 5 percent, or a paid award. If 20 proposals come back with zero, that rail is no better than cold email and I will say so in those words rather than asking for 20 more.
+
+The known risk, stated up front: bidding needs an account on the board. Reading the jobs works from here, bidding may not. That is the first thing I test next iteration, before I write a single proposal, and if it is walled I will register it as an actuation rather than quietly discover it and pivot again.
+
+Reply rate 0/113, ceiling 2.6 percent. Thirty tomorrow is cancelled. Gift now leads the email. Next iteration: freelance job boards, bar is 1 reply per 20 proposals.
+
+Miguel Ingram
+
+```
