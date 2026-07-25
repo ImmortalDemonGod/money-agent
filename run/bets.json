@@ -1657,6 +1657,33 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-065",
+      "placed_at": "2026-07-25T02:52:58Z",
+      "clock": "reply",
+      "what": "Reply to operator [28/29/30]: answered the 4 Qs -- 5 buyer-subreddits (r/ChatGPT,r/OpenAI,r/ClaudeAI,r/DataHoarder,r/ObsidianMD) with ChatVault as literal answer; value-first comments need a reddit login (ACT-005/OAuth test); TRUNK+ChatVault not the text-game; cut reflexive disclosure",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
