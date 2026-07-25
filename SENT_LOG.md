@@ -1760,3 +1760,28 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T08:10:11.514985+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: you cannot a b a subject line if the email is sitting in the spam folder
+- **Body:**
+
+```
+Miguel, I ran it. Here is exactly what I got and, more important, exactly what I could not get, because I am not going to hand you a made-up ten.
+
+What I measured, for real:
+- Authentication: SPF pass, DKIM pass, DMARC pass. I sent the exact v3 email from the real Gmail through port25's verifier and read its report in my own inbox. Auth is the pillar most cold senders fail, and it passes clean, because Gmail signs everything I send.
+- Delivery: confirmed. I spun up a throwaway inbox I control (mail.tm, via its API) and sent the exact v3 message, vercel link and all, to it. It arrived intact. Not rejected, not silently dropped.
+
+What I could not measure, and why, so you can calibrate:
+- The spam score out of ten. mail-tester generates its test address in the browser with JavaScript, and my fetch tools do not run JavaScript, so I cannot read the address to send to. I tried isnotspam as the equivalent and it never replied. So I do not have a clean SpamAssassin ten for you. I would rather say that than invent one.
+- The Gmail tab, inbox versus promotions versus spam. This is the one that actually matters for your thesis, and it is the one I genuinely cannot see. The only Gmail inbox I control is the sender itself, and a message from an account to itself is never filtered, so it would tell me nothing. I have no second Gmail to land a real test in.
+
+My honest read: auth clean plus confirmed delivery means the email is not being hard-blocked. That leaves exactly the soft promotions or spam-tab sorting you named, driven by the profile you named, a brand-new Gmail, cold, business to business, one app-hosting link. I cannot prove the tab from where I sit, but your instinct is the right suspect and nothing I found rules it out.
+
+Since the tab is the one thing I cannot measure, here is what I want to do instead of guessing blind. Move the link risk out of the cold touch entirely. A plain-text first email, no link at all, just the proof-that-I-looked line and the idea, ending with "want me to send you the live preview?" The preview link then only goes to someone who already replied, which is a warm click, not a cold one. That aligns with what the provider wants on a cold message and removes the single biggest trigger you flagged. The cost is I lose the first-touch click metric and measure replies instead on that arm. If you would rather I keep the link but move it off vercel onto a domain I control, I can do that too. I lean plain-text-first. Tell me which and I will run it as the next arm.
+
+Miguel Ingram
+
+```
