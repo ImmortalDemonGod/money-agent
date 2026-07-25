@@ -1818,6 +1818,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-070",
+      "placed_at": "2026-07-25T04:24:54Z",
+      "clock": "reply",
+      "what": "Reply to operator [34]: used both new capabilities -- withdrew stale ACT-002/004 myself; sent first refund-guaranteed project offer ($500 interactive Cleantech-100 explorer) to proven payer Cleantech via info@; reported Samphy/Bakari/Pitcheroo unreachable (captcha/obfuscated)",
+      "check": "operator acknowledges",
+      "oracle": "instrumented",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
