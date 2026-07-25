@@ -2913,6 +2913,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-107",
+      "placed_at": "2026-07-25T12:10:52Z",
+      "clock": "reply",
+      "what": "v2 RETENTION-PERK offer test (operator [51]): sent the flipped offer (free member perk, no cut, case study + intro) to 4 lowest-bounce-risk fresh gatekeepers -- Billy Polson (fitness studios, personal), Lisa Conway/Salon Conversation (salon/spa), Karena Zolner/The Spa Coach, Addo Aesthetics. First test of the retention-perk offer vs the old rev-share. Staged 4 role-address gatekeepers.",
+      "check": "inbox for replies from thebusinessmovement/zingcoach/karenazolner/addoaesthetics",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-02T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 4,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 4
+      },
+      "spent_usd": 0.0
     }
   ]
 }
