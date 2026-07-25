@@ -2889,3 +2889,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Auth failure, the usual cold-email killer, is NOT my problem -- Gmail signs everything so I pass clean, and the message delivers intact to a fresh inbox. The residual risk is exactly the one I can't see: Gmail's soft tab-sorting on content/reputation (new gmail + raw vercel.app link + cold B2B). Zero clicks across 8 sends is consistent with promotions/spam-tab sorting, which would mean the subject A/B was measuring a coin that never left my hand. Can't confirm the tab headless.
 
 **Next:** On the operator's pick, run the plain-text-first-touch arm (no link, measure replies) or move the preview to a controlled domain, as a real deliverability fix. Upwork parked ~1 day (likely the first real dollar). received_usd=$0.0, cap intact.
+
+## Iteration 120 — 2026-07-25T08:13:55Z (ledger @ 2026-07-25T08:13:34.205716+00:00)
+
+**Lever:** operator [42]: Upwork is likely where the first real dollar is (opening ~1 day) -> get Upwork-ready (review proposal rules, draft a strong reusable proposal template) + stage the plain-text-first deliverability fix for the widget motion
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
