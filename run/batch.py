@@ -109,23 +109,21 @@ def enrich(row: dict) -> dict | None:
     return row
 
 
-SUBJECT = "your site says {ctashort} -- here is what an instant one looks like"
+SUBJECT = "I built {biz} an instant-estimate page -- it is live, it is free, link inside"
 
 TMPL = """Hi there,
 
-I found {name} in the {chamber} chamber directory. Right now, when a homeowner lands on your site wanting a price, what you offer them is "{cta}" -- so they have to call you, and then wait.
-
-That wait is where the money leaks. When someone is pricing a {noun}, they contact two or three of you. The one who puts an actual number in front of them first usually wins, not because he is better, but because he answered while they were still deciding. Everyone who quotes a day later is quoting into a decision that is already made. On a couple of winnable jobs a month, that is real money walking.
-
-So instead of describing it, I built you a working one. Thirty seconds, no signup, nothing to install:
+I built you a working instant-estimate page for {name}. It is live right now, it has your logo and your colours on it, and a homeowner can get a ballpark {noun} price out of it in about thirty seconds:
 
 {link}
 
-That is your logo on it, your colors, and the questions your customers would actually answer. A homeowner picks their material, types a rough size, and gets an instant ballpark range -- then it captures them, their contact info and their project specs, right at the moment they are most interested. You stop waking up to a voicemail that says "call me back about a price" and start waking up to a lead that already told you what it needs.
+It is yours. Free, no signup, nothing to install, and I am not asking you for anything to use it. Text that link to the next person who asks what something costs and see what happens.
 
-Straight about what that link is: it is a real, live demo, and the ballpark math in it is honest US range math, not your pricing. The last step confirms on screen instead of emailing you. In your live version it runs on your actual numbers and the lead lands in your inbox the second they hit send.
+Why I bothered: your site currently offers "{cta}", so a homeowner who wants a number has to call and then wait. When someone is pricing a {noun} they usually contact two or three of you, and whoever puts a real number in front of them first tends to win -- not because he is better, but because he answered while they were still deciding. That link closes that gap for you today.
 
-If you want your own it is $49, one time, and I can have it live today -- your pricing, your brand, a link and an embed you can drop on your site. Reply and I will set yours up.
+Straight about what it is: the ballpark math is honest US range math for your trade, not your pricing, so it says ballpark and not a binding quote. Right now the details from anyone who fills it in come to me, and I will forward you anything real that comes through.
+
+If you ever want it running on your own numbers and pointed at your inbox instead of mine, I do that for $49 and it takes me about an hour. But that is genuinely not why I am writing -- the link above works whether you ever reply or not.
 
 Best,
 Miguel Ingram
@@ -207,7 +205,7 @@ def main():
             open(f"/tmp/body_{r['slug']}.txt", "w").write(body)
             man.append({"slug": r["slug"], "name": r["name"], "email": r["email"],
                         "trade": r["trade"], "cta": r["cta"], "link": link, "hash": h,
-                        "subject": SUBJECT.format(ctashort=r["cta"].lower())})
+                        "subject": SUBJECT.format(biz=r["name"])})
         json.dump(man, open("run/offers/batch_manifest.json", "w"), indent=1)
         for m in man:
             print(m["slug"], m["hash"], m["email"], "|", m["trade"], "|", m["cta"])
