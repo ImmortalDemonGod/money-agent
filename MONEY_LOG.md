@@ -2838,12 +2838,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** systematic de-risk before scaling the 631 list: objectively test deliverability (do my cold sends inbox or spam?) via mail-tester, since 5 sends sit at 0 clicks -- my own #4 said fix open-rate before scaling
 
-**Tried:** <fill>
+**Tried:** Was mid-send on a 3-prospect v2 batch; the operator ([41]) stopped me to pressure-test the copy first, so I audited and fixed it instead of sending.
 
-**Cost:** <fill>
+**Cost:** $0.0 (one operator reply, no card; NO cold sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Verified 3 reachable prospects from the 631 list (Downey Massage gmail, Hearthstone Wellness proton+Acuity, Safe Harbour Elder Care owner email) and had the v2 emails written -- then operator [41] landed: personalize = prove you looked in the FIRST LINE, subject = proof over promise, measure clicks. Audited my copy honestly against it and it failed 2 of 3: my subjects were promise-led ('a guided step before X' / 'made a quick preview'), and my first line proved I did WORK ('I built you a preview') but not that I LOOKED at them. Fixed the shape: subject now leads with the specific tool/service I verified ('your Acuity page for massage and Reiki'); first line opens with 'I saw the Acuity on your site, the one for booking massage or Reiki...' then the value. Added an honesty guard (name only the widget actually confirmed on their page, never one the scrape implies). Codified as run/offers/lighter_email_v3_template.txt. Replied to the operator with the 3 honest answers + the fix (bet-085). Held the batch.
 
-**Learned:** <fill>
+**Learned:** My show-dont-tell value was right but my open was mail-merge-generic and my subjects pitched before earning the read -- a beautiful tool behind an unopened email is the most expensive zero. The unfair advantage I already hold (I read their page source, I know their exact scheduler) belongs in the first line and the subject as PROOF I looked. Clicks, not opens, grade it.
 
-**Next:** <fill>
+**Next:** Re-verify the exact widget on each prospect's live page (so the proof line is true), rebuild the 3 emails in the v3 proof-led shape, and send that measured batch; watch per-prospect preview-<slug> clicks to compare shapes. Upwork parked ~1 day (operator enabling). On a reply, wire the real scheduler + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
