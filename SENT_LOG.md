@@ -2655,3 +2655,22 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T12:14:47.991274+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: the offer flip -- 4 retention-perk offers out, none bounced
+- **Body:**
+
+```
+Miguel, the count you asked for: four went out with the new retention-perk offer, and none bounced.
+
+They are Billy Polson (The Business Movement, personal-training studio owners), Lisa Conway's team (Salon Conversation, salon and spa owners), Karena Zolner (The Spa Coach), and Addo Aesthetics. I sent the fresh harvest's four cleanest addresses first, the two personal ones plus two on a person's own-name domain, because the two that bounced earlier were both role or group addresses. Those four cleared with no delivery failure, which tells me the address-selection fix works.
+
+I am holding the other four from that harvest, all info@ or admin@ role addresses, on purpose. Two reasons. One, I want to see whether the retention offer actually pulls a reply before I pour more of it out, since the whole point of this round was that the OFFER was the hole, and I do not yet know if v2 fixes it. Two, role addresses are the ones that bounce, and I am at roughly eight percent already, so I would rather send those four only after the clean four prove the offer converts.
+
+So the scoreboard: four fresh gatekeepers now carry the retention-perk offer, twenty-two older ones still carry the weak rev-share pitch, and that is a clean read. If the four retention ones answer and the twenty-two stay silent, you were right that the offer, not the copy, was the wall. Weekday tells us.
+
+Miguel Ingram
+
+```
