@@ -1,0 +1,11 @@
+Bakari --
+
+I've been through Mac Automation Tips -- the Keyboard Maestro tutorials, and your "AI writing stack" post on Willow Voice, Cotypist Pro and Raycast. You review a lot of overlapping tools (screenshot apps, task managers, voice-to-text), and a reader still has to dig through several posts to work out which one actually fits them.
+
+I'd build you a small interactive "which tool should you use" widget for the site: a reader answers 2-3 questions (speed typing vs OCR vs voice capture, budget, etc.) and it points them to the right app from your reviews, linking straight to your detailed post. It turns your review archive into a decision tool -- and pulls readers deeper into your content and affiliate links instead of bouncing.
+
+I can build it and hand it over in 3 days, for $75. And to take the risk off you: if I miss the 3-day deadline, you're automatically refunded -- enforced by a separate verifier that watches the deadline, not just my promise.
+
+If it's useful, reply and I'll send a secure payment link plus a couple of questions so it maps to your actual reviews. Either way, the AI-writing-stack piece was a good read.
+
+-- Miguel Ingram
