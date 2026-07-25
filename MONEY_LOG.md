@@ -3440,14 +3440,50 @@ real numbers into their existing kit (minutes), then send the $49 link -- delive
 that point. If replies come in, pull the next batch from the 89 un-tooled-with-email already in hand
 and brand-kit them the same way. received_usd=$0.0, cap intact.
 
-## Iteration 154 — 2026-07-25T18:33:30Z (ledger @ 2026-07-25T18:29:44.833216+00:00)
+## Iteration 154 — 2026-07-25T18:30Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [60]: the machine is assembled and verified, but 13 sends tests nothing. Pour
+volume in. Two numbers wanted: the week's list target, and the daily ramp + next batch size.
 
-**Cost:** <fill>
+**Tried:** Scale the SOURCE first (sending 20 out of 195 is a slower version of the same mistake),
+then build a batch pipeline that keeps personalisation HONEST at volume, then send.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches, 1 Vercel deploy, 19 emails; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) SOURCE SCALED: generated 2,904 candidate chamber hosts from city x URL-pattern permutations,
+probed them -> 164 live (up from 14). Pulled 9,077 member rows -> 1,283 unique businesses with a
+website (1,051 new). Classified every homepage: 974 UNTOOLED / 236 TOOLED / 73 unreachable. The 80%
+un-tooled rate held almost exactly from the 14-chamber sample (76%).
+(2) Built run/batch.py: infers trade from the business's own name/category, quotes a CTA phrase
+ACTUALLY PRESENT on their homepage, attaches the brand kit, and SKIPS rather than sends when any
+piece cannot be extracted honestly.
+(3) Hardened it after inspecting the first output, which contained four things I would not send:
+4 duplicates of the iter-152 batch (same-day re-contact = spam + reputation burn), a theme
+placeholder (janedoe@gmail.com), a web DEVELOPER's address scraped from a roofer's footer
+(micah@micahrich.com), and "Workspace USA" classified as a POOL company because the `spa` pattern
+matched inside "Work-spa-ce". Fixed: word-boundary the trade patterns, add an email_ok() that
+requires the address to be on the business's own domain or freemail matching the business name,
+and a persistent contacted.json so a domain can never be re-contacted.
+(4) Dropped 4 more by judgment: a scrape-artifact address, and metal-building / water-fire-
+restoration firms whose work the room-sqft estimator genuinely does not fit -- a mismatched
+estimator is precisely the "generic shrug" operator [59] warned about. 22 built -> 18 sent.
+(5) Render-verified all 18 in a browser BEFORE sending (logo present with real pixel dimensions,
+business name, correct trade estimator): 18/18 OK, 0 failures.
+(6) SENT 18 (bet-120 send:18, bet-121 send:1). Answered operator [60] (bet-122) with: 974 un-tooled
+in hand, week target 2,500 found / ~500 sendable after the honest-personalisation filter, and a ramp
+of 18 today -> 30 -> 45 -> 60 -> 75 -> 90 -> 100/day by Friday (~418 in week one).
+(7) Operator turned OFF commit.gpgsign, independently confirming the trap I recorded last iteration.
 
-**Next:** <fill>
+**Learned:** Volume and honesty are not in tension, but only if the filter does the work: 974
+un-tooled collapse to ~120 currently sendable, because a contactable prospect needs a quotable CTA,
+an extractable logo, a fitting trade, and an address that plausibly belongs to the business. That
+ratio is the real constraint, not list size. And the same "look at it" discipline that caught the
+roof-shown-a-deck bug caught four bad sends here -- inspecting the batch before sending is the
+scaled version of rendering the page before shipping it.
+
+**Next:** Sunday: 30 sends, and probe ~7,000 more chamber hosts to push the list toward 2,500.
+Watch bounce rate at each ramp step and hold flat rather than climb if it moves. Read replies
+(bet-117 for the first 7, bet-120/121 for these 18) and the per-contractor click counters. On a yes:
+wire their real numbers in and send the $49 link -- delivery is already done at that point.
+received_usd=$0.0, cap intact.
