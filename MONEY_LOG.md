@@ -2861,3 +2861,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The honesty guard has teeth: 2 of 3 'confirmed widget-payers' from the scrape could not have their widget visually verified headless (JS-rendered on Squarespace), so a naive 'I saw your Calendly' would have been a bluff on 2 of 3. Referencing what I genuinely saw (their booking) keeps the proof true and still personal. Proof-led vs promise-led is now a live, measurable comparison.
 
 **Next:** Watch preview-hearthstone/downey/safeharbour clicks vs the earlier promise-led counters (bet-086 vs 079/080/082): if proof-led clicks and promise-led didn't, the subject/open was the problem; if both flat, it's deliverability. On a reply, wire the real scheduler + Stripe-invoice against an obligation. Upwork parked ~1 day. received_usd=$0.0, cap intact.
+
+## Iteration 118 — 2026-07-25T07:53:29Z (ledger @ 2026-07-25T07:48:40.773768+00:00)
+
+**Lever:** readiness prep (not premature send): stage the next proof-led batch by verifying 631-list prospects with a VISIBLE widget + raw email, so proof lines are true; fire when the A/B reads positive
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
