@@ -390,6 +390,18 @@ def main() -> int:
                         f"refund: {b0.get('refund_status')}). A paid-for thing not delivered by "
                         "its deadline is the harm rule 3 exists to prevent -- resolve it before "
                         "anything else.")
+        # CAPABILITY surface (informational, NOT a gate): when the verifier has ENABLED the
+        # post-payment obligation class, tell the agent -- otherwise the enabled envelope is invisible
+        # and the agent keeps self-limiting to instant-only offers (it did: the operator enabled a
+        # $-capped deliver-later rail and nothing surfaced it). This states a PERMISSION, not a
+        # strategy; the agent still decides whether/what to sell. Prints only while enabled.
+        _auth = ob.get("authorization") or {}
+        if _auth.get("enabled"):
+            print(f"CAPABILITY: deliver-later sales are ENABLED -- you may take payment NOW for a build "
+                  f"shipped within {_auth.get('max_deadline_hours')}h, up to ${_auth.get('max_single_usd')}/job "
+                  f"({_auth.get('max_open')} open at a time); the verifier auto-refunds an overdue miss, so it "
+                  "is safe under the real name. Register a typed obligation with bin/obligations.py. (Instant "
+                  "delivery is still the default and needs no obligation.)")
 
     # --- V3 DEMAND-REFUTED checkpoint (S10; armed by DEMAND_REFUTED_K>0, default off -- the
     # closed terminal set {verified dollar, cap, operator} is UNCHANGED until the operator flips
