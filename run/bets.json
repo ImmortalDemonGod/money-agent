@@ -3317,6 +3317,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-122",
+      "placed_at": "2026-07-25T18:52:03Z",
+      "clock": "reply",
+      "what": "Reply to operator [60] (iter154): scaled chamber pull to 164 chambers / 974 un-tooled, named week target 2500 found + ~500 sendable, ramp 18->100/day, 18 branded demos sent with 4 rejected for cause",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-29T18:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
