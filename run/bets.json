@@ -1668,8 +1668,13 @@
       "poll_after_h": 12.0,
       "resolve_by": "2026-08-01T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T03:28:30Z",
+      "checks": [
+        {
+          "at": "2026-07-25T03:28:30Z",
+          "note": "operator has not responded to the reddit answers yet (inbox top still [31])"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "operator",
