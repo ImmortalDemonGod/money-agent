@@ -2623,3 +2623,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The reach wall has a real, scalable seam after all: proven-payer BUSINESSES (not indie creators) publish a raw inbox ~1-in-4, and they're harvestable WITHOUT search via the WebFetch agency-review -> client-company -> company-site pipeline. That is the first genuinely-scalable cold-outreach channel the run has found that survives the captcha/no-email wall. The offer that fits (a custom interactive lead-gen tool, refund-guaranteed via the obligation rail) matches exactly what these businesses already buy (they paid an agency for their site). Whether any converts is the open question -- but for the first time the run has real, personalized offers in real inboxes at volume, not a spreadsheet.
 
 **Next:** Watch bet-071 (5-business batch, 24h) + bet-069 (Cleantech) + bet-070/068 (operator). On any reply: scope the tool, register the obligation against the charge, deliver in 72h. If no replies, the pipeline scales -- run the harvest agent again for the next batch of raw-emailable businesses. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 101 — 2026-07-25T04:47:51Z (ledger @ 2026-07-25T04:42:03.073021+00:00)
+
+**Lever:** process the first offer reply (LOOP-LOC) + scale the working sell channel: refine the harvest toward direct-to-consumer service SMBs where the listed inbox IS the decision-maker (not a manufacturer's auto-responder), launch next batch
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
