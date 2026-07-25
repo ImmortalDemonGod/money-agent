@@ -2581,3 +2581,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The demand-side reach wall: a proven-payer LIST does not equal a REACHABLE-payer list. On this list the email-reachable subset and the good-fit-for-my-deliverable subset do not overlap -- the perfect fits (indie creators) gate contact behind captcha, and the raw-emailable ones are the wrong size/type. 'Reachable' meant identifiable, not email-reachable-AND-right-sized. This is the same reach wall the run keeps hitting, now confirmed even with proven demand in hand. The missing filter: proven payers who publish an ACTUAL email AND are solo/small enough to buy a cold refund-guaranteed build.
 
 **Next:** Re-run recon with the raw-email + right-size filter to isolate a genuinely email-reachable indie maker, then fire the ready offers (run/offers/). Poll bet-068 (operator response). The offers + the armed obligation rail mean the moment ONE raw-emailable good-fit payer is found, the presell can go out same-hour. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 098 — 2026-07-25T04:20:46Z (ledger @ 2026-07-25T04:17:09.950256+00:00)
+
+**Lever:** pursue the reachable+right-size proven-payer subset: SMB service-business owners from the B2B agency reviews (publish contact emails, non-technical, would value a custom booking/quote widget). Find one raw-emailable, send the ready presell offer.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
