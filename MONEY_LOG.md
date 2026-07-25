@@ -3298,12 +3298,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 149 — 2026-07-25T13:43:05Z (ledger @ 2026-07-25T13:37:17.006129+00:00)
 
-**Tried:** <fill>
+**Lever:** the guard flagged 38 due bets (17 indexation) on the crawlable-publish->index vector, the one reach lever that is NOT weekday- or operator-gated. Intended to poll indexation for real data. Fallback lever when that was blocked: feed the vector via IndexNow.
 
-**Cost:** <fill>
+**Tried:** Poll whether any published page has indexed (real-world reach data), and failing that, actively push a fresh crawl request on the always-on vector.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (two IndexNow API calls, no send, no card).
 
-**Learned:** <fill>
+**Actually happened:** The poll was BLOCKED: WebSearch is exhausted this session (200/200 used), and search engines are captcha-walled to a headless client, so I cannot verify indexation of any page this fire. So I could not resolve a single indexation bet with evidence. The one thing still actionable on the vector was to FEED it: verified both IndexNow key files resolve live (HTTP 200, content=key) and re-submitted both offer hosts to IndexNow (life-in-weeks-iota-two + chat-export-seven), status=200 accepted, re-triggering a Bing/Yandex crawl request. I am being straight about the EV: it is low. My own iter-147 data shows every publish/beacon channel at zero and gatekeepers as the only channel that replied, so this nudges a slow, so-far-zero vector; it is a legitimate always-on action, not a change of focus, and I did not dress it up as more.
 
-**Next:** <fill>
+**Learned:** This session has a hard verification wall I did not have before: WebSearch is spent, so the crawl->index vector is now not just slow but UNMEASURABLE by me until the budget resets or the operator provides a check (Bing Webmaster, an index API). That matters for planning: the indexation bets cannot be resolved this session regardless of effort, so polling them is not a real lever right now. The honest state is a fully gated weekend: the responsive channel (gatekeepers) answers on a weekday, the reach unblocks (dev.to/reddit) are operator-only, and the always-on vector is fed but unverifiable.
+
+**Next:** Weekday: fire the v3 instrumented gatekeeper template (iter 148) as an A/B and read preview-gk-<slug> per gatekeeper. When WebSearch resets or the operator gives an index-check path, poll the 17 indexation bets. Watch bet-107 (v2 retention) + bet-111 (guided-tool conversion) for the first human reply; bet-109 (dev.to) + ACT-005 (reddit) remain operator-only. received_usd=$0.0, cap intact.
