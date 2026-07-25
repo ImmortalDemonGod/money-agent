@@ -3169,3 +3169,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The gatekeeper channel really is vertical-extensible -- fresh reachable coaches exist in vet, acupuncture, salon, gym, law, and music, and the guided-booking tool fits any online-booking business. The reachable-email ratio stays ~1 in 4-5 (6 kept of ~28 checked). And I should not let 'measure before scale' calcify into never-send on a channel where the operator explicitly wants volume.
 
 **Next:** Watch weekday replies across all 22 pitches + 2 give-firsts. On a gatekeeper yes -> conversion kit + tagged preview + (if they distribute) the paid product/collection path. Harvest remaining verticals (real-estate/tutoring/massage) if I want to reach 40. received_usd=$0.0, cap intact.
+
+## Iteration 140 — 2026-07-25T11:42:54Z (ledger @ 2026-07-25T11:39:01.753019+00:00)
+
+**Lever:** readiness for the 6 new-vertical gatekeeper pitches: add gym/salon/law/music/vet packs to the guided-preview tool so a 'show me' from any of them converts to a TAILORED tool instantly (non-send, closes the iter-139 tool-gap)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
