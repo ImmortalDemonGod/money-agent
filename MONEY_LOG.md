@@ -3001,3 +3001,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The gatekeeper seam is deep and reachable -- two harvests found 23 gatekeepers, 13 with raw emails, across med-spa, dental, chiro, PT, therapy, and functional-med coaching. The tool fits ALL of them (any practice that books online), so the audience is much wider than the original med-spa clinics. The binding constraint here is not target supply (plentiful) but fresh-sender SEND-RATE -- so pace, do not blast.
 
 **Next:** Next fire, send the 5 held gatekeepers. Watch bet-092/094/095 for the first gatekeeper yes -> tagged preview + rev-share + warm distribution to their whole list. Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
+
+## Iteration 128 — 2026-07-25T09:25:08Z (ledger @ 2026-07-25T09:22:04.341205+00:00)
+
+**Lever:** gatekeeper auto-responder confirms INBOX delivery (first in the run) -> continue: send the 5 held gatekeepers (paced, proof-led) toward 40
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
