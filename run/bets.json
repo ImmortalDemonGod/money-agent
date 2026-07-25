@@ -3514,6 +3514,30 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-130",
+      "placed_at": "2026-07-25T23:03:48Z",
+      "clock": "reply",
+      "what": "FIRST BID PLACED (build-first thesis, operator [70]): freelancer.com project 40604596 'Stylish Electronics Web Page', Rs.85,000 INR / 3 days, proposal OPENING with the finished live artifact (voltedge-ten.vercel.app) instead of a price and a promise. Bid #123 of 123 vs an average of Rs.93,030, from a zero-review account. Thesis: the only bidder who did the work first gets contacted. Budget 6 bids for 1 win; if 6 artifact-bearing bids get zero contact, the thesis is wrong and gets recorded as such.",
+      "check": "freelancer.com notifications/inbox for a client message on project 40604596; bid award or decline",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-08-01T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "spent_usd": 0.0
     }
   ]
 }
