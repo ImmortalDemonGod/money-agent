@@ -2736,6 +2736,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-101",
+      "placed_at": "2026-07-25T10:18:59Z",
+      "clock": "reply",
+      "what": "GIVE-FIRST sent (operator [48] binary): built Dr. Sachin Patel / The Living Proof Institute (fresh, un-emailed FM-clinic gatekeeper) his OWN live guided intake tool routed to his apply page, sent to info@becomeproof.com with ZERO ask. First real give-first proof point. preview-gk-livingproof-gift tracks his use.",
+      "check": "inbox for reply from becomeproof/Sachin Patel; counter preview-gk-livingproof-gift",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
