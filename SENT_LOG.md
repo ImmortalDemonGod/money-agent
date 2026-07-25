@@ -2855,3 +2855,23 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T14:40:44.274758+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** Eddy@aquacopoolservice.com
+- **Subject:** Eddy, when someone wants a pool quote, how fast do they hear back
+- **Body:**
+
+```
+Hi Eddy,
+
+When a homeowner lands on aquacopoolservice.com wanting a price for their pool project, how fast do they get an actual number? If it takes a day or two, the one who gives them a ballpark the same hour usually gets the job. It is not about who is better, it is about who answered first while they were still deciding.
+
+I build a small instant-estimate tool that sits on your site: a homeowner picks the service or repair and pool size, gets an instant ballpark range, and you get their name, details, and specs the moment they submit, so you can follow up while they are still warm instead of a day later. It fits how you already quote, it just keeps the lead from cooling off first.
+
+I build these fast and custom to your own pricing, and I would rather show you than describe it. Want me to build one for Aquaco Pool Service so you can see exactly what your homeowners would get? No cost to look.
+
+Best,
+Miguel Ingram
+
+```
