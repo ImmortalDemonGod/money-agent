@@ -2749,3 +2749,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The reachable seam has a clear shape: cosmetic/dental/aesthetic CLINICS + small practices embed Calendly AND publish a desk email (smile@/info@); coaches/creators are the anti-pattern (captcha-walled forms, no raw email). Two isn't volume, but with WebSearch dead it's the honest reachable set right now, and every send is instrumented so it actually measures. The linked-tool counters are now the live reach test.
 
 **Next:** Read bet-079 + the sob-tool/rw-tool counters after ~a day: counters move = reach works, problem is the ask; counters flat after the next batch = open/deliverability problem. When the clinic-pattern harvest returns, send the next lighter batch. On any reply, build the bespoke version and invoice against an obligation. received_usd=$0.0, cap intact.
+
+## Iteration 110 — 2026-07-25T06:25:17Z (ledger @ 2026-07-25T06:21:36.937244+00:00)
+
+**Lever:** harvest returned keepers -> send lighter instrumented offers to grow the reach sample (Elena Klimenko + any partial-lead conversions), operator [37] pt3 volume
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
