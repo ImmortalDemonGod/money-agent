@@ -2609,3 +2609,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The reachable-business seam is real but narrow and, for SCALING, search-bound this session. Many businesses also gate contact behind forms (Katzkin), not just indie creators; and the clean-fit SMBs need search to locate (domain-guessing fails). So the volume the operator wants is gated on the search budget: with search I can filter for businesses with a raw inbox + a static-content gap at scale; without it I'm limited to the one target I already fully researched. The one real offer stands and is the honest test.
 
 **Next:** Watch bet-069 (Cleantech reply, 24h) and bet-070 (operator). The moment search reopens (fresh session / raised cap), run the reachable-business filter at volume -- that is the scalable version of the one send already out. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 100 — 2026-07-25T04:33:42Z (ledger @ 2026-07-25T04:29:37.722763+00:00)
+
+**Lever:** work the non-search pipeline for VOLUME of real sends: harvest raw-emailable business proven-payers (published inbox + interactive-tool gap) via 1 non-nesting WebFetch agent, then send more refund-guaranteed offers
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
