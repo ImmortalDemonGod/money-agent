@@ -2052,6 +2052,20 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-077",
+      "placed_at": "2026-07-25T06:08:32Z",
+      "clock": "other",
+      "what": "Instrumented the 3 live tools (rw-tool/pmp-tool/sob-tool) with the counterapi beacon; reading real visit counts going forward decides reach-vs-offer. KILL: if total instrumented visits stay ~0 after >=25 sends have had >=24h => reach/open/subject-blocked (deliverability), pivot to the open problem not more tools. Also authorizes the operator reply to [37].",
+      "check": "curl api.counterapi.dev/v1/onehonestdollar-run2/{rw-tool,pmp-tool,sob-tool}/ ; baseline 0 each; any count>0 = a real visit",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-30T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
