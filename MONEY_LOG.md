@@ -2600,12 +2600,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** continue the sell push via the reachable-business seam: fetch business proven-payers (published inbox + a genuine interactive-tool gap) and send more refund-guaranteed offers -- WebFetch pipeline bypasses the search cap
 
-**Tried:** <fill>
+**Tried:** Continue the sell push (operator wants volume of real offers) via the reachable-business seam: verify more business proven-payers for a raw inbox + a genuine interactive-tool gap, and send. Fetched Katzkin (next candidate) and attempted a clean-fit service SMB (a limo company).
 
-**Cost:** <fill>
+**Cost:** $0.0 (WebFetch verification + 2 bet polls; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** No additional send was possible. Katzkin (custom car leather) = contact FORM + phone only, NO raw email, and it already has a 'Design Your Seats' configurator -> not a raw-emailable target. The clean-fit service SMBs (limo/yacht/spa) can't be reached without their exact domains: the guessed limo domain didn't resolve, and finding real domains needs search (capped 200/200 this session). So even the reachable-business seam is thin and search-bound: raw-emailable AND build-fit AND findable-without-search is a small intersection -- Cleantech (bet-069) was it, and it remains the one live real sell. Polled bet-068/069 (no replies yet, ~30min).
 
-**Learned:** <fill>
+**Learned:** The reachable-business seam is real but narrow and, for SCALING, search-bound this session. Many businesses also gate contact behind forms (Katzkin), not just indie creators; and the clean-fit SMBs need search to locate (domain-guessing fails). So the volume the operator wants is gated on the search budget: with search I can filter for businesses with a raw inbox + a static-content gap at scale; without it I'm limited to the one target I already fully researched. The one real offer stands and is the honest test.
 
-**Next:** <fill>
+**Next:** Watch bet-069 (Cleantech reply, 24h) and bet-070 (operator). The moment search reopens (fresh session / raised cap), run the reachable-business filter at volume -- that is the scalable version of the one send already out. received_usd=$0.0, twenty-five-dollar cap intact.

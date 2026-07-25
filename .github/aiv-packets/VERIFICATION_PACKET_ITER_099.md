@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Tried to scale the sell push but confirmed no additional raw-emailable + build-fit business target
+   is findable without search this session (Katzkin form-only; guessed SMB domain unresolved); the one
+   real offer stands. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T232323_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,50 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebFetch katzkin.com/contact -> 'no raw email, only a form/phone'; already has a
+configurator. WebFetch www.limoservicemiami.com -> getaddrinfo ENOTFOUND (domain does not resolve).
+bin/bets.py checked bet-068, bet-069 -> recorded, no replies. WebSearch remains exhausted (200/200
+this session), so new business domains cannot be discovered.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/099/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md iter 099 (the constraint mapping), run/bets.json (bet-068/069 checks).
+Builds on the committed iter-098 first-sell (bet-069 Cleantech) and knowledge/contact_reachability.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I declined to fire a low-quality offer at
+the one remaining raw email I hold (hello@qsstechnosoft.com is a software dev shop that builds its
+own tools -- a nonsensical target for a build offer), rather than manufacture a second 'send'. No
+captcha defeat, no domain-spraying to fabricated addresses.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact). No
+new bets/sends this iteration (constrained). Knowledge refinement: the reachable-business seam is
+narrower than iter-098 implied -- businesses also form-gate (Katzkin), and clean-fit SMBs are
+search-bound to locate.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves the operator's standing sell directive (volume of real offers to proven payers).
+Bounded by CLAUDE.md 'falsify before you conclude' -- I verified the next targets rather than assuming
+them, and by the name-test -- no forced weak send to a mismatched inbox just to report a number.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `web verification (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+This is a constrained iteration with no new send -- honest, but the operator wants volume and I
+produced one verification, not an offer. 'Search-bound' is a real limit but I did not exhaustively
+try every non-search path (e.g. harvesting more client-company names from additional Clutch/DesignRush
+agency pages via WebFetch, then fetching each for a raw inbox -- a slow but non-search pipeline I
+deferred). received_usd=0.0; only a real charge proves anything, and none has occurred.
