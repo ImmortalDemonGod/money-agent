@@ -3099,3 +3099,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The give-first channel's ceiling is reachability, same wall as everywhere: strong give-first fits (a practitioner who both practices and coaches) overwhelmingly hide email behind contact forms / Cloudflare, so only ~1 in 5-6 is email-reachable. So the operator's '2-3' is roughly the ceiling of what is cleanly reachable right now (Patel + Gray), not a volume I can push past without unlocking the form-gated ones.
 
 **Next:** Watch preview-gk-livingproof-gift / preview-gk-stephgray-gift + replies from Patel/Gray -> a practitioner USING + liking it is the proof point. Weekday: watch the 16 gatekeeper pitches. If search budget returns, dig the 4 form-gated fits' emails from podcast/newsletter pages. received_usd=$0.0, cap intact.
+
+## Iteration 135 — 2026-07-25T10:33:10Z (ledger @ 2026-07-25T10:30:34.553943+00:00)
+
+**Lever:** give-first showing life (Gray click=2); try to unlock a 3rd give-first (LeBauer's clinic email = his own PT practice, perfect fit) and send it, else watch the accruing plays
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
