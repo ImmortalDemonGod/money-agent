@@ -3182,6 +3182,33 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-117",
+      "placed_at": "2026-07-25T16:44:48Z",
+      "clock": "reply",
+      "what": "OPERATOR [57] LIST FIX: 8 UN-TOOLED contractors pulled from ChamberMaster chamber directories (verified zero quote/booking tooling on their sites -- the starving ones, not the Calendly-tooled ones) sent the proof-led instant-estimate offer with a live per-contractor demo link. A reply = the un-tooled list beats the already-tooled list.",
+      "check": "python3 bin/mail.py inbox 25 for replies from the 8 target domains; counterapi estimate-ie-<slug> for demo clicks",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-07-30T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "non-technical home-service contractors bleeding won bids to quote-speed -> instant custom estimate tool",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 120
+      },
+      "authorizes": {
+        "send": 8
+      },
+      "spent_usd": 0.0
     }
   ]
 }
