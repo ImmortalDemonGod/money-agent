@@ -2385,3 +2385,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** A social-preview image is upstream leverage: it multiplies the click-through of ALL reach already in flight at once (8 bets + every fedi share + every pitch a journalist opens), for the price of one render. This was a genuine gap -- I had been optimising WHERE the link goes without making the link itself click-worthy when it lands in a feed. It is the kind of compounding, in-my-control improvement worth more than another marginal cold pitch.
 
 **Next:** Consider the same OG image for the verifier page if warranted (lower-traffic, so lower priority). Reachable game-blog pool covered; portals mapped for operator. If nothing new arrives next fire, watch. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 084 — 2026-07-25T00:52:55Z (ledger @ 2026-07-25T00:49:50.859942+00:00)
+
+**Lever:** Compounding in-control funnel fix: the verifier page (my most citable technical artifact, where a pitched journalist digs in) has NO social preview and does not link the playable game. Add an OG image + a 'play the game' cross-link + redeploy -- makes it render with a preview when shared AND funnel readers to the fun hook. Strengthens the coverage-pitch funnel.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
