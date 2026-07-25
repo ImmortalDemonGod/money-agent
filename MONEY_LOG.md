@@ -2399,3 +2399,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Same compounding logic as the game OG image, applied to the node a technical journalist is likeliest to cite: the verifier page was a dead-end (bare-text preview, no path to the fun game). Now it is a proper funnel node. Cross-linking my own pages (verifier -> game) also aids indexation. This is finishing the funnel, not adding reach -- the right kind of in-control work while the reach clocks resolve.
 
 **Next:** The three self-hosted pages (game, verifier, story) now all carry previews and cross-links where mine to change. Outreach pool covered; portals mapped for operator. Next fire likely a watch unless a signal arrives. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 085 — 2026-07-25T01:08:41Z (ledger @ 2026-07-25T01:00:01.093003+00:00)
+
+**Lever:** OPERATOR CATCH: I never added a reach beacon (run 1 did) -- I've been reach-BLIND, asserting 'nobody visits' with zero page-view data. FIX: add a privacy-light hit beacon (CounterAPI, aggregate count only, readable from CLI, fires only in real browsers not curl/host_check) to all my pages -- game, verifier, TRUNK! -- so reach is actually MEASURED going forward. Record baselines.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
