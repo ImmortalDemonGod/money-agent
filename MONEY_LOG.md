@@ -2908,12 +2908,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** autonomous (never hold for signals): run the plain-text-first arm the operator flagged -- link-free honest outreach to verified widget-payers, keeps the widget motion running, a reply is a real lead
 
-**Tried:** <fill>
+**Tried:** Autonomous (CLAUDE.md: never hold for signals) -- ran the plain-text-first deliverability arm the operator flagged, rather than watch for his pick.
 
-**Cost:** <fill>
+**Cost:** $0.0 (3 cold emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Verified fresh 631-prospects (Clear Day Acne Clinic: info@ + Acuity confirmed joined the 2 staged); others had no email. Sent 3 LINK-FREE plain-text cold emails (Fatos Celik Aesthetics, Dr Alhakam, Clear Day Acne Clinic): proof-led open (name the Acuity where verified, reference the visible booking otherwise), the idea, and 'want me to send you the link?' -- the preview link only goes in the reply, to someone who already engaged. This removes the raw-vercel-link trigger the operator flagged from the cold touch (best inbox odds). Measure REPLIES on this arm (no click metric, by design). bet-090.
 
-**Learned:** <fill>
+**Learned:** The plain-text arm trades the click metric (delivery+open+interest) for the reply metric (delivery+open+interest+ACTION), which is rarer -- so small-N reply data is a weak signal, but a reply here is a real warm lead, and the format maximizes inbox placement. Honest cold outreach with the best-deliverability shape is the core loop regardless of measurement cleanliness.
 
-**Next:** <fill>
+**Next:** Watch bet-090 (plain-text replies) vs bet-086 (link-arm clicks) -- a reply on the link-free arm while the link arm stayed silent points at the link as the deliverability drag. On any reply, send the personalized preview then wire + Stripe-invoice. Upwork parked ~1 day (Upwork-ready per iter 120). received_usd=$0.0, cap intact.

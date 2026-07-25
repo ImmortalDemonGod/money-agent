@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Ran the plain-text-first deliverability arm: 3 link-free proof-led cold emails to verified widget-payers,
+   removing the vercel-link trigger from the cold touch. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T031948_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `d67766d0a581d3427c593e54d2a403c4b497dc68a173ad04fad188af30e74f4d`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,47 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebFetch verified cleardayacneclinic.com (info@ + Acuity as.me) + others (no email/404).
+bin/mail.py send x3 -> 'sent' to info@fatoscelikaesthetics.com, info@dralhakam.com, info@cleardayacneclinic.com,
+each consuming a bet-090 send reservation. Link-free bodies (no vercel link in touch #1).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/121/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/bets.json (bet-090 send:3 -> 0), DISCLOSURE_EV_LOG.md (3 bodies cut),
+SENT_LOG.md (3 sends), run/offers/plaintext_first_touch_template.txt (the shape). Contrast arm: bet-086 (link).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. Honesty guard held: named Acuity only for
+Fatos/Clear Day (verified), referenced only the visible 'Book a Consult' for Dr Alhakam. Plain-text
+maximizes deliverability and carries NO link, so nothing to spam-flag. I did NOT wait idle on the operator's
+pending pick (CLAUDE.md forbids holding for signals) -- I ran his own suggested lever. Measured batch of 3.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +3 plain-text (link-free) cold sends (bet-090); new deliverability arm vs the link arm (bet-086);
++Clear Day verified. Reach sample now 11 cold sends across 3 arms (promise-led link, proof-led link, plain-text).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator [42] (keep the widget motion running; plain-text-first is his flagged fix)
+and CLAUDE.md's autonomy rule (never hold for signals -- I acted on my recommended arm rather than wait for
+his pick). Bounded by the name-test honesty guard and the honest-delivery rule (no link = nothing to misfire).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = d67766d0a581d3427c593e54d2a403c4b497dc68a173ad04fad188af30e74f4d (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `3 cold emails (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+3 plain-text sends give weak reply-signal (cold reply rates are low, so 0 replies would not confirm a
+deliverability problem, only fail to rule it out). No click metric on this arm by design. I acted before the
+operator's pick -- if he wanted the domain arm instead, this spent 3 prospects on plain-text (low cost, and
+plain-text is the safer arm anyway). Still no confirmed Gmail-tab placement. received_usd=0.0.
