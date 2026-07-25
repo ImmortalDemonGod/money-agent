@@ -3076,12 +3076,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** harvest returned a clean fresh give-first target (Dr. Sachin Patel / The Living Proof Institute, un-emailed, real FM practice + coaches FM practitioners) -> build his own tool + SEND it, no ask (completes operator [48] binary)
 
-**Tried:** <fill>
+**Tried:** Complete the operator [48] give-first binary properly: send a fresh (un-emailed) gatekeeper their OWN free tool, no ask.
 
-**Cost:** <fill>
+**Cost:** $0.0 (2 emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** The practice-gatekeeper harvest returned 1 clean keeper (the triple -- own bookable practice + audience of practice owners + a raw email -- is rare): Dr. Sachin Patel, The Living Proof Institute (a working functional-medicine clinic) who also coaches FM practitioners under becomeproof, info@becomeproof.com, NOT in my 16. Built his clinic its own live guided-intake tool (functional-medicine module, routes a new patient to his apply page with answers attached), verified it renders, and SENT it to info@becomeproof.com with zero ask -- the guard passed it clean because he is a fresh recipient. First real give-first proof point delivered. Reported the completed binary to the operator with the live link + the honest scarcity note (1 raw-email keeper of 15 checked; 4 more perfect fits -- LeBauer, Bulletproof Dental, Carter, Fitzgerald -- hide behind contact forms).
 
-**Learned:** <fill>
+**Learned:** Give-first works but scales slower than the cold pitch: the give-first target needs a raw email AND their own bookable practice AND a practice-owner audience, and practitioner-coaches overwhelmingly use contact forms + Cloudflare-obfuscated email. So the give-first channel is low-volume/high-quality (each is a real user), the opposite of the pitch channel. The 4 form-gated fits need their raw email dug out of podcast show-notes / newsletter footers.
 
-**Next:** <fill>
+**Next:** Watch preview-gk-livingproof-gift + Dr. Patel's reply -> if he uses + likes it, the warm 'want this for the practitioners you coach' follow-up. Dig raw emails for the 4 form-gated give-first fits. Weekday: watch the 16 gatekeeper pitches for human replies. received_usd=$0.0, cap intact.
