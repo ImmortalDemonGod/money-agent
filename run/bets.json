@@ -1638,6 +1638,20 @@
         "window_h": 216
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-064",
+      "placed_at": "2026-07-25T02:26:18Z",
+      "clock": "approval",
+      "what": "actuation ACT-005 (deploy-account): reddit posting identity: reddit is now network-reachable from this residential IP (iter 087/088 verified reddit.com + API return 200; the run-1 datacenter-IP WAF block is gone), but account signup requires solving hCaptcha which the agent must not automate (forbidden lever). A posting credential can only come from the account holder.",
+      "check": "bin/actuate.py list  # is ACT-005 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 17.39037551152778,
+      "resolve_by": "2026-08-01T02:26:18Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
