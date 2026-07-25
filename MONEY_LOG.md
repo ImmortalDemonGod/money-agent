@@ -3141,3 +3141,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The give-first door with an email on it genuinely is not there for this subtype (coach-podcasters who harvest emails hide their own). The operator's 'podcasters publish an email to be found' holds for many, but these four monetize the OPT-IN, so they suppress a raw address by design. A booking calendar counts as reachable but does NOT enable a no-ask give-first. So give-first stays capped at 2 (Patel, Gray).
 
 **Next:** If the operator names a specific media-kit/newsletter-archive page, pull it (1 fetch). Otherwise the 4 need a warm intro or the operator's own calendar-reach. Watch weekday replies (16 pitches + 2 gifts) + operator (Upwork, gift ruling). received_usd=$0.0, cap intact.
+
+## Iteration 138 — 2026-07-25T11:23:37Z (ledger @ 2026-07-25T11:20:20.661168+00:00)
+
+**Lever:** efficient weekend prep (send Monday): extend the high-leverage gatekeeper channel to NEW verticals (vet/salon/fitness/tutoring/law/real-estate practice-coaches) via a harvest, toward the operator's 40; no new weekend sends
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
