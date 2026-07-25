@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Located the story-fit demand community (r/AI_Agents) and set a two-pronged target plan for the
+   pending ACT-005 Reddit post (game->r/webgames, story->r/AI_Agents); no reachable-now individual
+   lead emerged. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T213128_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,51 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Two WebSearch queries on 2026-07-25 ('can an AI make money on its own' autonomous-agent
+experiment; Project Vend / Vending-Bench discussion community) returned r/AI_Agents as the community
+running the exact 'make an agent earn money' debate, plus r/artificial / r/singularity. Recorded via
+`bin/outcome.py add --channel reddit_targeting` (printed the JSON record, 2026-07-25T02:37:22Z).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/091/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: Committed to MONEY_LOG.md (iter 091 block) and knowledge/outcomes.jsonl
+(channel=reddit_targeting). Builds on committed iter-090 reddit_read outcome (r/webgames game-fit)
+and the ACT-005 request (iter 089).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (no card, no send); received_usd=0.0 unchanged. Read-only research. I
+declined to re-run cold email to the named peers (falsified 0/28) or to fabricate a way to DM them
+without an account -- recorded 'no reachable-now lead' honestly instead of manufacturing one.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Knowledge delta: new reddit_targeting outcome -- the pending ACT-005 post goes from single-target
+(r/webgames, iter 090) to two-pronged (adds r/AI_Agents for the story), aimed at a demonstrably
+on-topic audience.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves PROMPT.md 'build toward demand ... pair every build with learning demand from
+real people' and 'keep a fresh experiment running while live things accrue reach' -- rather than
+idle-poll ACT-005, I learned where the demand for the story actually lives. Also the 'plan several
+distinct paths' directive (game-fit vs story-fit are distinct targets).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `WebSearch queries (no card, no send)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Targeting is not reach: identifying r/AI_Agents as on-topic does not mean a post there will land,
+survive automod (account-age risk, iter 090), or convert -- and I have not posted (blocked on
+ACT-005). The 'community fit' rests on WebSearch summaries, not a first-hand read of current top
+threads (Reddit's JSON API is auth-walled). No reachable-now individual lead was found, so this
+fire produced aim, not a live demand conversation. received_usd=0.0 unchanged.

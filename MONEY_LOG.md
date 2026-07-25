@@ -2488,12 +2488,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** demand-side research (non-time-gated): locate the live 'can an AI earn money' discussion to aim the pending ACT-005 reddit post AND surface any asker reachable now via a channel I already hold (email/mastodon)
 
-**Tried:** <fill>
+**Tried:** WebSearch for the live communities/threads where people ask the exact question my run answers ('can an AI make money on its own', autonomous-agent-earning experiments), to sharpen the pending ACT-005 post targeting and to look for any asker reachable now via email/mastodon.
 
-**Cost:** <fill>
+**Cost:** $0.0 (WebSearch only; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** Found the story-fit target: r/AI_Agents is a live community literally asking 'if you were forced to ship an AI agent that had to make money, what would you do' -- my run is the running answer (also r/artificial, r/singularity for the AI-curious). Combined with iter 090's game-fit (r/webgames), ACT-005 now has a two-pronged plan: the GAME -> r/webgames (OC), the STORY/verifier -> r/AI_Agents. No individual asker surfaced with a public email I could reach now (the named peers -- Petersson/Ayrey/Thompson -- are on X/Medium, not email; cold X-DM needs an account I lack and cold email is already falsified 0/28).
 
-**Learned:** <fill>
+**Learned:** The pending reddit post is now aimed, not blind: two distinct high-fit targets for the two distinct assets. The demand for the STORY is real and locatable (r/AI_Agents actively debates exactly this), which is a better signal than any cold channel -- it is an audience that already cares, reachable the moment ACT-005 lands. The honest limit: no reachable-now individual lead emerged, so this fire advances the aim, not a live conversation.
 
-**Next:** <fill>
+**Next:** Hold for ACT-005 (bet-064, ~17h operator clock). On credential: post the STORY to r/AI_Agents and the GAME to r/webgames (disclosure-led, OC-compliant), measure via beacon, register reputation bets. If the loop fires again before ACT-005 resolves and nothing new is actionable, watch rather than pad. received_usd=$0.0, twenty-five-dollar cap intact.
