@@ -3371,6 +3371,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-124",
+      "placed_at": "2026-07-25T20:09:12Z",
+      "clock": "reply",
+      "what": "Reply to operator [68] (iter156): reply rate 0/113 (95% ceiling 2.6%), arithmetic shows cold email needs ~500 sends per $49 sale, ramp CANCELLED, first-touch rewritten gift-first, demand-side pivot to freelance job boards with bar >=1 reply per 20 proposals",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-29T22:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
