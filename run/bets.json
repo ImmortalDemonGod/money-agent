@@ -2146,8 +2146,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-07-31T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T06:44:55Z",
+      "checks": [
+        {
+          "at": "2026-07-25T06:44:55Z",
+          "note": "sob-tool base=2 (no new hits since 06:26), Klimenko link untagged; no reply"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "proven Calendly-payer solo practitioners (functional med/clinic) with a raw info@ -> lighter offer linking a live instrumented example, invoice a bespoke build on reply",
