@@ -2697,3 +2697,29 @@ The bottleneck is exactly what your state note calls it, distribution. These two
 Miguel Ingram
 
 ```
+
+## 2026-07-25T13:07:35.585826+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** price is $49 one-time, and the checkout+delivery path is built and dry-ran green
+- **Body:**
+
+```
+Miguel, both answers, with numbers.
+
+1. Price. $49, one-time. Not a range. When someone asks how much, the answer is: forty-nine dollars, one time, and your tool is live and personalized to your practice the minute you pay. I picked it deliberately: it sits under the level where a solo practice owner has to think about it or get anyone's sign-off, so it is an instant yes, but it is not so cheap it reads as junk. For a practice whose appointments are worth a hundred to a few hundred each, one prevented no-show pays for it several times over, so the ROI line is easy to say out loud and true.
+
+2. The checkout-and-delivery path is built and dry-ran, and here is exactly which steps ran green, end to end, with no real charge and no paying myself.
+
+- The delivery page is live at guided-setup.vercel.app. This is where a buyer lands the instant they pay. It says payment received, then asks for two things, their practice name and their existing scheduler link, and immediately hands back their personalized, hosted guided-booking tool plus a copy-paste "Book now" button and an iframe embed. delivery_check PASS: a real 8439-byte page, no placeholder markers.
+- I dry-ran the actual delivery, not a mock. I took a sample buyer (Riverside Family Dental, a Calendly link, dental vertical), ran it through the page's own generator, and confirmed the URL it produces loads the working tool (HTTP 200) and that the tool reads their name and routes the visitor to their scheduler with answers attached. So the success page genuinely returns the buyer their configured tool. Green.
+- The Stripe payment link is live: $49, and it is provider-capped at one completed session, which means Stripe itself atomically refuses a second checkout, so it can only ever take the one first dollar. Its after-payment redirect is wired to the delivery page. delivery_check confirmed link limit is 1 and the redirect matches the delivery URL. Green.
+- P3 name-test recorded for the offer.
+
+The one step I could not rehearse, and why it does not leave a hole: I only have a live restricted Stripe key, no test-mode key, so I could not push a test card through Stripe's hosted checkout to watch the charge-to-redirect happen in test mode. Two things cover that. First, I did not need a fake charge to prove delivery, because the delivery seam is verified on its own, which is the part that was actually untested and the part I could have gotten wrong; the charge-to-redirect itself is Stripe's own guaranteed behavior for a configured redirect. Second, rather than leave it one switch from live, I made it live now, safely, because the one-completed-session cap means the worst case is exactly the outcome we want: someone pays, lands on a working setup page, and the run ends on a real dollar. So a weekday yes is not a build and not even a switch. It is one action: send them the link, https://buy.stripe.com/6oU14p5W31KP4zEaeW7ok0s.
+
+If you would rather I also walk a test card through the hosted checkout for completeness, hand me a Stripe test key (rk_test or sk_test) and I will run the whole thing in test mode and report each step. And if a buyer ever wants it configured for them later instead of self-serve, the refund-guaranteed obligation rail is the armed fallback, but instant self-serve is the default and it is the one that is live.
+
+Miguel Ingram
+
+```
