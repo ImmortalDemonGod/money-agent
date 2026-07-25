@@ -3638,14 +3638,48 @@ message test with a real control. Poll ACT-006 (bet-125); if the operator return
 proposals against client-written requirements. Do NOT raise the cold-email send count.
 received_usd=$0.0, cap intact.
 
-## Iteration 158 — 2026-07-25T21:26:44Z (ledger @ 2026-07-25T21:24:33.808559+00:00)
+## Iteration 158 — 2026-07-25T21:40Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [69]: I found the rooms where money already is and then, in the same breath,
+recorded them as walls WITHOUT trying the handle. An untried signup is a guess, not a wall.
 
-**Cost:** <fill>
+**Tried:** Actually submit the signups I had written off, then count what is really in the room.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (browser automation, fetches, 1 email; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) PeoplePerHour -- ATTEMPTED FOR REAL this time: filled first/last name, the run email, a generated
+password, both consent boxes, clicked SIGN UP. reCAPTCHA served an INTERACTIVE IMAGE CHALLENGE
+("Select all images with crosswalks", 9 tiles + VERIFY). Screenshot captured. That is a genuine wall
+and I stopped -- solving it is out of bounds.
+(2) freelancer.com -- MY EARLIER ENTRY WAS WRONG AND I CORRECTED IT IN PLACE. I had recorded it as
+reCAPTCHA-walled from a curl grep that matched Google's boilerplate "this site is protected by
+reCAPTCHA" FOOTER NOTICE. Driving the real signup in a browser: ZERO reCAPTCHA iframes; the form
+advanced through username selection to account creation. **Account `miguelingram` created**, welcome
+email from Freelancer.com received in the inbox, session state saved. The wall was imaginary and I
+had written it down as a finding.
+(3) Fixed my own signup bugs along the way, each caught by looking: index 0 of the PPH text inputs
+was the site's CHAT WIDGET (so the name went into the wrong box), and freelancer's consent checkbox
+is custom-styled and only accepts a LABEL click, not .check().
+(4) Counted the room instead of asserting it: pulled 178 unique live jobs off the open feed; 53 are
+buildable-today. HONEST CAVEAT reported to the operator rather than the flattering number -- reading
+those 53 individually, most of the "quote/booking/scheduling" keyword hits are virtual-assistant and
+Meta-ads work, not tool builds, and the job I am perfectly shaped for (build me an instant quote
+calculator) was NOT on the pages pulled today.
+(5) Answered operator [69] (bet-127): yes/no on both attempts, the corrected wall tally, 178/53,
+named the winnable job ("Replicate AussieCaller Functionality in Wordpress", $80 -- small on purpose,
+because a zero-review account does not win the $13,610 API contract), and the one-word answer to
+"price and a promise, or the thing already built": **Built.**
 
-**Next:** <fill>
+**Learned:** A curl grep for "recaptcha" matched Google's boilerplate legal footer, which appears on
+pages that have NO active challenge. So my captcha detector produced BOTH a false negative (PPH: raw
+HTML clean, real form challenged) AND a false positive (freelancer: raw HTML matched, no challenge at
+all). The same cheap check failed in both directions on the same day. The only thing that settled
+either was submitting the form. Related: I recorded a guess in REFUSALS.md as a tested finding, which
+is the precise failure that killed run 1 -- the correction is left visible in the file, not silently
+edited.
+
+**Next:** Complete the freelancer onboarding (skills), then bid the AussieCaller job the way the edge
+demands -- build the thing FIRST and reply with a live link, not a price and a promise. Poll ACT-006
+(bet-125) for the Upwork job texts. Read the gift-first 13 (bet-126) against the diagnosis-first 26.
+No more cold batches. received_usd=$0.0, cap intact.
