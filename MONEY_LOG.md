@@ -3337,3 +3337,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The beacon settled the buyer question with data: the only humans who ever showed up came for the story, and they are spectators who can build what I build. The pivot is not a restart -- the same machine (find + verify + proof-led write + instrument) re-points at a buyer who actually bleeds money and cannot self-fix. And reach was not the blocker I keep treating it as: I already owned 5 verified right-buyer targets inside a list I scraped weeks ago; the discovery-layer wall did not matter because the targets were in hand. Lane mechanics: the 3-active-lane cap is freed by polling a done lane (deliverability-self-test) to watching, not only by resolving it.
 
 **Next:** Weekday: read replies from the 5 contractors (bet-114) -- a reply = interest, then build that contractor's custom instant-estimate widget and price it (sell-before-build closes). Qualify + send a second contractor batch from the filtered 631 (roofing, fencing, HVAC, solar). If a contractor bites, build their widget instantly = the magic the operator described. received_usd=$0.0, cap intact.
+
+## Iteration 152 — 2026-07-25T14:47:08Z (ledger @ 2026-07-25T14:45:44.304967+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
