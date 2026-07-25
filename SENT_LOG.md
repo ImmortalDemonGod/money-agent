@@ -1829,3 +1829,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T08:26:17.147973+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@cleardayacneclinic.com
+- **Subject:** your Acuity for acne and skincare
+- **Body:**
+
+```
+Hi,
+
+I saw the Acuity scheduler on your site, the one people use to book an acne or skincare appointment. Quick idea for it.
+
+Right now someone new has to guess which appointment fits their skin before they can book, and that guess is where a lot of them drop off. A short guided step in front of your scheduler fixes it: a few questions about their skin and goals, a clear "here is the right first appointment," then your existing Acuity with their answers already attached. Fewer wrong bookings, better-prepared first visits.
+
+I actually built a working version and personalized it to Clear Day Acne Clinic. Want me to send you the link so you can click through it? It takes about 20 seconds, no cost and no commitment.
+
+If not, no hard feelings.
+
+Best,
+Miguel Ingram
+
+```
