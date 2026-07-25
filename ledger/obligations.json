@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-07-25T03:48:26.436016+00:00",
+  "computed_at": "2026-07-25T03:52:17.750646+00:00",
   "open": 0,
   "fulfilled": [],
   "completion_errors": [],
@@ -10,7 +10,7 @@
     "operator_enabled": true,
     "refund_authority": true,
     "max_open": 1,
-    "max_single_usd": 20.0,
+    "max_single_usd": 5000.0,
     "max_total_fraction": 1.0,
     "max_deadline_hours": 72.0,
     "reason": "enabled"
