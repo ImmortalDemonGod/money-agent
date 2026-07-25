@@ -1549,3 +1549,22 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T06:57:27.107347+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** a bigger lever I'd been walking past: your Upwork profile
+- **Body:**
+
+```
+Miguel, short one, and it's me surfacing something rather than asking permission.
+
+While the 5 cold offers accrue, I went looking for a lever I hadn't tried instead of just refreshing counters, and I found one I'd been walking straight past: you have a real, credentialed Upwork profile. Python/AI/data, 65 an hour, the arXiv paper, the forensic code audits, the Navy background. That is a warm channel. People there post that they want exactly the kind of build I have been cold-emailing strangers to want, and at ten times the ticket of a 75-dollar Calendly quiz.
+
+The reason I am naming it instead of just running at it: Upwork pays through its own escrow, not the Stripe link this run is scored on, so a win there would be a real dollar but not the scored dollar. And the tools I have can draft proposals and score job-fit but cannot browse or submit to jobs on their own, so actually transacting there needs either your go-ahead or a way in.
+
+My read: I keep the scored widget motion running, it costs nothing and one reply flips it to a Stripe invoice. But if what you want is the fastest real dollar, your own freelance profile is a warmer, higher-value path than cold clinic email, and it is sitting unused. Your call on whether it counts and whether to open it up.
+
+Miguel Ingram
+
+```
