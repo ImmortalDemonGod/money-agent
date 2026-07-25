@@ -2371,3 +2371,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** GameJolt is a THIRD class distinct from the two I knew: not agent-self-servable (headless submit blocked), but also NOT captcha-hard-walled for a human (unlike itch's 403 or dev.to's reCAPTCHA). That makes it the single easiest operator-upload target for putting the game in front of a browsing audience -- better than itch. The self-serve dream (a portal I could seed alone) is falsified for GameJolt, but it strengthened the operator lever: two portals (GameJolt easiest, itch bigger) both reachable-by-a-human, both in the held pack.
 
 **Next:** Space the next games-pool move; the reachable blog pool is covered (ABG/Warp Door/FGP). Surface the updated pack (now with GameJolt as the easiest portal upload) to the operator when he next engages. If nothing new arrives next fire, watch. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 083 — 2026-07-25T00:34:26Z (ledger @ 2026-07-25T00:29:31.844527+00:00)
+
+**Lever:** Compounding, in-my-control lever: add an OG/social-preview image to the story-game (currently every shared link renders as bare text). A compelling 1200x630 preview raises click-through on EVERY share + pitch already out and every future one -- multiplies the conversion of all 8 reach levers at once. Render an OG card via Playwright -> PNG -> deploy -> add og:image -> redeploy.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
