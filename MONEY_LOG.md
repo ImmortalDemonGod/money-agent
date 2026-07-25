@@ -2973,3 +2973,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The gatekeeper harvest yielded a real, reachable set fast (13 in one pass vs the 1-in-30 clinic slog), because consultants/newsletters/coaches PUBLISH contact info to be found -- the opposite of clinics. The highest-REACH gatekeepers gate contact (form/Calendly), same wall as the indie creators; the sweet spot is the mid-tier consultant with a personal email + a real clinic-owner audience. Each of the 5 sent is worth their whole list if they say yes.
 
 **Next:** Watch bet-092 for the first gatekeeper yes -> on a yes, send them the tagged preview + set up the rev-share + they distribute warm. Harvest toward 40 (Tier-A first). Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
+
+## Iteration 126 — 2026-07-25T09:15:52Z (ledger @ 2026-07-25T09:09:36.676690+00:00)
+
+**Lever:** operator [45] 'send forty': harvest more gatekeepers toward 40 (new niches) + send the remaining reachable Tier-A (Skytale). Volume is the directive on this channel.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
