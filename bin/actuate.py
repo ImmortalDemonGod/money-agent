@@ -770,6 +770,58 @@ def cmd_decline(a) -> int:
     return 0
 
 
+def cmd_withdraw(a) -> int:
+    """Agent: retract its OWN open request (an abandoned direction), freeing the capped queue.
+
+    The queue's only exits were operator fulfill/decline + agent sync, so a request the agent no
+    longer intends to pursue (a dropped direction) sat 'open' forever, permanently consuming one of
+    the MAX_OPEN_REQUESTS slots and forcing the operator to decline it by hand. Since run/actuation_
+    tasks.json is the AGENT's own claims file, retracting a request the agent authored fabricates no
+    human action -- it is not a resolution, so it never touches the verifier facts lane and does not
+    violate separation of duties (nothing claims 'a human acted'). It DOES resolve the conclusion-
+    blocking companion bet, so a withdrawn task leaves no orphan bet to jam conclusion_gate.py.
+
+    Guard: if a verifier-SIGNED resolution already exists for this task, refuse -- the operator has
+    already spent real minutes on it; the agent must `sync` to apply that (a withdraw would silently
+    discard the operator's action, e.g. a returned credential). The check is fail-soft toward
+    UNBLOCKING: only a POSITIVELY found resolution blocks; a None/error (e.g. ledger unreachable)
+    lets the withdraw proceed, since the whole point is to break a deadlock, not to add a new way to
+    get stuck."""
+    if len(a.reason.strip()) < 8:
+        print("FATAL: --reason required (why this direction is abandoned; the retraction is on the "
+              "record, like a decline).", file=sys.stderr)
+        return 2
+    tasks = _load_tasks()
+    task = next((t for t in tasks if t.get("id") == a.id), None)
+    if not task:
+        print(f"FATAL: no task {a.id!r}", file=sys.stderr)
+        return 1
+    if task.get("status") != "open":
+        print(f"{a.id} is already {task['status']}; nothing to withdraw.")
+        return 0
+    try:
+        grounded = _grounded_resolution(task)
+    except Exception as e:
+        print(f"warn: could not check for a signed resolution ({e}); proceeding with withdraw.",
+              file=sys.stderr)
+        grounded = None
+    if grounded:
+        print(f"FATAL: {a.id} already has a verifier-signed {grounded.get('status')} resolution -- "
+              f"the operator acted on it. Run `bin/actuate.py sync {a.id}` to apply it (a withdraw "
+              "would discard the operator's action, including any returned credential).",
+              file=sys.stderr)
+        return 1
+    task["status"] = "withdrawn"
+    task["withdrawn_at"] = _now()
+    task["withdraw_reason"] = a.reason.strip()
+    _save_tasks(tasks, f"actuate: withdraw {a.id} (abandoned): {a.reason.strip()[:50]}")
+    _resolve_companion_bet(task.get("companion_bet"), "withdrawn",
+                           f"withdrawn by agent: {a.reason.strip()}")
+    open_left = sum(1 for t in tasks if t.get("status") == "open")
+    print(f"{a.id} withdrawn; companion bet resolved. Queue now {open_left}/{MAX_OPEN_REQUESTS} open.")
+    return 0
+
+
 def _run_usability_probe(task: dict, material_path: Path) -> tuple[str, str]:
     """Run the agent's PRE-REGISTERED post-handback usability probe against the materialized return.
 
@@ -1062,6 +1114,11 @@ def main() -> int:
     pd.add_argument("--minutes", type=float, required=True)
     pd.add_argument("--reason", required=True)
     pd.set_defaults(fn=cmd_decline)
+
+    pw = sub.add_parser("withdraw")
+    pw.add_argument("id")
+    pw.add_argument("--reason", required=True)
+    pw.set_defaults(fn=cmd_withdraw)
 
     ps = sub.add_parser("sync")
     ps.add_argument("id")
