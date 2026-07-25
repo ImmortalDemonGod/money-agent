@@ -3188,12 +3188,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [51]: flip the gatekeeper offer from 'rev-share on my tool' to 'free retention PERK for your members, no cut, I just want the case study + intros'; rewrite the template + harvest fresh personal-email targets to test it
 
-**Tried:** <fill>
+**Tried:** Operator [51]'s offer flip: my gatekeeper pitch was a rev-share on MY tool (asking a coach to spend their audience's trust to sell my product for small money) -> rewrite it to a free RETENTION PERK for their members, no cut, I want only the case study + intros.
 
-**Cost:** <fill>
+**Cost:** $0.0 (one operator email + a harvest, no card, no cold sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Rewrote the gatekeeper offer (run/offers/gatekeeper_offer_v2_retention.txt): give the coach's OWN members a free personalized booking tool as a perk of their program; the coach pays nothing, looks generous, and it improves their RETENTION (a member whose numbers go up renews) -- the coach's actual business; I take no commission and ask only for the case study + an intro to the members who want it set up. That is the Ashley/Hormozi flip (the partner never earns a dime directly and says yes because their clients get the value). Replied to the operator with the one-paragraph offer. Held re-sends to the 22 already-emailed: the outreach guard hard-blocks a 2nd email to a non-responder AND re-emailing 22 non-responders is the reputation tax I flagged after ~8% bounced -- so the new offer proves out on FRESH targets. Launched a harvest tuned for PERSONAL emails (firstname@), since both bounces were role/group addresses (info@/sales@).
 
-**Learned:** <fill>
+**Learned:** The gatekeeper offer, not the copy shape, was the real hole: a commission on my product asks the gatekeeper to spend their trust for my gain, so they ignore it; a free perk for their members costs them nothing, makes them look good, and serves their retention, so they forward it. Give in a way that makes the GATEKEEPER win (retention), not me.
 
-**Next:** <fill>
+**Next:** When the personal-email harvest returns, send the v2 retention-perk offer to the fresh batch (paced, personal emails to avoid bounces) and report the count. Watch weekday replies. received_usd=$0.0, cap intact.

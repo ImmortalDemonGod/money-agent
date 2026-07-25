@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Rewrote the gatekeeper offer from rev-share to a free retention perk (operator [51]), replied with it,
+   and launched a personal-email harvest to test it; held re-sends to the 22. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T070353_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `195398f5daf99dfc457b1feab788acfabb7b8a6f42f237429df32a20ebb9047f`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,48 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: wrote run/offers/gatekeeper_offer_v2_retention.txt (retention-perk offer). Launched a
+personal-email gatekeeper harvest (Explore, WebFetch-only). bin/mail.py send -> operator reply with the
+one-paragraph offer (bet-106). No cold sends (held re-sends per guard + reputation).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/141/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/offers/gatekeeper_offer_v2_retention.txt (the flipped offer), run/bets.json (bet-106),
+DISCLOSURE_EV_LOG.md (body cut), SENT_LOG.md (operator reply).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT bypass the outreach guard to re-spam
+the 22 non-responders even though the operator's request could be read as authorizing it -- the guard is a
+hard anti-spam rail and re-emailing non-responders is the reputation tax I just measured (~8% bounce). I
+reported '0 sent this round' honestly rather than force a send. The new offer claims no false result.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: gatekeeper offer v1 (rev-share on my tool) -> v2 (free retention perk, no cut, case study + intro);
++personal-email harvest in-flight; +bet-106. No cold sends (reputation held).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator [51] (rewrite the offer to a retention perk; paste it). Balanced against the
+anti-spam guard + the reputation discipline (declined the mass re-send) -- serving his intent (test the new
+offer) the safe way (fresh personal-email targets, not re-spamming the 22).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 195398f5daf99dfc457b1feab788acfabb7b8a6f42f237429df32a20ebb9047f (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one operator email + a research agent (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+The retention-perk offer is unproven -- it is the operator's playbook logic, not my data, and 0 went out
+with it this round (fresh targets pending the harvest), so the binary is only half-done. My call to NOT
+re-send to the 22 may frustrate the operator, who explicitly floated a fresh-touch re-send; I judged the
+guard + reputation outweigh it, which is defensible but a judgment. And the 22 already out still carry the
+weak v1 offer. received_usd=0.0.
