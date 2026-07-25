@@ -3127,3 +3127,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The whole acquisition machine CAN close the loop to a real Stripe charge -- the collection endpoint exists and works. The remaining gap to the first dollar is not capability, it is a warm buyer (a gatekeeper who distributes, then a practice that pays). Good to know the finish line is wired before the runner arrives.
 
 **Next:** On a gatekeeper yes -> distribute (conversion kit) -> when a practice wants the real tool, create the guided-tool payment link (instant configured-URL success page or obligation-rail) and collect. Watch weekday replies + operator (Upwork, gift ruling). received_usd=$0.0, cap intact.
+
+## Iteration 137 — 2026-07-25T11:03:21Z (ledger @ 2026-07-25T11:01:40.035395+00:00)
+
+**Lever:** operator [49]: I stopped at the contact form -- try the OTHER doors (podcast/sponsor/media/work-with-me/newsletter pages) for the 4 give-first fits, find a real email/bookable channel, give-first at least one today
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
