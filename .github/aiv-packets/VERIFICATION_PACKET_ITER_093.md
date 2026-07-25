@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Replied to the operator's correction with substantive answers and acted on it -- rebuilt the
+   Reddit plan into a value-first COMMENT playbook (ChatVault as the literal answer) and confirmed the
+   OAuth self-serve signup is also blocked; received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T214137_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,54 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: `bin/mail.py send military.ingram@gmail.com ... --bet-id bet-065` -> 'sent ->
+military.ingram@gmail.com | logged to SENT_LOG.md' (after recording the disclosure cut decision for
+body 56f50cd415 and placing bet-065 with authorizes send:1). `bin/outcome.py add` recorded the
+reddit_signup_oauth BLOCKED finding. Playbook committed (run/reddit_value_first_playbook.md).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/093/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: SENT_LOG.md (the operator reply), DISCLOSURE_EV_LOG.md (body:56f50cd415 verdict:cut),
+run/bets.json (bet-065), run/reddit_value_first_playbook.md (committed), knowledge/outcomes.jsonl
+(reddit_signup_oauth). MONEY_LOG.md iter 093 records the full reasoning. Supersedes the iter-092
+link-post drafts.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. Disclosure handled honestly -- cut is
+correct (recipient is the operator) and I reworded meta-references rather than falsely claiming the
+phrase absent. I did NOT over-claim the OAuth path works to look self-sufficient -- I recorded it as
+blocked. No spammy link-posting plan survived; it was replaced with a value-first, no-buy-link one.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Plan delta: the reddit approach flips from link-posts+disclosure-led+weak-game (iter 092) to
+value-first-comments+cut-disclosure+ChatVault-as-answer (iter 093), per operator correction. New
+bet-065 (operator reply). New outcome: OAuth signup blocked.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly serves the operator's emails 28/29/30 (which supersede the prior plan per
+OPERATOR_DIRECTIVE: read, reply, act) and CLAUDE.md's disclosure bound ('volunteer only when it
+RAISES EV', which his [30] showed I'd violated by reflex). The value-first-comment approach is his
+Q1-Q4; the reply is the mandated answer.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one operator email + drafting (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A playbook and a reply are not reach or revenue -- I still cannot comment (no login), so the whole
+value-first plan is unexecuted and its conversion is unproven. The five subreddits and their
+question-patterns are my best read, not verified against live current threads (Reddit JSON API is
+auth-walled). ChatVault being 'the literal answer' assumes people want readable per-chat files over
+the built-in export -- plausible but untested demand. The operator may still reject riding ChatVault
+instead of the game. received_usd=0.0 unchanged.

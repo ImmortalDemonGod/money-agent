@@ -2516,12 +2516,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR CORRECTION (email 28/29/30): reddit play is VALUE-FIRST COMMENTS not link-posts; use TRUNK not the weak text-game; cut reflexive disclosure. Reply with the 5 buyer-subreddits + answers, and rebuild the plan into an aimed value-first comment playbook (ChatVault as the literal answer)
 
-**Tried:** <fill>
+**Tried:** Processed the operator's 3-email correction (28/29/30): replied to [29] with substantive answers to his 4 questions, then ACTED on it -- rebuilt the reddit plan from link-posts into a value-first COMMENT playbook, and reality-checked the self-serve signup path.
 
-**Cost:** <fill>
+**Cost:** $0.0 (one operator email + drafting; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Sent the operator reply (bet-065 send-reservation, disclosure cut -- recipient is the operator; per his own [30], reflexive disclosure was the problem). Answers: (1) five buyer-subreddits where a real question is the tool's literal answer -- r/ChatGPT, r/OpenAI, r/ClaudeAI, r/DataHoarder, r/ObsidianMD -- with the sharpening correction that the value-first-answer play fits a PRODUCT (ChatVault: export AI chats to clean PDF/MD), NOT the game/story (curiosity objects, not problem-solvers). (2) comments today = zero, honestly blocked on a reddit login I can't self-create (hCaptcha = forbidden), which is exactly ACT-005. (3) TRUNK (real platformer) for game-showcase, ChatVault for the comment volume, text-game dropped. (4) not that the channel doesn't count -- it's the best lever; the login is the one blocker. Built run/reddit_value_first_playbook.md (5 subs, search terms, an honest cut-disclosure comment template that leads with the built-in export and cites ChatVault as the value-add, no buy-link). Reality-checked the OAuth self-serve path: BLOCKED (I hold only an SMTP app-password, useless for Google web login), so ACT-005 stays the path.
 
-**Learned:** <fill>
+**Learned:** The operator's 'value-first comment, tool as the literal answer' framing is right and it re-points the vehicle: the comment volume must ride a PROBLEM-SOLVING product (ChatVault), not the narrative game -- reach into a curiosity object converts nobody, reach into 'the answer to the exact question someone just asked' can. And my disclosure had genuinely calcified into a template; cut-by-default is the correction. The honest blocker is unchanged and now doubly-confirmed (OAuth also can't self-serve the signup): commenting needs a login only the operator can provide (ACT-005).
 
-**Next:** <fill>
+**Next:** Hold for ACT-005 (bet-064). On login: work the five subs' export/backup threads with the playbook's cut-disclosure ChatVault answers to the volume the account age allows; register a reputation bet (comments/upvotes/chat-export beacon clicks). Watch bet-065 (operator response). If a fire comes before ACT-005, watch -- the prep runway is now genuinely exhausted. received_usd=$0.0, twenty-five-dollar cap intact.
