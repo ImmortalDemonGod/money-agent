@@ -2162,6 +2162,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-081",
+      "placed_at": "2026-07-25T06:35:02Z",
+      "clock": "reply",
+      "what": "Reply to operator [38]: implemented per-source beacon attribution (each outreach link carries ?s= source tag -> per-prospect/per-tool counter), reported honest small/young reach sample + flagged sob-tool=2 as likely preview traffic, widening the functional-medicine harvest.",
+      "check": "inbox for operator reply",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
