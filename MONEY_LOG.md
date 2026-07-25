@@ -2698,12 +2698,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** build-and-show target #3 (operator [36]): build Simply Organic Beauty (proven Jotform-payer, salon-products distributor recruiting host salons) a better multi-step salon-partner application tool, host it, email help@ the link to USE
 
-**Tried:** <fill>
+**Tried:** Build-and-show target #3 -- the last reachable widget-payer from the screen (Simply Organic Beauty, embeds a Jotform for Host-Salon recruiting).
 
-**Cost:** <fill>
+**Cost:** $0.0 (build + deploy + one email; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Built Simply Organic Beauty (B2B clean-salon-products distributor recruiting Host Salons) a values-first multi-step salon-partner qualifier -- salon profile -> clean-beauty stance -> instant fit + summary -> apply -- on their sage brand and voice, a genuine upgrade over a blank Jotform. Deployed live (host-salon-application.vercel.app, HOST_CHECK PASS, P3 recorded), emailed help@ the link, no upfront price. THREE live build-and-show tools now out (Repair Wizards, PayMT Pro, Simply Organic Beauty); all reachable widget-payers from the screen are built (Ruedi Wealth was form-only).
 
-**Learned:** <fill>
+**Learned:** The build-and-show pipeline runs cleanly at one tailored tool per iteration, and it generalizes across verticals (home-repair contractor, fintech processor, beauty distributor) -- each screened for a real embedded paid widget, each built a genuinely-better, honest, on-brand tool. The current screen's reachable pool is now exhausted (3 built + 1 form-only), so scaling further means a fresh widget-screen harvest for the next batch of Calendly/Typeform/Jotform payers.
 
-**Next:** <fill>
+**Next:** Watch bet-074/075/076 (the 3 shows) + the 9 prior offers. If quiet, run a fresh widget-screen harvest for more owner-inbox widget-payers and build the best. On any reply: hand over / integrate + invoice (register the obligation against the charge). received_usd=$0.0, twenty-five-dollar cap intact.
