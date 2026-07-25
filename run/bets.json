@@ -1684,6 +1684,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-066",
+      "placed_at": "2026-07-25T03:23:36Z",
+      "clock": "reply",
+      "what": "Reply to operator [31]: plain evidence-backed why -- verified the crawler-fix hook is FALSE on all 8 findable-email targets (GPTBot sees their meta+SSR+JSON-LD), so no false 'you're broken' emails sent; bug is mutually exclusive with a findable email in the 2026 cohort; honest next = GitHub-issue/handle path to genuinely-broken makers",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
