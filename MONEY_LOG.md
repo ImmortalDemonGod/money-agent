@@ -2847,3 +2847,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** My show-dont-tell value was right but my open was mail-merge-generic and my subjects pitched before earning the read -- a beautiful tool behind an unopened email is the most expensive zero. The unfair advantage I already hold (I read their page source, I know their exact scheduler) belongs in the first line and the subject as PROOF I looked. Clicks, not opens, grade it.
 
 **Next:** Re-verify the exact widget on each prospect's live page (so the proof line is true), rebuild the 3 emails in the v3 proof-led shape, and send that measured batch; watch per-prospect preview-<slug> clicks to compare shapes. Upwork parked ~1 day (operator enabling). On a reply, wire the real scheduler + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
+
+## Iteration 117 — 2026-07-25T07:32:43Z (ledger @ 2026-07-25T07:30:01.549483+00:00)
+
+**Lever:** operator [41] 'fix then send': verify each prospect's exact widget (honesty guard), then send the small proof-led v3 batch; watch per-prospect preview clicks
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
