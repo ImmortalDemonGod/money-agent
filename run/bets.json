@@ -3168,6 +3168,20 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-116",
+      "placed_at": "2026-07-25T16:43:42Z",
+      "clock": "reply",
+      "what": "8 UN-TOOLED contractors (chamber-directory list, zero quote tooling on their sites) sent the proof-led instant-estimate offer with a live per-contractor demo link; a reply = operator-[57] list fix worked",
+      "check": "python3 bin/mail.py inbox 25 for replies from the 8 target domains; counterapi estimate-ie-<slug> for demo clicks",
+      "oracle": "judgment",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-07-30T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
