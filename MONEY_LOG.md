@@ -3587,14 +3587,53 @@ open; freelancer.com captcha-walled; Upwork 403 -> actuation if needed). If bidd
 send proposals against client-written budgeted requirements and measure replies per 20. Do NOT raise
 the cold-email send count. received_usd=$0.0, cap intact.
 
-## Iteration 157 — 2026-07-25T20:44:42Z (ledger @ 2026-07-25T20:40:50.104300+00:00)
+## Iteration 157 — 2026-07-25T20:55Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** run the demand-side move I committed to operator [68] -- boards where the client already
+wrote the requirement and attached a budget -- and test the account wall FIRST, as promised.
 
-**Cost:** <fill>
+**Tried:** Four boards tested as a matrix, then the one channel that is not walled used to test the
+CHANGED VARIABLE (gift-first message), not to raise volume.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches, browser probes, 1 deploy, 13 emails; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) BOARD MATRIX -- I could act on NONE of them, and I tested rather than assumed:
+  - Upwork: job search AND signup both HTTP 403 to this sandbox (WAF/egress), even though the account
+    holder already has a real Upwork freelancer profile with proposal tooling wired to it. Filed
+    actuation ACT-006 (operator pastes 10 job texts; I draft the proposals). bet-125.
+  - freelancer.com: listings readable (50 live budgeted jobs, $30-$5,386) but /signup is reCAPTCHA.
+    REFUSED -- defeating a captcha is out of bounds.
+  - PeoplePerHour: raw HTML showed NO captcha, so I drove the real flow in a browser -- the form
+    renders with 4 reCAPTCHA iframes. REFUSED. The curl-based captcha scan was a FALSE NEGATIVE:
+    the captcha only exists after JS.
+  - Hacker News "Freelancer? Seeking freelancer?": fully reachable, no account needed (Algolia API),
+    so NOT walled -- but empty on the buy side. July 2026 (20 comments) + June 2026 (31 comments)
+    contain exactly ONE "SEEKING FREELANCER" post, and it publishes no email. A measured dead rail.
+  All four recorded in REFUSALS.md with what stopped me.
+(2) STRUCTURAL FINDING: every acquisition channel available to this run except cold email is
+identity-walled (captcha or WAF), and cold email measures 0/113. That is the honest shape of the
+problem, and it is what ACT-006 exists to break.
+(3) Used the one unwalled channel to test the variable I changed rather than the one operator [68]
+told me to stop changing: sent 13 fresh un-tooled contractors the REWRITTEN gift-first first touch
+(free working branded tool + link in sentence one, "I am not asking you for anything to use it",
+diagnosis below the gift, $49 one optional closing line). Control = the 26 diagnosis-first sends at
+0 replies. This is a MESSAGE A/B; the send count was not raised (13 < yesterday's 18) and the
+cancelled ramp stays cancelled. bet-126.
+(4) All 13 render-verified in a browser before sending (logo, business name, correct trade): 13/13.
+(5) Durable fix: poor-fit targets kept resurfacing every prep because contacted.json only covers
+people actually emailed. Added run/offers/rejected.json (rejected BY JUDGMENT with the reason) and
+wired batch.py to honour it -- metal-building and disaster-restoration firms no longer need
+re-adjudicating by hand each batch.
 
-**Next:** <fill>
+**Learned:** A captcha check done with curl is not evidence of absence -- PeoplePerHour's raw HTML
+was clean and the rendered page carried four reCAPTCHA frames. Same lesson as the roof-shown-a-deck
+bug in a new place: the cheap check and the real thing disagree, and only driving the actual flow
+settles it. Second: "demand already exists there" is itself a claim needing a test. HN's freelancer
+thread is the canonical answer to "where do buyers ask for freelancers" and it is currently ~1 buyer
+post per 25 comments -- naming a venue is not the same as measuring it.
+
+**Next:** Read replies to the gift-first 13 (bet-126) against the diagnosis-first 26 -- that is a
+message test with a real control. Poll ACT-006 (bet-125); if the operator returns job texts, draft
+proposals against client-written requirements. Do NOT raise the cold-email send count.
+received_usd=$0.0, cap intact.
