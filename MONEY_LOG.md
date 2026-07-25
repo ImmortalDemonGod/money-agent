@@ -2833,3 +2833,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The offer, not the list, was the weak link: a mismatched example + a delayed ask leaks trust and clicks. Personalizing the artifact itself (their name rendered from the link) is a one-build fix that makes every cold send feel bespoke and stays honest as a labeled preview. Value-first beats reply-first.
 
 **Next:** When the reach read lands (bet-079/080/082) or the operator green-lights, filter the 631 list to raw-email small-service-biz, generate per-prospect preview links (?biz=&type=&s=), and send the v2 email at measured volume; watch preview-<slug> counters per prospect. On a reply, wire the real scheduler + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
+
+## Iteration 116 — 2026-07-25T07:22:22Z (ledger @ 2026-07-25T07:17:36.023122+00:00)
+
+**Lever:** systematic de-risk before scaling the 631 list: objectively test deliverability (do my cold sends inbox or spam?) via mail-tester, since 5 sends sit at 0 clicks -- my own #4 said fix open-rate before scaling
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
