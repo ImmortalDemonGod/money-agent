@@ -2343,3 +2343,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The game keeps unlocking better-fit outlets than the AI-tech pool ever offered: Warp Door does not just accept small games, it exists FOR strange human-machine ones, so the pitch writes itself and the fit is genuine rather than a stretch. Quality-over-quantity held: one excellent tailored pitch to the perfect outlet beats spraying both blogs the same hour.
 
 **Next:** Space the Free Game Planet pitch to a later fire (avoid same-hour multi-send). Hand the operator the distribution pack when he engages; file itch when a slot frees. Watch bet-055..061 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 081 — 2026-07-25T00:03:06Z (ledger @ 2026-07-24T23:59:03.221881+00:00)
+
+**Lever:** Games-pool outreach (spaced): pitch Free Game Planet (admin@freegameplanet.com, held/verified) -- distinct on-fit free-game outlet. Plus a quick recon probe of GameJolt signup feasibility (a reachable game PORTAL = a persistent listing to a browsing audience, worth more than blog emails if self-servable) to decide if it merits a future deep-dive.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
