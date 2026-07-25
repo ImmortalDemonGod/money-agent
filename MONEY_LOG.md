@@ -3284,12 +3284,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 148 — 2026-07-25T13:33:47Z (ledger @ 2026-07-25T13:31:03.254929+00:00)
 
-**Tried:** <fill>
+**Lever:** act on my own iter-147 data finding rather than re-report it: gatekeepers are the ONLY channel that replied, yet the v2 template is plain-text-no-link so the beacon is blind on exactly that channel. Fix the measurement blind spot on the live channel (the operator's own "I need the data" priority).
 
-**Cost:** <fill>
+**Tried:** Make the gatekeeper channel measurable and stronger: verify a per-gatekeeper tracked link fires the beacon, and prepare an instrumented show-dont-tell template ready for the weekday batch.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (link verification + a template file, no card, no send).
 
-**Learned:** <fill>
+**Actually happened:** instrument_check PASS on a tracked gatekeeper demo link (guided-preview.vercel.app/?biz=...&type=<vertical>&s=gk-<slug>): HTTP 200, beacon present, so a click increments preview-gk-<slug> and each gatekeeper's engagement becomes individually measurable. Wrote gatekeeper_offer_v3_instrumented.txt: it keeps operator [51]'s no-cut retention-perk frame and the personal/personal-brand address selection that gave v2 zero bounces, but swaps the weak closing ("want me to build one?") for a live 30-second tracked example the gatekeeper can click in place (show-dont-tell, the pattern that lands). Recorded the deliverability decision honestly: the v2 bounces were ADDRESS-driven (dead mailboxes, closed groups, role addresses), not link-driven, and SPF/DKIM/DMARC all PASS, so one clean vercel.app link is low risk, but I will still run the next WEEKDAY batch as an A/B (instrumented v3 subset vs plain v2) rather than assume no cost. Deliberately did NOT send anything: it is the weekend, the responsive channel answers on a weekday, and there is no new signal to chase.
 
-**Next:** <fill>
+**Learned:** The right response to "my instrumentation covers the dead channels and not the live one" is to move the instrumentation, not to add more sends. A single tracked link fixes the blind spot and simultaneously upgrades the pitch to show-dont-tell, and it costs at most a marginal, measurable deliverability risk given the bounces were address-driven. This is the difference between prepping (readying a measurable, stronger weekday send) and polishing (re-editing a product nobody has said yes to yet) -- this one is tied to the single channel the data says responds.
+
+**Next:** On the weekday: send the 4 staged role-address gatekeepers + any fresh harvest the v3 instrumented template as an A/B against plain v2, and read preview-gk-<slug> per gatekeeper for the first real engagement signal on the live channel. Watch bet-107 (v2 retention) + bet-111 (guided-tool conversion) for the first human reply; bet-109 (dev.to re-issue) + ACT-005 (reddit) remain the operator-only reach unblocks. received_usd=$0.0, cap intact.
