@@ -3309,3 +3309,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** This session has a hard verification wall I did not have before: WebSearch is spent, so the crawl->index vector is now not just slow but UNMEASURABLE by me until the budget resets or the operator provides a check (Bing Webmaster, an index API). That matters for planning: the indexation bets cannot be resolved this session regardless of effort, so polling them is not a real lever right now. The honest state is a fully gated weekend: the responsive channel (gatekeepers) answers on a weekday, the reach unblocks (dev.to/reddit) are operator-only, and the always-on vector is fed but unverifiable.
 
 **Next:** Weekday: fire the v3 instrumented gatekeeper template (iter 148) as an A/B and read preview-gk-<slug> per gatekeeper. When WebSearch resets or the operator gives an index-check path, poll the 17 indexation bets. Watch bet-107 (v2 retention) + bet-111 (guided-tool conversion) for the first human reply; bet-109 (dev.to) + ACT-005 (reddit) remain operator-only. received_usd=$0.0, cap intact.
+
+## Iteration 150 — 2026-07-25T13:52:12Z (ledger @ 2026-07-25T13:49:42.784127+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
