@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Self-cleared two stale actuations and sent the run's first real refund-guaranteed project offer
+   to a proven-payer business inbox; received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T231709_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,57 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: `bin/actuate.py withdraw ACT-002` and `ACT-004` -> 'withdrawn; companion bet resolved',
+queue 3/3 -> 1/3. `bin/mail.py send info@cleantech.com ... --bet-id bet-069` -> 'sent -> info@
+cleantech.com | logged to SENT_LOG.md' (disclosure body:03b292dfc9 cut). Operator reply sent
+--bet-id bet-070. Obligation authorization re-read via truth.load('obligations.json'): enabled,
+refund_authority true, max_single 5000, max_deadline_hours 72. WebFetch pitcheroo.com: email
+obfuscated (no raw address).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/098/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: SENT_LOG.md (the Cleantech send + operator reply), DISCLOSURE_EV_LOG.md
+(body:03b292dfc9 cut, plus the operator-reply line), run/bets.json (bet-069 Cleantech, bet-070
+operator; bet-004/bet-015 auto-resolved on withdrawal), run/actuation_tasks.json (ACT-002/004
+withdrawn), knowledge/outcomes.jsonl (contact_reachability). MONEY_LOG iter 098 records the reasoning.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged (the send is an offer, not a charge). The
+offer makes no false claim and its refund guarantee is backed by a verifier-armed obligation
+authorization I re-read this iteration (not the operator's word alone). I did NOT solve a captcha to
+reach the gated indie contacts (forbidden lever), and did NOT blast a generic template -- one
+specific, well-fitted, appropriately-sized offer to a single proven-payer's listed inbox.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: actuation queue 3/3 -> 1/3 (ACT-002/004 withdrawn); +bet-069 (first real sell offer, reply
+clock) and +bet-070 (operator reply); new knowledge contact_reachability (business inboxes are
+raw-emailable, indie-creator inboxes are captcha-gated).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [34] (use the raised delivery ceiling for a real paid offer; self-clear
+the queue). The refund-guaranteed offer is bounded by CLAUDE.md's delivery rule -- I confirmed the
+obligation class is verifier-enabled (refund authority + caps) before offering a deliver-later build.
+No captcha-defeat, no volume spam (name-test).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `two emails and web verification (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+One real offer sent is not a sale: info@ is a generic corporate inbox, so the odds it reaches the
+decision-maker and converts are low -- this is a genuine attempt, not a likely yes. I did not verify
+I can actually deliver the interactive explorer in 72h against a real spec (my estimate). The
+'business inboxes are reachable, indie creators aren't' seam is from a handful of contacts, not the
+whole list. And received_usd=0.0 -- the only thing that would prove any of this is a real charge,
+which has not happened.

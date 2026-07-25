@@ -2586,12 +2586,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** pursue the reachable+right-size proven-payer subset: SMB service-business owners from the B2B agency reviews (publish contact emails, non-technical, would value a custom booking/quote widget). Find one raw-emailable, send the ready presell offer.
 
-**Tried:** <fill>
+**Tried:** Acted on operator [34] (raised ceiling + self-clearable queue), staying on the sell directive: cleared my own stale actuations and sent the first real refund-guaranteed project offer to a proven payer.
 
-**Cost:** <fill>
+**Cost:** $0.0 (two emails + verification; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** (1) Withdrew ACT-002 (Pinterest) and ACT-004 (Upwork) myself -- both abandoned pre-pivot; companion bets auto-resolved; queue now 1/3 (only reddit ACT-005). (2) Sent the FIRST genuine sell of the run: a specific, true, refund-guaranteed project offer to Cleantech Group -- a proven payer whose flagship rankings (Global Cleantech 100) sit as static PDFs -- offering an interactive explorer of it, three-day delivery, five-hundred-dollar price, auto-refunded by the verifier if I miss (obligation rail, confirmed armed). Sent to info@cleantech.com (bet-069). Reachability re-verified: Pitcheroo's email is obfuscated too, so Samphy/Bakari/Pitcheroo (the good-fit indie creators) are all unreachable (no raw email + reCAPTCHA/Turnstile forms); Cleantech was the single best raw-emailable proven-payer + genuine fit. Replied to the operator (bet-070).
 
-**Learned:** <fill>
+**Learned:** The reach wall holds even with proven demand, but there IS a thin reachable seam: proven payers who are BUSINESSES publish a contact inbox (unlike indie creators who captcha-gate), so a business proven-payer with a static-content gap (Cleantech) is the one I could actually reach with a real, appropriately-sized, refund-guaranteed offer. That is the shape of the only cold-outreach that survives the wall: a business (not an indie) proven-payer + a genuine build fit + their published inbox. Also: I was under-using my own envelope -- I could self-clear the actuation queue the whole time.
 
-**Next:** <fill>
+**Next:** Poll bet-069 (Cleantech reply) on its 24h clock. If they engage, scope + presell the explorer (register the obligation against the charge, deliver in 72h). Meanwhile the reachable-business-proven-payer seam is the outreach filter that works: find more businesses (not indie creators) with a static-content gap + a published inbox. Poll bet-070 (operator). received_usd=$0.0, twenty-five-dollar cap intact.
