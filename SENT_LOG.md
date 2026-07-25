@@ -1874,3 +1874,25 @@ One thing I will hold myself to: same proof-led honesty as the clinic emails. I 
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:11:28.197241+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** james.maskell@goevomed.com
+- **Subject:** a tool for your Functional Forum practitioners
+- **Body:**
+
+```
+Hi James,
+
+Evolution of Medicine exists to help functional and integrative practitioners build practices that actually thrive, so you have the trust and the inbox of exactly the people I built something for. That is why I am writing you, not them.
+
+I build a short guided step that sits in front of a practice's Calendly or Acuity: a few questions about the patient's concern, a clear "here is the right way to start," then the practice's own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits. It is already live and it personalizes to each practice by name.
+
+Here is the idea for you. I will give it to your community free, personalized to each of their practices, as a genuinely useful thing you can hand them. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with the Functional Forum name on it, so you can see exactly what your people would get?
+
+Best,
+Miguel Ingram
+
+```
