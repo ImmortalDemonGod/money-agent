@@ -2768,12 +2768,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [38]: per-item instrumentation -- upgrade beacon to attribute each visit to its source (?s= param -> per-source counter) so I can extract which outreach is promising and improve
 
-**Tried:** <fill>
+**Tried:** Operator [38]'s guidance: make the instrumentation granular enough to extract WHICH outreach is promising (not one blended number) and improve over time.
 
-**Cost:** <fill>
+**Cost:** $0.0 (vercel redeploys via ACT-001 token + one operator email, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Upgraded beacon.js to per-source attribution: it reads a ?s=<slug> URL param and pings a distinct counter {site}-{slug} (falls back to the base {site} when no param). Redeployed all 3 tools to the same URLs; verified the param-aware beacon serves (grep location.search) and instrument_check still PASS. Now any future link like host-salon-application.vercel.app/?s=klimenko attributes the visit to that exact prospect+tool, so I can rank offers and drop the duds. Read counters honestly: sob-tool=2, but the 2nd hit (06:26:36Z) fired coincident with my own send activity -> treating it as preview/verification, not a prospect. Relaunched a functional-medicine harvest (the proven seam) for the next batch, every link tagged from the start. Replied to the operator (bet-081) confirming the upgrade + honest sample status.
 
-**Learned:** <fill>
+**Learned:** Coarse instrumentation (one counter per tool, shared across recipients) can't tell you which outreach works; per-source tagging is the fix and it's one small beacon change. The reach data is still too young/small to read (cold sends <1h). 'The market is wide' -> keep the harvest running on the highest-yield seam and tag everything so the next batch is measurable per-prospect.
 
-**Next:** <fill>
+**Next:** When the harvest returns, send the next batch with per-prospect ?s= tags. After ~24h read the per-source counters (bet-077/079/080): which prospects visited = promising, silence = reach/open problem. On a reply, build the bespoke tool + invoice against an obligation. received_usd=$0.0, cap intact.
