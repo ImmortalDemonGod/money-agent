@@ -1940,3 +1940,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:11:49.336573+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@aestheticbusinessinstitute.com
+- **Subject:** a tool for the practices you train
+- **Body:**
+
+```
+Hi,
+
+The Aesthetic Business Institute has helped hundreds of aesthetic practices across the US grow, so you have the trust and the inbox of exactly the people I built something for. That is why I am writing you instead of them.
+
+I build a short guided step that sits in front of a practice's Calendly or Acuity: a few questions, a clear "here is the right appointment," then their own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits. It is already live and personalizes to each practice by name.
+
+Here is the idea for you. I will give it to the practices you train free, personalized to each one, as a genuinely useful tool you can include. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a practice name on it so you can see exactly what your members would get?
+
+Best,
+Miguel Ingram
+
+```
