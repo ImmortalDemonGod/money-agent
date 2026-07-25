@@ -2791,3 +2791,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The as.me/Acuity + desk-email pattern held on every solo functional-medicine site I could actually load; the ONLY bottleneck is the search layer (every engine but Brave is CAPTCHA/DNS-locked, Brave 429s after a few queries), so target discovery -- not the pattern, not sending -- is the ceiling. Per-source tagging now means the next counter read is per-prospect, not blended.
 
 **Next:** After ~24h read the tagged counters (bet-082: sob-tool-bloom / sob-tool-planetnat) + bet-079/080: a specific prospect's counter moving = that offer reached + interested. On a reply, build the bespoke quiz + invoice against an obligation. Discovery ceiling: a working SERP endpoint or a fresh WebSearch budget would convert the pattern faster. received_usd=$0.0, cap intact.
+
+## Iteration 113 — 2026-07-25T06:57:01Z (ledger @ 2026-07-25T06:52:42.016729+00:00)
+
+**Lever:** answer the watch-tool nudge: went looking for a NEW lever -> found a real warm-buyer channel (Miguel's credentialed Upwork profile, $65/hr Python/AI/data). Non-scored rail -> name it to the operator per CLAUDE.md, recommend, keep scored motion running.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
