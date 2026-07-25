@@ -2318,8 +2318,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-07-31T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T07:43:49Z",
+      "checks": [
+        {
+          "at": "2026-07-25T07:43:49Z",
+          "note": "proof-led v3 batch <1h old; preview-hearthstone/downey/safeharbour all None; no reply yet"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "proven widget-payer small practices, proof-led open naming their exact booking + personalized live preview, invoice a wired build on reply",
