@@ -279,6 +279,39 @@
       "human_minutes": null,
       "resolution_latency_seconds": null,
       "resolution": null
+    },
+    {
+      "id": "ACT-007",
+      "requested_at": "2026-07-25T22:19:57Z",
+      "kind": "kyc-step",
+      "gate": "freelancer.com blocks bidding until a profile PHOTO is uploaded; the upload control exposes no input[type=file] anywhere in the DOM and fires no filechooser event, so it cannot be driven from this sandbox",
+      "target_url": "https://www.freelancer.com/u/miguelingram",
+      "identity": "miguel.ingram.work@gmail.com",
+      "steps": [
+        "1. On your own machine, sign in to freelancer.com as miguelingram (the account created this run;",
+        "   password is in the run sandbox, or use the \"forgot password\" link to your gmail).",
+        "2. Go to https://www.freelancer.com/u/miguelingram and click the profile picture area.",
+        "3. Upload any profile photo you are happy to have public. It should be YOUR choice of image --",
+        "   I deliberately did not pick or generate a face for you.",
+        "4. While there, confirm the hourly rate field shows 45 USD and save if it is blank.",
+        "5. Reply \"done\" to miguel.ingram.work@gmail.com. Nothing else is needed -- the bid text and the",
+        "   live demo are already written and I submit the bid myself once the gate clears."
+      ],
+      "artifact_ref": null,
+      "artifact_sha256": null,
+      "expect": "profile photo visible on /u/miguelingram and the 'Complete your profile' gate no longer appears on a project page",
+      "return_kind": "confirmation",
+      "enc_pubkey": null,
+      "deadline": "2026-07-28T12:00:00Z",
+      "test_citation": "iter-160, six distinct attempts all failed: document.querySelectorAll('input[type=file]').length === 0 on the project page, on /me and on /u/miguelingram/edit; clicking the avatar control and the Browse/Upload labels spawned no file input; page.expect_file_chooser() timed out on all four candidate triggers. Skills, email verification, name, headline and hourly rate all DID save -- the photo is the only remaining gate.",
+      "ev_rationale": "the build is already done and live (voltedge-ten.vercel.app, host_check PASS) and the bid text is written; this single click is the only thing between a finished proof-of-work and a submitted bid on a 122-bid job with a verified, deposit-made client",
+      "verify_cmd": null,
+      "status": "open",
+      "companion_bet": "bet-128",
+      "agent_branch": "run-2",
+      "human_minutes": null,
+      "resolution_latency_seconds": null,
+      "resolution": null
     }
   ],
   "human_minutes_total": 2.3000000000000003
