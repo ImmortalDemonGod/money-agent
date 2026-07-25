@@ -2656,12 +2656,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR [36] pivot: stop cold-offering to 'has-a-website' businesses. Screen for the HUNGRY CROWD -- businesses whose PAGE SOURCE already embeds a paid widget (Typeform/Calendly/Involve.me/Jotform) = proven category-payer. Then SHOW not tell: build the working tool + send a live link. Launch the widget-screen harvest + answer the counts.
 
-**Tried:** <fill>
+**Tried:** Process the operator's [36] strategic upgrade: stop cold-offering to 'has-a-website' businesses; target the HUNGRY CROWD (businesses whose page source already embeds a paid widget = proven category-payer + proven pain), and SHOW not tell (build the working tool + send a live link, then invoice).
 
-**Cost:** <fill>
+**Cost:** $0.0 (one operator email + launched one screen agent; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Conceded both of his screens honestly and answered his counts: (Q1) ZERO of my 9 targets were screened for already-paying-for-the-category -- I'd screened only for 'has a website', which proves neither pain nor willingness to buy THIS. (Q3) of the 9 sends, ~2 went to a clearly owner-read address (NGF named concierge, DJ AJ Falcon personal Gmail), ~2 to a small owner-run team inbox, and ~5 to a generic info/consumers/admission line -- so most went to a shared inbox, which explains much of the silence. Launched the CORRECT target-finder: one non-nesting WebFetch agent screening business page source for embedded paid widgets (Calendly/Typeform/Involve.me/Jotform) + capturing an owner email + a 'build a better one' angle. Replied to the operator (bet-073) committing to build-and-show.
 
-**Learned:** <fill>
+**Learned:** The real screen for a cold digital-tool sale is not 'has a website' -- it is 'already embeds a PAID tool of this category', which is visible in their HTML and proves both halves (pain + wallet) at once. And the winning motion is SHOW not tell: build the working thing (I can, instantly), hand them the live link to use, invoice after -- a working tool in-hand beats a priced cold proposal. This is a materially better strategy than the 9 offers already out; those were aimed at the stadium doors before the crowd let out.
 
-**Next:** <fill>
+**Next:** When the widget-screen agent returns already-paying-for-category targets, BUILD one of them a genuinely better working tool, host it live (host_check + P3), and send the live link (show, then invoice). Watch bet-072/071/069 for any reply to the offers already out. received_usd=$0.0, twenty-five-dollar cap intact.
