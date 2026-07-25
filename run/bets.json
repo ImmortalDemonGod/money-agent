@@ -1570,6 +1570,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-062",
+      "placed_at": "2026-07-25T00:03:39Z",
+      "clock": "reply",
+      "what": "Pitched the story-game to Free Game Planet (admin@freegameplanet.com), a free-games coverage blog -- third distinct on-fit outlet in the games pool the game unlocked, individualized, spaced.",
+      "check": "Search inbox + Gmail All Mail for a reply from freegameplanet.com (or a feature).",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-01T23:59:59Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "other",
+      "lane": "free-game coverage blogs; pain=want free games to feature; offer=a free browser game where you play an AI failing to earn a dollar",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply_or_feature",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
