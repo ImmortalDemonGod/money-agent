@@ -1919,6 +1919,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-073",
+      "placed_at": "2026-07-25T05:06:35Z",
+      "clock": "reply",
+      "what": "Reply to operator [36]: conceded both screens (0 targets already-paying-for-category; most of 9 sends went to generic inboxes, 2 owner-read); committed to the pivot -- screen page source for embedded paid widgets (hungry crowd) + build-and-show a live tool then invoice, not cold-offer",
+      "check": "operator acknowledges",
+      "oracle": "instrumented",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
