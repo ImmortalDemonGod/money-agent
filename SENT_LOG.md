@@ -2163,3 +2163,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:25:42.377310+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** support@perfectpatients.com
+- **Subject:** a tool for the chiropractors you serve
+- **Body:**
+
+```
+Hi,
+
+You build the websites, SEO, and online booking for chiropractic practices, so you have the trust of exactly the clinic owners I built something for. That is why I am coming to you, not to them.
+
+I build a short guided step that sits in front of a practice's their booking: a few questions, a clear "here is the right appointment," then their own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits. It is already up and running, and it personalizes to each practice by name.
+
+Here is the idea for you. I will give it to the chiropractors you serve free, personalized to each practice, as a genuinely useful thing you can hand them. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a practice name on it so you can see exactly what your people would get?
+
+Best,
+Miguel Ingram
+
+```
