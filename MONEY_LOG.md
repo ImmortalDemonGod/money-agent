@@ -3822,14 +3822,44 @@ impressive, which is optimising for how the profile reads to ME rather than to t
 run/freelancer_bid_40604596.txt, artifact live at voltedge-ten.vercel.app). Poll ACT-006 (Upwork job
 texts, bet-125). Read the gift-first 13 (bet-126). received_usd=$0.0, cap intact.
 
-## Iteration 162 — 2026-07-25T23:03:20Z (ledger @ 2026-07-25T22:58:28.552521+00:00)
+## Iteration 162 — 2026-07-25T23:25Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator cleared the profile gate. Submit the bid — the whole build-first thesis in one act.
 
-**Cost:** <fill>
+**Tried:** Place the first bid, opening with the finished artifact instead of a price and a promise.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (browser automation only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Gate CLEARED after the operator saved the profile. The bid form appeared: bid amount, delivery
+days, milestone, proposal textarea.
+(2) First submit FAILED: "Failed to create bid — please complete all fields correctly." The specific
+cause was only visible in the rendered page, not in any status code: **"Your proposal must not be
+greater than 1500 characters."** Mine was 2,283.
+(3) Rewrote the proposal to 1,493 characters WITHOUT dropping the three things that carry it: the
+live link on line one, the measured numbers against his own acceptance criteria (1440px/390px zero
+overflow, 15.8:1 and 17.4:1 contrast, no framework/build/fonts/third-party requests), and the honest
+line that the Figma source does not exist yet. What got cut was padding, not substance.
+(4) **BID PLACED**, confirmed three independent ways rather than trusting the click: the URL became
+`/proposals?bidCreated=true`, the page returned "You've successfully placed a bid" with a Retract
+option, and the project's bid count moved **122 -> 123**.
+(5) Terms: Rs.85,000 INR (deliberately just under the Rs.93,030 average — credible, not a lowball),
+3 days, from a zero-review account against 122 competitors. Fee disclosed by the platform:
+Rs.8,500, so Rs.76,500 net if awarded.
+(6) Registered as bet-130 with the falsifiable bar already stated to the operator: 6 bids budgeted
+for 1 win; if six artifact-bearing bids draw zero client contact, the build-first thesis is wrong and
+I record it as wrong rather than asking for six more.
+(7) Lane cap (9 active >= 3) refused a new lane for the freelance rail, so the bet went on the
+existing `outreach` lane rather than forcing a lane closure I cannot honestly ground yet — the
+contractor bets it would have required closing do not reach their deadlines until 07-30 to 08-01.
 
-**Next:** <fill>
+**Learned:** Two submission failures in a row were both content-shaped, not permission-shaped: the
+profile form needed a dropdown selection rather than typed text, and the bid needed 1500 characters
+rather than 2283. Neither produced a useful error anywhere except the rendered page — the first
+looked like "save silently does nothing", the second like a generic "complete all fields correctly".
+Reading the screenshot resolved both in one look each, after multiple wrong guesses from text alone.
+
+**Next:** Poll bet-130 for client contact on 40604596. Five bids remain this month; spend them on
+briefs with the same shape (deliverable needs nothing from the client, interactive component at the
+centre) and build each artifact first. Poll ACT-006 (Upwork job texts, bet-125). Read the gift-first
+13 (bet-126). received_usd=$0.0, cap intact.
