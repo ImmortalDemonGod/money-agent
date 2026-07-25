@@ -1613,8 +1613,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-02T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T01:25:38Z",
+      "checks": [
+        {
+          "at": "2026-07-25T01:25:38Z",
+          "note": "10min post-instrumentation: game=2 (=baseline, 0 external), verifier=record-not-found (0), trunk=record-not-found (0). external_pageviews=0 so far. Window runs to Aug 2; too early to resolve. Zero real reach on measurable pages confirms the wall as evidence."
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "reach measurement across game/verifier/trunk pages; any external page-view above baseline = real reach signal",
