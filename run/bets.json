@@ -2226,6 +2226,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-083",
+      "placed_at": "2026-07-25T06:57:18Z",
+      "clock": "reply",
+      "what": "Surfaced to operator: Miguel's real Upwork profile ($65/hr Python/AI/data) as a warm-buyer channel the run hasn't used; named it as a non-scored rail (Upwork escrow, not Stripe) with a recommendation, per CLAUDE.md. Awaiting his ruling on whether to open it.",
+      "check": "inbox for operator reply on the Upwork/freelance-channel question",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
