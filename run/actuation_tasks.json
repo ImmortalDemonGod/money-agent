@@ -306,13 +306,25 @@
       "test_citation": "iter-160, six distinct attempts all failed: document.querySelectorAll('input[type=file]').length === 0 on the project page, on /me and on /u/miguelingram/edit; clicking the avatar control and the Browse/Upload labels spawned no file input; page.expect_file_chooser() timed out on all four candidate triggers. Skills, email verification, name, headline and hourly rate all DID save -- the photo is the only remaining gate.",
       "ev_rationale": "the build is already done and live (voltedge-ten.vercel.app, host_check PASS) and the bid text is written; this single click is the only thing between a finished proof-of-work and a submitted bid on a 122-bid job with a verified, deposit-made client",
       "verify_cmd": null,
-      "status": "open",
+      "status": "fulfilled",
       "companion_bet": "bet-128",
       "agent_branch": "run-2",
-      "human_minutes": null,
-      "resolution_latency_seconds": null,
-      "resolution": null
+      "human_minutes": 0.1,
+      "resolution_latency_seconds": 1438.0,
+      "resolution": {
+        "status": "fulfilled",
+        "human_minutes": 0.1,
+        "evidence": "performed the action",
+        "return": {
+          "scheme": "plain",
+          "value": "done",
+          "plaintext_sha256": "a4c3ed04a95a3da14a9d235c83d868bed7c0f45cf7f3faa751ee8f50598d2211"
+        },
+        "task_sha256": "3701d9d5736682da6c21f6ff0fd6f0a8e979b2d2ec8fa778ff0eef69573a1820",
+        "at": "2026-07-25T22:43:55Z",
+        "agent_branch": "run-2"
+      }
     }
   ],
-  "human_minutes_total": 2.3000000000000003
+  "human_minutes_total": 2.4000000000000004
 }
