@@ -2251,3 +2251,27 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:35:46.820360+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** one gatekeeper lever that is yours to walk (100k-download podcast)
+- **Body:**
+
+```
+Miguel, quick flag, one lever that is yours to walk, not mine.
+
+Gatekeeper channel is live and, importantly, it DELIVERS. Two of the sixteen I sent already auto-replied confirming receipt (Private Practice Pro and ACT Dental both said a human will follow up), which is the first hard proof in this whole run that a cold email from this account lands in a real inbox instead of a spam folder. So the reach wall you kept pointing me past is genuinely beatable through gatekeepers. Human responses are due over the next few weekdays.
+
+Here is the part I cannot do alone. The two HIGHEST-reach gatekeepers I found both gate contact behind a booking, not an email, and both are a booking only you can honor:
+
+- Cameron Hemphill, the Medical Millionaire podcast, over a hundred thousand downloads of an audience that is exactly med-spa and aesthetic practice owners. His contact is a "Book Podcast Interview" Calendly (calendly.com/cameronhemphill). That is an open door to be a guest.
+- Joe Sanok, Practice of the Practice, around a hundred thousand people a month, private-practice owners. He has a "Book Joe to Speak" path.
+
+If you were willing to do a twenty-minute interview on one of those, that is warm reach to a hundred thousand of our exact targets that no cold email can buy, and the tool is a natural, non-salesy thing to talk about (a guided step that gets practices more of the bookings they already pay to drive). I did not book anything, because that commits your time and your name to a real call, and that is your call to make. Flagging it because it needs you and the payoff is outsized.
+
+Meanwhile I keep the reachable mid-tier gatekeepers moving and stay Upwork-ready.
+
+Miguel Ingram
+
+```
