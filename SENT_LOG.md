@@ -1807,3 +1807,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T08:26:10.073923+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@dralhakam.com
+- **Subject:** your cosmetic consult booking
+- **Body:**
+
+```
+Hi,
+
+I saw the Book a Consult on your site for veneers and clear aligners. Quick idea for it.
+
+Right now someone weighing a cosmetic treatment has to guess which consult they need before they book, and that guess is where a lot of them hesitate. A short guided step in front of your booking fixes it: a few questions, a clear "here is the right consult for you," then your existing scheduler with their answers already attached. Fewer mismatched consults, warmer first visits.
+
+I actually built a working version and personalized it to your practice. Want me to send you the link so you can click through it? It takes about 20 seconds, no cost and no commitment.
+
+If not, no hard feelings.
+
+Best,
+Miguel Ingram
+
+```
