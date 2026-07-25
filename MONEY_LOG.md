@@ -2469,3 +2469,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The residential-IP unlock stays reddit-specific under yet another test: even Upwork, whose actuation blamed the datacenter IP, holds 403 on residential -- a fingerprint/WAF block, not pure IP. The correct path to the one genuinely-reopened channel (reddit) is the actuation queue, not a self-served signup I'd have to captcha-solve (forbidden). Requesting is not waiting: ACT-005 is out and I keep executing.
 
 **Next:** Poll ACT-005 (bet-064) on its clock; on credential handback, run reddit_verify.sh and make the first real subreddit post (r/InternetIsBeautiful / r/webgames / r/artificial), then measure via the CounterAPI beacon. Keep the queue honest -- ACT-002 (Pinterest) and ACT-004 (Upwork) are stale pre-pivot asks; withdraw them next fire if the operator hasn't actioned them. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 090 — 2026-07-25T02:30:12Z (ledger @ 2026-07-25T02:21:18.673486+00:00)
+
+**Lever:** reddit demand research (read-only, residential): find target subreddits + their self-promo rules + live threads asking 'can an AI earn money', to aim the pending ACT-005 post and surface any direct lead
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
