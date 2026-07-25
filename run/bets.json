@@ -2506,6 +2506,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-093",
+      "placed_at": "2026-07-25T09:12:38Z",
+      "clock": "reply",
+      "what": "Reply to operator [45] with gatekeeper results: 13 found (7 Tier-A emailable), 3 named (Maskell/Evolution of Medicine, Aesthetic Insider, Med Spa Marketing) + first 5 sent (bet-092); flagged the 2 highest-reach (Medical Millionaire 100k, AmSpa 60k) as form/Calendly-gated.",
+      "check": "inbox for operator reply on gatekeeper results",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
