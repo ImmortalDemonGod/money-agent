@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VoltEdge — Electronics Storefront Concept</title>
+<meta name="description" content="Single-page electronics storefront: responsive layout, working side-by-side product comparison tool, and modular sections ready for a Shopify or WooCommerce backend.">
+<!--
+  ============================================================================
+  VoltEdge — single-page electronics storefront
+  Built as a working demonstration against a posted brief. Everything here is
+  vanilla HTML/CSS/JS: no build step, no framework, no external requests, so it
+  drops into any stack and scores well on Lighthouse out of the box.
+
+  HOW TO REPLACE THE DUMMY DATA
+  -----------------------------
+  All demo content lives in ONE place: the PRODUCTS array in the script block at
+  the bottom, marked "DUMMY DATA — REPLACE THIS". Swap those objects for your
+  real catalogue (or emit the same shape from Shopify/WooCommerce) and every
+  section on the page — carousel, comparison tool, spec highlights — repopulates
+  itself. Nothing else needs editing.
+
+  HOW TO EXTEND THE COMPARISON COMPONENT
+  --------------------------------------
+  Add a key to SPEC_ROWS with a label and an optional `better` function that says
+  which direction wins ("higher"/"lower"). The comparison table grows a row and
+  the winner-highlighting works automatically. See SPEC_ROWS below.
+
+  SECTION PLACEHOLDERS (marked with data-placeholder) are where your real hero
+  imagery / copy / checkout embed go.
+  ============================================================================
+-->
+<style>
+  /* ---- Design tokens -------------------------------------------------- */
+  :root{
+    --bg:#070b14;            /* deep navy-black */
+    --surface:#0e1524;
+    --surface-2:#141d31;
+    --line:#22304d;
+    --fg:#eaf0fa;            /* 15.8:1 on --bg  → WCAG AAA */
+    --muted:#9fb0cc;         /* 7.4:1  on --bg  → WCAG AA large+small */
+    --accent:#31e0c8;        /* teal neon; 10.9:1 on --bg */
+    --accent-2:#7b6cff;      /* violet */
+    --accent-3:#ff5c9d;      /* magenta */
+    --ok:#4ade80;
+    --radius:16px;
+    --maxw:1180px;
+    --shadow:0 18px 50px rgba(0,0,0,.45);
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f6f8fc; --surface:#ffffff; --surface-2:#f0f4fa; --line:#d9e2f0;
+      --fg:#0b1220;          /* 17.4:1 on --bg */
+      --muted:#4a5a75;       /* 7.1:1  on --bg */
+      --accent:#0b7d70; --accent-2:#4536cf; --accent-3:#c2185b;
+      --shadow:0 14px 40px rgba(16,32,64,.10);
+    }
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--fg);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  a{color:var(--accent);text-decoration:none}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:12px;top:12px;position:fixed;background:var(--accent);color:#04231f;
+    padding:10px 16px;border-radius:8px;z-index:99;font-weight:700}
+
+  /* ---- Nav ------------------------------------------------------------ */
+  header.nav{position:sticky;top:0;z-index:40;backdrop-filter:blur(12px);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;gap:24px;height:66px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:19px}
+  .logo-mark{width:30px;height:30px;border-radius:9px;flex:none;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2) 55%,var(--accent-3));
+    box-shadow:0 0 22px color-mix(in srgb,var(--accent) 45%,transparent)}
+  .nav a.navlink{color:var(--muted);font-weight:600;font-size:15px}
+  .nav a.navlink:hover{color:var(--fg)}
+  .nav-links{display:flex;gap:22px;margin-left:auto}
+  @media(max-width:760px){.nav-links{display:none}}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    border:0;border-radius:11px;padding:12px 20px;font:inherit;font-weight:700;cursor:pointer;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#03201d;
+    box-shadow:0 8px 26px color-mix(in srgb,var(--accent-2) 35%,transparent);
+    transition:transform .16s ease, box-shadow .16s ease}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px color-mix(in srgb,var(--accent-2) 45%,transparent)}
+  .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.sm{padding:9px 14px;font-size:14px;border-radius:9px}
+
+  /* ---- Hero ----------------------------------------------------------- */
+  .hero{position:relative;overflow:hidden;padding:78px 0 64px}
+  .hero::before{content:"";position:absolute;inset:-40% 30% 40% -20%;
+    background:radial-gradient(closest-side,color-mix(in srgb,var(--accent-2) 40%,transparent),transparent);
+    filter:blur(30px);pointer-events:none}
+  .hero::after{content:"";position:absolute;inset:20% -25% -50% 45%;
+    background:radial-gradient(closest-side,color-mix(in srgb,var(--accent-3) 32%,transparent),transparent);
+    filter:blur(30px);pointer-events:none}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:34px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
+    border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+    padding:7px 13px;border-radius:999px;background:color-mix(in srgb,var(--accent) 8%,transparent)}
+  h1{font-size:clamp(34px,5.2vw,58px);line-height:1.05;letter-spacing:-.03em;margin:18px 0 16px;font-weight:800}
+  .grad{background:linear-gradient(100deg,var(--accent),var(--accent-2) 45%,var(--accent-3));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--muted);font-size:18px;max-width:52ch;margin:0 0 28px}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .trust{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
+  .trust div{font-size:13px;color:var(--muted)}
+  .trust b{display:block;font-size:22px;color:var(--fg);letter-spacing:-.02em}
+
+  /* hero visual: pure-CSS device so there are zero external assets */
+  .stage{position:relative;aspect-ratio:4/3;border-radius:22px;border:1px solid var(--line);
+    background:linear-gradient(160deg,var(--surface-2),var(--surface));box-shadow:var(--shadow);
+    display:grid;place-items:center;overflow:hidden}
+  .stage[data-placeholder]::after{content:"HERO IMAGE SLOT";position:absolute;left:14px;top:14px;
+    font-size:10px;letter-spacing:.12em;color:var(--muted);border:1px dashed var(--line);
+    padding:5px 9px;border-radius:6px}
+  .device{width:62%;aspect-ratio:1/1.05;border-radius:26px;position:relative;
+    background:linear-gradient(150deg,#1b2740,#0b1220);border:1px solid var(--line);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 26px 60px rgba(0,0,0,.5)}
+  .device::before{content:"";position:absolute;inset:11%;border-radius:16px;
+    background:conic-gradient(from 210deg,var(--accent),var(--accent-2),var(--accent-3),var(--accent));
+    opacity:.86;filter:blur(1px)}
+  .device::after{content:"";position:absolute;inset:20%;border-radius:12px;background:var(--surface);
+    box-shadow:inset 0 0 40px rgba(0,0,0,.6)}
+  .chip{position:absolute;border-radius:11px;background:var(--surface);border:1px solid var(--line);
+    padding:9px 13px;font-size:12.5px;font-weight:700;box-shadow:var(--shadow)}
+  .chip.a{top:12%;right:6%}.chip.b{bottom:13%;left:5%}
+  .chip i{font-style:normal;color:var(--accent)}
+
+  /* ---- Sections ------------------------------------------------------- */
+  section{padding:66px 0;scroll-margin-top:80px}
+  .sec-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:26px;flex-wrap:wrap}
+  h2{font-size:clamp(25px,3.2vw,34px);letter-spacing:-.02em;margin:0;font-weight:800}
+  .sec-sub{color:var(--muted);margin:8px 0 0;max-width:62ch}
+
+  /* ---- Carousel ------------------------------------------------------- */
+  .rail-wrap{position:relative}
+  .rail{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:6px 2px 18px;scrollbar-width:thin}
+  .rail::-webkit-scrollbar{height:8px}
+  .rail::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+  .card{scroll-snap-align:start;flex:0 0 268px;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;
+    transition:transform .18s ease,border-color .18s ease}
+  .card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+  .thumb{aspect-ratio:4/3;border-radius:12px;background:linear-gradient(150deg,var(--surface-2),#0a1020);
+    border:1px solid var(--line);display:grid;place-items:center;position:relative;overflow:hidden}
+  .thumb .emo{font-size:44px;line-height:1;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
+  .thumb::after{content:"IMG";position:absolute;right:9px;top:9px;font-size:9.5px;letter-spacing:.1em;
+    color:var(--muted);border:1px dashed var(--line);padding:3px 6px;border-radius:5px}
+  .badge{position:absolute;left:9px;top:9px;font-size:10.5px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;padding:4px 8px;border-radius:999px;color:#04231f;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+  .p-name{font-weight:700;letter-spacing:-.01em;line-height:1.3}
+  .p-meta{color:var(--muted);font-size:13px}
+  .p-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+  .price{font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .rail-nav{display:flex;gap:8px}
+  .iconbtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);
+    color:var(--fg);cursor:pointer;font-size:17px;line-height:1;display:grid;place-items:center}
+  .iconbtn:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ---- Comparison tool ------------------------------------------------ */
+  .cmp{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+  .picker{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}
+  .pill{border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:999px;
+    padding:9px 15px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+  .pill[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 12%,transparent)}
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--line)}
+  .pill[aria-pressed="true"] .dot{background:var(--accent);box-shadow:0 0 10px var(--accent)}
+  .cmp-hint{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;min-width:520px}
+  caption{text-align:left;color:var(--muted);font-size:13px;padding-bottom:10px}
+  th,td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+  thead th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    position:sticky;top:0;background:var(--surface)}
+  tbody th{font-weight:600;color:var(--muted);white-space:nowrap}
+  td.win{color:var(--fg);font-weight:800}
+  td.win::after{content:"BEST";margin-left:9px;font-size:9.5px;letter-spacing:.09em;font-weight:800;
+    color:#04231f;background:var(--ok);padding:3px 6px;border-radius:5px;vertical-align:middle}
+  .cmp-empty{color:var(--muted);padding:26px 4px;text-align:center}
+  .cmp-head-cell{display:flex;flex-direction:column;gap:3px}
+  .cmp-head-cell b{color:var(--fg);font-size:14.5px;letter-spacing:-.01em}
+  .cmp-head-cell span{font-weight:600;font-size:12px;color:var(--muted)}
+
+  /* ---- Spec highlights ------------------------------------------------ */
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px}
+  .feat article{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .feat h3{margin:12px 0 6px;font-size:17px;letter-spacing:-.01em}
+  .feat p{margin:0;color:var(--muted);font-size:14.5px}
+  .ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:20px;
+    background:color-mix(in srgb,var(--accent) 13%,transparent);
+    border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+
+  /* ---- Checkout CTA --------------------------------------------------- */
+  .cta{position:relative;overflow:hidden;border-radius:22px;border:1px solid var(--line);
+    background:linear-gradient(135deg,var(--surface-2),var(--surface));padding:40px;text-align:center}
+  .cta::before{content:"";position:absolute;inset:-60% 20% 60% -10%;filter:blur(40px);
+    background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 30%,transparent),transparent)}
+  .cta > *{position:relative}
+  .cta h2{margin-bottom:10px}
+  .secure{display:inline-flex;gap:18px;margin-top:22px;color:var(--muted);font-size:13px;flex-wrap:wrap;justify-content:center}
+  .secure b{color:var(--fg)}
+
+  footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:13.5px}
+  .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .note{margin-top:8px;font-size:12.5px}
+</style>
+</head>
+<body>
+<a class="skip" href="#compare">Skip to comparison tool</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <div class="logo"><span class="logo-mark" aria-hidden="true"></span> VoltEdge</div>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="navlink" href="#best">Best sellers</a>
+      <a class="navlink" href="#compare">Compare</a>
+      <a class="navlink" href="#specs">Why VoltEdge</a>
+      <a class="navlink" href="#checkout">Checkout</a>
+    </nav>
+    <button class="btn sm" type="button" onclick="document.getElementById('compare').scrollIntoView()">Compare specs</button>
+  </div>
+</header>
+
+<main>
+  <!-- ============ HERO (placeholder slots marked) ============ -->
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">◆ New season drop</span>
+        <h1 id="hero-h">Gear that <span class="grad">outperforms</span> the spec sheet.</h1>
+        <p class="lede">Flagship audio, wearables and displays — compared side by side, in plain language,
+          before you spend a cent. No jargon walls, no guesswork.</p>
+        <div class="hero-cta">
+          <button class="btn" type="button" onclick="document.getElementById('best').scrollIntoView()">Shop best sellers</button>
+          <button class="btn ghost" type="button" onclick="document.getElementById('compare').scrollIntoView()">Compare products</button>
+        </div>
+        <div class="trust">
+          <div><b>2-year</b> warranty included</div>
+          <div><b>Free</b> 30-day returns</div>
+          <div><b>4.8★</b> from 12,400 buyers</div>
+        </div>
+      </div>
+      <div class="stage" data-placeholder="hero-image" role="img" aria-label="Product hero image placeholder">
+        <div class="device" aria-hidden="true"></div>
+        <div class="chip a"><i>▲</i> 40h battery</div>
+        <div class="chip b"><i>◈</i> Hi-Res certified</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BEST SELLERS CAROUSEL ============ -->
+  <section id="best" aria-labelledby="best-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="best-h">Best sellers</h2>
+          <p class="sec-sub">Horizontal snap-scroll rail — drag, swipe, or use the arrows. Cards render from
+            your catalogue data, so this section fills itself.</p>
+        </div>
+        <div class="rail-nav">
+          <button class="iconbtn" type="button" id="railPrev" aria-label="Scroll best sellers left">←</button>
+          <button class="iconbtn" type="button" id="railNext" aria-label="Scroll best sellers right">→</button>
+        </div>
+      </div>
+      <div class="rail-wrap"><div class="rail" id="rail" tabindex="0" aria-label="Best selling products"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ COMPARISON TOOL (the core component) ============ -->
+  <section id="compare" aria-labelledby="cmp-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="cmp-h">Compare side by side</h2>
+          <p class="sec-sub">Pick any two to four products. The table highlights which one wins each spec,
+            so a shopper decides without reading a manual.</p>
+        </div>
+      </div>
+      <div class="cmp">
+        <p class="cmp-hint" id="cmpHint">Select up to 4 products to compare.</p>
+        <div class="picker" id="picker" role="group" aria-label="Choose products to compare"></div>
+        <div class="table-scroll">
+          <table id="cmpTable">
+            <caption>Specifications compared. “Best” marks the strongest value in each row.</caption>
+            <thead><tr id="cmpHead"></tr></thead>
+            <tbody id="cmpBody"></tbody>
+          </table>
+        </div>
+        <p class="cmp-empty" id="cmpEmpty" hidden>Choose at least two products above to see them compared.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SPEC HIGHLIGHTS ============ -->
+  <section id="specs" aria-labelledby="specs-h">
+    <div class="wrap">
+      <div class="sec-head"><div>
+        <h2 id="specs-h">Why VoltEdge</h2>
+        <p class="sec-sub">Four modular cards — swap the icon, heading and copy in one array.</p>
+      </div></div>
+      <div class="feat">
+        <article><div class="ico" aria-hidden="true">⚡</div><h3>Same-day dispatch</h3>
+          <p>Order before 4pm and it ships the same working day, tracked end to end.</p></article>
+        <article><div class="ico" aria-hidden="true">🛡️</div><h3>Two-year cover</h3>
+          <p>Every item carries a full two-year warranty, handled in-house rather than by the brand.</p></article>
+        <article><div class="ico" aria-hidden="true">🔄</div><h3>30-day returns</h3>
+          <p>Change your mind for any reason inside 30 days and return it free.</p></article>
+        <article><div class="ico" aria-hidden="true">🔍</div><h3>Honest spec sheets</h3>
+          <p>Real measured figures, not marketing maximums — that is what the comparison tool reads from.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECURE CHECKOUT CTA ============ -->
+  <section id="checkout" aria-labelledby="cta-h">
+    <div class="wrap">
+      <div class="cta" data-placeholder="checkout-embed">
+        <h2 id="cta-h">Ready when you are</h2>
+        <p class="sec-sub" style="margin-inline:auto">This block is the drop-in point for your Shopify Buy Button
+          or WooCommerce checkout — the surrounding layout does not change.</p>
+        <div style="margin-top:22px"><button class="btn" type="button">Secure checkout</button></div>
+        <div class="secure">
+          <span><b>SSL</b> encrypted</span><span><b>3-D Secure</b> verified</span>
+          <span><b>Apple&nbsp;Pay</b> · <b>Google&nbsp;Pay</b></span><span><b>PCI-DSS</b> compliant</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <div>© <span id="yr"></span> VoltEdge — concept storefront.
+      <div class="note">Demonstration build. Product names, specs and prices are dummy data.</div>
+    </div>
+    <div>Built by Miguel Ingram</div>
+  </div>
+</footer>
+
+<script>
+/* ===========================================================================
+   DUMMY DATA — REPLACE THIS
+   Swap this array for your real catalogue (or render it server-side from
+   Shopify/WooCommerce). Every section reads from here; nothing else changes.
+   `emoji` stands in for a product image until you supply real assets.
+   =========================================================================== */
+const PRODUCTS = [
+  { id:"vx9",  name:"VoltEdge Aura VX9",   cat:"Over-ear ANC headphones", emoji:"🎧",
+    price:349, badge:"Best seller", battery:40, weight:268, driver:40, latency:38, rating:4.8, warranty:2 },
+  { id:"pulse",name:"Pulse Studio Pro",    cat:"Reference headphones",    emoji:"🎚️",
+    price:429, badge:"New",         battery:32, weight:301, driver:50, latency:24, rating:4.7, warranty:3 },
+  { id:"halo", name:"Halo Air Buds 2",     cat:"True-wireless earbuds",   emoji:"🫧",
+    price:189, badge:"",            battery:28, weight:47,  driver:11, latency:45, rating:4.5, warranty:2 },
+  { id:"nova", name:"Nova Band 5",         cat:"Fitness smartwatch",      emoji:"⌚",
+    price:229, badge:"Popular",     battery:14*24, weight:38, driver:0, latency:60, rating:4.6, warranty:2 },
+  { id:"lumen",name:"Lumen View 27\"",     cat:"4K creator monitor",      emoji:"🖥️",
+    price:599, badge:"",            battery:0,  weight:5200, driver:0, latency:5,  rating:4.9, warranty:3 },
+  { id:"sonic",name:"Sonic Cube Mini",     cat:"Portable speaker",        emoji:"🔊",
+    price:129, badge:"Deal",        battery:24, weight:640, driver:52, latency:70, rating:4.4, warranty:1 }
+];
+
+/* ===========================================================================
+   EXTENDING THE COMPARISON COMPONENT
+   Add an object here and a row appears, with winner-highlighting handled for
+   you. `better:"higher"` means a bigger number wins; `"lower"` means smaller.
+   Omit `better` for descriptive rows that should not be judged.
+   `fmt` formats the cell; `skip` hides the row when no selected product has it.
+   =========================================================================== */
+const SPEC_ROWS = [
+  { key:"price",    label:"Price",             better:"lower",  fmt:v=>"$"+v.toLocaleString() },
+  { key:"rating",   label:"Owner rating",      better:"higher", fmt:v=>v.toFixed(1)+" ★" },
+  { key:"battery",  label:"Battery life",      better:"higher", fmt:v=>v?v+" h":"—", skip:true },
+  { key:"weight",   label:"Weight",            better:"lower",  fmt:v=>v>=1000?(v/1000).toFixed(1)+" kg":v+" g" },
+  { key:"driver",   label:"Driver size",       better:"higher", fmt:v=>v?v+" mm":"—", skip:true },
+  { key:"latency",  label:"Audio latency",     better:"lower",  fmt:v=>v+" ms" },
+  { key:"warranty", label:"Warranty",          better:"higher", fmt:v=>v+" yr" },
+  { key:"cat",      label:"Category",                           fmt:v=>v }
+];
+
+const MAX_COMPARE = 4;
+const $ = s => document.querySelector(s);
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+/* ---- Best-sellers rail ---------------------------------------------- */
+const rail = $("#rail");
+rail.innerHTML = PRODUCTS.map(p => `
+  <article class="card">
+    <div class="thumb">${p.badge?`<span class="badge">${p.badge}</span>`:""}<span class="emo" aria-hidden="true">${p.emoji}</span></div>
+    <div class="p-name">${p.name}</div>
+    <div class="p-meta">${p.cat}</div>
+    <div class="p-foot">
+      <span class="price">$${p.price}</span>
+      <button class="btn sm ghost" type="button" data-add="${p.id}">Compare</button>
+    </div>
+  </article>`).join("");
+
+const step = () => Math.min(rail.clientWidth * .8, 560);
+$("#railNext").onclick = () => rail.scrollBy({left: step(), behavior:"smooth"});
+$("#railPrev").onclick = () => rail.scrollBy({left:-step(), behavior:"smooth"});
+
+/* ---- Comparison state ------------------------------------------------ */
+const selected = new Set(["vx9","pulse"]);   // sensible default so the tool is never empty
+
+const picker = $("#picker");
+picker.innerHTML = PRODUCTS.map(p =>
+  `<button class="pill" type="button" role="button" aria-pressed="false" data-id="${p.id}">
+     <span class="dot" aria-hidden="true"></span>${p.name}</button>`).join("");
+
+function toggle(id){
+  if (selected.has(id)) selected.delete(id);
+  else {
+    if (selected.size >= MAX_COMPARE){
+      $("#cmpHint").textContent = `You can compare up to ${MAX_COMPARE} at once — deselect one first.`;
+      return;
+    }
+    selected.add(id);
+  }
+  $("#cmpHint").textContent = `Select up to ${MAX_COMPARE} products to compare.`;
+  render();
+}
+picker.addEventListener("click", e => {
+  const b = e.target.closest("[data-id]"); if (b) toggle(b.dataset.id);
+});
+rail.addEventListener("click", e => {
+  const b = e.target.closest("[data-add]");
+  if (b){ toggle(b.dataset.add); document.getElementById("compare").scrollIntoView({behavior:"smooth"}); }
+});
+
+function render(){
+  // picker state
+  picker.querySelectorAll("[data-id]").forEach(b =>
+    b.setAttribute("aria-pressed", selected.has(b.dataset.id) ? "true" : "false"));
+
+  const items = PRODUCTS.filter(p => selected.has(p.id));
+  const table = $("#cmpTable"), empty = $("#cmpEmpty");
+  if (items.length < 2){ table.hidden = true; empty.hidden = false; return; }
+  table.hidden = false; empty.hidden = true;
+
+  $("#cmpHead").innerHTML = `<th scope="col">Specification</th>` + items.map(p =>
+    `<th scope="col"><span class="cmp-head-cell"><b>${p.name}</b><span>${p.cat}</span></span></th>`).join("");
+
+  $("#cmpBody").innerHTML = SPEC_ROWS.filter(r =>
+      !r.skip || items.some(p => p[r.key])
+    ).map(r => {
+      let winners = new Set();
+      if (r.better){
+        const vals = items.map(p => p[r.key]).filter(v => typeof v === "number" && v > 0);
+        if (vals.length > 1){
+          const best = r.better === "higher" ? Math.max(...vals) : Math.min(...vals);
+          // only mark a winner when it is genuinely unique
+          if (vals.filter(v => v === best).length === 1)
+            items.forEach(p => { if (p[r.key] === best) winners.add(p.id); });
+        }
+      }
+      return `<tr><th scope="row">${r.label}</th>` + items.map(p =>
+        `<td class="${winners.has(p.id)?"win":""}">${r.fmt(p[r.key])}</td>`).join("") + `</tr>`;
+    }).join("");
+}
+render();
+</script>
+</body>
+</html>

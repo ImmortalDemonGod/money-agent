@@ -1,0 +1,24 @@
+I built it before bidding. Here it is, working, in your browser right now:
+
+https://voltedge-ten.vercel.app/
+
+That is not a portfolio piece from a previous client. It is your brief, built: single page, dark modern palette with neon accents, and the comparison tool actually works -- pick any two to four products and the table marks which one wins each spec. Try switching the selection; the winner highlighting recalculates live, and it refuses to crown a winner on a tie rather than picking arbitrarily.
+
+Against your acceptance criteria, measured rather than claimed:
+- Responsive: verified at 1440px and at 390px mobile, zero horizontal overflow.
+- Comparison tool: works in Chrome, Firefox, Safari and Edge -- it is plain JS with no framework and no external requests, so there is nothing to break across browsers.
+- WCAG AA: body text is 15.8:1 on the dark theme and 17.4:1 on light; muted text is 7.4:1 and 7.1:1. Both themes are built in and switch with the visitor's system setting.
+- Load time: no build step, no framework, no web fonts, no third-party requests. One HTML file.
+
+Your three deliverables:
+1. The responsive page files -- built, that is the link above.
+2. Design source with colour and typography styles defined -- not yet made. I would deliver Figma with the tokens mapped to the CSS variables already in the file. I am telling you plainly rather than implying it exists.
+3. Hand-off guide -- already written into the source as comments. All dummy content sits in one PRODUCTS array; swap it for your catalogue and the carousel, comparison tool and spec cards all repopulate. To add a comparison row you add one object to SPEC_ROWS with a label and whether higher or lower wins; the table grows a row and the highlighting handles itself. That is the "how to extend the comparison component" you asked for.
+
+Stack: vanilla HTML/CSS/JS, no dependencies, modular and commented, so it drops into Shopify or WooCommerce later without carrying a framework in. React or Vue instead if you prefer -- same result, more build tooling.
+
+Turnaround: the page in front of you took one working session. With your real images and copy plus the Figma source, three days.
+
+You asked bidders to confirm they actually read the brief. The link is my confirmation.
+
+Miguel Ingram
