@@ -2063,8 +2063,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-07-30T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T06:23:49Z",
+      "checks": [
+        {
+          "at": "2026-07-25T06:23:49Z",
+          "note": "sob-tool=1 (hit 06:14Z, before the cold sends -> likely operator/preview bot verifying, not a prospect); rw/pmp still 0. Beacon proven to register a real JS visit. Cold sample still accruing."
+        }
+      ],
       "resolution": null
     },
     {
