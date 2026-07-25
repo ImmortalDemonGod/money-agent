@@ -2642,12 +2642,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** send the refined direct-to-consumer batch: 4 tailored refund-guaranteed booking/scheduler-widget offers to owner-read SMB inboxes (DJ AJ Falcon, Exclusive Dog Training, Levitt Pavilion, Atlas Abstract) -- higher-quality targets than batch 1
 
-**Tried:** <fill>
+**Tried:** Send the refined direct-to-consumer batch from the second harvest pass (owner-read inboxes, per the LOOP-LOC quality lesson).
 
-**Cost:** <fill>
+**Cost:** $0.0 (4 emails; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** The refined harvest checked ~36 business sites and returned 5 owner-inbox keepers; I sent 4 tailored refund-guaranteed booking/scheduler-widget offers to the new ones (the 5th, The International Kitchen, was already emailed in batch 1): DJ AJ Falcon (real-time event booking), Exclusive Dog Training (eval scheduler + program-fit quiz), Levitt Pavilion (RSVP/reservation widget), Atlas Abstract (closing-appointment scheduler). Each 3-day, three-hundred-dollar, verifier-auto-refund if late. Two of these are personal Gmails, i.e. definitively owner-read -- higher quality than batch 1's generic inboxes. That brings total real offers sent to nine (LOOP-LOC dead; ~8 live pending across bet-069/071/072).
 
-**Learned:** <fill>
+**Learned:** The refined filter works and is higher-quality but lower-yield: direct-to-consumer service SMBs with an OWNER-read raw inbox are ~14% of proven-payer businesses (vs ~25% for any-raw-inbox), because owner-read raw addresses are scarcer than generic info@ lines. The trade is worth it -- an owner Gmail is far likelier to convert than a consumer-service autoresponder. The pipeline is now a repeatable, self-correcting sell engine: harvest -> personalize -> send -> learn from the reply quality -> refine the next harvest.
 
-**Next:** <fill>
+**Next:** Watch bet-072 (4 refined offers, 24h), bet-071 (batch 1), bet-069 (Cleantech) for a real human reply. On any 'yes': scope the tool, register the obligation against the charge, deliver in 72h. If the batches go quiet, run the harvest again (it's repeatable). received_usd=$0.0, twenty-five-dollar cap intact.
