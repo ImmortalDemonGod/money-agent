@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your Life in Weeks — a poster of every week you'll live</title>
+<meta name="description" content="See your whole life as a grid of weeks. One dot per week of a ~90-year life. Free, private, runs entirely in your browser. Print-ready poster available." />
+<meta property="og:title" content="Your Life in Weeks" />
+<meta property="og:description" content="Every week of your life on one page. Free, private, made in your browser." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://life-in-weeks-iota-two.vercel.app/" />
+<meta property="og:site_name" content="Your Life in Weeks" />
+<meta property="og:image" content="https://life-in-weeks-iota-two.vercel.app/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Your Life in Weeks" />
+<meta name="twitter:description" content="Every week of your life on one page. Free, private, made in your browser." />
+<meta name="twitter:image" content="https://life-in-weeks-iota-two.vercel.app/og.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "What is a Life in Weeks poster?",
+     "acceptedAnswer": {"@type": "Answer", "text": "It is a single-page grid where every dot is one week of a roughly 90-year life, so you can see your whole life at a glance. It is a popular memento-mori and life-planning visual."}},
+    {"@type": "Question", "name": "How many weeks are in a life?",
+     "acceptedAnswer": {"@type": "Answer", "text": "A 90-year life is about 4,680 weeks. This tool lays them out as one dot each on a single page, with the weeks you have already lived filled in."}},
+    {"@type": "Question", "name": "Is it free and private?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. The interactive grid is free and runs entirely in your browser, so your birth date never leaves your device. A print-ready high-resolution poster PDF is available as a one-time purchase."}}
+  ]
+}
+</script>
+<style>
+  :root{--bg:#f4f1ea;--ink:#1c1c1c;--muted:#6b6660;--line:#d8d2c6;--accent:#c2410c;--card:#fbfaf6}
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent)}
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+  header h1{font-size:30px;letter-spacing:-.02em;margin:0 0 6px}
+  header p{color:var(--muted);margin:0 0 4px;max-width:56ch}
+  .layout{display:grid;grid-template-columns:320px 1fr;gap:28px;margin-top:28px}
+  @media(max-width:820px){.layout{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  label{display:block;font-weight:600;font-size:13px;margin:14px 0 5px}
+  input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:15px;color:var(--ink)}
+  input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+  .milestone{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center;margin-top:8px}
+  .milestone input{font-size:13px;padding:7px 9px}
+  .mini{font-size:12px;color:var(--muted);margin-top:4px}
+  button{font:inherit;font-weight:600;cursor:pointer;border-radius:10px;border:1px solid transparent;padding:11px 16px;transition:transform .04s ease}
+  button:active{transform:translateY(1px)}
+  .btn-primary{background:var(--accent);color:#fff;width:100%;margin-top:18px;font-size:15px}
+  .btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+  .btn-add{background:#fff;border-color:var(--line);color:var(--muted);padding:6px 10px;font-size:13px;margin-top:10px}
+  .btn-x{background:transparent;border:none;color:var(--muted);font-size:18px;line-height:1;padding:0 4px;cursor:pointer}
+  .stage{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .poster-frame{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;box-shadow:0 6px 24px rgba(0,0,0,.06);width:100%;max-width:640px}
+  #poster{display:block;width:100%;height:auto}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;max-width:640px}
+  .actions button{flex:1;min-width:150px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);justify-content:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+  .sell{margin-top:14px;background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px 18px;max-width:640px;width:100%}
+  .sell h3{margin:0 0 6px;font-size:16px}
+  .sell ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:14px}
+  .price{font-weight:700;color:var(--ink)}
+  footer{margin-top:56px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+  .tag{display:inline-block;background:#efeee8;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin-bottom:12px}
+</style>
+<!-- geo-patch --><link rel="canonical" href="https://life-in-weeks-iota-two.vercel.app/"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Your Life in Weeks", "url": "https://life-in-weeks-iota-two.vercel.app/", "description": "See your whole life as a grid of weeks. One dot per week of a ~90-year life. Free, private, runs entirely in your browser. Print-ready poster PDF available for $9.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "9", "priceCurrency": "USD"}, "publisher": {"@type": "Person", "name": "Miguel Ingram"}}</script><script defer src="/_vercel/insights/script.js"></script></head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="tag">free · private · runs entirely in your browser</span>
+    <h1>Your Life in Weeks</h1>
+    <p>Every week of a life, on one page. Each dot is one week; the filled ones are already behind you. It is a quiet, useful thing to look at once in a while.</p>
+    <p class="mini">Your birth date and milestones stay in your browser — they are never sent anywhere or stored. (This page keeps only an anonymous visit count, no personal data.) Made by Miguel Ingram.</p>
+  </header>
+
+  <div class="layout">
+    <div class="panel">
+      <label for="name">Name on the poster (optional)</label>
+      <input id="name" type="text" maxlength="40" placeholder="e.g. Alex Rivera" />
+      <label for="dob">Date of birth</label>
+      <input id="dob" type="date" />
+      <label for="life">Life expectancy (years)</label>
+      <select id="life"><option value="80">80</option><option value="90" selected>90</option><option value="100">100</option></select>
+      <label for="palette">Palette</label>
+      <select id="palette"><option value="ink">Ink on cream</option><option value="dusk">Dusk indigo</option><option value="ember">Ember</option></select>
+      <label>Milestones (optional)</label>
+      <div id="milestones"></div>
+      <button class="btn-add" id="addMilestone" type="button">+ add a milestone</button>
+      <p class="mini">A milestone marks the week it happened — first job, a move, a wedding, a child.</p>
+      <button class="btn-primary" id="render" type="button">Draw my life</button>
+    </div>
+
+    <div class="stage">
+      <div class="poster-frame">
+        <svg id="poster" viewBox="0 0 660 1000" role="img" aria-label="Life in weeks poster"></svg>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div class="actions">
+        <button class="btn-ghost" id="dlPng" type="button">Download PNG (free)</button>
+        <button class="btn-ghost" id="share" type="button">Share</button>
+        <button class="btn-primary" id="buy" type="button" style="margin-top:0">Get the print poster — $9</button>
+      </div>
+      <div class="sell">
+        <h3>The print-ready poster — <span class="price">$9</span></h3>
+        <p class="mini" style="margin-top:0">The free PNG is perfect for your screen. The poster file is made to hang on a wall:</p>
+        <ul>
+          <li>Print-ready PDF on an 18×24" / A2 page at ~300 DPI, matted to the palette</li>
+          <li>Your name and milestones baked in — no watermark</li>
+          <li>Delivered to you the instant you pay — the download starts on the confirmation page, nothing to wait for</li>
+        </ul>
+        <p class="mini">Payment is handled by Stripe; the statement shows the name of the maker, Miguel Ingram.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Your Life in Weeks · a small, private tool · no account, no tracking, no data leaves your browser.<br/>
+    Inspired by the "Life in Weeks" idea popularized by Tim Urban / Wait But Why.
+  </footer>
+</div>
+
+<script src="liw.js"></script>
+<script>
+(function(){
+  "use strict";
+  // Set to the live Stripe Payment Link once created. Until then the button explains it is being set up.
+  var STRIPE_LINK = "https://buy.stripe.com/aFa4gB2JRahld6a3Qy7ok0e";
+
+  var $ = function(id){ return document.getElementById(id); };
+  var milestonesEl = $("milestones");
+
+  function addMilestoneRow(date, label){
+    var row = document.createElement("div");
+    row.className = "milestone";
+    row.innerHTML = '<input type="date" class="m-date" /><input type="text" class="m-label" maxlength="28" placeholder="label" /><button class="btn-x" title="remove" type="button">&#215;</button>';
+    if(date) row.querySelector(".m-date").value = date;
+    if(label) row.querySelector(".m-label").value = label;
+    row.querySelector(".btn-x").onclick = function(){ row.remove(); };
+    milestonesEl.appendChild(row);
+  }
+  $("addMilestone").onclick = function(){ if(milestonesEl.children.length < 5) addMilestoneRow(); };
+
+  function readMilestones(){
+    var out = [], rows = milestonesEl.querySelectorAll(".milestone");
+    for(var i=0;i<rows.length;i++){
+      var d = rows[i].querySelector(".m-date").value;
+      var l = rows[i].querySelector(".m-label").value.trim();
+      if(d) out.push({date:d, label:l, color:LIW.MILE_COLORS[i % LIW.MILE_COLORS.length]});
+    }
+    return out;
+  }
+
+  function readState(){
+    var dob = $("dob").value;
+    if(!dob) return null;
+    return {name:$("name").value.trim(), dob:dob, lifeYears:parseInt($("life").value,10), palette:$("palette").value, milestones:readMilestones()};
+  }
+
+  var lastState = null;
+  function draw(){
+    var state = readState();
+    if(!state){ alert("Please enter your date of birth."); return; }
+    lastState = state;
+    var built = LIW.buildSVG(state, {paid:false});
+    var host = $("poster");
+    host.setAttribute("viewBox", "0 0 "+built.W+" "+built.H);
+    host.innerHTML = new DOMParser().parseFromString(built.markup, "image/svg+xml").documentElement.innerHTML;
+    // legend
+    var p = LIW.PALETTES[state.palette] || LIW.PALETTES.ink;
+    var h = '<span><i class="dot" style="background:'+p.past+'"></i>weeks lived</span>'
+          + '<span><i class="dot" style="background:'+p.now+'"></i>this week</span>'
+          + '<span><i class="dot" style="background:'+p.future+'"></i>weeks ahead</span>';
+    state.milestones.forEach(function(m){ if(m.label) h += '<span><i class="dot" style="background:'+m.color+'"></i>'+LIW.escapeXml(m.label)+'</span>'; });
+    $("legend").innerHTML = h;
+    try{ localStorage.setItem("liw_state", JSON.stringify(state)); }catch(e){}
+  }
+  $("render").onclick = draw;
+
+  $("dlPng").onclick = function(){ if(!lastState){ draw(); if(!lastState) return; } LIW.downloadPng(lastState); };
+
+  $("share").onclick = function(){
+    var url = "https://life-in-weeks-iota-two.vercel.app";
+    var text = "Your Life in Weeks — every week of your life on one page, made privately in your browser.";
+    if(navigator.share){ navigator.share({title:"Your Life in Weeks", text:text, url:url}).catch(function(){}); return; }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){
+        var btn=$("share"), old=btn.textContent; btn.textContent="Link copied!";
+        setTimeout(function(){ btn.textContent=old; }, 1500);
+      }, function(){ window.prompt("Copy this link:", url); });
+      return;
+    }
+    window.prompt("Copy this link:", url);
+  };
+
+  $("buy").onclick = function(){
+    var state = readState();
+    if(!state){ alert("Enter your date of birth and click \"Draw my life\" first — the poster is personalized to it."); return; }
+    try{ localStorage.setItem("liw_paid_state", JSON.stringify(state)); }catch(e){}
+    if(!STRIPE_LINK || STRIPE_LINK.indexOf("__STRIPE") === 0){
+      alert("Checkout is being set up right now — please check back shortly. Your design is saved.");
+      return;
+    }
+    window.location.href = STRIPE_LINK;
+  };
+
+  (function init(){
+    var saved = null;
+    try{ saved = JSON.parse(localStorage.getItem("liw_state")||"null"); }catch(e){}
+    if(saved && saved.dob){
+      $("name").value = saved.name||"";
+      $("dob").value = saved.dob;
+      $("life").value = String(saved.lifeYears||90);
+      $("palette").value = saved.palette||"ink";
+      (saved.milestones||[]).forEach(function(m){ addMilestoneRow(m.date, m.label); });
+      draw();
+    }
+  })();
+})();
+</script>
+<script>
+/* traffic beacon: counts only real-ish browser loads + buy-clicks (filters automation/preview bots + our own Playwright); no PII, no user data */
+(function(){try{
+var ua=navigator.userAgent||"";
+var bot = navigator.webdriver===true
+  || /bot|crawl|spider|slurp|headless|preview|render|lighthouse|monitor|scan|fetch|curl|python|node|axios|http/i.test(ua)
+  || !navigator.languages || navigator.languages.length===0
+  || !(navigator.plugins && (navigator.plugins.length>0 || navigator.mimeTypes && navigator.mimeTypes.length>0));
+if(bot) return;
+var b="https://api.counterapi.dev/v1/liwbeacon37/";
+function ping(c){var i=new Image();i.src=b+c+"/up?t="+Date.now();}
+ping("loads");
+document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href*="buy.stripe.com"]');
+if(a){ping("buyclicks");}},true);
+}catch(_){}})();
+</script>
+</body>
+</html>

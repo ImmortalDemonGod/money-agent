@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Export ChatGPT &amp; Claude history to Markdown — own it, migrate it | ChatVault</title>
+<meta name="description" content="Export your ChatGPT and Claude conversations to portable Markdown files you own — for Obsidian, Notion, backup, or your own tools. Both formats, bulk, 100% in your browser. Not just a PDF printout.">
+<link rel="canonical" href="https://chat-export-seven.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChatVault">
+<meta property="og:url" content="https://chat-export-seven.vercel.app/">
+<meta property="og:title" content="Export ChatGPT or Claude to PDF — free, private, in your browser">
+<meta property="og:description" content="Turn your ChatGPT or Claude export into a clean, readable PDF. Runs entirely in your browser — your conversations never leave your device. Free, no signup.">
+<meta property="og:image" content="https://chat-export-seven.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Export ChatGPT or Claude to PDF — free, private, in your browser">
+<meta name="twitter:description" content="Turn your ChatGPT or Claude export into a clean, readable PDF. Runs entirely in your browser. Free, no signup.">
+<meta name="twitter:image" content="https://chat-export-seven.vercel.app/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ChatVault",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any (web browser)",
+  "url": "https://chat-export-seven.vercel.app/",
+  "description": "Export your ChatGPT and Claude conversations to portable Markdown files (for Obsidian, Notion, backup) or clean PDFs. Both formats, bulk, entirely in your browser; your conversations never leave your device.",
+  "offers": [
+    {"@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free — single and combined PDF export"},
+    {"@type": "Offer", "price": "9", "priceCurrency": "USD", "name": "Pro — bulk export your whole history as portable Markdown (.md) files or PDFs in a .zip"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "How do I export my ChatGPT conversations to PDF?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Export your data from ChatGPT (Settings, Data controls, Export data), unzip the emailed file to get conversations.json, then drop that file into ChatVault to get a clean PDF. Everything runs in your browser."}},
+    {"@type": "Question", "name": "Can I export my Claude conversations to PDF too?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. ChatVault accepts the conversations.json from a Claude data export as well as ChatGPT, and lays each conversation out as a readable PDF."}},
+    {"@type": "Question", "name": "Is it private? Are my conversations uploaded?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Nothing is uploaded. The parsing and PDF generation happen entirely in your browser on your own device, so your conversations never leave your machine."}},
+    {"@type": "Question", "name": "Can I export all my conversations as separate PDF files at once?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes, with ChatVault Pro (a one-time nine dollars): batch export writes every conversation as its own named PDF and delivers them in a single .zip."}},
+    {"@type": "Question", "name": "Can I export my ChatGPT or Claude history to Markdown for Obsidian or Notion?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. ChatVault Pro exports every conversation as its own portable Markdown (.md) file in a .zip, so you can drop your whole history into Obsidian, Notion, Logseq, or any tool that reads Markdown. It handles both ChatGPT and Claude exports in one place, all in your browser."}}
+  ]
+}
+</script>
+<script>
+/* traffic beacon: counts only real-ish browser loads + buy-clicks (filters automation/preview bots + our own Playwright); no PII, no user data */
+(function(){try{
+var ua=navigator.userAgent||"";
+var bot = navigator.webdriver===true
+  || /bot|crawl|spider|slurp|headless|preview|render|lighthouse|monitor|scan|fetch|curl|python|node|axios|http/i.test(ua)
+  || !navigator.languages || navigator.languages.length===0
+  || !(navigator.plugins && (navigator.plugins.length>0 || navigator.mimeTypes && navigator.mimeTypes.length>0));
+if(bot) return;
+var b="https://api.counterapi.dev/v1/cvbeacon37/";
+function ping(c){var i=new Image();i.src=b+c+"/up?t="+Date.now();}
+ping("loads");
+document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href*="buy.stripe.com"]');
+if(a){ping("buyclicks");}},true);
+}catch(_){}})();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+  :root{--bg:#f6f7f9;--ink:#14171a;--muted:#5b6470;--line:#e2e6ea;--card:#fff;--accent:#0b6b5b;--gold:#8a6d00}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:760px;margin:0 auto;padding:44px 20px 80px}
+  h1{font-size:30px;line-height:1.2;margin:0 0 10px}
+  .sub{color:var(--muted);font-size:18px;margin:0 0 8px}
+  .privacy{display:inline-block;margin:14px 0 26px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:14px;color:var(--accent)}
+  .drop{background:var(--card);border:2px dashed var(--line);border-radius:14px;padding:34px 22px;text-align:center;transition:border-color .15s,background .15s}
+  .drop.drag{border-color:var(--accent);background:#f0faf7}
+  .drop h2{margin:0 0 6px;font-size:19px}
+  .drop p{margin:4px 0;color:var(--muted);font-size:14px}
+  button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:11px 18px;background:var(--accent);color:#fff;font-weight:600}
+  button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  button:disabled{opacity:.5;cursor:default}
+  input[type=file]{display:none}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:14px}
+  #status{margin-top:16px;font-size:14px;color:var(--muted);min-height:20px}
+  .list{margin-top:22px}
+  .conv{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;display:flex;align-items:center;gap:12px}
+  .conv .t{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .conv .m{color:var(--muted);font-size:13px}
+  .steps{margin:28px 0;padding:18px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+  .steps h3{margin:0 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .steps ol{margin:0;padding-left:20px}.steps li{margin:5px 0;font-size:15px}
+  .pro{margin:22px 0 0;padding:18px 20px;border:1px solid #ecdca6;background:#fffdf4;border-radius:12px}
+  .pro h3{margin:0 0 6px;font-size:16px}
+  .pro p{margin:4px 0;font-size:14px;color:#6b5f38}
+  .pro .cta{display:inline-block;margin-top:10px;background:var(--gold);color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:10px}
+  .pro.active{border-color:#bfe3d8;background:#f2faf7}
+  .pro.active h3{color:var(--accent)}
+  footer{margin-top:40px;color:var(--muted);font-size:13px;text-align:center;line-height:1.7}
+  a{color:var(--accent)}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Own your ChatGPT and Claude history — export it to portable Markdown</h1>
+  <p class="sub">Drop the <code>conversations.json</code> from your ChatGPT <em>or Claude</em> export and get your whole history as clean <b>Markdown files you keep</b> — for Notion, a backup, or your own tools — or as a readable PDF. <b>No app to install, no plugin, nothing uploaded</b> — both AI formats, one page, entirely in your browser. A portable archive you own, in one click.</p>
+  <span class="privacy">🔒 100% private — runs in your browser. Your conversations never leave your device.</span>
+
+  <div class="drop" id="drop">
+    <h2>Drop <code>conversations.json</code> here</h2>
+    <p>or</p>
+    <div class="row">
+      <button id="pick">Choose file</button>
+      <input type="file" id="file" accept=".json,application/json">
+    </div>
+    <p style="margin-top:14px">Don't have it? See the two-step export guide below.</p>
+  </div>
+
+  <div id="status"></div>
+  <div class="list" id="list"></div>
+
+  <div class="row hide" id="actions">
+    <button class="secondary hide" id="dlmd">Download portable Markdown (.zip) — Pro</button>
+    <button class="secondary hide" id="dlzip">Download each as PDF (.zip) — Pro</button>
+    <button id="dlall">Download all as one PDF</button>
+    <button class="secondary" id="reset">Start over</button>
+  </div>
+
+  <div class="pro" id="proBox">
+    <h3 id="proTitle">ChatVault Pro — one-time, nine dollars</h3>
+    <p id="proBody">Get your <b>entire</b> ChatGPT + Claude history out at once: every conversation as its own
+       <b>portable Markdown file</b> (import into Obsidian, Notion, Logseq, or any tool that reads Markdown) —
+       or as a named PDF — delivered in a single <code>.zip</code>. That portability is the thing the free
+       PDF buttons don't give you. One payment, yours forever, still 100% in-browser.</p>
+    <a class="cta" id="proCta" href="https://buy.stripe.com/8x27sNacj89dfei5YG7ok0f">Get ChatVault Pro →</a>
+  </div>
+
+  <div class="steps">
+    <h3>How to get your conversations.json</h3>
+    <ol>
+      <li>In ChatGPT: <b>Settings → Data controls → Export data</b>, then confirm.</li>
+      <li>You'll get an email with a link to a <code>.zip</code>. Unzip it, and <code>conversations.json</code> is inside. Drop that file above.</li>
+    </ol>
+  </div>
+
+  <footer>
+    Made with <a href="https://chat-export-seven.vercel.app/">ChatVault</a> — export &amp; own your ChatGPT + Claude history as portable Markdown or PDF, privately. Nothing is uploaded; everything runs on your device.
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+"use strict";
+const SITE = 'https://chat-export-seven.vercel.app/';
+const $ = s => document.querySelector(s);
+const statusEl = $('#status'), listEl = $('#list'), actionsEl = $('#actions');
+let CONVS = [];
+let PRO = false;
+try { PRO = localStorage.getItem('cv_pro') === '1'; } catch(e){}
+
+// ---- ChatGPT export parser ----
+function threadFromMapping(conv){
+  const mapping = conv.mapping || {};
+  let msgs = [];
+  let nodeId = conv.current_node;
+  const path = []; const guard = new Set();
+  while (nodeId && mapping[nodeId] && !guard.has(nodeId)){
+    guard.add(nodeId); path.push(mapping[nodeId]); nodeId = mapping[nodeId].parent;
+  }
+  path.reverse();
+  let nodes = path;
+  if (!nodes.some(n => n.message)){
+    nodes = Object.values(mapping).filter(n => n && n.message);
+    nodes.sort((a,b)=>((a.message.create_time||0)-(b.message.create_time||0)));
+  }
+  for (const node of nodes){
+    const m = node.message; if (!m) continue;
+    const role = m.author && m.author.role;
+    if (role !== 'user' && role !== 'assistant') continue;
+    const c = m.content; if (!c) continue;
+    let text = '';
+    if (Array.isArray(c.parts)) text = c.parts.map(p => typeof p === 'string' ? p : (p && p.text) ? p.text : '').join('\n');
+    else if (typeof c.text === 'string') text = c.text;
+    if (!text.trim()) continue;
+    msgs.push({ role, text: text.replace(/\r/g,'') });
+  }
+  return msgs;
+}
+function claudeThread(conv){
+  const out = [];
+  for (const m of (conv.chat_messages || [])){
+    const role = m.sender === 'human' ? 'user' : (m.sender === 'assistant' ? 'assistant' : null);
+    if (!role) continue;
+    let text = '';
+    if (typeof m.text === 'string' && m.text.trim()) text = m.text;
+    else if (Array.isArray(m.content)) text = m.content.map(b => typeof b === 'string' ? b : (b && b.text) ? b.text : '').join('\n');
+    if (!text.trim()) continue;
+    out.push({ role, text: text.replace(/\r/g,'') });
+  }
+  return out;
+}
+function parseExport(json){
+  let arr = Array.isArray(json) ? json : (json && Array.isArray(json.conversations) ? json.conversations : [json]);
+  const out = [];
+  for (const conv of arr){
+    if (!conv || typeof conv !== 'object') continue;
+    let msgs, source, title, when;
+    if (Array.isArray(conv.chat_messages)){          // Claude export
+      msgs = claudeThread(conv); source = 'Claude';
+      title = (conv.name && String(conv.name).trim()) || 'Untitled conversation';
+      when = conv.created_at ? new Date(conv.created_at) : null;
+    } else {                                          // ChatGPT export
+      msgs = threadFromMapping(conv); source = 'ChatGPT';
+      title = (conv.title && String(conv.title).trim()) || 'Untitled conversation';
+      when = conv.create_time ? new Date(conv.create_time*1000) : null;
+    }
+    if (!msgs.length) continue;
+    if (when && isNaN(when.getTime())) when = null;
+    out.push({ title, when, msgs, source });
+  }
+  return out;
+}
+
+// ---- PDF (returns a jsPDF doc) ----
+function buildDoc(convs){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt', format:'letter'});
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  const M = 54, CW = W - M*2; let y = M;
+  const host = SITE.replace(/^https?:\/\//,'').replace(/\/$/,'');
+  function footer(){ if (PRO) return; doc.setFontSize(8); doc.setTextColor(150);
+    doc.text('Exported with '+host+' — free, private ChatGPT→PDF', M, H-26); doc.setTextColor(20); }
+  function newPage(){ footer(); doc.addPage(); y = M; }
+  function need(h){ if (y + h > H - 44) newPage(); }
+  function para(text, size, style, color, indent){
+    doc.setFont('helvetica', style||'normal'); doc.setFontSize(size); doc.setTextColor(color!=null?color:20);
+    const lines = doc.splitTextToSize(text, CW - (indent||0));
+    for (const ln of lines){ need(size*1.35); doc.text(ln, M+(indent||0), y); y += size*1.35; } }
+  convs.forEach((c, ci)=>{
+    if (ci>0) newPage();
+    para(c.title, 18, 'bold', 15); y += 4;
+    if (c.when){ para(c.when.toDateString(), 10, 'normal', 130); } y += 10;
+    for (const m of c.msgs){
+      need(40);
+      doc.setFont('helvetica','bold'); doc.setFontSize(10.5); doc.setTextColor(m.role==='user'?30:70);
+      doc.text(m.role==='user'?'You':(c.source||'Assistant'), M, y); y += 15;
+      const blocks = m.text.split(/```/);
+      blocks.forEach((blk, bi)=>{ if (!blk.trim()) return;
+        if (bi % 2 === 1){ const body = blk.replace(/^[a-zA-Z0-9]*\n/, ''); doc.setFont('courier','normal');
+          const lines = doc.splitTextToSize(body, CW-16);
+          for (const ln of lines){ need(12); doc.setTextColor(40); doc.text(ln, M+8, y); y += 12; } doc.setFont('helvetica','normal'); }
+        else { para(blk.trim(), 11, 'normal', 25); } y += 4; });
+      y += 10; }
+  });
+  footer();
+  return doc;
+}
+function makePDF(convs, name){ buildDoc(convs).save((name||'chatgpt-export').replace(/[^a-z0-9]+/gi,'-').slice(0,60).toLowerCase()+'.pdf'); }
+async function makeZip(){
+  if (!PRO){ location.href = $('#proCta').href; return; }
+  const zip = new JSZip(); const used = {};
+  CONVS.forEach((c,i)=>{ let base = (c.title||'conversation').replace(/[^a-z0-9]+/gi,'-').slice(0,50).toLowerCase()||'conversation';
+    if (used[base]) base += '-'+(++used[base]); else used[base]=1;
+    zip.file(base+'.pdf', buildDoc([c]).output('blob')); });
+  const blob = await zip.generateAsync({type:'blob'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'chatgpt-conversations.zip'; a.click();
+}
+// ---- Portable Markdown archive (own / migrate your history, not just print it) ----
+function mdFromConv(c){
+  const when = c.when ? c.when.toISOString().slice(0,10) : '';
+  let md = '# ' + (c.title || 'Untitled conversation') + '\n\n';
+  md += '_' + (c.source || 'AI') + (when ? ' · ' + when : '') + '_\n\n';
+  for (const m of c.msgs){
+    md += '**' + (m.role === 'user' ? 'You' : (c.source || 'Assistant')) + ':**\n\n' + m.text.trim() + '\n\n---\n\n';
+  }
+  return md;
+}
+async function makeMdZip(){
+  if (!PRO){ location.href = $('#proCta').href; return; }
+  const zip = new JSZip(); const used = {};
+  CONVS.forEach((c)=>{ let base = (c.title||'conversation').replace(/[^a-z0-9]+/gi,'-').slice(0,50).toLowerCase()||'conversation';
+    if (used[base]) base += '-' + (++used[base]); else used[base] = 1;
+    zip.file(base + '.md', mdFromConv(c)); });
+  const blob = await zip.generateAsync({type:'blob'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ai-history-markdown.zip'; a.click();
+}
+
+// ---- UI ----
+function applyPro(){
+  const box = $('#proBox');
+  $('#dlzip').classList.toggle('hide', !PRO);
+  $('#dlmd').classList.toggle('hide', !PRO);
+  if (PRO){ box.classList.add('active'); $('#proTitle').textContent = '✨ ChatVault Pro is active';
+    $('#proBody').textContent = 'Portable Markdown + PDF batch export enabled below. Your whole history, yours to keep. Thanks for supporting the tool.';
+    $('#proCta').classList.add('hide'); }
+}
+function renderList(){
+  listEl.innerHTML = '';
+  CONVS.forEach((c)=>{ const d = document.createElement('div'); d.className='conv';
+    const dt = c.when ? c.when.toISOString().slice(0,10) : '';
+    d.innerHTML = `<span class="t"></span><span class="m">${c.msgs.length} msgs${dt?' · '+dt:''}</span>`;
+    d.querySelector('.t').textContent = c.title;
+    const b = document.createElement('button'); b.className='secondary'; b.textContent='PDF'; b.style.padding='7px 12px';
+    b.onclick=()=>makePDF([c], c.title); d.appendChild(b); listEl.appendChild(d); });
+  actionsEl.classList.toggle('hide', CONVS.length===0);
+}
+function handleFile(file){
+  if (!file) return;
+  statusEl.textContent = 'Reading '+file.name+' …';
+  const r = new FileReader();
+  r.onload = () => { let json;
+    try { json = JSON.parse(r.result); } catch(e){ statusEl.textContent = '❌ That file is not valid JSON. Use conversations.json from your export.'; return; }
+    try { CONVS = parseExport(json); } catch(e){ statusEl.textContent = '❌ Could not read that export ('+e.message+').'; return; }
+    if (!CONVS.length){ statusEl.textContent = '❌ No conversations found. Drop the conversations.json from your ChatGPT export.'; return; }
+    statusEl.textContent = '✅ Found '+CONVS.length+' conversation'+(CONVS.length>1?'s':'')+'. Pick one, or download all.';
+    renderList(); };
+  r.onerror = () => { statusEl.textContent = '❌ Could not read the file.'; };
+  r.readAsText(file);
+}
+$('#pick').onclick = ()=>$('#file').click();
+$('#file').onchange = e => handleFile(e.target.files[0]);
+$('#dlall').onclick = ()=>makePDF(CONVS, 'chatgpt-conversations');
+$('#dlmd').onclick = makeMdZip;
+$('#dlzip').onclick = makeZip;
+$('#reset').onclick = ()=>{ CONVS=[]; renderList(); statusEl.textContent=''; $('#file').value=''; };
+const drop = $('#drop');
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag');}));
+drop.addEventListener('drop', e=>{ const f=e.dataTransfer.files[0]; if(f) handleFile(f); });
+applyPro();
+</script>
+</body>
+</html>

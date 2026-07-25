@@ -95,6 +95,11 @@
       if(k.biz){ BIZ=clean(k.biz); document.getElementById("biz").textContent=BIZ;
                  document.getElementById("biz2").textContent=BIZ; }
       if(k.trade){ setTrade(k.trade); }
+      if(k.live!==true){
+        document.getElementById("donemsg").textContent =
+          "Heads up: this is a working demo of "+BIZ+"'s instant-estimate tool, so your details went "
+          +"to the person who built it, not to "+BIZ+". If you need a real quote, call them directly.";
+      }
       if(k.color){ document.documentElement.style.setProperty("--acc", k.color); }
       if(k.logo){ var im=document.getElementById("logo"); im.src=k.logo; im.alt=BIZ+" logo"; im.hidden=false; }
       if(k.city){ document.getElementById("sub").textContent =
@@ -186,11 +191,25 @@
   document.getElementById("send").onclick=function(){
     var nm=document.getElementById("nm").value.trim();
     var ct=document.getElementById("ct").value.trim();
+    var ad=document.getElementById("ad").value.trim();
     if(!nm||!ct){ alert("Please add your name and a way to reach you."); return; }
-    // A live tool wires this to the contractor's inbox/CRM; in this demo it confirms capture client-side.
-    document.getElementById("est").classList.remove("show");
-    document.getElementById("done").classList.add("show");
-    document.getElementById("done").scrollIntoView({behavior:"smooth"});
+    var btn=this; btn.disabled=true; btn.textContent="Sending...";
+    // Real routing (operator [61]): the submission actually leaves the page. Where it lands is
+    // decided SERVER-side from the slug config -- the contractor's inbox once he is live, mine
+    // while it is still a demo. The visitor's confirmation never depends on the network call.
+    var payload={slug:SLUG, name:nm, contact:ct, address:ad,
+                 detail:(st.mat?st.mat.k:"")+(sizeEl.value?(" / "+sizeEl.value+" "+(C.unit||"")):""),
+                 estimate:document.getElementById("range").textContent};
+    function finish(){
+      document.getElementById("est").classList.remove("show");
+      document.getElementById("done").classList.add("show");
+      document.getElementById("done").scrollIntoView({behavior:"smooth"});
+    }
+    try{
+      fetch("/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},
+                         body:JSON.stringify(payload)}).then(finish).catch(finish);
+    }catch(e){ finish(); }
+    setTimeout(finish, 2500);
   };
 </script>
 <script src="https://guided-preview.vercel.app/beacon.js" data-site="estimate"></script>

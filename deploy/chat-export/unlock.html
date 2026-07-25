@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatVault Pro — unlocked</title>
+<style>
+  body{margin:0;background:#f6f7f9;color:#14171a;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:560px;margin:0 auto;padding:64px 22px;text-align:center}
+  .card{background:#fff;border:1px solid #e2e6ea;border-radius:16px;padding:36px 28px}
+  h1{font-size:26px;margin:0 0 10px}
+  p{color:#5b6470;margin:8px 0}
+  .check{font-size:44px;margin:0 0 6px}
+  a.btn{display:inline-block;margin-top:20px;background:#0b6b5b;color:#fff;text-decoration:none;font-weight:600;padding:12px 22px;border-radius:10px}
+  code{background:#f4f5f6;padding:1px 5px;border-radius:4px}
+  .small{font-size:13px;color:#8b93a0;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="check">✅</div>
+    <h1>ChatVault Pro is unlocked</h1>
+    <p>Thank you — your payment is complete and <b>Pro is now active in this browser</b>.</p>
+    <p>Pro removes the footer link from your PDFs and adds <b>batch export</b> — every conversation
+       as its own named PDF, delivered in a single <code>.zip</code>.</p>
+    <p>Head back to the tool and re-drop your <code>conversations.json</code>; the Pro options are on
+       now. Everything still runs entirely in your browser — nothing is uploaded.</p>
+    <a class="btn" href="/">Back to ChatVault →</a>
+    <p class="small">Pro is stored locally on this device. If you clear your browser data you can
+       re-open this page from your Stripe receipt to reactivate it.</p>
+  </div>
+</div>
+<script>
+  try { localStorage.setItem('cv_pro', '1'); } catch(e) {}
+</script>
+</body>
+</html>

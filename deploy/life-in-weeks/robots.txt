@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://life-in-weeks-iota-two.vercel.app/sitemap.xml

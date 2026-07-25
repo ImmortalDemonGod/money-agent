@@ -1,0 +1,1 @@
+(function(){try{var s=document.currentScript,site=(s&&s.getAttribute('data-site'))||'unknown';var src='';try{var m=location.search.match(/[?&]s=([a-zA-Z0-9_-]{1,32})/);if(m)src=m[1];}catch(e){}var name=src?(site+'-'+src):site;var i=new Image();i.src='https://api.counterapi.dev/v1/onehonestdollar-run2/'+encodeURIComponent(name)+'/up?t='+Date.now();}catch(e){}})();

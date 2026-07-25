@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A guided booking preview</title>
+<meta name="description" content="A short, personalized preview of a guided step that sits in front of your existing scheduler.">
+<style>
+  :root{--ink:#141a24;--pap:#fff;--mut:#5c6675;--line:#e6e9f0;--brand:#2f6bff;--brand2:#1f4fd0;--soft:#eef2fb;--cream:#f4f6fb;--good:#1a7f37}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--cream)}
+  .wrap{max-width:600px;margin:0 auto;padding:0 16px 44px}
+  .banner{background:#101623;color:#c9d4e8;font-size:12px;text-align:center;padding:7px 12px;letter-spacing:.2px}
+  .banner b{color:#fff}
+  header{background:linear-gradient(135deg,var(--brand2),var(--brand));color:#fff;padding:26px 18px 30px;text-align:center}
+  .kicker{font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:#cfe0ff;opacity:.9}
+  .biz{font-size:23px;font-weight:800;margin-top:3px;line-height:1.2}
+  .pill{display:inline-block;margin-top:11px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);color:#eaf1ff;font-size:12px;padding:4px 11px;border-radius:999px}
+  .card{background:var(--pap);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(24,40,80,.08);margin-top:-16px;padding:24px}
+  .steps{display:flex;gap:6px;margin:0 0 18px}.dot{height:5px;border-radius:99px;background:var(--line);flex:1}.dot.on{background:var(--brand)}
+  h1{font-size:19px;margin:0 0 3px}.sub{color:var(--mut);font-size:14px;margin:0 0 14px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt{border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:13px 12px;font-size:14.5px;font-weight:600;cursor:pointer;text-align:left;transition:.12s}
+  .opt:hover{border-color:var(--brand);background:var(--soft)}
+  .opt.sel{border-color:var(--brand);background:var(--soft);box-shadow:inset 0 0 0 1px var(--brand)}
+  label{font-size:13px;font-weight:700;color:#3a4453;display:block;margin:14px 0 6px}
+  input,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit}
+  textarea{min-height:66px;resize:vertical}
+  .row{display:flex;gap:10px;margin-top:18px}
+  .btn{appearance:none;border:0;border-radius:11px;padding:13px 18px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--brand);color:#fff;flex:1}.btn.primary:hover{background:var(--brand2)}
+  .btn.ghost{background:#eef0f5;color:#3a4453}.btn[disabled]{opacity:.45;cursor:not-allowed}
+  .hide{display:none}
+  .rec{background:var(--soft);border:1px solid #d3e0ff;border-radius:12px;padding:16px}
+  .rec .big{font-size:18px;font-weight:800;color:var(--brand2)}
+  .sum{background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:13.5px;line-height:1.6;margin-top:12px}
+  .sum b{color:var(--ink)}
+  .final{text-align:center}.ok{width:50px;height:50px;border-radius:50%;background:#e7f6ec;color:var(--good);display:flex;align-items:center;justify-content:center;font-size:24px;margin:4px auto 10px}
+  .foot{color:var(--mut);font-size:12.5px;text-align:center;margin-top:16px;line-height:1.55}
+  .note{font-size:12px;color:var(--mut);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="banner">This is a <b>working preview</b> built for <b id="bizb">your practice</b>. It is a mock-up to show the idea, not your live page yet.</div>
+<header>
+  <div class="kicker">Guided booking preview</div>
+  <div class="biz" id="bizh">Your practice</div>
+  <div class="pill" id="pillw">Sits in front of your scheduler</div>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="steps"><div class="dot on" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
+
+    <section id="s1">
+      <h1 id="h1">Let's find the right way to start</h1>
+      <p class="sub" id="sub1">Instead of a bare time-picker, a few quick questions send each person to the right first appointment, with their answers already attached.</p>
+      <label id="lq1">What brings you in?</label>
+      <div class="grid" id="q1"></div>
+      <div class="row"><button class="btn primary" id="n1" disabled>Continue</button></div>
+    </section>
+
+    <section id="s2" class="hide">
+      <h1>A couple more details</h1>
+      <p class="sub">The more the practice knows up front, the more useful your first visit is.</p>
+      <label id="lq2">How soon are you looking to start?</label>
+      <div class="grid" id="q2"></div>
+      <label>Anything you want them to know first? (optional)</label>
+      <textarea id="note" placeholder="A sentence or two is plenty..."></textarea>
+      <div class="row"><button class="btn ghost" id="b2">Back</button><button class="btn primary" id="n2">See my recommendation</button></div>
+    </section>
+
+    <section id="s3" class="hide">
+      <h1 style="text-align:center">Here's the right first step</h1>
+      <div class="rec">
+        <div class="big" id="recline">Your recommended first visit</div>
+        <p class="sub" id="recmsg" style="margin:8px 0 0"></p>
+        <div class="sum" id="sum"></div>
+      </div>
+      <label>Best email to send the confirmation to</label><input id="email" placeholder="you@email.com">
+      <div class="row"><button class="btn ghost" id="b3">Back</button><button class="btn primary" id="book" style="flex:1">Book this on their scheduler</button></div>
+      <p class="note" id="routenote">In the live version this opens the practice's own Calendly / Acuity with everything above pre-filled.</p>
+    </section>
+
+    <section id="s4" class="hide final">
+      <div class="ok">&#10003;</div>
+      <h1>That's the whole idea</h1>
+      <p class="sub" id="donemsg">In under a minute the visitor self-selected the right appointment, and your team gets it with the answers attached, instead of a cold calendar slot.</p>
+      <div class="sum" id="sum2"></div>
+    </section>
+  </div>
+  <p class="foot" id="pitchfoot">A guided step like this sits in front of the scheduler you already pay for, so more visitors finish booking and fewer pick the wrong slot.</p>
+</div>
+<script>
+  function qp(k){try{return new URLSearchParams(location.search).get(k)||"";}catch(e){return"";}}
+  function clean(s){return (s||"").replace(/[<>]/g,"").slice(0,60);}
+  var BIZ=clean(qp("biz"))||"Your practice";
+  var TYPE=(qp("type")||"").toLowerCase();
+  var WIDGET=clean(qp("widget"))||"scheduler";
+  var TARGET=(function(){var t=qp("target");return /^https?:\/\//i.test(t)?t:"";})();
+  document.getElementById("bizb").textContent=BIZ;
+  document.getElementById("bizh").textContent=BIZ;
+  document.getElementById("pillw").textContent="Sits in front of your "+(WIDGET||"scheduler");
+  document.getElementById("routenote").textContent=TARGET?("This opens "+BIZ+"'s scheduler with your answers attached."):("In the live version this opens "+BIZ+"'s own "+(WIDGET&&WIDGET!=="scheduler"?WIDGET:"Calendly / Acuity")+" with everything above pre-filled.");
+
+  // Light vertical adaptation of the copy/options
+  var packs={
+    "functional-medicine":{q1l:"What's your main concern right now?",q1:["Gut / digestion","Hormones / energy","Autoimmune / inflammation","General optimization"],recs:{"Gut / digestion":"a 60-minute new-patient consult","Hormones / energy":"a 60-minute new-patient consult","Autoimmune / inflammation":"a 60-minute new-patient consult","General optimization":"a 30-minute discovery call"}},
+    "naturopath":{q1l:"What's your main concern right now?",q1:["A single specific issue","Several things at once","I have test results to review","Not sure yet"],recs:{"A single specific issue":"a 30-minute consult","Several things at once":"a 60-minute consult","I have test results to review":"a test-review consult","Not sure yet":"a 30-minute discovery call"}},
+    "dental":{q1l:"What are you hoping to improve?",q1:["Whitening / brightness","Straightening / alignment","Veneers / reshaping","Not sure, want advice"],recs:{"Whitening / brightness":"a cosmetic consult","Straightening / alignment":"an alignment consult","Veneers / reshaping":"a smile-design consult","Not sure, want advice":"a general cosmetic consult"}},
+    "clinic":{q1l:"What brings you in?",q1:["A specific concern","A general check / plan","Following up on results","Just exploring options"],recs:{"A specific concern":"a focused consult","A general check / plan":"a new-patient visit","Following up on results":"a results-review visit","Just exploring options":"a short discovery call"}},
+    "physio":{q1l:"Where's the pain or problem?",q1:["Back or neck","Knee or hip","Shoulder","Sports injury"],recs:{"Back or neck":"a back and neck assessment","Knee or hip":"a lower-limb assessment","Shoulder":"a shoulder assessment","Sports injury":"a sports-injury assessment"}},
+    "vet":{q1l:"What brings your pet in?",q1:["Wellness / checkup","A specific concern","Dental","New pet visit"],recs:{"Wellness / checkup":"a wellness visit","A specific concern":"a focused exam","Dental":"a dental consult","New pet visit":"a new-patient visit"}},
+    "gym":{q1l:"What's your main goal?",q1:["Lose weight / get lean","Build strength","Mobility / recover","Just getting started"],recs:{"Lose weight / get lean":"a free intro session","Build strength":"a strength assessment","Mobility / recover":"a movement assessment","Just getting started":"a no-pressure intro session"}},
+    "salon":{q1l:"What are you booking?",q1:["Cut / style","Color","Treatment / smoothing","Not sure yet"],recs:{"Cut / style":"a cut appointment","Color":"a color consult","Treatment / smoothing":"a treatment appointment","Not sure yet":"a quick consult"}},
+    "law":{q1l:"What do you need help with?",q1:["Estate / will","Injury / accident","Business / contracts","Family"],recs:{"Estate / will":"an estate consult","Injury / accident":"an injury consult","Business / contracts":"a business consult","Family":"a family-law consult"}},
+    "music":{q1l:"Who is the lesson for?",q1:["A young beginner","A returning adult","An advancing student","Just exploring"],recs:{"A young beginner":"a beginner intro lesson","A returning adult":"an adult intro lesson","An advancing student":"an advanced trial lesson","Just exploring":"a meet-the-teacher call"}}
+  };
+  var P=packs[TYPE]||{q1l:"What brings you in?",q1:["A specific need","A few things at once","Just exploring","Following up"],recs:{"A specific need":"a focused first visit","A few things at once":"a full first visit","Just exploring":"a short discovery call","Following up":"a follow-up visit"}};
+  document.getElementById("lq1").textContent=P.q1l;
+
+  var st={q1:"",urg:"",note:"",email:""};
+  function show(n){for(var i=1;i<=4;i++)document.getElementById("s"+i).classList.toggle("hide",i!==n);
+    document.getElementById("d1").className="dot on";document.getElementById("d2").className="dot"+(n>=2?" on":"");document.getElementById("d3").className="dot"+(n>=3?" on":"");}
+  function fill(el,arr,onpick){el.innerHTML="";arr.forEach(function(v){var b=document.createElement("button");b.className="opt";b.textContent=v;b.onclick=function(){[].forEach.call(el.children,function(c){c.classList.remove("sel")});b.classList.add("sel");onpick(v);};el.appendChild(b);});}
+  fill(document.getElementById("q1"),P.q1,function(v){st.q1=v;document.getElementById("n1").disabled=false;});
+  fill(document.getElementById("q2"),["As soon as possible","In the next few weeks","Just planning ahead"],function(v){st.urg=v;});
+  document.getElementById("n1").onclick=function(){show(2);};
+  document.getElementById("b2").onclick=function(){show(1);};
+  document.getElementById("b3").onclick=function(){show(2);};
+  document.getElementById("n2").onclick=function(){
+    st.note=document.getElementById("note").value.trim();
+    var rec=P.recs[st.q1]||"a first visit";
+    document.getElementById("recline").textContent="Recommended: "+rec;
+    document.getElementById("recmsg").textContent="Based on your answers, "+BIZ+" would start you with "+rec+".";
+    document.getElementById("sum").innerHTML="<b>You told "+BIZ+":</b><br>"+st.q1+(st.urg?(" &middot; "+st.urg):"")+(st.note?("<br><b>Note:</b> "+st.note.replace(/</g,"&lt;")):"");
+    show(3);
+  };
+  document.getElementById("book").onclick=function(){
+    st.email=document.getElementById("email").value.trim();
+    document.getElementById("sum2").innerHTML=document.getElementById("sum").innerHTML+(st.email?("<br><b>Email:</b> "+st.email):"");
+    document.getElementById("donemsg").textContent="In under a minute the visitor self-selected the right appointment at "+BIZ+", and your team gets it with the answers attached, instead of a cold calendar slot.";
+    if(TARGET){
+      var note=encodeURIComponent((st.q1||"")+(st.urg?(" | "+st.urg):"")+(st.note?(" | "+st.note):"")+(st.email?(" | "+st.email):""));
+      try{window.open(TARGET+(TARGET.indexOf("?")>-1?"&":"?")+"a1="+note,"_blank");}catch(e){}
+    }
+    show(4);
+  };
+</script>
+  <script src="https://guided-preview.vercel.app/beacon.js" data-site="preview"></script>
+</body>
+</html>

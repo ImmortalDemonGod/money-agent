@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Set up your guided booking tool</title>
+<meta name="description" content="Your guided booking pre-step is ready. Enter your practice name and your existing scheduler link to generate your personalized tool and a copy-paste embed.">
+<meta name="robots" content="noindex">
+<style>
+  :root{--bg:#0f1720;--card:#16212e;--fg:#eef4fb;--mut:#9fb2c6;--acc:#39d98a;--line:#26374a;--field:#0d151d}
+  @media (prefers-color-scheme:light){:root{--bg:#f4f7fb;--card:#fff;--fg:#0f1720;--mut:#4a5b6d;--acc:#0a8f57;--line:#dce6f0;--field:#fff}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:32px 20px 72px}
+  .badge{display:inline-block;font-size:13px;font-weight:600;color:var(--acc);border:1px solid var(--acc);border-radius:999px;padding:3px 12px;letter-spacing:.02em}
+  h1{font-size:26px;margin:16px 0 6px;line-height:1.25}
+  .sub{color:var(--mut);margin:0 0 26px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin:0 0 18px}
+  label{display:block;font-weight:600;margin:0 0 6px;font-size:14px}
+  .hint{color:var(--mut);font-size:13px;font-weight:400;margin:0 0 8px}
+  input,select{width:100%;background:var(--field);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:11px 12px;font-size:15px;margin:0 0 16px}
+  input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
+  button.go{background:var(--acc);color:#04150c;border:0;border-radius:9px;padding:13px 18px;font-size:15px;font-weight:700;cursor:pointer;width:100%}
+  button.go:disabled{opacity:.5;cursor:not-allowed}
+  .out{display:none}
+  .out.show{display:block}
+  .snip{background:var(--field);border:1px solid var(--line);border-radius:9px;padding:12px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-all;color:var(--fg)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 20px}
+  .row a,.row button.cp{flex:1;min-width:150px;text-align:center;text-decoration:none;border-radius:9px;padding:11px 12px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--line)}
+  .row a.prime{background:var(--acc);color:#04150c;border-color:var(--acc)}
+  .row button.cp{background:transparent;color:var(--fg)}
+  .step{color:var(--mut);font-size:13px;margin:2px 0 14px}
+  .ok{color:var(--acc);font-weight:600}
+  code{background:var(--field);padding:1px 5px;border-radius:4px;font-size:13px}
+  hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+  .foot{color:var(--mut);font-size:13px;margin-top:26px}
+  a.link{color:var(--acc)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">&#10003; Payment received &middot; set up in 30 seconds</span>
+  <h1>Let's build your guided booking tool</h1>
+  <p class="sub">You keep your existing Calendly, Acuity, or any scheduler. This adds a short guided step in front of it so visitors pick the right appointment and arrive with their answers attached. Fill in the two fields below and your personalized tool is live immediately.</p>
+
+  <div class="card">
+    <label for="biz">Your practice or business name</label>
+    <div class="hint">Shown to your visitors, e.g. "Riverside Family Dental".</div>
+    <input id="biz" type="text" placeholder="Riverside Family Dental" autocomplete="off">
+
+    <label for="target">Your existing scheduler link</label>
+    <div class="hint">Paste the booking URL you already use (Calendly, Acuity, Squarespace, Jane, etc.). Visitors land here after the guided step, answers attached.</div>
+    <input id="target" type="url" placeholder="https://calendly.com/your-practice/consult" autocomplete="off">
+
+    <label for="type">What kind of practice is it?</label>
+    <div class="hint">Picks the right first question. Optional, defaults to a general version.</div>
+    <select id="type">
+      <option value="">General practice (default)</option>
+      <option value="functional-medicine">Functional / integrative medicine</option>
+      <option value="naturopath">Naturopath</option>
+      <option value="dental">Dental / cosmetic dental</option>
+      <option value="clinic">Medical clinic</option>
+      <option value="physio">Physiotherapy / PT</option>
+      <option value="vet">Veterinary</option>
+      <option value="gym">Gym / personal training</option>
+      <option value="salon">Salon / spa</option>
+      <option value="law">Law firm</option>
+      <option value="music">Music / lessons</option>
+    </select>
+
+    <button id="go" class="go" disabled>Generate my tool</button>
+  </div>
+
+  <div id="out" class="out">
+    <div class="card">
+      <div class="step ok">&#10003; Your tool is live. Here is everything you need.</div>
+
+      <label>1. Your personalized tool (open it to test)</label>
+      <div class="step">This is your live guided booking page. Try it, then add it to your site with one of the options below.</div>
+      <div class="row">
+        <a id="openlink" class="prime" href="#" target="_blank" rel="noopener">Open my live tool &#8599;</a>
+        <button class="cp" data-copy="url">Copy the link</button>
+      </div>
+      <div id="urlsnip" class="snip"></div>
+
+      <hr>
+
+      <label>2. Add a "Book now" button to your site</label>
+      <div class="step">Paste this where you want the button. It opens your guided tool.</div>
+      <div class="snip" id="btnsnip"></div>
+      <div class="row"><button class="cp" data-copy="btn">Copy button code</button></div>
+
+      <hr>
+
+      <label>3. Or embed it directly in a page</label>
+      <div class="step">Drops the whole guided step inside any page on your site.</div>
+      <div class="snip" id="ifsnip"></div>
+      <div class="row"><button class="cp" data-copy="if">Copy embed code</button></div>
+
+      <div class="foot">Want it changed, restyled, or wired differently? Reply to your receipt email and it gets adjusted, no extra charge. If anything about the setup does not work, you are fully refunded.</div>
+    </div>
+  </div>
+
+  <p class="foot">Setup page for the guided booking tool. Your scheduler and your data stay yours; this only adds the guided step in front of the link you already use.</p>
+</div>
+
+<script>
+  function enc(s){return encodeURIComponent(s);}
+  var biz=document.getElementById("biz"),target=document.getElementById("target"),type=document.getElementById("type"),go=document.getElementById("go");
+  function valid(){return biz.value.trim().length>0 && /^https?:\/\/.+\..+/i.test(target.value.trim());}
+  function refresh(){go.disabled=!valid();}
+  biz.addEventListener("input",refresh);target.addEventListener("input",refresh);
+  var built={url:"",btn:"",iframe:""};
+  go.onclick=function(){
+    if(!valid())return;
+    var u="https://guided-preview.vercel.app/?biz="+enc(biz.value.trim())+"&target="+enc(target.value.trim());
+    if(type.value)u+="&type="+enc(type.value);
+    u+="&s=setup";
+    built.url=u;
+    built.btn='<a href="'+u+'" style="display:inline-block;padding:12px 22px;background:#0a8f57;color:#fff;border-radius:8px;font:600 15px sans-serif;text-decoration:none">Book an appointment</a>';
+    built.iframe='<iframe src="'+u+'" title="Book an appointment" style="width:100%;max-width:560px;height:640px;border:1px solid #ddd;border-radius:12px"></iframe>';
+    document.getElementById("openlink").href=u;
+    document.getElementById("urlsnip").textContent=u;
+    document.getElementById("btnsnip").textContent=built.btn;
+    document.getElementById("ifsnip").textContent=built.iframe;
+    document.getElementById("out").classList.add("show");
+    document.getElementById("out").scrollIntoView({behavior:"smooth"});
+  };
+  document.addEventListener("click",function(e){
+    var b=e.target.closest("button.cp");if(!b)return;
+    var k=b.getAttribute("data-copy"),v=k==="url"?built.url:k==="btn"?built.btn:built.iframe;
+    if(!v)return;
+    var t=b.textContent;
+    try{navigator.clipboard.writeText(v).then(function(){b.textContent="✓ Copied";setTimeout(function(){b.textContent=t;},1400);});}
+    catch(err){b.textContent="Select and copy above";setTimeout(function(){b.textContent=t;},1600);}
+  });
+</script>
+<script src="https://guided-preview.vercel.app/beacon.js" data-site="setup"></script>
+</body>
+</html>
