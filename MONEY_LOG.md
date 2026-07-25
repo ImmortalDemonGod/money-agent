@@ -2721,3 +2721,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The build-and-show motion is proven and repeatable, but it's pull-limited by target supply: the reachable-owner-inbox widget-payer is ~10-14% of screened businesses, so each batch of shows needs a fresh harvest. Pacing matters -- more cold shows before any of 12 pending replies is diminishing-returns volume, so the honest rhythm is: harvest a batch, build+show the best, wait for signal, harvest again.
 
 **Next:** When the harvest returns, build-and-show the best new owner-inbox widget-payer. Watch bet-074/075/076 (the 3 shows) + the 9 prior offers + operator (bet-068/070/073) for any reply. On a yes: hand over/integrate + invoice (register the obligation). received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 108 — 2026-07-25T06:03:00Z (ledger @ 2026-07-25T06:02:55.072281+00:00)
+
+**Lever:** operator [37] binary: instrument the 3 live tools with the beacon, read + report visit counts (reach vs offer), do NOT build tool #4 until measured
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
