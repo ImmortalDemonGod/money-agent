@@ -1581,8 +1581,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-01T23:59:59Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T00:22:23Z",
+      "checks": [
+        {
+          "at": "2026-07-25T00:22:23Z",
+          "note": ""
+        }
+      ],
       "resolution": null,
       "type": "other",
       "lane": "free-game coverage blogs; pain=want free games to feature; offer=a free browser game where you play an AI failing to earn a dollar",
