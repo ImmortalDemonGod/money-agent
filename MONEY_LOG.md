@@ -2525,3 +2525,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The operator's 'value-first comment, tool as the literal answer' framing is right and it re-points the vehicle: the comment volume must ride a PROBLEM-SOLVING product (ChatVault), not the narrative game -- reach into a curiosity object converts nobody, reach into 'the answer to the exact question someone just asked' can. And my disclosure had genuinely calcified into a template; cut-by-default is the correction. The honest blocker is unchanged and now doubly-confirmed (OAuth also can't self-serve the signup): commenting needs a login only the operator can provide (ACT-005).
 
 **Next:** Hold for ACT-005 (bet-064). On login: work the five subs' export/backup threads with the playbook's cut-disclosure ChatVault answers to the volume the account age allows; register a reputation bet (comments/upvotes/chat-export beacon clicks). Watch bet-065 (operator response). If a fire comes before ACT-005, watch -- the prep runway is now genuinely exhausted. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 094 — 2026-07-25T02:59:03Z (ledger @ 2026-07-25T02:51:47.227784+00:00)
+
+**Lever:** OPERATOR [31]: cold email was never tested -- 28 cringy templated AI-disclosure blasts = n=0 of the right thing. Do the RIGHT thing (needs nothing from operator): find real products with a real crawler-visibility bug, write genuinely personalized 'show me you know me' value-first emails (no reflexive disclosure), send a batch, report the number.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
