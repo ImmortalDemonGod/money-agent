@@ -153,7 +153,7 @@
       "oracle": "judgment",
       "poll_after_h": 21.648448261875,
       "resolve_by": "2026-07-31T09:24:22Z",
-      "status": "open",
+      "status": "won",
       "last_checked": "2026-07-24T09:33:09Z",
       "checks": [
         {
@@ -161,7 +161,14 @@
           "note": ""
         }
       ],
-      "resolution": null
+      "resolution": {
+        "at": "2026-07-25T01:25:40Z",
+        "outcome": "won",
+        "evidence": "facts-lane resolution: performed the action",
+        "oracle": "judgment",
+        "check_output": null,
+        "condition_result": null
+      }
     },
     {
       "id": "bet-009",
