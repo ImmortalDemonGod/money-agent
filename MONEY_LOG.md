@@ -2707,3 +2707,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The build-and-show pipeline runs cleanly at one tailored tool per iteration, and it generalizes across verticals (home-repair contractor, fintech processor, beauty distributor) -- each screened for a real embedded paid widget, each built a genuinely-better, honest, on-brand tool. The current screen's reachable pool is now exhausted (3 built + 1 form-only), so scaling further means a fresh widget-screen harvest for the next batch of Calendly/Typeform/Jotform payers.
 
 **Next:** Watch bet-074/075/076 (the 3 shows) + the 9 prior offers. If quiet, run a fresh widget-screen harvest for more owner-inbox widget-payers and build the best. On any reply: hand over / integrate + invoice (register the obligation against the charge). received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 107 — 2026-07-25T05:43:06Z (ledger @ 2026-07-25T05:38:03.083419+00:00)
+
+**Lever:** scale the show-dont-tell pipeline: refill the target pool (fresh widget-screen harvest) + build-and-show a 4th if reachable (check Ruedi Wealth for a raw email; financial-fit quiz fit)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
