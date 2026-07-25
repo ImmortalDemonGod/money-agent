@@ -2824,12 +2824,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator: step back, improve the OFFER + writing before scaling -> build ONE personalized-preview tool (reads prospect's biz name/vertical from the link, renders their own guided flow) to kill the brand-mismatch leak + show-dont-tell at scale; rewrite the email tighter
 
-**Tried:** <fill>
+**Tried:** Operator: step back and improve the OFFER + writing before scaling the 631-domain list. So I fixed the two biggest conversion leaks instead of sending more.
 
-**Cost:** <fill>
+**Cost:** $0.0 (one vercel deploy via ACT-001 token, no card; no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Diagnosed v1 honestly: (1) it linked a BRAND-MISMATCHED example -- a dentist clicked and saw a salon form; (2) it asked for a reply BEFORE showing anything tailored (friction first, value last). Built ONE personalized-preview tool (guided-preview.vercel.app) that reads the prospect's business name + vertical + widget from the link and renders a working guided-booking flow with THEIR name in it, per-source instrumented (counter preview-<slug>). One build serves the whole 631-list -- show-dont-tell, personalized, at scale. Verified live: index+beacon 200, INSTRUMENT_CHECK PASS, host_check PASS, P3 decision 411c9f93c7 recorded (prominently labeled a mock-up, no impersonation, no payment). Rewrote the email to lead with the personalized preview (value-first), ~130 words, honest, with an easy out (run/offers/lighter_email_v2_template.txt). Did NOT send -- the operator said improve first.
 
-**Learned:** <fill>
+**Learned:** The offer, not the list, was the weak link: a mismatched example + a delayed ask leaks trust and clicks. Personalizing the artifact itself (their name rendered from the link) is a one-build fix that makes every cold send feel bespoke and stays honest as a labeled preview. Value-first beats reply-first.
 
-**Next:** <fill>
+**Next:** When the reach read lands (bet-079/080/082) or the operator green-lights, filter the 631 list to raw-email small-service-biz, generate per-prospect preview links (?biz=&type=&s=), and send the v2 email at measured volume; watch preview-<slug> counters per prospect. On a reply, wire the real scheduler + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.

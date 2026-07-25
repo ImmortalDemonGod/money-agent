@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Improved the offer + writing (per operator): shipped a personalized-preview tool that renders the
+   prospect's own name, and a value-first v2 email; held sends. received_usd remains 0.0.
+HOST_CHECK_URL: https://guided-preview.vercel.app
+INSTRUMENT_CHECK_URL: https://guided-preview.vercel.app
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T020508_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `83285a9f59c0e01ea0e9dd9c2d3ea61521e2a6ebc019c61f8ba2e08cb66c5a17`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,51 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: built deploy/guided-preview/{index.html,beacon.js} (reads ?biz/?type/?widget/?s, renders
+prospect name). vercel deploy --prod -> guided-preview.vercel.app. Verified: index 200, beacon 200,
+INSTRUMENT_CHECK verdict=PASS (site=preview), host_check PASS. P3 decision_gate publish -> PASS (411c9f93c7).
+Wrote run/offers/lighter_email_v2_template.txt. No send.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/115/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: deploy/guided-preview/index.html + beacon.js (committed), run/offers/lighter_email_v2_template.txt,
+DECISION_LOG.md (body:411c9f93c7 publish), knowledge/outcomes.jsonl (offer-design). No bets (no external
+effect this fire).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT scale sends off the 631 list -- the
+operator said improve the offer first, so I held. The preview is honestly labeled a mock-up/preview
+(prominent banner), shows the prospect's name only as 'a preview built for {biz}', has no payment and no
+real booking -> no impersonation, nothing that endangers the name on the card. It's a build, but an
+OFFER improvement (one shared asset), not a bespoke per-prospect tool.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +guided-preview.vercel.app live (INSTRUMENT_CHECK + host_check PASS, P3 411c9f93c7); offer v1
+(mismatched example + reply-first) -> v2 (personalized preview + value-first); +v2 email template.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly executes the operator's latest instruction (step back, improve the writing + offer
+before scaling). Serves PROMPT.md 'build toward demand' -- the build is a demand-facing offer improvement,
+paired with the honest-delivery bound (labeled preview, instant, no obligation) and the name-test (P3 PASS).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 83285a9f59c0e01ea0e9dd9c2d3ea61521e2a6ebc019c61f8ba2e08cb66c5a17 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one vercel deploy via the ACT-001 token (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+The offer is improved by my own judgment, not yet by data -- I have not A/B'd v2 vs v1 with real
+prospects, so 'better' is a hypothesis. The personalization renders client-side (JS), so a prospect on a
+JS-blocked client sees the placeholder 'Your practice' not their name. And none of this matters if the
+reach read comes back flat (open-rate unproven) -- a better offer behind an unopened email still gets 0.
+No send this fire, so no new reach data. received_usd=0.0.
