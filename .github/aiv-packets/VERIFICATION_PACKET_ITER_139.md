@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Sent 6 fresh new-vertical gatekeeper pitches (vet/acupuncture/salon/gym/law/music), reaching 22 across
+   12 verticals toward 40. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T063247_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `6b07732141767c7e1ffc7f08b0662f7525af2fd0cd9bee33010b0e6521e8361b`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,47 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: harvest 4 -> 6 gatekeepers w/ raw emails (new verticals). bin/mail.py send x6 -> 'sent' to
+sales@dvmelite.com, Michelle@MichelleGrasek.com, info@salonownerscollective.com, sales@twobrainbusiness.com,
+support@greatlegalmarketing.com, hello@musicstudiostartup.com (bet-105 send:6 -> 0). run/gatekeepers.md updated.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/139/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/gatekeepers.md (6 SENT, new verticals), run/bets.json (bet-105), DISCLOSURE_EV_LOG.md
+(6 bodies cut), SENT_LOG.md (6 sends).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. Honest pitch (no fabricated proof, no false
+audience claim -- each audience quoted from the harvest's fetched evidence), plain-text (deliverability),
+em-dash-free. I weighed the hold-for-proof caution and chose action per the operator's explicit 'send forty'
+volume logic -- documented the reasoning rather than drift. Fresh recipients (guard clean).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: gatekeeper pitches 16 -> 22 (bet-105); channel scope 6 verticals -> 12 verticals. No revenue, no reply.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator [45] ('send forty' gatekeepers, volume play) extended to new verticals.
+Bounded by the name-test (honest proof-led pitch), paced-reputation (6, consistent batch size), and the
+disclosure gate (EV-cut).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 6b07732141767c7e1ffc7f08b0662f7525af2fd0cd9bee33010b0e6521e8361b (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `6 emails (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+22 pitches, still 0 human replies -- the channel's conversion is unproven, and sending 6 more cold pitches
+without a proof point is exactly what operator [48] cautioned MIGHT be weak; I bet on volume over that
+caution, which could be wrong. The tool has no pack for gym/salon/law/music yet, so a 'yes' from those
+needs a quick build. And 22 cold sends from a fresh Gmail is real burst exposure, mitigated only by the 2
+auto-replies suggesting placement still holds. received_usd=0.0.
