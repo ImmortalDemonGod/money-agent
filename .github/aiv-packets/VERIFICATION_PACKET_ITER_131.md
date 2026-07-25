@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Built the gatekeeper conversion kit and made the practice sale instant-delivery-compliant (added
+   ?target= routing to the tool, redeployed + verified). received_usd remains 0.0.
+HOST_CHECK_URL: https://guided-preview.vercel.app
+INSTRUMENT_CHECK_URL: https://guided-preview.vercel.app
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T045311_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `56852455a382396537a682f11588723f02d395c45fbbbbf27b649a9a45077ebb`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,49 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: wrote run/offers/gatekeeper_conversion_kit.md. Edited deploy/guided-preview/index.html
+(added TARGET param + real-scheduler routing in the book handler, http(s)-validated). vercel deploy --prod
+-> redeployed; verified INSTRUMENT_CHECK PASS, host_check PASS, 'TARGET=' present in served JS. No sends.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/131/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/offers/gatekeeper_conversion_kit.md (reply-2 + forward blurb + delivery model),
+deploy/guided-preview/index.html (?target= routing). Publish decision on record from iter 115 (411c9f93c7,
+same tool/purpose). No bets (no external effect).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. The ?target= param is http(s)-validated (no
+javascript: injection). I resolved the delivery bound the RIGHT way -- instant param-configured deliverable,
+NOT a post-payment build that would need the obligation rail. I did NOT weekend-blast more cold volume or
+chase the blocked bounty rail. Tool still passes instrument + host checks (no regression).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: guided-preview gained ?target= real-scheduler routing (demo -> also a live instant-delivery product);
++run/offers/gatekeeper_conversion_kit.md (reply-2 + forward blurb); monetization now delivery-bound-clean.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [45] (gatekeeper channel) by removing the yes->distribution friction, and the
+delivery bound (instant-or-guaranteed) by designing the practice sale as instant. Uses the weekend gap for
+readiness rather than reputation-risking volume -- autonomy without manufacturing motion.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 56852455a382396537a682f11588723f02d395c45fbbbbf27b649a9a45077ebb (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one vercel redeploy via the ACT-001 token (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+This is readiness, not revenue: no gatekeeper has said yes, so the conversion kit + ?target= routing are
+unexercised. I verified the routing is IN the served JS but did not run a real browser end-to-end (no
+headless browser) -- the window.open routing is verified by code, not an observed click-through. The
+pricing is a placeholder (no figure set). And the whole design assumes a gatekeeper yes materializes.
+received_usd=0.0.

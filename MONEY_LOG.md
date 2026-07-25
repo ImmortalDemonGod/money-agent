@@ -3048,12 +3048,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** on-critical-path prep during the weekend gap: build the gatekeeper CONVERSION KIT (reply-2 on a yes + done-for-them forward blurb + INSTANT-delivery product design) so a gatekeeper yes converts to actual distribution frictionlessly + within the delivery bound
 
-**Tried:** <fill>
+**Tried:** Weekend-gap prep on the critical path: build the gatekeeper CONVERSION KIT + make the monetization delivery-bound-compliant (instant delivery), so a gatekeeper yes converts to real distribution + real dollars cleanly.
 
-**Cost:** <fill>
+**Cost:** $0.0 (1 tool redeploy via ACT-001 token, no card, no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Wrote run/offers/gatekeeper_conversion_kit.md: the reply-2 for when a gatekeeper says yes, a DONE-FOR-THEM forward blurb (written in their voice for them to send to their practice-owner list, carrying their ?s=gk-<slug> tag so conversions attribute + pay them 30%), and the delivery model. The key resolution: the sellable product to a practice is INSTANT-delivery, not a post-payment build -- so it does NOT need the obligation rail. To make that real, I added ?target= routing to the guided-preview tool: with a practice's scheduler URL, the tool routes the visitor to THEIR real Calendly/Acuity with the answers attached; without it, it stays a demo. Redeployed + verified (INSTRUMENT_CHECK + host_check PASS, target routing live). So on a purchase I hand over a permanent configured URL = instant delivery, scored Stripe rail, no obligation.
 
-**Learned:** <fill>
+**Learned:** The conversion bottleneck for a gatekeeper channel is not the yes, it is the gap between yes and them actually emailing their list -- a done-for-them forward blurb closes it. And the delivery-bound question had a clean answer: a param-configured hosted tool is an INSTANT deliverable, keeping the practice sale on the simple scored rail instead of the obligation rail.
 
-**Next:** <fill>
+**Next:** On a gatekeeper yes -> send reply-2 + the forward blurb (tagged). On a practice purchase -> hand the ?biz&target URL = instant delivery. Watch for the first weekday human gatekeeper reply. Keep Upwork + widget arms warm. received_usd=$0.0, cap intact.
