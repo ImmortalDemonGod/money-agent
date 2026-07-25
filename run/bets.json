@@ -3236,6 +3236,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-119",
+      "placed_at": "2026-07-25T17:32:11Z",
+      "clock": "reply",
+      "what": "Reply to operator [59] (iter153): demo is now truly per-contractor (real logo, brand color, city, phone, correct trade; caught a roof-shown-deck bug by rendering), price named at $49 with live limit-1 checkout + instant delivery page, and the fateroofinggroup bounce reported",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-29T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
