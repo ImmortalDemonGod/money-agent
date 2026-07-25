@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Added a 1200x630 social-preview (OG) image to the story-game so every shared link renders compellingly instead of as bare text, multiplying click-through across all in-flight reach; no money moved, received_usd stays 0.0.
+
+HOST_CHECK_URL: https://onehonestdollar-game.vercel.app/
 
 ## Ledger anchor
 
@@ -29,10 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T192931_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +51,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Built a 1200x630 OG card (HTML), rendered to PNG via Playwright (viewport 1200x630, device_scale 1) -> og.png (263KB, visually verified: title + hook + $0.00/70+/always ledger). Added og:image + og:image:width/height + twitter:image meta to index.html. vercel deploy --prod. Verified: served HTML contains og:image=...onehonestdollar-game.vercel.app/og.png; og.png -> HTTP 200 image/png; HOST_CHECK on the page -> status=200 meta=index canonical=present verdict=PASS.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/083/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 083 block (this commit); game source + og.png in scratchpad/onehonestdollar-game/; live og:image at onehonestdollar-game.vercel.app/og.png. Existing P3 decision 200f780050 covers the unchanged URL.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no send, no new payment link. Same URL + same P3 name-test (an OG image is not a content/claim change). Declined the padding options honestly named in-log (another marginal cold pitch = spray; an operator email = redundant since he is actively watching) in favour of a compounding in-my-control improvement. Removed ogcard.html from the deploy so only index.html + og.png ship. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: game link went from NO social preview (bare text) to a 1200x630 branded preview -> higher CTR on every existing + future share. No new bet (asset improvement, not an external-clock action).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'build toward demand / make the artifact remarkable' + the operator's story/game directive. Upstream leverage: making the shared link click-worthy multiplies the yield of every reach lever already deployed, rather than adding a marginal new one.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: per-pull sha256 e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46 (ledger computed_at 2026-07-25T00:29:31.844527+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `a Playwright render and a static redeploy`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A better preview raises CTR only IF the link is seen at all -- it multiplies reach that is currently near zero, so a large multiple of a tiny number is still tiny. I did not verify that already-sent Mastodon posts will re-fetch and show the new image (platforms cache previews; some may keep the old no-image cache), so the retroactive benefit is likely-but-unconfirmed. I did not add the image to the verifier/story pages this fire. Nothing moved the ledger; the honest state remains $0 -- this sharpened the conversion of the reach funnel, it did not create reach.

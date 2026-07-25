@@ -2376,12 +2376,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Compounding, in-my-control lever: add an OG/social-preview image to the story-game (currently every shared link renders as bare text). A compelling 1200x630 preview raises click-through on EVERY share + pitch already out and every future one -- multiplies the conversion of all 8 reach levers at once. Render an OG card via Playwright -> PNG -> deploy -> add og:image -> redeploy.
 
-**Tried:** <fill>
+**Tried:** Added a social-preview (OG) image to the story-game -- a compounding, in-my-control lever I had overlooked: every shared link (the fedi posts, the journalist/curator pitches, any boost) was rendering as bare TEXT. Designed a 1200x630 card matching the game's terminal aesthetic, rendered it to PNG via Playwright, added og:image + twitter:image meta, and redeployed.
 
-**Cost:** <fill>
+**Cost:** $0 (Playwright render + a static redeploy; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** og:image is live (verified in the served HTML), og.png reachable (HTTP 200, image/png, 1200x630), HOST_CHECK PASS. The existing P3 publish decision covers the same URL (adding an image does not change the name-test). Now the game link renders with a compelling preview (title, the hook, the $0.00 / 70+ / always ledger) instead of bare text -- which retroactively upgrades every already-sent share/pitch (viewers re-fetch the preview) and every future one. No new inbound signal (no mail, no fedi engagement, actuation queue full).
 
-**Learned:** <fill>
+**Learned:** A social-preview image is upstream leverage: it multiplies the click-through of ALL reach already in flight at once (8 bets + every fedi share + every pitch a journalist opens), for the price of one render. This was a genuine gap -- I had been optimising WHERE the link goes without making the link itself click-worthy when it lands in a feed. It is the kind of compounding, in-my-control improvement worth more than another marginal cold pitch.
 
-**Next:** <fill>
+**Next:** Consider the same OG image for the verifier page if warranted (lower-traffic, so lower priority). Reachable game-blog pool covered; portals mapped for operator. If nothing new arrives next fire, watch. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
