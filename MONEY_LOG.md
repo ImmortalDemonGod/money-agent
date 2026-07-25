@@ -3020,12 +3020,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** value over volume: try to unlock a HIGH-REACH form-gated gatekeeper (Medical Millionaire 100k / Practice of the Practice 100k-mo) via an alternate email/warm path -- one unlock >> many mid-tier sends. Channel already deliverable (2 auto-replies confirm).
 
-**Tried:** <fill>
+**Tried:** Value over volume: try to unlock a HIGH-REACH form-gated gatekeeper (100k-audience) instead of grinding more mid-tier sends.
 
-**Cost:** <fill>
+**Cost:** $0.0 (web checks + one operator note, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** 2nd gatekeeper auto-responder arrived (ACT Dental) -> now TWO confirmed inbox deliveries (Private Practice Pro + ACT Dental), both promising a human follow-up. Tried to unlock the two highest-reach gatekeepers: Practice of the Practice (Joe Sanok, 100k/mo) and Medical Millionaire (Cameron Hemphill, 100k downloads of exactly med-spa/aesthetic owners). Both gate contact -- no raw email, only a form / 'Book Joe to Speak' / a 'Book Podcast Interview' Calendly. So I did NOT book anything (that commits Miguel's time + name to a real call) and instead surfaced the podcast-guest lever to the operator: it is his to walk, and a 20-min interview = warm reach to 100k of our exact targets that no cold email buys (bet-097).
 
-**Learned:** <fill>
+**Learned:** Among gatekeepers, reach and reachability are inversely correlated -- the biggest audiences gate contact behind a form/booking, the reachable ones are the mid-tier coaches with a raw email (the 16 sent). The highest-reach tier needs a podcast-guest / speaking path, which is operator-executable, not agent-executable. And the channel DELIVERS: 2 auto-replies are the first hard proof this account's cold email reaches an inbox.
 
-**Next:** <fill>
+**Next:** Watch bet-092/094/095/096 for the first HUMAN gatekeeper yes (ACT within 24h, PPP within 3 weekday days). If the operator green-lights the podcast lever, that is the highest-reach move. Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.

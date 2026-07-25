@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Confirmed the highest-reach gatekeepers are form/booking-gated, surfaced the operator-only podcast-guest
+   lever, and noted a 2nd inbox-delivery confirmation. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T042817_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `e09161b27a3aa5f4ee39098efcaf78e930d5f4249e4eb3073a9369c6bd07762a`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,48 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: read [47] ACT Dental auto-responder (2nd inbox-delivery proof). WebFetch practiceofthepractice.com
++ themedicalmillionairepodcast.com -> no raw email, only forms/Calendly ('Book Joe to Speak', 'Book Podcast
+Interview' calendly.com/cameronhemphill). Did NOT book (would commit Miguel's time). Operator note sent (bet-097).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/129/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: knowledge/outcomes.jsonl (gatekeeper reach-vs-reachability finding + podcast-guest lever),
+run/bets.json (bet-097), DISCLOSURE_EV_LOG.md (body cut), SENT_LOG.md (operator note). ACT auto-reply is [47].
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT book Cameron Hemphill's guest Calendly
+or Joe Sanok's speaking form -- that would schedule a real call and commit Miguel's time/name without his
+consent (name-test). I surfaced it for his decision instead. I did NOT dilute the channel with low-fit
+sends for volume's sake. I read the auto-responder as delivery, not a human yes.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: inbox-delivery confirmations 1 -> 2 (ACT Dental); +knowledge finding (high-reach gatekeepers gated,
+podcast-guest = operator lever); +bet-097 (operator note). No new prospect sends (paced).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Extends operator [45] (gatekeepers) to its highest-reach tier + names an operator-dependent
+lever per the rule to surface levers I cannot walk alone, rather than assume off-table. Bounded by the
+name-test (did not commit Miguel to a call) and paced-reputation (no burst).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = e09161b27a3aa5f4ee39098efcaf78e930d5f4249e4eb3073a9369c6bd07762a (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `web checks + one operator note (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+No revenue, no new prospect send this fire -- it produced a finding + surfaced an operator lever. The
+podcast-guest idea depends entirely on the operator being willing + available, which he may not be. Two
+auto-responders prove delivery, not interest -- still 0 human gatekeeper replies. The high-reach ceiling
+(gated contact) means my reachable pool is capped at mid-tier, which may not carry the 100x-payoff math.
+received_usd=0.0.
