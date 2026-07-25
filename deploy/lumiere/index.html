@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lumière — Restaurant Website Concept</title>
+<meta name="description" content="Modern restaurant website: hero with reservation and menu CTAs, filterable full menu, working reservation form, gallery, map and hours. Responsive, fast, no dependencies.">
+<!--
+  ===========================================================================
+  LUMIÈRE — modern restaurant website, built against a posted brief.
+  Vanilla HTML/CSS/JS. No framework, no build step, no external requests —
+  which is what keeps it fast and SEO-clean out of the box.
+
+  WHERE TO PUT YOUR CONTENT
+  -------------------------
+  • MENU:    one MENU array in the script at the bottom. Add/remove dishes and
+             the menu grid, the dietary filters and the counts all update
+             themselves. Tags drive the filters — add a new tag string and a
+             new filter chip appears automatically.
+  • PHOTOS:  every image slot is marked data-slot. Drop an <img> in and the
+             placeholder styling disappears on its own.
+  • MAP:     the map block is marked data-slot="map" — paste the Google Maps
+             iframe there; the aspect ratio and rounding are already set.
+  • HOURS / SOCIAL / ADDRESS: the SITE object at the top of the script.
+
+  ADMIN PANEL / BLOG / ANALYTICS: the brief asks for these. They need a CMS
+  behind the page (WordPress, Webflow or a small headless setup) — this
+  demonstrates the front end those would drive. Called out honestly in the bid.
+  ===========================================================================
+-->
+<style>
+  :root{
+    --bg:#12100e;              /* warm near-black */
+    --surface:#1b1815;
+    --surface-2:#241f1a;
+    --line:#3a322a;
+    --fg:#f6efe6;              /* 15.2:1 on --bg */
+    --muted:#c2b3a1;           /* 8.9:1 on --bg  */
+    --accent:#e0a253;          /* warm gold, 8.6:1 on --bg */
+    --accent-2:#c2603c;        /* terracotta */
+    --ok:#7fbf7f;
+    --radius:14px;
+    --maxw:1120px;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  }
+  @media (prefers-color-scheme:light){
+    :root{
+      --bg:#fbf7f1; --surface:#ffffff; --surface-2:#f4ede3; --line:#e3d8c9;
+      --fg:#1c1713;            /* 16.9:1 */
+      --muted:#5f5346;         /* 7.3:1  */
+      --accent:#9a6415; --accent-2:#a8442a;
+    }
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  a{color:var(--accent);text-decoration:none}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{position:fixed;left:12px;top:12px;background:var(--accent);color:#231301;
+    padding:10px 16px;border-radius:8px;font-weight:700;z-index:99}
+  h1,h2,h3,.brand{font-family:var(--serif);font-weight:600;letter-spacing:-.01em}
+
+  /* nav */
+  header.nav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;gap:26px;height:68px}
+  .brand{font-size:22px;letter-spacing:.02em}
+  .brand span{color:var(--accent)}
+  .nav-links{display:flex;gap:22px;margin-left:auto}
+  .nav-links a{color:var(--muted);font-weight:600;font-size:15px}
+  .nav-links a:hover{color:var(--fg)}
+  @media(max-width:840px){.nav-links{display:none}}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;
+    border-radius:10px;padding:13px 22px;font:inherit;font-weight:700;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#241200;
+    transition:transform .15s ease,box-shadow .15s ease;
+    box-shadow:0 8px 24px color-mix(in srgb,var(--accent-2) 30%,transparent)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px color-mix(in srgb,var(--accent-2) 42%,transparent)}
+  .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.sm{padding:9px 15px;font-size:14px}
+
+  /* hero */
+  .hero{position:relative;padding:74px 0 60px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:-30% 40% 30% -20%;filter:blur(40px);pointer-events:none;
+    background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 26%,transparent),transparent)}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.02fr .98fr;gap:44px;align-items:center}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:32px}}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:clamp(36px,5.4vw,60px);line-height:1.06;margin:14px 0 16px}
+  .lede{color:var(--muted);font-size:18px;max-width:50ch;margin:0 0 26px}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .facts{display:flex;gap:26px;margin-top:28px;flex-wrap:wrap;color:var(--muted);font-size:13.5px}
+  .facts b{display:block;color:var(--fg);font-size:15px;font-family:var(--serif)}
+
+  /* image slots */
+  [data-slot]{position:relative;background:linear-gradient(150deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line);border-radius:var(--radius);display:grid;place-items:center;overflow:hidden}
+  [data-slot]::after{content:attr(data-slot);position:absolute;left:10px;top:10px;font-size:9.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);
+    padding:4px 7px;border-radius:5px;background:color-mix(in srgb,var(--bg) 60%,transparent)}
+  [data-slot] .ph{font-size:44px;opacity:.85}
+  [data-slot]:has(img)::after{display:none}
+  .hero-shot{aspect-ratio:4/3.2}
+
+  section{padding:62px 0;scroll-margin-top:80px}
+  .sec-head{margin-bottom:26px}
+  h2{font-size:clamp(26px,3.4vw,36px);margin:0}
+  .sec-sub{color:var(--muted);margin:8px 0 0;max-width:60ch}
+
+  /* menu */
+  .filters{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 20px}
+  .chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;
+    padding:9px 16px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+  .chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 12%,transparent)}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:16px}
+  .dish{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px;display:flex;gap:14px;align-items:flex-start}
+  .dish .pic{flex:0 0 84px;aspect-ratio:1;border-radius:10px}
+  .dish h3{margin:0 0 3px;font-size:17px}
+  .dish p{margin:0 0 8px;color:var(--muted);font-size:13.5px}
+  .price{font-family:var(--serif);font-size:18px;color:var(--accent);white-space:nowrap}
+  .row-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .tags{display:flex;gap:5px;flex-wrap:wrap}
+  .tag{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:3px 6px}
+  .count{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+
+  /* reservation */
+  .res-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:26px}
+  @media(max-width:860px){.res-grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+  label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+  input,select,textarea{width:100%;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);
+    border-radius:9px;padding:11px 12px;font:inherit;font-size:15px;margin:0 0 14px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .err{color:var(--accent-2);font-size:13px;margin:-8px 0 12px;display:none}
+  .err.show{display:block}
+  .ok-msg{display:none;background:color-mix(in srgb,var(--ok) 15%,transparent);
+    border:1px solid color-mix(in srgb,var(--ok) 45%,transparent);border-radius:12px;padding:16px;margin-top:6px}
+  .ok-msg.show{display:block}
+  .hours{list-style:none;margin:0;padding:0}
+  .hours li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  .hours li:last-child{border-bottom:0}
+  .hours .day{color:var(--muted)}
+
+  .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+  .gallery [data-slot]{aspect-ratio:1}
+  .map-slot{aspect-ratio:16/8;width:100%}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:14px}
+  .foot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:24px}
+  footer h4{margin:0 0 10px;color:var(--fg);font-size:15px;font-family:var(--serif)}
+  footer a{color:var(--muted)} footer a:hover{color:var(--accent)}
+  .note{margin-top:24px;font-size:12.5px;opacity:.85}
+</style>
+</head>
+<body>
+<a class="skip" href="#menu">Skip to menu</a>
+
+<header class="nav"><div class="wrap nav-in">
+  <div class="brand">Lumi<span>è</span>re</div>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#about">About</a><a href="#menu">Menu</a><a href="#gallery">Gallery</a>
+    <a href="#reserve">Reservations</a><a href="#find">Find us</a>
+  </nav>
+  <button class="btn sm" onclick="document.getElementById('reserve').scrollIntoView()">Reserve a table</button>
+</div></header>
+
+<main>
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="kicker">Seasonal · Wood-fired · Since 1998</span>
+        <h1 id="h1">Food worth crossing town for.</h1>
+        <p class="lede">A short, seasonal menu cooked over open flame, poured with care, and served
+          without ceremony. Book a table in under a minute.</p>
+        <div class="hero-cta">
+          <button class="btn" onclick="document.getElementById('reserve').scrollIntoView()">Reserve a table</button>
+          <button class="btn ghost" onclick="document.getElementById('menu').scrollIntoView()">See the menu</button>
+        </div>
+        <div class="facts">
+          <div><b>4.8 ★</b> 1,240 reviews</div>
+          <div><b>Open today</b> until 11pm</div>
+          <div><b>2 min</b> from Central Station</div>
+        </div>
+      </div>
+      <div class="hero-shot" data-slot="hero photo"><span class="ph" aria-hidden="true">🔥</span></div>
+    </div>
+  </section>
+
+  <section id="about" aria-labelledby="about-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="about-h">About us</h2>
+        <p class="sec-sub">Two paragraphs of your story sit here — this block is plain text, so you can
+          edit it without touching anything else.</p></div>
+      <div class="res-grid">
+        <div>
+          <p>We started as a six-table room with one wood oven and a menu that changed whenever the
+            market did. That has not really changed, except there are more tables now.</p>
+          <p>Everything is cooked to order over flame. The menu shifts with the season, the bread is
+            baked each morning, and the wine list favours small growers we have actually met.</p>
+        </div>
+        <div data-slot="interior photo" style="aspect-ratio:4/3"><span class="ph" aria-hidden="true">🍽️</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu" aria-labelledby="menu-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="menu-h">Full menu</h2>
+        <p class="sec-sub">Filter by dietary need — the chips below are generated from the menu data,
+          so adding a dish with a new tag creates its filter automatically.</p></div>
+      <div class="filters" id="filters" role="group" aria-label="Filter menu by dietary option"></div>
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="menu-grid" id="menuGrid"></div>
+    </div>
+  </section>
+
+  <section id="gallery" aria-labelledby="gal-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="gal-h">Gallery</h2>
+        <p class="sec-sub">Six square slots, ready for your photography.</p></div>
+      <div class="gallery">
+        <div data-slot="food 1"><span class="ph" aria-hidden="true">🥘</span></div>
+        <div data-slot="food 2"><span class="ph" aria-hidden="true">🍝</span></div>
+        <div data-slot="food 3"><span class="ph" aria-hidden="true">🥗</span></div>
+        <div data-slot="room 1"><span class="ph" aria-hidden="true">🕯️</span></div>
+        <div data-slot="room 2"><span class="ph" aria-hidden="true">🍷</span></div>
+        <div data-slot="team"><span class="ph" aria-hidden="true">👩‍🍳</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reserve" aria-labelledby="res-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="res-h">Reserve a table</h2>
+        <p class="sec-sub">Validated in the browser, so a guest never submits an impossible booking.
+          Wire it to your booking provider or your inbox — the form is standard fields.</p></div>
+      <div class="res-grid">
+        <form class="card" id="resForm" novalidate>
+          <div class="two">
+            <div><label for="rname">Name</label><input id="rname" autocomplete="name" placeholder="Your name"></div>
+            <div><label for="rphone">Phone</label><input id="rphone" autocomplete="tel" placeholder="For confirmation"></div>
+          </div>
+          <p class="err" id="errName">Please add a name and a phone number.</p>
+          <div class="two">
+            <div><label for="rdate">Date</label><input id="rdate" type="date"></div>
+            <div><label for="rtime">Time</label>
+              <select id="rtime"><option>17:30</option><option>18:00</option><option selected>19:00</option>
+                <option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select></div>
+          </div>
+          <p class="err" id="errDate">Please choose today or a future date.</p>
+          <div class="two">
+            <div><label for="rparty">Party size</label>
+              <select id="rparty"><option>1</option><option selected>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option><option>9+</option></select></div>
+            <div><label for="rseat">Seating</label>
+              <select id="rseat"><option>No preference</option><option>Indoors</option><option>Terrace</option><option>Bar</option></select></div>
+          </div>
+          <label for="rnotes">Anything we should know?</label>
+          <textarea id="rnotes" rows="2" placeholder="Allergies, celebrations, accessibility"></textarea>
+          <button class="btn" type="submit" style="width:100%">Request this table</button>
+          <div class="ok-msg" id="resOk"><b>Table requested.</b>
+            <div id="resSummary" style="margin-top:6px;font-size:14.5px;color:var(--muted)"></div></div>
+        </form>
+        <div class="card">
+          <h3 style="margin:0 0 12px;font-size:18px">Opening hours</h3>
+          <ul class="hours" id="hours"></ul>
+          <p style="color:var(--muted);font-size:13.5px;margin:14px 0 0">
+            Large party or a private room? Call us on <a href="tel:+15550140">(555) 014-0198</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="find" aria-labelledby="find-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="find-h">Find us</h2>
+        <p class="sec-sub">Paste your Google Maps embed into the slot below — sizing is already handled.</p></div>
+      <div class="map-slot" data-slot="google maps embed"><span class="ph" aria-hidden="true">📍</span></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot-grid">
+    <div><h4>Lumière</h4><div id="addr"></div></div>
+    <div><h4>Hours</h4><div id="footHours"></div></div>
+    <div><h4>Follow</h4>
+      <div><a href="#">Instagram</a> · <a href="#">Facebook</a> · <a href="#">TripAdvisor</a></div></div>
+    <div><h4>Quick links</h4>
+      <div><a href="#menu">Menu</a> · <a href="#reserve">Reservations</a> · <a href="#find">Directions</a></div></div>
+  </div>
+  <div class="note">Demonstration build — restaurant name, dishes, prices and reviews are placeholder content.</div>
+</div></footer>
+
+<script>
+/* ===========================================================================
+   SITE — your details in one place.
+   =========================================================================== */
+const SITE = {
+  address: "18 Lantern Street, Old Town",
+  hours: [["Monday","Closed"],["Tuesday","5pm – 10pm"],["Wednesday","5pm – 10pm"],
+          ["Thursday","5pm – 11pm"],["Friday","5pm – 11pm"],["Saturday","12pm – 11pm"],
+          ["Sunday","12pm – 9pm"]]
+};
+
+/* ===========================================================================
+   MENU — DUMMY DATA, REPLACE THIS.
+   `tags` drive the dietary filters: add a new tag and its filter chip appears.
+   =========================================================================== */
+const MENU = [
+  {n:"Wood-fired focaccia",  d:"Rosemary, sea salt, new-season olive oil",         p:7,  e:"🍞", tags:["Vegan","Vegetarian"]},
+  {n:"Burrata & peaches",    d:"Grilled peach, basil, aged balsamic",              p:14, e:"🍑", tags:["Vegetarian","Gluten-free"]},
+  {n:"Charred octopus",      d:"Confit potato, smoked paprika, lemon",             p:18, e:"🐙", tags:["Gluten-free"]},
+  {n:"Cacio e pepe",         d:"Hand-rolled tonnarelli, pecorino, black pepper",   p:19, e:"🍝", tags:["Vegetarian"]},
+  {n:"Wild mushroom risotto",d:"Carnaroli, thyme, parmesan crisp",                 p:21, e:"🍄", tags:["Vegetarian","Gluten-free"]},
+  {n:"Dry-aged ribeye",      d:"45-day aged, bone marrow butter, watercress",      p:38, e:"🥩", tags:["Gluten-free"]},
+  {n:"Whole sea bream",      d:"Salt-baked, fennel, charred lemon",                p:32, e:"🐟", tags:["Gluten-free","Pescatarian"]},
+  {n:"Aubergine parmigiana", d:"Slow-baked, san marzano, buffalo mozzarella",      p:17, e:"🍆", tags:["Vegetarian"]},
+  {n:"Chickpea tagine",      d:"Preserved lemon, apricot, harissa, herb couscous", p:16, e:"🥘", tags:["Vegan","Vegetarian"]},
+  {n:"Tiramisù",             d:"Espresso, mascarpone, cocoa",                      p:9,  e:"🍮", tags:["Vegetarian"]},
+  {n:"Dark chocolate torte", d:"Olive oil, flaked salt, crème fraîche",            p:10, e:"🍫", tags:["Vegetarian","Gluten-free"]},
+  {n:"Affogato",             d:"Vanilla gelato, double espresso",                  p:7,  e:"☕", tags:["Vegetarian","Gluten-free"]}
+];
+
+const $ = s => document.querySelector(s);
+const active = new Set();
+
+/* hours + address */
+$("#hours").innerHTML = SITE.hours.map(([d,h])=>`<li><span class="day">${d}</span><span>${h}</span></li>`).join("");
+$("#footHours").innerHTML = SITE.hours.map(([d,h])=>`${d}: ${h}`).join("<br>");
+$("#addr").textContent = SITE.address;
+
+/* filters generated from the data */
+const allTags = [...new Set(MENU.flatMap(m=>m.tags))].sort();
+$("#filters").innerHTML = allTags.map(t=>
+  `<button class="chip" type="button" aria-pressed="false" data-tag="${t}">${t}</button>`).join("");
+
+$("#filters").addEventListener("click", e=>{
+  const b=e.target.closest("[data-tag]"); if(!b) return;
+  const t=b.dataset.tag;
+  active.has(t) ? active.delete(t) : active.add(t);
+  render();
+});
+
+function render(){
+  document.querySelectorAll("#filters [data-tag]").forEach(b=>
+    b.setAttribute("aria-pressed", active.has(b.dataset.tag) ? "true":"false"));
+  // a dish must carry EVERY selected tag (intersection, not union) — a guest who is
+  // vegan AND gluten-free needs dishes that satisfy both, not either.
+  const shown = MENU.filter(m => [...active].every(t => m.tags.includes(t)));
+  $("#count").textContent = active.size
+    ? `${shown.length} of ${MENU.length} dishes match ${[...active].join(" + ")}`
+    : `${MENU.length} dishes`;
+  $("#menuGrid").innerHTML = shown.map(m=>`
+    <article class="dish">
+      <div class="pic" data-slot="dish"><span class="ph" style="font-size:26px" aria-hidden="true">${m.e}</span></div>
+      <div style="flex:1">
+        <div class="row-top"><h3>${m.n}</h3><span class="price">$${m.p}</span></div>
+        <p>${m.d}</p>
+        <div class="tags">${m.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      </div>
+    </article>`).join("") ||
+    `<p class="sec-sub">No dishes match that combination — the kitchen can usually adapt one, just ask.</p>`;
+}
+render();
+
+/* reservation: validate before it ever reaches your inbox */
+const today = new Date().toISOString().slice(0,10);
+$("#rdate").min = today; $("#rdate").value = today;
+
+$("#resForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const name=$("#rname").value.trim(), phone=$("#rphone").value.trim(), date=$("#rdate").value;
+  let bad=false;
+  $("#errName").classList.toggle("show", !(name && phone)); if(!(name&&phone)) bad=true;
+  const pastDate = !date || date < today;
+  $("#errDate").classList.toggle("show", pastDate); if(pastDate) bad=true;
+  if(bad) return;
+  $("#resSummary").textContent =
+    `${$("#rparty").value} guests · ${date} at ${$("#rtime").value} · ${$("#rseat").value}. `+
+    `We'll text ${phone} to confirm.`;
+  $("#resOk").classList.add("show");
+  $("#resOk").scrollIntoView({behavior:"smooth", block:"nearest"});
+});
+</script>
+</body>
+</html>

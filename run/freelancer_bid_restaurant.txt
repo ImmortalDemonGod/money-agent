@@ -1,0 +1,20 @@
+I built it first. Working, in your browser now:
+
+https://lumiere-blush-five.vercel.app/
+
+That is your brief, built - not a portfolio piece. Home hero with Reserve and Menu CTAs, About, full menu with working dietary filters, reservation form, gallery, hours, map slot, footer.
+
+Try two things:
+- Filter the menu by Vegan, then add Gluten-free. It narrows on BOTH, not either - a coeliac vegan sees only what they can actually eat, and gets a graceful message rather than a blank page.
+- Submit the reservation empty: it refuses and says why. Fill it in and it confirms with party size, date, time and seating.
+
+Checked, not claimed:
+- Responsive: verified at 1440px and 390px, zero horizontal overflow.
+- Contrast: 15.2:1 body dark, 16.9:1 light - clear of WCAG AA.
+- Fast/SEO: no framework, no build step, no web fonts, no third-party requests.
+
+Honest about scope. Built: everything above, plus your photos drop into marked slots and your Google Maps embed drops into the map block. NOT built: the admin panel, blog and analytics. Those need a CMS behind the page - WordPress or Webflow - and that is the real work in this project. I would rather tell you that now than show you a pretty page and discover it later.
+
+Full build with the CMS and admin panel, your photos and menu loaded, maps and analytics wired: $1,500, 10 days. The front end you are looking at is already done.
+
+Miguel Ingram
