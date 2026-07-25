@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Got Upwork-ready (proposal rules + reference proposal + playbook) and found the guided-preview tool
+   doubles as portfolio for that job class; staged the plain-text deliverability fix. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T031333_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `629e131eb879ba4df5bc219d4127635e6ba99e404147abc540d38d47775f859a`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,48 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: mcp__upwork__list_proposal_rules -> 10 rules; mcp__upwork__draft_proposal(guided-intake job)
+-> scaffold, wrote a <200w reference proposal leading with the live guided-preview link. Saved
+run/upwork/proposal_playbook.md + run/offers/plaintext_first_touch_template.txt. No sends, no deploy.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/120/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/upwork/proposal_playbook.md (rules + reference proposal + workflow),
+run/offers/plaintext_first_touch_template.txt (deliverability fix). Builds on the guided-preview tool
+(iter 115) and the deliverability findings (iter 119).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT try to transact on Upwork before the
+operator opens it (his ~1-day gate) or pretend the escrow rail is scored -- the playbook flags it as
+non-scored, his ruling. I did NOT send a prospect batch before his plain-text-vs-domain pick (avoided
+overriding the choice I offered him). Prep only, no external effect.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +Upwork proposal playbook + reference proposal (zero-latency when the channel opens); +plain-text
+deliverability fix staged; identified the guided-preview-as-Upwork-portfolio convergence.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [42] #4 (Upwork is likely the first real dollar; be ready) and the autonomy
+rule (prepared the highest-EV channel instead of idle-watching). Bounded by the non-scored-rail rule
+(playbook names Upwork escrow as non-scored) and no-premature-send.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 629e131eb879ba4df5bc219d4127635e6ba99e404147abc540d38d47775f859a (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `MCP profile/tooling review + 2 template artifacts (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+This is prep, not revenue: Upwork is not open yet, the MCP cannot browse/submit jobs, and even a great
+proposal wins nothing until the operator enables the channel AND a matching job exists. The plain-text fix
+is an unproven hypothesis (I still cannot see the Gmail tab). No scored-rail progress this fire. The
+convergence insight is real but only pays if a matching job actually appears. received_usd=0.0.

@@ -2894,12 +2894,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [42]: Upwork is likely where the first real dollar is (opening ~1 day) -> get Upwork-ready (review proposal rules, draft a strong reusable proposal template) + stage the plain-text-first deliverability fix for the widget motion
 
-**Tried:** <fill>
+**Tried:** Operator [42] flagged Upwork as very likely where the first real dollar is (opening ~1 day). Rather than watch, got Upwork-ready and staged the widget-motion deliverability fix.
 
-**Cost:** <fill>
+**Cost:** $0.0 (profile/tooling review + 2 template artifacts, no card, no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Reviewed the Upwork proposal rules (open with the client's problem, prove you read the posting, <200 words, clear next step -- the SAME shape as the operator's cold-email formula, so my copy learning transfers). Drafted a reference proposal for a representative target job ('guided intake quiz -> Calendly') and hit a real convergence: that job class is EXACTLY the guided-preview tool I already built, so the live tool (guided-preview.vercel.app) is ready-made Upwork PORTFOLIO -- warm demand-side buyers at ~10x the ticket, with a working example in hand. Saved run/upwork/proposal_playbook.md (rules + reference proposal + the analyze_job_fit/draft_proposal workflow). Also wrote run/offers/plaintext_first_touch_template.txt -- the deliverability fix I recommended (no link in the cold touch; preview link only in the reply after they engage), ready for the operator's pick. No prospect sends.
 
-**Learned:** <fill>
+**Learned:** My widget build is NOT wasted even if cold email is deliverability-capped -- it doubles as the proof-of-work that wins warm Upwork jobs for the same thing. The two levers converge on one asset. And the proposal formula = the cold-email formula, so the craft carries over.
 
-**Next:** <fill>
+**Next:** When the operator opens Upwork, get a job's text -> analyze_job_fit -> draft_proposal -> submit with the live preview as portfolio. On his plain-text-vs-domain pick, run the staged fix as the next widget arm. Watch prospect counters + Upwork enablement. received_usd=$0.0, cap intact.
