@@ -3537,14 +3537,52 @@ an immediate personal reply. Read replies (bet-117 first 7, bet-120/121 the 18).
 live:true + lead_to in their config, send the $49 link -- everything else is already done.
 received_usd=$0.0, cap intact.
 
-## Iteration 156 — 2026-07-25T20:04:49Z (ledger @ 2026-07-25T20:03:16.367076+00:00)
+## Iteration 156 — 2026-07-25T20:20Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [68], and he is right: output = sends x reply rate, my reply rate is ZERO, so
+scaling sends multiplies zero and burns a finite list doing it. Five questions, answered with numbers.
 
-**Cost:** <fill>
+**Tried:** Compute the real conversion arithmetic, kill the ramp, fix the gift-behind-the-ask flaw in
+my own copy, and TEST (not assert) where demand already exists.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches, 1 email; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) REPLY RATE, measured: 113 unique external recipients this run, 0 replies = 0.0%. Contractors:
+26 sent / 25 delivered / 0 replies. Rule of three -> 95% ceiling on the true rate is 3/113 = 2.6%.
+(2) THE ARITHMETIC: sales = sends x reply x close. At 100/day, one sale/day needs reply x close >=
+1%. At a 25% close I would need a 4% reply rate -- ABOVE my own 95% ceiling, so unreachable. At the
+ceiling (2.6% x 25%) = 0.66 sales/day; at normal cold-email rates (1% x 20%) = 0.2 sales/day, i.e.
+~500 sends per $49. 500 sends is the entire filtered list. Cold email would consume my whole
+sendable universe for roughly one sale, IF the true rate is even nonzero.
+(3) RAMP CANCELLED. No 30 tomorrow. I will not raise the send count again on volume alone.
+(4) OWN-COPY AUDIT: my first two sentences opened by telling a stranger what is wrong with his
+business; the free tool was in paragraph 4 and the $49 was in the same email. A push email wearing a
+gift's clothes. REWROTE the first touch: it now opens "I built you a working instant-estimate page
+for <biz>. It is live right now..." -> link -> "It is yours. Free... and I am not asking you for
+anything to use it." Diagnosis moved BELOW the gift; the $49 is one optional line at the bottom
+closing with "the link above works whether you ever reply or not."
+(5) VENUE MATRIX, tested not assumed: reddit www 403 / old.reddit RSS 200 but hard 429 (1 of 9 subs
+through); Craigslist RSS 403; Indeed 403; Upwork job search 403 AND signup 403; freelancer.com jobs
+200 with 50 live budgeted listings ($30-$5,386) but its keyword filter is client-side and its SIGNUP
+is reCAPTCHA-walled; PeoplePerHour jobs 200 and its register page shows no captcha markers.
+(6) Named the real blocker honestly: it is not that I do not know where contractors gather, it is
+that every such room needs an identity I cannot create from here (reddit account = ACT-005,
+operator-only, still open). That is what I should have said three rounds ago instead of scaling.
+(7) Replied to operator [68] (bet-124) with all five answers and a falsifiable bar for the pivot:
+>=1 client reply per 20 proposals (5%) or a paid award, versus 0/113 for cold email.
+(8) LANE CAP correctly refused a new lane at 7 active. Tried to close the deliverability lane with a
+verdict (auth passes, 25/26 delivered, so 0 replies is a MESSAGE problem not an inbox-placement
+problem) but bet-087/088 carry prose checks their typed oracle cannot execute -- a mechanical wall I
+did not route around, since editing my own bet to make it resolvable would be self-certification.
 
-**Next:** <fill>
+**Learned:** I optimised the machine for four rounds while the only number that pays stayed at zero,
+because every round produced a visible improvement and none of them touched conversion. The check
+that would have caught it is arithmetic I could have done at send 13: what reply rate does this need
+to produce one dollar, and is that rate plausible? Also: "proof-led" is not the same as "gift-first".
+My email led with proof of THEIR problem, which is a critique; the gift sat behind it.
+
+**Next:** Test whether a freelance-board account can actually be created and bid from here (PPH looks
+open; freelancer.com captcha-walled; Upwork 403 -> actuation if needed). If bidding is reachable,
+send proposals against client-written budgeted requirements and measure replies per 20. Do NOT raise
+the cold-email send count. received_usd=$0.0, cap intact.
