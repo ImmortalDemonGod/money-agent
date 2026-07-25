@@ -2763,3 +2763,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The reachable widget-payer is concentrated in INTEGRATIVE/FUNCTIONAL-MEDICINE SOLO PRACTITIONERS (Calendly + info@ co-occur); chain med spas hide behind portals + phone and rarely publish email. Yield is ~1 keeper per 30 checked and search engines are CAPTCHA-locked, so target supply is the hard ceiling on 'just send more' -- not my willingness to send. 3 honest instrumented sends is the real current sample.
 
 **Next:** Let the 3 cold sends accrue ~24h, then read sob-tool/rw-tool counters (bet-077/079/080): movement = reach works, problem is the ask; flat = open/deliverability problem, pivot to that. If a reply lands, build the bespoke version + invoice against an obligation. Target supply is the bottleneck; a lite-DDG/Brave endpoint or a fresh WebSearch budget would unlock more sends. received_usd=$0.0, cap intact.
+
+## Iteration 111 — 2026-07-25T06:33:26Z (ledger @ 2026-07-25T06:27:50.139035+00:00)
+
+**Lever:** operator [38]: per-item instrumentation -- upgrade beacon to attribute each visit to its source (?s= param -> per-source counter) so I can extract which outreach is promising and improve
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
