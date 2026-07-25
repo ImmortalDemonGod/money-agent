@@ -1962,3 +1962,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:11:56.129944+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@freedompracticecoaching.com
+- **Subject:** a tool for the doctors you coach
+- **Body:**
+
+```
+Hi,
+
+Freedom Practice Coaching helps wellness and functional-medicine doctors build thriving practices, so you have the trust and the inbox of exactly the people I built something for. That is why I am writing you, not them.
+
+I build a short guided step that sits in front of a practice's Calendly or Acuity: a few questions about the patient's concern, a clear "here is the right way to start," then the practice's own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits. It is already live and personalizes to each practice by name.
+
+Here is the idea for you. I will give it to the doctors you coach free, personalized to each practice, as a genuinely useful thing you can hand them. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a practice name on it so you can see exactly what your clients would get?
+
+Best,
+Miguel Ingram
+
+```
