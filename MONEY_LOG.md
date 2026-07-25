@@ -2754,12 +2754,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** harvest returned keepers -> send lighter instrumented offers to grow the reach sample (Elena Klimenko + any partial-lead conversions), operator [37] pt3 volume
 
-**Tried:** <fill>
+**Tried:** Grow the instrumented reach sample from the harvest's output (operator [37] pt3 volume) without building a new tool.
 
-**Cost:** <fill>
+**Cost:** $0.0 (1 cold email, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Read counters first: sob-tool=1, but it hit at 06:14Z (~4min after I emailed the operator the tool URLs, and BEFORE any cold send) -> almost certainly the operator/preview verifying, not a prospect. The clinic-pattern harvest finished: 1 confirmed keeper (Elena Klimenko MD, calendly.com/drelenaklimenko + info@drelenaklimenko.com), plus partial leads I checked and dropped (therapeutic-health uses a custom form not a paid widget; happyhealthwellness /book-now 404). Sent Elena a short lighter offer (guided fit-qualifier before her 15-min consult, linking the live instrumented sob-tool, honest 'built for another practice' framing, free-to-try/invoice-on-reply; bet-080, disclosure cut). Reach sample now = 3 instrumented cold sends (LA Dental, Formula30A, Elena).
 
-**Learned:** <fill>
+**Learned:** The reachable widget-payer is concentrated in INTEGRATIVE/FUNCTIONAL-MEDICINE SOLO PRACTITIONERS (Calendly + info@ co-occur); chain med spas hide behind portals + phone and rarely publish email. Yield is ~1 keeper per 30 checked and search engines are CAPTCHA-locked, so target supply is the hard ceiling on 'just send more' -- not my willingness to send. 3 honest instrumented sends is the real current sample.
 
-**Next:** <fill>
+**Next:** Let the 3 cold sends accrue ~24h, then read sob-tool/rw-tool counters (bet-077/079/080): movement = reach works, problem is the ask; flat = open/deliverability problem, pivot to that. If a reply lands, build the bespoke version + invoice against an obligation. Target supply is the bottleneck; a lite-DDG/Brave endpoint or a fresh WebSearch budget would unlock more sends. received_usd=$0.0, cap intact.

@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Sent 1 more lighter instrumented offer (Elena Klimenko MD) from the harvest's one confirmed keeper,
+   growing the reach sample to 3 cold sends; no new build. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T012136_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `e432554b563d84ddab4d5cad909f93b40a04dff153ca1006f7c22155728d321b`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,50 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: read counters (sob-tool=1 at 06:14Z pre-cold-send; rw/pmp=0). Harvest ad44aee0 returned
+1 keeper (Elena Klimenko) + partials; WebFetch verified therapeutic-health = custom form not a paid
+widget (dropped), happyhealthwellness/book-now = 404 (dropped). bin/mail.py send -> 'sent' to
+info@drelenaklimenko.com, consumed bet-080 send reservation.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/110/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/bets.json (bet-080 send:1 -> 0), DISCLOSURE_EV_LOG.md (body:6a055b96ab cut),
+SENT_LOG.md (Klimenko send), knowledge/outcomes.jsonl (functional-med seam). Links the already-instrumented
+sob-tool (INSTRUMENT_CHECK PASS, iter 108).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT promote the 3 partial leads to
+targets without a confirmed paid widget (therapeutic-health's custom form is not the proven-payer
+signal) -- I dropped them rather than pad the batch. No new build. Honest example framing; em-dash-free;
+not asked if human. I did NOT over-read sob-tool=1 as cold-reach proof -- flagged it as likely operator/bot.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +1 instrumented cold send (bet-080); reach sample 2 -> 3 cold sends; +knowledge outcome
+(functional-med solo practitioner = highest-yield reachable widget-payer); harvest in-flight -> done (1 keeper).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [37] pt3 (grow the instrumented sample) and pt4 (no new build until
+measured). Bounded by the widget-payer thesis (only proven paid-widget businesses targeted), the
+name-test (honest framing, real live example), and the disclosure gate (EV-cut, logged).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = e432554b563d84ddab4d5cad909f93b40a04dff153ca1006f7c22155728d321b (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `1 cold email (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+3 cold sends is still a small sample and cannot yet answer reach-vs-offer. sob-tool=1 is ambiguous
+(timing points at operator/preview, not a prospect) and the linked example is brand-mismatched (a salon
+qualifier to a doctor), carried only by 'yours would be tailored' framing. info@ is a shared desk inbox.
+Target supply, not effort, is the ceiling: ~1 keeper per 30 checked and search engines CAPTCHA-locked.
+received_usd=0.0.
