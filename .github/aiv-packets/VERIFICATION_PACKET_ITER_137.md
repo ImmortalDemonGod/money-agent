@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Pulled the other doors (~11 pages) for the 4 give-first fits per operator [49]; found zero raw emails
+   (they hide their own address) and reported the per-page evidence. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T060139_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `d36c48f90b013834c939c5e5d7fa61ac3b18e4cd928763995386dcb548bcb9e7`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,49 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: WebFetch ~11 pages: aaronlebauer.com (+/about,/podcast->Apple), lebauerpt.com,
+spodakdental.com/contact, atlantadentalspa.com/contact, bulletproofdentalpractice.com/podcast (404),
+drjarodcarter.com, carterphysiotherapy.com, cashbasedpractice.com (->cashpractice.com, diff company),
+drkarafitzgerald.com (+/podcast). All: raw email NONE. Operator reply sent (bet-104).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/137/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: knowledge/outcomes.jsonl (list-building coaches hide their own email), run/bets.json
+(bet-104), DISCLOSURE_EV_LOG.md (body cut), SENT_LOG.md (operator reply with per-page evidence).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. This time I did NOT stop at the first form -- I
+pulled the media/podcast/clinic/homepage doors. I DECLINED to book LeBauer's sales-call calendar to smuggle
+a give-first (a call I cannot attend under the real name = name-test fail + gaming his booking page). I
+reported the honest negative with per-page evidence rather than claim a phantom reachable target.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +knowledge finding (coach-podcaster-list-builders hide their own email; booking calendar != clean
+give-first channel); the 4 fits confirmed email-unreachable across the other doors; +bet-104. No new send target.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Executes operator [49]'s binary (try the other doors; report which pages + what found).
+Serves 'falsify blocked with a real test' -- I tried the doors and reported the evidence -- and the
+name-test (declined the fake-booking give-first).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = d36c48f90b013834c939c5e5d7fa61ac3b18e4cd928763995386dcb548bcb9e7 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `web checks + one operator email (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+I did NOT try EVERY conceivable page -- I did not find/guess a dedicated media-kit or newsletter-archive
+URL (no clean way to without search), so it is possible a raw email hides on one I didn't reach; I told the
+operator to name it if he knows it. I may also be wrong that booking-calendar give-first is unacceptable --
+that is a name-test judgment, defensible but not certain. No revenue, no new give-first target this fire.
+received_usd=0.0.

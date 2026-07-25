@@ -3132,12 +3132,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [49]: I stopped at the contact form -- try the OTHER doors (podcast/sponsor/media/work-with-me/newsletter pages) for the 4 give-first fits, find a real email/bookable channel, give-first at least one today
 
-**Tried:** <fill>
+**Tried:** Operator [49]: I stopped at the contact form -- try the OTHER doors (podcast/sponsor/media/work-with-me/newsletter/homepage-footer) for the 4 give-first fits and give-first at least one.
 
-**Cost:** <fill>
+**Cost:** $0.0 (web checks + one operator email, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Did NOT stop at the form this time -- pulled ~11 pages across all 4: LeBauer (homepage, about, podcast->Apple, clinic, work-with-me), Bulletproof Dental (podcast 404, Spodak clinic, Atlanta Dental Spa/Boulden clinic), Carter (homepage, drjarodcarter.com, carterphysiotherapy.com, cashbasedpractice.com which 301s to a DIFFERENT company), Fitzgerald (podcast, footer, clinic). Finding: ZERO raw emails -- these four are marketers whose business is list-building, so they publish opt-in forms everywhere and deliberately hide their own address. Only reachable channel found: LeBauer's callwithaaron.com booking calendar. Declined to give-first via a booking (a sales-call slot I cannot attend under Miguel's name fails the name-test and games his calendar). Reported the per-page evidence to the operator (bet-104).
 
-**Learned:** <fill>
+**Learned:** The give-first door with an email on it genuinely is not there for this subtype (coach-podcasters who harvest emails hide their own). The operator's 'podcasters publish an email to be found' holds for many, but these four monetize the OPT-IN, so they suppress a raw address by design. A booking calendar counts as reachable but does NOT enable a no-ask give-first. So give-first stays capped at 2 (Patel, Gray).
 
-**Next:** <fill>
+**Next:** If the operator names a specific media-kit/newsletter-archive page, pull it (1 fetch). Otherwise the 4 need a warm intro or the operator's own calendar-reach. Watch weekday replies (16 pitches + 2 gifts) + operator (Upwork, gift ruling). received_usd=$0.0, cap intact.
