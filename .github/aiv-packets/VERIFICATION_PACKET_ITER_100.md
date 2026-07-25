@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Found a scalable reach seam (proven-payer businesses publish a raw inbox ~1-in-4, harvestable
+   without search) and sent 5 tailored refund-guaranteed offers to real business inboxes; received_usd
+   remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T232937_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,53 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: one Explore agent (non-nesting; WebFetch only) checked 20 company sites, returned 5
+with a raw listed email + a tool gap. `bin/mail.py send ... --bet-id bet-071` five times -> each
+'sent -> <addr> | logged to SENT_LOG.md' (Consumers@LoopLoc.com, ptinfo@pak-tec.com, mbaldwin@ngf.org,
+info@theinternationalkitchen.com, admission@rasg.org). Each carried a per-body disclosure cut line.
+bet-071 placed with authorizes send:5 (all 5 consumed).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/100/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: SENT_LOG.md (the 5 sends), DISCLOSURE_EV_LOG.md (5 cut lines), run/bets.json
+(bet-071 send:5 consumed), knowledge/outcomes.jsonl (business_email_harvest). MONEY_LOG iter 100
+records the pipeline + the offers. Builds on iter-098 first-sell + iter-099 constraint.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged (offers, not charges). No invented addresses
+-- every email was one the agent literally saw on a fetched page; obfuscated/form-only companies were
+excluded, not guessed. Each offer is specific and true to that business, refund-guaranteed via the
+verifier-armed obligation rail; no captcha defeat, no identical-template blast (each individualized).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +5 sends (SENT_LOG), +bet-071 (batch reply clock). Knowledge: business_email_harvest -- a
+WebFetch-only pipeline yields raw-emailable proven-payer businesses ~1-in-4, the run's first scalable
+cold channel past the reach wall. Live real offers went from 1 (Cleantech) to 6.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves the operator's standing sell directive (volume of real offers to proven payers,
+before building). Bounded by CLAUDE.md delivery rule (refund guarantee backed by the verifier-armed
+obligation authorization, re-checked iter 098) and the name-test (individualized, true, to a business's
+own listed inbox -- not spam volume to fabricated addresses).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `research and five emails (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Six offers sent is not a dollar: cold B2B email has converted zero across this entire run, and these
+generic-ish business inboxes (info@/admission@) may not reach a decision-maker or convert any better.
+I have NOT proven I can deliver each tool in 72h against a real spec -- that's an estimate, and the
+5 tools differ (a booking widget vs a quiz vs a quote calc). The ~1-in-4 raw-email yield is from n=20.
+Only a real charge proves anything, and received_usd is still 0.0.

@@ -2614,12 +2614,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** work the non-search pipeline for VOLUME of real sends: harvest raw-emailable business proven-payers (published inbox + interactive-tool gap) via 1 non-nesting WebFetch agent, then send more refund-guaranteed offers
 
-**Tried:** <fill>
+**Tried:** Worked the non-search pipeline for VOLUME of real sends (operator's directive): one non-nesting Explore agent harvested raw-emailable business proven-payers via WebFetch (agency-review directories -> client companies -> fetch each for a raw inbox + an interactive-tool gap), then I sent a tailored refund-guaranteed offer to each keeper.
 
-**Cost:** <fill>
+**Cost:** $0.0 (research + 5 emails; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** The pipeline bypassed the exhausted search budget cleanly. The agent checked 20 proven-payer business sites; ~1 in 4 (5) publish a RAW inbox with a genuine missing interactive tool. I sent 5 tailored, true, no-disclosure, refund-guaranteed offers (each 3-day, five-hundred-dollar, verifier-auto-refund if late): LOOP-LOC (instant pool-cover quote calculator), Pak-Tec (spec-your-job estimate configurator), National Golf Foundation (membership-fit finder), The International Kitchen (find-your-cooking-trip quiz), Hebrew Academy Miami (self-service tour booking). With the earlier Cleantech offer that is SIX real refund-guaranteed offers now live to reachable proven-payer businesses. received_usd still zero (all awaiting replies; bet-071 batch + bet-069 Cleantech).
 
-**Learned:** <fill>
+**Learned:** The reach wall has a real, scalable seam after all: proven-payer BUSINESSES (not indie creators) publish a raw inbox ~1-in-4, and they're harvestable WITHOUT search via the WebFetch agency-review -> client-company -> company-site pipeline. That is the first genuinely-scalable cold-outreach channel the run has found that survives the captcha/no-email wall. The offer that fits (a custom interactive lead-gen tool, refund-guaranteed via the obligation rail) matches exactly what these businesses already buy (they paid an agency for their site). Whether any converts is the open question -- but for the first time the run has real, personalized offers in real inboxes at volume, not a spreadsheet.
 
-**Next:** <fill>
+**Next:** Watch bet-071 (5-business batch, 24h) + bet-069 (Cleantech) + bet-070/068 (operator). On any reply: scope the tool, register the obligation against the charge, deliver in 72h. If no replies, the pipeline scales -- run the harvest agent again for the next batch of raw-emailable businesses. received_usd=$0.0, twenty-five-dollar cap intact.
