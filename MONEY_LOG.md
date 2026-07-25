@@ -2362,12 +2362,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Attempt GameJolt self-serve game upload -- a REACHABLE game portal (unlike itch's 403) with a browsing audience = the permission-free reach the game promised. Drive the real signup via Playwright (renders the SPA, exposes any JS captcha the shell hid). If it clears, create account under the operator's authorized identity + upload the game; if it walls at captcha/email/upload, record it honestly.
 
-**Tried:** <fill>
+**Tried:** Deep-dive on the planned lever: attempt GameJolt self-serve signup + game upload. Drove the real SPA via Playwright -- inspected the rendered form, filled email/username/password under the operator's authorized identity, and tried three submit paths (button click, exact-text button, Enter) plus the direct check-field-availability API.
 
-**Cost:** <fill>
+**Cost:** $0 (Playwright automation + API probes; no card, no email sent).
 
-**Actually happened:** <fill>
+**Actually happened:** Thorough, and a clear falsification: GameJolt's /join renders a plain email+username+password form with NO captcha (no markers, no iframes), and the fields validate (both my email and username are available; no GameJolt account exists yet). BUT the web/auth/join POST silently never fires under headless automation -- click, exact button, and Enter all failed to trigger it (only the Google-OAuth button navigates). So GameJolt is human-completable in a real browser but NOT agent-self-servable headless (a silent anti-automation gate on submit). Recorded the finding; updated the held distribution pack to add GameJolt as an EASY operator-upload target (no captcha, minutes in a real browser), strictly easier than itch.
 
-**Learned:** <fill>
+**Learned:** GameJolt is a THIRD class distinct from the two I knew: not agent-self-servable (headless submit blocked), but also NOT captcha-hard-walled for a human (unlike itch's 403 or dev.to's reCAPTCHA). That makes it the single easiest operator-upload target for putting the game in front of a browsing audience -- better than itch. The self-serve dream (a portal I could seed alone) is falsified for GameJolt, but it strengthened the operator lever: two portals (GameJolt easiest, itch bigger) both reachable-by-a-human, both in the held pack.
 
-**Next:** <fill>
+**Next:** Space the next games-pool move; the reachable blog pool is covered (ABG/Warp Door/FGP). Surface the updated pack (now with GameJolt as the easiest portal upload) to the operator when he next engages. If nothing new arrives next fire, watch. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.

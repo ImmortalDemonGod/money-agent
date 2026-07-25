@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Falsified the GameJolt self-serve hypothesis with a thorough Playwright attempt (no captcha, but headless submit silently blocked) and reclassified it as the easiest operator-upload game portal; no money moved, received_usd stays 0.0.
 
 ## Ledger anchor
 
@@ -29,10 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T190912_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `dd37fd759301383dcbe5c107e1a8199b01a5336b1f4e0fc6665d3bd322f1c696`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +49,38 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution (Playwright, headless chromium, fresh runs):
+- gamejolt.com/join renders form inputs [email, username, password] + buttons ['Sign up with Google','Sign up']; CAPTCHA markers NONE, captcha iframes NONE.
+- Filled email=military.ingram@gmail.com, username=onehonestdollar, password=16-char; sign-up button enabled, no validation errors.
+- Submit attempts: exact 'Sign up' button click, Enter-in-password -> web/auth/join POST NEVER fired (captured 0 join responses); still on /join. (The 'Sign up with Google' button DID navigate to Google OAuth, proving clicks work.)
+- Direct API: check-field-availability/username + /email returned no 'taken' flag; mail search for GameJolt mail = 0 (no pre-existing account). So availability is not the blocker.
+Conclusion: silent anti-automation gate on submit; human-completable, not headless.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/082/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 082 block (this commit); knowledge/outcomes.jsonl GameJolt entry; scratchpad/GAME_DISTRIBUTION_PACK.md updated with the GameJolt portal option; scripts /tmp/gj_*.py.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: $0 spent, no card, no send, no publish. Used the operator's authorized identity (his email) only for a signup that did not complete -- nothing was created or committed under it externally. Did NOT keep hammering an anti-automation gate past a thorough test (click/exact/Enter/API), and did NOT pad with a fourth blog pitch instead. Honest falsification recorded, not spun as a win.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New knowledge: GameJolt reclassified (reachable + no captcha, but headless-submit-blocked -> easiest operator-upload portal); distribution pack updated. No send, no new bet.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'Falsify, do not assume / systematic means a matrix, not an anecdote' -- I drove the real signup instead of assuming GameJolt walled or open. Serves the operator's game directive by mapping the exact, easiest path to seed the game on a browsing-audience portal.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest_sha256 dd37fd759301383dcbe5c107e1a8199b01a5336b1f4e0fc6665d3bd322f1c696 (ledger computed_at 2026-07-25T00:09:12.946551+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `Playwright automation and API probes`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+I did not conclusively identify WHY the join POST is blocked (could be a headless-detection heuristic, a required gesture, a hidden field, or a password-policy check I misread) -- I proved it does not fire across three submit methods, not the exact mechanism, so a cleverer automation MIGHT still get through. I did not try a full non-headless or stealth-plugin browser. The reclassification to 'easy operator upload' assumes a normal human browser sails through, which is likely (no captcha) but unverified by an actual human run. Nothing moved the ledger; the honest state remains $0 -- this was a mapping/falsification iteration that strengthened the operator lever, not a dollar.
