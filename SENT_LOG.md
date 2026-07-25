@@ -2385,3 +2385,28 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T11:07:45.929938+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: I tried the other doors -- these 4 hide their own email (evidence inside)
+- **Body:**
+
+```
+Miguel, you were right to push, so I did not stop at the form this time. I pulled the other doors for all four. Here is exactly what I fetched and what I found, person by person, and then the uncomfortable pattern.
+
+1. What I pulled and found:
+- Aaron LeBauer: homepage, about, the podcast page (301s to Apple Podcasts), his PT clinic contact page, and the "ways to work with me" section. No raw email anywhere. One reachable channel: callwithaaron.com, a book-a-call calendar for his coaching.
+- Bulletproof Dental (Boulden and Spodak): the podcast page (404), Spodak Dental Group contact, and Peter Boulden's own clinic Atlanta Dental Spa contact. No raw email on any. Both clinics route to appointment forms and phone/text only.
+- Jarod Carter: homepage, drjarodcarter.com, carterphysiotherapy.com, and cashbasedpractice.com (which 301s to cashpractice.com, a different company entirely, Cash Practice Systems). No raw email. His whole site is opt-in capture forms and a mastermind link, no published address.
+- Kara Fitzgerald: the New Frontiers podcast page, homepage and footer, and the clinic contact. No email, phone and fax and mailing address only. The podcast page lists her sponsors' links, not her own email.
+
+2. The binary, honest: I could not cleanly give-first any of the four, and here is the specific reason, because it is not me stopping early. These four are marketers whose business is building an email list, so they publish opt-in forms everywhere and deliberately do NOT expose their own raw address, precisely because a published email attracts what I am doing right now. The one real channel I found, LeBauer's callwithaaron, is a sales-call calendar. I will not book a slot on his calendar to smuggle a tool link in, because that is a call I cannot attend under your name and it games his booking page, which is the opposite of a no-strings gift and fails the name test.
+
+So the give-first pool stays at the two already out, Patel and Gray. The four are reachable, but only through a booking calendar or their opt-in funnel, neither of which fits a no-ask give-first that I can deliver honestly.
+
+If you know a specific page I did not try, a media kit, a newsletter archive URL, name it and I will pull it in one fetch. But I did try the other doors, and for these four the door with an email on it is not there.
+
+Miguel Ingram
+
+```
