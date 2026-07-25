@@ -2752,3 +2752,46 @@ Net: the instrumentation is working, and its honest answer is that nothing has r
 Miguel Ingram
 
 ```
+
+## 2026-07-25T13:27:00.945832+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** the full week of instrumentation, cross-referenced: products x channels x who engaged
+- **Body:**
+
+```
+Miguel, you are right, I handed you a verdict instead of the data. Here is the whole week, cross-referenced: every instrumented product, every channel I emailed, and every non-zero signal mapped against it. 79 real prospect and press sends, plus 39 replies to you and 3 deliverability self-tests.
+
+INSTRUMENTED PRODUCTS, beacon loads (run-2 counters are recent, so all-time is basically this week):
+- game (the TRUNK browser game): 3 loads, last 09:36 UTC Sat
+- sob-tool (Simply Organic Beauty tool): 2 loads, last 06:26 UTC Sat
+- preview-gk-stephgray-gift (give-first tool sent to Dr. Gray): 2 loads, last 10:26 UTC Sat
+- Zero loads: preview (the main guided-preview sent to 11 clinics), setup (the new checkout delivery page), chat-export (ChatVault), rw-tool (Repair Wizards), pmp-tool (PayMT Pro), verifier, trunk, and every per-clinic source tag (bloom, planetnat, hearthstone, downey, safeharbour, dralhakam, fatos, livingproof-gift)
+
+CHANNELS EMAILED, sends then engagement:
+1. Gatekeepers, v1 rev-share: 22 sends -> 2 auto-responders (ACT Dental, Private Practice Pro) + 1 bounce (DVM Elite). The ONLY channel that produced a reply of any kind.
+2. Gatekeepers, v2 retention perk: 4 sends -> 0 bounces, no reply yet. Plain text, no link, so the beacon cannot see these at all.
+3. Press and journalists (the AI-agent story): 12 sends -> 0. Nothing back.
+4. Crawler-visibility cold ("you are invisible to AI crawlers"): 11 sends -> 0. This is also the hook I later falsified as untrue.
+5. Clinic guided-step (proven widget-payers): 11 sends -> 0 beacon and 0 reply, even though every one carried a personalized beacon-tracked preview link.
+6. Business and custom-tool cold: 10 sends -> 0.
+7. Show-dont-tell built tools: 3 sends -> sob-tool 2 loads (scanner-consistent), 0 reply.
+8. Game-coverage blogs: 3 sends -> game 3 loads, one-to-one with sends, 0 reply.
+9. Give-first tools: 2 sends -> stephgray 2 loads, 0 reply.
+(Plus one warm prior thread, Fabio at democr.ai, who did reply earlier in the week and is the single warmest contact on record.)
+
+What the cross-reference says that "zero" did not:
+
+a) Engagement, meaning an actual reply and not a beacon ping, came from exactly ONE channel: gatekeepers, 2 of 22. Zero replies from the other 55 non-operator sends across press, clinics, business, crawler-fix, and games. That is the clearest "where to focus" signal in the whole dataset: the gatekeeper channel is the only place a real human system responded.
+
+b) I built a measurement blind spot. My instrumented channels (clinics, show-dont-tell) are the ones getting zero, and my one live channel (gatekeepers) is plain-text-no-link, so the beacon literally cannot measure it. I have rich tracking on the dead channels and no tracking on the live one. Gatekeeper engagement can only be read through replies right now, which is why the weekday is the real test, not the beacon.
+
+c) The two highest-effort provably-dead channels are press (12 sends, 0) and crawler-visibility (11 sends, 0, and the hook was false anyway). That is 23 sends for nothing. I should stop both.
+
+d) The one beacon that tracks one-to-one with its sends is the game: 3 blogs, 3 loads. It is scanner-plausible like the rest, but it is the only place where a send reliably produced a same-category load, so if we ever want to test the attention/story rail instead of the tool rail, the game-coverage channel is the least-dead lead there.
+
+Where I would put more effort, straight from the data: concentrate on gatekeepers, especially institutional ones like ACT Dental and Private Practice Pro that auto-acknowledged; stop press and crawler-visibility entirely; and add a tracked link to future gatekeeper sends where deliverability allows, so I stop flying blind on the one channel that actually responds. The setup and preview beacons only get a real read once a gatekeeper says yes and forwards the tool to their members.
+
+Miguel Ingram
+
+```
