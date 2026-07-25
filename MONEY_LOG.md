@@ -2693,3 +2693,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The screen->build->host->show pipeline is fully repeatable at roughly one target per iteration, and it is honest at each step: the calculator shows its math, labels the estimate, and gracefully handles a merchant already at a good rate (no fake-savings claim). The Vercel deploy path is reliable now. This is the strongest motion the run has had -- a working, tailored tool in a proven-payer's hands for the cost of a build.
 
 **Next:** Watch bet-074 (Repair Wizards) + bet-075 (PayMT Pro). One reachable widget-payer remains to build-and-show (Simply Organic Beauty / Jotform salon-partner app). Ruedi Wealth is form-only (no email). On any reply: hand over / integrate + invoice (register the obligation). Also watch the 9 prior offers. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 106 — 2026-07-25T05:34:41Z (ledger @ 2026-07-25T05:31:49.346207+00:00)
+
+**Lever:** build-and-show target #3 (operator [36]): build Simply Organic Beauty (proven Jotform-payer, salon-products distributor recruiting host salons) a better multi-step salon-partner application tool, host it, email help@ the link to USE
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
