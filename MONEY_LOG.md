@@ -2777,3 +2777,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Coarse instrumentation (one counter per tool, shared across recipients) can't tell you which outreach works; per-source tagging is the fix and it's one small beacon change. The reach data is still too young/small to read (cold sends <1h). 'The market is wide' -> keep the harvest running on the highest-yield seam and tag everything so the next batch is measurable per-prospect.
 
 **Next:** When the harvest returns, send the next batch with per-prospect ?s= tags. After ~24h read the per-source counters (bet-077/079/080): which prospects visited = promising, silence = reach/open problem. On a reply, build the bespoke tool + invoice against an obligation. received_usd=$0.0, cap intact.
+
+## Iteration 112 — 2026-07-25T06:41:04Z (ledger @ 2026-07-25T06:40:16.592145+00:00)
+
+**Lever:** harvest returned 2 functional-med keepers -> send lighter offers with PER-SOURCE tagged links (first use of the new attribution), grow the reach sample (operator [38] market-is-wide)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
