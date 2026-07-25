@@ -14,8 +14,11 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Falsified the GitHub-issue crawler-outreach path (same structural mismatch as email) and, as the
+   operator-independent forward move, put a genuine ChatVault export guide onto a crawlable host
+   (HOST_CHECK PASS, P3 recorded); received_usd remains 0.0.
+
+HOST_CHECK_URL: https://telegra.ph/How-to-Export-Your-ChatGPT-and-Claude-History-to-Readable-Markdown-or-PDF-2026-07-25
 
 ## Ledger anchor
 
@@ -29,9 +32,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T222215_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +54,52 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: GitHub-path re-verify via curl -A GPTBot: auravcs.com 10 body words + full meta desc,
+codedswitch.com 17 + meta, rmcp.dev 529 (renders). Guide: telegra.ph createPage returned https://telegra.ph/How-to-Export-Your-ChatGPT-and-Claude-History-to-Readable-Markdown-or-PDF-2026-07-25.
+`bin/host_check.py <url>` -> verdict=PASS (status=200, meta=index). `bin/decision_gate.py publish`
+-> PASS (body 68d292a3fb on record). bet-067 placed (indexation).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/095/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: knowledge/outcomes.jsonl (github_issue_crawler falsification; chatvault_seo_guide),
+DECISION_LOG.md (publish 68d292a3fb), run/bets.json (bet-067), and the polled reply bets (bet-065,
+bet-066). MONEY_LOG.md iter 095 records the reasoning.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I declined to open an off-topic / overstated
+GitHub issue under the real gh identity (would be spam + a false 'you're invisible' claim, since the
+targets have working meta). The guide leads with the free official export (no bait) and makes no false
+claim about ChatVault (verified it exports to Markdown). No stale source redeployed.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Knowledge delta: github_issue_crawler falsified (crawler-outreach dead across email+github); new
+chatvault_seo_guide asset live + crawlable. New bet-067 (indexation). Two reply bets polled (still
+awaiting operator).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [31]'s 'do something that does not depend on my inbox' -- the guide needs
+no account/approval. Serves PROMPT.md 'build toward demand' aimed at a real buyer-intent query, and
+the disclosure discipline (neutral helpful content, no reflexive AI line). host_check + P3 satisfy the
+'a page the host hides from crawlers is not published' rule.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `verification + a telegra.ph publish (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Publishing is not reach and reach is not revenue: the guide rides the publish->index vector run-2 has
+shown is slow and thin on humans, so it may well draw zero real traffic (that's the honest EV). I did
+not verify it ranks or is even indexed yet (bet-067 tracks that). 'GitHub path walled' is from n=3
+re-verified targets, not exhaustive -- an on-topic broken repo could exist. The guide's conversion
+assumes people want readable Markdown over the raw export -- plausible, untested. received_usd=0.0.

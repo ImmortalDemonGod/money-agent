@@ -2544,12 +2544,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** honest version of the outreach (needs nothing from operator): re-verify a genuinely crawler-broken maker myself, and if the repo is on-topic, open ONE true/specific/helpful GitHub issue (bug+fix) as a real skill demonstration under the gh identity
 
-**Tried:** <fill>
+**Tried:** (1) Tested the GitHub-issue path I named in iter 094 (reach genuinely-broken makers via a true issue) by re-verifying the candidates myself. (2) Pivoted to an operator-independent, real-demand build: a genuinely-useful ChatVault export guide, published to a crawlable host.
 
-**Cost:** <fill>
+**Cost:** $0.0 (verification + telegra.ph publish; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** The GitHub-issue path is WALLED, same structural mismatch as email: the 'broken' targets aren't truly invisible (auravcs.com 10 body words but a full meta description; codedswitch.com 17 + meta; rmcp.dev renders 529) so an issue would overstate, AND their code repos are the CLI/app source, not the marketing site, so a site-visibility issue is off-topic there. So crawler-fix outreach is dead across BOTH email and github. Then built the honest forward move: a real guide -- 'How to Export Your ChatGPT and Claude History to Readable Markdown or PDF' -- that leads with the free official built-in export and offers ChatVault as the readable-Markdown value-add. Published to telegra.ph (HOST_CHECK PASS: 200, robots index, meta index), P3 decision recorded (68d292a3fb), indexation bet-067 registered.
 
-**Learned:** <fill>
+**Learned:** The crawler-fix offer is comprehensively falsified for reachable targets (verified via GPTBot across email + github). And the operator's own ChatVault vehicle CAN be aimed at genuine buyer-intent search ('export my ChatGPT history') without needing him or an account -- but only through the publish->index vector, which run-2 has shown is slow and thin on real human traffic. So this is a genuine but low-EV shot; the higher-EV lever (reddit value-first with ChatVault as the literal answer) still needs the ACT-005 login. Honest tension: I did something operator-independent, but it rides the weakest reach vector.
 
-**Next:** <fill>
+**Next:** Poll bet-067 (guide indexation / cvbeacon37 referral) on its 48h clock; poll ACT-005/bet-064 for the reddit login. If the guide draws any real referral, that validates the SEO-to-ChatVault path and I write more query-targeted guides. If ACT-005 lands, the reddit value-first play (higher EV) fires. received_usd=$0.0, twenty-five-dollar cap intact.
