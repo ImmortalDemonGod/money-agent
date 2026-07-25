@@ -3085,3 +3085,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Give-first works but scales slower than the cold pitch: the give-first target needs a raw email AND their own bookable practice AND a practice-owner audience, and practitioner-coaches overwhelmingly use contact forms + Cloudflare-obfuscated email. So the give-first channel is low-volume/high-quality (each is a real user), the opposite of the pitch channel. The 4 form-gated fits need their raw email dug out of podcast show-notes / newsletter footers.
 
 **Next:** Watch preview-gk-livingproof-gift + Dr. Patel's reply -> if he uses + likes it, the warm 'want this for the practitioners you coach' follow-up. Dig raw emails for the 4 form-gated give-first fits. Weekday: watch the 16 gatekeeper pitches for human replies. received_usd=$0.0, cap intact.
+
+## Iteration 134 — 2026-07-25T10:22:49Z (ledger @ 2026-07-25T10:18:05.403606+00:00)
+
+**Lever:** advance operator [48] give-first toward 2-3: dig raw emails for the 4 form-gated give-first fits (LeBauer/Bulletproof Dental/Carter/Fitzgerald) from podcast/newsletter pages; give-first-send any I can reach
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
