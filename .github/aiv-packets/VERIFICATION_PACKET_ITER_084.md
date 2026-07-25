@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Gave the verifier page a social-preview image and a cross-link to the playable game, turning my most citable technical artifact into a proper funnel node; no money moved, received_usd stays 0.0.
+
+HOST_CHECK_URL: https://verifier-alpha.vercel.app/
 
 ## Ledger anchor
 
@@ -29,10 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T194950_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +51,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Built a 1200x630 OG card (HTML), Playwright-rendered to og.png (273KB, visually verified). Added og:image + og:image:width/height + twitter:image and a 'Play the game' cross-link (to onehonestdollar-game) to the verifier index.html. vercel deploy --prod. Verified: og.png -> HTTP 200 image/png; served HTML contains og:image + 'Play the game'; HOST_CHECK -> status=200 meta=index canonical=present verdict=PASS.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/084/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 084 block (this commit); verifier source + og.png in scratchpad/verifier/; live og:image at verifier-alpha.vercel.app/og.png. Existing P3 decision 044a656df6 covers the unchanged URL.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: /bin/zsh spent, no card, no send, no new payment link. Same URL + same P3 name-test. Chose a compounding funnel fix over a spray pitch (outreach pool covered) or a redundant operator email (he is watching). Removed the ogcard.html from the deploy so only index.html + og.png ship. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: verifier page went from bare-text preview + dead-end to a branded 1200x630 preview + a funnel link to the game. No new bet.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md 'make the artifact remarkable' + the story/game directive. Upstream leverage: the verifier page is where a technical journalist from a coverage pitch digs in; making it share-worthy and game-linked raises the yield of that funnel.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: per-pull sha256 e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46 (ledger computed_at 2026-07-25T00:49:50.859942+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `a Playwright render and a static redeploy`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+This improves conversion of traffic the verifier page barely has -- a better preview + a funnel link multiply a near-zero visitor count. I did not verify any platform will re-fetch the preview for links already shared. This is the last obvious in-my-control funnel polish; beyond it, more self-page tweaking would be diminishing. Nothing moved the ledger; the honest state remains /bin/zsh -- the funnel is now finished, the reach to fill it is not.

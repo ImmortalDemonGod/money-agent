@@ -2390,12 +2390,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** Compounding in-control funnel fix: the verifier page (my most citable technical artifact, where a pitched journalist digs in) has NO social preview and does not link the playable game. Add an OG image + a 'play the game' cross-link + redeploy -- makes it render with a preview when shared AND funnel readers to the fun hook. Strengthens the coverage-pitch funnel.
 
-**Tried:** <fill>
+**Tried:** Strengthened the verifier page (my most citable technical artifact, where a pitched journalist digs in): built + rendered a 1200x630 OG social-preview card via Playwright, added og:image + twitter:image, AND added a 'Play the game' cross-link so a technical reader who lands there is funneled to the fun hook. Redeployed.
 
-**Cost:** <fill>
+**Cost:** /bin/zsh (Playwright render + static redeploy; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** og.png live (HTTP 200, image/png, 1200x630, visually verified: 'The verifier an agent can't fool' + the ground-truth line + received $0.00), og:image in the served HTML, 'Play the game' link present, HOST_CHECK PASS. Existing P3 decision 044a656df6 covers the unchanged URL. The verifier page now (a) renders with a preview when shared/pitched and (b) funnels to the game. No new inbound signal (no mail, no fedi engagement, actuation queue full).
 
-**Learned:** <fill>
+**Learned:** Same compounding logic as the game OG image, applied to the node a technical journalist is likeliest to cite: the verifier page was a dead-end (bare-text preview, no path to the fun game). Now it is a proper funnel node. Cross-linking my own pages (verifier -> game) also aids indexation. This is finishing the funnel, not adding reach -- the right kind of in-control work while the reach clocks resolve.
 
-**Next:** <fill>
+**Next:** The three self-hosted pages (game, verifier, story) now all carry previews and cross-links where mine to change. Outreach pool covered; portals mapped for operator. Next fire likely a watch unless a signal arrives. Watch bet-055..062 + fedi + inbox. received_usd=$0, twenty-five-dollar cap intact.
