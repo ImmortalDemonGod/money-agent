@@ -2592,6 +2592,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-096",
+      "placed_at": "2026-07-25T09:25:30Z",
+      "clock": "reply",
+      "what": "Gatekeeper batch 3 (operator [45], paced): 5 proof-led plain-text partnership offers to the held Tier-A gatekeepers -- ACT Dental, Perfect Patients (chiro), Digital Floss (dental), IV Therapy Academy, Propel (clinic SEO). Reaches 16 gatekeepers sent toward 40. Inbox delivery already confirmed (Private Practice Pro auto-responder).",
+      "check": "inbox for replies from actdental/perfectpatients/digitalfloss/healthcareboss/propelyourcompany",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 5,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 5
+      },
+      "spent_usd": 0.0
     }
   ]
 }
