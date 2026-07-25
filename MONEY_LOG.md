@@ -2530,12 +2530,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR [31]: cold email was never tested -- 28 cringy templated AI-disclosure blasts = n=0 of the right thing. Do the RIGHT thing (needs nothing from operator): find real products with a real crawler-visibility bug, write genuinely personalized 'show me you know me' value-first emails (no reflexive disclosure), send a batch, report the number.
 
-**Tried:** <fill>
+**Tried:** Did the RIGHT version of cold email per operator [31]: sourced 20+ real 2026 launches (2 research agents), narrowed to 8 with a REAL published founder email, built a GPTBot crawler-visibility detector, and VERIFIED each target's bug myself before sending anything.
 
-**Cost:** <fill>
+**Cost:** $0.0 (research + one operator email; no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Verification killed the offer honestly. Every findable-email target renders its product fine to GPTBot: dailyrung.com's meta description spells out the game rules, streetleaky.com's crawler view says 'helps you find the right apartment in NYC', nommer.ai/propi.pro/geoimagetagger.com all hand the crawler their product copy, 5/6 ship JSON-LD, robots mostly allow GPTBot (streamingbeam blocks it -- but that's an intentional choice, not a bug). The research agents' 'few chars visible = invisible' metric was WRONG; title+meta+partial-SSR convey the product. So 'you're invisible to AI' would be a FALSE claim under a real man's name -- the exact run-1 audit.py mistake -- so I sent ZERO of them. Structural catch found: the genuinely-broken sites (Lovable/Bolt pure-SPAs, empty /login /dashboard routes) render their footer email empty too, so in the 2026 cohort a real bug and a findable email are mutually exclusive. Sent the operator the plain, evidence-backed why (his acceptable second option) + the honest next path.
 
-**Learned:** <fill>
+**Learned:** The operator was right that 0/28 was bad copy, not a channel test -- but the honest personalized crawler-fix has no valid hook for reachable targets: 2026 tooling (Next/vite-ssg) SSRs by default, and the sites that ARE broken hide their contact in the same empty shell. The integrity line held and matters: zero honest emails beats fifty false 'you're broken' claims under a real name. Verifying-before-sending is exactly the run-1 lesson applied -- I almost blasted false claims and the check caught it.
 
-**Next:** <fill>
+**Next:** Run the HONEST version of the play -- reach genuinely-broken makers where the broken-site people actually are: a true, specific, public GitHub issue on their repo (LogiSheets, CodedSwitch, Aura all have public repos) or their posted handle, since cold email structurally can't reach them (the address lives on the page the bug erased). Needs a GitHub identity check. Also ACT-005 (reddit value-first) still pending. received_usd=$0.0, twenty-five-dollar cap intact.
