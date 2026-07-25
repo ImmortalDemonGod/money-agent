@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Solved the target-discovery ceiling: scraped 631 distinct proven-widget-payer domains via urlscan.io's
+   free headless API (operator [39]), and replied with the numbers + flat-counter plan. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T015854_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `c72075c13baed03fb1657a49976ba8d1f6db10232045c5fc9e5c3737855950dc`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,51 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: curl PublicWWW -> JS shell ('enable JavaScript'), export=csv -> 200 but 6352-byte shell
+(no urls). BuiltWith websitelist -> HTTP/2 202 challenge. Wappalyzer -> 200, '250,000 websites'. urlscan.io
+search api q=domain:calendly.com -> JSON, total=10000, 75 embedders on page 1; paginated calendly+acuity
+-> 631 distinct biz domains saved to run/scraped_widget_payers.txt. Operator reply sent (bet-084 consumed).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/114/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/scraped_widget_payers.txt (631 domains), run/bets.json (bet-084),
+DISCLOSURE_EV_LOG.md (body cut), knowledge/outcomes.jsonl (urlscan.io headless discovery method),
+SENT_LOG.md (operator reply).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT defeat a captcha or bot-challenge --
+when PublicWWW/BuiltWith blocked headless I found a source that serves openly (urlscan) rather than force
+theirs. I did NOT immediately blast the 631 list -- the operator's own point #4 is that a bigger list
+into a broken funnel is the mistake, so I held sends pending the reach read. No false numbers to the
+operator (PublicWWW/BuiltWith really are gated for me; urlscan really returned 631).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: target discovery HAND-SCREEN (1/30) -> SCRAPED (631 domains in hand, 20k+ available);
++run/scraped_widget_payers.txt; +bet-084 (operator reply, consumed); +knowledge outcome (urlscan method).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly executes operator [39] (scrape the pre-qualified list, run one query, report the
+number + which source loads). Serves PROMPT.md 'build toward demand / get information yourself' and the
+autonomy rule (I found a working source instead of waiting on a search-budget unblock).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = c72075c13baed03fb1657a49976ba8d1f6db10232045c5fc9e5c3737855950dc (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `free API pulls + one operator email (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+631 domains is raw top-of-funnel, NOT qualified targets: I have not yet checked which publish a raw
+owner email, which are small service businesses vs agencies/SaaS/dev sandboxes (urlscan skews toward
+recently-scanned tech sites), or which are reachable. The count answers 'can I get the list' (yes), not
+'how many convert.' And discovery being solved does nothing if the reach read comes back flat -- open-rate
+is the real unproven gate. received_usd=0.0.

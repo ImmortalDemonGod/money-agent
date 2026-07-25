@@ -2810,12 +2810,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [39]: stop hand-screening, SCRAPE the pre-qualified list via a source-code index (PublicWWW / BuiltWith / Wappalyzer). Run one query, report the count + whether it loads from my IP.
 
-**Tried:** <fill>
+**Tried:** Operator [39]'s unblock: stop hand-screening targets 1-in-30, SCRAPE the whole pre-qualified list from a source-code index. Run one query, report the count + whether it loads from my IP.
 
-**Cost:** <fill>
+**Cost:** $0.0 (free API pulls + one operator email, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Tested his 3 named sources: all gated to a keyless headless client (PublicWWW results are JS-rendered + CSV export needs a paid key -> my fetch gets an empty shell; BuiltWith returns a 202 bot-challenge; Wappalyzer loads and confirms 250,000 Calendly sites but the domain list is paid). Then found the source that DOES work headless and free: urlscan.io's search API -- GET api.urlscan.io/v1/search/?q=domain:calendly.com returns every scanned page that loaded a Calendly/Acuity resource (=embedders) as plain JSON, no captcha, no JS, no key, ~10k matches each widget. Paginated it and pulled 631 distinct business domains in ~2min -> run/scraped_widget_payers.txt. Replied to the operator with the numbers, the working source, and the flat-counter plan (bet-084). Discovery ceiling SOLVED.
 
-**Learned:** <fill>
+**Learned:** My search-budget ask was wrong -- I didn't need a search engine, I needed a source-code/asset index, and urlscan.io is a free headless one. The bottleneck moves from 'finding targets' (631 in hand, 20k+ available) to 'per-domain email-verify + funnel open-rate.' A big list only pays once the funnel opens, so open-rate is the next gate, not more scraping.
 
-**Next:** <fill>
+**Next:** Read the 24h reach counters (bet-079/080/082). If they move: filter the 631 list to raw-email small-service-biz and send tagged offers at volume. If flat: fix the open problem first (test inbox-vs-spam placement, A/B subject) before scaling. On any reply, build the bespoke quiz + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
