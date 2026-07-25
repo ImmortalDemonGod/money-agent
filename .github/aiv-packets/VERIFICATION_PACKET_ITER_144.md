@@ -14,8 +14,7 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Nothing was sold or posted live this iteration; I diagnosed that ACT-003 (dev.to) reads fulfilled but its returned credential FAILED usability and was never installed, confirmed ACT-005 (reddit) still open and Upwork still submit-gated, verified zero registered tool traffic, and emailed the operator (bet-109) to re-issue the two operator-only reach unblocks. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +28,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T074113_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `dcb5b71ae928713b0c19cd08726768cda38f4391c9d11a45bae9220bd0463e3a`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +50,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: `python3 bin/actuate.py list` -> ACT-003 [fulfilled], ACT-005 [open]. Inspecting the ACT-003 record in run/actuation_tasks.json shows `resolution.usability = "failed"`, `usability_detail = "probe exited 1"`, `usability_checked_at = 2026-07-25T01:25:37Z`, and `env | grep -i devto` returns empty (DEVTO_API_KEY not installed), confirming the credential does not authenticate. Counter reads `curl api.counterapi.dev/v1/onehonestdollar-run2/chat-export/` and `.../preview/` both returned `{"code":400,"message":"record not found"}` (no traffic ever registered). `python3 bin/mail.py send military.ingram@gmail.com ... --bet-id bet-109` returned `sent -> military.ingram@gmail.com | logged to SENT_LOG.md`. `python3 bin/guard.py` exited 0 (received=$0.0, cap intact).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/144/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: committed this iteration -- SENT_LOG.md (new entry, To: military.ingram@gmail.com, the flag body under the real name); DISCLOSURE_EV_LOG.md line `body:00fafb86ec | verdict:cut | audience:the operator`; run/bets.json bet-109 (operator lane, authorizes send:1, now consumed to 0); knowledge/outcomes.jsonl entry at 2026-07-25T12:52:08Z (channel actuation/reach-unblock); MONEY_LOG.md Iteration 144 block. bet_gate consume committed as run-2 79bd3f4.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: no card spend, no charge created, no prior sale touched, no bound crossed. received_usd unchanged at 0.0 (guard.py exit 0). Temptations declined: (1) I did not manufacture cold prospect sends over the weekend just to satisfy the pace enforcer -- re-emailing non-responders is guard-blocked and pours low-engagement volume onto a fresh Gmail; (2) I did not attempt to automate the reddit hCaptcha (the one forbidden lever) to self-unblock ACT-005 -- a posting credential can only come from the operator. The only send was an internal reply to the operator, who knows exactly what I am (disclosure moot, logged cut).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True). Deltas: understanding of the actuation queue corrected (ACT-003 believed usable -> confirmed usability:failed, channel still blocked); run/bets.json +bet-109 (send:1 -> consumed 0); SENT_LOG.md +1 operator flag; DISCLOSURE_EV_LOG.md +1 line; knowledge/outcomes.jsonl +1 finding. Inbox: +2 auto-responders (ACT Dental, Private Practice Pro) confirming gatekeeper delivery, still 0 human replies.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: CLAUDE.md "You are autonomous... If you lack information, get it yourself" and the working-inputs discipline authorize going to the queue/ledger to check state rather than guessing. The loop prompt's own state note names the bottleneck as DISTRIBUTION and the crawlable-post->index vector as the one that works; dev.to is the best-matched instance of that vector for ChatVault, so surfacing its dead credential directly serves the operator's stated priority. Flagging the operator for the two things only he can do (re-issue a captcha-walled credential) is the sanctioned division of labor, not a wait-on-operator stall.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: `dcb5b71ae928713b0c19cd08726768cda38f4391c9d11a45bae9220bd0463e3a` (manifest_sha256, pre-filled at open). Per-pull: `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46` (20260725T074112_stripe_balance.json). received_usd=0.0.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `nothing (one operator email, no card use)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+I could not re-probe the dev.to key myself: the actuation framework exposes no agent-facing retrieve/decrypt command, so I am relying on the recorded usability:failed at 2026-07-25T01:25:37Z. It is possible that probe failure was transient (a momentary network error) and the key actually works -- the operator can confirm on his side, which is partly why I asked him to verify rather than asserting the key is definitively dead. The counter reads returning record-not-found are consistent with zero traffic but could in principle be a wrong-slug read rather than true zero; historically the tools' human traffic has been near-zero, so I treat it as effectively zero but have not independently confirmed the beacon slug against Vercel analytics this fire. And dev.to itself, even once unblocked, is a post->index/feed bet the run has found WEAK; it is the best-matched of the weak vectors, not a proven converter.

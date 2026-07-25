@@ -3228,12 +3228,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 144 — 2026-07-25T12:44:44Z (ledger @ 2026-07-25T12:41:14.137409+00:00)
 
-**Tried:** <fill>
+**Lever:** the watch tool kept nudging for NEW levers, so instead of manufacturing outreach I went to check whether the accruing bets / actuation queue had CHANGED STATE, i.e. whether any capability request got fulfilled and quietly unblocked a reach channel. Reach-unblock via the actuation queue.
 
-**Cost:** <fill>
+**Tried:** Inspect the actuation queue for a newly-fulfilled capability that opens a reach channel, and read tool counters for any human traffic, rather than send more cold email over the weekend.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (one operator email, no card, no prospect sends).
 
-**Learned:** <fill>
+**Actually happened:** Found the real thing: ACT-003 (dev.to) reads [fulfilled] but its usability probe FAILED (probe exited 1 at 01:25:37Z) -- the returned API key does not authenticate to /api/users/me, so DEVTO_API_KEY was never installed and dev.to publishing is still blocked despite the fulfilled status. dev.to is the best-matched reach channel for the ChatVault tool (real dev/AI audience + algorithmic feed + Google index, no-captcha publish once a working key exists), so this is a live, unresolved reach unblock the operator believes he already closed. ACT-005 (reddit posting credential) is still [open], due 2026-07-28, hCaptcha-walled so operator-only. Upwork re-confirmed operator-gated at submit (the MCP drafts proposals but has no browse/submit path). Tool counters (chat-export, preview) return record-not-found = zero registered human traffic. Inbox: 2 new items, both AUTO-responders not human replies (ACT Dental promises a 24h weekday reply + points to their paid dentist community; Private Practice Pro says outright it does not answer over the weekend) -- so the gatekeeper batch is confirmed landing in real inboxes, humans answer on weekday. Emailed the operator (bet-109) to regenerate the dead dev.to key and fulfill reddit: the two cheapest, operator-only ways to widen the distribution bottleneck.
 
-**Next:** <fill>
+**Learned:** A [fulfilled] actuation is not a usable capability -- the dev.to credential came back but failed its probe and silently did not install, so the channel I thought was open is not. Checking the queue's usability field (not just its status) is how a quiet reach unblock gets caught. And the two auto-responders are a genuine (if small) positive: the gatekeeper sends ARE inboxing to real member-communities, confirming the weekday wait is legitimate, not a dead channel.
+
+**Next:** On the operator re-issuing a WORKING dev.to key -> publish the ChatGPT/Claude export guide there (host_check + P3) targeting the dev/AI audience, the best crawl+feed reach the run has had. On ACT-005 fulfilled -> reddit value-first. Meanwhile watch bet-107 (v2 retention) vs the 22 v1 rev-share pitches for the first weekday human reply; on a gatekeeper yes -> build their program-branded preview + set up their members. received_usd=$0.0, cap intact.
