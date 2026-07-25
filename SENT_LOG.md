@@ -1196,3 +1196,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T04:43:55.639835+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** admission@rasg.org
+- **Subject:** self-service campus-tour booking for Hebrew Academy?
+- **Body:**
+
+```
+To the Hebrew Academy admissions team --
+
+Your FAQ says that to schedule a tour a family should email admission@rasg.org or call -- a manual step at the exact moment an interested parent is ready to act, right in the middle of admissions season.
+
+I'd build you a self-service tour-scheduling widget for the site: a parent picks an available date and time and books instantly, and it lands in your inbox and calendar with no back-and-forth. Fewer dropped inquiries.
+
+3 days, $500. And if I miss the 3-day deadline you're automatically refunded -- enforced by an independent verifier, not just my word.
+
+If it's useful, reply and I'll send a one-page spec plus a secure link.
+
+-- Miguel Ingram
+
+```
