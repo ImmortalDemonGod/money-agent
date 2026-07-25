@@ -19,7 +19,12 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # ${LEDGER_BRANCH:-ledger} fallback in this script, since the var is set from here on)
 [[ "${SHADOW:-0}" == "1" ]] && LEDGER_BRANCH="${LEDGER_BRANCH:-shadow-ledger}"
 ITER="${1:?usage: aiv_gate.sh <iteration-number>}"
-N=$(printf '%03d' "$ITER")
+# Coerce to base-10 BEFORE the %03d pad: iter.py always passes a zero-padded number ("087"), and
+# under bash 3.2 (the macOS default shell) `printf '%03d' 087` reads the leading zero as OCTAL and
+# aborts ("087: invalid number") on any 8/9 digit -- turning N into "000" and failing the gate for
+# every 08x/09x/x8/x9 iteration. `10#` forces base-10 for any form (padded or bare), so the pad is
+# correct regardless of shell. Non-numeric input still errors, exactly as before.
+N=$(printf '%03d' "$((10#$ITER))")
 PACKET="$REPO/.github/aiv-packets/VERIFICATION_PACKET_ITER_${N}.md"
 fails=0
 fail() { echo "GATE FAIL: $*" >&2; fails=$((fails+1)); }
