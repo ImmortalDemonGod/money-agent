@@ -1322,3 +1322,26 @@ So I'm flipping it, exactly as you laid out:
 The screen is finding the already-paying targets; then I build one the working tool and send the live link. Not another priced proposal.
 
 ```
+
+## 2026-07-25T05:26:13.144334+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@repairwizards.com
+- **Subject:** I built you a working booking tool for repairwizards.com -- try it
+- **Body:**
+
+```
+Hi --
+
+I build small web tools for service businesses, and I noticed Repair Wizards books inspections through Calendly. Calendly's great for grabbing a time, but it doesn't capture WHAT the job is -- so your team heads into an inspection without the details.
+
+So instead of pitching you, I just built you a better version and put it live to try:
+
+https://repair-wizards-intake.vercel.app
+
+A homeowner picks the work (re-leveling, water damage, a remodel), gives you the property type, urgency, and a quick description, THEN books -- all routed into your existing scheduler with the job details attached. Same booking you already have, but every lead now arrives qualified and prepared. I used your branding, your actual services, and your Zoom-inspection flow.
+
+It's a working demo I made specifically for you -- go click through it on your phone. If it's useful and you'd want it live on repairwizards.com (or wired to your CRM), just reply and I'll get it set up. Either way, it's yours to keep.
+
+-- Miguel Ingram
+
+```
