@@ -3480,6 +3480,33 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-129",
+      "placed_at": "2026-07-25T22:20:53Z",
+      "clock": "reply",
+      "what": "Reply to operator [70] (iter160): picked job 40604596 (Stylish Electronics Web Page, $900-1800, 122 bids, deposit-made client) over the cheaper AussieCaller; BUILT the deliverable live at voltedge-ten.vercel.app with a working comparison tool, verified responsive+contrast+bug-fixed by rendering; bid text written; budget 6 bids for 1 win; blocked only on ACT-007 profile photo",
+      "check": "operator acknowledges / uploads photo",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-07-30T06:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
