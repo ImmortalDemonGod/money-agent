@@ -3202,12 +3202,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** harvest returned 8 fresh gatekeepers -> send the v2 RETENTION-PERK offer to the 4 lowest-bounce-risk (personal + personal-brand-domain emails), test the flipped offer, stage the 4 role addresses (reputation discipline)
 
-**Tried:** <fill>
+**Tried:** Test the operator's flipped offer: the personal-email harvest returned, so send the v2 RETENTION-PERK offer to the fresh batch (completing operator [51]'s binary).
 
-**Cost:** <fill>
+**Cost:** $0.0 (4 emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Harvest 5 returned 8 fresh gatekeepers (2 personal emails, 6 role) across fitness/salon/spa/aesthetics/gym/law. Sent the v2 retention-perk offer (free tool for their members, NO cut, I want the case study + an intro) to the 4 LOWEST-bounce-risk -- Billy Polson (fitness studios, personal), Lisa Conway/Salon Conversation (salon/spa), Karena Zolner/The Spa Coach, Addo Aesthetics (hello@ on personal-brand domains). Staged the 4 bigger role addresses (info@/admin@) to send only if these 4 don't bounce -- disciplined pacing given the ~8% bounce history. bet-107. First real test of the flipped offer vs the old rev-share pitch.
 
-**Learned:** <fill>
+**Learned:** The retention-offer flip is now in market on 4 fresh gatekeepers -- a clean A/B against the 22 that carry the old rev-share offer: if the retention-perk versions get replies and the rev-share ones stay silent, the operator's diagnosis (the offer, not the copy, was the hole) is confirmed. Prioritizing personal / personal-brand-domain emails is the reputation-safe way to test it.
 
-**Next:** <fill>
+**Next:** Watch bet-107 (v2 retention offer) vs the v1 rev-share pitches for the first reply. If the 4 don't bounce, send the 4 staged role-address gatekeepers the v2 offer. On a gatekeeper yes -> build their program-branded preview + set up their members. Report the v2 count to the operator on his next reply. received_usd=$0.0, cap intact.
