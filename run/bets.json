@@ -2560,6 +2560,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-095",
+      "placed_at": "2026-07-25T09:21:47Z",
+      "clock": "reply",
+      "what": "Gatekeeper batch 2 (operator [45] 'send forty', paced): 5 proof-led plain-text partnership offers to fresh Tier-A gatekeepers -- Kelley Stevens/Private Practice Pro (100k therapists), Gary Takacs/Thriving Dentist (2200 practices), Paul Gough (PT owners), Kevin Christie/Modern Chiro, Amie Martin/Aesthetic Mentor. Free preview for their audience + rev-share. 5 more gatekeepers held for next fire (paced for fresh-sender reputation).",
+      "check": "inbox for replies from theprivatepracticepro/thrivingdentist/paulgough/moderndeskjockey/aestheticmentor",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 5,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 5
+      },
+      "spent_usd": 0.0
     }
   ]
 }
