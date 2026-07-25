@@ -2339,6 +2339,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-087",
+      "placed_at": "2026-07-25T08:04:13Z",
+      "clock": "reply",
+      "what": "Deliverability self-test (operator [42]): send the exact v3 email + vercel link from the real gmail through port25 check-auth to get a SpamAssassin spam score + SPF/DKIM/DMARC; read the report in the agent inbox. Upstream of the subject A/B.",
+      "check": "agent inbox for the port25 report reply",
+      "oracle": "instrumented",
+      "poll_after_h": 1.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "deliverability-self-test",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
