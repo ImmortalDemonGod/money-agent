@@ -4241,3 +4241,46 @@ Yes to both attempts. PPH walled by an image challenge, Freelancer not walled at
 Miguel Ingram
 
 ```
+
+## 2026-07-25T22:21:05.018023+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** built it before bidding: job 40604596, live link inside, blocked on one photo
+- **Body:**
+
+```
+Miguel, three answers, and the thing is built.
+
+1. The job. Not AussieCaller. I was passing over the better one.
+
+"Stylish Electronics Web Page", project 40604596. Budget 75,000 to 150,000 rupees, roughly 900 to 1,800 dollars, 122 bids so far, six days left. Client is in Bhiwandi, identity verified, payment verified, and a deposit already made, so the money is actually sitting there.
+
+It is the right target for exactly the reason you pushed on. The centrepiece he asked for is "an intuitive product comparison tool so visitors can evaluate specs side by side". That is a working interactive component, not a page of copy. He also says he will supply images and text later, which means the entire deliverable can be built with zero input from him. So a normal freelancer physically cannot do anything but promise it, and I can hand it over finished. That is the widest the gap gets. AussieCaller was me picking the cheapest thing I was confident about, and 126 bids on a 117-dollar average was not a better shot, just a smaller one.
+
+2. Does my bid open with a link or a promise. A link.
+
+https://voltedge-ten.vercel.app/
+
+Open it. Dark palette with neon accents, hero, best-sellers carousel, spec cards, checkout CTA block, and the comparison tool live: select any two to four products and each row marks which one wins. Change the selection and the winner marks recalculate. It refuses to crown a winner on a tie instead of picking one arbitrarily.
+
+I checked his acceptance criteria rather than asserting them. Rendered at 1440 and at 390 mobile, zero horizontal overflow. Contrast measured: 15.8 to 1 body on dark, 17.4 to 1 on light, muted text 7.4 and 7.1, all clear of AA. No framework, no build step, no web fonts, no third-party requests, which is the load-time criterion handled at the root rather than optimised afterwards.
+
+And I caught a real bug by rendering it instead of trusting my own code: the "BEST SELLER" badges were rendering at forty-four pixels and swallowing the product cards, because a `.thumb span` rule out-specified `.badge`. Invisible in the source, obvious in the screenshot.
+
+The bid says plainly that deliverable two, the Figma source, is not made yet, and that I would produce it. I am not implying I have something I do not.
+
+3. The plan as facts.
+
+Bids before I expect a win: I am budgeting six, which is one month of a free account, and I expect one win inside those six. Not because I am good, but because I am the only bidder in a 122-bid thread who did the work first. If six bids with a live artifact attached produce zero wins, the "build first" thesis is wrong and I will say so rather than ask for six more.
+
+The single job I built for: 40604596, Stylish Electronics Web Page.
+The link the client opens: https://voltedge-ten.vercel.app/
+The bid text is written and sitting in the repo, ready to paste.
+
+One blocker, and it is why the bid is not already submitted. Freelancer will not let me bid until the profile has a photo. I cleared everything else myself: email verified, skills added, name, professional headline, hourly rate all saved. The photo control is the one thing I cannot drive from here -- there is no file input anywhere in the page, on the profile page, or on the edit page, and Playwright's file-chooser interception never fires. Six different attempts, all failed the same way. So it is ACT-007, and I deliberately did not generate a face for you: the photo on a real man's professional profile should be his own choice, not something I invented. One upload and I submit.
+
+Job 40604596. Link is live. Bid written. Six bids budgeted for one win. Waiting on one photo.
+
+Miguel Ingram
+
+```
