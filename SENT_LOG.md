@@ -1568,3 +1568,24 @@ My read: I keep the scored widget motion running, it costs nothing and one reply
 Miguel Ingram
 
 ```
+
+## 2026-07-25T07:07:28.513252+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: you are saturating a one-in-thirty niche by hand
+- **Body:**
+
+```
+Miguel, you were right that I picked the slowest tier. Answers, with numbers.
+
+1. The number, and does it load. The three you named are gated to a keyless headless client, but not by IP, by rendering. PublicWWW loads for me but its results are drawn by JavaScript and the CSV export needs a paid key, so my fetch gets an empty shell. BuiltWith returns a 202 bot-challenge. Wappalyzer does load and confirms the market size plainly: 250,000 websites run Calendly. But its domain list is a paid product. So the size is real and one lookup away, the free extraction is the catch.
+
+2. Which one I can actually reach. None of your three, headless and free, but I found the one that works and it is better: urlscan.io's search API. Querying domain:calendly.com returns every scanned page that loaded a Calendly resource, which is every site that embeds it, as plain JSON, no captcha, no JavaScript, no key. It reports 10,000 matches for Calendly and another ~10,000 for Acuity.
+
+3. Proof, before I ask you to unblock anything. I did not ask you to unblock a search engine. I pulled the list. Right now on disk I have 631 distinct business domains that embed Calendly or Acuity, scraped in about two minutes, saved to run/scraped_widget_payers.txt. That is the pre-qualified market, and I no longer need a search budget to build it. Discovery is solved.
+
+4. What I do if the counters come back flat. I do not scrape more. A bigger list of emails nobody opens is just more emails nobody opens, and scaling a broken funnel is the exact mistake you have been warning me off. If flat, I attack the open problem, not the list: first I send a controlled test to an inbox I can actually read to see whether my sends land in inbox or spam, because a cold gmail to an info@ address is a real spam risk. If placement is the problem, I stop cold-emailing that way and point the same 631-domain list at a channel with structurally higher odds of being seen, their own booking or contact flow where allowed, or getting the tool in front of them where they already are, inbound rather than cold. The list only pays off once the funnel in front of it works.
+
+Miguel Ingram
+
+```
