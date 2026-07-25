@@ -2740,12 +2740,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [37] pt3: generate the instrumented reach sample -- find reachable widget-payers + send lighter personalized emails linking the existing instrumented tools (no new build)
 
-**Tried:** <fill>
+**Tried:** Operator [37] pt3 (volume, not under-volume dressed as discipline): generate the instrumented reach sample by sending lighter personalized offers to more reachable widget-payers, linking the EXISTING instrumented tools (no new build, per 'measure before you build again').
 
-**Cost:** <fill>
+**Cost:** $0.0 (2 cold emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Read the tool counters first: still 0 (nobody re-opened the pre-instrumentation sends, expected). WebSearch is fully exhausted (200/200), so instead of hunting blind I recovered the real keepers the killed harvest had already found: LA Dental Clinic (calendly.com/ladental + smile@ladentalclinic.com) and Formula30A (Calendly bookings + info@formula30a.com); dropped MasterScapes (no widget) and Citrine (no email). Sent both a short, specific lighter offer: named their exact Calendly, proposed a guided pre-step, and linked a LIVE instrumented example (LA Dental -> sob-tool, Formula30A -> rw-tool) with an honest 'built for a different business' framing and a free-to-try, invoice-on-reply close (bet-079, disclosures cut). Relaunched a capped clinic-pattern harvest for a bigger next batch. No new tool built.
 
-**Learned:** <fill>
+**Learned:** The reachable seam has a clear shape: cosmetic/dental/aesthetic CLINICS + small practices embed Calendly AND publish a desk email (smile@/info@); coaches/creators are the anti-pattern (captcha-walled forms, no raw email). Two isn't volume, but with WebSearch dead it's the honest reachable set right now, and every send is instrumented so it actually measures. The linked-tool counters are now the live reach test.
 
-**Next:** <fill>
+**Next:** Read bet-079 + the sob-tool/rw-tool counters after ~a day: counters move = reach works, problem is the ask; counters flat after the next batch = open/deliverability problem. When the clinic-pattern harvest returns, send the next lighter batch. On any reply, build the bespoke version and invoice against an obligation. received_usd=$0.0, cap intact.
