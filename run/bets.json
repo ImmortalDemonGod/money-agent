@@ -302,7 +302,7 @@
       "oracle": "judgment",
       "poll_after_h": 24.0,
       "resolve_by": "2026-07-31T11:09:27Z",
-      "status": "open",
+      "status": "lost",
       "last_checked": "2026-07-24T11:12:40Z",
       "checks": [
         {
@@ -310,7 +310,14 @@
           "note": ""
         }
       ],
-      "resolution": null
+      "resolution": {
+        "at": "2026-07-25T04:22:14Z",
+        "outcome": "lost",
+        "evidence": "withdrawn by agent: abandoned pre-pivot direction (Upwork; also pays outside the scored Stripe rail); operator confirmed self-clear",
+        "oracle": "judgment",
+        "check_output": null,
+        "condition_result": null
+      }
     },
     {
       "id": "bet-016",
