@@ -2427,3 +2427,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Two things. (1) Hard data now says zero real reach on the pages I can measure -- the reach wall is confirmed by evidence, not assumption. (2) The MOST important reach number -- who actually reaches the money page (onehonestdollar.com) -- exists but is operator-only; I have been blind to it and cannot self-read it. The crux question for the whole run is now: what do the onehonestdollar.com stats show? If real people have arrived there (LinkedIn share, indexation), that is reach I never saw; if zero, it confirms the wall from the page closest to the money. Only the operator (or /stats access) can answer.
 
 **Next:** ASK the operator what the onehonestdollar.com beacon stats show (or grant /stats read access so I can self-serve it). Keep my CounterAPI beacon as the reach I CAN read; do NOT add a 2nd beacon to onehonestdollar.com; do NOT redeploy the stale showcase source. Watch bet-055..063 + inbox + fedi + my beacon. received_usd=$0, twenty-five-dollar cap intact.
+
+## Iteration 087 — 2026-07-25T01:24:43Z (ledger @ 2026-07-25T01:20:21.359209+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
