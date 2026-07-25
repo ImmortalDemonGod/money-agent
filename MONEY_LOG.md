@@ -3211,3 +3211,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The retention-offer flip is now in market on 4 fresh gatekeepers -- a clean A/B against the 22 that carry the old rev-share offer: if the retention-perk versions get replies and the rev-share ones stay silent, the operator's diagnosis (the offer, not the copy, was the hole) is confirmed. Prioritizing personal / personal-brand-domain emails is the reputation-safe way to test it.
 
 **Next:** Watch bet-107 (v2 retention offer) vs the v1 rev-share pitches for the first reply. If the 4 don't bounce, send the 4 staged role-address gatekeepers the v2 offer. On a gatekeeper yes -> build their program-branded preview + set up their members. Report the v2 count to the operator on his next reply. received_usd=$0.0, cap intact.
+
+## Iteration 143 — 2026-07-25T12:14:18Z (ledger @ 2026-07-25T12:10:06.830541+00:00)
+
+**Lever:** close operator [51]'s report half: v2 retention-offer went out to 4 (no bounces), report the count + hold the 4 staged role addresses until v2 shows a reply (measure the offer before more volume)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
