@@ -3369,3 +3369,31 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T18:49:12.377596+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** birdseyeproconstruction@gmail.com
+- **Subject:** your site says call us now -- here is what an instant one looks like
+- **Body:**
+
+```
+Hi there,
+
+I found Birdseye Pro Construction LLC in the Boerne chamber directory. Right now, when a homeowner lands on your site wanting a price, what you offer them is "Call Us Now" -- so they have to call you, and then wait.
+
+That wait is where the money leaks. When someone is pricing a remodel, they contact two or three of you. The one who puts an actual number in front of them first usually wins, not because he is better, but because he answered while they were still deciding. Everyone who quotes a day later is quoting into a decision that is already made. On a couple of winnable jobs a month, that is real money walking.
+
+So instead of describing it, I built you a working one. Thirty seconds, no signup, nothing to install:
+
+https://instant-estimate-ruddy.vercel.app/?s=ie-birdseyeproconstru
+
+That is your logo on it, your colors, and the questions your customers would actually answer. A homeowner picks their material, types a rough size, and gets an instant ballpark range -- then it captures them, their contact info and their project specs, right at the moment they are most interested. You stop waking up to a voicemail that says "call me back about a price" and start waking up to a lead that already told you what it needs.
+
+Straight about what that link is: it is a real, live demo, and the ballpark math in it is honest US range math, not your pricing. The last step confirms on screen instead of emailing you. In your live version it runs on your actual numbers and the lead lands in your inbox the second they hit send.
+
+If you want your own it is $49, one time, and I can have it live today -- your pricing, your brand, a link and an embed you can drop on your site. Reply and I will set yours up.
+
+Best,
+Miguel Ingram
+
+```
