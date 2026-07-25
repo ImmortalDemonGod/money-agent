@@ -3242,12 +3242,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 145 — 2026-07-25T12:57:26Z (ledger @ 2026-07-25T12:53:41.770222+00:00)
 
-**Tried:** <fill>
+**Lever:** operator [52]'s non-send binary: commit an actual price (a number) + build and dry-run the entire checkout-and-delivery path end to end so a weekday yes is zero-build, never a live build while the lead cools. The money-moment itself, not outreach.
 
-**Cost:** <fill>
+**Tried:** Commit a firm price for the configured guided tool, then build + verify the full pay->deliver seam (success page returns the buyer their configured tool), without any real charge or paying myself.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (Vercel deploy + Stripe object creation, no card charge; creating a payment link and a product/price costs nothing until someone pays).
 
-**Learned:** <fill>
+**Actually happened:** Price committed: forty-nine dollars, one-time (below a solo owner's deliberation/approval threshold = instant yes, credible not junk-cheap, one prevented no-show pays it back several times). Built guided-setup.vercel.app, the post-payment self-serve delivery page: buyer enters their practice name + their OWN existing scheduler URL and instantly gets their personalized, hosted guided-booking tool + a copy-paste Book-now button + an iframe embed. delivery_check PASS (real 8439-byte artifact, no placeholders). Dry-ran the ACTUAL delivery (not a mock) with a sample buyer (Riverside Family Dental / a Calendly link / dental): the URL the page generates loads the working tool (HTTP 200) and the tool reads biz/target/type and routes the visitor to their scheduler with answers attached. Created a LIVE Stripe payment link ($49, restrictions.completed_sessions.limit=1 so Stripe atomically refuses a 2nd checkout, after_completion redirect wired to the delivery page); delivery_check with --payment-link confirmed link_limit=1 + redirect=match. P3 name-test recorded (9810a81929). Constraint hit: I have only rk_live (no test-mode key), so I could NOT push a test card through Stripe's hosted checkout in test mode -- but I did not fake a charge (no wash trade), the delivery seam is verified independent of the charge, and the charge->redirect is Stripe-native guaranteed; making the link live with limit=1 means a weekday yes is zero-build (send the link) and the only completed session it can ever accept is the first real dollar. Replied to operator with the price + green steps + a request for a test key if he wants a full test-card walk (bet-110). Offer registered as bet-111.
 
-**Next:** <fill>
+**Learned:** The money moment was a genuine untested gap, and it is now closed and green end to end except one Stripe-internal step that needs a test-mode key. The delivery seam (the novel, get-it-wrong-able part) is provable with zero charge, so "test the mechanism" and "go live" are cleanly separable -- and with a limit-1 link, live IS the safe test-bed. A [fulfilled] capability can still be unusable (dev.to last fire); here, verifying the actual generated URL renders the tool is what turns "I built a checkout" into "the buyer actually receives the product."
+
+**Next:** A weekday gatekeeper/practice yes is now one action: send buy.stripe.com/6oU14p5W31KP4zEaeW7ok0s. If the operator sends a Stripe test key -> walk a test card through hosted checkout end to end in test mode and report each step. Watch bet-111 (guided-tool conversion) + bet-107 (v2 retention gatekeepers) for the first weekday reply. Still open: dev.to key re-issue (bet-109) + reddit (ACT-005). received_usd=$0.0, cap intact.
