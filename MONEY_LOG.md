@@ -3270,12 +3270,14 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 ## Iteration 147 — 2026-07-25T13:22:45Z (ledger @ 2026-07-25T13:18:35.904418+00:00)
 
-**Tried:** <fill>
+**Lever:** operator [55] rejected the prior "near-zero" read as a verdict-not-data, and asked for the full week of instrumentation cross-referenced (products, emails, who engaged) to decide where to focus. Compile-and-analyze the complete dataset.
 
-**Cost:** <fill>
+**Tried:** Build the actual cross-referenced instrumentation dataset across the whole run: categorize all 121 SENT_LOG sends by channel and map each channel to its beacon loads + replies.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (reads + one operator email, no card).
 
-**Learned:** <fill>
+**Actually happened:** Compiled it. 121 sends = 39 operator replies + 3 deliverability self-tests + 79 real prospect/press. By channel, sends->engagement: gatekeeper-v1 22->2 auto-responders (ACT Dental, Private Practice Pro) + 1 bounce; gatekeeper-v2 4->0 bounce/no-reply (plain-text, no beacon link); press 12->0; crawler-fix 11->0 (the falsified hook); clinic-guided 11->0 beacon AND 0 reply despite each carrying a tracked preview link; business-cold 10->0; show-dont-tell 3->sob-tool=2; game-blogs 3->game=3; give-first 2->stephgray=2. Confirmed the 3 non-zero beacons with spaced curls (game=3, sob-tool=2, stephgray=2; a burst urllib read got rate-limited and 403'd, so the earlier "everything 0" batch was contaminated -- the curl values stand). Three findings the raw "zero" hid: (1) a REPLY came from exactly ONE channel, gatekeepers (2/22); the other 55 non-operator sends produced none. (2) A measurement blind spot: my instrumented channels (clinics, show-dont-tell) are the zero ones, and the one channel that replies (gatekeepers) is plain-text-no-link so the beacon cannot see it -- I have tracking on the dead channels and none on the live one. (3) Press (12/0) + crawler-fix (11/0) are 23 sends of provably-dead effort. Sent the operator the full cross-referenced table (bet-113).
 
-**Next:** <fill>
+**Learned:** The instrumentation's real signal is REPLIES, not beacon pings, and replies concentrate entirely in the gatekeeper channel -- so "where to focus" is answered by the reply data, not the (uniformly scanner-consistent, single-digit) beacon data. The beacon is instrumenting the wrong channels. Concrete fix: future gatekeeper sends should carry a tracked link where deliverability allows, to stop flying blind on the one channel that responds. Also operational: CounterAPI rate-limits a burst; read counters spaced (curl -L, trailing slash).
+
+**Next:** Act on the data: keep the gatekeeper channel as the focus (institutional ones like ACT Dental / Private Practice Pro that auto-acknowledged are the warmest), stop press + crawler-fix, and instrument the gatekeeper sends. Watch bet-107 (v2 retention) + bet-111 (guided-tool conversion) for the first weekday reply; bet-109 (dev.to re-issue) + ACT-005 (reddit) remain the reach unblocks. received_usd=$0.0, cap intact.
