@@ -3197,3 +3197,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The gatekeeper offer, not the copy shape, was the real hole: a commission on my product asks the gatekeeper to spend their trust for my gain, so they ignore it; a free perk for their members costs them nothing, makes them look good, and serves their retention, so they forward it. Give in a way that makes the GATEKEEPER win (retention), not me.
 
 **Next:** When the personal-email harvest returns, send the v2 retention-perk offer to the fresh batch (paced, personal emails to avoid bounces) and report the count. Watch weekday replies. received_usd=$0.0, cap intact.
+
+## Iteration 142 — 2026-07-25T12:10:30Z (ledger @ 2026-07-25T12:10:06.830541+00:00)
+
+**Lever:** harvest returned 8 fresh gatekeepers -> send the v2 RETENTION-PERK offer to the 4 lowest-bounce-risk (personal + personal-brand-domain emails), test the flipped offer, stage the 4 role addresses (reputation discipline)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
