@@ -3344,6 +3344,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-123",
+      "placed_at": "2026-07-25T19:29:45Z",
+      "clock": "reply",
+      "what": "Reply to operator [61] (iter155): zero-effort delivery -- real lead-routing endpoint built and verified end-to-end in both demo and live modes, address leak fixed, delivery page rewritten with no code, 26 sent today / 30 tomorrow",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-29T20:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
