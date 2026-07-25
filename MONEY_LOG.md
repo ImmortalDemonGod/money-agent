@@ -2875,3 +2875,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The reachable-target bar that actually yields is 'raw email + visible booking CTA', not 'headless-visible widget' -- the latter is JS-hidden on most site builders. Naming the widget only when seen keeps the proof true; referencing 'your online booking + your specific service' is the honest fallback and still personal. Staging is cheap readiness that removes the verify-step from the critical path once the read comes back.
 
 **Next:** When the A/B reads (bet-086 proof-led vs 079/080/082 promise-led): if proof-led clicked, send the staged batch (Fatos, Dr Alhakam) + scale; if both flat, deliverability pivot. Upwork parked ~1 day. On a reply, wire the real scheduler + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
+
+## Iteration 119 — 2026-07-25T08:03:35Z (ledger @ 2026-07-25T08:01:07.885834+00:00)
+
+**Lever:** operator [42]: deliverability is upstream -- run the EXACT v3 email from the exact gmail through a deliverability test, report the spam score + where it landed, then fix the biggest trigger (likely the raw vercel link)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
