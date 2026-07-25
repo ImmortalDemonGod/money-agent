@@ -2959,3 +2959,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The reach wall I could not beat (cold clinic deliverability) is sidestepped entirely by going one layer up: a gatekeeper's endorsement email to their list is warm and high-deliverability precisely because I am not the sender. Same cold-reply-rate to reach the gatekeeper, but each yes is worth their whole audience, not one clinic. This runs in parallel to the accruing widget arms and the parked Upwork lever, costs only the emails, and needs nothing from the operator.
 
 **Next:** When the harvester returns, verify the gatekeepers (audience = clinic owners + reachable contact), reply to the operator with the count + 3 real names, and send the first proof-led gatekeeper batch (tagged). Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
+
+## Iteration 125 — 2026-07-25T09:10:24Z (ledger @ 2026-07-25T09:09:36.676690+00:00)
+
+**Lever:** gatekeeper harvester returned 13 (7 Tier-A) -> send the first proof-led plain-text gatekeeper batch (free preview for their audience + rev-share) + report count+3 names to operator
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
