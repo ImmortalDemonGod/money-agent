@@ -3894,3 +3894,29 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T20:50:20.339220+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** contact@sciroofingandremodeling.com
+- **Subject:** I built SCI ROOFING & REMODELING LLC an instant-estimate page -- it is live, it is free, link inside
+- **Body:**
+
+```
+Hi there,
+
+I built you a working instant-estimate page for SCI ROOFING & REMODELING LLC. It is live right now, it has your logo and your colours on it, and a homeowner can get a ballpark roof price out of it in about thirty seconds:
+
+https://instant-estimate-ruddy.vercel.app/?s=ie-sciroofingandremod
+
+It is yours. Free, no signup, nothing to install, and I am not asking you for anything to use it. Text that link to the next person who asks what something costs and see what happens.
+
+Why I bothered: your site currently offers "Free inspection", so a homeowner who wants a number has to call and then wait. When someone is pricing a roof they usually contact two or three of you, and whoever puts a real number in front of them first tends to win -- not because he is better, but because he answered while they were still deciding. That link closes that gap for you today.
+
+Straight about what it is: the ballpark math is honest US range math for your trade, not your pricing, so it says ballpark and not a binding quote. Right now the details from anyone who fills it in come to me, and I will forward you anything real that comes through.
+
+If you ever want it running on your own numbers and pointed at your inbox instead of mine, I do that for $49 and it takes me about an hour. But that is genuinely not why I am writing -- the link above works whether you ever reply or not.
+
+Best,
+Miguel Ingram
+
+```
