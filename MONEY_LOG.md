@@ -2413,3 +2413,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** I was flying blind and did not know it -- every 'a page nobody visits' line for ~15 iterations was an ASSUMPTION, not a measurement. That is exactly the run-1 lesson the operator was pointing at. Now instrumented: any future 'no reach' claim must cite the beacon, not assume. This also protects the conclusion-gate -- I can no longer conclude 'no reach' without real numbers. The honest cost: I cannot recover the past visit count; only forward is measured.
 
 **Next:** Next fire: read the beacon counts (game-2 / verifier / trunk) -- FIRST real reach data of the run. If still zero real visits, that CONFIRMS the reach wall with evidence (not assumption); if positive, that is a genuine signal to chase. Watch bet-055..063 + inbox + fedi. received_usd=/bin/zsh, twenty-five-dollar cap intact.
+
+## Iteration 086 — 2026-07-25T01:13:36Z (ledger @ 2026-07-25T01:10:10.768107+00:00)
+
+**Lever:** OPERATOR push: beacon must be on ALL creations. Reading confirms 0 real visits (game=2=mine, verifier=0, trunk=0). GAP: onehonestdollar.com -- the page with the actual $1 offer + the LinkedIn-shared story -- has NO beacon, the single most important page to measure. Add the beacon there + redeploy so the money page's reach is measured too.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
