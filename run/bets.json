@@ -2940,6 +2940,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-108",
+      "placed_at": "2026-07-25T12:14:38Z",
+      "clock": "reply",
+      "what": "Report to operator [51]: 4 v2 retention-perk offers sent (no bounces; clean address selection worked), 4 role addresses held pending a v2 reply; clean A/B (4 retention vs 22 rev-share) reads on weekday.",
+      "check": "inbox for operator reply",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-02T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
