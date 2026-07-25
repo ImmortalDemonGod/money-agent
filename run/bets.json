@@ -2431,8 +2431,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-07-31T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T08:33:41Z",
+      "checks": [
+        {
+          "at": "2026-07-25T08:33:41Z",
+          "note": "info@dralhakam.com HARD-BOUNCED (550 no such user) -- dead scraped address; Fatos + Clear Day accepted (no bounce). Plain-text arm effectively 2 live sends; no reply yet"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "proven widget-payer practices, plain-text-first no-link touch, send preview on reply, invoice a wired build on yes",
