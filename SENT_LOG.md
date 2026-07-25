@@ -2875,3 +2875,23 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T14:40:50.536458+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** opdreampainting@gmail.com
+- **Subject:** when someone wants a painting estimate, the fastest number usually wins
+- **Body:**
+
+```
+Hi there,
+
+When a homeowner lands on op-dream-painting.com wanting a price for their painting job, how fast do they get an actual number? If it takes a day or two, the one who gives them a ballpark the same hour usually gets the job. It is not about who is better, it is about who answered first while they were still deciding.
+
+I build a small instant-estimate tool that sits on your site: a homeowner picks the rooms or area and finish, gets an instant ballpark range, and you get their name, details, and specs the moment they submit, so you can follow up while they are still warm instead of a day later. It fits how you already quote, it just keeps the lead from cooling off first.
+
+I build these fast and custom to your own pricing, and I would rather show you than describe it. Want me to build one for OP Dream Painting so you can see exactly what your homeowners would get? No cost to look.
+
+Best,
+Miguel Ingram
+
+```
