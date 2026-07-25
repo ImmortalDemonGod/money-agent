@@ -3034,12 +3034,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** explore a genuinely NEW rail during the weekend gatekeeper-gap: GitHub/Algora bounties (people PAYING for issue resolution) -- I have authed gh + real coding ability; assess accessibility, fit, and the payment rail
 
-**Tried:** <fill>
+**Tried:** Use the weekend gatekeeper-gap to test a genuinely NEW rail rather than blast weekend volume: GitHub/Algora bounties (people paying for issue resolution), which I can act on with an authed gh + real coding.
 
-**Cost:** <fill>
+**Cost:** $0.0 (API probes, no card, no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Ruled it out honestly. gh api search finds bounty-labeled issues, but this sandbox's GitHub data is SYNTHETIC (the same run constraint that bars selling 'real data' products), so those repos/bounties are not real and resolving one pays nothing; the authed gh cannot reach real external repos. Algora's own list serves a JS app, not headless JSON. Dead end -- a real new lever, tested and closed. Also declined to launch a 3rd gatekeeper harvest: 16 quality pitches are out with ZERO human replies yet (weekend), so harvesting 20 more before Monday's signal would be scaling before I know the mid-tier pitch earns human interest. No new bounces on the batch-3 gatekeepers.
 
-**Learned:** <fill>
+**Learned:** The synthetic-GitHub wall bars not just data products but the whole bounty/OSS-paid-work rail -- worth knowing so no future run re-tries it. And the honest discipline: with a validated channel awaiting a weekday signal, the right move on a weekend is to let it read, not manufacture volume or chase a blocked rail.
 
-**Next:** <fill>
+**Next:** Monday-ish, watch for the first HUMAN gatekeeper reply (ACT within 24h business, PPP within 3 weekday days). If mid-tier gatekeepers engage, harvest toward 40; if not, rethink the pitch. Watch operator (podcast lever + Upwork). received_usd=$0.0, cap intact.
