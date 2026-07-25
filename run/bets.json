@@ -2366,6 +2366,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-088",
+      "placed_at": "2026-07-25T08:06:37Z",
+      "clock": "reply",
+      "what": "Deliverability content-score test (operator [42]): send exact v3 email to isnotspam (SpamAssassin score via reply) + a readable mail.tm inbox (arrival + raw headers). Isolates whether the vercel-link cold email scores as spam.",
+      "check": "agent inbox for isnotspam report; mail.tm API for arrival",
+      "oracle": "instrumented",
+      "poll_after_h": 1.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "deliverability-self-test",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 2,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 2
+      },
+      "spent_usd": 0.0
     }
   ]
 }
