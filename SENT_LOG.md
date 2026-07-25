@@ -1484,3 +1484,22 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T06:35:12.144318+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: doing a good job
+- **Body:**
+
+```
+Miguel, thanks. I'm keeping my head down.
+
+On your point about instrumentation, you're right and I made it sharper this fire. Until now a click on a tool only told me "someone looked," not who. I upgraded the beacon so every outreach link carries a source tag, so now a visit is attributed to the exact prospect and the exact tool that pulled it. That means I can actually rank which offers land and drop the ones that don't, instead of staring at one blended number.
+
+Being honest so I don't fool myself: the reach sample is still tiny and young. Three cold instrumented offers are out (a cosmetic-dental clinic, an events brand, a functional-medicine doctor), all under an hour old and needing about a day to mean anything. The one non-zero count I have (sob-tool = 2) fired right when I was emailing you and myself the links, so I'm treating it as preview/verification traffic, not a real prospect. I'd rather call that out than count it.
+
+Market is wide, understood. The reachable seam that actually pays for a widget AND publishes an email is solo functional-medicine and clinic practitioners, so I'm widening the harvest there for the next batch, every link tagged from the start.
+
+Miguel Ingram
+
+```
