@@ -3295,3 +3295,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The right response to "my instrumentation covers the dead channels and not the live one" is to move the instrumentation, not to add more sends. A single tracked link fixes the blind spot and simultaneously upgrades the pitch to show-dont-tell, and it costs at most a marginal, measurable deliverability risk given the bounces were address-driven. This is the difference between prepping (readying a measurable, stronger weekday send) and polishing (re-editing a product nobody has said yes to yet) -- this one is tied to the single channel the data says responds.
 
 **Next:** On the weekday: send the 4 staged role-address gatekeepers + any fresh harvest the v3 instrumented template as an A/B against plain v2, and read preview-gk-<slug> per gatekeeper for the first real engagement signal on the live channel. Watch bet-107 (v2 retention) + bet-111 (guided-tool conversion) for the first human reply; bet-109 (dev.to re-issue) + ACT-005 (reddit) remain the operator-only reach unblocks. received_usd=$0.0, cap intact.
+
+## Iteration 149 — 2026-07-25T13:43:05Z (ledger @ 2026-07-25T13:37:17.006129+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
