@@ -2712,12 +2712,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** scale the show-dont-tell pipeline: refill the target pool (fresh widget-screen harvest) + build-and-show a 4th if reachable (check Ruedi Wealth for a raw email; financial-fit quiz fit)
 
-**Tried:** <fill>
+**Tried:** Scale the show-dont-tell pipeline: refill the target pool (fresh widget-screen harvest) and check whether the 4th screened target (Ruedi Wealth) was reachable.
 
-**Cost:** <fill>
+**Cost:** $0.0 (launched one research agent + 2 web checks + bet polls; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** Confirmed Ruedi Wealth is not raw-emailable (homepage socket-errored, /contact 404s -- consistent with the earlier form-only finding), so no 4th build from the current screen. Launched a fresh non-nesting widget-screen harvest for the next batch of owner-inbox Calendly/Typeform/Jotform payers (deduped against the 14 businesses already contacted). Polled the 3 show-dont-tell bets (074/075) -- no replies yet. Deliberately did NOT over-produce a 4th/5th show this fire: 12 things are already live (3 tailored tools + 9 offers) and none have replied, so refilling the pool for the next build is the measured move, not frantic building.
 
-**Learned:** <fill>
+**Learned:** The build-and-show motion is proven and repeatable, but it's pull-limited by target supply: the reachable-owner-inbox widget-payer is ~10-14% of screened businesses, so each batch of shows needs a fresh harvest. Pacing matters -- more cold shows before any of 12 pending replies is diminishing-returns volume, so the honest rhythm is: harvest a batch, build+show the best, wait for signal, harvest again.
 
-**Next:** <fill>
+**Next:** When the harvest returns, build-and-show the best new owner-inbox widget-payer. Watch bet-074/075/076 (the 3 shows) + the 9 prior offers + operator (bet-068/070/073) for any reply. On a yes: hand over/integrate + invoice (register the obligation). received_usd=$0.0, twenty-five-dollar cap intact.

@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Refilled the show-dont-tell target pool (launched a fresh widget-screen harvest) and confirmed the
+   4th screened target unreachable; deliberately paced rather than over-producing. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T003802_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,46 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: launched one Explore harvest agent (WebFetch-only, non-nesting, deduped vs the 14
+already-contacted businesses). WebFetch ruediwealth.com/contact -> HTTP 404; homepage -> socket closed
+(not raw-emailable). bin/bets.py checked bet-074, bet-075 -> no replies.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/107/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG iter 107 (the pacing decision), run/bets.json (bet-074/075 checks). Builds
+on the 3 live tools (iters 104/105/106) and knowledge/show_dont_tell_delivery.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I declined to frantically build a 4th/5th
+cold show before any of the 12 live things replies -- that would be volume-for-its-own-sake. The
+harvest is deduped against already-contacted businesses so no one gets a second unsolicited email.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact). No
+new sends/tools this iteration (a pool-refill step). A fresh harvest is in flight; Ruedi confirmed
+unreachable.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves the operator's build-and-show directive (keep aiming at the hungry crowd) while
+honoring CLAUDE.md's judgment to not manufacture motion -- pacing the shows to target supply and to
+the pending replies rather than blasting. The harvest is the demand-side reconnaissance PROMPT.md asks for.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `a research agent and web checks (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+No build or send this iteration -- a refill/pacing step, and the operator wants a paid yes, not a
+fuller pipeline. 'Pacing' could be rationalizing slowness; the counter is that 12 genuine things are
+already live and unreplied, so more supply now wouldn't change the odds. The harvest may return few
+owner-inbox keepers (yield ~10-14%). received_usd=0.0.
