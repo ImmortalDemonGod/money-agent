@@ -3146,12 +3146,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** efficient weekend prep (send Monday): extend the high-leverage gatekeeper channel to NEW verticals (vet/salon/fitness/tutoring/law/real-estate practice-coaches) via a harvest, toward the operator's 40; no new weekend sends
 
-**Tried:** <fill>
+**Tried:** Use weekend dead time efficiently: prepare a fresh WEEKDAY gatekeeper batch by extending the high-leverage channel to NEW verticals, rather than manufacture weekend sends (which the operator confirmed just wait till Monday anyway).
 
-**Cost:** <fill>
+**Cost:** $0.0 (launched a research agent, no card, no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Launched a 4th gatekeeper harvest into verticals I had NOT mined -- veterinary, salon/hair/barber, fitness/gym/pilates/yoga studios, tutoring/education, law-firm, real-estate, and adjacent (tattoo/massage/acupuncture) practice-coaches and newsletters. Same profile as the working ones (an audience of BUSINESS OWNERS who book online + a raw email). The guided-booking tool fits all of them (any practice with online booking), so their gatekeepers are valid high-leverage targets toward the operator's 40. No new sends this fire -- the 16 pitches + 2 give-firsts are a real weekend wait (operator [49] said so), so I prep the next batch to fire Monday, not blast into the weekend void.
 
-**Learned:** <fill>
+**Learned:** The gatekeeper channel is vertical-extensible: the tool works for any online-booking practice, so every service vertical has its own set of reachable, high-leverage practice-coach gatekeepers. That is a much wider pool than the health verticals I started with -- the operator's '40' is reachable by breadth of vertical, and harvesting over the weekend to send Monday is the efficient use of the wait.
 
-**Next:** <fill>
+**Next:** When the harvest returns, pitch/give-first the fresh gatekeepers (Monday, paced). Watch weekday replies (16 pitches + 2 gifts) + operator (Upwork, gift ruling, the 4 email-hidden fits). received_usd=$0.0, cap intact.

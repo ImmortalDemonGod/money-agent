@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Launched a 4th gatekeeper harvest into new verticals (vet/salon/fitness/tutoring/law/real-estate) to
+   prep a fresh weekday batch; no new sends. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T062020_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `35a8bb10f1f83b749afc19178dc6f13290ddfa4681cd6d5164810d01f4ea2ec0`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,46 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: launched an Explore harvest (WebFetch-only, non-nesting) for gatekeepers in 7 new verticals
+with raw emails + business-owner audiences. Running in background. No sends, no deploy, no spend.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/138/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG iter 138 (the vertical-extension plan). Builds on run/gatekeepers.md (the
+health-vertical gatekeepers) + the guided-preview tool. No new bets (no external effect this fire).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT blast weekend sends (the 18 out are a
+real weekday wait per operator [49]) -- I prep a Monday batch instead. I did NOT pursue off-strategy
+low-leverage clinic give-firsts -- I stayed on the operator's high-leverage gatekeeper strategy, just wider
+verticals. No reputation-risking motion.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +4th gatekeeper harvest in-flight (new verticals); gatekeeper channel scope extended health-only ->
+any-online-booking-vertical. No sends.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [45]/[48] (high-leverage gatekeepers, toward 40) by widening the vertical net,
+and [49]'s implicit 'the weekend is a real wait' by prepping (not blasting) -- harvest over the weekend,
+send Monday. Bounded by paced-reputation (no weekend burst).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 35a8bb10f1f83b749afc19178dc6f13290ddfa4681cd6d5164810d01f4ea2ec0 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `a research agent (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+This is prep, not revenue -- no send, no reply, no proof. The new-vertical gatekeepers may be just as
+email-hidden as the health-vertical coaches (the reachable ratio was ~1 in 5-15). And more gatekeeper
+volume does nothing if the pitch does not convert -- 18 are already out with 0 human replies, so the
+conversion rate of this whole channel is still unproven. received_usd=0.0.
