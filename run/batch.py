@@ -156,6 +156,13 @@ def main():
                        json.load(open("run/offers/contacted.json"))}
         except Exception:
             already = set()
+        # Domains rejected BY JUDGMENT in an earlier batch (wrong trade for the estimator, bad
+        # address). Without this they resurface every prep and get re-adjudicated by hand -- the
+        # contacted list alone does not cover them, because they were never contacted.
+        try:
+            rejected = set(json.load(open("run/offers/rejected.json")))
+        except Exception:
+            rejected = set()
         seen_dom = set()
         cands = []
         for r in rows:
@@ -164,7 +171,7 @@ def main():
             t = infer_trade(r)
             if not t or r["domain"] in seen_dom:
                 continue
-            if slug_for(r).replace("ie-", "") in already:
+            if slug_for(r).replace("ie-", "") in already or r["domain"] in rejected:
                 continue
             seen_dom.add(r["domain"])
             r = dict(r); r["trade"] = t
