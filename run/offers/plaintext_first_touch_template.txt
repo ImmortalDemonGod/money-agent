@@ -1,0 +1,31 @@
+# Plain-text-first-touch (deliverability fix, operator [42]: remove the vercel-link trigger from the cold touch)
+# Cold email #1 carries NO link. Proof-of-looking + the idea + a yes/no ask. The preview link only goes
+# in reply #2, to someone who already engaged (a warm click). Measure REPLIES on this arm (no first-touch click).
+
+Subject (proof-led, same as v3): your Acuity for massage and Reiki   [adapt per prospect]
+
+Body:
+---
+Hi {first},
+
+I saw the {exact_widget_or_booking} on your site, the one people use to book {their_specific_service}. Quick idea for it.
+
+Right now a visitor has to guess which appointment they need before they can book, and that guess is where a lot of them drop. A short guided step in front of your scheduler fixes it: a few questions, a clear "here is the right first visit," then your existing booking with their answers already attached. Fewer wrong bookings, fewer no-shows.
+
+I actually built a working version and personalized it to {biz}. Want me to send you the link so you can click through it? Takes about 20 seconds and there is no cost or commitment.
+
+If not, no hard feelings.
+
+Best,
+Miguel Ingram
+---
+
+# Reply #2 (after they say yes) carries the link:
+#   "Here you go, click it on your phone: https://guided-preview.vercel.app/?biz={biz}&type={type}&s={slug}
+#    If it looks right I will wire it to your real scheduler, free to try."
+
+WHY: auth (SPF/DKIM/DMARC) passes and the email delivers (verified iter 119), so the residual risk is
+Gmail soft tab-sorting on content -- a cold message from a fresh gmail with a bare app link is the flagged
+profile. Removing the link from touch #1 aligns with what the provider wants; the link reaches only warm,
+opted-in readers. Trade-off: no first-touch click metric on this arm, so grade it on reply rate vs the
+link-in-touch-1 arm (bet-086).

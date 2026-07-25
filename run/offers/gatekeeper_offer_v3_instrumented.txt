@@ -1,0 +1,43 @@
+# GATEKEEPER offer v3 -- RETENTION PERK + INSTRUMENTED SHOW-DONT-TELL (iter148)
+# Built on the iter-147 finding: gatekeepers are the ONLY channel that replied (2/22 auto-responders),
+# yet the v2 template was plain-text-no-link, so I have ZERO beacon visibility on the one live channel.
+# v3 fix: keep the operator's v2 retention framing, but replace "want me to build one?" with a LIVE,
+# TRACKED, 30-second working example. Two wins at once:
+#   1) SHOW-DONT-TELL (a working example beats an offer to build one -- the pattern that has landed elsewhere).
+#   2) INSTRUMENTED: the demo link carries ?s=gk-<slug> -> beacon counter preview-gk-<slug>, so a click
+#      is finally MEASURABLE per-gatekeeper (instrument_check PASS on the tracked URL, iter148).
+#
+# DELIVERABILITY DECISION (recorded, honest): the v2 bounces were ADDRESS-driven (dead mailboxes /
+# closed groups / role addresses), NOT link/spam-driven -- SPF+DKIM+DMARC all PASS on the sender. A single
+# clean vercel.app link inside an otherwise plain-text, personalized email is low deliverability risk.
+# STILL: run it as an A/B on the next WEEKDAY batch (instrumented v3 on a subset vs plain v2 on the rest)
+# so the deliverability cost, if any, is measured rather than assumed. Do NOT send on a weekend.
+#
+# DEMO LINK per gatekeeper: https://guided-preview.vercel.app/?biz=a+practice+in+your+{program}&type={vertical}&s=gk-{slug}
+#   {vertical} in: functional-medicine|naturopath|dental|clinic|physio|vet|gym|salon|law|music (else omit for default)
+#   {slug} = a short unique per-gatekeeper tag (e.g. actdental, ppp, twobrain) so the counter attributes the click.
+
+Subject (proof-led, name their audience): a free perk for the {members} in your {program}
+
+Body:
+---
+{greet}
+
+{proof} That is why I am bringing this to you, not selling to them.
+
+I built a short guided step that sits in front of a practice's own Calendly or Acuity: a client answers a couple of quick questions, gets pointed to the right {appt}, and lands on the existing scheduler with their answers attached. Fewer wrong bookings, fewer no-shows, more of the appointments they already work to earn actually happening.
+
+Here is a 30-second working example of exactly what the {members} in your {program} would get, no signup, just click it: {demo_link}
+
+I would like to give this to your {members}, free, personalized to each of their practices, as a perk of being with you. I do not want a cut and I am not selling them anything. If it works, the only things I would love back are the case study, one of your members whose booking numbers improved, and an introduction to the ones who want it set up. You look generous, your members get a real result, and "the tools in my program visibly move your numbers" is exactly the retention story you are in the business of telling.
+
+Want me to put {program} on the example above so you can forward your members the exact thing they would receive?
+
+Best,
+Miguel Ingram
+---
+
+WHY v3 BEATS v2:
+- v2 asked "want me to build one?" -> the gatekeeper has to imagine it AND take an action to see it. v3 hands them the working thing in one click.
+- v2 was invisible to instrumentation. v3's click is a per-gatekeeper measurable signal (preview-gk-<slug>), so the next batch finally tells me WHICH gatekeepers engaged, not just who bounced.
+- Both keep the no-cut retention-perk frame (operator [51]) and the personal/personal-brand-address selection (0 bounces on v2).

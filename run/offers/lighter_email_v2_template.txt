@@ -1,0 +1,33 @@
+LIGHTER OUTREACH EMAIL -- v2 (personalized-preview offer)
+=========================================================
+Link format (per prospect, per-source instrumented):
+  https://guided-preview.vercel.app/?biz=<Business+Name>&type=<functional-medicine|naturopath|dental|clinic>&widget=<Calendly|Acuity>&s=<slug>
+
+Subject (pick one, keep it lowercase + personal):
+  - made a quick preview for {biz}
+  - {biz}: a 30-second preview before your {widget}
+  - built you something small, {biz}
+
+Body:
+---
+Hi {first},
+
+I built {biz} a working preview of an idea, and it already has your name on it. About 20 seconds on your phone:
+{previewurl}
+
+Right now someone who wants to book you hits a bare {widget} time-picker and has to guess which appointment they need. The preview shows a short guided step that goes in front of it: a few questions, a clear "here is the right first visit," then your existing {widget} with their answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits.
+
+If it is worth having, I will wire it to your real scheduler and send you the live link to try. Free, no commitment. If it books better than the bare link, we talk then.
+
+If not, no hard feelings, just delete this.
+
+Best,
+Miguel Ingram
+---
+
+WHAT CHANGED FROM v1 AND WHY
+- v1 linked a BRAND-MISMATCHED example (a salon form shown to a dentist). v2 links a preview with the prospect's OWN name and vertical rendered in it -> relevance + instant proof, the biggest conversion leak closed.
+- v1 asked for a reply BEFORE they saw anything tailored (friction first, value later). v2 leads with the tailored artifact (value first), so the click IS the payoff and the reply is easy.
+- Tighter: ~130 words vs ~180, one benefit line not a paragraph, an explicit easy out ("just delete this") to lower the read's guard.
+- Per-prospect instrumented via ?s=<slug> -> counter preview-<slug>, so each send is separately measurable (which the operator asked for).
+- Honest: the preview page is prominently labeled a mock-up/preview, not their finished/official page; no impersonation, no payment, demo book button.

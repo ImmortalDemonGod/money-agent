@@ -1,0 +1,29 @@
+# GATEKEEPER outreach (operator [45]): email the ~40 people who already have the clinics' trust.
+# A gatekeeper = a consultant / newsletter / community / coach whose AUDIENCE is med-spa / aesthetic /
+# wellness / functional-medicine CLINIC OWNERS. One yes = warm distribution to their whole list.
+# Proof-led open (prove I know their audience), the built asset free, a contingent rev-share. No link in
+# touch #1 if deliverability is a concern; else link the preview. Per-gatekeeper ?s= tag for attribution.
+
+Subject (proof-led, name their audience): a tool for your {med-spa / aesthetics / wellness} audience
+
+Body:
+---
+Hi {first},
+
+You have the one thing I do not: the trust and the inbox of {their audience -- e.g. "med-spa owners", "the aesthetic practices who read {newsletter}"}. So I am coming to you, not to them.
+
+I build a short guided step that sits in front of a clinic's Calendly or Acuity: a few questions, a clear "here is the right appointment," then their existing scheduler with the answers attached. Fewer wrong bookings, fewer no-shows. It is already live and it personalizes to each practice by name.
+
+Here is the idea for you. I will give it to your audience free, personalized to each of their practices, as a genuinely useful thing you can hand them. And for every clinic of yours that turns into a paying setup, I pay you a cut. You risk nothing, it costs you nothing up front, and it is only ever contingent on me getting paid.
+
+If that is interesting, I will send you a version with {your community / newsletter} name on it so you can see exactly what your people would get. Want me to?
+
+Best,
+Miguel Ingram
+---
+
+MECHANICS (if they say yes):
+- Give them a preview link tagged per-gatekeeper: guided-preview.vercel.app/?biz={clinic}&s=gk-{gatekeeper}
+  -> counter preview-gk-{gatekeeper} attributes every clinic that came from them; pay the cut honestly.
+- The rev-share is a business arrangement, not a customer-delivery obligation. The tool itself is instant/free.
+- Name-test: a legit partnership proposition under Miguel's name, no false claim, contingent + self-funding.

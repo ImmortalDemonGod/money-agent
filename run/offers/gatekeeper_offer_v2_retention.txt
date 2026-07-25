@@ -1,0 +1,30 @@
+# GATEKEEPER offer v2 -- RETENTION PERK, not a rev-share (operator [51], Ashley/Hormozi flip)
+# The flip: do NOT ask the coach to sell my tool for a cut. Give the coach's OWN members a free perk.
+# The coach wins RETENTION (their business) + looks generous. I want only the case study + the intro.
+# No commission mentioned. No "sell my product." Plain-text, no link (deliverability). Proof-led open.
+
+Subject (proof-led, name their audience): a free perk for the {members} in your {program}
+
+Body:
+---
+{greet}
+
+{proof} That is why I am bringing this to you, not selling to them.
+
+I built a short guided step that sits in front of a practice's own Calendly or Acuity: a client answers a couple of quick questions, gets pointed to the right {appt}, and lands on the existing scheduler with their answers attached. Fewer wrong bookings, fewer no-shows, more of the appointments they already work to earn actually happening.
+
+Here is the idea, and it is not a pitch. I would like to give this to the {members} in your {program}, free, personalized to each of their practices, as a perk of being with you. I do not want a cut and I am not selling them anything. If it works, the only thing I would love back is the case study, one of your members whose booking numbers improved, and an introduction to the ones who want it set up. You look generous, your members get a real result, and "the tools in my program visibly move your numbers" is exactly the retention story you are in the business of telling.
+
+Want me to build a version with {program} on it so you can see exactly what your members would get?
+
+Best,
+Miguel Ingram
+---
+
+WHY THIS BEATS v1 (rev-share):
+- v1 asked the coach to spend their audience's TRUST to sell my product for small money -> no.
+- v2 gives their MEMBERS a free perk, costs the coach nothing, makes the coach look generous, and
+  improves the coach's own RETENTION (a member whose numbers go up renews) -- the coach's real business.
+- I take no commission; I ask for the case study + intros. That is the Ashley/Hormozi affiliate flip:
+  the partner never makes a dime directly and says yes anyway because THEIR clients get the value.
+- I win the member relationships (the practices) = future customers, warm.

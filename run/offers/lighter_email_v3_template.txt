@@ -1,0 +1,40 @@
+LIGHTER OUTREACH EMAIL -- v3 (proof-led, operator [41] formula)
+================================================================
+Formula (from the source): PERSONALIZE (prove you looked) + BIG FAST VALUE (the live tool),
+both in the FIRST LINE. Subject = PROOF over promise. Measure CLICKS (per-prospect beacon), not opens.
+
+HONESTY GUARD (name on the card): the proof line must be TRUE. Name only the exact scheduler you
+CONFIRMED on that business's live page. Never write "I saw your Calendly" if you saw a booking button
+but did not confirm the widget -- verify first, or say only what you saw ("your online booking page").
+
+Link (per prospect, per-source instrumented):
+  https://guided-preview.vercel.app/?biz=<Name>&type=<functional-medicine|naturopath|dental|clinic>&widget=<Calendly|Acuity>&s=<slug>
+
+SUBJECT -- lead with proof you looked (their exact tool / their exact service), not a pitch:
+  - "your Acuity page for massage and Reiki"
+  - "the Calendly on your booking page"
+  - "your 30 vs 60 minute consult booking"
+  (NOT: "a guided step before X", "made a quick preview" -- those are promises.)
+
+BODY:
+---
+Hi {first},
+
+I saw the {exact_widget} on your site, the one people use to book {their_specific_service}, so I built you a quick working preview of an idea for it. About 20 seconds on your phone:
+{previewurl}
+
+Right now a visitor has to guess which appointment they need before they can book. The preview puts a short guided step in front of your {widget}: a few questions, a clear "here is the right first visit," then your existing scheduler with their answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits.
+
+If it is worth having, I will wire it to your real {widget} and send you the live link to try. Free, no commitment. If it books better than the bare link, we talk then.
+
+If not, no hard feelings, just delete this.
+
+Best,
+Miguel Ingram
+---
+
+CHANGED FROM v2:
+- SUBJECT: promise ("made a quick preview for {biz}") -> PROOF ("your Acuity page for massage and Reiki"). The subject now proves I looked; that is what earns the open.
+- FIRST LINE: was "I built {biz} a preview..." (proves work, not looking). Now opens with "I saw the {exact_widget} on your site, the one for {service}..." -- proves I looked at THEM specifically, then the value in the same breath.
+- Kept: the personalized live preview (big fast value), the easy out, per-prospect ?s= beacon.
+- Added the honesty guard so the proof is never a bluff.
