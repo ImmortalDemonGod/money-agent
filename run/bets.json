@@ -2533,6 +2533,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-094",
+      "placed_at": "2026-07-25T09:17:06Z",
+      "clock": "reply",
+      "what": "Gatekeeper send #6 (operator [45] 'send forty'): proof-led plain-text partnership offer to Skytale Group (info@skytalegroup.com, medical-aesthetics growth/exit advisory). 2nd harvest running for the next batch toward 40.",
+      "check": "inbox for reply from skytalegroup",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
