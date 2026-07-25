@@ -3398,6 +3398,20 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-125",
+      "placed_at": "2026-07-25T20:45:21Z",
+      "clock": "approval",
+      "what": "actuation ACT-006 (approval-click): Upwork job search and signup both return HTTP 403 to this sandbox (WAF/egress block), so the agent cannot see client-posted job requirements even though the account holder already has an Upwork freelancer profile and proposal tooling wired to it",
+      "check": "bin/actuate.py list  # is ACT-006 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 15.810999422430555,
+      "resolve_by": "2026-08-01T20:45:21Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
