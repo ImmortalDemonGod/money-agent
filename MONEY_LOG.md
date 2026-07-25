@@ -3253,3 +3253,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The money moment was a genuine untested gap, and it is now closed and green end to end except one Stripe-internal step that needs a test-mode key. The delivery seam (the novel, get-it-wrong-able part) is provable with zero charge, so "test the mechanism" and "go live" are cleanly separable -- and with a limit-1 link, live IS the safe test-bed. A [fulfilled] capability can still be unusable (dev.to last fire); here, verifying the actual generated URL renders the tool is what turns "I built a checkout" into "the buyer actually receives the product."
 
 **Next:** A weekday gatekeeper/practice yes is now one action: send buy.stripe.com/6oU14p5W31KP4zEaeW7ok0s. If the operator sends a Stripe test key -> walk a test card through hosted checkout end to end in test mode and report each step. Watch bet-111 (guided-tool conversion) + bet-107 (v2 retention gatekeepers) for the first weekday reply. Still open: dev.to key re-issue (bet-109) + reddit (ACT-005). received_usd=$0.0, cap intact.
+
+## Iteration 146 — 2026-07-25T13:14:16Z (ledger @ 2026-07-25T13:12:21.704714+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
