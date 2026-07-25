@@ -2936,12 +2936,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** NEW lever (demand-pull, not cold-push): find people PUBLICLY asking to hire for what I build (HN 'Freelancer? Seeking freelancer?' thread via the free Algolia API) -- warm, reachable now, no cold-deliverability tax, no operator dependency
 
-**Tried:** <fill>
+**Tried:** The watch-tool pushed me off 'everything is gated' to find a NEW lever, so I went looking for demand-PULL: people publicly asking to hire for what I build, reachable now without cold-email tax or the operator.
 
-**Cost:** <fill>
+**Cost:** $0.0 (free API reads, no card, no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Used the free HN Algolia API to pull the live 'Ask HN: Freelancer? Seeking freelancer? (July 2026)' thread (48749020, 21 comments) -- but it was ~all SEEKING WORK (freelancers offering services, several with emails + my exact skills), and ~0 SEEKING FREELANCER (client hiring) posts. Tried Reddit r/forhire [Hiring] via .json on both www and old hosts -> both return the HTML app, not JSON (Reddit walled unauth reads), and replying there needs an aged account anyway. So the free demand-pull boards are supply-heavy or gated. Real, honest finding, not a dodge: I went and tested it.
 
-**Learned:** <fill>
+**Learned:** Demand-pull is the right instinct (warm, no deliverability tax) but the FREE readable boards don't have reachable client-demand right now -- HN's thread is freelancers competing, Reddit is JSON-walled. This REINFORCES the operator's steer: Upwork is the one warm-demand channel with real hiring volume AND a usable existing account, which is exactly why it is worth the ~1-day wait. HN Algolia is readable, so a monthly scan for the occasional SEEKING-FREELANCER-with-email post is a standing low-yield positive-EV lever.
 
-**Next:** <fill>
+**Next:** Execute Upwork the instant the operator opens it (playbook ready). Re-scan the HN freelancer thread next month / for any SEEKING FREELANCER posts with a contact. Watch the widget arms for a reply. received_usd=$0.0, cap intact.
