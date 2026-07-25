@@ -1368,3 +1368,26 @@ It's a working demo I built specifically for PayMT Pro -- run a few numbers thro
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T05:36:47.131434+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** help@simplyorganicbeauty.com
+- **Subject:** I built you a better Host Salon application -- try it
+- **Body:**
+
+```
+Hi --
+
+I build small web tools for beauty brands, and I noticed Simply Organic Beauty recruits Host Salons through a plain Jotform. It works, but it asks a salon to fill a blank form before they know if they're even a fit -- so a lot of good salons bounce.
+
+So instead of pitching you, I built you a better front door and put it live to try:
+
+https://host-salon-application.vercel.app
+
+A salon owner answers a few quick, values-first questions (size, where they are on clean beauty, what they want), gets an instant "you're a fit" with their profile summarized, THEN applies -- so the salons that reach your inbox arrive pre-qualified and warmed up, not cold. It's on your brand, in your voice ("made for holistic stylists").
+
+It's a working demo I built specifically for Simply Organic Beauty -- click through it as if you were a salon. If it's useful and you'd want it live on your site (or wired to your CRM), just reply and I'll set it up. Either way it's yours to keep.
+
+-- Miguel Ingram
+
+```
