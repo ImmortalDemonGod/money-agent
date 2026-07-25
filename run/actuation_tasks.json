@@ -203,6 +203,41 @@
       "human_minutes": null,
       "resolution_latency_seconds": null,
       "resolution": null
+    },
+    {
+      "id": "ACT-005",
+      "requested_at": "2026-07-25T02:26:21Z",
+      "kind": "deploy-account",
+      "gate": "reddit posting identity: reddit is now network-reachable from this residential IP (iter 087/088 verified reddit.com + API return 200; the run-1 datacenter-IP WAF block is gone), but account signup requires solving hCaptcha which the agent must not automate (forbidden lever). A posting credential can only come from the account holder.",
+      "target_url": "https://www.reddit.com/prefs/apps",
+      "identity": "the operator's Reddit account",
+      "steps": [
+        "# ACT: provide a Reddit script-app credential",
+        "",
+        "1. Log in to reddit.com in your own browser (or create an account there \u2014 signup solves its own hCaptcha in your human session).",
+        "2. Go to https://www.reddit.com/prefs/apps \u2192 \"create another app\u2026\" \u2192 select type **script**. Name it anything (e.g. \"moneyagent\"); redirect URI can be http://localhost:8080.",
+        "3. After creating it, note the **client_id** (the string shown under the app name, top-left of the app box) and the **secret**.",
+        "4. Return a JSON object as the SECRET handback with exactly these fields:",
+        "   `{\"client_id\": \"...\", \"secret\": \"...\", \"username\": \"<the reddit account username>\", \"password\": \"<that account's password>\"}`",
+        "5. If the account has 2FA enabled: either turn it off for script access, or append the current TOTP to the password as `password:TOTP` per Reddit's script-auth convention (note it expires, so prefer disabling 2FA for a persistent script credential).",
+        "",
+        "The sandbox will verify the credential with `run/reddit_verify.sh` (OAuth password-grant \u2192 /api/v1/me). Only the API credential is requested here."
+      ],
+      "artifact_ref": null,
+      "artifact_sha256": null,
+      "expect": "a JSON credential blob {client_id, secret, username, password} that authenticates against the Reddit API (verified by run/reddit_verify.sh exit 0)",
+      "return_kind": "credential",
+      "enc_pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0geCBoLHB0/s8uSn1hg+\nkphHTtx/SjDjm/AOl9/ZsU/h5RemqVEtlM/KqbcrWB2GDJXgXBiYD1dO4z1rSNlB\nNtv5n/Ml0TrtJD/Ql9TirGdW01i57ddwvn+cuLjKKpDMsIJD92d2wvHdNTAQdY++\nipGu8ClAOFpPX3Y5eGCxxgQ1fcJfqC1beSW6wEiLbVyDZXB+jYnD3GIXdENzeF3C\nbta3lSgsw+EsL928mVJTZu63mydo2xgO45aBF2qU0wcoEgLajTFIUpa2IOlwoypo\n+bi94EV9/gkFaxdQr3TkEsy9i9EsfMLzyaUIiV804H3tEtwQ5mIMADCSNKUJcEQO\nLwIDAQAB\n-----END PUBLIC KEY-----\n",
+      "deadline": "2026-07-28T00:00:00Z",
+      "test_citation": "run/reddit_verify.sh exits 0: OAuth password-grant returns an access_token and /api/v1/me returns the username",
+      "ev_rationale": "reddit is the single highest-reach channel the residential-IP unlock genuinely reopened (every other walled channel is captcha/approval/invite, unaffected by IP). One credential converts network-open into the run's first real audience-channel reach, which every prior vector (0 external visits measured) has lacked.",
+      "verify_cmd": "bash run/reddit_verify.sh",
+      "status": "open",
+      "companion_bet": "bet-064",
+      "agent_branch": "run-2",
+      "human_minutes": null,
+      "resolution_latency_seconds": null,
+      "resolution": null
     }
   ],
   "human_minutes_total": 2.3000000000000003
