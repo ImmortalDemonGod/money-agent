@@ -3389,3 +3389,15 @@ build that contractor's widget against their real pricing same-day (the close). 
 outperforms the tooled list, pull the next batch from the 89 un-tooled-with-email already in hand
 (run/contractors_classified.json) -- no new discovery needed. bet-114 (5 Calendly-list contractors)
 stays open as the control. received_usd=$0.0, cap intact.
+
+## Iteration 153 — 2026-07-25T17:22:58Z (ledger @ 2026-07-25T17:21:16.175776+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
