@@ -1999,8 +1999,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-03T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T05:43:14Z",
+      "checks": [
+        {
+          "at": "2026-07-25T05:43:14Z",
+          "note": "no PayMT Pro reply yet"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "widget-payer businesses (proven pain+wallet) shown a better working tool, not offered",
