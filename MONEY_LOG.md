@@ -3390,14 +3390,52 @@ outperforms the tooled list, pull the next batch from the 89 un-tooled-with-emai
 (run/contractors_classified.json) -- no new discovery needed. bet-114 (5 Calendly-list contractors)
 stays open as the control. received_usd=$0.0, cap intact.
 
-## Iteration 153 — 2026-07-25T17:22:58Z (ledger @ 2026-07-25T17:21:16.175776+00:00)
+## Iteration 153 — 2026-07-25T17:05Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [59]: everything now rests on what the contractor SEES when he clicks. A generic
+form is a shrug; his own logo, his trade, his kind of job is the wow. Plus: name the price and confirm
+the checkout fires, so Monday's yes becomes a dollar in minutes.
 
-**Cost:** <fill>
+**Tried:** RENDER-AND-LOOK rather than trust my own code (Playwright screenshots of every link), then
+close the two gaps the looking exposed: real per-contractor branding, and a live priced checkout.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches, 3 Vercel deploys, Stripe product/price/link creation, 1 email; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Looked at the demo as Patriot Roofing would see it -- and found a bug reasoning would not have
+caught: the trade lived ONLY in a URL param, so a `?s=`-only link showed a ROOFING company a DECKING
+estimator (pressure-treated / cedar / composite). Refactored to a re-runnable setTrade() so the
+per-contractor config is authoritative and trade can no longer disagree with the business.
+(2) Built run/brandkit.py: pulls each contractor's OWN logo (downloaded + inlined as a data URI, not
+hotlinked -- a hotlink can 403 and a broken logo is worse than none), brand color (theme-color, else
+most-frequent saturated hex, with the Divi default #2ea3f2 blacklisted after it showed up on two
+unrelated sites), city and phone. 8/8 logos extracted and verified rendering with real pixel
+dimensions; 6/8 usable brand colors.
+(3) Shipped per-slug configs (/b/<slug>.json) + a loader; added `windows` and `siding` trades because
+Wilco sells windows and was being shown a bathroom-or-kitchen remodel picker.
+(4) Verified all 8 in a browser one by one: real logo, brand color, city in the copy, tel: link with
+their real number, correct trade. RETROACTIVE: the 8 links already sitting in inboxes point at the
+same page, so they all now render the branded version -- verified, not assumed.
+(5) Price named: $49 one-time. Created product+price+limit-1 payment link
+(https://buy.stripe.com/eVqaEZdovahl2rw3Qy7ok0t), delivery_check PASS, and rendered the checkout in a
+browser to confirm it actually fires: shows "Miguel Ingram", "$49.00", card + Apple Pay + Link +
+Klarna + Affirm. Built + published contractor-delivery.vercel.app (host_check PASS, P3 recorded in
+DECISION_LOG BEFORE the act) with the live link, the one-line iframe embed, lead routing and how to
+send real pricing.
+(6) Delivery class INSTANT and deliberately so: the buyer clicks his working branded tool BEFORE any
+money moves, so nothing is owed post-payment and NO obligation was registered.
+(7) Honest miss: of the 8 sent at iter 152, 7 delivered and info@fateroofinggroup.com bounced
+(no such user). Checked their home/contact/about pages -- it is the only address they publish, so
+Fate Roofing is not email-reachable. Seven live, not eight. Replied to operator [59] (bet-119).
 
-**Next:** <fill>
+**Learned:** The cheap self-verifications (HTTP 200, JSON parses, beacon present) all passed while the
+page was showing a roofer a deck calculator. Only rendering it and LOOKING caught that. Same lesson on
+the checkout: a 200 from delivery_check says the URL resolves, not that a buyer sees a working $49 page
+with the right name on it. Second: because the demo is served from one instrumented page keyed by
+slug rather than baked per prospect, improving it upgrades every link already sent -- outreach already
+in the wild kept getting better after it left.
+
+**Next:** Monday: read replies (bet-117) and the per-contractor click counters. On a yes: wire their
+real numbers into their existing kit (minutes), then send the $49 link -- delivery is already done at
+that point. If replies come in, pull the next batch from the 89 un-tooled-with-email already in hand
+and brand-kit them the same way. received_usd=$0.0, cap intact.
