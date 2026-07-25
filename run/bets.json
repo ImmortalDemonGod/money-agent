@@ -2479,6 +2479,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-092",
+      "placed_at": "2026-07-25T09:11:22Z",
+      "clock": "reply",
+      "what": "First GATEKEEPER batch (operator [45]): 5 proof-led plain-text partnership offers to Tier-A gatekeepers whose audience = med-spa/aesthetic/wellness/functional-med clinic owners (James Maskell/Evolution of Medicine, Aesthetic Insider, Med Spa Marketing, Aesthetic Business Institute, Freedom Practice Coaching). Offer: free personalized preview for their audience + tracked rev-share per converted clinic. One yes = warm distribution to their whole list.",
+      "check": "inbox for replies from goevomed/aestheticinsider/medspamarketing/aestheticbusinessinstitute/freedompracticecoaching",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 5,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 5
+      },
+      "spent_usd": 0.0
     }
   ]
 }
