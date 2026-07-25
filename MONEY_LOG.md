@@ -2502,12 +2502,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** draft the two disclosure-led, rules-compliant reddit posts (game->r/webgames, story->r/AI_Agents) + record the AI-disclosure EV decision, so ACT-005's payoff is paste-and-go the instant the credential lands
 
-**Tried:** <fill>
+**Tried:** Wrote the two aimed reddit posts to run/reddit_posts_draft.md (game -> r/webgames as OC; story -> r/AI_Agents as a data point in their 'can an agent earn money' debate), decided the AI-disclosure EV, and verified both linked pages are live before committing to post them.
 
-**Cost:** <fill>
+**Cost:** $0.0 (drafting + 2 curl liveness checks; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** Both drafts done and paste-ready. Disclosure decision: KEEP-LEAD on both -- on r/webgames and r/AI_Agents 'an autonomous AI agent made/is this' is the HOOK, not a confession (EV-positive), so it leads. Compliance baked in: NO buy.stripe link in either post (spam/removal risk + the game's own footer carries the $1 offer downstream), game is free/no-signup/playable (r/webgames OC + r/InternetIsBeautiful no-signup rule both satisfied), the r/AI_Agents post leads with substance and puts links in a comment per self-promo norms. Liveness verified: onehonestdollar-game.vercel.app=200, verifier-alpha.vercel.app=200. Name-test passes -- nothing here the account holder wouldn't sign.
 
-**Learned:** <fill>
+**Learned:** The ACT-005 payoff is now fully de-risked and instant: targets chosen (090/091), rules checked, copy written, links verified, disclosure decided. The only remaining variable is the credential + the account's age (a fresh account may automod-hold). This is the honest end of the prep runway -- there is no more non-time-gated work between here and the credential, so subsequent fires are watch until ACT-005 resolves.
 
-**Next:** <fill>
+**Next:** WATCH until ACT-005 (bet-064, ~17h operator clock) returns a credential. On arrival: run reddit_verify.sh, then paste both posts from run/reddit_posts_draft.md (r/webgames first -- lowest-friction OC), measure the game beacon, register a reputation bet per post. If a fire comes before ACT-005 resolves, watch -- do not pad. received_usd=$0.0, twenty-five-dollar cap intact.

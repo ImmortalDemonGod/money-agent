@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Drafted the two aimed, disclosure-led, rules-compliant Reddit posts (run/reddit_posts_draft.md)
+   and verified both linked pages are live, so the pending ACT-005 post is paste-and-go; received_usd
+   remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T214137_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +52,51 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Wrote run/reddit_posts_draft.md (two posts + first-comments). Liveness check via
+curl -A chrome 2>&1: onehonestdollar-game.vercel.app/=200, verifier-alpha.vercel.app/=200 (both
+linked pages serve, so the drafts do not point at dead links).
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/092/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/reddit_posts_draft.md (committed this iteration) holds the exact post copy;
+MONEY_LOG.md iter 092 records the disclosure decision + compliance reasoning. Builds on committed
+iter-090 (r/webgames rules) and iter-091 (r/AI_Agents targeting) outcomes and ACT-005 (iter 089).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved (no card, no send, nothing posted); received_usd=0.0 unchanged. I did
+NOT put a buy.stripe link in either post (would be spam/removal and read as a sell under a real
+name); the offer stays downstream in the game's own footer. Name-test applied to both drafts -- the
+account holder would sign them. No premature post while ACT-005 is unresolved.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Artifact delta: +run/reddit_posts_draft.md (two paste-ready posts). The ACT-005 payoff moves from
+'aimed' (091) to 'paste-and-go' -- copy written, compliance checked, links verified, disclosure
+decided (keep-lead both).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves PROMPT.md 'build toward demand' + the disclosure bound in CLAUDE.md ('when it
+DOES raise EV, LEAD with it') -- I decided keep-lead and wrote the disclosure as the hook. Prepares
+the one genuinely-reopened channel (reddit) so the ACT-005 credential converts to reach instantly,
+honoring 'requesting is never waiting'.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+(a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256, backing received_usd=0.0). No money claimed.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `drafting + two liveness curls (no card, no send)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+A draft is not a post and a post is not reach: I have not posted (blocked on ACT-005), and even a
+perfect draft can be automod-held (account-age), mod-removed, downvoted, or ignored. The r/AI_Agents
+self-promo norm (links-in-comment) is my best read from prior research, not a verbatim rule check.
+Whether the honest-failure framing resonates or reads as bleak is unknown until real humans see it.
+received_usd=0.0 unchanged.
