@@ -3338,14 +3338,54 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Next:** Weekday: read replies from the 5 contractors (bet-114) -- a reply = interest, then build that contractor's custom instant-estimate widget and price it (sell-before-build closes). Qualify + send a second contractor batch from the filtered 631 (roofing, fencing, HVAC, solar). If a contractor bites, build their widget instantly = the magic the operator described. received_usd=$0.0, cap intact.
 
-## Iteration 152 — 2026-07-25T14:47:08Z (ledger @ 2026-07-25T14:45:44.304967+00:00)
+## Iteration 152 — 2026-07-25T14:47:08Z (ledger @ 2026-07-25T16:31:26.722061+00:00)
 
-**Tried:** <fill>
+**Lever:** operator [57]: the buyer/leak/offer are right, the LIST is wrong. The Calendly-embed list
+selects contractors who ALREADY bought booking software -- the fed ones. The starving one is the
+contractor whose site says "call for a free estimate" and has no quote system at all. And "discovery
+is walled because my search budget is spent" was a premature wall: contractors saturate directories
+that fetch without any search engine.
 
-**Cost:** <fill>
+**Tried:** Falsify the discovery wall by testing a MATRIX of fetchable directories (not one anecdote),
+pick the one that carries the field I actually need (a website, so I can classify tooling), pull a
+batch, filter to the genuinely un-tooled, and send them the approved offer.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches, one Vercel redeploy, 9 emails; no card).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Directory matrix, tested not assumed: YellowPages 403, Manta 403, Angi 403, Thumbtack 308,
+Overpass/OSM 504-timeout, Nominatim 0 results, BBB search 200 (but its profile pages are
+Cloudflare-challenged and the search JSON carries no website). ChamberMaster/GrowthZone chamber
+directories: HTTP 200, server-rendered member cards with name + phone + WEBSITE. Chose it precisely
+because chamber membership is ORTHOGONAL to owning quote software, unlike a Calendly embed.
+(2) Built run/contractor_pull.py (discover / pull / classify). Probed 68 chamber hosts -> 14 live.
+Pulled 1,666 trade-category member rows -> 269 unique businesses publishing a website.
+(3) Classified all 269 by fetching every homepage and scanning for ANY instant-quote or self-serve
+booking (Calendly, Housecall Pro, Jobber, ServiceTitan, Acuity, Roofr, JobNimbus, "instant quote",
+"book online", "see your price", ...): 61 TOOLED, 195 UNTOOLED, 13 unreachable. Un-tooled is 76% of
+reachable -- the starving pool is the MAJORITY; my old list was drawn from the minority. 89 un-tooled
+publish an email; 38 also run the old free-estimate language.
+(4) Show-don't-tell: added the beacon to deploy/instant-estimate, redeployed
+(instant-estimate-ruddy.vercel.app, HTTP 200 + beacon verified on all 8 links), so each contractor got
+a LIVE working instant-estimate page with their own name on it, instrumented per contractor
+(estimate-ie-<slug>).
+(5) CONTACTED 8, each hand-verified by reading their actual quote CTA so the email quotes their real
+words: 8 Square Roofing, Red Oak Roofworks, Old Wolf Construction, Patriot Roofing, Trinity Fence &
+Deck, East Texas Elite Exteriors, Fate Roofing Group, Wilco Windows & Siding (bet-117, send:8).
+Offer shape, price, and the cut AI line unchanged -- only the list changed, plus the demo link, which
+I flagged to the operator for veto rather than slipping in. Replied to operator [57] (bet-118).
 
-**Next:** <fill>
+**Learned:** "Discovery is walled" was false, and one test would not have shown it -- the matrix did.
+Four directories 403 a headless client and two OSM endpoints failed, but a fifth class (chamber
+directories) serves everything plaintext. The deeper lesson is about FILTER SELECTION, not reach: my
+list was not too small, it was adversely selected. Every proxy I used to find "a business with money"
+(pays for Calendly, pays an agency) also selects "a business that already solved this." The right
+filter is orthogonal to the problem, and then the un-tooled majority (76%) is right there. Also: the
+lane cap correctly refused a new lane for what is the SAME lane with a fixed list.
+
+**Next:** Weekday: read replies from the 8 (bet-117) and the per-contractor click counters -- the
+counters tell me who engaged even without a reply, which the iter-151 batch could not. On a reply,
+build that contractor's widget against their real pricing same-day (the close). If the un-tooled list
+outperforms the tooled list, pull the next batch from the 89 un-tooled-with-email already in hand
+(run/contractors_classified.json) -- no new discovery needed. bet-114 (5 Calendly-list contractors)
+stays open as the control. received_usd=$0.0, cap intact.
