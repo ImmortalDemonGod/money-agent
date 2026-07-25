@@ -1154,3 +1154,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T04:43:41.279789+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** mbaldwin@ngf.org
+- **Subject:** a which-membership-fits-me finder for NGF?
+- **Body:**
+
+```
+To the NGF team --
+
+Your value is the golf-facility data and the membership, but a researcher on ngf.org who's weighing whether to join has to email or call the concierge, and some don't get that far.
+
+I'd build you an interactive "which membership fits me" finder (or a facility finder over your data): a few questions, a clear recommendation, then join. It converts the researchers who currently bounce before they reach a person.
+
+3 days, $500. And if I miss the 3-day deadline you're automatically refunded -- enforced by an independent verifier, not just my word.
+
+If it's useful, reply and I'll send a one-page spec plus a secure link.
+
+-- Miguel Ingram
+
+```
