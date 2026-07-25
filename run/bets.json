@@ -3538,6 +3538,33 @@
         "window_h": 168
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-131",
+      "placed_at": "2026-07-25T23:42:42Z",
+      "clock": "reply",
+      "what": "Reply to operator [73] (iter163): conceded the 122-bid bid contradicted my own iter-159 finding; committed remaining 5 bids to fresh low-bid jobs only; CORRECTED a false arrival measurement (anonymous bidCount ships 0 pre-hydration) -- verified median 22.5 bids on newest listings, 1 of 28 both under-10-bids and buildable; accepted the better-account/Upwork unblock",
+      "check": "operator acknowledges / provisions account",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-07-30T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
