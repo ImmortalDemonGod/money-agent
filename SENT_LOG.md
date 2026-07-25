@@ -1526,3 +1526,26 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T06:41:56.359743+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** support@planetnaturopath.com
+- **Subject:** a guided step before your 30 vs 60 minute consult
+- **Body:**
+
+```
+Hi Michael,
+
+Quick one. On your consulting page a new patient has to pick between a 30-minute and a 60-minute consult (and the test-review option) on their own. Most people genuinely do not know which one their situation needs, so they either book wrong or stall.
+
+I build a short guided step that sits in front of that booking: the patient answers two or three quick questions (single issue vs multiple concerns, whether they already have test results to review), gets a clear "here is the consult length you actually need," and then lands on your existing as.me scheduler with the right option pre-selected and their answers attached. Fewer wrong-length bookings, less back-and-forth before the call.
+
+Here is a live example of the kind of guided triage I build. It was built for a different kind of practice, so yours would be naturopath-specific, but click it on your phone and you will see the idea in about 20 seconds:
+https://host-salon-application.vercel.app/?s=planetnat
+
+If it is useful, I will build your version and send you the live link to try, free, no commitment. If it books better-matched consults than the plain choice, we can talk then. Reply and I will start on it.
+
+Best,
+Miguel Ingram
+
+```
