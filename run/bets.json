@@ -2705,6 +2705,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-100",
+      "placed_at": "2026-07-25T10:10:13Z",
+      "clock": "reply",
+      "what": "CORRECTION to operator: the Paul give-first send was BLOCKED by the outreach guard (already-emailed non-responder, correct anti-spam rail), so my prior 'sent Paul' claim was wrong -- owned it, resolved to give-first fresh (un-emailed) gatekeepers; Paul's tool built+live, ready if he replies.",
+      "check": "inbox for operator reply on the correction/override question",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
