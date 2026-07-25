@@ -1345,3 +1345,26 @@ It's a working demo I made specifically for you -- go click through it on your p
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T05:31:40.094991+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** support@paymtpro.com
+- **Subject:** I built PayMT Pro a savings calculator -- try it
+- **Body:**
+
+```
+Hi --
+
+I build small web tools for merchant-services folks, and I saw PayMT Pro books rate reviews through Calendly. Calendly grabs a time, but it doesn't show the merchant WHY they should book -- so a lot of them never do.
+
+So instead of pitching you, I built you a better front door and put it live to try:
+
+https://paymt-pro-savings.vercel.app
+
+A merchant picks their business type (you've got the high-risk categories built in), enters their monthly volume and current rate, and instantly sees what they're paying now and what they could save -- with the math shown, honestly labeled as an estimate, and framed exactly the way you already talk ("we shoot you straight"). Then it books the rate review with their numbers attached. It turns a cold "book a call" into "here's your money on the table, let's confirm it."
+
+It's a working demo I built specifically for PayMT Pro -- run a few numbers through it. If it's useful and you'd want it on paymtpro.com, just reply and I'll wire it up. Either way it's yours to keep.
+
+-- Miguel Ingram
+
+```
