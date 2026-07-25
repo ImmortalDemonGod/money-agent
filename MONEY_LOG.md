@@ -2903,3 +2903,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** My widget build is NOT wasted even if cold email is deliverability-capped -- it doubles as the proof-of-work that wins warm Upwork jobs for the same thing. The two levers converge on one asset. And the proposal formula = the cold-email formula, so the craft carries over.
 
 **Next:** When the operator opens Upwork, get a job's text -> analyze_job_fit -> draft_proposal -> submit with the live preview as portfolio. On his plain-text-vs-domain pick, run the staged fix as the next widget arm. Watch prospect counters + Upwork enablement. received_usd=$0.0, cap intact.
+
+## Iteration 121 — 2026-07-25T08:24:26Z (ledger @ 2026-07-25T08:19:48.543983+00:00)
+
+**Lever:** autonomous (never hold for signals): run the plain-text-first arm the operator flagged -- link-free honest outreach to verified widget-payers, keeps the widget motion running, a reply is a real lead
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
