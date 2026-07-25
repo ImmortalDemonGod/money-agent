@@ -1935,8 +1935,13 @@
       "poll_after_h": 12.0,
       "resolve_by": "2026-08-01T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T05:12:51Z",
+      "checks": [
+        {
+          "at": "2026-07-25T05:12:51Z",
+          "note": "operator not yet responded to the pivot reply"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "operator",
