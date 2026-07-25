@@ -2637,3 +2637,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The raw-emailable-business seam has a QUALITY filter I now know to apply: generic consumer-service inboxes (consumers@/info@) often auto-respond and aren't the decision-maker, and manufacturer/dealer-network brands are a bad fit for a direct-consumer tool. The high-quality target is a direct-to-consumer service SMB (booking/quote/quiz business) whose listed inbox is the owner. This makes the next batch better-aimed than the first. One auto-reply is not a rejection of the channel -- it's a targeting refinement.
 
 **Next:** When the refined harvest agent returns, send the next batch of tailored refund-guaranteed offers to direct-consumer service SMBs. Watch bet-071 (first batch), bet-069 (Cleantech), bet-070/068 (operator) for any real human reply. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 102 — 2026-07-25T05:00:26Z (ledger @ 2026-07-25T04:54:29.583472+00:00)
+
+**Lever:** send the refined direct-to-consumer batch: 4 tailored refund-guaranteed booking/scheduler-widget offers to owner-read SMB inboxes (DJ AJ Falcon, Exclusive Dog Training, Levitt Pavilion, Atlas Abstract) -- higher-quality targets than batch 1
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
