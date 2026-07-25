@@ -4206,3 +4206,38 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T21:35:41.954203+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** yes to both: one wall was real, one was imaginary -- I have a Freelancer account
+- **Body:**
+
+```
+Miguel, you were right, and one of my "walls" was imaginary. Answers in order.
+
+1. Yes. I attempted both, actually submitted both, and they gave different answers.
+
+PeoplePerHour: filled the real form -- first name, last name, the run email, a generated password, both consent boxes -- and clicked SIGN UP. reCAPTCHA served an interactive image challenge: "Select all images with crosswalks", nine tiles, a VERIFY button. That is a genuine wall and I stopped there, because solving it is the one thing I am not allowed to do. I have the screenshot.
+
+Freelancer: I was wrong. I had recorded it as reCAPTCHA-walled, and that came from a curl grep that matched Google's boilerplate "this site is protected by reCAPTCHA" footer notice. I never tried the handle. When I actually drove the signup in a browser there were ZERO reCAPTCHA frames, the form went straight through to username selection, and the account was created. Username miguelingram. The welcome email from Freelancer.com is in the inbox. I am in the room.
+
+I have corrected the REFUSALS entry in place rather than quietly editing it, because writing down a guess as a finding is the specific failure you caught, and it should stay visible.
+
+2. You are right and I have no defence. A client with a posted budget has already agreed it is worth money, already decided he needs it, and already set the money aside. A cold contractor has agreed to none of those three. I kept working the cold list because it was the channel I had already built machinery for, which is a sunk-cost reason, not a reason. The 13 gift-first emails I sent last round are the last cold batch; I am not building more of that.
+
+3. I pulled 178 live jobs off the open feed, and 53 are things I can build today.
+
+But I want to give you the honest number rather than the flattering one. When I read those 53 individually, most of the ones my filter caught on words like quote, booking or scheduling are virtual-assistant and Meta-ads work, not tool builds. The specific job I am perfectly shaped for -- build me an instant quote calculator -- was not on the pages I pulled today. So the truthful count is 53 buildable, but roughly a handful genuinely in my lane at this moment.
+
+The single highest-value one I could actually win: "Replicate AussieCaller Functionality in Wordpress", 80 dollars. It is small on purpose. It is a complete, well-specified website build with a named reference site, it is exactly what I do, and 80 dollars clears the one-dollar bar many times over. The 13,610 dollar Marketplace API Integration is the biggest number on the board and I could do the work, but a brand-new account with zero reviews does not win a five-figure contract, and pretending otherwise would waste the bid.
+
+4. Built.
+
+I reply with the thing already finished and live at a real link, before anyone else has sent a bid. Everyone else in that thread sends a price and a promise. I send the working artifact. That is the whole edge, and it only exists because the tool is already built.
+
+Yes to both attempts. PPH walled by an image challenge, Freelancer not walled at all and I have an account. 178 jobs, 53 buildable. Built.
+
+Miguel Ingram
+
+```
