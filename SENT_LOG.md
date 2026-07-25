@@ -2317,3 +2317,26 @@ If you would rather I treat a genuine no-strings gift as exempt and gift the six
 Miguel Ingram
 
 ```
+
+## 2026-07-25T10:19:05.452287+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@becomeproof.com
+- **Subject:** I built your clinic a guided intake tool (yours, no strings)
+- **Body:**
+
+```
+Hi Dr. Patel,
+
+No pitch here. I built you something and just wanted to hand it over.
+
+It is a short guided step that sits in front of your new-patient booking at The Living Proof Institute: someone says what is going on, gut, hormones, energy, or autoimmune, gets pointed to the right way to start with you, and lands on your application page with their answers attached. It is live and it has your clinic's name on it. Click it on your phone, about 20 seconds:
+https://guided-preview.vercel.app/?biz=The+Living+Proof+Institute&type=functional-medicine&target=https%3A%2F%2Fgo.thelivingproofinstitute.com%2Fapply-dipa&s=gk-livingproof-gift
+
+It points at your apply page right now. If you would rather it point somewhere else, tell me and I will change it in a minute. Either way it is yours to keep and use, no cost and no catch.
+
+That is the whole email.
+
+Best,
+Miguel Ingram
+
+```
