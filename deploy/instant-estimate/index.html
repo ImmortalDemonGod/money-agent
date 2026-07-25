@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Instant estimate</title>
+<meta name="description" content="Get an instant ballpark estimate for your project and connect with the contractor while you're still deciding.">
+<meta name="robots" content="noindex">
+<style>
+  :root{--bg:#0f1620;--card:#18232f;--fg:#eef4fb;--mut:#9db0c4;--acc:#f6a821;--acc2:#39d98a;--line:#28394b;--field:#0e1720}
+  @media (prefers-color-scheme:light){:root{--bg:#f2f6fb;--card:#fff;--fg:#12202e;--mut:#51657a;--acc:#c9781a;--acc2:#0a8f57;--line:#dbe6f0;--field:#fff}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:560px;margin:0 auto;padding:28px 20px 64px}
+  .biz{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--acc)}
+  h1{font-size:24px;margin:8px 0 4px;line-height:1.25}
+  .sub{color:var(--mut);margin:0 0 22px;font-size:15px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 18px;margin:0 0 16px}
+  label{display:block;font-weight:600;margin:0 0 7px;font-size:14px}
+  input,select{width:100%;background:var(--field);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:11px 12px;font-size:15px;margin:0 0 15px}
+  input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 15px}
+  .opt{flex:1;min-width:120px;text-align:center;background:var(--field);border:1px solid var(--line);border-radius:9px;padding:11px 8px;font-size:14px;font-weight:600;cursor:pointer}
+  .opt.sel{border-color:var(--acc);color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+  button.go{background:var(--acc);color:#231400;border:0;border-radius:9px;padding:13px 18px;font-size:15px;font-weight:800;cursor:pointer;width:100%}
+  button.go:disabled{opacity:.45;cursor:not-allowed}
+  .est{display:none;text-align:center;padding:6px 0 2px}
+  .est.show{display:block}
+  .range{font-size:34px;font-weight:800;color:var(--acc2);margin:6px 0 2px;letter-spacing:-.02em}
+  .estnote{color:var(--mut);font-size:13px;margin:0 0 6px}
+  .step{color:var(--mut);font-size:13px;margin:2px 0 14px}
+  hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+  .ok{color:var(--acc2);font-weight:700}
+  .foot{color:var(--mut);font-size:12px;margin-top:22px;line-height:1.5}
+  .lock{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+  .lock img{max-height:52px;max-width:190px;width:auto;height:auto;border-radius:6px;background:#fff;padding:5px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+  .callrow{margin:14px 0 0;font-size:14px;color:var(--mut)}
+  .callrow a{color:var(--acc);font-weight:700;text-decoration:none}
+  .done{display:none}.done.show{display:block;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lock" id="lock">
+    <img id="logo" alt="" hidden>
+    <div class="biz" id="biz">Your Contractor</div>
+  </div>
+  <h1 id="head">Get an instant ballpark</h1>
+  <p class="sub" id="sub">Answer two quick questions for a real ballpark range, then get the exact quote confirmed. No waiting a day to hear back.</p>
+
+  <div class="card" id="form">
+    <div id="matwrap">
+      <label id="matlabel">Type</label>
+      <div class="opts" id="opts"></div>
+    </div>
+    <label id="sizelabel">Size</label>
+    <input id="size" type="number" inputmode="numeric" min="1" placeholder="e.g. 250">
+    <button id="calc" class="go" disabled>Show my ballpark</button>
+  </div>
+
+  <div class="card est" id="est">
+    <div class="estnote">Estimated range for your project</div>
+    <div class="range" id="range">--</div>
+    <div class="estnote" id="rangesub">This is a ballpark from typical rates. Your exact quote is confirmed by the contractor.</div>
+    <hr>
+    <div class="step">Want the exact number? Send your details and the contractor gets them right now, so they can confirm while you are still deciding.</div>
+    <label>Name</label><input id="nm" type="text" autocomplete="name" placeholder="Your name">
+    <label>Email or phone</label><input id="ct" type="text" autocomplete="email" placeholder="you@email.com or a number">
+    <label>Project address or area</label><input id="ad" type="text" autocomplete="address-level2" placeholder="City or zip is fine">
+    <button id="send" class="go">Send me the exact quote</button>
+  </div>
+
+  <div class="card done" id="done">
+    <div class="ok" style="font-size:19px">&#10003; Sent to <span id="biz2">the contractor</span></div>
+    <p class="step" id="donemsg">They have your project details and ballpark now and will confirm your exact quote shortly. That is the whole point: you got a number in seconds, not next week.</p>
+  </div>
+
+  <p class="callrow" id="callrow" hidden>Rather talk to a person? Call <a id="calllink" href="#"></a>.</p>
+  <p class="foot" id="foot">This is a ballpark estimator to give you a fast number. It is not a binding quote; the contractor confirms the exact price. A working demo of the instant-estimate tool.</p>
+</div>
+
+<script>
+  function qp(k){try{return new URLSearchParams(location.search).get(k)||"";}catch(e){return"";}}
+  function clean(s){return (s||"").replace(/[<>]/g,"").slice(0,60);}
+  var BIZ=clean(qp("biz"))||"Your Contractor";
+  var TRADE=(qp("trade")||"deck").toLowerCase();
+
+  // Per-contractor brand kit (operator [59]): the demo must read as HIS page, not a generic form
+  // with his name on it. /b/<slug>.json carries his own logo, brand color, city and phone -- all
+  // pulled from his own public homepage. Applied synchronously-ish before first paint where it can
+  // be; the params above remain the fallback so a missing kit degrades to the generic-but-named page.
+  function applyKit(k){
+    try{
+      if(!k) return;
+      if(k.biz){ BIZ=clean(k.biz); document.getElementById("biz").textContent=BIZ;
+                 document.getElementById("biz2").textContent=BIZ; }
+      if(k.trade){ setTrade(k.trade); }
+      if(k.color){ document.documentElement.style.setProperty("--acc", k.color); }
+      if(k.logo){ var im=document.getElementById("logo"); im.src=k.logo; im.alt=BIZ+" logo"; im.hidden=false; }
+      if(k.city){ document.getElementById("sub").textContent =
+          "Answer two quick questions for a real ballpark range on your "+k.city+
+          " project, then get the exact quote confirmed. No waiting a day to hear back."; }
+      if(k.phone){ var digits=(k.phone+"").replace(/[^0-9]/g,"");
+        if(digits.length>=10){
+          var pretty="("+digits.slice(-10,-7)+") "+digits.slice(-7,-4)+"-"+digits.slice(-4);
+          var a=document.getElementById("calllink"); a.href="tel:"+digits; a.textContent=pretty;
+          document.getElementById("callrow").hidden=false; } }
+    }catch(e){}
+  }
+  var SLUG=(qp("s")||"").replace(/[^a-zA-Z0-9_-]/g,"");
+
+  document.getElementById("biz").textContent=BIZ;
+  document.getElementById("biz2").textContent=BIZ;
+  if(SLUG){ fetch("/b/"+SLUG+".json",{cache:"no-store"})
+              .then(function(r){return r.ok?r.json():null;})
+              .then(applyKit).catch(function(){}); }
+
+  // Honest US ballpark rate ranges per unit (lo/hi). Wide on purpose -- a ballpark, not a quote.
+  var T={
+    deck:{noun:"deck",unit:"square feet",q:"About how many square feet?",matl:"Decking material",
+      opts:[{k:"Pressure-treated",lo:18,hi:30},{k:"Cedar",lo:28,hi:45},{k:"Composite",lo:32,hi:62}]},
+    fence:{noun:"fence",unit:"linear feet",q:"About how many linear feet?",matl:"Fence type",
+      opts:[{k:"Chain-link",lo:12,hi:24},{k:"Wood",lo:18,hi:38},{k:"Vinyl",lo:28,hi:48},{k:"Aluminum",lo:30,hi:58}]},
+    roof:{noun:"roof",unit:"square feet of roof",q:"Roughly how many sq ft of roof? (a typical home roof is 1,500 to 2,500)",matl:"Roofing material",
+      opts:[{k:"Asphalt shingle",lo:4.5,hi:9},{k:"Metal",lo:10,hi:18},{k:"Tile",lo:12,hi:26}]},
+    paint:{noun:"paint job",unit:"square feet",q:"About how many square feet? (rooms x ~200)",matl:"Interior or exterior",
+      opts:[{k:"Interior",lo:2,hi:6.5},{k:"Exterior",lo:2,hi:5.5}]},
+    remodel:{noun:"remodel",unit:"square feet",q:"About how many square feet of the space?",matl:"What are we remodeling",
+      opts:[{k:"Bathroom",lo:120,hi:320},{k:"Kitchen",lo:110,hi:300},{k:"Other room",lo:80,hi:230}]},
+    windows:{noun:"window replacement",unit:"windows",q:"About how many windows?",matl:"Window type",
+      opts:[{k:"Vinyl",lo:450,hi:900},{k:"Fiberglass",lo:700,hi:1400},{k:"Wood",lo:900,hi:1800}]},
+    siding:{noun:"siding job",unit:"square feet",q:"Roughly how many sq ft of wall? (a typical home is 1,500 to 2,500)",matl:"Siding material",
+      opts:[{k:"Vinyl",lo:4,hi:9},{k:"Fiber cement",lo:9,hi:20},{k:"Wood",lo:8,hi:17}]},
+    pool:{noun:"pool project",unit:"",q:"",matl:"",leadOnly:true,
+      opts:[{k:"Service / repair",lo:0,hi:0},{k:"Cleaning / opening",lo:0,hi:0},{k:"New build",lo:0,hi:0}]}
+  };
+  var C, st={mat:null};
+  var optsEl=document.getElementById("opts");
+  var sizeEl=document.getElementById("size"), calc=document.getElementById("calc");
+  function ready(){ return st.mat && (C.leadOnly || (parseFloat(sizeEl.value)>0)); }
+  function refresh(){ calc.disabled=!ready(); }
+
+  // setTrade is re-runnable: the brand kit may arrive AFTER first paint and must be able to
+  // correct the trade. (Caught by render-and-look: a ?s=-only link showed a ROOFING company a
+  // DECK estimator, because the trade lived only in a URL param the short link did not carry.)
+  function setTrade(t){
+    C = T[(t||"").toLowerCase()] || T.deck;
+    st.mat = null;
+    document.getElementById("head").textContent = C.leadOnly ? ("Tell "+BIZ+" what you need") : ("Get an instant ballpark for your "+C.noun);
+    document.getElementById("matlabel").textContent=C.matl||"Type";
+    document.getElementById("sizelabel").textContent=C.q||"Size";
+    var hide = !!C.leadOnly;
+    document.getElementById("size").style.display = hide?"none":"";
+    document.getElementById("sizelabel").style.display = hide?"none":"";
+    calc.textContent = hide ? "Continue" : "Show my ballpark";
+    optsEl.innerHTML="";
+    C.opts.forEach(function(o){
+      var b=document.createElement("div"); b.className="opt"; b.textContent=o.k;
+      b.onclick=function(){ [].forEach.call(optsEl.children,function(c){c.classList.remove("sel");}); b.classList.add("sel"); st.mat=o; refresh(); };
+      optsEl.appendChild(b);
+    });
+    refresh();
+  }
+  sizeEl.addEventListener("input",refresh);
+  setTrade(TRADE);
+
+  function money(n){ return "$"+Math.round(n).toLocaleString(); }
+  calc.onclick=function(){
+    if(!ready())return;
+    if(C.leadOnly){
+      document.getElementById("range").textContent=st.mat.k;
+      document.getElementById("rangesub").textContent="Send your details and "+BIZ+" will get right back to you with pricing.";
+      document.getElementById("range").style.fontSize="22px";
+    } else {
+      var s=parseFloat(sizeEl.value);
+      var lo=s*st.mat.lo, hi=s*st.mat.hi;
+      // round to a sensible step
+      var step = hi>20000?1000:(hi>4000?500:100);
+      lo=Math.floor(lo/step)*step; hi=Math.ceil(hi/step)*step;
+      document.getElementById("range").textContent=money(lo)+" to "+money(hi);
+    }
+    document.getElementById("form").style.display="none";
+    document.getElementById("est").classList.add("show");
+    document.getElementById("est").scrollIntoView({behavior:"smooth"});
+  };
+  document.getElementById("send").onclick=function(){
+    var nm=document.getElementById("nm").value.trim();
+    var ct=document.getElementById("ct").value.trim();
+    if(!nm||!ct){ alert("Please add your name and a way to reach you."); return; }
+    // A live tool wires this to the contractor's inbox/CRM; in this demo it confirms capture client-side.
+    document.getElementById("est").classList.remove("show");
+    document.getElementById("done").classList.add("show");
+    document.getElementById("done").scrollIntoView({behavior:"smooth"});
+  };
+</script>
+<script src="https://guided-preview.vercel.app/beacon.js" data-site="estimate"></script>
+</body>
+</html>
