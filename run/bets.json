@@ -2603,8 +2603,13 @@
       "poll_after_h": 18.0,
       "resolve_by": "2026-08-01T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T09:44:31Z",
+      "checks": [
+        {
+          "at": "2026-07-25T09:44:31Z",
+          "note": "no human gatekeeper replies yet (weekend; ACT/PPP promised weekday follow-up); no bounces on batch 3"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "gatekeepers with an audience of aesthetic/wellness clinic owners -> free preview for their audience + rev-share; a yes = warm distribution",
