@@ -3729,14 +3729,53 @@ FIRST, and spend one of the 6 bids attaching a live link within minutes of a job
 ACT-006 (bet-125) for the Upwork job texts. Read the gift-first 13 (bet-126). received_usd=$0.0,
 cap intact.
 
-## Iteration 160 — 2026-07-25T22:08:46Z (ledger @ 2026-07-25T22:08:31.877175+00:00)
+## Iteration 160 — 2026-07-25T22:35Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [70]: stop counting the room and win one job in it. Do not settle for the cheapest
+winnable listing -- name the job where the instant-build edge is a VISIBLE unfair advantage, and open
+the bid with a live link, not a price and a promise.
 
-**Cost:** <fill>
+**Tried:** Pick the right job, BUILD the finished deliverable before bidding, verify it by rendering,
+and submit.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (build + 2 deploys + browser automation + 1 email; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) CHANGED TARGET after re-reading: not the $30-250 AUD AussieCaller job (126 bids, I had picked it
+because I was confident, not because it was best) but **project 40604596 "Stylish Electronics Web
+Page"** -- Rs.75,000-150,000 INR (~$900-1,800), 122 bids, 6 days left, client identity-verified,
+payment-verified, and DEPOSIT ALREADY MADE. Decisive reason: the centrepiece is "an intuitive product
+comparison tool", a working interactive component, and the client says he supplies images/copy LATER
+-- so the whole deliverable is buildable with zero input from him. Every other bidder can only promise.
+(2) BUILT IT: deploy/voltedge/ -- single-page storefront, dark neon palette, hero with placeholder
+slots, snap-scroll best-sellers rail, spec cards, checkout CTA block, and a working comparison tool
+(pick 2-4 products; each row marks the winner; refuses to crown a winner on a tie). Vanilla
+HTML/CSS/JS, no framework/build/fonts/third-party requests. Live at voltedge-ten.vercel.app,
+host_check PASS, P3 recorded BEFORE publishing.
+(3) VERIFIED BY RENDERING, not asserting: 1440px and 390px mobile, scrollWidth==innerWidth so zero
+horizontal overflow; comparison table re-renders correctly at 2/3/4 products and enforces the 4-item
+cap; contrast measured (15.8:1 dark body, 17.4:1 light, muted 7.4/7.1 -- all clear of AA).
+(4) CAUGHT A REAL BUG BY LOOKING: the "BEST SELLER" badges rendered at 44px and swallowed the product
+cards, because `.thumb span` (the emoji rule) out-specified `.badge` (0,1,1 beats 0,1,0). Invisible in
+source, obvious in the screenshot. Fixed by scoping the emoji rule to its own class.
+(5) Bid text written (run/freelancer_bid_40604596.txt) -- opens with the live link, states measured
+numbers against his acceptance criteria, and says PLAINLY that deliverable 2 (Figma source) does not
+exist yet rather than implying it.
+(6) BLOCKED ON ONE THING: freelancer requires a profile PHOTO before bidding. I cleared every other
+gate myself (email verified, skills, name, headline, hourly rate). The photo control exposes NO
+input[type=file] anywhere -- job page, /me, /u/edit -- and expect_file_chooser() never fires; six
+distinct attempts, all failed identically. Filed **ACT-007** (bet-128). I deliberately did NOT
+generate a face: the photo on a real man's professional profile should be his own choice.
+(7) Answered operator [70] (bet-129) with the job, the link, the bid text and a FALSIFIABLE budget:
+6 bids (one month of a free account) to produce 1 win; if 6 bids each carrying a live artifact
+produce zero, the build-first thesis is wrong and I say so rather than asking for six more.
 
-**Next:** <fill>
+**Learned:** "Highest value I could win" and "cheapest thing I'm confident about" are different
+questions, and I had been answering the second while believing I was answering the first. The right
+selector is not price and not confidence -- it is WHERE THE GAP IS WIDEST between what I can hand over
+and what a competitor can only promise, which is exactly the job whose deliverable needs nothing from
+the client. Also, the specificity bug is the third time this run that rendering caught something every
+cheap check passed; the pattern is now unambiguous.
+
+**Next:** On ACT-007 clearing, submit the bid immediately (text ready). Poll ACT-006 (Upwork job
+texts). Read the gift-first 13 (bet-126). received_usd=$0.0, cap intact.
