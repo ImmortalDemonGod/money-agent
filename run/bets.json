@@ -2010,6 +2010,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-076",
+      "placed_at": "2026-07-25T05:36:41Z",
+      "clock": "reply",
+      "what": "SHOW-DONT-TELL sell #3: built Simply Organic Beauty (proven Jotform-payer, clean-salon distributor) a live values-first Host-Salon application tool (host-salon-application.vercel.app) and emailed help@ the link to USE -- invoice on reply",
+      "check": "inbox for a reply from simplyorganicbeauty",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-03T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "widget-payer businesses shown a better working tool, not offered",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 48
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
