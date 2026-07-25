@@ -1871,8 +1871,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-03T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T04:47:54Z",
+      "checks": [
+        {
+          "at": "2026-07-25T04:47:54Z",
+          "note": "1 of 5 responded: LOOP-LOC = AUTO-RESPONDER (FAQ bounce, not a human); also a bad fit (manufacturer/dealer-network, consumers@ routes to dealers). 4 others (Pak-Tec/NGF/TIK/RASG) still pending. No real lead yet."
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "businesses that paid an agency for web work + have a static-content gap -> custom interactive lead-gen tool",
