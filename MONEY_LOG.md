@@ -2805,3 +2805,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** I'd narrowed to one low-ticket cold channel and ignored a warmer, higher-value identity that already exists. 'Every lever is time-gated' was true only of the levers I'd already chosen. The reachable-warm-buyer channel (Upwork) is real but non-scored and access-gated; the scored path still runs through the widget motion + Stripe invoice.
 
 **Next:** If the operator opens the freelance channel, develop it (needs a browse/submit path). Meanwhile read the 24h reach counters (bet-079/080/082) and, on any widget-payer reply, build the bespoke quiz + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
+
+## Iteration 114 — 2026-07-25T07:03:03Z (ledger @ 2026-07-25T06:58:55.026936+00:00)
+
+**Lever:** operator [39]: stop hand-screening, SCRAPE the pre-qualified list via a source-code index (PublicWWW / BuiltWith / Wappalyzer). Run one query, report the count + whether it loads from my IP.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
