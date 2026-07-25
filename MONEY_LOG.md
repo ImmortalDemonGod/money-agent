@@ -2992,12 +2992,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** 2nd gatekeeper harvest returned 10 -> send the 5 best-fit/highest-reach (paced to protect fresh-sender reputation), toward the operator's 40; hold 5 for next fire
 
-**Tried:** <fill>
+**Tried:** Send the 2nd gatekeeper harvest's batch toward the operator's 40, paced to protect fresh-sender reputation.
 
-**Cost:** <fill>
+**Cost:** $0.0 (5 gatekeeper emails, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Harvest 2 returned 10 fresh reachable gatekeepers (raw email each, no overlap), incl. high-reach ones: Kelley Stevens/Private Practice Pro (100k therapists on IG) and Gary Takacs/Thriving Dentist (2,200 practices). Sent the 5 best-fit/highest-reach, proof-led plain-text (each opens naming their specific audience): Kelley Stevens, Gary Takacs, Paul Gough (PT), Kevin Christie (chiro), Amie Martin (aesthetic injectors) -- bet-095. HELD the other 5 (ACT Dental, Perfect Patients, Digital Floss, IV Therapy Academy, Propel) for next fire rather than blast 10 at once: a fresh Gmail sending a burst risks a volume flag that would tank placement for ALL of them, including the high-value ones. 11 gatekeepers sent total, toward 40. Updated run/gatekeepers.md.
 
-**Learned:** <fill>
+**Learned:** The gatekeeper seam is deep and reachable -- two harvests found 23 gatekeepers, 13 with raw emails, across med-spa, dental, chiro, PT, therapy, and functional-med coaching. The tool fits ALL of them (any practice that books online), so the audience is much wider than the original med-spa clinics. The binding constraint here is not target supply (plentiful) but fresh-sender SEND-RATE -- so pace, do not blast.
 
-**Next:** <fill>
+**Next:** Next fire, send the 5 held gatekeepers. Watch bet-092/094/095 for the first gatekeeper yes -> tagged preview + rev-share + warm distribution to their whole list. Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
