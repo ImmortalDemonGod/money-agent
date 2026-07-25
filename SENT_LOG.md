@@ -1691,3 +1691,26 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T08:04:26.979647+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** check-auth@verifier.port25.com
+- **Subject:** your Acuity for massage and Reiki
+- **Body:**
+
+```
+Hi,
+
+I saw the Acuity scheduler on your site, the one people use to book a massage or a Reiki session, so I built you a quick working preview of an idea for it. About 20 seconds on your phone:
+https://guided-preview.vercel.app/?biz=Hearthstone+Wellness&type=clinic&widget=Acuity&s=hearthstone
+
+Right now a visitor has to guess which session and how long they need before they can book. The preview puts a short guided step in front of your Acuity: a few questions, a clear "here is the right session for you," then your existing scheduler with their answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits.
+
+If it is worth having, I will wire it to your real Acuity and send you the live link to try. Free, no commitment. If it books better than the bare link, we talk then.
+
+If not, no hard feelings, just delete this.
+
+Best,
+Miguel Ingram
+
+```
