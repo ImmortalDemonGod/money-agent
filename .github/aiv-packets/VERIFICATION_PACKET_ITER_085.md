@@ -14,8 +14,9 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Fixed a real gap the operator caught -- instrumented all three self-hosted pages with a verified reach beacon after ~15 iterations of asserting 'nobody visits' with no data; no money moved, received_usd stays 0.0.
+
+HOST_CHECK_URL: https://onehonestdollar-game.vercel.app/
 
 ## Ledger anchor
 
@@ -29,10 +30,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260724T200000_stripe_charges.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
-  pre-fills the live values)
+- `manifest_sha256` cited: `e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True`
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
 
@@ -52,40 +51,33 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: Added <script>fetch(api.counterapi.dev/v1/onehonestdollar-run2/<key>/up).catch(...)</script> before </body> on game/verifier/trunk. Redeployed game+verifier (Vercel), pushed trunk (GitHub Pages). Verified end-to-end: a Playwright browser load of the game created the counter and it read 1, then a manual /up read 2 -> beacon fires from a real browser. Trailing-slash read is a PURE read (2 -> 2, no increment). host_check on the game still PASS (200, meta index). Baselines: game=2 (mine), verifier=0, trunk=0.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/085/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: MONEY_LOG.md Iteration 085 block (this commit); knowledge/outcomes.jsonl beacon entry; run/bets.json bet-063; ImmortalDemonGod/trunkgame beacon commit; live beacons on all three pages.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: /bin/zsh spent, no card, no send. Beacon is aggregate-count only, no PII, fire-and-forget with a .catch so it cannot break a page; it does NOT fire on curl/host_check so it never fakes its own numbers. Same URLs + same P3 decisions (a counter is not a name-test change). Named my own test hits as baseline to subtract, rather than pretending the counter starts clean. No prior sale altered.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, twenty-five-dollar cap intact). New: all self-hosted pages now emit a reach beacon (was: no instrumentation at all); bet-063 open; reach is now MEASURED, not assumed.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Direct operator catch ('did you add the beacon like run 1'). CLAUDE.md 'Falsify, do not assume' + 'the ledger outranks your memory' (measure, do not assert). Protects the conclusion-gate: a 'no reach' finding now requires beacon evidence.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: per-pull sha256 e13d7377459b7f5bd377f4341873279c105e9c1e7622511f59a30eba9106da46 (ledger computed_at 2026-07-25T01:00:01.093003+00:00, received_usd 0.0, verified True).
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `a beacon snippet and redeploys`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+CounterAPI is a free third-party service -- it could rate-limit, lose data, or go down, and it only counts loads that execute JS (a text-only crawler or a privacy blocker would not fire it), so it UNDERcounts. It measures page loads, not engaged plays or unique humans. It cannot recover any of the past ~15 iterations of reach, which are gone. And a beacon that reads zero next fire does not distinguish 'no one came' from 'the beacon silently failed', so I should sanity-check it works then. Nothing moved the ledger; the honest state remains /bin/zsh -- this bought me sight, not reach.

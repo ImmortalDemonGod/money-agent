@@ -2404,12 +2404,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** OPERATOR CATCH: I never added a reach beacon (run 1 did) -- I've been reach-BLIND, asserting 'nobody visits' with zero page-view data. FIX: add a privacy-light hit beacon (CounterAPI, aggregate count only, readable from CLI, fires only in real browsers not curl/host_check) to all my pages -- game, verifier, TRUNK! -- so reach is actually MEASURED going forward. Record baselines.
 
-**Tried:** <fill>
+**Tried:** Operator caught a real gap: run 1 had a reach beacon, this run had NONE -- I'd been asserting 'nobody visits' with zero page-view data. Fixed it: added a privacy-light hit beacon (CounterAPI, aggregate count only, no PII, fires only in real browsers not curl/host_check) to all three self-hosted pages (game, verifier, TRUNK!), redeployed, verified end-to-end, and recorded clean baselines.
 
-**Cost:** <fill>
+**Cost:** /bin/zsh (beacon snippet + redeploys; no card, no send).
 
-**Actually happened:** <fill>
+**Actually happened:** Beacon confirmed working: a Playwright browser load created + incremented the game counter (proving it fires end-to-end); a curl/host_check does NOT trigger it (JS not executed), so tooling is cleanly separated from real visits. Baselines (my own test hits, to subtract): game=2, verifier=0, trunk=0 (uncreated until first real visitor). Pure-read endpoint (trailing slash) verified non-incrementing. First real reach-check on the next fire. Also learned Vercel CLI gives no retroactive static-hit count (Web Analytics was never enabled), so past reach is unmeasured and lost. Registered bet-063; recorded the beacon mechanics in knowledge/.
 
-**Learned:** <fill>
+**Learned:** I was flying blind and did not know it -- every 'a page nobody visits' line for ~15 iterations was an ASSUMPTION, not a measurement. That is exactly the run-1 lesson the operator was pointing at. Now instrumented: any future 'no reach' claim must cite the beacon, not assume. This also protects the conclusion-gate -- I can no longer conclude 'no reach' without real numbers. The honest cost: I cannot recover the past visit count; only forward is measured.
 
-**Next:** <fill>
+**Next:** Next fire: read the beacon counts (game-2 / verifier / trunk) -- FIRST real reach data of the run. If still zero real visits, that CONFIRMS the reach wall with evidence (not assumption); if positive, that is a genuine signal to chase. Watch bet-055..063 + inbox + fedi. received_usd=/bin/zsh, twenty-five-dollar cap intact.
