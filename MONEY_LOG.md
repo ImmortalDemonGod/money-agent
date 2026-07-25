@@ -3174,12 +3174,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** readiness for the 6 new-vertical gatekeeper pitches: add gym/salon/law/music/vet packs to the guided-preview tool so a 'show me' from any of them converts to a TAILORED tool instantly (non-send, closes the iter-139 tool-gap)
 
-**Tried:** <fill>
+**Tried:** Close the tool-gap I flagged when sending the 6 new-vertical gatekeepers: the guided-preview tool only had health packs, so a 'show me' from a gym/salon/law/music/vet gatekeeper would have gotten a mismatched health tool.
 
-**Cost:** <fill>
+**Cost:** $0.0 (one redeploy via ACT-001 token, no card, no sends -- reputation-safe).
 
-**Actually happened:** <fill>
+**Actually happened:** Added 5 vertical packs to the guided-preview tool -- vet (wellness/concern/dental/new-pet), gym (goal-based intro), salon (cut/color/treatment), law (estate/injury/business/family consult), music (beginner/adult/advanced lesson). Redeployed + verified: INSTRUMENT_CHECK PASS, host_check PASS, all 5 packs live in served JS, a sample tailored link (type=gym) renders 200. The tool now personalizes to all 12 verticals I have pitched, so a gatekeeper 'yes' in any of them converts to a genuinely tailored preview instantly instead of a mismatched one. No sends (holding cold outreach per the ~8% bounce-rate reputation call).
 
-**Learned:** <fill>
+**Learned:** Readiness compounds: the give-first / conversion machine is only as good as the tool fitting the prospect's world, and each vertical I pitch needs its own pack (a 5-line addition). Doing it over the weekend, while sends are held, is the ideal use of the wait -- non-send, non-reputation-risking, and it removes the fumble when a reply lands.
 
-**Next:** <fill>
+**Next:** On a gatekeeper 'show me' -> send the tailored ?type= preview (now covers all 12 verticals) + conversion kit. Watch weekday replies (21 delivered pitches + 2 give-firsts) + operator. Hold cold sends until reputation recovers / a proof point lands. received_usd=$0.0, cap intact.

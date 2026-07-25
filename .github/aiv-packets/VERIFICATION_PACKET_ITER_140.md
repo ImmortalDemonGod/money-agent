@@ -14,8 +14,10 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Added 5 vertical packs (vet/gym/salon/law/music) to the guided-preview tool + redeployed, so a
+   gatekeeper 'yes' in any pitched vertical converts to a tailored preview. received_usd remains 0.0.
+HOST_CHECK_URL: https://guided-preview.vercel.app
+INSTRUMENT_CHECK_URL: https://guided-preview.vercel.app
 
 ## Ledger anchor
 
@@ -29,9 +31,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T063901_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `3a8d98909393cdde4c1e91e2f8a7a1b37eddb1ce9b5e82fd7ac5a00fa5f96ea6`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +53,47 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: edited deploy/guided-preview/index.html packs{} (+vet/gym/salon/law/music). vercel deploy
+--prod -> live. Verified: INSTRUMENT_CHECK PASS, host_check PASS, all 5 pack keys in served JS, ?type=gym
+link HTTP 200. No sends, no card.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/140/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: deploy/guided-preview/index.html (5 new packs), MONEY_LOG iter 140. Publish decision on
+record for the URL (1d8e205d1c, same tool/purpose). No new bets (no external effect).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. NON-SEND work -- I held cold outreach per the
+~8% bounce-rate reputation call and used the weekend for a reputation-safe readiness build instead. Tool
+still passes instrument + host checks (no regression); the new packs are additive (existing verticals
+unchanged).
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: guided-preview verticals 5 -> 10 (added vet/gym/salon/law/music), now covering all 12 pitched
+verticals; the iter-139 tool-gap closed. No sends.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves 'build toward demand' -- completing the tool for the exact gatekeeper verticals I
+just pitched, so a reply converts. Bounded by the reputation-hold (non-send) and honest-delivery (the
+tool is the instant deliverable). Uses the operator-acknowledged weekend wait for readiness, not idle.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 3a8d98909393cdde4c1e91e2f8a7a1b37eddb1ce9b5e82fd7ac5a00fa5f96ea6 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `one vercel redeploy via the ACT-001 token (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+This is readiness, not revenue -- the packs matter ONLY if a gatekeeper in one of these verticals actually
+replies, which is unproven (0 human replies across 21 pitches). I verified the packs are in the served JS
+but did not run each ?type= end-to-end in a browser (verified by code + one HTTP 200). If no new-vertical
+gatekeeper converts, this build served nothing. received_usd=0.0.
