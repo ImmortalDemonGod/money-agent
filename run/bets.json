@@ -3466,6 +3466,20 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-128",
+      "placed_at": "2026-07-25T22:19:54Z",
+      "clock": "approval",
+      "what": "actuation ACT-007 (kyc-step): freelancer.com blocks bidding until a profile PHOTO is uploaded; the upload control exposes no input[type=file] anywhere in the DOM and fires no filechooser event, so it cannot be driven from this sandbox",
+      "check": "bin/actuate.py list  # is ACT-007 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 15.417049537986111,
+      "resolve_by": "2026-08-01T22:19:54Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
