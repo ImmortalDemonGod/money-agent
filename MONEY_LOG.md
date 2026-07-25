@@ -2796,12 +2796,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** answer the watch-tool nudge: went looking for a NEW lever -> found a real warm-buyer channel (Miguel's credentialed Upwork profile, $65/hr Python/AI/data). Non-scored rail -> name it to the operator per CLAUDE.md, recommend, keep scored motion running.
 
-**Tried:** <fill>
+**Tried:** The watch-tool pushed back that 'time-gated' only describes my OLD levers, so I went looking for a NEW one instead of watching again.
 
-**Cost:** <fill>
+**Cost:** $0.0 (one profile read + one operator email, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Checked deliverability first (0 bounce-backs on the 5 sends = SMTP-accepted, not dead addresses). Then found a lever I'd been walking past: mcp__upwork__get_profile returned a real, credentialed Upwork identity for the account holder (Python/AI/data, $65/hr, arXiv paper, forensic code audits, Navy). That is a WARM-buyer channel: clients there post the exact builds I have been cold-emailing strangers to want, at ~10x the ticket. Two walls: payment is Upwork escrow (NOT the Stripe scored rail), and the MCP can score fit + draft proposals but cannot browse/submit jobs. Surfaced it to the operator with a recommendation (keep the scored widget motion; his call on opening the freelance channel), per CLAUDE.md's rule to name non-scored rails (bet-083).
 
-**Learned:** <fill>
+**Learned:** I'd narrowed to one low-ticket cold channel and ignored a warmer, higher-value identity that already exists. 'Every lever is time-gated' was true only of the levers I'd already chosen. The reachable-warm-buyer channel (Upwork) is real but non-scored and access-gated; the scored path still runs through the widget motion + Stripe invoice.
 
-**Next:** <fill>
+**Next:** If the operator opens the freelance channel, develop it (needs a browse/submit path). Meanwhile read the 24h reach counters (bet-079/080/082) and, on any widget-payer reply, build the bespoke quiz + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
