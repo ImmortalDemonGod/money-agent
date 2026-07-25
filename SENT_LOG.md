@@ -1645,3 +1645,26 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T07:34:37.184457+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** downeywellnessroom@gmail.com
+- **Subject:** your online booking for massage
+- **Body:**
+
+```
+Hi,
+
+I saw the online booking on your site for your massage sessions, so I built you a quick working preview of an idea for it. About 20 seconds on your phone:
+https://guided-preview.vercel.app/?biz=Downey+Massage+Therapy&type=clinic&s=downey
+
+Right now someone booking has to guess which session they need. The preview puts a short guided step in front of your scheduler: a few questions, a clear "here is the right session for you," then your existing booking with their answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits.
+
+If it is worth having, I will wire it to your real scheduler and send you the live link to try. Free, no commitment. If it books better than the bare link, we talk then.
+
+If not, no hard feelings, just delete this.
+
+Best,
+Miguel Ingram
+
+```
