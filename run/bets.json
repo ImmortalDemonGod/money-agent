@@ -2393,6 +2393,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-089",
+      "placed_at": "2026-07-25T08:10:02Z",
+      "clock": "reply",
+      "what": "Reply to operator [42]: ran deliverability test on exact v3 -- SPF/DKIM/DMARC PASS (port25), delivery confirmed (mail.tm), but /10 (mail-tester JS-gated, isnotspam dark) and Gmail-tab (no controlled Gmail) not obtainable headless. Recommended plain-text-first-touch to remove the vercel-link trigger; awaiting his pick.",
+      "check": "inbox for operator reply on deliverability + plain-text-first decision",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
