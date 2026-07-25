@@ -3013,3 +3013,31 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T16:45:23.461135+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** patriotroofingandstaining@gmail.com
+- **Subject:** your site says call for an estimate -- here is what an instant one looks like
+- **Body:**
+
+```
+Hi there,
+
+I found Patriot Roofing and Staining in the Rockwall Area chamber directory. Right now, when a homeowner lands on your site wanting a price, the only thing you offer them is "Get a Quote" -- so they have to call you, and then wait.
+
+That wait is where the money leaks. When someone is pricing a roof, they contact two or three of you. The one who puts an actual number in front of them first usually wins, not because he is better, but because he answered while they were still deciding. Everyone who quotes a day later is quoting into a decision that is already made. On a couple of winnable jobs a month, that is real money walking.
+
+So instead of describing it, I built you a working one. Thirty seconds, no signup, nothing to install:
+
+https://instant-estimate-ruddy.vercel.app/?biz=Patriot%20Roofing%20and%20Staining&trade=roof&s=ie-patriot
+
+Your name is on it. A homeowner picks their material, types a rough size, and gets an instant ballpark range -- then it captures them, their contact info and their project specs, right at the moment they are most interested. You stop waking up to a voicemail that says "call me back about a price" and start waking up to a lead that already told you what it needs.
+
+Straight about what that link is: it is a real, live demo, and the ballpark math in it is honest US range math, not your pricing. The last step confirms on screen instead of emailing you. In your live version it runs on your actual numbers and the lead lands in your inbox the second they hit send.
+
+If you want your own, I will build it -- your pricing, your brand, a link and an embed you can drop on your site. Reply and tell me it is worth a look, and I will set yours up.
+
+Best,
+Miguel Ingram
+
+```
