@@ -3141,6 +3141,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-115",
+      "placed_at": "2026-07-25T14:42:01Z",
+      "clock": "reply",
+      "what": "Reply to operator [56] (iter151): beacon read + 3 non-technical buyer types + picked quote-heavy contractors (leak: same-day-quote bid loss 10-30k/mo; tool: instant estimate widget) + ran the machine: 5 verified contractors contacted",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-07-28T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
