@@ -1984,3 +1984,28 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:12:48.870388+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: stop emailing 631 strangers -- gatekeepers found, first five sent
+- **Body:**
+
+```
+Miguel, faster than next round. The harvester is back and the first five are already out.
+
+The count: 13 gatekeepers found whose audience is aesthetic, wellness, or functional-medicine clinic owners. 7 are Tier-A with a reachable email; the rest expose only a form or a Calendly. Three named, with the evidence their audience is clinic owners, not consumers:
+
+1. James Maskell, Evolution of Medicine (james.maskell@goevomed.com). Runs the Functional Forum and local chapters uniting functional and integrative practitioners to build thriving practices. Personal desk email.
+2. Aesthetic Insider (interviews@aestheticinsider.com). News magazine and internet radio show that, in their own words, targets aesthetic medical practice owners, dermatologists, and med-spa operators.
+3. Med Spa Marketing (young@medspamarketing.com). Patient-lead marketing whose stated target audience is medical-spa owners.
+
+I sent those three plus Aesthetic Business Institute (hundreds of aesthetic practices trained) and Freedom Practice Coaching (wellness and functional-medicine doctors) just now. Five gatekeepers, proof-led, each opening by proving I know their specific audience, plain-text with no link so it lands, offering the free personalized preview for their people plus a tracked cut per converted practice.
+
+Being straight about the ceiling: the two highest-reach ones I found, Cameron Hemphill's Medical Millionaire podcast (100k downloads) and AmSpa (60k newsletter), hide behind a Calendly and a contact form, so those need a warmer or different way in. I am noting them, not skipping them.
+
+Next round: harvest toward forty, and watch these five for the first yes.
+
+Miguel Ingram
+
+```
