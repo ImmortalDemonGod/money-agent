@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repair Wizards — Start Your Repair</title>
+<meta name="description" content="Tell Repair Wizards what you need and book a free Zoom video inspection in under a minute. Bay Area's Gold Standard for licensed mobile home repairs.">
+<style>
+  :root{--blue:#1f6feb;--blue2:#134a9e;--ink:#0b1220;--paper:#ffffff;--muted:#5b6472;--line:#e4e8ef;--good:#1a7f37}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#f4f6fa}
+  .wrap{max-width:640px;margin:0 auto;padding:0 16px 48px}
+  header{background:linear-gradient(135deg,#0b1220,#12203b);color:#fff;padding:26px 16px 30px;text-align:center}
+  .brand{font-size:26px;font-weight:800;letter-spacing:.3px}
+  .brand span{color:#5aa0ff}
+  .tag{color:#b9c6dd;font-size:13.5px;margin-top:4px}
+  .badges{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .badge{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#dbe6f7;font-size:11.5px;padding:4px 9px;border-radius:999px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 24px rgba(16,32,64,.06);margin-top:-18px;padding:22px}
+  h1{font-size:19px;margin:2px 0 2px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 16px}
+  .steps{display:flex;gap:6px;margin:0 0 18px}
+  .dot{height:5px;border-radius:99px;background:var(--line);flex:1}
+  .dot.on{background:var(--blue)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt{border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:13px 12px;font-size:14.5px;font-weight:600;cursor:pointer;text-align:left;transition:.12s}
+  .opt:hover{border-color:var(--blue);background:#f5f9ff}
+  .opt.sel{border-color:var(--blue);background:#eef5ff;box-shadow:inset 0 0 0 1px var(--blue)}
+  label{font-size:13px;font-weight:700;color:#37414f;display:block;margin:14px 0 6px}
+  input,textarea,select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit}
+  textarea{min-height:78px;resize:vertical}
+  .row{display:flex;gap:10px;margin-top:18px}
+  .btn{appearance:none;border:0;border-radius:11px;padding:13px 18px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--blue);color:#fff;flex:1}
+  .btn.primary:hover{background:var(--blue2)}
+  .btn.ghost{background:#eef1f6;color:#37414f}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .hide{display:none}
+  .summary{background:#f5f9ff;border:1px solid #d5e5ff;border-radius:11px;padding:14px;font-size:14px;line-height:1.55}
+  .summary b{color:var(--blue2)}
+  .final{text-align:center;padding:6px 0}
+  .final .ok{width:52px;height:52px;border-radius:50%;background:#e7f6ec;color:var(--good);display:flex;align-items:center;justify-content:center;font-size:26px;margin:6px auto 10px}
+  .foot{color:var(--muted);font-size:12.5px;text-align:center;margin-top:16px;line-height:1.5}
+  a.book{display:block;text-decoration:none}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Repair <span>Wizards</span></div>
+  <div class="tag">The Bay Area's Gold Standard for Licensed Mobile Home Repairs</div>
+  <div class="badges"><span class="badge">Licensed C-47 / B General</span><span class="badge">BBB A+</span><span class="badge">25+ Years</span></div>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="steps"><div class="dot on" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
+
+    <!-- STEP 1 -->
+    <section id="s1">
+      <h1>What can we help with?</h1>
+      <p class="sub">Pick the closest match — it takes about 30 seconds and gets you a prepared inspection, not just a time slot.</p>
+      <div class="grid" id="svc">
+        <button class="opt" data-v="Re-leveling">Re-Leveling</button>
+        <button class="opt" data-v="Water damage / dry rot">Water Damage / Dry Rot</button>
+        <button class="opt" data-v="Bathroom remodel">Bathroom Remodel</button>
+        <button class="opt" data-v="Kitchen remodel">Kitchen Remodel</button>
+        <button class="opt" data-v="Painting & drywall">Painting & Drywall</button>
+        <button class="opt" data-v="Emergency repair">Emergency Repair</button>
+        <button class="opt" data-v="Insurance work">Insurance Work</button>
+        <button class="opt" data-v="Something else">Something Else</button>
+      </div>
+      <div class="row"><button class="btn primary" id="n1" disabled>Continue</button></div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section id="s2" class="hide">
+      <h1>Tell us a bit more</h1>
+      <p class="sub">The more we know up front, the more useful your free Zoom inspection is.</p>
+      <label>Property type</label>
+      <select id="ptype"><option>Mobile / manufactured home</option><option>Condo</option><option>Single-family residential</option><option>Commercial</option></select>
+      <label>How soon do you need it?</label>
+      <select id="urg"><option>It's an emergency</option><option>Within a week or two</option><option>Planning ahead / getting quotes</option></select>
+      <label>Briefly, what's going on?</label>
+      <textarea id="desc" placeholder="e.g. Soft spot in the bathroom floor near the tub, think it may be dry rot..."></textarea>
+      <div class="row"><button class="btn ghost" id="b2">Back</button><button class="btn primary" id="n2">Continue</button></div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section id="s3" class="hide">
+      <h1>How would you like to start?</h1>
+      <p class="sub">Here's what we've got so far:</p>
+      <div class="summary" id="sum"></div>
+      <label>Your name</label><input id="nm" placeholder="First and last name">
+      <label>Best phone or email</label><input id="ct" placeholder="Phone number or email">
+      <div class="row">
+        <a class="book" style="flex:1" id="bookLink" href="https://calendly.com/repairwizards" target="_blank" rel="noopener">
+          <button class="btn primary" style="width:100%">Book my free Zoom inspection →</button>
+        </a>
+      </div>
+      <button class="btn ghost" id="b3" style="width:100%;margin-top:10px">Back</button>
+      <p class="note">Booking opens Repair Wizards' scheduler with your details ready to paste — no repeating yourself.</p>
+    </section>
+
+    <!-- DONE -->
+    <section id="s4" class="hide final">
+      <div class="ok">✓</div>
+      <h1>You're all set</h1>
+      <p class="sub" id="doneMsg">Repair Wizards has your details. Pick a time on the next screen and a licensed pro will come prepared.</p>
+      <div class="summary" id="sum2"></div>
+      <p class="foot">Prefer to talk? Call or text <b>(408) 723-2900</b> — 20 East Main St, Los Gatos, CA.</p>
+    </section>
+  </div>
+  <p class="foot">A working intake + booking demo built for Repair Wizards. Routes to your existing scheduler; your team keeps every lead with the job details already attached.</p>
+</div>
+<script>
+  var state={svc:"",ptype:"",urg:"",desc:"",nm:"",ct:""};
+  function show(n){for(var i=1;i<=4;i++)document.getElementById('s'+i).classList.toggle('hide',i!==n);
+    document.getElementById('d1').className='dot on';document.getElementById('d2').className='dot'+(n>=2?' on':'');document.getElementById('d3').className='dot'+(n>=3?' on':'');}
+  var svc=document.getElementById('svc');
+  svc.addEventListener('click',function(e){var b=e.target.closest('.opt');if(!b)return;
+    [].forEach.call(svc.children,function(c){c.classList.remove('sel')});b.classList.add('sel');
+    state.svc=b.dataset.v;document.getElementById('n1').disabled=false;});
+  document.getElementById('n1').onclick=function(){show(2)};
+  document.getElementById('b2').onclick=function(){show(1)};
+  document.getElementById('n2').onclick=function(){
+    state.ptype=document.getElementById('ptype').value;state.urg=document.getElementById('urg').value;state.desc=document.getElementById('desc').value.trim();
+    renderSum();show(3)};
+  document.getElementById('b3').onclick=function(){show(2)};
+  function renderSum(){
+    var h='<b>'+state.svc+'</b> &middot; '+state.ptype+'<br><b>Timing:</b> '+state.urg+(state.desc?('<br><b>Details:</b> '+state.desc.replace(/</g,'&lt;')):'');
+    document.getElementById('sum').innerHTML=h;}
+  document.getElementById('bookLink').addEventListener('click',function(){
+    state.nm=document.getElementById('nm').value.trim();state.ct=document.getElementById('ct').value.trim();
+    var note='Repair Wizards intake — '+state.svc+' | '+state.ptype+' | '+state.urg+(state.desc?(' | '+state.desc):'')+(state.nm?(' | '+state.nm):'')+(state.ct?(' | '+state.ct):'');
+    // hand the summary to the scheduler via a prefill note + copy to clipboard as a fallback
+    try{navigator.clipboard&&navigator.clipboard.writeText(note);}catch(e){}
+    this.href='https://calendly.com/repairwizards?a1='+encodeURIComponent(note);
+    var s2=document.getElementById('sum2');if(s2)s2.innerHTML=document.getElementById('sum').innerHTML+(state.nm?('<br><b>Name:</b> '+state.nm):'')+(state.ct?('<br><b>Contact:</b> '+state.ct):'');
+    setTimeout(function(){show(4)},400);
+  });
+</script>
+</body>
+</html>
