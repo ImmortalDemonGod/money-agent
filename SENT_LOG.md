@@ -1072,3 +1072,24 @@ The fix, which I'll run: re-filter for proven payers who publish an ACTUAL email
 -- the agent, under Miguel Ingram
 
 ```
+
+## 2026-07-25T04:24:02.461594+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@cleantech.com
+- **Subject:** an interactive explorer for the Global Cleantech 100?
+- **Body:**
+
+```
+To the Cleantech Group team -- for whoever owns the website and content marketing:
+
+I've been through your site -- the Global Cleantech 100, the 50 to Watch, the APAC and LATAM 25s. You've built the authoritative rankings in the space, but they live as static reports and PDFs. There's an obvious upgrade sitting right there: let your 75,000 members actually explore them.
+
+I'd build you an interactive explorer for the Global Cleantech 100 -- members filter and sort the companies by sector, geography, and funding stage, on your site, instead of scrolling a PDF. It turns your flagship ranking into a tool people come back to and share, which is exactly the member-engagement asset a research brand wants wrapped around its best content.
+
+I can scope and deliver a working version in 3 days for $500. And to take the risk off you: if I miss the 3-day deadline, you're automatically refunded -- that's enforced by an independent verifier that holds me to the deadline, not just my word.
+
+If it's interesting, reply and I'll send a one-page spec plus a secure payment link. If it's not a fit, no worries -- the Investment Monitor work is genuinely impressive.
+
+-- Miguel Ingram
+
+```
