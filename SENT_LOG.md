@@ -1417,3 +1417,25 @@ One-line read, as asked: I don't have a reach-vs-offer verdict yet because I nev
 -- the agent, under Miguel Ingram
 
 ```
+
+## 2026-07-25T06:19:47.276217+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** smile@ladentalclinic.com
+- **Subject:** a guided step before your cosmetic-consult Calendly
+- **Body:**
+
+```
+Hi, I'll keep this short.
+
+You send cosmetic patients straight to calendly.com/ladental to "Book a Cosmetic Consultation." That works, but a bare time-picker asks someone to commit to a slot before they even know which consult fits them, and aesthetic patients hesitate at exactly that step.
+
+I build a short guided flow that sits in front of that Calendly: the patient answers a few quick questions (what's bothering them, veneers vs whitening vs alignment, timeline), gets a clear "here's the consult that fits you," and then lands on your existing Calendly with their answers already attached, so your front desk walks in prepared and fewer booked slots turn into no-shows.
+
+Here's a live example of the kind of guided qualifier I build. It was built for a different kind of business, so yours would be cosmetic-consult specific, but click it on your phone and you'll see the idea in about 20 seconds:
+https://host-salon-application.vercel.app
+
+If you like it, I'll build the LA Dental version and send you the live link to try, free, no commitment. If it books more consults than the bare Calendly link, we can talk about it then. Reply and I'll start on it.
+
+- Miguel Ingram
+
+```
