@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Staged the next proof-led batch (2 verified prospects with true proof lines) without sending, per
+   measure-before-scale; reach A/B still too young to read. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T024840_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `3cdf764f35527a8353ee257425a02728adde051918f5484096c5ca9780051e33`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,49 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: read counters (preview-* None; ~1h old). WebFetch ~7 candidates -> 2 stageable both-signals
+seen: fatoscelikaesthetics.com (Acuity app.acuityscheduling.com/schedule.php?owner=21875475 + info@),
+dralhakam.com (info@ + 'Book A Consult' CTA, widget not visible). Saved run/offers/staged_batch_next.md.
+No send, no deploy.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/118/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/offers/staged_batch_next.md (2 prospects, true proof lines, preview links),
+run/offers/lighter_email_v3_template.txt (shape). No bets (no external effect). Reads bet-086 (proof-led)
+and 079/080/082 (promise-led) as the pending A/B.
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. I did NOT send the staged batch -- staging is
+readiness, sending before the A/B read would be the premature-scale mistake. I kept the honesty guard:
+Fatos names Acuity (seen), Dr Alhakam does NOT name a widget (not seen) and references only the visible
+'Book a Consult'. Dropped 2 non-qualifying candidates rather than pad.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +run/offers/staged_batch_next.md (2 verified proof-led-ready prospects); learned the staging
+criterion (email + visible booking CTA > headless-visible widget). No sends; reach A/B unchanged (young).
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Serves operator [37]/[41] (measure before scale) by preparing, not sending; serves 'build
+toward demand / probe real people' by verifying real prospects. Bounded by the name-test honesty guard
+(name a widget only when seen) and no-premature-send.
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 3cdf764f35527a8353ee257425a02728adde051918f5484096c5ca9780051e33 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `WebFetch verification only (no card, no sends)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+Staging is a bet that cold email works -- if the A/B says deliverability is dead, these 2 prospects are
+wasted effort (mitigated: they're still the right businesses if I pivot channel). Only 2 stageable from
+~7 checked, so scaling to a big batch still needs many fetches. And I have no reach signal yet, so
+'proof-led is better' remains unproven. received_usd=0.0.

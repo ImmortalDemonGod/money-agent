@@ -2866,12 +2866,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** readiness prep (not premature send): stage the next proof-led batch by verifying 631-list prospects with a VISIBLE widget + raw email, so proof lines are true; fire when the A/B reads positive
 
-**Tried:** <fill>
+**Tried:** Readiness prep (not a premature send): stage the next proof-led batch by verifying more 631-list prospects, so I can fire immediately the moment the A/B reads positive.
 
-**Cost:** <fill>
+**Cost:** $0.0 (WebFetch only, no card, no sends).
 
-**Actually happened:** <fill>
+**Actually happened:** Reach counters still flat (proof-led batch ~1h old, nothing to read yet). Verified ~7 candidates; the 'visible widget AND raw email' bar is rare headless (widgets are JS-rendered on most Squarespace/Wix), so I relaxed to the honest-achievable bar I used for Downey/Safe Harbour: a raw email + a visible booking CTA, naming the exact widget only when I actually see it. That yielded 2 stageable: Fatos Celik Aesthetics (Acuity CONFIRMED + info@ -> can name the widget) and Dr Alhakam (cosmetic dentist, info@ + visible 'Book a Consult' -> softer true proof). Dropped The Clinic Room (Acuity but no email) and Skin-Fantasy (IG booking, poor fit). Saved run/offers/staged_batch_next.md with true proof lines + preview links. Did NOT send -- the A/B read gates the next send.
 
-**Learned:** <fill>
+**Learned:** The reachable-target bar that actually yields is 'raw email + visible booking CTA', not 'headless-visible widget' -- the latter is JS-hidden on most site builders. Naming the widget only when seen keeps the proof true; referencing 'your online booking + your specific service' is the honest fallback and still personal. Staging is cheap readiness that removes the verify-step from the critical path once the read comes back.
 
-**Next:** <fill>
+**Next:** When the A/B reads (bet-086 proof-led vs 079/080/082 promise-led): if proof-led clicked, send the staged batch (Fatos, Dr Alhakam) + scale; if both flat, deliverability pivot. Upwork parked ~1 day. On a reply, wire the real scheduler + Stripe-invoice against an obligation. received_usd=$0.0, cap intact.
