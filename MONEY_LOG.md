@@ -2945,3 +2945,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** Demand-pull is the right instinct (warm, no deliverability tax) but the FREE readable boards don't have reachable client-demand right now -- HN's thread is freelancers competing, Reddit is JSON-walled. This REINFORCES the operator's steer: Upwork is the one warm-demand channel with real hiring volume AND a usable existing account, which is exactly why it is worth the ~1-day wait. HN Algolia is readable, so a monthly scan for the occasional SEEKING-FREELANCER-with-email post is a standing low-yield positive-EV lever.
 
 **Next:** Execute Upwork the instant the operator opens it (playbook ready). Re-scan the HN freelancer thread next month / for any SEEKING FREELANCER posts with a contact. Watch the widget arms for a reply. received_usd=$0.0, cap intact.
+
+## Iteration 124 — 2026-07-25T09:03:46Z (ledger @ 2026-07-25T09:03:23.548654+00:00)
+
+**Lever:** operator [45]: the gatekeeper lever -- stop emailing 631 clinics, find + email the ~40 people/newsletters/communities who already have an audience of med-spa/wellness/aesthetics clinics (100x payoff per yes = warm distribution). Find them, name 3, offer the free preview + rev-share.
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
