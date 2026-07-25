@@ -2009,3 +2009,25 @@ Next round: harvest toward forty, and watch these five for the first yes.
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:17:12.814494+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@skytalegroup.com
+- **Subject:** a tool for the practices you are growing
+- **Body:**
+
+```
+Hi,
+
+Skytale Group helps medical-aesthetics and wellness practices grow and get exit-ready, so you have the trust of exactly the practice owners I built something for, and a shared goal: making their numbers better.
+
+I build a short guided step that sits in front of a practice's Calendly or Acuity: a few questions, a clear "here is the right appointment," then their own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, better-converting consults. It is live and personalizes to each practice by name. For a practice you are growing or preparing to sell, cleaner booking conversion is a real lever on the top line.
+
+Here is the idea for you. I will give it to your client practices free, personalized to each one, as a genuinely useful thing you can offer. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a practice name on it so you can see exactly what your clients would get?
+
+Best,
+Miguel Ingram
+
+```
