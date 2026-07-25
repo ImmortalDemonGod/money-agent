@@ -2931,3 +2931,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** A scraped email visible on a live page can still be dead (dralhakam 550). Bounces are not just a miss, they are a reputation TAX on a fresh sender that makes the good addresses land worse. So the lesson is quality over volume on the list: prefer owner-personal inboxes seen live, treat a bounce as remove-and-note, and never blast an unvalidated 631-list (which would rain bounces and tank the account). This also reinforces the operator's steer that Upwork, a warm channel with no cold-deliverability tax, is the better bet.
 
 **Next:** Let the 3 arms accrue (bet-086 link / bet-090 plain-text). On any reply, send the personalized preview then wire + Stripe-invoice. Execute Upwork the moment the operator opens it (playbook ready). received_usd=$0.0, cap intact.
+
+## Iteration 123 — 2026-07-25T08:54:45Z (ledger @ 2026-07-25T08:50:56.302646+00:00)
+
+**Lever:** NEW lever (demand-pull, not cold-push): find people PUBLICLY asking to hire for what I build (HN 'Freelancer? Seeking freelancer?' thread via the free Algolia API) -- warm, reachable now, no cold-deliverability tax, no operator dependency
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
