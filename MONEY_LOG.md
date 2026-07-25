@@ -3488,14 +3488,51 @@ Watch bounce rate at each ramp step and hold flat rather than climb if it moves.
 wire their real numbers in and send the $49 link -- delivery is already done at that point.
 received_usd=$0.0, cap intact.
 
-## Iteration 155 — 2026-07-25T19:25:40Z (ledger @ 2026-07-25T19:19:34.287204+00:00)
+## Iteration 155 — 2026-07-25T19:40Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [61]: the buyer is non-technical BY DESIGN -- that is why he is the right buyer --
+so "paste this one-line code into your website" hands him a task he cannot do, and that is where the
+$49 dies. Get his effort to zero. Also: today's total sent + tomorrow's batch size.
 
-**Cost:** <fill>
+**Tried:** Close the finish-line hole for real (not by rewording the page), then report the numbers.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (4 Vercel deploys, 2 env vars, 1 email; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) CONCEDED the hole: the delivery page literally said paste this iframe into WordPress/Wix/
+Squarespace. For this buyer that is homework, and homework is where the sale dies.
+(2) Found the deeper gap behind it -- the tool did not actually SEND anything. The final step
+confirmed on screen and stopped, so even a "finished" tool would have delivered him nothing. Built
+deploy/instant-estimate/api/lead.js (Vercel function + nodemailer, Gmail creds added as production
+env vars): a completed estimator now emails name / contact / project detail / ballpark within seconds.
+No dashboard, no login, no CRM -- it lands in the inbox he already reads.
+(3) Two modes, resolved SERVER-side from the slug config so the client cannot supply a destination
+(no open relay): demo -> the notice comes to ME (a contractor playing with his own demo is the hottest
+buying signal available, and it arrives in seconds); live -> the lead goes to HIM with the homeowner
+set as reply-to, me on cc to catch a bounce.
+(4) VERIFIED BOTH BY A REAL EMAIL LANDING, not by a 200: demo POST -> "[DEMO CLICK] Spade Roofing and
+Gutters" arrived; live-mode test config -> "New estimate request: Jane Homeowner" arrived. Then
+deleted the test config and confirmed it 404s and the endpoint rejects the slug.
+(5) Caught a leak while testing: the endpoint echoed the destination email address back to the
+browser (`live` returned the address rather than a boolean). Fixed to a plain boolean.
+(6) HONESTY GUARD: while a tool is an unpaid demo, the confirmation screen now says in plain words
+that the details went to the person who built it, NOT to that company, and to call them directly.
+No homeowner should believe a contractor got a message he did not.
+(7) Rewrote the delivery page with ZERO code in it: it is done, here is your link, put it where you
+already work (text a customer, Google Business Profile quote-link field, Facebook button, email
+signature, truck QR). For his actual website it says in bold DO NOT do this yourself -- reply and I
+handle it, or forward my email to your web person and I talk to them. host_check PASS, P3 recorded.
+(8) Answered operator [61] (bet-123): effort is reply -> pay -> done; 26 sent today (25 delivered);
+30 tomorrow, laddering 45/60/75/90/100 with owner-first ordering.
 
-**Next:** <fill>
+**Learned:** "Instant delivery" was true about the LINK and false about the PRODUCT. The page was
+live from the first send, so every cheap check passed, but the thing the buyer is actually paying for
+-- leads arriving -- did not exist until this iteration. A delivery claim needs to be tested at the
+buyer's outcome (did an email land in his inbox?), not at the artifact's availability (does the URL
+return 200?). Same class of gap as the roof-shown-a-deck bug: everything green, wrong thing shipped.
+
+**Next:** Tomorrow: 30 sends, owner-addresses first, and push the chamber list toward 2,500 un-tooled.
+Watch for [DEMO CLICK] notifications -- that is now a real-time buying signal and the first one gets
+an immediate personal reply. Read replies (bet-117 first 7, bet-120/121 the 18). On a yes: set
+live:true + lead_to in their config, send the $49 link -- everything else is already done.
+received_usd=$0.0, cap intact.
