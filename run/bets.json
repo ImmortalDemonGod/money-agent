@@ -2420,6 +2420,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-090",
+      "placed_at": "2026-07-25T08:25:55Z",
+      "clock": "reply",
+      "what": "Plain-text-first deliverability arm (operator [42] lever): 3 link-free cold emails to verified widget-payers (Fatos info@fatoscelikaesthetics.com, Dr Alhakam info@dralhakam.com, Clear Day info@cleardayacneclinic.com). No link in touch #1 -> best inbox odds; preview link only on reply. Measure REPLIES (no click metric on this arm) vs the link arm (bet-086).",
+      "check": "inbox for replies from fatoscelikaesthetics/dralhakam/cleardayacneclinic",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-07-31T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "proven widget-payer practices, plain-text-first no-link touch, send preview on reply, invoice a wired build on yes",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 3,
+        "window_h": 48
+      },
+      "authorizes": {
+        "send": 3
+      },
+      "spent_usd": 0.0
     }
   ]
 }
