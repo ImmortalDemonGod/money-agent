@@ -2619,6 +2619,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-097",
+      "placed_at": "2026-07-25T09:35:36Z",
+      "clock": "reply",
+      "what": "Note to operator: gatekeeper channel DELIVERS (2 auto-replies confirm inbox); surfaced the podcast-guest lever for the 2 highest-reach gatekeepers (Cameron Hemphill 100k / Joe Sanok 100k-mo) which needs Miguel to appear, not agent-executable.",
+      "check": "inbox for operator reply on the podcast-guest lever",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-01T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
