@@ -2922,12 +2922,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** process a real signal: a hard bounce (info@dralhakam.com 550) -- record the deliverability data point (10/11 accepted, 1 dead) + the reputation risk of unvalidated scraped emails; do not blast more unvalidated sends
 
-**Tried:** <fill>
+**Tried:** Process a real deliverability signal -- a hard bounce landed -- rather than blast more sends.
 
-**Cost:** <fill>
+**Cost:** $0.0 (no sends, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** A Delivery Status Notification came back: info@dralhakam.com -> 550 No Such User Here. That page-visible email was DEAD. It is the ONLY bounce across all 11 cold sends; Fatos, Clear Day, and the earlier v3/promise batches were all accepted by their servers (no bounce). So the 0-clicks/0-replies is NOT universal delivery failure -- most sends were accepted, and placement (inbox vs spam/promotions) for those is the still-unmeasured piece. Marked Dr Alhakam dead in the staged file; polled bet-090 (plain-text arm now effectively 2 live sends). Deliberately did NOT send more -- a hard bounce from a fresh Gmail sender hurts sender reputation, which degrades placement for the good addresses, so blasting unvalidated scraped emails is self-harming.
 
-**Learned:** <fill>
+**Learned:** A scraped email visible on a live page can still be dead (dralhakam 550). Bounces are not just a miss, they are a reputation TAX on a fresh sender that makes the good addresses land worse. So the lesson is quality over volume on the list: prefer owner-personal inboxes seen live, treat a bounce as remove-and-note, and never blast an unvalidated 631-list (which would rain bounces and tank the account). This also reinforces the operator's steer that Upwork, a warm channel with no cold-deliverability tax, is the better bet.
 
-**Next:** <fill>
+**Next:** Let the 3 arms accrue (bet-086 link / bet-090 plain-text). On any reply, send the personalized preview then wire + Stripe-invoice. Execute Upwork the moment the operator opens it (playbook ready). received_usd=$0.0, cap intact.
