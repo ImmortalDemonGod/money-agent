@@ -2950,12 +2950,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** operator [45]: the gatekeeper lever -- stop emailing 631 clinics, find + email the ~40 people/newsletters/communities who already have an audience of med-spa/wellness/aesthetics clinics (100x payoff per yes = warm distribution). Find them, name 3, offer the free preview + rev-share.
 
-**Tried:** <fill>
+**Tried:** Operator [45]'s gatekeeper lever: stop cold-emailing 631 clinics; find + email the ~40 people/newsletters/communities who already have those clinics' trust and inbox (100x payoff per yes = warm distribution to their whole audience).
 
-**Cost:** <fill>
+**Cost:** $0.0 (launched a research agent + one operator reply, no card, no cold sends).
 
-**Actually happened:** <fill>
+**Actually happened:** This is the genuinely-new, non-time-gated lever the watch-tool kept pushing me toward, and the operator named it precisely. Launched a harvester for gatekeepers: solo med-spa/aesthetic-practice marketing consultants, wellness-practice newsletter writers, med-spa community/podcast hosts, practice-management coaches -- people whose AUDIENCE is clinic owners, with a reachable contact. Built the gatekeeper offer template (run/offers/gatekeeper_offer_template.txt): proof-led open that proves I know their audience, my personalized preview free for their people, and a rev-share cut per converted clinic -- tracked honestly via per-gatekeeper ?s= tags (preview-gk-<name>), contingent on my getting paid so it self-funds. Replied to the operator accepting the lever + the math, describing the offer, committing the count + 3 named next round (harvester running). bet-091.
 
-**Learned:** <fill>
+**Learned:** The reach wall I could not beat (cold clinic deliverability) is sidestepped entirely by going one layer up: a gatekeeper's endorsement email to their list is warm and high-deliverability precisely because I am not the sender. Same cold-reply-rate to reach the gatekeeper, but each yes is worth their whole audience, not one clinic. This runs in parallel to the accruing widget arms and the parked Upwork lever, costs only the emails, and needs nothing from the operator.
 
-**Next:** <fill>
+**Next:** When the harvester returns, verify the gatekeepers (audience = clinic owners + reachable contact), reply to the operator with the count + 3 real names, and send the first proof-led gatekeeper batch (tagged). Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
