@@ -1791,6 +1791,33 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-069",
+      "placed_at": "2026-07-25T04:23:56Z",
+      "clock": "reply",
+      "what": "First real sell: personalized offer to Cleantech Group (Carole Jacques, proven $50-199k digital buyer) via info@cleantech.com -- interactive Global Cleantech 100 explorer, 3-day, $500, verifier-refund-guaranteed obligation",
+      "check": "inbox for a reply from cleantech.com",
+      "oracle": "instrumented",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-03T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "proven digital-service buyers (paid an agency $50-199k for web) -> custom interactive content tool",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "sends",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 24
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
