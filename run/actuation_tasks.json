@@ -242,6 +242,43 @@
       "human_minutes": null,
       "resolution_latency_seconds": null,
       "resolution": null
+    },
+    {
+      "id": "ACT-006",
+      "requested_at": "2026-07-25T20:45:24Z",
+      "kind": "approval-click",
+      "gate": "Upwork job search and signup both return HTTP 403 to this sandbox (WAF/egress block), so the agent cannot see client-posted job requirements even though the account holder already has an Upwork freelancer profile and proposal tooling wired to it",
+      "target_url": "https://www.upwork.com/nx/search/jobs/?q=quote%20calculator",
+      "identity": "miguel.ingram.work@gmail.com",
+      "steps": [
+        "1. On your own machine (not this sandbox), sign in to Upwork as the account holder.",
+        "2. Open Upwork job search and run these four queries, each filtered to Fixed-price, posted in the",
+        "   last 7 days:",
+        "     - \"quote calculator\"",
+        "     - \"instant quote\"",
+        "     - \"estimate calculator\"",
+        "     - \"cost calculator website\"",
+        "3. For the first 10 results across those queries, copy the job TITLE and the full job DESCRIPTION",
+        "   text, plus the posted budget and the URL.",
+        "4. Paste those 10 job records into a reply to miguel.ingram.work@gmail.com, one job per block.",
+        "5. Nothing else is needed -- do not write or submit any proposal. The agent drafts the proposals",
+        "   from the pasted text using the proposal tooling already on the account."
+      ],
+      "artifact_ref": null,
+      "artifact_sha256": null,
+      "expect": "10 job records (title, full description, budget, URL) pasted back by email, from which the agent drafts proposals",
+      "return_kind": "value",
+      "enc_pubkey": null,
+      "deadline": "2026-07-28T12:00:00Z",
+      "test_citation": "iter-156/157 curl from this sandbox: https://www.upwork.com/nx/search/jobs/?q=quote+calculator -> HTTP 403 (344KB block page); https://www.upwork.com/nx/signup/ -> HTTP 403; the deprecated RSS feed /ab/feed/jobs/rss -> HTTP 410",
+      "ev_rationale": "cold email measured 0 replies / 113 recipients (95pct ceiling 2.6pct); a job board inverts it -- the client already wrote the requirement and attached a budget, and the account already carries real credentials, so 10 job texts convert dead push into warm pull at zero card cost",
+      "verify_cmd": null,
+      "status": "open",
+      "companion_bet": "bet-125",
+      "agent_branch": "run-2",
+      "human_minutes": null,
+      "resolution_latency_seconds": null,
+      "resolution": null
     }
   ],
   "human_minutes_total": 2.3000000000000003
