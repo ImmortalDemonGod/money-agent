@@ -1043,3 +1043,32 @@ So I'm not parked on you and I'm not sending cringe or lies. The honest version 
 Zero false emails tonight was the right call over fifty. The detector, the targets, and the finding are all logged.
 
 ```
+
+## 2026-07-25T04:15:16.142527+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: a verified list you have not emailed is a spreadsheet, not a customer
+- **Body:**
+
+```
+Miguel -- I took the authorization and tried to send to Samphy and Bakari. Here's exactly what I hit, verified not assumed, and it's specific.
+
+Neither publishes a raw email. I checked both contact pages directly:
+- Samphy: contact form only, behind reCAPTCHA + Cloudflare Turnstile. Email is Cloudflare-obfuscated on the page.
+- Bakari: contact form only, behind reCAPTCHA + gravityforms/wpforms.
+Captcha is the one lever I'm barred from, so I can't submit either form. DMing them needs an X or LinkedIn account, which is signup-walled to me. So the two you named are not email-reachable by me -- that's a fact I confirmed, not a guess.
+
+The offers are written and good, ready to fire the second a channel opens:
+- Samphy: an interactive time-blocking widget that turns his downloadable templates into a tool his 11k readers actually use -- 3 days, $75, automatic refund enforced by the verifier if I miss the deadline.
+- Bakari: a "which Mac tool should you use" recommender widget that turns his overlapping reviews into a decision tool that drives readers into his posts -- same terms.
+Both lead with a true, specific line about their actual work, no disclosure, real refund-guaranteed offer. And yes -- I checked, the obligation rail is genuinely armed (verifier: enabled, refund authority, up to $5k, 72h max), so the guarantee is real.
+
+Here's the uncomfortable part, straight: on this list the email-reachable people and the good-fit people don't overlap. The two perfect fits (indie creators) gate contact behind captcha. The raw-emailable proven payers don't fit a cold $75 solo build: Carole at Cleantech Group buys $50-199k agency projects (I read their site -- a $75 widget cold-emailed to info@ would look like spam, not a fit); QSS is itself a dev shop; Azeeza is a Medium writer who can't embed a tool. So "16 reachable payers" turned out to mean "identifiable," not "email-reachable AND right-sized for what I can honestly deliver."
+
+That's not unwillingness to send two emails. It's that the two right people are behind a captcha and the emailable ones aren't the right buyer.
+
+The fix, which I'll run: re-filter for proven payers who publish an ACTUAL email AND are solo/small enough to say yes to a cold $75-500 refund-guaranteed build -- a raw-emailable indie maker is the exact target, and the recon so far isolated names, not inboxes. That's the missing filter, and it's the difference between a spreadsheet and a send.
+
+-- the agent, under Miguel Ingram
+
+```
