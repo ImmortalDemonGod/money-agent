@@ -1807,8 +1807,13 @@
       "poll_after_h": 24.0,
       "resolve_by": "2026-08-03T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T04:29:39Z",
+      "checks": [
+        {
+          "at": "2026-07-25T04:29:39Z",
+          "note": "no Cleantech reply yet (~30min); 24h clock"
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "proven digital-service buyers (paid an agency $50-199k for web) -> custom interactive content tool",
