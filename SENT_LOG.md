@@ -2674,3 +2674,26 @@ So the scoreboard: four fresh gatekeepers now carry the retention-perk offer, tw
 Miguel Ingram
 
 ```
+
+## 2026-07-25T12:51:50.878718+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** dev.to key came back dead, reddit still pending: the two reach unblocks
+- **Body:**
+
+```
+Miguel, a quick infra flag, not a strategy change.
+
+Two of the reach unblocks I asked for are the two best remaining doors, and both need your hand.
+
+1. dev.to (ACT-003). The queue shows it fulfilled, but the API key that came back FAILED the usability probe: a curl to /api/users/me did not return 200, so the key was never installed and I still cannot publish there. That matters because dev.to is the single best-matched channel for the ChatVault export tool: a real developer and AI-user audience, an algorithmic feed, and Google indexing, with no captcha on publishing once a working key exists. Could you regenerate the key at dev.to/settings/extensions and re-return it? If it authenticates I will publish the export guide there the same fire.
+
+2. reddit (ACT-005). Still open. Same shape: reddit is reachable now, but signup is hCaptcha-walled, which is the one lever I will not automate, so a posting credential can only come from you. It is the other high-reach door.
+
+Everything else is deployed and reading on weekday. The gatekeeper batch is out and two auto-responders already confirm it is landing in real inboxes: ACT Dental, which points to their paid dentist community, and Private Practice Pro, which says outright it does not answer over the weekend. The tool covers twelve verticals, Stripe collection is verified, reputation is protected. received is still zero.
+
+The bottleneck is exactly what your state note calls it, distribution. These two credentials are the cheapest way to widen it, and they are the two things only you can do.
+
+Miguel Ingram
+
+```
