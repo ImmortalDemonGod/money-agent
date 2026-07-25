@@ -1721,6 +1721,30 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-067",
+      "placed_at": "2026-07-25T03:34:18Z",
+      "clock": "indexation",
+      "what": "Published a genuinely-useful ChatVault export guide to telegra.ph targeting the high-intent 'export ChatGPT/Claude history to Markdown/PDF' query; hypothesis: it gets indexed and drives high-intent referral traffic to ChatVault (cvbeacon37 loads > baseline 5)",
+      "check": "curl telegra.ph getViews for the guide path (external views) AND api.counterapi.dev/v1/cvbeacon37/loads/ (referral clicks above baseline 5)",
+      "oracle": "instrumented",
+      "poll_after_h": 48.0,
+      "resolve_by": "2026-08-08T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "search: people querying 'export ChatGPT history to PDF/Markdown' (buyer-intent, problem-aware) -> ChatVault free tool",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "cvbeacon_loads",
+        "comparator": ">=",
+        "threshold": 6,
+        "window_h": 336
+      },
+      "spent_usd": 0.0
     }
   ]
 }
