@@ -2382,8 +2382,13 @@
       "poll_after_h": 1.0,
       "resolve_by": "2026-07-31T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T14:39:01Z",
+      "checks": [
+        {
+          "at": "2026-07-25T14:39:01Z",
+          "note": "content-spam-score is JS-gated (mail-tester), not self-measurable headless; auth-level deliverability confirmed via bet-087. No further action."
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "deliverability-self-test",
