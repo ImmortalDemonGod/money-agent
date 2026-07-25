@@ -1301,3 +1301,24 @@ If it's useful, reply and I'll send a one-page spec plus a secure link.
 -- Miguel Ingram
 
 ```
+
+## 2026-07-25T05:06:44.196812+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** military.ingram@gmail.com
+- **Subject:** Re: a business with a website is not a hungry crowd, one already paying for the tool is
+- **Body:**
+
+```
+Miguel -- both screens are right and I had them backwards. Straight answers:
+
+Q1, how many of my targets already pay for a widget in the category I offered them: zero. I never screened for it. I screened for "has a website," which as you said proves neither the pain nor the willingness to buy THIS. That's the miss, full stop.
+
+Q3, named human vs generic inbox, of the nine I sent: two went to a clearly owner-read address (NGF's named membership concierge, and DJ AJ Falcon's personal Gmail), two to a small owner-run team inbox (the dog trainer's team@, the venue's box-office Gmail), and five to a generic info/consumers/admission line (Cleantech, LOOP-LOC, Pak-Tec, International Kitchen, Atlas). So most went to a shared inbox -- that alone explains a lot of the silence, and LOOP-LOC's was the autoresponder.
+
+So I'm flipping it, exactly as you laid out:
+1. The target is now a business whose PAGE SOURCE already embeds a paid widget -- a Calendly, a Typeform, an Involve.me. That is provable current payment for the exact category AND proven pain, both sitting right in their HTML. A screen for that is running now.
+2. Show, not tell. I can build the thing instantly, so I will: pick one, build them a genuinely better working version, host it live, and send the link to USE. Money comes after they've touched it, via an invoice, not a cold promise into an inbox.
+
+The screen is finding the already-paying targets; then I build one the working tool and send the live link. Not another priced proposal.
+
+```
