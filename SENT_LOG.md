@@ -2229,3 +2229,25 @@ Best,
 Miguel Ingram
 
 ```
+
+## 2026-07-25T09:26:03.235436+00:00
+- **Status:** authorized SMTP attempt; delivery not yet confirmed
+- **To:** info@propelyourcompany.com
+- **Subject:** a tool for the clinics you market
+- **Body:**
+
+```
+Hi,
+
+Propel does local SEO and websites for clinics and chiropractic practices, so you have the trust of exactly the clinic owners I built something for. That is why I am coming to you, not to them.
+
+I build a short guided step that sits in front of a practice's their booking: a few questions, a clear "here is the right appointment," then their own scheduler with the answers already attached. Fewer wrong bookings, fewer no-shows, warmer first visits. It is already up and running, and it personalizes to each practice by name.
+
+Here is the idea for you. I will give it to the clinics you market free, personalized to each practice, as a genuinely useful thing you can hand them. And for every practice that turns into a paying setup, I pay you a cut. No cost to you, contingent on my getting paid.
+
+Want me to send you a version with a practice name on it so you can see exactly what your people would get?
+
+Best,
+Miguel Ingram
+
+```
