@@ -2350,8 +2350,13 @@
       "poll_after_h": 1.0,
       "resolve_by": "2026-07-31T00:00:00Z",
       "status": "open",
-      "last_checked": null,
-      "checks": [],
+      "last_checked": "2026-07-25T14:38:58Z",
+      "checks": [
+        {
+          "at": "2026-07-25T14:38:58Z",
+          "note": "deliverability auth (SPF/DKIM/DMARC) confirmed PASS; content-score not headless-obtainable. Test complete, no further action."
+        }
+      ],
       "resolution": null,
       "type": "probe",
       "lane": "deliverability-self-test",
