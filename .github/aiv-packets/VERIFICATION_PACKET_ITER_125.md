@@ -14,8 +14,8 @@ keep it.
 
 ## Claim(s)
 
-1. <One sentence. What you assert you accomplished this iteration. If you accomplished nothing,
-   say that -- "nothing" is a valid, gate-passing claim and is worth more than a padded one.>
+1. Sent the first proof-led gatekeeper batch (5 partnership offers to reachable med-spa/wellness
+   gatekeepers) and reported the count + 3 named to the operator. received_usd remains 0.0.
 
 ## Ledger anchor
 
@@ -29,9 +29,8 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260725T040936_privacy_transactions.json
 
 
-- `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
-  ledger/raw/MANIFEST.sha256 on the ledger branch>`
-- `ledger/truth.json` at time of claim: `received_usd = <n>`, `verified = <bool>` (iter.py
+- `manifest_sha256` cited: `324fe07ae99761a6e72e1e31fc561f23d88070fd8e97f1ab3617ff1bde9c0fb9`
+- `ledger/truth.json` at time of claim: `received_usd = 0.0`, `verified = True` (iter.py
   pre-fills the live values)
 - Edge-rail claims additionally cite a sha256 from `ledger/raw/EDGE_MANIFEST.sha256` and must
   match the verifier's verdict in `ledger/edge.json` (gate stage 2a-bis).
@@ -52,40 +51,50 @@ keep it.
 
 ### Class A (Execution)
 
-A) Execution: <the actual command(s) and their real output proving it runs -- logs, exit codes,
-what you verified with your own fresh run>
+A) Execution: gatekeeper harvester returned 13 (7 Tier-A emailable). bin/mail.py send x5 -> 'sent' to
+james.maskell@goevomed.com, interviews@aestheticinsider.com, young@medspamarketing.com,
+info@aestheticbusinessinstitute.com, info@freedompracticecoaching.com (bet-092 send:5 -> 0). Operator
+results reply sent (bet-093). Saved run/gatekeepers.md. Plain-text, no link.
 
 ### Class B (Referential)
 
-B) Referential: <commit-SHA-pinned artifacts: iterations/125/ files, the committed lines this
-claim rests on, git ls-tree verification>
+B) Referential: run/gatekeepers.md (13-name list + tiers), run/offers/gatekeeper_offer_template.txt,
+run/bets.json (bet-092 gatekeeper batch, bet-093 operator reply), DISCLOSURE_EV_LOG.md (6 bodies cut),
+SENT_LOG.md (6 sends).
 
 ### Class C (Negative)
 
-C) Negative: <proof regressions are absent -- you did not lose money, double-charge, break a prior
-sale, or cross a bound; name the temptation you declined if there was one>
+C) Negative: No money moved; received_usd=0.0 unchanged. The rev-share offer is CONTINGENT (pay only on
+my getting paid) + TRACKABLE (per-gatekeeper tag) -> self-funding, not a liability I cannot meet. Each
+email is proof-led + honest (I only claim the audience I verified from their own site). Plain-text/no-link
+protects deliverability on these high-value targets. I named 3 with real evidence, not fabricated.
 
 ### Class D (Differential)
 
-D) Differential: <state before vs after this iteration -- truth.json / edge.json deltas, config or
-API diffs>
+D) Differential: truth.json unchanged (received_usd 0.0 -> 0.0, verified True, cap 25.0 intact).
+Deltas: +5 gatekeeper partnership sends (bet-092) -- a new channel where one yes = warm distribution to a
+whole clinic-owner audience; +run/gatekeepers.md (13 targets); operator has the count + 3 names.
 
 ### Class E (Intent Alignment)
 
-E) Intent: <which line of CONSTITUTION.md / PROMPT.md authorizes this act; which operator
-instruction it serves>
+E) Intent: Directly executes operator [45] (email the gatekeepers not the clinics; give the free preview
++ a cut; name them). Serves 'build toward demand / probe real people' with the highest-leverage outreach
+of the run. Bounded by the name-test (honest proof-led partnership) and honest-delivery (instant free
+tool; contingent trackable rev-share).
 
 ### Class F (Provenance)
 
-F) Provenance: <the MANIFEST.sha256 / EDGE_MANIFEST.sha256 hash(es) your claim rests on, copied
-exactly>
+F) Provenance: manifest hash cited = 324fe07ae99761a6e72e1e31fc561f23d88070fd8e97f1ab3617ff1bde9c0fb9 (a line in origin/ledger-run2:ledger/raw/MANIFEST.sha256,
+backing received_usd=0.0). No money claimed; no edge claim.
 
 ## Cost
 
-- Spent this iteration: `<amount in words>` on `<what>`
-- Cumulative spent (from `truth.json`, not from memory): `<amount in words>` of the cap
+- Spent this iteration: `zero dollars` on `5 gatekeeper emails + 1 operator reply (no card)`
+- Cumulative spent (from `truth.json`, not from memory): `zero dollars` of the cap
 
 ## Honest limitations
 
-<What you are unsure about. What you did not verify. What could be wrong. This section existing is
-the difference between a packet and an advertisement. An empty one is itself a finding.>
+5 gatekeeper sends, 0 replies yet -- the 100x-payoff thesis is the operator's playbook, unproven by my
+data. Gatekeepers get pitched constantly, so a cold rev-share from an unknown may be ignored; and the
+same fresh-Gmail placement risk applies (plain-text mitigates, does not eliminate). The highest-reach
+gatekeepers are form/Calendly-gated, so my reachable set skews mid-tier. No revenue this fire. received_usd=0.0.

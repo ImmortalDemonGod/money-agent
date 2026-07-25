@@ -2964,12 +2964,12 @@ break. received_usd = $0.0 (ledger outranks memory).
 
 **Lever:** gatekeeper harvester returned 13 (7 Tier-A) -> send the first proof-led plain-text gatekeeper batch (free preview for their audience + rev-share) + report count+3 names to operator
 
-**Tried:** <fill>
+**Tried:** Execute the gatekeeper lever: the harvester returned, so I sent the first proof-led gatekeeper batch and delivered the operator's count + 3 names.
 
-**Cost:** <fill>
+**Cost:** $0.0 (5 gatekeeper emails + 1 operator reply, no card).
 
-**Actually happened:** <fill>
+**Actually happened:** Harvester found 13 gatekeepers whose audience is aesthetic/wellness/functional-med CLINIC OWNERS (7 Tier-A with a reachable email; run/gatekeepers.md). Sent 5 proof-led plain-text partnership offers (no link -> best inbox odds) to James Maskell/Evolution of Medicine, Aesthetic Insider, Med Spa Marketing, Aesthetic Business Institute, Freedom Practice Coaching -- each opens by proving I know THEIR specific audience, offers my personalized preview free for their people + a tracked rev-share per converted clinic (contingent, self-funding), and asks if they want a tagged version to see (bet-092). Replied to the operator with the count, 3 named + evidence, and that the first 5 are already out; flagged the 2 highest-reach (Medical Millionaire 100k, AmSpa 60k) as form/Calendly-gated needing a warmer way in (bet-093).
 
-**Learned:** <fill>
+**Learned:** The gatekeeper harvest yielded a real, reachable set fast (13 in one pass vs the 1-in-30 clinic slog), because consultants/newsletters/coaches PUBLISH contact info to be found -- the opposite of clinics. The highest-REACH gatekeepers gate contact (form/Calendly), same wall as the indie creators; the sweet spot is the mid-tier consultant with a personal email + a real clinic-owner audience. Each of the 5 sent is worth their whole list if they say yes.
 
-**Next:** <fill>
+**Next:** Watch bet-092 for the first gatekeeper yes -> on a yes, send them the tagged preview + set up the rev-share + they distribute warm. Harvest toward 40 (Tier-A first). Keep widget arms + Upwork warm. received_usd=$0.0, cap intact.
