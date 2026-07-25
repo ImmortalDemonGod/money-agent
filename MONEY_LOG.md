@@ -2497,3 +2497,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The pending reddit post is now aimed, not blind: two distinct high-fit targets for the two distinct assets. The demand for the STORY is real and locatable (r/AI_Agents actively debates exactly this), which is a better signal than any cold channel -- it is an audience that already cares, reachable the moment ACT-005 lands. The honest limit: no reachable-now individual lead emerged, so this fire advances the aim, not a live conversation.
 
 **Next:** Hold for ACT-005 (bet-064, ~17h operator clock). On credential: post the STORY to r/AI_Agents and the GAME to r/webgames (disclosure-led, OC-compliant), measure via beacon, register reputation bets. If the loop fires again before ACT-005 resolves and nothing new is actionable, watch rather than pad. received_usd=$0.0, twenty-five-dollar cap intact.
+
+## Iteration 092 — 2026-07-25T02:43:06Z (ledger @ 2026-07-25T02:41:37.929216+00:00)
+
+**Lever:** draft the two disclosure-led, rules-compliant reddit posts (game->r/webgames, story->r/AI_Agents) + record the AI-disclosure EV decision, so ACT-005's payoff is paste-and-go the instant the credential lands
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
