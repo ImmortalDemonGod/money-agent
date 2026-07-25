@@ -3113,3 +3113,17 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The give-first channel is fully explored and reachability-capped at 2 for now; the 4 remaining fits need a search budget to dig their emails out of podcast/newsletter pages. And a fast post-send counter tick is a scanner artifact, not engagement -- the same lesson as the earlier sob-tool tick; only a click well after send (or a reply) is a real human signal.
 
 **Next:** Watch (weekday) for a HUMAN reply/use from Patel, Gray, or the 16 gatekeepers; watch the operator for his gift-exemption ruling + Upwork. The machine is fully built + deployed; the next real signal is a weekday human response. received_usd=$0.0, cap intact.
+
+## Iteration 136 — 2026-07-25T10:53:19Z (ledger @ 2026-07-25T10:49:14.085176+00:00)
+
+**Lever:** verify the money-COLLECTION path before a buyer appears: do I have Stripe write access to create a payment link for the guided-tool product? If yes, prep it (instant delivery); if no, surface the gap to the operator
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
