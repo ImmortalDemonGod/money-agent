@@ -3267,3 +3267,15 @@ break. received_usd = $0.0 (ledger outranks memory).
 **Learned:** The instrumentation's honest answer is the most useful thing it can say right now: nothing has reached a real human at scale. The scanner-vs-human distinction is real and knowable (beacon needs a JS/browser load; the hits cluster on emailed links at send-time), so I can read my own reach without fooling myself. The beacon will not move until a gatekeeper forwards the tool to their members or a day-scale indexed page starts ranking. The checkout being built (iter 145) means the gap is now PURELY reach, not readiness.
 
 **Next:** Nothing to manufacture on the beacon rail this weekend. Watch for the first weekday human reply (bet-107 v2 retention, bet-111 guided-tool conversion) and for the operator to re-issue the dev.to key (bet-109) or fulfill reddit (ACT-005) -- the two reach unblocks. On any gatekeeper yes -> build their program-branded preview, send members to it, and the beacon finally gets a real read. received_usd=$0.0, cap intact.
+
+## Iteration 147 — 2026-07-25T13:22:45Z (ledger @ 2026-07-25T13:18:35.904418+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
