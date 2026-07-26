@@ -13355,6 +13355,457 @@
       ],
       "evidence": [],
       "timestamp": "2026-07-26T08:04:00.193274+00:00"
+    },
+    {
+      "sha": "9ab98af2d5c81e19b0c914c0a3381a0fc182696b",
+      "message": "iter 208: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:04:25.423784+00:00"
+    },
+    {
+      "sha": "82b2cf9b69889fd125666fdf83a873748ab8b9d6",
+      "message": "iter 209: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_209.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_209.md"
+      ],
+      "timestamp": "2026-07-26T08:12:01.295601+00:00"
+    },
+    {
+      "sha": "272971c2e3d35b8a23fe490670a835fff6fd52b4",
+      "message": "edge: VOID 8k-coverage-drift-v1 — killed pre-trade, t=1.37<2, structural (alpha=cost=illiquidity)",
+      "files": [
+        ".aiv/change.json",
+        ".run/watch_streak",
+        "CLAUDE.md",
+        "DECISION_LOG.md",
+        "DISCLOSURE_EV_LOG.md",
+        "EDGE_REGISTRATION.md",
+        "OPERATOR_DIRECTIVE.md",
+        "REFUSALS.md",
+        "deploy/cellcraft/.gitignore",
+        "deploy/cellcraft/index.html",
+        "deploy/meridian-pt/.gitignore",
+        "deploy/meridian-pt/index.html",
+        "deploy/mith-studios/.gitignore",
+        "deploy/mith-studios/index.html",
+        "deploy/northbeam/.gitignore",
+        "deploy/northbeam/index.html",
+        "deploy/northbeam/robots.txt",
+        "deploy/northbeam/sitemap.xml",
+        "deploy/wavecrest/.gitignore",
+        "deploy/wavecrest/index.html",
+        "run/EDGE_STRATEGY.md",
+        "run/batch.py",
+        "run/edgar_events.py",
+        "run/edge_backtest.py",
+        "run/edge_classify.py",
+        "run/edge_execute.py",
+        "run/edge_session.py",
+        "run/edge_state/peak_equity.json",
+        "run/edge_state/plan_2026-07-23.json",
+        "run/fl_screen.py",
+        "run/freelancer_bid_cellcraft.txt",
+        "run/freelancer_bid_meridian.txt",
+        "run/freelancer_bid_mith.txt",
+        "run/freelancer_bid_northbeam.txt",
+        "run/freelancer_bid_textile.txt",
+        "run/freelancer_bid_wavecrest.txt",
+        "run2.env"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:13:40.516540+00:00"
+    },
+    {
+      "sha": "30b35a3cb2c67ffbbcf337280a112d191151b34a",
+      "message": "outcome: event-drift edge: kill confirmed by literature, not just sample size | VOIDED, AND THE LITERATURE MAKES THE KILL STRUCTUR",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:15:58.133561+00:00"
+    },
+    {
+      "sha": "f3db328142cb2201b6cbc63b634e1eed3dfecc54",
+      "message": "iter 209: close (gate PASS)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_209.md",
+        "MONEY_LOG.md"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_209.md"
+      ],
+      "timestamp": "2026-07-26T08:16:36.102413+00:00"
+    },
+    {
+      "sha": "41637d10285dd02272e901bc565a3bde3afa7873",
+      "message": "iter 210: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_210.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_210.md"
+      ],
+      "timestamp": "2026-07-26T08:21:59.856439+00:00"
+    },
+    {
+      "sha": "3e6009342be21273bbe55a926e2badfd972c7167",
+      "message": "outcome: searching for a genuinely-different cost-surviving edge | THE FIRST-PASS LITERATURE CONVERGES ON THE OPERATO",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:23:41.174123+00:00"
+    },
+    {
+      "sha": "2c1e127620dc88afd313ac9efab663cf921bfb8a",
+      "message": "iter 210: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:24:00.773682+00:00"
+    },
+    {
+      "sha": "755028373f2aced4e773ff898f13d7c579856839",
+      "message": "iter 211: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_211.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_211.md"
+      ],
+      "timestamp": "2026-07-26T08:32:02.383831+00:00"
+    },
+    {
+      "sha": "17a924f4649cca0bfd6fc86c15d4ddc3864c0056",
+      "message": "outcome: edge experiment battery (operator: run experiments not narrative) | RAN 4 DISTINCT EXPERIMENTS; NOTHING CLEARS THE BAR",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:36:20.702301+00:00"
+    },
+    {
+      "sha": "d5e0fbc595d338b43eba05abf85b8f509e92127a",
+      "message": "iter 211: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:36:41.221116+00:00"
+    },
+    {
+      "sha": "b957e269ad1f7137c10a723a7631333ee0d8111a",
+      "message": "iter 212: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_212.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_212.md"
+      ],
+      "timestamp": "2026-07-26T08:37:43.638294+00:00"
+    },
+    {
+      "sha": "ea1932fc2c399a89a6b02642d57a58b261cb61fa",
+      "message": "outcome: out-of-sample validation kills a t=2.4 in-sample signal | THE SIGN FLIPPED OUT-OF-SAMPLE — THE SIGNAL IS DEA",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:41:34.148873+00:00"
+    },
+    {
+      "sha": "2e37fe973393941b099c99edee5557c0e7c6b364",
+      "message": "iter 212: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:41:55.539075+00:00"
+    },
+    {
+      "sha": "6c8d056e420f790e9e37f59d214c20d758b029ab",
+      "message": "iter 213: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_213.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_213.md"
+      ],
+      "timestamp": "2026-07-26T08:43:05.797482+00:00"
+    },
+    {
+      "sha": "ea65fcf0c4f559080040ca9af61cadecca5df6bf",
+      "message": "outcome: earnings announcement premium + placebo validation | EAP FAILS (SIGN-FLIP), AND A PLACEBO CONFIRMS THE",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:45:39.414559+00:00"
+    },
+    {
+      "sha": "24e614b28972884dbfc14352012b047d1b5a85cb",
+      "message": "iter 213: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:46:00.309768+00:00"
+    },
+    {
+      "sha": "cfb288af216daf6dead669df31cd4d219b36481d",
+      "message": "iter 214: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_214.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_214.md"
+      ],
+      "timestamp": "2026-07-26T08:52:23.013205+00:00"
+    },
+    {
+      "sha": "62ae672048b5c04e34c80620a572309354a8d8d9",
+      "message": "outcome: powered 5-year test: EMH confirmed, costs are the only robust effect | DEFINITIVE NULL WITH POWER, AND THE ONLY t>3 IN TH",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:53:42.060113+00:00"
+    },
+    {
+      "sha": "a0fc874a9ae9b93f57c8eac990436e63fa276372",
+      "message": "iter 214: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T08:54:04.642024+00:00"
+    },
+    {
+      "sha": "38d6b5eb693fa1c93aa43275da72c66070485ec7",
+      "message": "iter 215: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_215.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_215.md"
+      ],
+      "timestamp": "2026-07-26T09:00:36.049772+00:00"
+    },
+    {
+      "sha": "3d71cec4f330063c5ed71aa40645b46a18a1786a",
+      "message": "outcome: forced-flow (mechanical) edges — the genuinely different class | CALENDAR FORCED FLOWS ARE ARBITRAGED (NULL); THE P",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:02:56.954250+00:00"
+    },
+    {
+      "sha": "40bc5e75c0972661ba0a88b39deb14bc127b84a7",
+      "message": "iter 215: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:04:07.496064+00:00"
+    },
+    {
+      "sha": "c71da99cbffad63676fadcb2ce609fc95f5bcf48",
+      "message": "iter 216: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_216.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_216.md"
+      ],
+      "timestamp": "2026-07-26T09:05:02.827072+00:00"
+    },
+    {
+      "sha": "a61caff9bab708c6b39d2ccbb889227dc93bf404",
+      "message": "outcome: index-inclusion forced flow — first structural survivor | FIRST SURVIVOR OF THE SEARCH, AND IT DOES NOT SIGN",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:08:23.322841+00:00"
+    },
+    {
+      "sha": "0a5278ac8f28a84b3c95a96534b9364a108bbeca",
+      "message": "iter 216: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:08:44.566737+00:00"
+    },
+    {
+      "sha": "8df30d9c34dd3cd802e8c16b30f76bc942588d9f",
+      "message": "iter 217: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_217.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_217.md"
+      ],
+      "timestamp": "2026-07-26T09:11:13.244948+00:00"
+    },
+    {
+      "sha": "a6b5aba8f9dd994310a35354c95284b9659d8400",
+      "message": "outcome: index-inclusion capturability — the honest tradeable portion | THE HEADLINE OVERSTATES THE TRADEABLE EDGE; THE CA",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:13:44.567562+00:00"
+    },
+    {
+      "sha": "ec99cc4ef680f77276fb6f436b1de778c3c8ff24",
+      "message": "iter 217: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:14:04.965016+00:00"
+    },
+    {
+      "sha": "a4e40d27ee71a091ef606118ac835ec462b53a18",
+      "message": "iter 218: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_218.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_218.md"
+      ],
+      "timestamp": "2026-07-26T09:21:40.065435+00:00"
+    },
+    {
+      "sha": "a92e25e3a010ae34b03f36beb3f20d739b012cb5",
+      "message": "outcome: index-inclusion true capturability — the honest end of the search | THE CAPTURABLE EDGE IS A NULL; THE +4.4% IS THE UN",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:22:50.890324+00:00"
+    },
+    {
+      "sha": "845808e5c283943272fa7dfb860ae497d160bd24",
+      "message": "iter 218: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:23:11.072268+00:00"
+    },
+    {
+      "sha": "558d3e930fa7e2cb21d348c97d9241cbc96fff75",
+      "message": "iter 219: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_219.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_219.md"
+      ],
+      "timestamp": "2026-07-26T09:31:11.345062+00:00"
+    },
+    {
+      "sha": "2217b0a28b42a9af1e348088832d8d628e4cf935",
+      "message": "outcome: index-deletion reversal — last capturable forced flow tested | NULL, WHICH COMPLETES THE FORCED-FLOW SWEEP. Buyin",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:32:48.768231+00:00"
+    },
+    {
+      "sha": "2d6f5b82be859fef8cb142d3a1c63c4c42afc697",
+      "message": "iter 219: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:33:09.608247+00:00"
+    },
+    {
+      "sha": "ff8e7190a19ad6efe4e6bc46384483d1478a4f1a",
+      "message": "iter 220: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_220.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_220.md"
+      ],
+      "timestamp": "2026-07-26T09:37:20.698205+00:00"
+    },
+    {
+      "sha": "455a2b8eb125eab7f4562d61a86464dd1e0cf99f",
+      "message": "outcome: volatility risk premium — the completely-different edge that works | REAL, OVERWHELMING, STABLE — THE FIRST GENUINELY R",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:39:03.174285+00:00"
+    },
+    {
+      "sha": "29f81dac573d3542693eaf96f9ad613b09fb2ace",
+      "message": "iter 220: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:39:26.849906+00:00"
+    },
+    {
+      "sha": "2f261f5fbccf6b5be3e0567eba79f15c3ed5d465",
+      "message": "iter 221: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md"
+      ],
+      "timestamp": "2026-07-26T09:41:20.270348+00:00"
+    },
+    {
+      "sha": "73ed456b11ae4506acafe72ff56c6135ea9f8843",
+      "message": "outcome: short-vol tradeable backtest — the premium is real, the strategy is tail-dominated | THE PREMIUM IS REAL (t24) BUT THE TRADEABLE STRATE",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:43:13.349144+00:00"
     }
   ],
   "files_changed": [
@@ -13718,7 +14169,54 @@
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_205.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_206.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_207.md",
-    ".github/aiv-packets/VERIFICATION_PACKET_ITER_208.md"
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_208.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_209.md",
+    ".aiv/change.json",
+    ".run/watch_streak",
+    "CLAUDE.md",
+    "DECISION_LOG.md",
+    "DISCLOSURE_EV_LOG.md",
+    "OPERATOR_DIRECTIVE.md",
+    "deploy/cellcraft/.gitignore",
+    "deploy/cellcraft/index.html",
+    "deploy/meridian-pt/.gitignore",
+    "deploy/meridian-pt/index.html",
+    "deploy/mith-studios/.gitignore",
+    "deploy/mith-studios/index.html",
+    "deploy/northbeam/.gitignore",
+    "deploy/northbeam/index.html",
+    "deploy/northbeam/robots.txt",
+    "deploy/northbeam/sitemap.xml",
+    "deploy/wavecrest/.gitignore",
+    "deploy/wavecrest/index.html",
+    "run/EDGE_STRATEGY.md",
+    "run/edgar_events.py",
+    "run/edge_backtest.py",
+    "run/edge_classify.py",
+    "run/edge_execute.py",
+    "run/edge_session.py",
+    "run/edge_state/peak_equity.json",
+    "run/edge_state/plan_2026-07-23.json",
+    "run/fl_screen.py",
+    "run/freelancer_bid_cellcraft.txt",
+    "run/freelancer_bid_meridian.txt",
+    "run/freelancer_bid_mith.txt",
+    "run/freelancer_bid_northbeam.txt",
+    "run/freelancer_bid_textile.txt",
+    "run/freelancer_bid_wavecrest.txt",
+    "run2.env",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_210.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_211.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_212.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_213.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_214.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_215.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_216.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_217.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_218.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_219.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_220.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md"
   ],
   "evidence_files": [
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_001.md",
@@ -13928,6 +14426,19 @@
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_205.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_206.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_207.md",
-    ".github/aiv-packets/VERIFICATION_PACKET_ITER_208.md"
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_208.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_209.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_210.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_211.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_212.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_213.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_214.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_215.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_216.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_217.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_218.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_219.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_220.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md"
   ]
 }
