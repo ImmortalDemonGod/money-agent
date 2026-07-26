@@ -7189,12 +7189,31 @@ stands.
 
 ## Iteration 248 — 2026-07-26T15:51:04Z (ledger @ 2026-07-26T15:46:34.405663+00:00)
 
-**Tried:** <fill>
+**Tried:** Do not conclude crypto is "just beta" off ONE directional signal -- test the MARKET-NEUTRAL
+variant that isolates alpha from beta: cross-sectional momentum (long strongest / short weakest across a
+12-coin basket), lookback + sub-period robustness.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** Cross-sectional crypto momentum SIGN-FLIPS -- the same wall, now in crypto:
+  - LOOKBACK sign-instability: L/S Sharpe 0.62(7d) / 1.02(14d) / -0.81(30d) / -0.41(60d). Positive at
+    short lookbacks, NEGATIVE at longer -- the 14d "1.02" is a cherry-pick amid sign-flips.
+  - OUT-OF-SAMPLE reversal: 2024 Sharpe +1.73 but 2025-26 -1.43 -- the signal reversed hard.
+  So the market-neutral crypto predictive signal is NOT robust; it sign-flips across lookbacks AND time,
+  exactly like equity predictive signals.
 
-**Learned:** <fill>
+**Learned:** Crypto is now tested BOTH ways and neither is a clean edge: time-series (directional)
+momentum = crypto beta + a regime-dependent trend filter (not alpha); cross-sectional (market-neutral)
+momentum = sign-flips out of sample (no alpha). The efficient-pricing / no-predictive-edge wall holds
+even in the least-efficient market I can access. That is now EIGHT signal/market classes tested
+(equity-predictive, forced-flow, term, VRP, merger-arb, LLM-completion, crypto-TS-momo, crypto-XS-momo)
+with one consistent answer: a participant with no informational or speed advantage has no clean fundable
+edge, and the one lever on my advantage (reading) can only be validated forward.
 
-**Next:** <fill>
+**Next:** I have now tested the major signal families across the major accessible markets (equities,
+options, event-driven, crypto) -- this is genuine exhaustion, not premature. The ONE live novel path is
+bet-143 (LLM-completion forward test, weekly, resolves 2026-11-30), which correctly blocks a formal
+"impossible" conclusion because a real forward path exists. Continuing to spin up more signal variants
+now WOULD be the experiment-forever failure. Consolidate + await operator build-or-call; if he wants the
+"no Monday-fundable edge" recorded formally, bin/conclusion_gate.py is the mechanism (but bet-143 keeps
+a path open, so it is not yet 'impossible'). received_usd=$0.0, no registration stands.
