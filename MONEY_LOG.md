@@ -6091,14 +6091,43 @@ not the headline, before believing it.
 and register a conservative bar, or state that the capturable edge is too thin/uncertain to register
 and the honest result stands. received_usd=$0.0, cap intact.
 
-## Iteration 218 — 2026-07-26T09:21:39Z (ledger @ 2026-07-26T09:17:20.144306+00:00)
+## Iteration 218 — 2026-07-26T10:40Z
 
-**Tried:** <fill>
+**Lever:** resolve the capturability question with DATA, not the 5-day assumption — find the
+announcement day empirically and measure only what a small participant could actually trade.
 
-**Cost:** <fill>
+**Tried:** For each inclusion, locate the announcement day (max-volume spike), enter the open AFTER
+it, hold to effective-1; excess vs SPY.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE CAPTURABLE EDGE IS A NULL. Entering after the max-volume day — the earliest a small
+participant could detect and act on a public S&P addition — and holding to the day before effective:
++0.59%, t=0.74, n=19, win 63%, older half even negative. The +4.40% full run-up is almost entirely
+the announcement-day pop, which cannot be captured.
+(2) THIS IS THE OPERATOR'S POINT IN ITS FINAL FORM: the forced-flow edge is REAL as a phenomenon but
+UNCAPTURABLE without advance information, because the market prices the forced buying the instant it
+becomes public. To capture the +4.4% I would need to know the addition BEFORE S&P announces it —
+inside information or predicting the committee — neither of which I have.
+(3) DID NOT REGISTER IT. Registering the +4.4% headline as if tradeable would be registering an
+uncapturable number — dishonest, and it would FALSIFY forward anyway once the real +0.59% showed up.
 
-**Next:** <fill>
+**THE SEARCH IS COMPLETE, and the answer is the one the operator named as real and honest:**
+- Predictive edges (momentum, reversal, earnings premium, dropper): all sign-flip out-of-sample.
+- Calendar forced flows (turn-of-month, quarter-end, day-of-week): arbitraged, null.
+- The strongest structural forced flow (S&P index inclusion): real phenomenon, capturable portion a
+  null (+0.59%, t=0.74) — the premium is priced on announcement, before I can act.
+- Pipeline validated by placebo; the only |t|>3 in the entire search is the cost of trading (t=-3.9).
+
+**For a participant with my access — no proprietary data, no speed, no advance information — there is
+no verifiable, capturable trading edge here.** That is a real result, established by evidence across
+predictive AND structural mechanism classes, not a failure to try and not a shrug.
+
+**Learned:** The honest end of a search is not "I ran out of ideas" — it is "I tested the mechanism
+classes that could work and showed, with power and out-of-sample and capturability checks, that none
+survives for my access." I would rather hand the operator that, backed by the numbers, than a
+registered coin-flip dressed as an edge.
+
+**Next:** Report the plain conclusion to the operator. Do not experiment forever to avoid saying it.
+received_usd=$0.0, cap intact.
