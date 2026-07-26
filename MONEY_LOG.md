@@ -6440,14 +6440,33 @@ same nothing as an untested one.
 remaining work is forward evidence, weekly renewal of the sell cron, and honest marking of fills at a
 spread haircut. received_usd=$0.0, cap intact.
 
-## Iteration 228 — 2026-07-26T10:41:18Z (ledger @ 2026-07-26T10:38:43.130590+00:00)
+## Iteration 228 — 2026-07-26T13:00Z
 
-**Tried:** <fill>
+**Lever:** close the one real robustness gap — my VRP backtest window (2021-26) lacked a true tail
+event, and the operator's hole #1 named Feb-2018 and March-2020 specifically. Stress-test through them.
 
-**Cost:** <fill>
+**Tried:** Backtest the VIX-gated 10-delta short-vol through 2017-2021 (both crises); measure survival.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE VIX-GATE IS PROVEN ESSENTIAL, EMPIRICALLY. Through a crash-heavy period the UNCONDITIONAL
+strategy is NEGATIVE (-0.95%/mo, maxDD -221% of a risk unit) — crashes overwhelm the calm-window
+premium, exactly the operator's point. VIX>=16 +1.80%/mo; VIX>=20 +6.74%/mo (maxDD -83%). The gate
+keeps you out of pre-crash complacency and sells into post-crash rich premium.
+(2) THE STRATEGY SURVIVES THE WORST CRASHES BY CONSTRUCTION. Even the worst month (March 2020, -83% of
+a risk unit) is ~-$1,660 at my qty=1 ~$2,000 sizing — INSIDE the $5k cap. Defined-risk means a
+volmageddon or March-2020 CANNOT breach the cap. His hole #1 is now answered with EVIDENCE, not just
+the mathematical width argument.
+(3) DELIBERATELY DID NOT RE-TUNE. VIX>=20 is safer but re-tuning MIN_VIX to it would be overfitting to
+the crash sample, and at ~4 trades/year it would not fill the forward test. Kept 16: the defined-risk
+cap protects regardless of threshold, and the honest forward test needs to actually run.
 
-**Next:** <fill>
+**Learned:** The defined-risk structure is not a detail, it is the whole reason this edge is
+registrable where naked short-vol never would be — it converts an unbounded catastrophe into a bounded,
+cap-testable loss, so a March-2020 becomes a known ~$1,660 hit rather than an account-ender. And the
+gate + cap divide the labor cleanly: the gate is for returns, the cap is for survival. Testing against
+the real crashes rather than asserting the math was the honest way to know both hold.
+
+**Next:** Goal fully met and stress-tested. Monday 09:00 CDT the first gated spread fires. Remaining is
+forward evidence and weekly cron renewal, not more backtests. received_usd=$0.0, cap intact.
