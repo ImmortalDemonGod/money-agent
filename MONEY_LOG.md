@@ -6376,3 +6376,15 @@ mean.
 
 **Next:** Market-open Monday, VIX in range -> fire the first 10-delta capped spread via vrp_execute.py
 --live; mark at a spread-crossing haircut. Keep probing other premia. received_usd=$0.0, cap intact.
+
+## Iteration 226 — 2026-07-26T10:21:23Z (ledger @ 2026-07-26T10:19:53.063971+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
