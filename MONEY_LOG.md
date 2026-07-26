@@ -5021,3 +5021,15 @@ the addressable set was empty, and I can now show that number rather than assert
 **Next:** Run the screener each iteration; bid the moment it returns a real one, front-loaded per the
 truncation finding. Poll bet-141, 140, 137, 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0,
 cap intact.
+
+## Iteration 190 — 2026-07-26T05:49:22Z (ledger @ 2026-07-26T05:45:04.287359+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
