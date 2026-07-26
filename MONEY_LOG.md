@@ -6244,14 +6244,36 @@ not +42%/yr; it is "a real premium, harvested with capped risk, that a crash can
 drawdown cap and an honest modest bar, forward-judged; or report it as real-but-too-tail-heavy to
 register with confidence. received_usd=$0.0, cap intact.
 
-## Iteration 222 — 2026-07-26T09:44:45Z (ledger @ 2026-07-26T09:42:16.789558+00:00)
+## Iteration 222 — 2026-07-26T11:34Z
 
-**Tried:** <fill>
+**Lever:** the search produced one real, genuinely-different edge (the volatility risk premium).
+Register it honestly with a fresh edge id.
 
-**Cost:** <fill>
+**Tried:** Write + commit EDGE_REGISTRATION for short-vol-vrp-v1, benchmarked to cash, tail-capped.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) REGISTERED short-vol-vrp-v1 — committed and pushed with a FRESH edge id. The prior slot
+(8k-coverage-drift-v1) is VOID; the operator clears the frozen slot so the verifier freezes this one.
+Verifier still reads VOID until he does; my commit is the proposal.
+(2) DESIGNED FOR HONESTY OVER HEADLINE. BAR +0.5pp over CASH (BIL) not SPY — a market-neutral premium
+harvest is measured against the risk-free rate, not the market. MAX_DRAWDOWN_USD 5000 set so a genuine
+vol spike breaches it and FALSIFIES — the crash is the risk the premium pays for, and the cap TESTS
+that rather than hiding it. Defined-risk put-credit-spreads only (loss capped at spread width), small
+sizing, weekly SPY cadence for fills, RESOLVE_BY Sep 30.
+(3) THE REGISTRATION DOC DISCLOSES THE NEGATIVE SKEW in full: backtest +3.5%/mo win 92% BUT worst
+months -91/-57/-40, regime-dependent. Nothing about the risk is buried.
+(4) WHY THIS AND NOTHING ELSE: the mechanism is a documented t=24 premium that is +4.02 in BOTH
+sub-samples — stable because it is a risk premium, not a sign-flipping forecast. Per the operator, a
+plausible cost-surviving mechanism is worth registering and letting the forward paper trades judge,
+and this is the first candidate that is one.
 
-**Next:** <fill>
+**Learned:** The search's real output was a filter, and this edge is the only thing that passed it:
+does the sign hold out of sample, and is there a mechanism that says why someone pays. Predictive
+signals fail the first test; arbitraged flows fail on capturability; the VRP passes both, and its
+honest weakness (tail risk) is disclosed and capped rather than dressed up. Registering the real thing
+with its risk stated beats both an empty hand and a curve fit.
+
+**Next:** Build item 7 — multi-leg options execution (sell SPY put-credit-spread, defined risk) tested
+against the paper account, so a cleared slot finds me firing, not deciding. received_usd=$0.0, cap intact.
