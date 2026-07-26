@@ -7186,3 +7186,15 @@ curve-fit as tested -- I will name it to the operator as "a risk-managed crypto-
 edge," not oversell it. The one live NOVEL path remains bet-143 (LLM-completion forward test, weekly).
 No clean fundable edge across equities/options/merger-arb/crypto. received_usd=$0.0, no registration
 stands.
+
+## Iteration 248 — 2026-07-26T15:51:04Z (ledger @ 2026-07-26T15:46:34.405663+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
