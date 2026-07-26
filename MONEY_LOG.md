@@ -5598,3 +5598,15 @@ making sure the machine actually does the thing on Monday.
 
 **Next:** Monday 08:30 CDT the crons fire the live paper session; trade as registered, grow the
 sample toward MIN_FILLED_ORDERS 40, let the forward books decide. received_usd=$0.0, cap intact.
+
+## Iteration 204 — 2026-07-26T07:35:20Z (ledger @ 2026-07-26T07:29:41.884661+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
