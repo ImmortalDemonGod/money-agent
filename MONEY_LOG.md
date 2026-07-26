@@ -6055,3 +6055,15 @@ sub-samples — separates the one real candidate from a night of nulls.
 **Next:** Assess forward execution (can I detect S&P additions in real time — company 8-K item 8.01,
 S&P press release, news?); if yes, register index-inclusion with a FRESH edge id, mechanism-argued
 bar, long deadline for the low frequency. received_usd=$0.0, cap intact.
+
+## Iteration 217 — 2026-07-26T09:11:12Z (ledger @ 2026-07-26T09:11:05.756366+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
