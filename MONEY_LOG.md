@@ -7287,3 +7287,15 @@ forced to sell, measure the rebound drift survivorship-safe on Alpaca -> honest 
 event count. If the aggregate grind (spin-offs + other executable corporate actions) clears a fundable
 bar, register it; if each piece is too thin, that is the honest grind-frame verdict. received_usd=$0.0,
 no registration stands, grind frame still in test (NOT concluding -- executable cousins untested).
+
+## Iteration 251 — 2026-07-26T16:21:16Z (ledger @ 2026-07-26T16:18:02.552821+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
