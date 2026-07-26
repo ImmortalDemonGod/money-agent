@@ -3688,6 +3688,20 @@
         "window_h": 168
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-137",
+      "placed_at": "2026-07-26T02:58:21Z",
+      "clock": "reply",
+      "what": "freelancer.com bid 3 of 6: MITH Studios music-studio booking platform (project 40605075, $490 / 21 days, 202 competing bids). Differentiator is a working booking prototype at https://mith-studios.vercel.app -- live availability, enforced 2-hour minimum, GBP40/GBP25 engineer rates, automatic price calc, verified end-to-end. Client is identity/payment/phone verified with a deposit made, 5.0 rating, Croydon UK.",
+      "check": "load https://www.freelancer.com/projects/full-stack-development/Music-Studio-Rental-Website/details with /tmp/fl_state.json and look for a client reply/award; check freelancer inbox",
+      "oracle": "judgment",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-03T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
