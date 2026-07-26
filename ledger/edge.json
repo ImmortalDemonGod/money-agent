@@ -1,11 +1,11 @@
 {
-  "computed_at": "2026-07-26T17:40:06.681988+00:00",
+  "computed_at": "2026-07-26T17:46:24.419075+00:00",
   "rail": "alpaca_paper",
   "provisioned": true,
   "verified": true,
   "errors": [],
-  "verdict": "PENDING",
-  "registration_intact": true,
+  "verdict": "VOID",
+  "registration_intact": false,
   "_note": "Computed from the broker's paper API by a process the agent cannot invoke. VERIFIED_POSITIVE_EV authorizes an OPERATOR REVIEW of real-capital deployment; it never authorizes the agent to touch real money. verified=false means a pull failed: the verdict is NOT trustworthy and no claim may cite it.",
   "registration": {
     "EDGE_ID": "short-vol-vrp-v1",
@@ -20,24 +20,5 @@
     "frozen_at": "2026-07-26T09:54:48Z",
     "sha256": "10fd60a0ff3945520975a6190ff1f84265a8423f3c929b0f3ebbe649a99ccad3"
   },
-  "baseline_equity_usd": 100000.0,
-  "equity_usd": 100000.0,
-  "paper_pnl_usd": 0.0,
-  "benchmark": "BIL",
-  "benchmark_price": 91.61,
-  "account_return_pct": 0.0,
-  "benchmark_return_pct": 0.0,
-  "excess_return_pct": 0.0,
-  "filled_orders_since_freeze": 0,
-  "open_positions": 0,
-  "unrealized_positions_at_verdict": false,
-  "peak_equity_usd": 100000.0,
-  "max_drawdown_usd_observed": 0.0,
-  "pulls_this_cycle": [
-    "20260726T124007_alpaca_account.json",
-    "20260726T124007_alpaca_orders.json",
-    "20260726T124007_alpaca_positions.json",
-    "20260726T124007_alpaca_benchmark.json"
-  ],
-  "edge_manifest_sha256": "d72008f03c02da537719176268b2b9b9e6784b02d6776fe466f9d281b217b036"
+  "baseline_equity_usd": 100000.0
 }
