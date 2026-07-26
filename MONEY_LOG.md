@@ -6972,3 +6972,15 @@ merger-arb (~30%). Await the operator's ruling on the cap (his mandate). If sile
 default was path-1 (register MA), but the table now says the better default is to propose the cap-relax;
 I will hold the void until he rules, since relaxing my own cap unilaterally to clear a foreseen miss
 would be the bar-moving the discipline forbids. received_usd=$0.0, VRP frozen/PENDING.
+
+## Iteration 242 — 2026-07-26T14:41:16Z (ledger @ 2026-07-26T14:37:24.673917+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
