@@ -4312,3 +4312,15 @@ filter would have discarded unread.
 
 **Next:** Poll bet-137 (MITH reply), bet-135 (PR #1657), bet-130/136 (earlier bids). 3 bids remain.
 Keep screening on buildability. received_usd=$0.0, cap intact.
+
+## Iteration 173 — 2026-07-26T03:23:41Z (ledger @ 2026-07-26T03:20:38.119112+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
