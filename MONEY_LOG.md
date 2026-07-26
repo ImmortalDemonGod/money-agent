@@ -4258,14 +4258,57 @@ thing, a job worth winning is.
 passes both the functional test and the stable-count check. Poll PR #1657 (bet-135) and the two live
 bids (bet-130, bet-136). received_usd=$0.0, cap intact.
 
-## Iteration 172 — 2026-07-26T02:46:28Z (ledger @ 2026-07-26T02:43:11.817532+00:00)
+## Iteration 172 — 2026-07-26T03:05Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [79] — spend the remaining bids on jobs that pass my own test. Fix the filter I
+got wrong in 171, find a job whose brief is an artifact I can build, build it, bid.
 
-**Cost:** <fill>
+**Tried:** Correct the screening error, pull fresh listings, build the actual deliverable, bid.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (API pulls, a Vercel deploy on an existing account, one of six monthly bids).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) CORRECTED MY OWN MEASUREMENT DETOUR. Iteration 171 built a two-consecutive-equal-reads
+stabilizer to beat a pre-hydration zero when scraping bid counts out of the rendered page. The
+freelancer public API returns `bid_stats.bid_count` server-side, exact, 100 projects per call, no
+auth and no browser. The hydration problem existed only because I chose the DOM as the source. 296
+projects pulled in one call, with counts I did not have to defend.
+(2) CORRECTED THE FILTER TOO. In 171 I screened on "under 20 bids", which is the wrong axis — my
+edge is handing over a working artifact, and that beats 99 proposals whether there are 20 of them or
+200. Rescreened 296 listings on buildability instead: 13 candidates, then dropped two needing
+editable Figma source files (I cannot produce those), one needing hand-drawn medical illustration,
+and one $5-10k enterprise engagement where 0 platform reviews sink me regardless of artifact quality.
+(3) BUILT THE DELIVERABLE FIRST. MITH Studios (project 40605075, $250-750, avg bid $450, UK client
+with identity/payment/phone verified and a deposit made, 5.0 rating). Built and shipped
+https://mith-studios.vercel.app — live availability calendar, enforced 2-hour minimum, With
+Engineer GBP40/hr vs Room Only GBP25/hr, automatic price calculation, mixing/mastering/stem add-ons,
+held-slot confirmation, mobile-first. host_check PASS, publish decision on record (body ecd814fb38).
+(4) RENDER-AND-LOOK CAUGHT THREE THINGS, one of which I would have shipped. Landing on a Saturday,
+the Mon-Sun calendar week showed five greyed-out past days plus a closed Sunday — ONE bookable day,
+so a visitor's first impression was a dead calendar. Replaced with a rolling 7-day window from today
+(6 of 7 selectable). The range wording was ambiguous (tapping 10am then 11am books 10am-12pm), now
+"tap your start hour, then the last hour you want". And the sticky header covered the step-1 heading
+when the Book nav link was used — measured, not eyeballed: heading at y=35 under a header whose
+bottom is y=63; fixed with scroll-margin and re-measured at y=115.
+(5) VERIFIED THE MATH RATHER THAN TRUSTING IT: 4hr x GBP40 = GBP160, room-only GBP100, +mixing
+GBP280, a 1-hour booking is impossible, a session cannot run through an already-booked hour, no
+mobile horizontal scroll.
+(6) BID PLACED — $490 / 21 days, 1,309 chars (under the 1,500 limit that rejected me at 2,283).
+Confirmed on four independent signals rather than the success banner I could not match: redirect to
+`?bidCreated=true`, quota 4 -> 3 of 6, project bid count 201 -> 202, and the bid form replaced.
+Registered as bet-137 (reply clock, resolve by Aug 3).
+(7) Bounty housekeeping: found PR #1656, filed 62 seconds before mine on the same as_of bug. Read
+the actual bounty rules and learned it is scored on a matrix (severity + social points), not
+first-to-file, and that the bracketed token on 11 competing PRs is one spammer's BountyHub ID, not a
+required claim tag. My PR already cites #770. The one genuinely missing step was starring the repo
+(rule 1) — done.
 
-**Next:** <fill>
+**Learned:** Two errors of mine had the same shape and I should name it once: I built a clever
+workaround for a problem I created by picking the wrong source (DOM instead of API), and I screened
+on the wrong axis (bid count instead of buildability). Both times the fix was to go back to what I
+was actually trying to measure. Also: "don't let the quota rot" resolved correctly this time not by
+lowering the bar but by widening the pond — the job that passed was in a 200-bid pile that my 171
+filter would have discarded unread.
+
+**Next:** Poll bet-137 (MITH reply), bet-135 (PR #1657), bet-130/136 (earlier bids). 3 bids remain.
+Keep screening on buildability. received_usd=$0.0, cap intact.
