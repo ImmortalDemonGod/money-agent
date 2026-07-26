@@ -4712,14 +4712,43 @@ now measured dead, while the two live ones — marketplace labor and direct sale
 unscored and distribution-blocked. That is the real question to bring him, with the measurements
 attached. Poll bet-139 (ACT-008), 138, 135, 137, 130/136. received_usd=$0.0, cap intact.
 
-## Iteration 182 — 2026-07-26T04:35:00Z (ledger @ 2026-07-26T04:29:52.860410+00:00)
+## Iteration 182 — 2026-07-26T04:38Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** OPERATOR_DIRECTIVE's standing frame — "get PAID, directly ... you have never once sent an
+invoice." Test the one demand channel I had never probed: people on GitHub publicly offering to pay.
 
-**Cost:** <fill>
+**Tried:** Find someone who said they would pay, build it, invoice them.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No bid spent.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE CHANNEL IS REAL, AND I HAVE PROOF RATHER THAN A THEORY: rrwood/HA_BGSmart_LocalCtl#2, where a
+stranger asked for a smart-socket integration with "I am happy to pay you for this", and the
+maintainer was paid THE SAME DAY ("I remitted the payment"). Someone sent an invoice into this exact
+channel and got money within hours.
+(2) BUT IT IS STRUCTURALLY UNCAPTURABLE BY ME, and the same example shows why. Eddie paid Romeo
+because Romeo OWNED the integration. On GitHub, willingness-to-pay attaches to whoever already owns
+the repo, because the request is always addressed to the maintainer of the thing being asked about.
+(3) APPLIED MY OWN LOOSE-VS-STRICT RULE BEFORE TRUSTING ANY OF IT, which is the third iteration
+running that it has changed an answer. Loose keyword search: 126 recent issues, 104 unanswered. The
+list was full of billing backlogs ("[Billing] Stripe webhook") and agent-generated task boards.
+Strict filter (a first-person offer to pay a PERSON): **12**. Then honest evaluation of those 12:
+**0 actionable**. Every one was a feature request to the owner of that product, an UNCHECKED "willing
+to sponsor" template checkbox, hardware diagnostics I cannot verify without owning the device, or out
+of bounds. 126 -> 104 -> 12 -> 0.
+(4) TWO REFUSED IN WRITING (REFUSALS.md): a request to defeat a sold-out ticket page (scalping,
+identical in kind to the IRCTC job refused at 171), and a distressed person offering to pay someone
+to "find who and stop it" — deanonymizing a private individual, which is not billable work and not
+something I will quote on.
 
-**Next:** <fill>
+**Learned:** Worth stating precisely, because it explains three dead channels at once: I keep looking
+for demand in places where the demand is already ATTACHED to an owner. GitHub pay-requests belong to
+the maintainer; freelancer escrow belongs to the platform; bounty issues belong to the sponsoring
+company. The one channel where a stranger's money can reach MY Stripe link is one where I hold
+something they want and no incumbent stands between us — and that is the thing I have not built.
+Also: the loose-vs-strict habit has now changed the answer three iterations in a row, which is enough
+evidence to stop treating it as a lesson and start treating it as the default first step.
+
+**Next:** Bring the operator the structural finding, since both rails he named are measured dead and
+this one is measured uncapturable. Keep the 3 bids on their Jul 31 commitment. Poll bet-139 (ACT-008),
+138, 135, 137, 130/136. received_usd=$0.0, cap intact.
