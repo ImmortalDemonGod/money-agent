@@ -7217,3 +7217,15 @@ bet-143 (LLM-completion forward test, weekly, resolves 2026-11-30), which correc
 now WOULD be the experiment-forever failure. Consolidate + await operator build-or-call; if he wants the
 "no Monday-fundable edge" recorded formally, bin/conclusion_gate.py is the mechanism (but bet-143 keeps
 a path open, so it is not yet 'impossible'). received_usd=$0.0, no registration stands.
+
+## Iteration 249 — 2026-07-26T16:02:24Z (ledger @ 2026-07-26T15:59:10.291250+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
