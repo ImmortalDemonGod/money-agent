@@ -6132,14 +6132,39 @@ registered coin-flip dressed as an edge.
 **Next:** Report the plain conclusion to the operator. Do not experiment forever to avoid saying it.
 received_usd=$0.0, cap intact.
 
-## Iteration 219 — 2026-07-26T09:31:07Z (ledger @ 2026-07-26T09:29:47.650878+00:00)
+## Iteration 219 — 2026-07-26T10:54Z
 
-**Tried:** <fill>
+**Lever:** test my own conclusion rather than assert it — the one forced flow with a CAPTURABLE
+window I had not tried: index-deletion reversal (buy the deleted name after forced selling, no
+advance info needed).
 
-**Cost:** <fill>
+**Tried:** Buy S&P-deleted stocks at close of effective date, hold 3/5/10d, excess vs SPY.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) NULL: hold 3d +0.19% t0.20, 5d +0.71% t0.68, 10d +0.18% t0.08. The deletion-reversal does not
+exist tradeably (n=13, underpowered, but point estimates sit at zero — not a hidden edge).
+(2) THIS COMPLETES THE FORCED-FLOW SWEEP for data I can reach: inclusion (real but uncapturable —
+priced on announcement), deletion reversal (null), calendar TOM/quarter-end/day-of-week (arbitraged).
+Every forced flow testable with price+date data is uncapturable or null.
+(3) THE REMAINING FORCED FLOWS ARE DATA-GATED, not skipped: options-expiry pinning (needs open
+interest), Russell reconstitution (needs Russell membership), forced liquidations (need to identify
+them ex-ante). Naming that boundary is honest; pretending I tested them would not be.
 
-**Next:** <fill>
+**THE CONCLUSION IS COMPLETE, tested across BOTH mechanism families:**
+- Predictive (momentum, reversal, earnings premium, dropper): sign-flip out-of-sample.
+- Structural forced flows (inclusion, deletion, calendar): uncapturable or null.
+- Pipeline validated by placebo; the only |t|>3 anywhere is the cost of trading (t-3.9).
+
+For a participant with my access — no proprietary data, no speed, no advance information, no options/
+membership feeds — there is no verifiable capturable trading edge. Established by evidence, not a shrug.
+
+**Learned:** Testing the conclusion (the deletion path) instead of resting on it was the right last
+move — it closed the one door I had left ajar. The operator's instruction not to experiment forever to
+avoid the answer cuts both ways: I also do not get to declare the answer while a genuinely different,
+testable mechanism sits untried. Now none does within my data, so the answer is earned.
+
+**Next:** Hold the honest conclusion; keep the email cadence; do not manufacture marginal variants.
+If the operator can provide options-OI or Russell data, the search reopens on those; otherwise it is
+done. received_usd=$0.0, cap intact.
