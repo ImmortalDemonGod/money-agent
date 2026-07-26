@@ -4411,14 +4411,44 @@ worth more than quiet compliance.
 **Next:** Finish on-prem setup, load the run corpus, run the reversal queries, and build the Path A
 showcase. Poll bet-137/135/130/136. received_usd=$0.0, cap intact.
 
-## Iteration 175 — 2026-07-26T03:42:19Z (ledger @ 2026-07-26T03:39:24.416441+00:00)
+## Iteration 175 — 2026-07-26T03:55Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [82] point two — stop at the install no longer; stand memanto up and build the
+Path A corpus that serves both bounties.
 
-**Cost:** <fill>
+**Tried:** Bring up the on-prem backend, then build the corpus and the falsification answer key.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local Docker/Ollama only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) BUILT THE CORPUS. Converted 196 dated outcome records (2026-07-24 -> 2026-07-26) into a memory
+corpus, and extracted 11 same-channel supersession pairs mechanically — cases where a later record
+overrides an earlier one on the SAME channel.
+(2) WROTE THE FALSIFICATION ANSWER KEY, which is the part no competitor can copy. Six curated cases
+where the agent HELD a belief and then abandoned it on evidence: bid counts (scrape the DOM ->
+call the API), booking arrival rate (15.6% -> 2.0%), the widget-payer seam (cosmetic/dental clinics
+-> integrative-medicine solo practitioners), Vercel analytics (404 -> 200), Tally submit (deferred ->
+succeeded), and the hydration chain (anonymous-fetch artifact -> no, a browser does it too). The
+point is that the WRONG answer is not missing from the corpus — it is present, older, and more
+confidently worded than the correction. That is a memory-integrity test, not a recall demo.
+(3) UNBLOCKED THE INSTALL, PARTLY. Found why setup died: it shells out to a bare `moorcheh` command
+and reports "CLI not found on PATH" even inside a venv where moorcheh IS installed. Worked around by
+putting the venv on PATH.
+(4) THEN FOUND A SECOND BLOCKER THAT WAS NOT MEMANTO'S FAULT, and did not break the operator's
+machine over it: port 8000 is already held by an unrelated pre-existing service of his ("Cultivation
+OS Kernel", PID 9293). I did not kill it. `moorcheh up` exposes `--server-port` and
+`--use-host-ollama`, so I restarted on 8077 against the host Ollama, which already has
+nomic-embed-text pulled. The server image pull is still running in the background.
+(5) So the honest state on operator [82] question two: the corpus and the answer key exist and are
+the hard part, but I still have NOT stored or retrieved a memory. The claim stays unmade until the
+server answers.
 
-**Next:** <fill>
+**Learned:** The valuable half of this work turned out to be the answer key, not the plumbing. Anyone
+can load 196 records into a memory layer; what makes it a bug-hunting instrument is knowing, for each
+question, which answer is the stale one — and my own run produced that ground truth for free because
+I have been recording corrections all along. Also: a port conflict on a shared machine is a reason to
+change MY port, never to kill the operator's process.
+
+**Next:** Server up on 8077 -> ingest the 196 -> run the six answer-key questions -> any case where
+it returns the superseded belief is the 60-point memory-integrity bug. Then package as the #1609
+Path A submission. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
