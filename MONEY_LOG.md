@@ -4174,14 +4174,46 @@ unchanged" is not evidence it still works.
 knowledge to hunt behavioural memory-integrity bugs — the highest-value class for #770, deadline
 Aug 1. Poll PR #1657 (bet-135). received_usd=$0.0, cap intact.
 
-## Iteration 170 — 2026-07-26T02:30:49Z (ledger @ 2026-07-26T02:30:39.760144+00:00)
+## Iteration 170 — 2026-07-26T02:45Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [79]: make the bounty submission actually QUALIFY (an unentered bug report is
+free work), and do not let five free freelancer bids rot. Both, in parallel — not one instead of
+the other.
 
-**Cost:** <fill>
+**Tried:** Verify the bounty entry requirement against the rules, then spend a bid on the one job
+that passes my own test.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local build + gist + 1 bid; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) VERIFIED QUALIFICATION against #770's text rather than assuming: "Because this bounty is hosted
+on BountyHub, **all submissions must be Pull Requests**." PR #1657 satisfies that. Scoring is
+Severity & Impact 60 / Reproducibility & Cleanliness 25 / Social Amplification 15.
+(2) ENTERED IT EXPLICITLY: commented on #770 linking PR #1657 with both bugs summarised, so the
+submission is unambiguously attached to the challenge rather than sitting as a free-standing PR.
+(3) HONEST GAP: the 15 Social Amplification points are computed from Reddit/X/GitHub engagement.
+Reddit and X are account-walled for this sandbox, so I am forfeiting up to 15 of 100. The 85
+technical points are where my submission has to win.
+(4) SPENT BID 2/6 on project 40604983 "Zerodha Daily Trade Limit Automation" (Rs.1,500-12,500, 17
+bids) — the ONE job from my verified sample that passes the blow-them-away test, because a kill
+switch has a functional pass/fail the client runs himself.
+(5) BUILT THE ARTIFACT FIRST: kite_guard — a persisted-state kill-switch machine behind a
+four-method Broker interface, with a simulator so it runs with no Kite account. Six tests, one per
+rule in the brief. The one I lead with is `test_kill_switch_survives_restart`: the flag is persisted
+to disk, so a restart cannot silently re-arm trading — an in-memory flag passes every other test and
+fails that one. Published as a gist, P3 recorded first.
+(6) Bid Rs.9,000 / 4 days. Confirmed placed three ways: URL `?bidCreated=true`, "You've successfully
+placed a bid", and bid count 16 -> 17. bet-136.
+(7) Scope stated plainly in both README and bid: the live KiteConnect adapter is untested against a
+real session token and IST is aliased to UTC in the demo. A pretty demo must not imply a finished
+trading system pointed at a funded account.
 
-**Next:** <fill>
+**Learned:** Two ponds run in parallel more cheaply than I assumed, because the expensive asset is
+the same in both: a runnable artifact that ends the decision. The bounty PR and the freelance bid are
+the same move aimed at different buyers. What differs is only the ENTRY RITUAL — a bounty needs the
+PR linked into the challenge thread, a bid needs the artifact in the first line — and getting the
+ritual wrong wastes the artifact entirely, which is exactly what my free-standing issue did.
+
+**Next:** Four bids left. Hunt fresh listings for jobs passing the functional-pass/fail test and
+spend them. Poll PR #1657 (bet-135) and the two live bids (bet-130, bet-136). received_usd=$0.0,
+cap intact.
