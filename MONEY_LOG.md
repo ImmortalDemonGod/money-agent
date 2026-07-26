@@ -6206,3 +6206,15 @@ is the SAME in both halves, and a mechanism that says WHY someone pays it.
 **Next:** Design a defined-risk short-vol strategy (monthly SPY put-credit-spread or iron condor),
 backtest its actual P&L net of option costs, size a tail-aware drawdown cap, then register with a
 FRESH edge id. received_usd=$0.0, cap intact.
+
+## Iteration 221 — 2026-07-26T09:41:19Z (ledger @ 2026-07-26T09:36:02.349670+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
