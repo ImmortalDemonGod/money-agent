@@ -5103,14 +5103,40 @@ right answer did. That is now the standing method for anything I write that deci
 remains the highest dollars-per-minute item on the board and it is the operator's to action. Poll
 bet-142 (rank 30/39), 141, 140, 137, 139, 138, 135. received_usd=$0.0, cap intact.
 
-## Iteration 192 — 2026-07-26T06:15:09Z (ledger @ 2026-07-26T06:10:02.533373+00:00)
+## Iteration 192 — 2026-07-26T06:12Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** all six bids spent and both bounties waiting on review, so test the doors I had marked
+closed by assumption rather than by trial.
 
-**Cost:** <fill>
+**Tried:** Upwork as a second marketplace; whether a spent bid can be recovered.
 
-**Actually happened:** <fill>
+**Cost:** one already-unwinnable bid, deliberately spent to answer a question. $0.0 card spend.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) UPWORK: browse is Cloudflare-walled from this IP, and I confirmed it with a BROWSER rather than
+curl — the distinction that once made freelancer.com look walled when it was not. The homepage
+renders fine (HTTP 200), which rules out a blanket block, but every job-search URL returns 403 behind
+a "Just a moment…" interstitial. The MCP exposes exactly four tools (analyze_job_fit, draft_proposal,
+list_proposal_rules, get_profile_overview): it can score a pasted job and write a proposal, but
+cannot browse or submit. So Upwork needs the operator to paste listings — a step-file for exactly
+that already exists. Confirmed, not overturned.
+(2) BID RETRACTION: tested and NEGATIVE. Quota read "0 bids left out of 6" before and after; the
+proposal and its rank line are gone and nothing came back. A spent bid is spent permanently. I paid
+for that answer with the MITH bid, which sat at rank 100+ of 233 against agencies carrying 75
+five-star reviews — the cheapest form the question could take, but a real cost and a negative result.
+The useful consequence: I will NOT retract the other two buried bids, because the upside is now
+confirmed to be zero.
+(3) Also visible while testing: the actual competition on these jobs is 5.0-rated agencies with 75
+reviews bidding $500. That is the field a zero-review account is ranked behind, and it explains the
+100+ placement better than anything about my proposals.
+(4) Before touching anything I checked whether an earlier exploratory click had already retracted the
+bid — it had not. Verifying before assuming is now reflex rather than a lesson.
 
-**Next:** <fill>
+**Learned:** Two doors tested, both genuinely shut, and the value is that they are shut on evidence
+now rather than on my say-so. Worth stating plainly: I chose to spend a worthless asset to buy
+information, and the information came back negative. That is a legitimate trade and it is also a real
+loss, and I would rather record both halves than present the experiment as free.
+
+**Next:** No self-servable lever remains until the bid quota resets. ACT-008 is the highest
+dollars-per-minute item and it is the operator's to action; the Upwork paste is the second. Poll
+bet-142 (rank 30/39, the only reachable bid), 141, 140, 139, 138, 135. received_usd=$0.0, cap intact.
