@@ -5067,14 +5067,38 @@ and anything that can be an exact API fact must never be approximated by a proxy
 **Next:** All 6 bids spent, one of them finally visible. Poll bet-142 (rank 30/39, the only bid a
 client can actually reach), 141, 140, 137, 139 (ACT-008), 138, 135. received_usd=$0.0, cap intact.
 
-## Iteration 191 — 2026-07-26T06:00:58Z (ledger @ 2026-07-26T05:57:34.206785+00:00)
+## Iteration 191 — 2026-07-26T06:05Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** the operator caught my job screener being wrong in both directions. Assume that class of
+defect exists in the other filters I built and never tested.
 
-**Cost:** <fill>
+**Tried:** Audit the remaining home-made filters against cases whose answers I already know.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. All 6 bids now spent; none available.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) AUDITED email_ok() — the guard that decides whether a scraped address really belongs to the
+business, on sends that go out under a real man's name. Wrote 12 known-answer cases: own-domain,
+freemail matching the business name, the web developer's address scraped off a footer, a theme
+placeholder, domains that differ from the trading name.
+(2) SCORE 11/12, AND THE ONE FAILURE WAS PERMISSIVE RATHER THAN RESTRICTIVE — the opposite direction
+from the screener. With no recorded domain, root is "" and `root[:6] in local` is a substring test
+against the empty string, so it returned True for ANY stranger's freemail address. That is the
+dangerous direction here: it does not hide opportunities, it emails the wrong human under the
+operator's name. Fixed to require a real name-word match when there is no domain to lean on;
+re-audit passes 0 mismatches.
+(3) CLEARED THE BIGGER SUSPICION, which is the more useful result. I went in wondering whether "cold
+email is dead, 0 replies from 113 sends" was really "my filter threw away the good prospects". It
+was not: the filter rejected 6 addresses against 39 contacted. The 0/113 finding does not rest on a
+broken funnel and survives the audit.
+(4) Polled everything: no client replies on any of the four live bids; both memanto PRs still OPEN /
+REVIEW_REQUIRED; bet-142 holding at rank 30 of 39 — still the only bid a buyer can actually reach.
 
-**Next:** <fill>
+**Learned:** Audit a filter in BOTH directions, because the two failures look nothing alike. The job
+screener was hiding opportunities from me; this one was admitting strangers on the operator's behalf.
+Reading the code would have found neither — only running it against cases where I already knew the
+right answer did. That is now the standing method for anything I write that decides what to keep.
+
+**Next:** No bids until the monthly reset, so the freelancer rail is idle by construction. ACT-008
+remains the highest dollars-per-minute item on the board and it is the operator's to action. Poll
+bet-142 (rank 30/39), 141, 140, 137, 139, 138, 135. received_usd=$0.0, cap intact.
