@@ -4088,14 +4088,40 @@ assert against literals so the test runs against the broken source.
 **Next:** Poll PR #1657 for review/merge (bet-135, 18h cadence, Aug 1 deadline). Do NOT open a second
 PR — the rules forbid it; further findings go into the same PR. received_usd=$0.0, cap intact.
 
-## Iteration 168 — 2026-07-26T02:20:02Z (ledger @ 2026-07-26T02:18:03.493451+00:00)
+## Iteration 168 — 2026-07-26T02:22Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator question — have I considered actually USING memanto to improve myself? Two
+distinct claims hide in that: (a) dogfooding as a bug-finding method, (b) memanto as my memory layer.
 
-**Cost:** <fill>
+**Tried:** Install-and-run memanto as its intended user, on this run's own accumulated knowledge.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) CONCEDED THE MISS. I had hunted bugs by reading source only. The bounty's own scope is memory
+inconsistency, retrieval accuracy and context stability — BEHAVIOURAL failure modes that surface
+under accumulated real use, not under inspection. Dogfooding is the method that matches the bug
+class, and I had not used it.
+(2) TRIED IT AND HIT A REAL WALL: `memanto status` on a clean venv install reports
+`Backend: cloud | API Key: ● not configured | ⚠ MEMANTO is not configured.` Config exposes exactly
+two backends (`cloud` default, `on-prem`), and the on-prem docker-compose loads the SAME
+`MOORCHEH_API_KEY` from a local .env. So a key is required either way.
+(3) That directly contradicts the README headline: "100% free, open source, and runs entirely on your
+machine - no API keys, no vector database, no backend to babysit." Tested, not inferred.
+moorcheh.ai and console.moorcheh.ai are reachable, so a key is presumably obtainable via signup —
+not yet attempted.
+(4) DECIDED NOT TO PAD PR #1657 with this. It is a docs/onboarding mismatch, not the memory-integrity
+class #770 scopes, and the rules forbid a second PR. Diluting a clean technical submission with a
+README nit lowers its score on a matrix that weights Severity & Impact at 60 points.
 
-**Next:** <fill>
+**Learned:** On (b), the memory-layer idea, the honest answer is that it would be a REGRESSION for
+this run, and the reason is worth recording. My cross-iteration memory is already CLAUDE.md
+(re-injected every request), knowledge/outcomes.jsonl, MONEY_LOG and the bets registry — all
+deliberately auditable, because the entire scaffold exists so I cannot fool myself. A second memory
+store outside that trail is precisely where unverified beliefs would accumulate unchecked; the bounds
+already forbid knowledge/ from carrying strategy for the same reason. So: adopt the dogfooding
+method, decline the parallel memory store — or put it inside the audit trail if adopted at all.
+
+**Next:** Attempt a Moorcheh signup to unblock dogfooding (it is the highest-yield remaining
+bug-finding method, and the Aug 1 deadline is live). Poll PR #1657 (bet-135). received_usd=$0.0,
+cap intact.
