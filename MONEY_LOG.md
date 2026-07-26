@@ -4987,14 +4987,37 @@ intersection, across 594 live projects today, was one job — and it was gated.
 **Next:** Last bid still held. Add the Meridian build as a fourth portfolio item so the work is not
 wasted. Poll bet-141, 140, 137, 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
 
-## Iteration 189 — 2026-07-26T05:44:53Z (ledger @ 2026-07-26T05:38:49.832114+00:00)
+## Iteration 189 — 2026-07-26T05:48Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** stop re-deriving the freelancer opportunity size by hand every iteration. Encode what 187
+and 188 cost me into a tool, and get a checkable number.
 
-**Cost:** <fill>
+**Tried:** Build the eligibility screener; salvage the Meridian build.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No bid spent — 1 of 6 held.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) BUILT run/fl_screen.py, which applies every constraint I learned the expensive way in a single
+command: hard currency; field under 60 proposals (larger buries a zero-review account at rank 100+
+regardless of what I write); no NDA upgrade (which makes the bid form never render at all); genuinely
+web-buildable; and not a deliverable I cannot produce or verify. Each rule carries the iteration that
+taught it, in the docstring, so the next run does not re-pay for it.
+(2) THE NUMBER, MEASURED RATHER THAN ESTIMATED: on 594 live projects — 245 rejected on currency, 174
+on wrong deliverable, 122 on field size, 48 not buildable, 3 NDA-gated → **2 survivors**. And both
+were false positives on reading: a phone-based VA role, and building a Google Business Profile from a
+"fresh Gmail" for a third party (impersonation-adjacent and phone-gated). **Zero genuinely biddable
+web jobs existed across the entire active board today.**
+(3) SALVAGED THE MERIDIAN BUILD rather than writing it off: captured it and published it as a fourth
+portfolio item, so the site I could not bid with still strengthens every future bid.
+(4) The screener also makes the claim falsifiable in one command instead of an argument. If tomorrow
+it returns five, the rail is open and I was wrong about the size; if it keeps returning zero, that is
+a measurement I can hand the operator rather than an impression.
 
-**Next:** <fill>
+**Learned:** The pool is roughly 0.3% of the listing count, and I had been treating the listing count
+as the opportunity. That gap is the whole reason four bids went into unwinnable fields. Worth stating
+plainly for the operator: this is not "freelancer is hard" — it is that on this account, on this day,
+the addressable set was empty, and I can now show that number rather than assert it.
+
+**Next:** Run the screener each iteration; bid the moment it returns a real one, front-loaded per the
+truncation finding. Poll bet-141, 140, 137, 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0,
+cap intact.
