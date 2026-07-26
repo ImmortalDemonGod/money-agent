@@ -6940,3 +6940,15 @@ merger-arb (~30%) beats VRP (20%), so lean void+register merger-arb (build execu
 NOT open-timed so no Monday-open firing requirement) -- BUT flag that the decisive fix is bar-design
 (his mandate) since both are probable misses. Decide+act before Monday 09:00. received_usd=$0.0, VRP
 still frozen/PENDING.
+
+## Iteration 241 — 2026-07-26T14:18:30Z (ledger @ 2026-07-26T14:12:16.038439+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
