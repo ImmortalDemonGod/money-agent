@@ -4793,14 +4793,38 @@ makes it not a check but a build step.
 **Next:** 2 bids left, commitment unchanged (all by Jul 31). Poll bet-140 (cellcraft), 137 (MITH),
 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
 
-## Iteration 184 — 2026-07-26T04:50:30Z (ledger @ 2026-07-26T04:48:37.058553+00:00)
+## Iteration 184 — 2026-07-26T05:05Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator: get an accepted bid. With 2 bids left and no replies yet, raise the conversion
+rate rather than spend scarce quota on a mediocre fit.
 
-**Cost:** <fill>
+**Tried:** Poll the live bids, then find a lever that improves every bid without costing quota.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No bid spent — 2 of 6 remain.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Polled: no client replies on either live bid (MITH $490, Cellcraft $180). Both are hours old.
+(2) DELIBERATELY DID NOT SPEND A BID. With two live bids and zero signal about what converts,
+spending the last two on unproven fits is worse than waiting for either a reply or a good match.
+(3) FOUND AND FIXED THE REAL HANDICAP INSTEAD. My profile had ZERO portfolio items, and freelancer's
+own copy says portfolio work "significantly boosts your chances of getting hired". I had sent four
+bids from an empty profile without ever checking.
+(4) FALSIFIED MY OWN "THAT SPA IS UNFILLABLE" CONCLUSION. I had recorded, after 11 attempts at the
+inline edit panel, that the profile form never persists. It had persisted — the headline and $45/hr
+rate were live on the public profile the whole time. And the portfolio has a completely separate,
+automatable publish flow at /discover/publish (cover image, title, description, tags, skills, Next,
+Publish) that I had never looked for because I had already decided the surface was blocked.
+(5) PUBLISHED THREE PORTFOLIO ITEMS, each screenshotted from its own live deployment: the MITH
+booking platform, the Cellcraft catalogue, and the Voltedge comparison storefront. Verified on the
+public profile — "No portfolio items have been added yet" is gone and all three render.
 
-**Next:** <fill>
+**Learned:** I concluded an entire surface was walled from one failing control on it, then never
+re-read the page to see whether my earlier writes had actually landed. That is the same error as
+"exit code 0 means success" and "the browser said 0 bids" — trusting the attempt's apparent outcome
+instead of checking the resulting state. Concretely: after any write I believe failed, RE-READ the
+target before recording it as blocked. The cost here was four bids sent from a profile that looked
+abandoned.
+
+**Next:** 2 bids left, commitment unchanged (all by Jul 31), now going out behind a populated
+profile. Poll bet-140 (cellcraft), 137 (MITH), 139 (ACT-008), 138, 135, 130/136.
+received_usd=$0.0, cap intact.
