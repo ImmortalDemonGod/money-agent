@@ -5022,14 +5022,47 @@ the addressable set was empty, and I can now show that number rather than assert
 truncation finding. Poll bet-141, 140, 137, 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0,
 cap intact.
 
-## Iteration 190 — 2026-07-26T05:49:22Z (ledger @ 2026-07-26T05:45:04.287359+00:00)
+## Iteration 190 — 2026-07-26T06:00Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** the operator: "go up the funnel and check if the scanner is actually correct." I had
+audited the market with a tool I never audited.
 
-**Cost:** <fill>
+**Tried:** Test the screener against cases where I already knew the right answer.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (the last of six monthly bids; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE TOOL WAS WRONG, IN BOTH DIRECTIONS. Run against the five jobs I had HAND-PICKED as good, v1
+rejected three: "Figma" (a brief offering design source files ALONGSIDE the HTML I would write),
+"video" (a handover clip showing how to add products), and "logo" — from the client saying "I will
+supply logos". Keyword exclusion was reading the whole body, so an incidental mention killed the job.
+(2) THE OPERATOR THEN ASKED WHAT THE CURRENCY FILTER WAS, AND THAT WAS THE BIGGER HOLE. It was a
+hard-coded allow-list of "hard currencies" — 243 of 594 rejections, my largest bucket — acting as a
+proxy for "budget too small". Measured against the API's own exchange rates, it was silently
+discarding **70 visible-rank jobs actually worth $200 or more**, including "Responsive Business
+Website Development" (18 proposals, ~$389) — precisely the profile I had spent four iterations
+hunting and then declared did not exist.
+(3) So my iteration-189 conclusion, "zero genuinely biddable web jobs today", was reached with a
+broken instrument. It survived the keyword audit and failed the currency one.
+(4) FOUND A THIRD HIDDEN GATE the same way I found the NDA one — by building first and failing after.
+I built and deployed a full site for 40605240 before the bid form refused to appear; the API says
+`local: true`, meaning the project is restricted to freelancers physically near the client. Now a
+mechanical gate.
+(5) REBUILT THE TOOL ON THE RIGHT PRINCIPLE: mechanical gates are EXACT API FACTS (USD value via the
+supplied exchange rate, proposal count, NDA, local); the keyword layer only ORDERS the reading list
+and can no longer reject anything. Its output is now a list to READ, not a verdict to trust.
+(6) SPENT THE LAST BID — on a job my own screener had been hiding from me. Textile Fabric Showcase
+(40605246, ~$389, 10 days), citing two live artifacts rather than building a fourth.
+(7) **FIRST VISIBLE RANK OF THE RUN: "You are ranked 30 out of 39 proposals."** Every previous bid
+read "100+ out of 142/158/229". The iteration-187 theory holds: field size, not proposal quality,
+decides whether a buyer can reach you.
+(8) The Northbeam build is not wasted — it is the first artifact to pass host_check with
+robots=ALLOW, canonical=present and sitemap=200, and it loads in 0.54s with zero external requests.
 
-**Next:** <fill>
+**Learned:** A filter I wrote myself and never tested against known-good cases is not a measurement —
+it is my own assumptions with a number attached, and I reported it to the operator as fact. The
+generalisable rule: any screening tool must first be run against cases whose answer I already know,
+and anything that can be an exact API fact must never be approximated by a proxy.
+
+**Next:** All 6 bids spent, one of them finally visible. Poll bet-142 (rank 30/39, the only bid a
+client can actually reach), 141, 140, 137, 139 (ACT-008), 138, 135. received_usd=$0.0, cap intact.
