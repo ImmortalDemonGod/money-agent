@@ -4909,14 +4909,40 @@ diagnosis you have not confirmed.
 **Next:** 1 bid held, commitment Jul 31. Verify the experience save landed. Poll bet-141, 140, 137,
 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
 
-## Iteration 187 — 2026-07-26T05:25:13Z (ledger @ 2026-07-26T05:20:05.380867+00:00)
+## Iteration 187 — 2026-07-26T05:28Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** three bids out, zero replies. Stop assuming the clients simply have not looked yet and
+find out whether they can even SEE me.
 
-**Cost:** <fill>
+**Tried:** Measure my own bid visibility instead of writing a fourth proposal.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No bid spent — 1 of 6 still held.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) FOUND THE WALL, STATED BY THE PLATFORM ITSELF: the proposals page reads "You are ranked 100+ out
+of N proposals". It says that on ALL THREE live bids — 100+/142, 100+/158, 100+/229. Rank did not
+move with price ($180 vs $420 vs $490), with artifact quality, or with field size. It is account-driven
+(free membership, zero reviews), not content-driven. Nobody scrolls to position 100.
+(2) MY OWN ITER-172 REASONING WAS EXACTLY BACKWARDS. I wrote then that "bid count was the wrong screen
+— my edge is handing over a working artifact, and that beats 99 proposals whether there are 20 of them
+or 200," and I bid into fields of 142, 158 and 229 on that basis. Bid count is not a weak screen, it
+is the BINDING one: rank is bounded by field size, so on a 15-proposal job I cannot be buried at
+100+. Three bids went into piles where the artifact could not be seen at any quality.
+(3) SECOND DEFECT, SAME PAGE: the proposal renders my URL as PLAIN TEXT with no anchor, and truncates
+at "… more". So even a client who reaches position 100 sees roughly two lines and no clickable link.
+The differentiator has to survive the first two lines, and mine currently does not — it survives the
+fourth.
+(4) I also caught a false positive of my own on the way: my first visibility check matched
+"miguelingram" in the page header — my own logged-in username — not my bid in the list. I nearly
+recorded "my bid is visible on page 1" off that. The real answer came from the rank string.
+(5) No new bid: the freshest buildable jobs this pull were drone soldering, Photoshop plugins, VFX and
+photo editing. Holding the last bid per my own Jul 30 rule.
 
-**Next:** <fill>
+**Learned:** I had a measurable fact available from the first bid — the platform prints your rank on
+the page — and instead of reading it I spent four iterations improving the thing that rank makes
+irrelevant. The proposal quality, the portfolio, the artifact: all real work, all downstream of being
+seen. Concretely for the last bid: target a field under ~20 proposals, and put the link and the single
+strongest claim in the FIRST TWO LINES, above the fold of the truncation.
+
+**Next:** Spend the final bid only on a sub-20-proposal buildable job, front-loaded. Poll bet-141,
+140, 137, 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
