@@ -4624,14 +4624,48 @@ bug fix riding along would have muddied both bounties.
 **Next:** Poll #1664 and #1657 for maintainer review (bet-138, bet-135). Bids stand at 3 with the
 Jul 31 commitment. Poll bet-137 (MITH), bet-130/136. received_usd=$0.0, cap intact.
 
-## Iteration 180 — 2026-07-26T04:27:51Z (ledger @ 2026-07-26T04:23:36.651358+00:00)
+## Iteration 180 — 2026-07-26T04:30Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator asked whether multiple memanto submissions are even allowed. Verifying that
+instead of defending my earlier reasoning surfaced a much bigger problem.
 
-**Cost:** <fill>
+**Tried:** Check the multiple-PR rule; then read #1609's eligibility list to the end.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) ANSWERED THE QUESTION: multiple submissions ARE allowed. The "do NOT create multiple PRs" note
+exists only in #770, and it means consolidate your CHANGES into one PR — which I complied with, both
+bugs went into #1657 together. #1609 contains no such rule. So two PRs across two distinct bounties
+is fine.
+(2) BUT THE CHECK FOUND THAT MY SUBMISSION WAS INELIGIBLE AS FILED, which matters far more than the
+question asked. #1609 requires, to be eligible AT ALL: a BountyHub account and an explicit CLAIM
+attaching the PR link ("Unclaimed submissions -- no matter how good -- are not eligible"), a MANDATORY
+demo video published to X/YouTube/LinkedIn tagging Moorcheh, those links present IN the PR
+description, plus an OKF bundle sample and a migration summary. I had filed only code.
+(3) ALSO CORRECTED A DEADLINE I HAD REPORTED WRONG: I told the operator the migration bounty
+deadlines Aug 1. That is #770's deadline. #1609 is **Aug 31**, so there is four more weeks, not five
+days.
+(4) FIXED WHAT I COULD SELF-SERVE. Ran `memanto memory export --okf` and completed the round trip:
+59 markdown files, and 24 of them carry supersession markers. Verified the actual claim holds — the
+supersession pointer, the 0.6 confidence, the `error` type and the original `created_at` all survive
+OUT to portable OKF, not merely into Memanto. Edited the PR description to add the migration summary
+and a real OKF sample showing a superseded record.
+(5) REFUSED TO INVENT A SAVINGS REPORT. #1609 asks for one; provider migrations derive it by diffing
+a source API's own usage numbers, and a local oplog file has no upstream baseline. I said so in the
+PR rather than fabricating a percentage.
+(6) STATED THE GAP IN THE PR ITSELF rather than leaving a reviewer to find it: video, social posts and
+BountyHub claim are not done, are being arranged, and will be edited in before Aug 31.
+(7) RAISED ACT-008 (bet-139) for the parts that genuinely need account access, with a step-by-step
+recording script for the operator.
 
-**Next:** <fill>
+**Learned:** THE PR IS NOT THE SUBMISSION. This is the second time this run I did the expensive half
+and skipped the cheap half that converts it into money — the first was filing a free-standing issue
+instead of a bounty submission. So it is now mechanical rather than a resolution: before filing to any
+bounty or marketplace, read the eligibility list to the END and enumerate every non-code artifact it
+demands, because the payout gate is almost never the code. And the operator's question is the wider
+lesson: he asked about a rule I had already reasoned past, and checking it properly found a defect my
+reasoning had hidden.
+
+**Next:** ACT-008 (video + BountyHub claim) is the whole remaining distance on $200 of finished work.
+Poll bet-139/138/135/137/130/136. Bids stand at 3 with the Jul 31 commitment. received_usd=$0.0.
