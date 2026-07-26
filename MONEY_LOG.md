@@ -4670,14 +4670,44 @@ reasoning had hidden.
 **Next:** ACT-008 (video + BountyHub claim) is the whole remaining distance on $200 of finished work.
 Poll bet-139/138/135/137/130/136. Bids stand at 3 with the Jul 31 commitment. received_usd=$0.0.
 
-## Iteration 181 — 2026-07-26T04:29:12Z (ledger @ 2026-07-26T04:23:36.651358+00:00)
+## Iteration 181 — 2026-07-26T04:35Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [83] round 42 — stop polishing the $100 lottery ticket, and map the funded-bounty
+lake (Algora/Polar) where companies put $250-$5000 on single issues with 0-2 competitors.
 
-**Cost:** <fill>
+**Tried:** Answer his three questions with measurements rather than agreement.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) HIS QUESTION ONE, ANSWERED HONESTLY: **zero**. I had never opened a single funded bounty on
+Algora or Polar. He was right that this was an unmapped hole.
+(2) HIS QUESTION THREE CANNOT BE ANSWERED AS ASKED, BECAUSE THE LAKE IS DRY — and this is a
+falsification of his premise, not an excuse. **Polar** has pivoted to "a billing platform for the
+intelligence era": its public API exposes 126 paths with ZERO issue/bounty/funding endpoints,
+/bounties and /issues both 404, and the docs mention neither. **Algora** has pivoted to "Hire the top
+1% open source engineers" — recruiting. Its global /bounties board 404s. Across 13 orgs whose per-org
+boards still render: **1,106 completed bounties versus 5 open ones today**, max $100, none at or
+above $250, several aged 26-38 months. zio alone completed 463, so this was a genuinely live rail
+once; it has wound down.
+(3) I did not stop at two homepages, because a marketing page is not evidence about a product. I
+probed the APIs, the docs, the global boards, per-org boards, and then swept 20 orgs.
+(4) Cross-checked GitHub-wide: the "Bounty" label is dominated by synthetic agent-playground repos
+(one repo alone carries 11,000+ auto-generated issues; another offers "Calculate the exact value of
+PI"). This independently reproduces my own earlier finding that 569 bounty-labelled issues collapse
+to roughly one real program. Also found active brand-impersonation fraud posting fake
+Algora-sponsored bounties — worth knowing before trusting any bounty claim at face value.
+(5) HIS QUESTION TWO: done and stopping. Both memanto PRs are filed (#1657 for $100/#770, #1664 for
+$200/#1609), ACT-008 covers the eligibility gap, and I am not spending another iteration there.
 
-**Next:** <fill>
+**Learned:** The operator's strategic instinct was right and his facts were out of date — funded
+issue bounties were a real rail, and in July 2026 they are not. Worth naming the shape: this is the
+second premise of his I have had to falsify with measurement in two rounds (the first being comments
+vs PRs as the crowding metric), and both times the underlying instruction survived. "Fish where no
+one else is" remains correct; Algora is simply not where that is anymore, because nobody is fishing
+there for the same reason there are no fish.
+
+**Next:** The honest gap is that BOTH rails he has pointed at (crowded contests, funded bounties) are
+now measured dead, while the two live ones — marketplace labor and direct sale — are respectively
+unscored and distribution-blocked. That is the real question to bring him, with the measurements
+attached. Poll bet-139 (ACT-008), 138, 135, 137, 130/136. received_usd=$0.0, cap intact.
