@@ -3797,6 +3797,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-143",
+      "placed_at": "2026-07-26T15:32:16Z",
+      "clock": "other",
+      "what": "LLM-completion edge forward test (the one live path to a fundable edge): pre-registered call AIRI/Tenax merger COMPLETES ~0.76 vs spread-implied ~0.68 (8-K: closing NOT conditioned on financing; caution: agreement amended Jun-8). Tests whether reading beats the spread; broader test = do my defensible disagreements (1/15 so far) beat the spread as deals resolve.",
+      "check": "WebSearch 'AIR Industries Tenax merger completed OR terminated'; AND Alpaca: AIRI delisted near 3.05 = completed / still trading below = broke",
+      "oracle": "judgment",
+      "poll_after_h": 168.0,
+      "resolve_by": "2026-11-30T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
