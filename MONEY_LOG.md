@@ -4045,14 +4045,45 @@ credentials and no fixtures.
 tests for all three date spellings — that is the artifact that closes it. Meanwhile evaluate #1609
 ($200, 7 comments) for a second submission. received_usd=$0.0, cap intact.
 
-## Iteration 167 — 2026-07-26T02:11:58Z (ledger @ 2026-07-26T02:11:48.323509+00:00)
+## Iteration 167 — 2026-07-26T02:10Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [78]: I published the expensive half (diagnosis + runnable reproduction) for free
+and held back the cheap half (typing the fix), so anyone watching could open the PR and claim the
+$100. And on a bounty the thing that pays is a merged PR, not a report.
 
-**Cost:** <fill>
+**Tried:** Verify the actual award mechanism BEFORE more work (his Q3), then submit properly.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local work + fork; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) VERIFIED THE MECHANISM FIRST, and he was right that my issue was not a submission. #770's rules:
+"your execution must follow this exact flow" -> **submit a PR** (a code fix, or a PR adding a failing
+test to `tests/failing_tests/` or a report to `docs/bounty_reports/`); scored on a 100-point matrix
+(Severity & Impact 60 pts + Technical Rigor); **$100 paid via BountyHub**; **deadline Aug 1 2026
+23:59 UTC**; "please do NOT create multiple PRs". My issue #1655 carried no labels and was not
+entered. Answer to "what stops anyone claiming it": nothing. The reproduction was complete and
+public.
+(2) FORKED, FIXED, TESTED, SUBMITTED — **https://github.com/moorcheh-ai/memanto/pull/1657** (OPEN,
+3 files, +108/-6), closing #1655 and entered against #770.
+(3) THE FIX: `is_date_only()` detects a date-only cutoff by ATTEMPTING THE PARSE instead of matching
+shape, so `2026-07-26` and `20260726` behave identically; `END_OF_DAY` is defined once; the REST
+validator now delegates to the shared helper so the two paths cannot drift again.
+(4) EVIDENCE DONE PROPERLY. First version of the tests imported the new constants, so against
+pre-fix source they failed at IMPORT — which proves nothing about the bug. Rewrote the core
+assertions to use literal expected values, and they now fail on the pre-fix source ON THE BUG:
+`test_service_helper_treats_date_only_as_end_of_day[20260726]`,
+`test_rest_validator_matches_service_helper[2026-07-26]` and `[20260726]`,
+`test_basic_format_is_not_parsed_as_start_of_day`. With the fix, 12/12 pass and the full suite exits
+0.
+(5) Re-ran the original reproduction post-fix: both deltas are now 0:00:00.
 
-**Next:** <fill>
+**Learned:** I had the value split exactly backwards and did not notice until it was named. On a
+bounty, the diagnosis plus a runnable reproduction IS the expensive, scarce artifact; writing the
+patch afterwards is mechanical. Publishing the first for free while withholding the second is the
+worst possible ordering — it maximises what a competitor gains from reading my work and minimises
+what I hold. The general rule: publish the cheap half, hold the expensive half until the claim is
+filed. Second, smaller: a regression test that imports the fix's new API cannot demonstrate the bug;
+assert against literals so the test runs against the broken source.
+
+**Next:** Poll PR #1657 for review/merge (bet-135, 18h cadence, Aug 1 deadline). Do NOT open a second
+PR — the rules forbid it; further findings go into the same PR. received_usd=$0.0, cap intact.
