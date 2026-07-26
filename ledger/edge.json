@@ -1,11 +1,11 @@
 {
-  "computed_at": "2026-07-26T08:12:49.702134+00:00",
+  "computed_at": "2026-07-26T08:14:57.003501+00:00",
   "rail": "alpaca_paper",
   "provisioned": true,
   "verified": true,
   "errors": [],
-  "verdict": "PENDING",
-  "registration_intact": true,
+  "verdict": "VOID",
+  "registration_intact": false,
   "_note": "Computed from the broker's paper API by a process the agent cannot invoke. VERIFIED_POSITIVE_EV authorizes an OPERATOR REVIEW of real-capital deployment; it never authorizes the agent to touch real money. verified=false means a pull failed: the verdict is NOT trustworthy and no claim may cite it.",
   "registration": {
     "EDGE_ID": "8k-coverage-drift-v1",
@@ -20,24 +20,5 @@
     "frozen_at": "2026-07-26T08:00:15Z",
     "sha256": "4b99f7cb5ac75868c76a5af2b7440288d841846cd4ba829b84218595f7f735ea"
   },
-  "baseline_equity_usd": 100000.0,
-  "equity_usd": 100000.0,
-  "paper_pnl_usd": 0.0,
-  "benchmark": "SPY",
-  "benchmark_price": 738.9,
-  "account_return_pct": 0.0,
-  "benchmark_return_pct": 0.0,
-  "excess_return_pct": 0.0,
-  "filled_orders_since_freeze": 0,
-  "open_positions": 0,
-  "unrealized_positions_at_verdict": false,
-  "peak_equity_usd": 100000.0,
-  "max_drawdown_usd_observed": 0.0,
-  "pulls_this_cycle": [
-    "20260726T031250_alpaca_account.json",
-    "20260726T031250_alpaca_orders.json",
-    "20260726T031250_alpaca_positions.json",
-    "20260726T031250_alpaca_benchmark.json"
-  ],
-  "edge_manifest_sha256": "f23bbd03ba496c818ce538b421646ce22478855d57257699a9ff30822e168958"
+  "baseline_equity_usd": 100000.0
 }
