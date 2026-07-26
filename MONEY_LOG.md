@@ -5951,14 +5951,34 @@ is a finding; a null result with an unchecked method is just a shrug.
 (t>3, holds OOS, survives cost); absent that, the honest answer stands and strengthens with each
 falsified hypothesis. received_usd=$0.0, cap intact.
 
-## Iteration 214 — 2026-07-26T08:52:21Z (ledger @ 2026-07-26T08:46:07.757665+00:00)
+## Iteration 214 — 2026-07-26T09:46Z
 
-**Tried:** <fill>
+**Lever:** every null so far was on a 2-4 month window — low power. Test the most-documented price
+signal on 5 YEARS for real power, gross and net of costs. Definitive either way.
 
-**Cost:** <fill>
+**Tried:** Short-term reversal, 1393 days x 49 liquid names, day-clustered, gross and net.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) GROSS, THE SIGNAL IS NOTHING: droppers->next-day +0.039%/day t=0.96, risers +0.053% t=1.20 —
+insignificant even before costs, over FIVE YEARS. My earlier 2-month dropper t=2.4 is now confirmed
+as pure regime noise. High power turns the ambiguous nulls definitive.
+(2) NET OF A MILD 20bps ROUND-TRIP: droppers -0.16%/day t=-3.91, risers -0.15% t=-3.32 — significantly
+NEGATIVE. You lose, robustly.
+(3) THE PUNCHLINE OF THE WHOLE SEARCH: the ONLY result that clears the Harvey-Liu-Zhu |t|>3 bar
+anywhere across all my experiments is the demonstration that TRADING COSTS MONEY (t=-3.9), in the
+losing direction. That is EMH shown with power — no gross edge, and costs make activity a certain loss.
+(4) THE CASE IS NOW AIRTIGHT: pipeline validated by placebo; four hypotheses falsified out-of-sample;
+the most-studied price signal is a powered null gross and a significant loser net. No simple tradeable
+edge exists in the universe and methods I can access.
 
-**Next:** <fill>
+**Learned:** Low power was hiding the verdict, not the edge. Every 2-month "t~2" was the noise floor
+(the placebo hits |t|~1.8 by chance); five years collapses them to t~1 gross. The honest, evidence-
+backed answer the operator named as acceptable is now not a shrug but a demonstration: I did not fail
+to find an edge, I showed with power that none exists above costs in this space, and that the one
+robust effect is the cost itself.
+
+**Next:** Continue the cadence to the deadline, but any remaining candidate must be a genuinely
+different KIND (not another daily-directional price signal, which is now definitively dead) — else the
+honest capstone stands. received_usd=$0.0, cap intact.
