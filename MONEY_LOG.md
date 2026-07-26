@@ -5228,3 +5228,15 @@ fitted to a number I have already seen.
 **Next:** Operator provisions the paper broker + runs the verifier to create ledger/edge.json. Then:
 draft the hypothesis and bar from reasoning, register, and trade forward from Monday's open.
 received_usd=$0.0, cap intact.
+
+## Iteration 195 — 2026-07-26T06:35:16Z (ledger @ 2026-07-26T06:35:01.551687+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
