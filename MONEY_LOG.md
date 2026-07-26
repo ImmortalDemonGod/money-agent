@@ -5484,3 +5484,15 @@ nowhere near enough sample yet.
 
 **Next:** Read the wider backtest; if the spread survives a larger n, the Monday plan stands as
 registered; if it collapses, that is an honest pre-deployment negative worth recording. received_usd=$0.0.
+
+## Iteration 201 — 2026-07-26T07:20:48Z (ledger @ 2026-07-26T07:17:09.756852+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
