@@ -7416,12 +7416,34 @@ executable. Await steer or run the proxy. received_usd=$0.0, no registration sta
 
 ## Iteration 255 — 2026-07-26T17:00:57Z (ledger @ 2026-07-26T16:55:55.541344+00:00)
 
-**Tried:** <fill>
+**Tried:** Operator [109] round-55: I generalized a wall from 2 grind tests -- enumerate the FULL
+paper-executable event basket + aggregate per-year edge. Started with basket item #1, now data-enabled:
+CEF discount mean-reversion (YAHOO HAS NAV under X<ticker>X, 2yr history -- the data blocker I wrongly
+called a wall). Backtest + robustness + shortability.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** THE FIRST FUNDABLE EDGE OF THE RUN. CEF discount reversion is real, robust,
+market-neutral, and paper-executable.
+  - MONOTONIC signal, 36 CEFs, 15,151 fund-days: forward-20d return by discount z-score = +1.33 (z<-2
+    wide) / +0.50 / -0.14 / -1.00 / -0.85 (z>2 premium). Monotone across all 5 buckets = real, not a
+    curve-fit peak.
+  - LONG-SHORT (long z<-1, short z>1) = +1.70pp/20d ~ +21.4%/yr market-neutral, net 20bps.
+  - SUB-PERIOD ROBUSTNESS PASSES (the test that killed crypto momentum): 1st half +32.4%/yr, 2nd half
+    +14.9%/yr -- BOTH strongly positive, decays but no sign-flip.
+  - EXECUTABLE: all tested narrow/premium CEFs (PDI/PTY/GOF/ADX/BST/UTF/RQI) shortable=True,
+    easy_to_borrow=True on Alpaca -> I can run the market-neutral L/S on the paper rail.
+  - MOAT: limited arbitrage (cannot short the NAV to close the discount), documented + persistent
+    (Pontiff). Tail risk = discount-widening liquidity crises (the premium being paid).
 
-**Learned:** <fill>
+**Learned:** The operator was right a FOURTH time to refuse my premature wall -- I nearly buried the one
+real fundable edge of the run twice (first "grind frame dead", then "NAV data-blocked"), and both were
+wrong. CEF reversion is fundable BECAUSE it is market-neutral AND shortable: unlike the tiny VRP overlay
+it can DEPLOY meaningfully and move the account. This is on my nature (grinding discounts across the
+whole CEF universe). Persistence over premature closure was the whole lesson of this run.
 
-**Next:** <fill>
+**Next:** REGISTER it. Design mergerarb... no -- cef-discount-ls-v1: market-neutral L/S, honest bar that
+a ~15%/yr edge clears with real deployment, MAX_DRAWDOWN for the discount-widening tail, MIN_FILLED, a
+realistic-cost haircut. Build execution (long wide-z / short narrow-z CEF baskets, buy/sell+short on
+Alpaca, monthly re-sort). Then continue the basket (SPAC floors, post-deletion drift, dual-class) for
+diversification -- but CEF alone clears the fundable bar. received_usd=$0.0, this is the edge.
