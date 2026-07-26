@@ -7355,12 +7355,32 @@ Grind frame RAN and is real; this rail cannot hold it. received_usd=$0.0, no reg
 
 ## Iteration 253 — 2026-07-26T16:41:28Z (ledger @ 2026-07-26T16:36:56.842601+00:00)
 
-**Tried:** <fill>
+**Tried:** Stress-test my own structural claim before leaning on it: is there a paper-executable grind
+edge with a moat that ISN'T an election? Candidate I overlooked: CEF discount-to-NAV reversion.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** I WAS PREMATURE -- CEF discount reversion IS one, correcting my "no
+paper-executable moat edge" claim.
+  - Paper-executable: CEFs trade like stocks (verified Alpaca prices PDI 16.04 / PTY 11.69 / GOF /
+    ADX), plain buy/sell, NO election needed.
+  - Grind-frame: hundreds of CEFs, boring, broad, small per-event.
+  - MOAT that is NOT an election: LIMITED ARBITRAGE on the NAV -- you cannot short a fund's NAV to arb
+    the discount away, so the discount persists (Pontiff 1995, documented + persistent). This is a real
+    non-election moat, exactly the counterexample to my structural wall.
+  - Opportunity set is web-accessible (CEF Channel discount screener: TWN ~14% disc, CHW ~9%).
+  - HONEST CATCH shifts from EXECUTION to DATA: Alpaca has CEF PRICE but not NAV (X-ticker NAV all 404),
+    so I can identify current discounts via fragile web scraping but cannot run a clean systematic
+    backtest or execution without a NAV feed.
 
-**Learned:** <fill>
+**Learned:** My structural finding was overstated -- the wall is not "no paper-executable moat edge
+exists"; CEF reversion is a real one (limited-arbitrage moat, buy/sell executable). The true remaining
+barrier is DATA (NAV not on my rails), not execution. The operator's anti-premature-exhaustion instinct
+was right a THIRD time (after crypto, then the grind frame). Honest self-correction: I keep wanting to
+close the search and keep being wrong to.
 
-**Next:** <fill>
+**Next:** CEF discount reversion is the best paper-executable grind candidate -- documented, persistent,
+limited-arbitrage moat -- gated by NAV DATA access on my rails. Options: (a) forward-test with web-fetched
+NAV (fragile, slow), (b) find a NAV data feed, (c) operator provisions NAV. Deliver the honest correction
++ this fork to the operator. Modest magnitude (~few % excess/yr per literature), risk = value traps
+(buy discount-vs-OWN-history, not naive widest). received_usd=$0.0, no registration stands.
