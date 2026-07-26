@@ -5881,14 +5881,37 @@ at t>3 out-of-sample net of costs so the volume of tests raises the bar rather t
 **Next:** More experiments — distinct mechanisms (reversal depth, volume spikes, sector-relative),
 each a number, none registered until t>3 net of costs. received_usd=$0.0, cap intact.
 
-## Iteration 212 — 2026-07-26T08:37:42Z (ledger @ 2026-07-26T08:33:39.344754+00:00)
+## Iteration 212 — 2026-07-26T09:22Z
 
-**Tried:** <fill>
+**Lever:** operator [98] — do experiments. Pursue the reversal thread with a POWERED, properly
+statistical test, and validate anything promising out-of-sample before believing it.
 
-**Cost:** <fill>
+**Tried:** Powered continuation/reversal test on 49 liquid names; day-clustering; microstructure
+check; out-of-sample validation.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE EXPERIMENT OVERTURNED MY HYPOTHESIS, WHICH IS WHY YOU RUN IT. I predicted the biggest liquid
+droppers would BOUNCE (reversal). They CONTINUE DOWN: -0.57%/day next session, and on the naive
+pooled sample t=-2.89.
+(2) I DID NOT TRUST THE NAIVE t. The 138 pooled observations overlap (same names, same days,
+correlated within-day), so the t is inflated. Collapsed to one portfolio return per day (46
+independent obs): still -0.614%/day, t=-2.39. Robustness: close-to-close matched open-to-close, so
+it is NOT an open-print microstructure artifact. This was the strongest, cleanest, cost-surviving,
+significant result of the entire search.
+(3) THEN OUT-OF-SAMPLE KILLED IT. Same test on a non-overlapping earlier window (Feb-Apr): +0.223%/day,
+t=+1.11 — OPPOSITE SIGN. The in-sample t=-2.39 was regime-specific noise. It does not generalize.
+(4) THIS IS THE METHOD WORKING, NOT A FAILURE. A lazier analyst registers a t=2.4, day-clustered,
+microstructure-robust, cost-surviving signal — and loses, because it was a 2-month artifact. Out-of-
+sample validation caught it before a dollar or a registration. Registered nothing.
 
-**Next:** <fill>
+**Learned:** The accumulating meta-result of the search is itself the honest answer: every simple
+price/event signal I can build — small-cap 8-K drift, buyback 1d, dropper continuation — fails either
+the significance bar or out-of-sample validation. That is what efficient markets look like from the
+inside for a participant with no structural advantage. Finding it by killing three real candidates
+out-of-sample is more honest than registering any of them, and far more honest than a narrative.
+
+**Next:** Keep the experiment cadence (operator: one an hour, do not stop) with in-sample AND
+out-of-sample on every candidate; register only a t>3 that HOLDS out-of-sample net of costs.
+received_usd=$0.0, cap intact.
