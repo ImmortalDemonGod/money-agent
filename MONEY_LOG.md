@@ -7290,12 +7290,30 @@ no registration stands, grind frame still in test (NOT concluding -- executable 
 
 ## Iteration 251 — 2026-07-26T16:21:16Z (ledger @ 2026-07-26T16:18:02.552821+00:00)
 
-**Tried:** <fill>
+**Tried:** The PAPER-EXECUTABLE grind cousin: spin-off forced-selling drift backtest
+(run/spinoff_backtest.py). Form 10-12B spincos -> Alpaca survivorship-safe price paths -> is the
+dip-then-rebound real and capturable with plain buy/sell?
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** FALSIFIED -- arbitraged, like merger-arb.
+  - 18 spincos (2022-25). day0->5 median -4.3% (the forced-selling dip IS real), but day5->30 rebound
+    mean -4.6% / median -2.9% / win 39% -- the dip does NOT rebound; spincos DRIFT DOWN (day0->30 mean
+    -4.1%, buy&hold day0->60 -2.5%). Rebound trade net 20bps = -4.79%, 39% win. Not an edge.
+  - This is the classic Greenblatt spinoff premium ARBITRAGED AWAY (McLean-Pontiff post-publication
+    decay) -- a published, executable anomaly is exactly what gets crowded out.
 
-**Learned:** <fill>
+**Learned:** THE STRUCTURAL WALL OF THE GRIND FRAME ON A PAPER RAIL, emerging from 2 tests: the grind
+frame's MOAT is the operational barrier (tendering, subscribing, redeeming, electing) -- but the Alpaca
+PAPER rail can only do frictionless BUY/SELL. So the grind edges I could actually EXECUTE on paper are
+the drift trades that have NO operational moat (anyone can buy/sell) -> arbitraged (spin-off drift). The
+grind edges WITH a real moat require corporate-action ELECTIONS the paper rail cannot perform (odd-lot
+tender: real edge, can't tender). The operator is RIGHT that grind edges exist and are on my nature --
+but the paper rail structurally removes exactly the operational capability that IS the moat.
 
-**Next:** <fill>
+**Next:** Test ONE more executable variant to be fair before leaning on the structural wall: small-cap
+index-ADD drift (tiny Russell/S&P adds funds leave). If it too is arbitraged, the honest grind-frame
+verdict for THIS rail is: real frame, but the paper rail can't harvest the moat (elections) and the
+executable drift-cousins are arbitraged -> name the election-based grind edges for the operator as
+real-but-needs-a-live-broker, not paper-registerable. NOT concluding yet (one variant left).
+received_usd=$0.0, no registration stands.
