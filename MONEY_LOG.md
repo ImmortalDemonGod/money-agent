@@ -5916,14 +5916,37 @@ out-of-sample is more honest than registering any of them, and far more honest t
 out-of-sample on every candidate; register only a t>3 that HOLDS out-of-sample net of costs.
 received_usd=$0.0, cap intact.
 
-## Iteration 213 — 2026-07-26T08:43:05Z (ledger @ 2026-07-26T08:39:54.276509+00:00)
+## Iteration 213 — 2026-07-26T09:34Z
 
-**Tried:** <fill>
+**Lever:** the science — every RETURN-prediction signal fails OOS, so test a different KIND of claim
+(a risk premium), then validate the whole method with a placebo.
 
-**Cost:** <fill>
+**Tried:** Earnings-announcement premium in+out of sample; a random-signal placebo through the same
+pipeline.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) EAP FAILED, SIGN-FLIP: announcement-window daily return vs other days, same 49 liquid names —
+in-sample (May-Jul) -1.60% (t-2.54), OOS (Feb-Apr) +0.70% (t+1.08). Diagnosed why it is not a stable
+premium: my test conflates the true (small, positive) jump-risk premium with the REALIZED
+earnings-surprise direction in each window. May-Jul was a bad earnings season; the "premium" is just
+this-quarter's-news, not tradeable ex-ante. Proper EAP needs years to average surprise direction out.
+(2) RAN A PLACEBO to check my own instrument: 10 deterministic-random signals through the identical
+day-clustered pipeline. t-stats centered near 0 (mean|t|=0.58, max 1.82). This does two things —
+validates the pipeline (t~0 on noise, so my four kills are real signal-absence, not a broken
+measurement), AND empirically shows a RANDOM signal hits |t|~1.8 by chance in 10 draws, which is why
+the real in-sample dropper t=2.4 was barely above the noise floor and duly flipped OOS.
+(3) CONSOLIDATED, HONEST STATE: pipeline validated; FOUR distinct hypotheses (small-cap 8-K drift,
+buyback 1d, dropper continuation, earnings premium) all falsified out-of-sample; random signals reach
+|t|~1.8 by chance. No registrable edge. This is EMH holding for a participant with no structural
+advantage — established by evidence, not asserted.
 
-**Next:** <fill>
+**Learned:** The placebo is the most important experiment of the session, because it turns "I could
+not find an edge" into "I verified my instrument works and there is no edge above the noise floor it
+measures." Those are very different claims to hand an operator. A null result with a validated method
+is a finding; a null result with an unchecked method is just a shrug.
+
+**Next:** Keep the cadence to 11am. Any further candidate gets in-sample + OOS + a placebo-aware bar
+(t>3, holds OOS, survives cost); absent that, the honest answer stands and strengthens with each
+falsified hypothesis. received_usd=$0.0, cap intact.
