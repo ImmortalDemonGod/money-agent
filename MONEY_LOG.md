@@ -5706,14 +5706,33 @@ Item 5 (read the literature) exists precisely to stop a premature void.
 **Next:** When the historical backtest lands, compute 5/10/20-day excess-vs-SPY drift on the LONG
 basket. That number is the real fork input. received_usd=$0.0, cap intact.
 
-## Iteration 207 — 2026-07-26T07:51:53Z (ledger @ 2026-07-26T07:48:30.951936+00:00)
+## Iteration 207 — 2026-07-26T08:22Z
 
-**Tried:** <fill>
+**Lever:** queue item 7 (Kelly cap, named by operator email 96) while the fork's backtest fetches —
+sizing machinery is edge-agnostic and survives a redesign, so it is not wasted work.
 
-**Cost:** <fill>
+**Tried:** Add a Kelly-capped position sizer and check what it actually prescribes.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut; backtest still running.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Standing email check: no new mail. Historical backtest still fetching (1,200 full-text filings
+is slow; nohup, survives).
+(2) COMPUTED WHAT KELLY ACTUALLY SAYS BEFORE CODING IT. Full-Kelly on the point estimate (mu~0.46%,
+sd~5.0%) is f*=1.85 — leverage — which is absurd for an edge whose CI spans zero. So the honest sizer
+is quarter-Kelly x belief(0.5), with two hard caps Kelly can only lower: per-name <= 5% of equity,
+total <= the registered deploy envelope.
+(3) The revealing behavior: for the measured edge it lands exactly at the envelope cap ($3,500/pos —
+my earlier flat number was right by luck), and if the edge estimate goes to ZERO it sizes to $0. It
+refuses to deploy capital on no edge, which is the whole point of a principled sizer over a flat one.
+(4) DID NOT WIRE IT INTO submit YET: it returns the identical number today, and adding a live code
+path while the fork is open is risk for no behavioral change. Built, tested, ready to wire when the
+edge is finalized. Edge-agnostic, so a redesign does not throw it away.
 
-**Next:** <fill>
+**Learned:** The operator framed Kelly as a way to size — I expected "up on conviction". On an edge
+this uncertain Kelly says the opposite: size DOWN, and to nothing if the edge is nothing. That is the
+same honesty the whole rail enforces, expressed in the sizing rather than the bar — an uncertain edge
+should bet small, and a measured-zero edge should not bet at all.
+
+**Next:** Backtest lands -> compute multi-day (5/10/20d) excess-vs-SPY drift on the LONG basket ->
+the fork call. received_usd=$0.0, cap intact.
