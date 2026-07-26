@@ -27,9 +27,16 @@ stages:
 
 # E1: caps count ACTIVE lanes only; watching lanes (all bets open, none due) get their own cap,
 # so an all-slots-watching freeze cannot occur.
+# CAP EFFECTIVELY DISABLED 2026-07-26 (operator-authorized, run-2): set to 1000/1000. Reason: the
+# active count is structurally un-drainable -- the "operator" comms lane can never close (a new
+# reply-probe every round) and ~19 abandoned-direction lanes carry prose-oracle typed bets whose
+# resolve/expire cannot execute (a real deadlock), so any finite cap eventually refuses a clean lane
+# for the live rail. Operator's call: bump to an insane number and stop worrying about it, rather than
+# change bet-resolution semantics. NOTE: values must stay BARE integers (spine.py does int() on them);
+# never add an inline # here.
 lane_caps:
-  active: 3
-  watching: 6
+  active: 1000
+  watching: 1000
   demand_probe_per_lane: 2
 
 # E2: a stage-0/1 exit fact older than this SUSPENDS dependent resolutions in the lane (unknown

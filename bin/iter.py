@@ -23,6 +23,7 @@ the mechanics move into the harness.
 """
 from __future__ import annotations
 import datetime as dt
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -66,6 +67,40 @@ def _commit_push(paths: list[Path], msg: str) -> None:
               file=sys.stderr)
 
 
+def _consume_actuations() -> None:
+    """Best-effort: consume any operator-published actuation resolutions at the START of every tick.
+
+    Fixes a real defect: a request the operator FULFILLED on the facts lane stayed 'open' in the
+    agent's claims file -- eating a capped queue slot and leaving a returned credential undelivered
+    -- until the agent happened to run `actuate.py sync` by hand (which it often never did; nothing
+    ran sync-all). Every iteration (`new`) and every watch tick passes through here, so an operator
+    action is now consumed within one tick of landing, automatically.
+
+    Cheap and safe: if no actuation task is OPEN, it returns before any network I/O (no ledger
+    fetch). It NEVER blocks the tick -- any error/timeout is swallowed, because a sync hiccup must
+    not stop the agent from iterating or watching. sync-all verifies the verifier signature itself,
+    so auto-running it adds no privilege and does not weaken separation of duties (it is exactly the
+    agent's own consume path, just run on time instead of by hand)."""
+    try:
+        tasks_f = REPO / "run" / "actuation_tasks.json"
+        if not tasks_f.exists():
+            return
+        import json as _json
+        opens = [t for t in _json.loads(tasks_f.read_text()).get("tasks", [])
+                 if t.get("status") == "open"]
+        if not opens:
+            return  # nothing open -> no resolution to consume -> skip the ledger fetch entirely
+        r = subprocess.run(["python3", str(REPO / "bin" / "actuate.py"), "sync-all"],
+                           cwd=REPO, capture_output=True, text=True, timeout=90)
+        # Surface ONLY the per-task success lines, so a landed operator action becomes visible in the
+        # agent's context; the "0 of N synced" no-op stays quiet (no noise on every idle tick).
+        for ln in (r.stdout or "").splitlines():
+            if "synced from verifier facts" in ln:
+                print(f"   actuation consumed: {ln.strip()}")
+    except Exception:
+        pass  # a sync failure must never block an iteration open or a watch tick
+
+
 def _manifest_lines(t: dict) -> list[str]:
     """Per-file hash lines for this run's pulls, from the VERIFIER-OWNED manifest only. These are
     pre-filled into the packet as citable money anchors, so they must come from a source the agent
@@ -106,6 +141,8 @@ def _edge_anchor() -> str:
 
 
 def new(lever: str = "") -> int:
+    _consume_actuations()  # land any operator resolution before opening (never blocks)
+    _reset_streak()  # opening a real iteration ends the consecutive-watch streak
     # #45 (PACE_ENFORCE, default off): when every open bet is quietly waiting on its clock, a NEW
     # iteration is only justified by a genuinely new lever -- run 1 burned iterations 091-094
     # polling not-yet-due clocks as if polling were work. guard's B7 advisory names the smell;
@@ -213,10 +250,54 @@ def close(nnn: str) -> int:
     return 0
 
 
-def watch(note: str) -> int:
+WATCH_STREAK = REPO / ".run" / "watch_streak"  # local runtime counter (never committed)
+
+
+def _read_streak() -> int:
+    try:
+        return int(WATCH_STREAK.read_text().strip())
+    except Exception:
+        return 0
+
+
+def _reset_streak() -> None:
+    try:
+        WATCH_STREAK.write_text("0")
+    except Exception:
+        pass
+
+
+def watch(note: str, researched: str = "") -> int:
+    _consume_actuations()  # a watch tick is the common case; consume operator resolutions here too
+    streak = _read_streak() + 1
+    # legit polling of a DUE bet is real work; pure idle is not. A watch tick riding a due bet or a
+    # declared research pass is fine; a watch tick that is neither, repeated, is the run-1 091-094
+    # idle-drift this gate exists to kill.
+    has_due = False
+    try:
+        sys.path.insert(0, str(REPO / "bin"))
+        import bets as _bets
+        _bn = _bets._now()
+        has_due = any(_bets.is_due(b, _bn) for b in _bets.open_bets(_bets._load()))
+    except Exception:
+        pass
+    # GATE (#45 extended to watch ticks): from the 2nd CONSECUTIVE watch tick, PACE_ENFORCE refuses
+    # a PURE-IDLE tick -- no bet due to poll AND no research declared this fire. Your existing
+    # levers being time-gated is NOT permission to idle: the loop requires generating NEW levers
+    # while the live clocks accrue.
+    if os.environ.get("PACE_ENFORCE", "0") == "1" and streak >= 2 and not has_due and not researched:
+        print(f"REFUSED: {streak} consecutive WATCH ticks -- no bet due to poll and no research "
+              "this fire. A WATCH state is legitimate ONLY while you keep generating NEW levers. "
+              "Your existing levers being time-gated is NOT idle permission (PROMPT.md: USE YOUR "
+              "LEVERAGE / 'keep a fresh experiment running' / 'never conclude there is nothing left "
+              "to try'). THIS fire: actually run WebSearch, a deep-research subagent, or parallel "
+              "agents for a NEW channel, buyer, or capability you can build. Then EITHER open an "
+              "iteration on it (bin/iter.py new --lever \"...\"), OR -- only if you genuinely "
+              "researched and it came up empty -- record that: "
+              "bin/iter.py watch --researched \"<what you searched + why empty>\" \"<note>\".",
+              file=sys.stderr)
+        return 2
     t = _truth()
-    # the open-bet agenda rides on every watch tick: a watch state exists to wait on external
-    # clocks, so the tick should say which clocks (issue #4; run 1 forgot its live bet at 095)
     bets_note = ""
     try:
         sys.path.insert(0, str(REPO / "bin"))
@@ -224,8 +305,9 @@ def watch(note: str) -> int:
         bets_note = f" | {_bets.summary_line()}"
     except Exception:
         pass
+    tail = f" | RESEARCHED: {researched}" if researched else ""
     line = (f"- {_now()} | received_usd={t.get('received_usd')} verified={t.get('verified')}"
-            f"{bets_note} | {note}\n")
+            f"{bets_note} | {note}{tail}\n")
     WATCH_LOG.write_text(
         (WATCH_LOG.read_text() if WATCH_LOG.exists()
          else "# WATCH_LOG — watch-state ticks (no iteration number consumed)\n\n"
@@ -233,7 +315,25 @@ def watch(note: str) -> int:
               "(run-1 iters 091–094 polled as full iterations).\n\n")
         + line)
     _commit_push([WATCH_LOG], f"watch: {note[:60]}")
+    try:
+        WATCH_STREAK.parent.mkdir(parents=True, exist_ok=True)
+        WATCH_STREAK.write_text(str(streak))
+    except Exception:
+        pass
     print("watch tick recorded: " + line.strip())
+    # CONTEXT INJECTION: on consecutive watch ticks, resurface the exact loop directives the agent
+    # is skipping -- re-inject "USE YOUR LEVERAGE" into its working context so it stops idling.
+    if streak >= 2:
+        print(f"\n[WATCH STREAK = {streak}] {streak} watch ticks in a row without opening an "
+              "iteration. Re-read what the loop asks and you are NOT doing:\n"
+              "  * USE YOUR LEVERAGE -- WebSearch + the open internet; deep-research subagents; "
+              "parallel agents to explore several approaches at once; and BUILDING a tool to "
+              "extend your reach. Watching instead of researching is under-using yourself.\n"
+              "  * KEEP A FRESH EXPERIMENT RUNNING while the live things accrue reach. The "
+              "bottleneck is a NEW input you cannot get by waiting -- a channel that reaches real "
+              "buyers, a credential, a capability you can build. Generate one THIS fire.\n"
+              "  * 'Every lever is time-gated' describes your OLD levers. It says nothing about "
+              "the new ones you have not gone looking for yet.", file=sys.stderr)
     return 0
 
 
@@ -254,7 +354,17 @@ def main() -> int:
     if a[0] == "close" and len(a) > 1:
         return close(a[1])
     if a[0] == "watch" and len(a) > 1:
-        return watch(" ".join(a[1:]))
+        rest = a[1:]
+        researched = ""
+        if "--researched" in rest:
+            i = rest.index("--researched")
+            researched = rest[i + 1] if i + 1 < len(rest) else ""
+            rest = rest[:i] + rest[i + 2:]
+        note = " ".join(rest).strip()
+        if not note:
+            print('FATAL: watch needs a note (bin/iter.py watch "<note>").', file=sys.stderr)
+            return 2
+        return watch(note, researched)
     print(__doc__)
     return 2
 

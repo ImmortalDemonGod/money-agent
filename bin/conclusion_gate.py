@@ -289,6 +289,14 @@ def main() -> int:
                                  f"{task.get('gate')!r} -- only a verifier-published operator "
                                  "resolution consumed via bin/actuate.py sync closes it.")
                     continue
+                if task.get("status") == "withdrawn":
+                    # The agent retracted its OWN request (an abandoned direction). There is no
+                    # operator action to ground against -- a withdrawal is legitimately self-authored
+                    # (it claims no human acted, only that the agent stopped waiting), and its
+                    # companion bet is resolved on withdraw. So it is a closed terminal state, not an
+                    # ungrounded resolution. Requiring a facts-lane resolution here would trade the
+                    # capped-queue deadlock (which withdraw exists to break) for a conclusion-gate one.
+                    continue
                 try:
                     grounded = _actuate._grounded_resolution(task)
                     if not grounded or grounded.get("status") != task.get("status"):

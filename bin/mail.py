@@ -16,6 +16,12 @@ owns the boilerplate.
   bin/mail.py search <query>       IMAP search, e.g. 'FROM stripe.com' / 'UNSEEN'
   bin/mail.py send <to> <subj> <body-file-or--> [--bet-id ID] [--lane LANE]
 
+  inbox/read/search also take [--sent] (your Gmail "Sent Mail") or [--mailbox NAME] to read a
+  DIFFERENT IMAP folder. CHECK WHAT YOU ALREADY SENT before writing to someone under the real
+  name: `bin/mail.py search --sent democr.ai`. SENT_LOG.md is per-run and empty at the start of a
+  new run; your Gmail Sent Mail is the ONLY cross-run record of what has already gone out. These
+  flags are READ-ONLY -- they never touch send(), the disclosure gate, or SENT_LOG.md.
+
 EVERY SEND IS LOGGED to ledger/../SENT_LOG.md before it goes out. The log is not a permission
 system -- you have the password, you could bypass this file entirely. It exists so that in the
 morning there is an honest record of what left under a real person's name.
@@ -44,6 +50,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 SENT_LOG = REPO / "SENT_LOG.md"
+# Outreach guard (send()): the agent must not email the operator's own relationships.
+OPERATOR_RESERVED = REPO / "harness" / "operator_reserved.txt"  # addresses/domains the agent may NOT email
+AGENT_MARKER = "X-Money-Agent"  # header stamped on agent sends; its ABSENCE in Sent = operator/external
 
 # S12: SHADOW=1 = captured-not-delivered (design §16). The whole live gate chain still runs --
 # that IS the rehearsal -- but nothing ever opens a socket: inbox/read/search serve the
@@ -140,14 +149,102 @@ def _imap():
     return m
 
 
-def inbox(n=10):
+def _mb(name):
+    # IMAP requires a mailbox name containing spaces to be quoted (e.g. "[Gmail]/Sent Mail").
+    # Read-only helper: only decides which folder inbox/read/search SELECT; never affects send().
+    return f'"{name}"' if (" " in name and not name.startswith('"')) else name
+
+
+def _bare_addr(s):
+    # bare, lowercased email from "Name <email>" or "email"
+    s = (s or "").strip()
+    if "<" in s and ">" in s:
+        s = s[s.index("<") + 1:s.index(">")]
+    return s.strip().lower()
+
+
+def _outreach_guard(to):
+    """STRUCTURAL BLOCK on the real-name send path, run before any gate or external effect. Refuses
+    (exit 1) if the recipient is operator-reserved, OR if the recipient's Gmail Sent history already
+    holds a message the agent did not send (no X-Money-Agent marker) -- i.e. an operator or external
+    human is already in that thread and the agent must not step on or contradict it.
+
+    This is the mechanical prevention of the run-2 democr.ai / Fabio failure, where the agent sent an
+    unprompted AI-disclosure follow-up onto the operator's OWN human thread and recast it as fake.
+    Mechanics, not strategy: it constrains WHICH relationships are the operator's, never WHOM to email.
+
+    (1) reserved list = a network-free HARD WALL. (2) the Sent scan HARD-REFUSES on a positive match,
+    but if IMAP itself is unreachable it warns and allows -- the reserved wall still stands, and
+    failing every send closed on a transient proxy hiccup is the worse failure."""
+    to_addr = _bare_addr(to)
+    # (1) operator-reserved addresses / domains -- no network, cannot be flaky
+    if OPERATOR_RESERVED.exists():
+        for raw in OPERATOR_RESERVED.read_text().splitlines():
+            entry = raw.split("#", 1)[0].strip().lower()
+            if not entry:
+                continue
+            dom = to_addr.split("@")[-1]
+            hit = (to_addr == entry) if "@" in entry else (dom == entry or dom.endswith("." + entry))
+            if hit:
+                print(f"REFUSING (outreach guard): {to} is an OPERATOR-RESERVED contact (matched "
+                      f"'{entry}' in harness/operator_reserved.txt). Operator-owned relationships are "
+                      f"not the agent's to email. This is the democr.ai/Fabio wall.", file=sys.stderr)
+                sys.exit(1)
+    # (2) operator-touched thread: the recipient already has non-agent Sent history.
+    # (3) no-cold-follow-up: the AGENT already emailed this recipient and they have not replied ->
+    #     re-emailing a non-responder under the operator's real name is spam. Zero bumps.
+    if SHADOW:
+        return  # a rehearsal has no live Sent folder
+    try:
+        m = _imap()
+        m.select(_mb("[Gmail]/Sent Mail"))
+        _, data = m.search(None, "TO", f'"{to_addr}"')
+        found_nonagent = False   # operator/external in the thread
+        found_agent = False      # the agent already emailed this recipient
+        for i in data[0].split():
+            _, d = m.fetch(i, f"(BODY.PEEK[HEADER.FIELDS (TO {AGENT_MARKER})])")
+            hdr = email.message_from_bytes(d[0][1])
+            if to_addr in (hdr.get("To", "") or "").lower():
+                if hdr.get(AGENT_MARKER):
+                    found_agent = True
+                else:
+                    found_nonagent = True
+        # if the agent already emailed them, has the recipient EVER written back? (a reply earns a
+        # follow-up; silence does not). Only need this when it is otherwise the agent's own thread.
+        inbound = False
+        if found_agent and not found_nonagent:
+            m.select(_mb("INBOX"))
+            _, idata = m.search(None, "FROM", f'"{to_addr}"')
+            inbound = bool(idata[0].split())
+        m.logout()
+    except Exception as e:
+        print(f"warn (outreach guard): could not scan Sent/Inbox for {to} ({e}); the reserved-list "
+              f"wall still applies. Allowing this send.", file=sys.stderr)
+        return
+    if found_nonagent:
+        print(f"REFUSING (outreach guard): the Sent folder already holds a message to {to} that the "
+              f"agent did not send (no {AGENT_MARKER} marker) -- an operator or external human is in "
+              f"this thread. The agent must not step on or contradict it (the run-2 Fabio failure). "
+              f"Run `bin/mail.py search --sent {to_addr}` to read it and leave the thread to the "
+              f"operator (or ask the operator to clear it).", file=sys.stderr)
+        sys.exit(1)
+    if found_agent and not inbound:
+        print(f"REFUSING (outreach guard): you have ALREADY emailed {to} and they have NOT replied "
+              f"(nothing from them in your inbox). No cold follow-ups -- re-emailing a non-responder "
+              f"under the operator's real name is spam. Run `bin/mail.py search --sent {to_addr}` to "
+              f"see what you already sent. Email them again ONLY after THEY reply first.",
+              file=sys.stderr)
+        sys.exit(1)
+
+
+def inbox(n=10, mailbox="INBOX"):
     if SHADOW:
         for m in reversed(_shadow_msgs()[-n:]):
             print(f"[{m['id']}] {str(m.get('date', ''))[:31]:33s} "
                   f"{str(m.get('from', ''))[:34]:36s} {str(m.get('subject', ''))[:50]}")
         return
     m = _imap()
-    m.select("INBOX")
+    m.select(_mb(mailbox))
     _, data = m.search(None, "ALL")
     ids = data[0].split()[-n:]
     for i in reversed(ids):
@@ -157,7 +254,7 @@ def inbox(n=10):
     m.logout()
 
 
-def read(mid):
+def read(mid, mailbox="INBOX"):
     if SHADOW:
         for m in _shadow_msgs():
             if m["id"] == str(mid):
@@ -169,7 +266,7 @@ def read(mid):
         print(f"FATAL: no shadow message {mid!r} (have: {ids})", file=sys.stderr)
         sys.exit(2)
     m = _imap()
-    m.select("INBOX")
+    m.select(_mb(mailbox))
     _, d = m.fetch(str(mid).encode(), "(RFC822)")
     msg = email.message_from_bytes(d[0][1])
     print("From:", _dec(msg.get("From")), "\nSubject:", _dec(msg.get("Subject")),
@@ -184,7 +281,7 @@ def read(mid):
     m.logout()
 
 
-def search(q):
+def search(q, mailbox="INBOX"):
     if SHADOW:
         term = q.replace('"', '').lower()
         hits = [m for m in _shadow_msgs()
@@ -194,7 +291,7 @@ def search(q):
             print(f"[{m['id']}] {str(m.get('from', ''))[:34]:36s} {str(m.get('subject', ''))[:56]}")
         return
     m = _imap()
-    m.select("INBOX")
+    m.select(_mb(mailbox))
     # IMAP SEARCH needs a criterion keyword; a bare string is a syntax error (found live when
     # recovering the democr recipient). Quote the term and search across body + subject + from.
     term = q.replace('"', '')
@@ -210,6 +307,11 @@ def search(q):
 
 
 def send(to, subj, body, *, bet_id=None, lane=None):
+    # OUTREACH GUARD -- the FIRST thing, before any gate or external effect: the agent must not email
+    # an operator-reserved contact, nor step on a thread an operator/human has already answered. Added
+    # after run-2 sent an unprompted AI-disclosure follow-up onto the operator's own Fabio (democr.ai)
+    # thread and burned the lead. Fail-closed on a positive match; see _outreach_guard.
+    _outreach_guard(to)
     # V3 (S9, BET_GATE_ENFORCE=1 only): a send is an external-effect action and needs a live
     # typed bet's reservation -- the hypothesis-first discipline, consumed atomically so one bet
     # never authorizes unbounded sends. Inert by default; fail-closed when armed.
@@ -259,6 +361,8 @@ def send(to, subj, body, *, bet_id=None, lane=None):
     msg = EmailMessage()
     msg["From"], msg["To"], msg["Subject"] = ADDR, to, subj
     msg.set_content(body)
+    msg[AGENT_MARKER] = "1"  # so the outreach guard can tell agent sends from operator/external
+                             # ones in the Sent folder on any future send to this recipient
 
     # BURN the reservation now -- AFTER every content gate has passed (a refused send above never
     # reached here), but BEFORE the audit record is written or committed. Consuming after the commit
@@ -365,13 +469,29 @@ if __name__ == "__main__":
     if not a:
         print(__doc__)
         sys.exit(0)
+    # Read-only mailbox override for inbox/read/search: --sent (Gmail Sent Mail) or --mailbox NAME.
+    # Stripped from argv before positional parsing; never reaches send()/disclosure/SENT_LOG.
+    mailbox = "INBOX"
+    if "--sent" in a:
+        mailbox = "[Gmail]/Sent Mail"
+        a = [x for x in a if x != "--sent"]
+    if "--mailbox" in a:
+        i = a.index("--mailbox")
+        if i + 1 >= len(a):
+            print("FATAL: --mailbox needs a folder name", file=sys.stderr)
+            sys.exit(2)
+        mailbox = a[i + 1]
+        del a[i:i + 2]
+    if not a:
+        print(__doc__)
+        sys.exit(0)
     cmd = a[0]
     if cmd == "inbox":
-        inbox(int(a[1]) if len(a) > 1 else 10)
+        inbox(int(a[1]) if len(a) > 1 else 10, mailbox=mailbox)
     elif cmd == "read":
-        read(a[1])
+        read(a[1], mailbox=mailbox)
     elif cmd == "search":
-        search(" ".join(a[1:]))
+        search(" ".join(a[1:]), mailbox=mailbox)
     elif cmd == "send":
         body = sys.stdin.read() if a[3] == "-" else Path(a[3]).read_text()
         def option(name):

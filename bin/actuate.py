@@ -332,7 +332,15 @@ def _operator_tasks_all() -> list[dict]:
     _git("fetch", "-q", "origin", agent_branch, check=True)
     r = _git("show", f"origin/{agent_branch}:run/actuation_tasks.json")
     if r.returncode != 0:
-        raise RuntimeError(f"cannot read requests from origin/{agent_branch}")
+        # An absent run/actuation_tasks.json is an EMPTY queue, not an error: the agent has
+        # simply not queued a request yet (the file is created on the first request). The fetch
+        # above (check=True) already proved the branch exists, so a missing PATH is the only
+        # benign failure -- treat it as [] (consistent with the agent-side _tasks(), which reads
+        # an absent file as []), and still raise on any other git error.
+        if "does not exist" in (r.stderr or ""):
+            return []
+        raise RuntimeError(f"cannot read requests from origin/{agent_branch}: "
+                           f"{(r.stderr or '').strip()[:160]}")
     return json.loads(r.stdout).get("tasks", [])
 
 
@@ -400,7 +408,20 @@ def _publish_resolution(task: dict, resolution: dict) -> None:
             raise RuntimeError(f"could not commit resolution: {commit.stderr.strip()[:160]}")
         push = _git("push", "origin", f"HEAD:{ledger_branch}")
         if push.returncode != 0:
-            raise RuntimeError(f"could not publish resolution: {push.stderr.strip()[:160]}")
+            # The facts lane is SHARED with the verifier (it publishes truth.json every cycle), so a
+            # non-fast-forward here is expected contention, not a failure. Our resolution commit
+            # touches only actuation_resolutions.json (+ .sig) -- never the verifier's truth.json /
+            # raw / -- so rebasing our single commit onto the current tip is clean; then push again.
+            _git("fetch", "-q", "origin", ledger_branch)
+            rb = _git("rebase", f"origin/{ledger_branch}")
+            if rb.returncode != 0:
+                _git("rebase", "--abort")
+                raise RuntimeError("could not publish resolution: the facts lane advanced and the "
+                                   f"rebase did not apply cleanly: {rb.stderr.strip()[:140]}")
+            push = _git("push", "origin", f"HEAD:{ledger_branch}")
+            if push.returncode != 0:
+                raise RuntimeError(f"could not publish resolution after rebase onto the current "
+                                   f"facts tip: {push.stderr.strip()[:160]}")
 
 
 def _grounded_resolution(task: dict) -> dict | None:
@@ -749,6 +770,58 @@ def cmd_decline(a) -> int:
     return 0
 
 
+def cmd_withdraw(a) -> int:
+    """Agent: retract its OWN open request (an abandoned direction), freeing the capped queue.
+
+    The queue's only exits were operator fulfill/decline + agent sync, so a request the agent no
+    longer intends to pursue (a dropped direction) sat 'open' forever, permanently consuming one of
+    the MAX_OPEN_REQUESTS slots and forcing the operator to decline it by hand. Since run/actuation_
+    tasks.json is the AGENT's own claims file, retracting a request the agent authored fabricates no
+    human action -- it is not a resolution, so it never touches the verifier facts lane and does not
+    violate separation of duties (nothing claims 'a human acted'). It DOES resolve the conclusion-
+    blocking companion bet, so a withdrawn task leaves no orphan bet to jam conclusion_gate.py.
+
+    Guard: if a verifier-SIGNED resolution already exists for this task, refuse -- the operator has
+    already spent real minutes on it; the agent must `sync` to apply that (a withdraw would silently
+    discard the operator's action, e.g. a returned credential). The check is fail-soft toward
+    UNBLOCKING: only a POSITIVELY found resolution blocks; a None/error (e.g. ledger unreachable)
+    lets the withdraw proceed, since the whole point is to break a deadlock, not to add a new way to
+    get stuck."""
+    if len(a.reason.strip()) < 8:
+        print("FATAL: --reason required (why this direction is abandoned; the retraction is on the "
+              "record, like a decline).", file=sys.stderr)
+        return 2
+    tasks = _load_tasks()
+    task = next((t for t in tasks if t.get("id") == a.id), None)
+    if not task:
+        print(f"FATAL: no task {a.id!r}", file=sys.stderr)
+        return 1
+    if task.get("status") != "open":
+        print(f"{a.id} is already {task['status']}; nothing to withdraw.")
+        return 0
+    try:
+        grounded = _grounded_resolution(task)
+    except Exception as e:
+        print(f"warn: could not check for a signed resolution ({e}); proceeding with withdraw.",
+              file=sys.stderr)
+        grounded = None
+    if grounded:
+        print(f"FATAL: {a.id} already has a verifier-signed {grounded.get('status')} resolution -- "
+              f"the operator acted on it. Run `bin/actuate.py sync {a.id}` to apply it (a withdraw "
+              "would discard the operator's action, including any returned credential).",
+              file=sys.stderr)
+        return 1
+    task["status"] = "withdrawn"
+    task["withdrawn_at"] = _now()
+    task["withdraw_reason"] = a.reason.strip()
+    _save_tasks(tasks, f"actuate: withdraw {a.id} (abandoned): {a.reason.strip()[:50]}")
+    _resolve_companion_bet(task.get("companion_bet"), "withdrawn",
+                           f"withdrawn by agent: {a.reason.strip()}")
+    open_left = sum(1 for t in tasks if t.get("status") == "open")
+    print(f"{a.id} withdrawn; companion bet resolved. Queue now {open_left}/{MAX_OPEN_REQUESTS} open.")
+    return 0
+
+
 def _run_usability_probe(task: dict, material_path: Path) -> tuple[str, str]:
     """Run the agent's PRE-REGISTERED post-handback usability probe against the materialized return.
 
@@ -1041,6 +1114,11 @@ def main() -> int:
     pd.add_argument("--minutes", type=float, required=True)
     pd.add_argument("--reason", required=True)
     pd.set_defaults(fn=cmd_decline)
+
+    pw = sub.add_parser("withdraw")
+    pw.add_argument("id")
+    pw.add_argument("--reason", required=True)
+    pw.set_defaults(fn=cmd_withdraw)
 
     ps = sub.add_parser("sync")
     ps.add_argument("id")
