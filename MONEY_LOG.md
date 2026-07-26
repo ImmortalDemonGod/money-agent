@@ -6594,12 +6594,33 @@ the email channel. received_usd=$0.0, cap intact, verdict PENDING.
 
 ## Iteration 232 — 2026-07-26T11:21:19Z (ledger @ 2026-07-26T11:16:25.887477+00:00)
 
-**Tried:** <fill>
+**Tried:** No new email. Queue item 7 final step: PRE-FLIGHT the exact order Monday's scheduler will
+submit (`vrp_execute.py sell` dry-run against live market data) and eyeball tenor/strikes/credit —
+"paper-tested so the open is one button" means verifying the button presses the RIGHT order.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) THE PRE-FLIGHT CAUGHT A MATERIAL EXECUTION BUG. The dry-run selected exp 2026-07-29 — only 3 DTE
+— when the registered mechanism targets 5-10 DTE. Root cause: `/v2/options/contracts?limit=500` is
+PAGINATED and expiry-sorted; the first 500 rows cover only the 3 nearest expiries (Jul 27/28/29, ~167
+strikes each) with next_page_token=True, so pick_legs never saw the ~7 DTE weekly and fell back to the
+nearest daily. Monday's LIVE fire would have sold a 3-DTE spread — a third of the premium, far more
+gamma, NOT the instrument I backtested.
+(2) FIXED IT. put_contracts() now filters server-side by expiration_date_gte/lte around the DTE
+window, with a widen-then-refuse fallback (raises rather than sell the wrong tenor if the window is
+empty). Re-ran the pre-flight: now picks exp 2026-08-03 (8 DTE) SHORT 690P / LONG 670P (6.5%/9.3% OTM,
+~10-delta), width 20 = $2,000 risk, qty 1, credit ~$3.00 — the registered mechanism exactly. Confirmed
+the fetched window returns Jul31(5)/Aug3(8)/Aug4(9) DTE, and it correctly picks the ~7 DTE.
+(3) VIX gate confirmed live: VIX 18.6 >= 16, so Monday fires (does not skip). Recorded the pagination
+trap in knowledge/traps.md.
 
-**Learned:** <fill>
+**Learned:** A wrong-but-plausible order is worse than an error — the machine "worked" (200, an order
+built, sane-looking strikes) while silently choosing the wrong tenor. The only thing that caught it
+was pre-flighting the EXACT scheduled order and reading the expiry, not trusting that "the executor
+runs." Paginated endpoints hide the tail of the list; filter server-side, never post-filter page one.
 
-**Next:** <fill>
+**Next:** The one-button open is now verified end-to-end: sell picks the right tenor/strikes, gates
+evaluate, guard/manage/close all tested. Monday 09:00 CDT fires the real thing. After the fill: read
+leg-count for cadence, schedule the expiry-day manage --live for Aug 3. received_usd=$0.0, cap intact,
+verdict PENDING.
