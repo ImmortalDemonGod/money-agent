@@ -5845,3 +5845,15 @@ stated bar (economics-argued, cost-surviving, multiple-testing-aware) beats an e
 **Next:** Test direction A (does any liquid cross-sectional signal survive?) with a small, honest
 probe before believing it; if it and B come back null, the honest answer stands: still searching, no
 registration. received_usd=$0.0, cap intact.
+
+## Iteration 211 — 2026-07-26T08:31:58Z (ledger @ 2026-07-26T08:27:25.913799+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
