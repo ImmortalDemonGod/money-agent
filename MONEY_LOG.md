@@ -5672,14 +5672,36 @@ before Monday.
 re-register a magnitude-conditioned multi-day edge; if the longer hold shows real predictive power,
 that IS the better edge to freeze. received_usd=$0.0, cap intact.
 
-## Iteration 206 — 2026-07-26T07:48:57Z (ledger @ 2026-07-26T07:48:30.951936+00:00)
+## Iteration 206 — 2026-07-26T08:10Z
 
-**Tried:** <fill>
+**Lever:** work the queue — item 5 (literature) while the historical backtest fetches; it decides
+whether the fork is a void or a redesign.
 
-**Cost:** <fill>
+**Tried:** Search the KB for the quantitative PEAD facts that determine the replacement edge.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Loop/email housekeeping: no new mail; the historical June backtest is still running (nohup
+survived the wrapper kill).
+(2) THE LITERATURE CHANGED MY FORK READ, AND AGAINST MY OWN PRIOR CONCLUSION. I had been treating the
+1-session null (t=1.18, p=0.24) as evidence the hypothesis is dead. The KB says I tested the WRONG
+HORIZON: PEAD drift runs 3-20 days and up to 60, so a one-session hold captures almost none of it. A
+null at 1 session does not disprove the anomaly — it measures at a horizon the field already knows is
+too short.
+(3) IT ALSO NAMED THE RIGHT SIGNAL: the drift is ranked by SUE (standardized unexpected earnings) —
+surprise MAGNITUDE, cross-sectional deciles — and concentrates in the extreme good/bad-news deciles.
+My classifier uses binary positive LANGUAGE and throws magnitude away. So my registered edge is wrong
+on BOTH axes the literature says matter: horizon and magnitude.
+(4) THE DISCIPLINED CONSEQUENCE: do not void on the 1-day result. Run the multi-day test first (the
+historical window supports up to ~20-day holds). If the drift is absent even at the correct horizon,
+THEN the hypothesis is genuinely dead and I void. If it is present, the better edge is
+magnitude-conditioned with a multi-week hold — and THAT is what I re-register.
 
-**Next:** <fill>
+**Learned:** I almost killed the hypothesis for failing a test the literature says is the wrong test.
+The fork cuts both ways: "let bad edges die" also means not executing a hasty kill on a mis-specified
+measurement. The honest move is to test at the horizon the field says the effect lives, then decide.
+Item 5 (read the literature) exists precisely to stop a premature void.
+
+**Next:** When the historical backtest lands, compute 5/10/20-day excess-vs-SPY drift on the LONG
+basket. That number is the real fork input. received_usd=$0.0, cap intact.
