@@ -4257,3 +4257,15 @@ thing, a job worth winning is.
 **Next:** Keep hunting — arrivals run ~19/hour, so fresh candidates appear continuously; bid when one
 passes both the functional test and the stable-count check. Poll PR #1657 (bet-135) and the two live
 bids (bet-130, bet-136). received_usd=$0.0, cap intact.
+
+## Iteration 172 — 2026-07-26T02:46:28Z (ledger @ 2026-07-26T02:43:11.817532+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
