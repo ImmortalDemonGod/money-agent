@@ -7413,3 +7413,15 @@ fork that is his: provision a NAV/data feed or a live broker w/ elections (his c
 at a corner. One autonomous option I can still run without his input: a NAV-FREE forward-test proxy
 (paper-buy widest-discount CEFs, track price reversion) -- weak (conflates with beta) but real and
 executable. Await steer or run the proxy. received_usd=$0.0, no registration stands; bet-143 live.
+
+## Iteration 255 — 2026-07-26T17:00:57Z (ledger @ 2026-07-26T16:55:55.541344+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
