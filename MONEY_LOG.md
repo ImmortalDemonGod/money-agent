@@ -5317,3 +5317,15 @@ registration freezes, that class of error is the one that becomes permanent.
 **Next:** Awaiting Alpaca paper keys and the verifier run that publishes ledger/edge.json. Remaining
 build: the materiality classifier itself, then answer the four account questions and register.
 received_usd=$0.0, cap intact.
+
+## Iteration 197 — 2026-07-26T06:44:53Z (ledger @ 2026-07-26T06:41:16.570187+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
