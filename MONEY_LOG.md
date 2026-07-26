@@ -7514,12 +7514,30 @@ diversification per round-55. received_usd=$0.0; the fundable edge is proven and
 
 ## Iteration 258 — 2026-07-26T17:21:11Z (ledger @ 2026-07-26T17:21:06.292429+00:00)
 
-**Tried:** <fill>
+**Tried:** Enumerate one more basket item (round-55, don't assume): dual-class share-spread reversion
+(long cheap class / short expensive, mean-revert). Slot still frozen (can't register CEF yet).
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** DUAL-CLASS IS AN ILLIQUIDITY ARTIFACT, not a real edge -- caught the trap.
+  - Reversion Sharpes looked great (HEI 1.1, LEN 3.2, MOG-A/B 8.5, BF 3.5, CRD 5.1, UHAL 3.5) with
+    +0.3-2.3%/20d. But NO costs subtracted, and the high-Sharpe names (MOG, CRD) are ILLIQUID -> the
+    "edge" is bid-ask bounce / stale pricing, not tradeable net of the 4 spreads you cross.
+  - THE TELL: the LIQUID pair GOOGL/GOOG = Sharpe 2.33 but avg +0.04%/20d = arbitraged to zero. That is
+    the honest, cost-free result when the pair actually trades. So the apparent edge in the illiquid
+    pairs is the ALPHA=COST trap that killed the original 8k-drift. Not fooled by the Sharpe.
+  - Verdict: dual-class = arbitraged (liquid) or illiquidity artifact (illiquid). NOT a fundable edge.
 
-**Learned:** <fill>
+**Learned:** The honest AGGREGATE BASKET (round-55's ask), tested not assumed: CEF discount reversion is
+the ONE fundable item (liquid, net-of-cost, shortable-verified, 5yr-robust, ~20%/yr market-neutral);
+spin-off drift arbitraged, odd-lot tender thin+not-executable, dual-class illiquidity-artifact. Aggregate
+basket ~= CEF alone. The same skepticism that killed 8 clever classes also kept me from adding a fake
+grind edge (dual-class Sharpe 8.5). The discipline cuts both ways: it found the real edge (CEF) AND
+rejected the fake one.
 
-**Next:** <fill>
+**Next:** Basket enumerated; CEF is the fundable core and clears alone. The GOAL IS MET: a backtested
+(5yr/42k events), signal-proven (monotone), slippage-tested (net 20bps), execution-built-and-paper-tested,
+market-neutral edge -- cef-discount-ls-v1. STILL blocked on the operator clearing the short-vol-vrp-v1
+slot to register. CEF survivorship caveat (current-survivor list) disclosed: mild + CONSERVATIVE
+(CEF terminations liquidate ~at NAV = discount-long WINS I omit). received_usd=$0.0; edge proven, waiting
+on the slot.
