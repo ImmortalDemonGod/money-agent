@@ -1,0 +1,21 @@
+I built your booking flow before writing this, so you can test it instead of reading a promise:
+
+https://mith-studios.vercel.app
+
+Open it on your phone. What already works:
+- Live availability calendar, Sundays closed, free-hours count per day
+- 2-hour minimum actually enforced - it refuses a 1-hour booking, and won't let a session run through an hour that's already taken
+- With Engineer GBP40/hr vs Room Only GBP25/hr, total recalculates instantly
+- Mixing / mastering / stem-export add-ons
+- Session summary, total, and a held-slot reference on confirm
+- Mobile-first, no horizontal scroll
+
+What it deliberately does NOT do yet, because each needs your accounts and credentials: customer login, Revolut checkout, bank-transfer proof upload, automated confirmation and reminder emails, MP3/WAV uploads, package expiry tracking, and the admin dashboard for managing and blocking times. That is the real build - the demo is its front half, and the half that's usually argued about.
+
+Two things I'd want answered before I quote you a firm number:
+1. Should availability live in the site's own database, or sync from a calendar you already use?
+2. One bookable room, or several spaces that can be booked independently?
+
+Answer those and I'll give you a fixed price and a delivery date, not a range.
+
+- Miguel

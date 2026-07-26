@@ -1,0 +1,21 @@
+The hard part of your brief is one cart holding downloads and physical goods at once. I built that before writing this, so you can test it instead of reading a promise:
+
+https://wavecrest-two.vercel.app
+
+Open the cart and try these - it behaves correctly in all four:
+- Album only: "Shipping: Not required". A download basket never asks for postage or an address.
+- Album + vinyl: shipping appears ($7.95, heavier rate for vinyl) and the basket explains that postage is charged on the physical item only.
+- Add a second physical item: shipping does NOT stack. Still one delivery.
+- Over $50: shipping goes free automatically.
+
+Audio previews work on every album and single. Responsive, no horizontal scroll on mobile.
+
+Stack recommendation: WooCommerce. It handles mixed digital/physical carts natively, gives secure expiring download links once payment clears, and supports card, PayPal and manual bank transfer out of the box - your three payment requirements, no custom work. Shopify charges per-app for digital delivery and is clumsier with large audio files.
+
+What the demo deliberately does not include, because each needs your accounts: real payment capture, the actual file delivery, and your admin screen for uploading releases.
+
+Two questions before I quote firm:
+1. Roughly how many releases at launch, and typical file size per album?
+2. Do you need customers to have accounts and re-download later, or is a one-time link enough?
+
+- Miguel

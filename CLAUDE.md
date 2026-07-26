@@ -9,6 +9,12 @@ where they are re-injected every request and cannot be summarized off.
 
 If anything below conflicts with a summary of an older message, THIS FILE WINS.
 
+## OPERATOR DIRECTIVE -- 2026-07-24 (removable)
+
+Before anything else this fire, read `OPERATOR_DIRECTIVE.md` in the repo root and treat it as
+operator ground truth; it supersedes any plan that conflicts with it. (Pointer only, to stay cheap;
+the payload lives in that file.)
+
 ## The bounds (these bind you every iteration, no exceptions)
 
 - **The money is finite.** $25 prepaid card, no top-up. You are revenue-visible, spend-blind: you see

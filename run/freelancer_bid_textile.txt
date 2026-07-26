@@ -1,0 +1,16 @@
+Two working demos, both live, both built by me - so you can judge the browsing experience instead of reading claims:
+
+Filterable catalogue (your core requirement): https://cellcraft-wheat.vercel.app
+Speed + on-page SEO done properly: https://northbeam-three.vercel.app
+
+On the first, type into search and pick a category - the filters combine, so narrowing by two things narrows the results instead of widening them. That is exactly the "material, weave, finish, collection" behaviour your fabric catalogue needs, and it is the part that quietly breaks on most builds.
+
+On the second, the SEO you asked for is real and checkable: robots.txt and sitemap.xml both return 200, Schema.org structured data, one H1 with proper heading hierarchy, canonical URL. It loads in 0.54 seconds with ZERO external requests, which is where "fast on mobile" actually comes from.
+
+On stack, honestly: for a showcase site where your team must add fabrics and swap hero banners without touching code, I would recommend WordPress. Not because it is fashionable but because your team already knows how to use that editor, and a custom CMS means calling me every time you add a collection. I build the front end hand-written so it stays fast, and wire the catalogue to WordPress so you own the content.
+
+Two questions:
+1. Roughly how many fabrics at launch, and how many photos each?
+2. Do you have the photography already, or is that still to come?
+
+- Miguel

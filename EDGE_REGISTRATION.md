@@ -1,88 +1,43 @@
-# Edge registration — 8-K coverage drift, long-only
+# Edge registration — VOIDED (honest pre-trade kill)
 
 EDGE_ID: 8k-coverage-drift-v1
-METRIC: excess_return_pct
-BAR: 1.0
-MIN_FILLED_ORDERS: 40
-MAX_DRAWDOWN_USD: 4000.0
-RESOLVE_BY: 2026-08-07T00:00:00Z
-HYPOTHESIS: Among after-close 8-K filings from thinly-covered listed companies, those whose text discloses a materially favourable non-routine event earn positive excess returns versus SPY on the following session, because attention — not information — is the scarce input in names no analyst desk reads, and a machine can read all ~116 after-close filings a day where a human desk reads a handful.
-FALSIFIED_IF: The account fails to beat SPY by 1.0 percentage points by the deadline, or peak-to-current equity falls by $4,000 at any point, or fewer than 40 orders fill.
-BENCHMARK: SPY
+STATUS: VOID
+VOID_REASON: killed on out-of-sample evidence before any trade (0 fills since freeze)
 
-## Why this bar
+## Why this is voided, not traded
 
-**Registered before the market has ever opened for this strategy.** The paper account was provisioned
-on Sunday 2026-07-26; the next session is Monday 2026-07-27 09:30 ET. Zero orders have been placed,
-so this bar cannot have been fitted to a result — that property expires the moment trading starts,
-which is why this is filed now rather than after a first day of "calibration".
+The verifier froze this registration at $100,000 baseline, verdict PENDING, 0 filled orders. It is
+being voided deliberately BEFORE the first trade, which is free on paper and is the sanctioned path
+for a dead edge (operator round 46). Editing this file after the freeze sets the verdict to VOID by
+design — that is the intended effect here, and the reason is recorded so it reads as an honest kill,
+never as goalpost-moving.
 
-### The hypothesis, and why it is not a crowded null
+### The number (operator's kill criterion: t < 2)
 
-Technical and momentum signals on liquid equities are where an LLM has no structural advantage — no
-proprietary data, no low-latency infrastructure, no alt-data. Registering one of those would be
-theatre. The only honest claim available is that **the advantage is coverage, not speed**.
+Out-of-sample, survivorship-safe (Alpaca delist-inclusive prices, never yfinance), net of 50bps
+round-trip slippage, excess vs SPY:
 
-Measured, not assumed:
-- ~258 8-K filings market-wide per trading day (166–370 across five sessions).
-- ~116 of those are accepted after the 16:00 ET close, so the next open is a clean event window.
-- 86% map to a listed ticker (324 of 375 on 2026-07-23), overwhelmingly small and micro-cap.
+| horizon | n | mean | t-stat |
+|---|---|---|---|
+| 1 day  | 17–18 | +0.42% to +1.16% | 0.95–1.18 |
+| 10 day | 18 | +2.02% | 1.00 |
+| 20 day | 18 | +5.06% | 1.37 |
 
-A hundred analysts parse an Apple 8-K within seconds. Nobody is reading the AmeriServ Financial 8-K
-at 20:30 UTC. This also runs *with* the literature rather than against it: post-announcement drift is
-most durable in small caps with thin analyst coverage, which is the same place a coverage advantage
-can exist. The claim is not "I found something nobody knows"; it is "the known effect concentrates
-where nobody is looking, and I can look everywhere at once."
+No horizon reaches t = 2. The best is 1.37, with a 50% win rate (outlier-driven, not systematic).
+By the operator's explicit threshold, **t < 2 is a kill.** A kill honestly recorded is a real result.
 
-### Why 1.0 and not something more impressive
+### The structural reason it died (this decides what comes next)
 
-The sizing arithmetic, worked before this number was chosen:
+The neglect that creates the drift is the same illiquidity that generates the slippage that eats it.
+The alpha and the cost come from ONE source. So any tweak of the small-cap-event idea — a longer
+hold, a magnitude-conditioned SUE sort, a tighter language filter — dies the same death, because each
+still trades the illiquid long tail where the cost cancels the drift. The replacement cannot be this
+idea tuned; it has to be genuinely different: a more liquid subset, a different event, or a horizon
+where drift survives realistic costs. That search is open and will not be closed with a curve fit
+registered by Monday to avoid an empty hand.
 
-| input | value | source |
-|---|---|---|
-| after-close 8-Ks / session | 116 | measured from EDGAR daily index |
-| classifier selectivity | ~6% | measured on a real filing day |
-| LONG candidates / session | ~7 | derived |
-| position size | $5,000 | 35% of equity deployed per session |
-| sessions before deadline | 9 | Alpaca calendar: Jul 27–31, Aug 3–6 |
-| positions over window | ~63 | derived |
+### What was kept
 
-At a **conservative 0.3% per-event drift** — the low end of the published band for short-horizon
-post-announcement drift — this design returns **0.94 percentage points** over the window.
-
-That is the number that set the bar, and it set it *against* my interests. My pre-committed band
-(written into `run/EDGE_STRATEGY.md` §4 before the account existed) was 1–2 points. The arithmetic
-says my own central estimate is 0.94. So:
-
-- **1.5** would have been a bar I expect to miss even if the hypothesis is true — rigour theatre, and
-  explicitly refused in the strategy doc.
-- **0.9 or below** would be fitting the bar to my own forecast so it clears — the failure this rail
-  exists to catch.
-- **1.0** is the bottom of the pre-committed band and sits *slightly above* my central estimate. I
-  expect to just miss it if drift is 0.3%, and to clear it if drift is ~0.32% or better.
-
-It is deliberately a close call. A bar I was confident of clearing would not be evidence of anything.
-
-### Why 40 filled orders
-
-The window projects ~63 positions, or ~125 fills counting entry and exit. MIN_FILLED_ORDERS is set to
-40 so the sample still resolves if selectivity comes in at half the measured rate. Clearing the bar on
-a thin sample stays PENDING by design, and that is correct: variance is not an edge.
-
-### Why $4,000 drawdown
-
-Deploying ~$34,800 per session, a 5% adverse move across the book costs ~$1,740, or 1.7% of equity. A
-$4,000 cap is roughly 2.3 such sessions back to back. It is a real constraint rather than a formality:
-a raw P&L bar with no risk cap would admit a negative-skew strategy that looks healthy right up to the
-tail event that ends it.
-
-### What is deliberately excluded
-
-Short signals are computed and logged but **not traded**. Micro-cap borrow is unreliable, so short
-fills would concentrate in whatever happens to be easy to borrow — a selection effect that would
-masquerade as a result. This costs half the signal and buys a sample that means what it says.
-
-### What this can produce
-
-A verdict, not a dollar. VERIFIED_POSITIVE_EV halts the run as an operator checkpoint and is never
-authority to touch real capital. The $25 prepaid card is a spending instrument, not a trading account.
+The pipeline (EDGAR daily index → Alpaca survivorship-safe prices), the auditable classifier, the
+Kelly-capped sizer, the clock-aware executor, and the backtest harness are all edge-agnostic and
+carry to whatever survives the search. Only the hypothesis is dead.

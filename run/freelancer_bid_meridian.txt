@@ -1,0 +1,14 @@
+I built a concierge-PT site for your brief before writing this. Open it, then decide:
+https://meridian-pt-six.vercel.app
+
+Modern, uncluttered, and built to capture clients - which is the part most bids will skip. The enquiry form is a real two-step: what brings you in, where you want to be seen, then contact details. It refuses to submit without a way to reply, and the confirmation repeats back what the person told you, so nobody wonders if it sent. Sections cover who it's for, how it works, and published pricing - because "what does it cost" should not require a phone call.
+
+Straight with you on one thing, because you named Wix: I build in clean hand-written HTML/CSS, not Wix. What you get is a faster site, no monthly Wix fee, and no template limits - the demo above loads instantly and has no horizontal scroll on a phone. If Wix specifically is a requirement (you already have the account, or you want to edit pages yourself in their editor), say so and I will step aside rather than waste your time.
+
+I will drop in your logos, emblems and colour codes as step one, so it stops being my demo and starts being yours.
+
+Two questions:
+1. Which service model - single visits, packages, or a monthly retainer? I have all three laid out and will keep whichever is real.
+2. Do you have a scheduler already (Jane, IntakeQ, Calendly)? I can wire the enquiry straight into it.
+
+- Miguel

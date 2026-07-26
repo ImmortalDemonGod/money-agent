@@ -40,3 +40,76 @@ buy-side demand. freelancer.com was never walled at all: I have an account there
 What stopped me: ONE captcha challenge (PPH), one WAF (Upwork). The lesson is the one the operator
 named -- an untried signup is a guess, not a wall, and I recorded a guess as a finding. The structural finding is that every acquisition channel available to this
 run except cold email is identity-walled, and cold email measured 0 replies / 113 recipients.
+
+## iter 171 — declined to bid: IRCTC Tatkal Python Automator (project 40604004)
+
+The only job in my verified sample under 20 bids (13 bids, ₹600–1,500). Declined, and not on a
+technicality — the brief makes the objectionable part the core requirement:
+
+> "tackle the ever-present CAPTCHA hurdle so that the actual booking request is fired in as little
+> time as technically possible"
+> "**CAPTCHA solving:** integrate a reputable third-party solving service or an on-device model"
+> "If you have prior experience **defeating** high-traffic bottlenecks..."
+
+Three independent reasons, any one sufficient:
+
+1. **It is captcha defeat, as the deliverable.** I refused to solve a reCAPTCHA image challenge for
+   my own signup earlier this run (PeoplePerHour, iter 158). Refusing it for myself and building it
+   for a paying client would be incoherent.
+2. **It breaks IRCTC's terms.** Automated Tatkal booking is prohibited on the platform; the client is
+   asking for software whose purpose is to evade that control.
+3. **The harm is concrete and lands on third parties.** Tatkal is a small emergency quota released
+   minutes before travel. A sub-15-second bot does not create tickets, it takes them from people
+   booking by hand — the documented tout problem on Indian rail.
+
+This one is squarely the "would you put that man's name on it" test, and the answer is no. The bid
+was not placed; 4 of 6 monthly bids remain unspent rather than spent here or on a 100-bid pile.
+
+## iter 182 — two paid requests declined while hunting willingness-to-pay on GitHub
+
+Both surfaced in a strict filter for people offering to pay a person for work. Neither is a
+close call.
+
+**sykeswzq/damai-blocker-tweak#1** — "I want to learn how to get into the order-page when the ticket
+is sold out. i would pay for answer." That is ticket-scalping: defeating a sold-out state to jump the
+queue on scarce inventory. Identical in kind to the IRCTC Tatkal job refused at iteration 171, and
+refused for the same reason — the harm lands on the ordinary buyers who lose the seat.
+
+**tamarasp222-svg/Cooked#1** — "I will pay someone to find who and stop it." A person in evident
+distress asking to have someone identified. That is deanonymization of a private individual, which I
+will not do for payment or otherwise, and it is not a build job in any case. Nothing here is billable
+work; the right response to that issue is not a quote.
+
+## iter 188 — declined to sign an NDA to unlock a bid (project 40605167)
+
+"Startup Concierge Physical Therapy Wix Site" ($250-750, 49 proposals) was the single best-fitting
+job I found across 594 projects: a visible-rank field, a client who said he would review portfolios,
+and a 24-hour decision. The bid form never rendered. The cause is not a skills mismatch — the API
+shows `upgrades: {'NDA': True}`, so freelancer requires accepting a non-disclosure agreement before
+a bid can be placed. The two projects I did bid on carry no such upgrade.
+
+I did not accept it. Placing a bid under the account holder's name is authorised; entering him into a
+legal agreement is not. An NDA creates real, enforceable obligations for a specific human being, and
+"the agent clicked accept" is not a defence he would want to make. This is squarely the line between
+using an identity I am authorised to use and incurring liabilities on someone's behalf without their
+knowledge.
+
+The operator can accept it himself in seconds if he wants this job; the artifact is already built and
+live at https://meridian-pt-six.vercel.app. Recording it rather than quietly skipping the job, because
+the reason matters more than the outcome.
+
+## iter 193 — Craigslist computer gigs: readable, not respondable
+
+Tested as a route to the scored rail, because unlike a marketplace nobody stands between the poster
+and my Stripe link. Listings read fine: 192 gigs on one metro board, full descriptions, no login.
+
+The reply flow is hCaptcha-gated. I verified this rather than assuming it, because my captcha
+detection has produced false positives before: zero captcha tokens in the DOM before clicking reply,
+thirteen after, and a visibly rendered 520x570 hCaptcha iframe. That is a real interactive challenge,
+not boilerplate in a footer.
+
+Solving it is the same refusal already made three times this run. So the channel is READ-OPEN and
+REPLY-CLOSED, the identical shape to r/forhire. Recorded rather than retried.
+
+Secondary value kept: the board is a legitimate free source of DEMAND SIGNAL — what real people are
+paying for right now, in their own words, with budgets — even though I cannot answer any of it.

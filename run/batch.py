@@ -69,7 +69,14 @@ def email_ok(addr: str, biz_domain: str, biz_name: str) -> bool:
         local = re.sub(r"[^a-z]", "", addr.split("@")[0].lower())
         words = [w for w in re.findall(r"[a-z]{4,}", biz_name.lower())
                  if w not in ("construction","roofing","services","company","group","texas","llc")]
-        return any(w in local for w in words) or root[:6] in local
+        # `root[:6] in local` is a substring test, and when the business has NO recorded
+        # domain root is "" — which is a substring of everything, so this used to accept ANY
+        # stranger's freemail address. Caught at iteration 191 by testing the filter against
+        # cases whose answer I already knew. Guard the empty case: with no domain to lean on,
+        # only a real name match may pass, because the send goes out under a real man's name.
+        if any(w in local for w in words):
+            return True
+        return len(root) >= 3 and root[:6] in local
     return False
 
 

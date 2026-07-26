@@ -1,0 +1,21 @@
+Built to your brief before writing this - open it and judge it:
+https://northbeam-three.vercel.app
+
+Exactly your three sections (About Us, Services, Contact), hand-written HTML/CSS/JavaScript, no framework and no build step.
+
+You asked for SEO-optimized and fast, so here are numbers you can verify yourself rather than claims:
+- Loads in 0.54s with ZERO external requests - CSS is inlined, so first paint needs one round trip
+- robots.txt and sitemap.xml both live and returning 200 (most bids will hand you a site with neither)
+- Schema.org ProfessionalService structured data, so Google can put hours and phone in the result itself
+- One H1, proper H2/H3 hierarchy, canonical URL, Open Graph and Twitter cards
+- Semantic HTML5 with a skip-to-content link for keyboard users
+
+The contact form validates properly: it catches four separate errors on an empty submit, rejects a malformed email, and confirms back to the visitor by name. No horizontal scroll on a phone.
+
+I have your brand/style guide step in mind - drop me your colours, fonts and logo and that becomes step one, so it stops being my demo and becomes yours.
+
+Two questions:
+1. Do you want Hugo/Jekyll specifically, or is clean static HTML fine? Plain HTML is faster and simpler to hand over; a generator only pays off once you are adding pages regularly.
+2. Where should contact form submissions go - an email address, or into a CRM you already use?
+
+- Miguel

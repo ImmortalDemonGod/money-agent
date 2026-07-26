@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MITH Studios — Book a session</title>
+<meta name="description" content="Working booking flow for MITH Studios: live availability, 2-hour minimum, engineer/no-engineer rates, automatic price calculation.">
+<style>
+:root{
+  --bg:#0b0b0f; --panel:#14141b; --panel2:#1b1b24; --line:#2a2a37;
+  --fg:#f4f4f7; --mut:#9a9aab; --acc:#ff4d3d; --acc2:#ffb03a; --ok:#37d67a;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth}
+/* Sticky header is 62px; without this the "Book" nav link parks the step-1 heading
+   underneath it. Caught by measuring the heading against the header, not by eye. */
+#book{scroll-margin-top:80px}
+body{background:var(--bg);color:var(--fg);
+  font:16px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+/* ---- top bar ---- */
+header{position:sticky;top:0;z-index:30;background:rgba(11,11,15,.82);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:14px;height:62px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.14em;font-size:14px}
+.logo i{width:11px;height:11px;border-radius:50%;background:var(--acc);
+  box-shadow:0 0 0 4px rgba(255,77,61,.18);display:inline-block;font-style:normal}
+nav{margin-left:auto;display:flex;gap:22px;font-size:14px;color:var(--mut)}
+nav a{text-decoration:none}
+nav a:hover{color:var(--fg)}
+@media(max-width:720px){nav{display:none}}
+
+/* ---- hero ---- */
+.hero{padding:54px 0 30px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:-40% 40% 40% -20%;
+  background:radial-gradient(closest-side,rgba(255,77,61,.20),transparent);pointer-events:none}
+.kick{color:var(--acc);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+h1{font-size:clamp(30px,5.4vw,52px);line-height:1.05;margin:12px 0 12px;letter-spacing:-.02em}
+.hero p{color:var(--mut);max-width:52ch;margin:0;font-size:17px}
+.rates{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;
+  padding:8px 15px;font-size:13px;color:var(--mut)}
+.chip b{color:var(--fg)}
+
+/* ---- booking shell ---- */
+.book{display:grid;grid-template-columns:1fr 340px;gap:20px;padding:14px 0 70px;align-items:start}
+@media(max-width:900px){.book{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h2{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin:0 0 14px;font-weight:700}
+
+/* step head */
+.step{display:flex;align-items:center;gap:9px;margin:0 0 14px}
+.step span{width:21px;height:21px;border-radius:50%;background:var(--acc);color:#fff;
+  font-size:12px;font-weight:800;display:grid;place-items:center;flex:0 0 auto}
+.step h3{margin:0;font-size:15px}
+
+/* week nav */
+.wknav{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.wknav button{background:var(--panel2);border:1px solid var(--line);color:var(--fg);
+  width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:15px;line-height:1}
+.wknav button:hover:not(:disabled){border-color:var(--acc)}
+.wknav button:disabled{opacity:.32;cursor:not-allowed}
+.wknav .lab{font-weight:700;font-size:14px}
+
+/* day strip */
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:18px}
+.day{background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+  padding:9px 2px;text-align:center;cursor:pointer;transition:.13s}
+.day .dw{font-size:10px;letter-spacing:.09em;color:var(--mut);text-transform:uppercase}
+.day .dn{font-size:17px;font-weight:700;margin-top:2px}
+.day .fr{font-size:9.5px;color:var(--ok);margin-top:3px;height:12px}
+.day:hover:not(.off){border-color:#4a4a5e}
+.day.sel{background:var(--acc);border-color:var(--acc)}
+.day.sel .dw,.day.sel .fr{color:rgba(255,255,255,.85)}
+.day.off{opacity:.3;cursor:not-allowed}
+.day.off .fr{color:var(--mut)}
+
+/* slots */
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:7px}
+.slot{background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  padding:10px 4px;text-align:center;font-size:13.5px;font-weight:600;cursor:pointer;transition:.13s}
+.slot:hover:not(.taken){border-color:#4a4a5e}
+.slot.taken{opacity:.26;cursor:not-allowed;text-decoration:line-through}
+.slot.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.slot.edge{background:rgba(255,77,61,.16);border-color:var(--acc);color:var(--fg)}
+.hint{color:var(--mut);font-size:12.5px;margin:12px 0 0}
+.hint b{color:var(--acc2)}
+
+/* engineer toggle */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:420px){.opts{grid-template-columns:1fr}}
+.opt{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px;cursor:pointer;transition:.13s}
+.opt:hover{border-color:#4a4a5e}
+.opt.on{border-color:var(--acc);background:rgba(255,77,61,.09)}
+.opt .t{font-weight:700;font-size:14px}
+.opt .p{color:var(--acc2);font-weight:800;font-size:15px;margin-top:3px}
+.opt .d{color:var(--mut);font-size:11.5px;margin-top:4px;line-height:1.4}
+
+/* addons */
+.add{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.add:first-of-type{border-top:0}
+.add input{accent-color:var(--acc);width:17px;height:17px;flex:0 0 auto}
+.add .nm{flex:1}
+.add .pr{color:var(--mut);font-size:13px}
+
+/* summary */
+.sum{position:sticky;top:78px}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:7px 0;color:var(--mut)}
+.row b{color:var(--fg);font-weight:600;text-align:right}
+.tot{display:flex;justify-content:space-between;align-items:baseline;
+  border-top:1px solid var(--line);margin-top:12px;padding-top:14px}
+.tot span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.tot b{font-size:31px;letter-spacing:-.02em}
+.cta{display:block;width:100%;margin-top:15px;background:var(--acc);color:#fff;border:0;
+  border-radius:11px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.cta:disabled{background:var(--panel2);color:var(--mut);cursor:not-allowed}
+.cta:hover:not(:disabled){background:#ff3a27}
+.pay{display:flex;gap:6px;margin-top:11px;font-size:11px;color:var(--mut);align-items:center;justify-content:center;flex-wrap:wrap}
+.pay i{font-style:normal;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+.empty{color:var(--mut);font-size:13.5px;line-height:1.6}
+
+/* confirm */
+.ok{background:rgba(55,214,122,.09);border:1px solid rgba(55,214,122,.4);
+  border-radius:11px;padding:15px;margin-top:14px}
+.ok .h{color:var(--ok);font-weight:800;font-size:14px;margin-bottom:5px}
+.ok .b{font-size:13px;color:var(--mut);line-height:1.6}
+.ok code{color:var(--fg);background:var(--panel2);padding:1px 6px;border-radius:5px;font-size:12px}
+
+footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo"><i></i>MITH STUDIOS</div>
+    <nav>
+      <a href="#book">Book</a><a href="#book">Rates</a><a href="#book">Mixing</a><a href="#book">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kick">Recording &middot; Mixing &middot; Mastering</div>
+    <h1>Book the room.<br>Two hours minimum.</h1>
+    <p>Live availability, straight from the studio calendar. Pick your slot, choose whether you want an engineer on the desk, and see the price update as you go — no quote requests, no waiting on a callback.</p>
+    <div class="rates">
+      <div class="chip">With engineer <b>&pound;40/hr</b></div>
+      <div class="chip">Room only <b>&pound;25/hr</b></div>
+      <div class="chip">Minimum <b>2 hours</b></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap book" id="book">
+  <div>
+    <!-- STEP 1 -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="step"><span>1</span><h3>Pick a date</h3></div>
+      <div class="wknav">
+        <button id="prev" aria-label="Earlier dates">&#8249;</button>
+        <button id="next" aria-label="Later dates">&#8250;</button>
+        <div class="lab" id="wklab"></div>
+      </div>
+      <div class="days" id="days"></div>
+
+      <div class="step" style="margin-top:22px"><span>2</span><h3>Pick your hours</h3></div>
+      <div class="slots" id="slots"></div>
+      <p class="hint" id="slothint">Sessions run in whole hours with a <b>2-hour minimum</b>. Tap your start hour, then the <b>last hour</b> you want in the room.</p>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="step"><span>3</span><h3>Do you need an engineer?</h3></div>
+      <div class="opts">
+        <div class="opt on" data-eng="1">
+          <div class="t">With engineer</div>
+          <div class="p">&pound;40<span style="font-size:12px;color:var(--mut);font-weight:600">/hr</span></div>
+          <div class="d">A house engineer tracks, comps and rough-mixes the session with you.</div>
+        </div>
+        <div class="opt" data-eng="0">
+          <div class="t">Room only</div>
+          <div class="p">&pound;25<span style="font-size:12px;color:var(--mut);font-weight:600">/hr</span></div>
+          <div class="d">You bring your own engineer or self-record. Full access to the live room and control room.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="card">
+      <div class="step"><span>4</span><h3>Add mixing &amp; mastering</h3></div>
+      <label class="add"><input type="checkbox" data-add="mix" data-price="120">
+        <span class="nm">Mixing &mdash; per track</span><span class="pr">&pound;120</span></label>
+      <label class="add"><input type="checkbox" data-add="master" data-price="60">
+        <span class="nm">Mastering &mdash; per track</span><span class="pr">&pound;60</span></label>
+      <label class="add"><input type="checkbox" data-add="stems" data-price="35">
+        <span class="nm">Stem export &amp; file delivery</span><span class="pr">&pound;35</span></label>
+      <p class="hint">Upload your MP3/WAV files after checkout &mdash; your dashboard tracks each service and its turnaround.</p>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="card sum">
+    <h2>Your session</h2>
+    <div id="sumbody"><p class="empty">Pick a date and at least two hours to see your total.</p></div>
+    <div class="tot"><span>Total</span><b id="total">&pound;0</b></div>
+    <button class="cta" id="cta" disabled>Confirm &amp; pay</button>
+    <div class="pay"><i>Revolut</i><i>Card</i><i>Bank transfer + proof upload</i></div>
+    <div id="confirm"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    MITH Studios &mdash; working booking prototype. Availability, the 2-hour minimum, engineer rates and pricing are live and calculated in-browser.
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE={1:40,0:25}, MINH=2, OPEN=10, CLOSE=22; // 10:00 -> 22:00, last start 21:00
+  var DAYNM=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  // Deterministic pseudo-random booked slots, so availability is stable across reloads
+  // (a real deployment swaps this one function for the studio calendar feed).
+  function seeded(n){ var x=Math.sin(n)*10000; return x-Math.floor(x); }
+  function key(d){ return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); }
+  function booked(d,h){
+    if(d.getDay()===0) return true;                  // closed Sundays
+    return seeded(key(d)*37+h*7)>0.72;
+  }
+  function freeCount(d){
+    if(d.getDay()===0) return 0;
+    var c=0; for(var h=OPEN;h<CLOSE;h++){ if(!booked(d,h)) c++; }
+    return c;
+  }
+  function fmtH(h){
+    var ap=h>=12?"pm":"am", x=h%12; if(x===0)x=12;
+    return x+ap;
+  }
+  function sameDay(a,b){ return a&&b&&key(a)===key(b); }
+
+  // A rolling 7-day window starting today, NOT a Mon–Sun calendar week. Caught by render-and-look:
+  // on a Saturday the calendar-week view showed five greyed-out past days and a closed Sunday, so a
+  // visitor's first impression was a dead calendar with one bookable day on it.
+  var today=new Date(); today.setHours(0,0,0,0);
+  var weekStart=new Date(today);
+  var minWeek=new Date(today);
+  var selDay=null, selStart=null, selEnd=null, eng=1, addons=[];
+
+  var $=function(s){ return document.querySelector(s); };
+  var daysEl=$("#days"), slotsEl=$("#slots"), wklab=$("#wklab");
+
+  function renderWeek(){
+    var end=new Date(weekStart); end.setDate(weekStart.getDate()+6);
+    wklab.textContent = (key(weekStart)===key(today)?"Next 7 days · ":"")+
+      weekStart.getDate()+" "+MON[weekStart.getMonth()]+
+      " – "+end.getDate()+" "+MON[end.getMonth()];
+    $("#prev").disabled = key(weekStart)<=key(minWeek);
+
+    daysEl.innerHTML="";
+    for(var i=0;i<7;i++){
+      var d=new Date(weekStart); d.setDate(weekStart.getDate()+i);
+      var past = key(d)<key(today), closed = d.getDay()===0, free=freeCount(d);
+      var off = past||closed||free===0;
+      var el=document.createElement("div");
+      el.className="day"+(off?" off":"")+(sameDay(d,selDay)?" sel":"");
+      el.innerHTML='<div class="dw">'+DAYNM[d.getDay()]+'</div><div class="dn">'+d.getDate()+'</div>'+
+                   '<div class="fr">'+(closed?"closed":past?"":free?free+" free":"full")+'</div>';
+      if(!off){
+        (function(dd){ el.onclick=function(){ selDay=dd; selStart=selEnd=null; renderWeek(); renderSlots(); sum(); }; })(d);
+      }
+      daysEl.appendChild(el);
+    }
+  }
+
+  function renderSlots(){
+    slotsEl.innerHTML="";
+    if(!selDay){ slotsEl.innerHTML='<p class="empty" style="grid-column:1/-1">Choose a date above.</p>'; return; }
+    for(var h=OPEN;h<CLOSE;h++){
+      var el=document.createElement("div");
+      var taken=booked(selDay,h);
+      var on = selStart!==null && selEnd!==null && h>=selStart && h<selEnd;
+      var edge = selStart!==null && selEnd===null && h===selStart;
+      el.className="slot"+(taken?" taken":"")+(on?" on":"")+(edge?" edge":"");
+      el.textContent=fmtH(h);
+      if(!taken){ (function(hh){ el.onclick=function(){ pick(hh); }; })(h); }
+      slotsEl.appendChild(el);
+    }
+  }
+
+  // Selecting a range, with the 2-hour minimum enforced and no booking across a taken hour.
+  function pick(h){
+    if(selStart===null || selEnd!==null){ selStart=h; selEnd=null; note(""); renderSlots(); sum(); return; }
+    if(h<=selStart){ selStart=h; selEnd=null; renderSlots(); sum(); return; }
+    var end=h+1;
+    for(var i=selStart;i<end;i++){
+      if(booked(selDay,i)){ note("That range runs through a slot that is already booked — pick an end time before "+fmtH(i)+"."); renderSlots(); return; }
+    }
+    if(end-selStart<MINH){ note("Minimum booking is "+MINH+" hours — pick a last hour of "+fmtH(selStart+MINH-1)+" or later."); renderSlots(); return; }
+    selEnd=end; note(""); renderSlots(); sum();
+  }
+  function note(m){
+    $("#slothint").innerHTML = m ? '<b>'+m+'</b>'
+      : 'Sessions run in whole hours with a <b>2-hour minimum</b>. Tap your start hour, then the <b>last hour</b> you want in the room.';
+  }
+
+  document.querySelectorAll(".opt").forEach(function(o){
+    o.onclick=function(){
+      document.querySelectorAll(".opt").forEach(function(x){ x.classList.remove("on"); });
+      o.classList.add("on"); eng=+o.dataset.eng; sum();
+    };
+  });
+  document.querySelectorAll("[data-add]").forEach(function(c){
+    c.onchange=function(){
+      addons=[].slice.call(document.querySelectorAll("[data-add]")).filter(function(x){ return x.checked; })
+        .map(function(x){ return {n:x.parentNode.querySelector(".nm").textContent, p:+x.dataset.price}; });
+      sum();
+    };
+  });
+
+  function sum(){
+    var body=$("#sumbody"), hrs = (selStart!==null&&selEnd!==null) ? selEnd-selStart : 0;
+    var studio = hrs*RATE[eng];
+    var extra = addons.reduce(function(a,b){ return a+b.p; },0);
+    var total = studio+extra;
+
+    if(!hrs){
+      body.innerHTML='<p class="empty">Pick a date and at least two hours to see your total.</p>';
+    } else {
+      var h='<div class="row"><span>Date</span><b>'+DAYNM[selDay.getDay()]+" "+selDay.getDate()+" "+MON[selDay.getMonth()]+'</b></div>'+
+            '<div class="row"><span>Time</span><b>'+fmtH(selStart)+" – "+fmtH(selEnd)+'</b></div>'+
+            '<div class="row"><span>'+(eng?"With engineer":"Room only")+'</span><b>'+hrs+' hr &times; £'+RATE[eng]+'</b></div>'+
+            '<div class="row"><span>Studio time</span><b>£'+studio+'</b></div>';
+      addons.forEach(function(a){ h+='<div class="row"><span>'+a.n+'</span><b>£'+a.p+'</b></div>'; });
+      body.innerHTML=h;
+    }
+    $("#total").innerHTML="£"+total;
+    $("#cta").disabled = hrs<MINH;
+  }
+
+  $("#prev").onclick=function(){ if(key(weekStart)<=key(minWeek))return;
+    weekStart.setDate(weekStart.getDate()-7); renderWeek(); };
+  $("#next").onclick=function(){ weekStart.setDate(weekStart.getDate()+7); renderWeek(); };
+
+  $("#cta").onclick=function(){
+    var hrs=selEnd-selStart, ref="MITH-"+key(selDay).toString().slice(4)+"-"+selStart+selEnd;
+    $("#confirm").innerHTML='<div class="ok"><div class="h">&#10003; Slot held for 15 minutes</div>'+
+      '<div class="b">Reference <code>'+ref+'</code> &mdash; '+hrs+' hours on '+
+      DAYNM[selDay.getDay()]+" "+selDay.getDate()+" "+MON[selDay.getMonth()]+", "+fmtH(selStart)+" – "+fmtH(selEnd)+
+      '.<br><br>In the live build this is where Revolut checkout opens, the hours are written back to the studio calendar so nobody else can take them, and the confirmation + reminder emails go out automatically.</div></div>';
+    $("#cta").textContent="Slot held — see reference below";
+    $("#cta").disabled=true;
+  };
+
+  renderWeek(); renderSlots(); sum();
+})();
+</script>
+</body>
+</html>

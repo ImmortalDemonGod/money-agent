@@ -1,0 +1,22 @@
+I built your three core functions before writing this, so you can test them instead of reading a promise:
+
+https://cellcraft-wheat.vercel.app
+
+Open it on your phone. All three work right now:
+- Fast product search - filters by keyword AND category together. Type "usb-c" to narrow to 3, "usb-c cable" narrows to 1. Categories carry live counts.
+- Customer reviews on every product page - open any product. Star average recalculates as reviews come in, and the review form actually posts.
+- Live chat - bottom right. Ask it about trade accounts, warranty, delivery or MagSafe compatibility and it answers each one differently.
+
+Corporate styling, responsive, no horizontal scroll on mobile. 18 sample products across all six of your categories (cases, chargers, screen protectors, earbuds, speakers, watches).
+
+What it does NOT do yet, because each needs your accounts and your decisions: real checkout, a live chat backend staffed by you, and the admin screen where you upload products yourself. That is the real build - the demo is the customer-facing half.
+
+Two things I need before quoting firm:
+1. How do you want to edit products - a simple admin screen I build, or WooCommerce/Shopify so you get their checkout later?
+2. Roughly how many products at launch? 18 and 800 are different builds.
+
+Answer those and I will give you a fixed price and a delivery date.
+
+I would swap the sample products for yours and rebrand it to your name as step one.
+
+- Miguel

@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wavecrest Records — buy music direct</title>
+<meta name="description" content="Working demo: music store with audio previews and one cart that handles digital downloads and physical merch together.">
+<style>
+:root{
+  --bg:#0b0c10; --panel:#14161d; --panel2:#1b1e27; --line:#282c38;
+  --ink:#f2f4f8; --mut:#98a0b3; --acc:#e8484a; --acc2:#ffcc4d; --ok:#3ddc97; --r:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);
+  font:16px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+
+header{position:sticky;top:0;z-index:40;background:rgba(11,12,16,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:14px;height:64px}
+.logo{font-weight:800;letter-spacing:.02em;font-size:17px;display:flex;align-items:center;gap:9px}
+.logo i{width:9px;height:22px;background:var(--acc);border-radius:2px;font-style:normal;display:inline-block}
+.cartbtn{margin-left:auto;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+  border-radius:10px;padding:9px 15px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;position:relative}
+.cartbtn:hover{border-color:var(--acc)}
+.badge{background:var(--acc);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;margin-left:6px;font-weight:800}
+
+.hero{padding:44px 0 12px}
+.kick{color:var(--acc);font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+h1{font-size:clamp(26px,4.6vw,42px);margin:10px 0 10px;letter-spacing:-.022em;line-height:1.08}
+.hero p{color:var(--mut);max-width:56ch;margin:0;font-size:16.5px}
+
+.tabs{display:flex;gap:8px;margin:26px 0 18px;flex-wrap:wrap}
+.tab{background:var(--panel);border:1px solid var(--line);color:var(--mut);border-radius:999px;
+  padding:8px 16px;font-size:14px;cursor:pointer;font-family:inherit}
+.tab:hover{color:var(--ink);border-color:#3a4050}
+.tab.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-bottom:50px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.art{aspect-ratio:1;display:grid;place-items:center;font-size:64px;position:relative}
+.art .tag{position:absolute;top:9px;left:9px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.16);border-radius:6px;font-size:10.5px;padding:3px 8px;
+  letter-spacing:.07em;text-transform:uppercase;font-weight:700}
+.body{padding:13px;display:flex;flex-direction:column;flex:1}
+.tt{font-weight:700;font-size:15px;line-height:1.3}
+.ar{color:var(--mut);font-size:13px;margin:2px 0 9px}
+.tracks{margin:0 0 10px;font-size:12.5px;color:var(--mut)}
+.prow{display:flex;align-items:center;gap:8px;margin-top:auto}
+.pr{font-weight:800;font-size:17px}
+.play{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;
+  width:34px;height:34px;cursor:pointer;font-family:inherit;font-size:13px;flex:0 0 auto}
+.play:hover{border-color:var(--acc2);color:var(--acc2)}
+.play.on{background:var(--acc2);border-color:var(--acc2);color:#111}
+.add{flex:1;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px;font-weight:700;
+  cursor:pointer;font-family:inherit;font-size:13.5px}
+.add:hover{background:#d13b3d}
+.add.in{background:var(--ok);color:#08120d}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:11px;margin-left:5px;vertical-align:middle}
+.eq span{width:2.5px;background:currentColor;height:20%;animation:b .8s ease-in-out infinite}
+.eq span:nth-child(2){animation-delay:.15s}.eq span:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,100%{height:20%}50%{height:100%}}
+
+/* cart drawer */
+.scrim{position:fixed;inset:0;background:rgba(4,6,10,.62);z-index:60;display:none}
+.scrim.on{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--panel);
+  border-left:1px solid var(--line);z-index:61;transform:translateX(100%);transition:.22s;
+  display:flex;flex-direction:column}
+.drawer.on{transform:translateX(0)}
+.dh{padding:17px;border-bottom:1px solid var(--line);display:flex;align-items:center}
+.dh h2{margin:0;font-size:17px}
+.dh button{margin-left:auto;background:transparent;border:0;color:var(--mut);font-size:22px;cursor:pointer;font-family:inherit}
+.items{flex:1;overflow-y:auto;padding:8px 17px}
+.it{display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}
+.it .ic{width:48px;height:48px;border-radius:7px;display:grid;place-items:center;font-size:24px;flex:0 0 auto}
+.it .in{flex:1;min-width:0}
+.it .nm{font-weight:650;font-size:14px}
+.it .kind{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.it .kind b{color:var(--acc2)}
+.it .rm{background:transparent;border:0;color:var(--mut);cursor:pointer;font-size:12px;
+  text-decoration:underline;padding:0;margin-top:5px;font-family:inherit}
+.it .ip{font-weight:700;font-size:14px;white-space:nowrap}
+.sum{padding:15px 17px;border-top:1px solid var(--line);background:var(--panel2)}
+.ln{display:flex;justify-content:space-between;font-size:14px;color:var(--mut);padding:4px 0}
+.ln b{color:var(--ink)}
+.ln.tot{border-top:1px solid var(--line);margin-top:9px;padding-top:11px;font-size:16px}
+.ln.tot b{font-size:22px}
+.note{background:rgba(61,220,151,.09);border:1px solid rgba(61,220,151,.32);border-radius:9px;
+  padding:10px 12px;font-size:12.5px;color:var(--mut);margin:11px 0 0;line-height:1.5}
+.note b{color:var(--ok)}
+.pay{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.pay i{font-style:normal;background:var(--bg);border:1px solid var(--line);border-radius:6px;
+  padding:4px 9px;font-size:11px;color:var(--mut)}
+.co{width:100%;margin-top:12px;background:var(--acc);color:#fff;border:0;border-radius:10px;
+  padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.co:hover{background:#d13b3d}
+.co:disabled{background:var(--panel);color:var(--mut);cursor:not-allowed}
+.empty{color:var(--mut);text-align:center;padding:46px 12px;font-size:14px}
+footer{border-top:1px solid var(--line);padding:22px 0 60px;color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+
+<header><div class="wrap bar">
+  <div class="logo"><i></i>WAVECREST RECORDS</div>
+  <button class="cartbtn" id="cartbtn">Cart<span class="badge" id="cnt">0</span></button>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <div class="kick">Direct from the label</div>
+  <h1>Albums, singles and merch.<br>One cart, one checkout.</h1>
+  <p>Preview any release before you buy. Downloads arrive the moment payment clears; anything physical ships from our own warehouse &mdash; and both live in the same basket, with shipping charged only on what actually needs posting.</p>
+</div></section>
+
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<footer><div class="wrap">
+  Wavecrest Records &mdash; working front-end demo. Cart logic, mixed digital/physical shipping rules and audio previews all run live in the browser. Previews are synthesised placeholder audio; catalogue is sample data.
+</div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+  <div class="dh"><h2>Your basket</h2><button id="dx" aria-label="Close basket">&times;</button></div>
+  <div class="items" id="items"></div>
+  <div class="sum" id="sumbox"></div>
+</aside>
+
+<script>
+(function(){
+  "use strict";
+
+  // type: 'digital' downloads instantly and is never shipped.
+  // 'physical' is posted and is the ONLY thing that can attract shipping.
+  var CAT=[
+    {id:"a1",t:"Neon Harbour",a:"The Lantern Set",type:"digital",kind:"Album",p:9.99,n:11,e:"🌃",c:"#1f3a5f",f:[262,330,392,494]},
+    {id:"a2",t:"Slow Tide",a:"Marisa Vane",type:"digital",kind:"Album",p:8.99,n:9,e:"🌊",c:"#12494e",f:[220,277,330,440]},
+    {id:"a3",t:"Iron Garden",a:"Halberd",type:"digital",kind:"Album",p:10.99,n:12,e:"🌿",c:"#2c4a23",f:[196,247,294,392]},
+    {id:"a4",t:"Paper Cities",a:"Odile",type:"digital",kind:"Album",p:9.49,n:10,e:"🏙️",c:"#4a2c57",f:[233,294,349,466]},
+    {id:"s1",t:"Cathedral Lights",a:"The Lantern Set",type:"digital",kind:"Single",p:1.29,n:1,e:"✨",c:"#5f4a1f",f:[330,415,494]},
+    {id:"s2",t:"Undertow",a:"Marisa Vane",type:"digital",kind:"Single",p:1.29,n:1,e:"🌀",c:"#1f4a5f",f:[247,311,370]},
+    {id:"s3",t:"Rust & Rain",a:"Halberd",type:"digital",kind:"Single",p:1.49,n:1,e:"🌧️",c:"#3a3a44",f:[208,262,311]},
+    {id:"s4",t:"Nightbus",a:"Odile",type:"digital",kind:"Single",p:1.29,n:1,e:"🚌",c:"#4a1f2c",f:[294,370,440]},
+    {id:"m1",t:"Neon Harbour LP — 180g vinyl",a:"The Lantern Set",type:"physical",kind:"Vinyl",p:28.00,e:"💿",c:"#2a2f3a",w:"heavy"},
+    {id:"m2",t:"Wavecrest logo tee",a:"Wavecrest Records",type:"physical",kind:"Apparel",p:22.00,e:"👕",c:"#33384a"},
+    {id:"m3",t:"Tour poster — screen printed",a:"Wavecrest Records",type:"physical",kind:"Print",p:14.00,e:"🖼️",c:"#3a2f2a"},
+    {id:"m4",t:"Enamel pin set",a:"Wavecrest Records",type:"physical",kind:"Accessory",p:9.00,e:"📌",c:"#2f3a2a"}
+  ];
+
+  var TABS=["Everything","Albums","Singles","Merch"];
+  var tab="Everything", cart=[], playing=null, actx=null, timer=null;
+  var $=function(s){return document.querySelector(s)};
+
+  function inTab(p){
+    if(tab==="Everything") return true;
+    if(tab==="Albums") return p.kind==="Album";
+    if(tab==="Singles") return p.kind==="Single";
+    return p.type==="physical";
+  }
+  function money(v){ return "$"+v.toFixed(2); }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  /* ---- synthesised preview so "preview before you buy" is real, not a picture of a button ---- */
+  function stopAudio(){
+    if(timer){ clearTimeout(timer); timer=null; }
+    playing=null; render();
+  }
+  function preview(p){
+    if(playing===p.id){ stopAudio(); return; }
+    try{
+      actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+      if(actx.state==="suspended") actx.resume();
+    }catch(e){ return; }
+    playing=p.id; render();
+    var t0=actx.currentTime, notes=p.f||[262,330,392], step=0.42;
+    notes.concat(notes.slice(0,2)).forEach(function(f,i){
+      var o=actx.createOscillator(), g=actx.createGain();
+      o.type="triangle"; o.frequency.value=f;
+      var s=t0+i*step;
+      g.gain.setValueAtTime(0.0001,s);
+      g.gain.exponentialRampToValueAtTime(0.16,s+0.05);
+      g.gain.exponentialRampToValueAtTime(0.0001,s+step*0.95);
+      o.connect(g); g.connect(actx.destination); o.start(s); o.stop(s+step);
+    });
+    var dur=(notes.length+2)*step*1000;
+    timer=setTimeout(stopAudio,dur);
+  }
+
+  /* ---- cart ---- */
+  function has(id){ return cart.some(function(x){return x.id===id}); }
+  function toggle(p){
+    if(has(p.id)) cart=cart.filter(function(x){return x.id!==p.id});
+    else cart.push(p);
+    render(); renderCart();
+  }
+
+  function totals(){
+    var goods=cart.reduce(function(a,b){return a+b.p},0);
+    var phys=cart.filter(function(x){return x.type==="physical"});
+    // Shipping applies ONLY to physical goods. A digital-only basket never pays postage,
+    // and adding a download to a vinyl order must not increase shipping.
+    var ship=0;
+    if(phys.length){
+      ship=4.95;
+      if(phys.some(function(x){return x.w==="heavy"})) ship=7.95;
+      if(goods>=50) ship=0;
+    }
+    return {goods:goods,ship:ship,phys:phys.length,dig:cart.length-phys.length,total:goods+ship};
+  }
+
+  function renderCart(){
+    var box=$("#items"), t=totals();
+    $("#cnt").textContent=cart.length;
+    if(!cart.length){
+      box.innerHTML='<p class="empty">Your basket is empty.<br>Previews are free — have a listen first.</p>';
+      $("#sumbox").innerHTML='<button class="co" disabled>Checkout</button>';
+      return;
+    }
+    box.innerHTML=cart.map(function(p){
+      return '<div class="it"><div class="ic" style="background:'+p.c+'">'+p.e+'</div>'+
+        '<div class="in"><div class="nm">'+esc(p.t)+'</div>'+
+        '<div class="kind">'+esc(p.kind)+' &middot; '+
+          (p.type==="digital"?'<b>instant download</b>':'ships to you')+'</div>'+
+        '<button class="rm" data-r="'+p.id+'">Remove</button></div>'+
+        '<div class="ip">'+money(p.p)+'</div></div>';
+    }).join("");
+    box.querySelectorAll("[data-r]").forEach(function(b){
+      b.onclick=function(){ cart=cart.filter(function(x){return x.id!==b.dataset.r}); render(); renderCart(); };
+    });
+
+    var shipLine = t.phys
+      ? (t.ship===0 ? '<b>Free</b> (order over $50)' : '<b>'+money(t.ship)+'</b>')
+      : '<b>Not required</b>';
+    var msg="";
+    if(t.dig && t.phys)
+      msg='<div class="note"><b>Mixed basket.</b> '+t.dig+' download'+(t.dig>1?'s':'')+
+          ' &mdash; available the second payment clears. '+t.phys+' item'+(t.phys>1?'s':'')+
+          ' shipped separately. Postage is charged on the physical items only.</div>';
+    else if(t.dig)
+      msg='<div class="note"><b>Downloads only.</b> No postage, no address needed. Your links appear on the confirmation page and by email.</div>';
+    else if(t.phys && t.ship>0 && t.goods<50)
+      msg='<div class="note">Spend '+money(50-t.goods)+' more for <b>free shipping</b>.</div>';
+
+    $("#sumbox").innerHTML=
+      '<div class="ln"><span>Goods</span><b>'+money(t.goods)+'</b></div>'+
+      '<div class="ln"><span>Shipping</span><span>'+shipLine+'</span></div>'+
+      '<div class="ln tot"><span>Total</span><b>'+money(t.total)+'</b></div>'+
+      msg+
+      '<div class="pay"><i>Card</i><i>PayPal</i><i>Bank transfer</i></div>'+
+      '<button class="co" id="cobtn">Checkout &mdash; '+money(t.total)+'</button>';
+
+    $("#cobtn").onclick=function(){
+      var b=$("#cobtn");
+      b.textContent="✓ Order placed — check your email";
+      b.style.background="var(--ok)"; b.style.color="#08120d"; b.disabled=true;
+    };
+  }
+
+  function render(){
+    var tb=$("#tabs"); tb.innerHTML="";
+    TABS.forEach(function(x){
+      var n=CAT.filter(function(p){var o=tab;tab=x;var r=inTab(p);tab=o;return r}).length;
+      var b=document.createElement("button");
+      b.className="tab"+(x===tab?" on":""); b.textContent=x+" ("+n+")";
+      b.onclick=function(){ tab=x; render(); };
+      tb.appendChild(b);
+    });
+
+    var g=$("#grid"); g.innerHTML="";
+    CAT.filter(inTab).forEach(function(p){
+      var d=document.createElement("div"); d.className="card";
+      var isPlaying=playing===p.id;
+      d.innerHTML=
+        '<div class="art" style="background:linear-gradient(150deg,'+p.c+',#0b0c10)">'+
+          '<span class="tag">'+(p.type==="digital"?"Download":"Ships")+'</span>'+p.e+'</div>'+
+        '<div class="body"><div class="tt">'+esc(p.t)+'</div><div class="ar">'+esc(p.a)+'</div>'+
+        '<div class="tracks">'+esc(p.kind)+(p.n?' &middot; '+p.n+' track'+(p.n>1?'s':''):'')+'</div>'+
+        '<div class="prow"><span class="pr">'+money(p.p)+'</span>'+
+          (p.type==="digital"?'<button class="play'+(isPlaying?' on':'')+'" data-p="'+p.id+'" aria-label="Preview">'+
+             (isPlaying?'<span class="eq"><span></span><span></span><span></span></span>':'▶')+'</button>':'')+
+          '<button class="add'+(has(p.id)?' in':'')+'" data-a="'+p.id+'">'+
+             (has(p.id)?'✓ In basket':'Add')+'</button>'+
+        '</div></div>';
+      g.appendChild(d);
+    });
+    g.querySelectorAll("[data-p]").forEach(function(b){
+      b.onclick=function(){ preview(CAT.filter(function(x){return x.id===b.dataset.p})[0]); };
+    });
+    g.querySelectorAll("[data-a]").forEach(function(b){
+      b.onclick=function(){ toggle(CAT.filter(function(x){return x.id===b.dataset.a})[0]); };
+    });
+  }
+
+  function openCart(){ $("#drawer").classList.add("on"); $("#scrim").classList.add("on"); }
+  function closeCart(){ $("#drawer").classList.remove("on"); $("#scrim").classList.remove("on"); }
+  $("#cartbtn").onclick=openCart;
+  $("#dx").onclick=closeCart;
+  $("#scrim").onclick=closeCart;
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeCart(); });
+
+  render(); renderCart();
+})();
+</script>
+</body>
+</html>

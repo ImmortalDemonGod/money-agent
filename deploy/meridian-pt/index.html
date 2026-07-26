@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meridian Concierge Physical Therapy — one-to-one care, at your home</title>
+<meta name="description" content="Concierge physical therapy: full hour, one therapist, at your home or gym. Working demo with a two-step enquiry form built to capture clients.">
+<style>
+:root{
+  --bg:#fbfaf8; --card:#fff; --ink:#152229; --mut:#5c6d78; --line:#e6e2dc;
+  --acc:#1a6b6b; --acc-d:#14595a; --sand:#f3efe9; --gold:#c08a3e; --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth}
+/* Header is 68px sticky. Without this, every nav link parks its section heading underneath it.
+   Same defect caught on a previous build — carried forward rather than re-discovered. */
+#who,#how,#pricing,#enquire{scroll-margin-top:86px}
+body{background:var(--bg);color:var(--ink);
+  font:16.5px/1.62 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+a{color:var(--acc)}
+h1,h2,h3{letter-spacing:-.021em;line-height:1.14;margin:0}
+
+/* nav */
+header{position:sticky;top:0;z-index:40;background:rgba(251,250,248,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:16px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+.brand i{width:30px;height:30px;border-radius:50%;background:var(--acc);display:grid;place-items:center;
+  color:#fff;font-style:normal;font-weight:800;font-size:14px}
+nav{margin-left:auto;display:flex;gap:24px;font-size:14.5px;color:var(--mut)}
+nav a{text-decoration:none}
+nav a:hover{color:var(--ink)}
+.navcta{background:var(--acc);color:#fff;text-decoration:none;border-radius:9px;padding:9px 16px;
+  font-size:14.5px;font-weight:650}
+.navcta:hover{background:var(--acc-d)}
+@media(max-width:780px){nav{display:none}}
+
+/* hero */
+.hero{padding:56px 0 40px;display:grid;grid-template-columns:1.08fr .92fr;gap:44px;align-items:center}
+@media(max-width:880px){.hero{grid-template-columns:1fr;gap:30px;padding:38px 0 26px}}
+.eyebrow{color:var(--gold);font-size:12.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+.hero h1{font-size:clamp(31px,4.9vw,50px);margin:14px 0 16px}
+.hero p{color:var(--mut);font-size:18px;max-width:46ch;margin:0 0 24px}
+.ctas{display:flex;gap:11px;flex-wrap:wrap}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:14px 24px;font-size:15.5px;
+  font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--acc-d)}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--acc);background:transparent}
+.pts{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:9px}
+.pts li{display:flex;gap:10px;align-items:flex-start;color:var(--mut);font-size:15px}
+.pts b{color:var(--ink);font-weight:650}
+.tick{color:var(--acc);font-weight:800;flex:0 0 auto}
+.shot{background:linear-gradient(160deg,var(--sand),#e7efee);border:1px solid var(--line);border-radius:20px;
+  aspect-ratio:4/3.4;display:grid;place-items:center;font-size:96px;position:relative;overflow:hidden}
+.shot .chip{position:absolute;bottom:16px;left:16px;right:16px;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--mut);box-shadow:0 6px 22px rgba(21,34,41,.07)}
+.shot .chip b{color:var(--ink);display:block;font-size:14.5px;margin-bottom:2px}
+
+/* sections */
+section{padding:52px 0}
+.lead{color:var(--mut);font-size:17px;max-width:56ch;margin:12px 0 0}
+h2{font-size:clamp(23px,3.3vw,33px)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:30px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.c .ic{font-size:30px;margin-bottom:12px}
+.c h3{font-size:18px;margin-bottom:8px}
+.c p{color:var(--mut);font-size:15px;margin:0}
+.band{background:var(--sand)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:22px;margin-top:30px;counter-reset:s}
+.st{position:relative;padding-top:8px}
+.st:before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:34px;height:34px;
+  border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:15px;margin-bottom:12px}
+.st h3{font-size:17px;margin-bottom:6px}
+.st p{color:var(--mut);font-size:14.5px;margin:0}
+
+/* pricing */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:18px;margin-top:30px}
+.tier{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;display:flex;flex-direction:column}
+.tier.feat{border-color:var(--acc);box-shadow:0 10px 34px rgba(26,107,107,.11);position:relative}
+.tier.feat:after{content:"Most chosen";position:absolute;top:-11px;left:26px;background:var(--acc);color:#fff;
+  font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;letter-spacing:.03em}
+.tier h3{font-size:18px}
+.tier .p{font-size:34px;font-weight:800;margin:12px 0 2px}
+.tier .p span{font-size:15px;color:var(--mut);font-weight:600}
+.tier ul{list-style:none;padding:0;margin:16px 0 22px;display:grid;gap:9px}
+.tier li{color:var(--mut);font-size:14.5px;display:flex;gap:9px}
+.tier .btn{margin-top:auto;text-align:center}
+
+/* enquiry form */
+.form{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;max-width:560px;margin:30px auto 0}
+.prog{display:flex;gap:7px;margin-bottom:20px}
+.prog span{flex:1;height:4px;border-radius:99px;background:var(--line)}
+.prog span.on{background:var(--acc)}
+.q{font-size:19px;font-weight:700;margin-bottom:5px}
+.qs{color:var(--mut);font-size:14.5px;margin-bottom:18px}
+.opts{display:grid;gap:9px}
+.opt{border:1.5px solid var(--line);background:var(--bg);border-radius:11px;padding:14px 16px;cursor:pointer;
+  font-family:inherit;font-size:15px;text-align:left;color:var(--ink);transition:.12s}
+.opt:hover{border-color:var(--acc)}
+.opt.on{border-color:var(--acc);background:rgba(26,107,107,.06);font-weight:650}
+label{display:block;font-size:13px;color:var(--mut);font-weight:650;margin:0 0 6px}
+input,select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;
+  font-family:inherit;font-size:15.5px;background:var(--bg);color:var(--ink);margin-bottom:14px}
+input:focus,select:focus{outline:0;border-color:var(--acc)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+.back{background:transparent;border:0;color:var(--mut);cursor:pointer;font-family:inherit;font-size:14px;
+  text-decoration:underline;padding:0;margin-top:12px}
+.done{text-align:center;padding:14px 0}
+.done .big{font-size:46px}
+.done h3{font-size:21px;margin:10px 0 8px}
+.done p{color:var(--mut);font-size:15px;margin:0 auto;max-width:38ch}
+.mini{color:var(--mut);font-size:12.5px;margin-top:14px;text-align:center}
+
+footer{background:var(--ink);color:#c9d4d8;padding:44px 0 30px;font-size:14.5px}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:26px}
+@media(max-width:700px){footer .cols{grid-template-columns:1fr}}
+footer b{color:#fff;display:block;margin-bottom:9px}
+footer a{color:#c9d4d8;text-decoration:none;display:block;margin-bottom:6px}
+footer a:hover{color:#fff}
+.fine{border-top:1px solid rgba(255,255,255,.13);margin-top:28px;padding-top:16px;color:#8fa0a7;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header><div class="wrap bar">
+  <div class="brand"><i>M</i>Meridian Concierge PT</div>
+  <nav>
+    <a href="#how">How it works</a>
+    <a href="#who">Who it's for</a>
+    <a href="#pricing">Pricing</a>
+  </nav>
+  <a class="navcta" href="#enquire">Request a consult</a>
+</div></header>
+
+<div class="wrap">
+  <section class="hero" style="padding-top:52px">
+    <div>
+      <div class="eyebrow">Concierge physical therapy</div>
+      <h1>One therapist. A full hour. At your home.</h1>
+      <p>No waiting rooms, no being handed to an aide halfway through. The same doctor of physical therapy treats you every session, where it suits you &mdash; home, office or your gym.</p>
+      <div class="ctas">
+        <a class="btn" href="#enquire">Request a free consult</a>
+        <a class="btn ghost" href="#how">How it works</a>
+      </div>
+      <ul class="pts">
+        <li><span class="tick">&#10003;</span><span><b>60 minutes, one-to-one</b> &mdash; never shared, never rushed</span></li>
+        <li><span class="tick">&#10003;</span><span><b>We come to you</b> &mdash; home, office or gym</span></li>
+        <li><span class="tick">&#10003;</span><span><b>Superbill provided</b> for out-of-network reimbursement</span></li>
+      </ul>
+    </div>
+    <div class="shot">🧘
+      <div class="chip"><b>Typical first week</b>Consult within 48 hours, then two treating sessions and a plan you can actually follow.</div>
+    </div>
+  </section>
+</div>
+
+<section class="band" id="who"><div class="wrap">
+  <h2>Built for people who cannot lose a morning to a clinic</h2>
+  <p class="lead">Concierge care exists because the standard model asks you to travel, wait, and share your therapist with two other patients on the same clock.</p>
+  <div class="cards">
+    <div class="c"><div class="ic">🏃</div><h3>Returning athletes</h3><p>Post-injury and back to sport, with progressive loading rather than a photocopied sheet of exercises.</p></div>
+    <div class="c"><div class="ic">🩺</div><h3>Post-surgical recovery</h3><p>Hip, knee and shoulder rehabilitation in your own home during the weeks travel is hardest.</p></div>
+    <div class="c"><div class="ic">💼</div><h3>Executives and shift workers</h3><p>Early, late and weekend sessions, because the standard 9-to-5 clinic window is the problem.</p></div>
+    <div class="c"><div class="ic">🤰</div><h3>Pre and post-natal</h3><p>Pelvic health and return-to-strength work, at home, with your baby in the room.</p></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <h2>How it works</h2>
+  <p class="lead">Four steps, and the first one is free.</p>
+  <div class="steps">
+    <div class="st"><h3>Free consult</h3><p>A 20-minute call to hear the history and decide whether concierge care is genuinely the right fit for you.</p></div>
+    <div class="st"><h3>Full evaluation</h3><p>A 60-minute assessment in your space &mdash; movement, strength, and the actual demands of your day.</p></div>
+    <div class="st"><h3>Your plan</h3><p>A written plan with a target date, not an open-ended course of appointments.</p></div>
+    <div class="st"><h3>Treatment &amp; discharge</h3><p>Hands-on sessions and progressive loading, with the goal of discharging you, not retaining you.</p></div>
+  </div>
+</div></section>
+
+<section class="band" id="pricing"><div class="wrap">
+  <h2>Straightforward pricing</h2>
+  <p class="lead">Published, because asking &ldquo;what does it cost&rdquo; should not take a phone call. Superbills provided for out-of-network reimbursement.</p>
+  <div class="tiers">
+    <div class="tier">
+      <h3>Single session</h3>
+      <div class="p">$185<span> / 60 min</span></div>
+      <ul>
+        <li>&#10003; Full hour, one-to-one</li>
+        <li>&#10003; At your home, office or gym</li>
+        <li>&#10003; Written plan after the visit</li>
+        <li>&#10003; Superbill provided</li>
+      </ul>
+      <a class="btn ghost" href="#enquire">Request a consult</a>
+    </div>
+    <div class="tier feat">
+      <h3>Recovery package</h3>
+      <div class="p">$960<span> / 6 sessions</span></div>
+      <ul>
+        <li>&#10003; Everything in a single session</li>
+        <li>&#10003; $160 per visit &mdash; save $150</li>
+        <li>&#10003; Priority scheduling</li>
+        <li>&#10003; Messaging between visits</li>
+        <li>&#10003; Progress review at session four</li>
+      </ul>
+      <a class="btn" href="#enquire">Request a consult</a>
+    </div>
+    <div class="tier">
+      <h3>Performance retainer</h3>
+      <div class="p">$540<span> / month</span></div>
+      <ul>
+        <li>&#10003; Three visits monthly</li>
+        <li>&#10003; Programming and load management</li>
+        <li>&#10003; Direct line to your therapist</li>
+        <li>&#10003; Ideal for in-season athletes</li>
+      </ul>
+      <a class="btn ghost" href="#enquire">Request a consult</a>
+    </div>
+  </div>
+</div></section>
+
+<section id="enquire"><div class="wrap">
+  <div style="text-align:center">
+    <h2>Request your free consult</h2>
+    <p class="lead" style="margin:12px auto 0">Two quick questions, then how to reach you. Most enquiries get a call back the same day.</p>
+  </div>
+
+  <div class="form" id="form">
+    <div class="prog"><span class="on"></span><span></span><span></span></div>
+    <div id="stage"></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="cols">
+    <div>
+      <b>Meridian Concierge Physical Therapy</b>
+      One-to-one physical therapy delivered at home, at work, or at your gym.
+    </div>
+    <div><b>Explore</b><a href="#who">Who it's for</a><a href="#how">How it works</a><a href="#pricing">Pricing</a></div>
+    <div><b>Contact</b><a href="#enquire">Request a consult</a><a href="#enquire">Ask a question</a></div>
+  </div>
+  <div class="fine">Working demonstration site. Content, pricing and practice name are sample material; the enquiry form is fully functional and validates in the browser.</div>
+</div></footer>
+
+<script>
+(function(){
+  "use strict";
+  var step=1, data={};
+  var $=function(s){return document.querySelector(s)};
+
+  var GOALS=["Recover from an injury","Rehab after surgery","Get out of ongoing pain",
+             "Return to sport or training","Pre or post-natal care"];
+  var WHERE=["At my home","At my office","At my gym","Not sure yet"];
+
+  function prog(n){
+    var s=document.querySelectorAll(".prog span");
+    for(var i=0;i<s.length;i++) s[i].className = i<n ? "on" : "";
+  }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  function render(){
+    prog(step);
+    var el=$("#stage");
+
+    if(step===1){
+      el.innerHTML='<div class="q">What brings you in?</div>'+
+        '<div class="qs">Pick the closest &mdash; we will get the detail on the call.</div>'+
+        '<div class="opts">'+GOALS.map(function(g){
+          return '<button class="opt'+(data.goal===g?" on":"")+'" data-g="'+esc(g)+'">'+esc(g)+'</button>';
+        }).join("")+'</div>';
+      el.querySelectorAll("[data-g]").forEach(function(b){
+        b.onclick=function(){ data.goal=b.dataset.g; step=2; render(); };
+      });
+
+    } else if(step===2){
+      el.innerHTML='<div class="q">Where would you like to be seen?</div>'+
+        '<div class="qs">We travel to you &mdash; this just helps us check coverage.</div>'+
+        '<div class="opts">'+WHERE.map(function(w){
+          return '<button class="opt'+(data.where===w?" on":"")+'" data-w="'+esc(w)+'">'+esc(w)+'</button>';
+        }).join("")+'</div>'+
+        '<button class="back" id="bk">&larr; Back</button>';
+      el.querySelectorAll("[data-w]").forEach(function(b){
+        b.onclick=function(){ data.where=b.dataset.w; step=3; render(); };
+      });
+      $("#bk").onclick=function(){ step=1; render(); };
+
+    } else if(step===3){
+      el.innerHTML='<div class="q">How should we reach you?</div>'+
+        '<div class="qs">'+esc(data.goal)+' &middot; '+esc(data.where)+'</div>'+
+        '<div class="row"><div><label for="fn">First name</label><input id="fn" placeholder="First name"></div>'+
+        '<div><label for="ln">Last name</label><input id="ln" placeholder="Last name"></div></div>'+
+        '<label for="em">Email</label><input id="em" type="email" placeholder="you@example.com">'+
+        '<label for="ph">Phone</label><input id="ph" type="tel" placeholder="(555) 000-0000">'+
+        '<label for="tm">Best time to call</label>'+
+        '<select id="tm"><option>Morning</option><option>Afternoon</option><option>Evening</option><option>Any time</option></select>'+
+        '<button class="btn" id="go" style="width:100%">Request my free consult</button>'+
+        '<button class="back" id="bk2">&larr; Back</button>'+
+        '<p class="mini">We reply the same day. Your details are never shared.</p>';
+      $("#bk2").onclick=function(){ step=2; render(); };
+      $("#go").onclick=function(){
+        var fn=$("#fn").value.trim(), em=$("#em").value.trim(), ph=$("#ph").value.trim();
+        if(!fn){ alert("Please tell us your first name."); $("#fn").focus(); return; }
+        // A consult needs at least ONE way to reply. This is the whole point of a capture form.
+        if(!em && !ph){ alert("Please leave an email or a phone number so we can reply."); $("#em").focus(); return; }
+        if(em && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(em)){ alert("That email does not look right."); $("#em").focus(); return; }
+        data.name=fn; data.email=em; data.phone=ph; data.time=$("#tm").value;
+        step=4; render();
+      };
+
+    } else {
+      prog(3);
+      el.innerHTML='<div class="done"><div class="big">&#10003;</div>'+
+        '<h3>Thank you, '+esc(data.name)+'.</h3>'+
+        '<p>Your request is in. We call back the same day &mdash; you asked for <b>'+esc(data.time).toLowerCase()+
+        '</b>, and we have noted <b>'+esc(data.goal).toLowerCase()+'</b>, '+esc(data.where).toLowerCase()+'.</p>'+
+        '<p class="mini">In the live site this is where the enquiry lands in the practice inbox and the CRM, and an instant confirmation goes out to you.</p></div>';
+    }
+  }
+  render();
+})();
+</script>
+</body>
+</html>

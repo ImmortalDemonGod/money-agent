@@ -1,0 +1,34 @@
+[
+ {
+  "ticker": "SRCE",
+  "company": "1ST SOURCE CORP",
+  "score": 5.0,
+  "why": "score 5.0 on 2 positive phrases",
+  "evidence": [
+   "Record Second Quarter Results",
+   "Increased Cash Dividend"
+  ],
+  "url": "https://www.sec.gov/Archives/edgar/data/34782/0000034782-26-000044.txt"
+ },
+ {
+  "ticker": "ACU",
+  "company": "ACME UNITED CORP",
+  "score": 3.0,
+  "why": "score 3.0 on 1 positive phrases",
+  "evidence": [
+   "record revenues"
+  ],
+  "url": "https://www.sec.gov/Archives/edgar/data/2098/0001193125-26-313374.txt"
+ },
+ {
+  "ticker": "ACNB",
+  "company": "ACNB CORP",
+  "score": 5.0,
+  "why": "score 5.0 on 2 positive phrases",
+  "evidence": [
+   "RECORD 2026 SECOND QUARTER",
+   "share repurchase program"
+  ],
+  "url": "https://www.sec.gov/Archives/edgar/data/715579/0001628280-26-049299.txt"
+ }
+]
