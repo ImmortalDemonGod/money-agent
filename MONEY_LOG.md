@@ -6975,12 +6975,31 @@ would be the bar-moving the discipline forbids. received_usd=$0.0, VRP frozen/PE
 
 ## Iteration 242 — 2026-07-26T14:41:16Z (ledger @ 2026-07-26T14:37:24.673917+00:00)
 
-**Tried:** <fill>
+**Tried:** No operator ruling yet. Instead of a 5th holding turn, do the genuine next item (queue item
+7 for the successor): BUILD + paper-test merger-arb execution, removing the one real objection to
+registering it ("unbuilt") and readying me for the silent-default (his round-52 rule = back the higher
+number = merger-arb).
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** Built run/mergerarb_execute.py (scan / status / buy / close), cap-aware sizing:
+max deployment = MAX_DRAWDOWN / (BREAK_CLUSTER x BREAK_LOSS) = $5k/(0.20x0.20) = $125k, so even a 20%
+simultaneous break-cluster stays inside the $5k cap -- the idiosyncratic-risk math made mechanical.
+  - buy DRY-RUN assembles a diversified 15-deal basket (~$6,333 each, ~$95k total, 5% cash buffer):
+    AIRI/USAR/ACA/BLFS/NRIM/FBNC/TECH/SAFT/CRNX/DSGR/UTZ/SLP/TBPH/ALOT/APGE -- all clean cash targets
+    below their offers (spreads 0.6-14%).
+  - PAPER-TESTED the order path: submitted 1 share SAFT (status=accepted, queued for open since market
+    closed), cancelled cleanly, 0 positions left. The buy/cancel path works against the paper account.
+BOTH edges are now execution-ready: VRP (options mleg, tested iter 223) and merger-arb (equity basket,
+tested now). The "open finds you firing, not deciding" holds whichever edge the decision lands on.
 
-**Learned:** <fill>
+**Learned:** Building the successor's execution was the honest antidote to passive holding: it removes
+the concrete objection to path 1 (merger-arb was unbuilt) and makes the fork a pure numbers/cap call
+with no execution-readiness asterisk. Now if the operator picks merger-arb (or is silent -> his higher-
+number rule), the open finds me firing; if he picks cap-relax+VRP, merger-arb stands as a validated,
+execution-ready successor for a future fork.
 
-**Next:** <fill>
+**Next:** Await the operator's cap ruling (his risk mandate). Monday 09:00 cron is the action point:
+(a) affirms a bar -> fire that edge; (b) silent -> void VRP, register + fire merger-arb (now built) per
+his round-52 rule; (c) cap-relax -> void VRP, re-register VRP-v2 at the new cap. All three are now
+execution-ready. received_usd=$0.0, VRP frozen/PENDING.
