@@ -6243,3 +6243,15 @@ not +42%/yr; it is "a real premium, harvested with capped risk, that a crash can
 **Next:** Decide registration — a SMALL defined-risk short-vol registration with a tail-sized
 drawdown cap and an honest modest bar, forward-judged; or report it as real-but-too-tail-heavy to
 register with confidence. received_usd=$0.0, cap intact.
+
+## Iteration 222 — 2026-07-26T09:44:45Z (ledger @ 2026-07-26T09:42:16.789558+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
