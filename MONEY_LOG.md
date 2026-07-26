@@ -6756,12 +6756,37 @@ constraint-tension named. Monday 09:00 CDT fires SHORT 701/LONG 680. The forward
 
 ## Iteration 236 — 2026-07-26T12:01:45Z (ledger @ 2026-07-26T12:00:23.297648+00:00)
 
-**Tried:** <fill>
+**Tried:** Email round-50 ([104], the VIX-band dilution hole): I gate at 16 and fire 2x/week to reach
+16 fills, but measured Sharpe at VIX>=18 -- am I trading a watered-down 16-18 regime to hit a
+self-imposed count? Compute the number: excess VRP in 16-18 vs 18+ bands.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) THE NUMBER REFUTES THE PREMISE. VRP (entry VIX minus SPY subsequent 8-trading-day realized vol,
+5yr, date-aligned VIX+SPY): 16-18 band mean +5.10 (t=16.5, n=262, 88% win); 18+ +4.00 (t=12.0, n=616,
+81%); 20+ +3.70 (t=8.2). The 16-18 band is the RICHEST, not the thinnest. Mechanism: extreme VIX (20+)
+is a crisis in progress where realized CATCHES UP to implied and the gap shrinks; moderate elevation
+(16-18) is implied-rich/realized-calm = widest gap. So dropping the gate to 16 to reach the count does
+NOT dilute the edge -- it trades the best VRP regime.
+(2) CORRECTED MY OWN EARLIER CLAIM. I had told the operator "edge lives at VIX>=18-20, Sharpe 1.66 at
+>=20" (a small-sample strike-specific monthly backtest). This direct, model-free measurement (only VIX
++ realized SPY vol, no option model to misprice) overturns it. Fixed the misleading MIN_VIX comment in
+vrp_execute.py to match the data.
+(3) A DATA BUG CAUGHT + FIXED MID-ANALYSIS: intersecting Yahoo VIX and SPY by raw timestamp gave 0
+overlap (different intraday stamps); aligned by calendar date -> 1255 matched days. (Same family as
+prior traps: verify the join, do not trust it.)
+(4) ANSWERED "which is worse" (moot -- premise false) but held the principle: a clean miss on the real
+strategy beats a dirty miss on a diluted one. And committed PLAINLY to the from-here plan: execute,
+watch, mark honestly -- check email each fire, else HOLD; no manufactured backtests to look busy.
 
-**Learned:** <fill>
+**Learned:** The counterintuitive truth about the VRP: it is fattest at MODERATE elevated vol (16-18),
+not at the extremes, because the premium pays for a crash that has not arrived yet -- once VIX is 20+
+the crash is often underway and realized eats the premium. My self-imposed 16-fill count and the rich
+band coincide, so there is no dilution tradeoff. And I corrected MY OWN number with a better
+measurement -- the honest direction of a "prove it" hole.
 
-**Next:** <fill>
+**Next:** Rail work is finished; from here it is execute/watch/mark, not re-proving. Each iteration:
+check email, else HOLD. Monday 09:00 CDT the cron fires SHORT 701/LONG 680; then confirm the fill, read
+leg-count for cadence, mark at the real crossing price (not mid), schedule expiry-day manage for Aug 3.
+received_usd=$0.0, cap intact, verdict PENDING.
