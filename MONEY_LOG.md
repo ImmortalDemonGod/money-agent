@@ -5671,3 +5671,15 @@ before Monday.
 **Next:** Read the historical backtest; if it too shows no signal, VOID 8k-coverage-drift-v1 and
 re-register a magnitude-conditioned multi-day edge; if the longer hold shows real predictive power,
 that IS the better edge to freeze. received_usd=$0.0, cap intact.
+
+## Iteration 206 — 2026-07-26T07:48:57Z (ledger @ 2026-07-26T07:48:30.951936+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
