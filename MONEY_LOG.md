@@ -6407,3 +6407,15 @@ mechanism families, and one of them is a real, registered, market-neutral edge t
 **Next:** Hold the VRP as the registered edge; fire it Monday when VIX is in range. The search has a
 clear champion; further work is execution and forward evidence, not more backtests. received_usd=$0.0,
 cap intact.
+
+## Iteration 227 — 2026-07-26T10:31:25Z (ledger @ 2026-07-26T10:26:09.531867+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
