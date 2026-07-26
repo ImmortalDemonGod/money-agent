@@ -7006,12 +7006,42 @@ execution-ready. received_usd=$0.0, VRP frozen/PENDING.
 
 ## Iteration 243 — 2026-07-26T14:51:03Z (ledger @ 2026-07-26T14:49:58.456854+00:00)
 
-**Tried:** <fill>
+**Tried:** Operator [107] round-53 REVERSED the hold: paper account is an AUDITION for real money; he
+would not fund the 20% VRP. Directives THIS cycle: (1) void the VRP, (2) build a strategy he'd fund
+(properly sized, validated to standard), (3) register with a real-test bar + honest odds. Work every
+cycle, no idling.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) VOID DECIDED + EXECUTION STOPPED for short-vol-vrp-v1: CANCELLED the Monday 09:00 sell cron
+9f32cd9c so the dead edge cannot fire, and I am not trading it. MECHANISM NOTE: I first set the packet
+EDGE_CLAIM to VOID but the gate correctly REFUSED it -- the verifier still reads PENDING (a frozen edge
+is voided VERIFIER-side by the operator clearing the slot, as he did for 8k-coverage, not by me
+unilaterally claiming VOID). So EDGE_CLAIM stays PENDING to match the verifier; the actual void
+completes when the operator clears the slot. Requested in this reply. Either way it will NOT trade
+(cron gone).
+(2) FUNDABILITY MATH (the number that decides the design): UNLEVERED merger-arb beats cash by only
+~0.5pp/5mo (~5.5% vs ~4.3% cash) -- the SAME thin-edge trap as the VRP, even fully deployed. It becomes
+fundable only with leverage (real merger-arb funds run 1.5-3x): 1.5x -> ~8.2% annualized (+1.65pp/5mo,
+break-cluster DD ~$5.4k); 2x -> ~11% (+2.8pp/5mo, DD ~$7.2k). So the honest fundable strategy is
+~2x-levered diversified cash merger-arb: ~11%/yr, market-neutral, Sharpe ~1, bounded idiosyncratic
+drawdown = a real diversifying stream worth real money (NOT oversold: leverage amplifies the
+credit-crunch-correlated tail).
+(3) DESIGNED the registration: mergerarb-cash-v1, METRIC excess_return_pct, BENCHMARK BIL, BAR 2.0
+(beat cash 2pp), ~2x deployed / 20+ independent deals, MAX_DRAWDOWN ~$10k, RESOLVE_BY 2026-12-31, honest
+clearing ~55%. Execution already built + paper-tested (iter 242).
+(4) WILL NOT FREEZE until a TRUSTWORTHY backtest: text-based deal ID is noisy (acquirers/MOEs leak in);
+fixing via a delisting+price-convergence filter (completed cash target delists at ~offer; acquirer
+keeps trading) so completion rate + break severity are MEASURED not assumed.
 
-**Learned:** <fill>
+**Learned:** The audition framing is the real point: the paper rail exists to earn real capital, so the
+only question is "would he fund it," and the honest answer for any UNLEVERED market-neutral edge (VRP or
+merger-arb) is no -- ~1pp over cash is a rounding error. Fundability requires either leverage (amplified
+tail) or a genuinely higher-return edge. Merger-arb + modest leverage is the honest best available: a
+real ~Sharpe-1 diversifier, priced without a sales job.
 
-**Next:** <fill>
+**Next:** Build the trustworthy merger-arb backtest (delisting+convergence classification) -> measured
+completion rate, break severity, net return. Then freeze mergerarb-cash-v1 with the validated number.
+Working every cycle. received_usd=$0.0, VRP void-requested (sell cron cancelled, not trading; operator
+to clear the frozen slot), no new registration until merger-arb is validated.
