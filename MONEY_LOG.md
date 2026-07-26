@@ -6473,12 +6473,43 @@ forward evidence and weekly cron renewal, not more backtests. received_usd=$0.0,
 
 ## Iteration 229 — 2026-07-26T10:51:07Z (ledger @ 2026-07-26T10:45:00.912132+00:00)
 
-**Tried:** <fill>
+**Tried:** Check email (round-48, operator [102], the three-hole challenge). Answer all three with
+numbers and send the reply. Verify the frozen edge + the three crons are intact for Monday's open.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) A REAL DELIVERY FAILURE, CAUGHT. The operator's [102] ("collecting the premium in a calm window is
+not proving the edge") was NEVER answered. The prior op102-reply-224 disclosure entry was logged but
+the send never went out — confirmed ABSENT from Sent Mail (latest send is [210] Jul 25 19:04; zero
+hits for vix/spread/volatility). This is a PATTERN: every edge reply rounds 44-48 is in
+DISCLOSURE_EV_LOG but NONE reached the operator's inbox. The cause: bin/mail.py `_outreach_guard`
+hard-refuses because the agent's Sent folder holds a NO-MARKER (manually-sent) message to
+military.ingram@gmail.com, so the Fabio wall fires on the operator's OWN address. A logged disclosure
+decision is NOT proof of a send — Sent Mail is. TRAP recorded to knowledge/.
+(2) DID NOT BYPASS THE GUARD. Genuine uncertainty about who sent the no-marker message is exactly what
+the fail-closed rail exists for; overriding it to send under the real man's name would be the wrong
+call. Delivered the three answers to the operator through the open channel (this session) instead, and
+surfaced the block + the one-line fix (clear the no-marker message / exempt his own address).
+(3) THE THREE ANSWERS. #1 worst single day is capped by the long-put floor at ~$1,900/spread
+REGARDLESS of crash size (March-2020 backtest -83% of a risk unit ~$1,660; 2 concurrent ~$3,800 <
+$5k) — a spike cannot blow the cap at this size. #2 not mid: backtest nets 2% width AND I hold to
+expiry so winners never cross the exit spread (round-trip is one-way on winners); will mark entry
+bid-side-realistic on the forward test. #3 HONEST CORRECTION to my earlier "weekly reaches 16":
+Jul27-Sep30 is only ~10 Mondays, so weekly + VIX-skips does NOT honestly reach the frozen 16 fills —
+cadence is up to 2 gated entries/week, never padding a sub-16-VIX week, and I settle
+mleg-counts-as-1-or-2-fills empirically at Monday's first fill rather than adding a Thursday cron on a
+guess.
+(4) STATE INTACT: verdict PENDING, baseline $100k, 0 fills; crons 16256623 (email 30m), 19deac05 (edge
+10m), 9f32cd9c (Mon 09:00 VRP sell) all alive.
 
-**Learned:** <fill>
+**Learned:** "Reply sent" is a claim; Sent Mail is the fact — a disclosure-log entry proves only that
+the EV calc happened, not that SMTP fired, and the outreach guard silently blocks operator replies
+whenever a no-marker message sits in Sent to that address. Verify the channel, not just the gate. And
+the fill-count math is the honest gap: a frozen MIN_FILLED_ORDERS 16 over a ~10-Monday window is a
+constraint on cadence I set myself and must meet without over-trading into thin premium.
 
-**Next:** <fill>
+**Next:** Operator to clear the no-marker Sent message (or exempt his own address) so queued replies
+send; answers delivered in-session meanwhile. Monday 09:00 CDT first gated spread fires — read the
+first fill to learn whether the verifier counts the mleg as 1 order or 2 legs, then set cadence to
+reach 16 by Sep 30, always VIX-gated. received_usd=$0.0, cap intact.
