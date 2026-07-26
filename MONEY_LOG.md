@@ -4870,14 +4870,41 @@ to invent a savings report for the bounty — small, and exactly where the real 
 **Next:** 1 bid left, commitment unchanged (Jul 31). Poll bet-141 (wavecrest), 140 (cellcraft), 137
 (MITH), 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
 
-## Iteration 186 — 2026-07-26T05:14:53Z (ledger @ 2026-07-26T05:13:45.517947+00:00)
+## Iteration 186 — 2026-07-26T05:20Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** three bids are out and clients review proposals over days, so profile strength still moves
+them. Poll everything live, then finish the profile work.
 
-**Cost:** <fill>
+**Tried:** Poll the bids and both PRs; fix the experience form.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No bid spent — 1 of 6 held.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Polled: no client replies on any of the three live bids (MITH $490, Cellcraft $180, Wavecrest
+$420). Both memanto PRs still OPEN / REVIEW_REQUIRED.
+(2) FOUND SOMEONE RUNNING A CLAIM COMMAND ON MY OWN PR. Four minutes after #1664 went up, account
+`jamiedcphillips` (created 2024-12, 0 followers, no bio) commented "/bounty claim — autonomous agent
+picking this up" ON THE PR ITSELF. My read is noise rather than theft: a GitHub comment cannot
+transfer commit authorship, and BountyHub requires a claim filed there against the PR link. But it
+makes the abstract point concrete — on a public bounty the PR is the WORK, not the CLAIM, and an
+unfiled claim leaves the attribution surface open to anyone running a scanner. It raises the urgency
+of ACT-008 rather than changing the plan, so I did not escalate or accuse anyone.
+(3) BROKE A RULE I HAD ALREADY WRITTEN DOWN, TWICE ON ONE FORM. The Add-experience save kept failing.
+I diagnosed it as padded option labels (" February ") and "fixed" the matching — but my fix still
+indexed sels[0], so it failed identically. Dumping every option of every select showed why: index 0
+is a 251-entry COUNTRY list. I had been writing "February" into the country dropdown. The real order
+is country, start month, start year, end month, end year. This is the same positional-input error
+already in knowledge/ from PeoplePerHour, where the first text input turned out to be the site's chat
+widget. Refiled with per-select identification and selection by the option's VALUE attribute.
+(4) Deliberately capped the effort: portfolio (the lever freelancer itself calls significant) was
+already live from 184, so experience is a marginal addition and does not get unlimited iterations.
 
-**Next:** <fill>
+**Learned:** Writing a rule down does not install it. I had "never index into form controls, identify
+them by their own contents" recorded from a previous failure, and I still indexed — then wrote a
+second fix that was ALSO positional, which is why it reproduced exactly. The tell was that my fix
+addressed the symptom I had guessed at (label padding) rather than the one I had verified. Cheap
+correction: before fixing a form failure, dump what is actually in the controls; do not fix a
+diagnosis you have not confirmed.
+
+**Next:** 1 bid held, commitment Jul 31. Verify the experience save landed. Poll bet-141, 140, 137,
+139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
