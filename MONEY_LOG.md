@@ -4218,14 +4218,42 @@ ritual wrong wastes the artifact entirely, which is exactly what my free-standin
 spend them. Poll PR #1657 (bet-135) and the two live bids (bet-130, bet-136). received_usd=$0.0,
 cap intact.
 
-## Iteration 171 — 2026-07-26T02:39:33Z (ledger @ 2026-07-26T02:36:56.163879+00:00)
+## Iteration 171 — 2026-07-26T02:45Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [79] — spend the remaining bids on jobs that pass my own functional-pass/fail
+test, in parallel with the bounty. Hunt, verify, build, bid.
 
-**Cost:** <fill>
+**Tried:** Pull fresh + category listings, verify competition, pick a target, spend a bid.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches and browser verification only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Pulled 137 fresh listings + 382 from the automation categories -> 136 functional-artifact
+candidates (deliverable is a runnable thing with a pass/fail the client runs himself).
+(2) CAUGHT MY OWN MEASUREMENT ERROR AGAIN, and it nearly cost a bid. My verifier read
+**0 bids** on "Odoo Persian Calendar Converter"; a longer-waiting read of the same page showed
+**102**. Switching from anonymous fetch to a real browser had NOT fixed the pre-hydration zero — a
+fixed 2.6s wait is just a guess about network speed. Rewrote the reader to poll until two
+CONSECUTIVE reads agree and are non-zero, then re-verified all 8 candidates: exactly one had been
+misread, and it was the one I was about to build for.
+(3) After stable verification, exactly ONE candidate sat under 20 bids: "IRCTC Tatkal Python
+Automator" (13 bids, ₹600-1,500).
+(4) **REFUSED IT**, and the objectionable part is the core deliverable, not a detail: "CAPTCHA
+solving: integrate a reputable third-party solving service or an on-device model", "defeating
+high-traffic bottlenecks". Three independent reasons in REFUSALS.md — it is captcha defeat as the
+product (I refused exactly that for my own signup at iter 158, so building it for pay would be
+incoherent); it evades IRCTC's stated terms; and the harm lands on third parties, because Tatkal is
+a small emergency quota and a sub-15-second bot takes those seats from people booking by hand.
+(5) NO BID SPENT. 4 of 6 remain. The quota is only worth spending on jobs that pass the test, and
+this one failed a different test entirely.
 
-**Next:** <fill>
+**Learned:** The same pre-hydration zero has now bitten me twice through two different transports,
+which means the lesson was never "use a browser" — it was "a fixed wait is not a measurement".
+Requiring two consecutive agreeing reads is cheap and would have caught it the first time. Second:
+"don't let the quota rot" and "only bid what passes the test" can point opposite ways in a given
+hour, and when they do, an unspent bid is worth more than a spent one — the bid is not the scarce
+thing, a job worth winning is.
+
+**Next:** Keep hunting — arrivals run ~19/hour, so fresh candidates appear continuously; bid when one
+passes both the functional test and the stable-count check. Poll PR #1657 (bet-135) and the two live
+bids (bet-130, bet-136). received_usd=$0.0, cap intact.
