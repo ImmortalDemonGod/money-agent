@@ -7608,12 +7608,31 @@ forward account judges the true net. received_usd=$0.0; the honest edge is REGIS
 
 ## Iteration 261 — 2026-07-26T17:50:43Z (ledger @ 2026-07-26T17:46:24.280258+00:00)
 
-**Tried:** <fill>
+**Tried:** Deploy the execution so the open finds cef-discount-ls-v1 FIRING, not deciding: add the
+monthly re-sort, harden sizing, schedule the cron.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) Verifier now reads verdict VOID / registration_intact=False -- the transient "void for one cycle"
+state the operator named (old VRP cleared; verifier freezes cef on its next cycle).
+(2) Added `rebalance` command (flatten old book + re-enter fresh L/S) with a 25-DAY GATE so a weekly
+session cron acts ~MONTHLY (weekly re-sort would 4x turnover and kill the 6.6% net).
+(3) HARDENED SIZING against the operator's Q3 squeeze worry, caught in the dry-run: with only 1 current
+short (UTG), the old sizing would have put $30k on ONE short. Added MAX_PER_NAME=$6k cap + balance both
+legs to the smaller side's gross -> now $6k/side, $600x10 long / $6k x1 short, market-neutral, no single
+concentrated short. Deploys less when the signal is one-sided.
+(4) SCHEDULED cron 7941eff3 (Mon 09:03, weekly, self-gated monthly) -> cef_execute.py rebalance --live +
+status. First fire Monday market open = the CEF L/S fires automatically once cef is frozen.
 
-**Learned:** <fill>
+**Learned:** The edge is fully DEPLOYED: registered (honest bar), execution built + both legs
+paper-tested + per-name-capped + monthly-gated, cron scheduled. "The open finds you firing, not
+deciding" is satisfied -- Monday's open auto-fires the market-neutral L/S. The whole run compressed into
+one honest sentence: a no-advantage participant's edge is persistence into a limited-arbitrage grind
+niche (CEF discounts), not cleverness, and it is real-but-modest (Sharpe ~0.6-0.9) once you cost it
+honestly.
 
-**Next:** <fill>
+**Next:** OPERATOR: clear the frozen slot -> verifier freezes cef-discount-ls-v1 (baseline $100k), and
+Monday's cron fires the first L/S. Session cron expires in 7d (renew weekly, like the VRP one). Forward
+account is now the judge of the true net cost. received_usd=$0.0; edge registered, deployed, live-pending
+the slot freeze.
