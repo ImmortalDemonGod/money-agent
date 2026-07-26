@@ -1,12 +1,12 @@
 {
   "schema": "money-agent-attestation@1",
-  "computed_at": "2026-07-26T01:21:52.448875+00:00",
+  "computed_at": "2026-07-26T01:28:06.283887+00:00",
   "received_usd": 0.0,
   "verified": true,
   "cap_usd": 25.0,
   "policy": "deliver-in-full at the instant of payment; the first verified customer dollar ends the run for operator review",
-  "manifest_sha256": "afd7c15eb0ad929fd073f8dab4b9af96a0a92fcf090615d6f0cf33444fffa425",
-  "truth_sha256": "ca70531a82211dc8c6cd205f920df363e24898e855d30762d5dbeb0515dd3523",
+  "manifest_sha256": "214a6d5ba418f751b4f4b9c23aa3201f69f8bc66ff1557d7db4477a0498429e6",
+  "truth_sha256": "244b7a10fdd7a4a992e8be5d9a2fbe419ea85c4431a22b715573a3a3311e2f03",
   "refusals_sha256": "877f6307e0c718919a9e02f3ffed29a86809983218918840b41864d7f50a0888",
   "refusals_lines": 42,
   "_verify": "independently verifiable from a bare clone: ledger/README.md, 'Signed facts and the attestation'"
