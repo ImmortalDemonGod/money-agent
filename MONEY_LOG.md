@@ -6900,12 +6900,43 @@ survivorship-safe-backtestable) pending a VRP falsification. received_usd=$0.0, 
 
 ## Iteration 240 — 2026-07-26T14:02:16Z (ledger @ 2026-07-26T13:59:42.663140+00:00)
 
-**Tried:** <fill>
+**Tried:** Operator [106] round-52 LIFTED the hold and directed: run merger-arb through the same
+battery (out-of-sample, survivorship-safe, cost-aware, cap-sized), give its honest clearing
+probability, and decide on the two numbers before Monday -- void VRP if merger-arb beats 20%, ride if
+not. He called out that I was attached to the VRP because I wrote it down first. He is right.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) BUILT run/mergerarb_backtest.py, survivorship-safe (Alpaca retains delisted targets). Fixed the
+extraction to read the COMPLETE submission .txt (offer price lives in the EX-99 press release, not the
+primary doc). But clean CASH-TARGET identification from raw filings is NOISY: acquirers (CP/KSU) and
+merger-of-equals (PTEN) pollute the sample with +14% to +70% that is not arb. I do NOT trust the
+backtest return number -- same discipline as not trusting a buggy backtest.
+(2) THE DECISIVE STRUCTURAL FINDING (trustworthy, not data-dependent): the bar needs ~$1,270 in 2mo
+(beat BIL 0.77% by 0.5pp on $100k; idle cash earns 0). VRP's SYSTEMATIC crash risk caps deployment at
+~$4k -> ~$700 base. Merger-arb's IDIOSYNCRATIC risk lets me deploy ~$80-100k under the SAME $5k cap
+(even a 20% simultaneous break-cluster on $100k = $3.6k < $5k) -> higher base. Deployment, not premium,
+is the lever.
+(3) MEASURED THE CURRENT SPREAD SET (13 clean cash targets, live): median 1.5% spread / ~5% annualized
+(the safe high-completion deals); mean 11% skewed by 2 wide deals (IRDM 18%, AIRI 14%) whose fat
+spreads ARE priced break-risk, not free money. Risk-adjusted ~5-6% annualized = the historical avg,
+NOT the ~8%+ needed to clear fully deployed.
+(4) THE TWO NUMBERS: VRP ~20% (built+tested, ~$700 base). Merger-arb ~30% (fuller deployment -> ~$900
+base, but ~5-6% annualized still misses $1,270 base case; execution UNBUILT). Merger-arb is modestly
+better via deployment but BOTH are probable misses -- the bar is near-unclearable by ANY honest ~5-6%
+edge on a $100k account under a $5k cap in 2 months, because it implicitly demands ~30% annualized
+under a tight cap, which no honest market-neutral edge produces.
 
-**Learned:** <fill>
+**Learned:** The operator's "20% is a bar-design problem" is correct at a DEEPER level than a
+single-edge fix: swapping VRP -> merger-arb only moves 20% -> ~30%, both probable misses, because the
+binding constraint is the BAR (beat-cash-on-$100k + $5k-cap + 2mo + idle-cash-0%), not the edge. The
+real fix is bar/constraint design (deployed-capital benchmark, or a relaxed cap) -- the operator's
+mandate. Merger-arb's genuine, non-attachment advantage is deployment (idiosyncratic risk), and it IS
+the better bet on the number he asked me to decide on.
 
-**Next:** <fill>
+**Next:** Reply to [106] with both numbers + the structural finding + the call. Per his numbers rule
+merger-arb (~30%) beats VRP (20%), so lean void+register merger-arb (build execution this week; it is
+NOT open-timed so no Monday-open firing requirement) -- BUT flag that the decisive fix is bar-design
+(his mandate) since both are probable misses. Decide+act before Monday 09:00. received_usd=$0.0, VRP
+still frozen/PENDING.
