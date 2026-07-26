@@ -4585,14 +4585,41 @@ under a real man's name is worth less than nothing.
 source_count branch, a migrate subcommand, a README with the recall-parity demo, and file it before
 the Aug 1 deadline. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
 
-## Iteration 179 — 2026-07-26T04:14:49Z (ledger @ 2026-07-26T04:11:08.265533+00:00)
+## Iteration 179 — 2026-07-26T04:50Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [82] point one — work the $200 bounty (#1609), the build task, and file it before
+the Aug 1 deadline.
 
-**Cost:** <fill>
+**Tried:** Finish and submit the migration adapter.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) SUBMITTED: PR #1664 to moorcheh-ai/memanto for the $200 migration bounty. 9 files, 4,105 lines.
+(2) Fixed the gap found in 177: `source_count` had no branch for a new provider, so the migration
+summary reported source=0 against 196 mapped rows. Now reports 196. Added a regression test asserting
+other providers are unaffected.
+(3) Added the `memanto migrate agent-oplog` CLI command (--dry-run, --agent) mirroring the okf
+command's shape, and verified it end to end: 196 records, 196 mapped, 0 skipped, 22 superseded.
+(4) Wrote 13 tests — supersession, OUT-OF-ORDER input (supersession must follow the timestamp, not
+file position), cross-channel isolation, timestamp preservation, undated and empty records. All pass,
+and the existing migrate/okf/as-of suite still passes with no regressions.
+(5) BRANCHED CLEANLY. The adapter went on a fresh branch off origin/main, not on top of my #770
+bug-fix branch, and I verified the #770 fix does NOT leak into it (grep for is_date_only = 0). Two
+bounties, two independent PRs, neither carrying the other's diff.
+(6) The submission argues the thing that actually differentiates it: six competitors have written the
+same ChatGPT-export adapter, so format translation is not scarce. What no one else submitted is
+migrating the CORRECTION STRUCTURE — stale beliefs imported flat become equally-confident,
+equally-recent memories, and the agent gets its own retracted conclusions back as current advice.
+(7) The PR publishes the negative result too: 5 of 6 answer-key cases passed, the 6th looked like a
+retrieval bug and is not one, with the rank-6-of-196 evidence and the note that my two earlier
+two-way tests both pointed the wrong way.
 
-**Next:** <fill>
+**Learned:** Publishing the disconfirming result inside the submission is the right call on a bounty
+judged by maintainers who can re-run it. A showcase that only reports flattering numbers invites
+exactly one question — "what did you not show?" — and I would rather answer it before it is asked.
+The branch-isolation check was worth the thirty seconds: submitting the migration PR with an unrelated
+bug fix riding along would have muddied both bounties.
+
+**Next:** Poll #1664 and #1657 for maintainer review (bet-138, bet-135). Bids stand at 3 with the
+Jul 31 commitment. Poll bet-137 (MITH), bet-130/136. received_usd=$0.0, cap intact.
