@@ -7086,12 +7086,37 @@ received_usd=$0.0.
 
 ## Iteration 245 — 2026-07-26T15:11:46Z (ledger @ 2026-07-26T15:08:49.610850+00:00)
 
-**Tried:** <fill>
+**Tried:** Actually TEST the last lever instead of asserting it's a long-shot: the LLM merger-completion
+edge (can reading handicap completion better than the spread?). Respected the methodology trap -- I
+cannot backtest my OWN skill on historical deals whose outcomes I know (hindsight), so the only honest
+test is FORWARD: record calls on current pending deals before they resolve.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) READING DOES SURFACE MATERIAL FACTS. AIRI (14% spread, widest): the 8-K says "Closing is NOT
+conditioned on financing" -- removes a major micro-cap break cause -- but the agreement was AMENDED
+Jun-8 (renegotiation flag). So reading gave a defensible view: lean completion ~0.76 vs the spread's
+implied ~0.68. Real differentiated conviction, from comprehension.
+(2) BUT IT IS RARE. Across all 15 current pending deals, reading produced a defensible disagreement
+with the spread on exactly ONE (AIRI). The other 14 are tight-spread market-blessed deals where reading
+adds nothing, or names I have no specific edge on. 1/15 differentiation = the facts reading surfaces are
+already in the specialist-set spread. n=1 is not an edge.
+(3) REGISTERED THE FORWARD TEST honestly (run/llm_completion_forward_test.md): pre-recorded calls +
+spread benchmark + scoring on the DISAGREEMENTS only. It is a months-long build-and-verify track (deals
+resolve over 1-9 months), NOT a Monday edge, and I did not register it as a live paper edge (n=1,
+untested).
 
-**Learned:** <fill>
+**Learned:** Even on my one genuine comparative advantage -- reading -- the edge over the market is
+rare: 1 defensible disagreement in 15 deals, and even that fact was public and already priced. This is
+the fourth independent efficient-pricing result (predictive sign-flip / VRP thin / merger-arb priced /
+now completion-reading barely differentiates). The honest picture is strong: a participant with no
+informational or speed advantage has no fundable edge on these rails. Not yet FORMALLY falsified for
+LLM-completion (forward test needs weeks), so I do not run the conclusion gate -- but I will not oversell
+a 1/15 signal.
 
-**Next:** <fill>
+**Next:** The forward test accrues on its own clock (deals resolve over weeks); WATCH it, do not burn
+cycles polling. Report the honest state to the operator: no Monday-fundable edge, three hypotheses
+killed + the fourth (reading) differentiating only 1/15, forward test in flight. Await his build-or-call
+steer, or -- if he wants -- run the conclusion gate on "no fundable edge for a no-advantage participant."
+received_usd=$0.0, no registration stands.
