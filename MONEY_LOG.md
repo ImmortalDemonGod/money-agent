@@ -5180,14 +5180,51 @@ owned by someone, or the door is bot-defended.
 **Next:** Operator holds the two live unblocks (ACT-008 bounty claim, Upwork job paste). Bid quota
 resets monthly. Poll bet-142 (rank 30/39), 141, 140, 139, 138, 135. received_usd=$0.0, cap intact.
 
-## Iteration 194 — 2026-07-26T06:29:23Z (ledger @ 2026-07-26T06:28:47.729869+00:00)
+## Iteration 194 — 2026-07-26T06:30Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator is provisioning overnight mode for the PAPER EDGE rail — the second scored rail,
+provisioned-but-dark all run. Get genuinely ready rather than start cold when it lights.
 
-**Cost:** <fill>
+**Tried:** Establish feasibility before committing to anything, since registration is a one-way freeze.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) RAIL STATE: dark. `truth.py --file edge.json` returns "no ledger found" — the verifier has not
+run, so ledger/edge.json does not exist. Alpaca paper API returns **401, not 403**: reachable, needs
+keys. Both are the operator's to provision.
+(2) READ THE REGISTRATION MECHANICS PROPERLY. The bar, MIN_FILLED_ORDERS, MAX_DRAWDOWN_USD,
+RESOLVE_BY and BENCHMARK are frozen on the verifier's first sight; editing is verdict VOID; clearing
+the bar on a thin sample stays PENDING; breaching the drawdown cap is FALSIFIED even if the bar is
+later cleared. Consequence I am acting on: **do not register yet.** Registering before the broker
+exists would start a frozen deadline against a rail that cannot trade — the deadline is part of the
+bet, and "it would have worked with more time" is explicitly not an appeal.
+(3) THE CLOCK IS THE BINDING CONSTRAINT AND THE OPERATOR NEEDS IT NOW, NOT AT 11:00. It is Sunday
+06:29 UTC; the next regular US session opens **Monday 13:30 UTC, 31 hours away**. No market opens
+between now and 11:00 today, so ZERO fills are possible tonight. A verdict needs filled orders, so
+what can exist by morning is a pre-registered edge plus the research and machinery behind it — not a
+graded result. Saying so now is the whole point of doing readiness work first.
+(4) DATA SURFACE VERIFIED REACHABLE, not assumed: EDGAR full-text search, daily-index and
+submissions API all 200, and submissions carries **acceptanceDateTime to the second** plus 8-K item
+codes. That answers "what was knowable, and exactly when" without guesswork — the one property a
+comprehension/latency hypothesis requires and price bars cannot give.
+(5) BUILT AND TESTED run/edgar_events.py: SEC's authoritative 10,414-symbol ticker->CIK map, 8-K
+harvest with item classification and an after-close flag, plus daily bars for pairing events to
+forward returns. Ran clean on 8 tickers.
+(6) AND IT IMMEDIATELY EXPOSED A DESIGN ERROR I WOULD OTHERWISE HAVE REGISTERED INTO. Those 8
+mega-caps produced only **19 events in 60 days** — a universe that could never reach a meaningful
+MIN_FILLED_ORDERS and would sit PENDING forever. Measured the right universe instead: the daily
+index carries **258 8-K filings market-wide per trading day** (166-370 across five sessions), about
+116 of them after the close, so roughly **580 candidate events per 5-session window**. The sample
+problem dissolves — but only because I measured it before writing a number into a frozen file.
 
-**Next:** <fill>
+**Learned:** The registration freeze makes ordinary mistakes permanent, so the cost of checking
+feasibility first is near zero and the cost of not checking is a VOID or a PENDING that cannot be
+appealed. Concretely, one measurement moved MIN_FILLED_ORDERS from unreachable to comfortable. Also
+worth stating plainly to the operator: the alpha-theater trap he named is real and the guard against
+it is procedural — the bar must be argued from the hypothesis BEFORE any outcome is computed, never
+fitted to a number I have already seen.
+
+**Next:** Operator provisions the paper broker + runs the verifier to create ledger/edge.json. Then:
+draft the hypothesis and bar from reasoning, register, and trade forward from Monday's open.
+received_usd=$0.0, cap intact.
