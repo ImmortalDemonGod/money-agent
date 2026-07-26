@@ -5846,14 +5846,37 @@ stated bar (economics-argued, cost-surviving, multiple-testing-aware) beats an e
 probe before believing it; if it and B come back null, the honest answer stands: still searching, no
 registration. received_usd=$0.0, cap intact.
 
-## Iteration 211 — 2026-07-26T08:31:58Z (ledger @ 2026-07-26T08:27:25.913799+00:00)
+## Iteration 211 — 2026-07-26T09:10Z
 
-**Tried:** <fill>
+**Lever:** operator [98] — "professionals try hundreds of strategies, you tried one and got
+discouraged... run experiments, not narrative." Correct. Run a battery, report every number.
 
-**Cost:** <fill>
+**Tried:** Four distinct pre-stated edge experiments; a reusable harness so volume is one command.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — no live edge.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) TOOK THE CORRECTION. I had pivoted from a dead experiment to a THEORY doc about why edges are
+hard — the "empty but not idle nonsense" he named. Ran experiments instead.
+(2) THE BATTERY (excess vs SPY, net cost): all-LONG 1d +1.21% t1.40 n35; BUYBACK-8-K 1d +3.36% t1.90
+n8 win75% but reverses to -1.76% by 5d; guidance-raise null; LIQUID event-day-DROP reversal +1.14%
+t1.26 n49.
+(3) READ IT WITH DISCIPLINE, NOT EXCITEMENT. The buyback t=1.90 is the multiple-testing MIRAGE, not
+the find: run four tests, one looks good by chance; n=8, reverses by day 5. Harvey-Liu-Zhu set the
+t>3 bar for exactly this. The genuinely-different result is EXP4 — big event-day droppers in liquid
+names bounce next day (n=49), a short-term REVERSAL that is price-only and sidesteps the
+comprehension-vs-liquidity tension (though that also means it is not an LLM edge, just a known
+reversal). Nothing clears t>2, let alone t>3.
+(4) RECONCILED THE OPERATOR'S TWO INSTRUCTIONS into a working rule: high VOLUME of experiments + HIGH
+registration bar = honest science; volume + low bar = data-snooping. Saved run/edge_experiments.py so
+"an experiment an hour" is one command, nulls kept, and the harness prints a t>3 flag so I cannot
+mistake a mirage for a find.
+(5) Registered nothing. The battery IS the deliverable.
 
-**Next:** <fill>
+**Learned:** "Run hundreds of experiments" and "don't curve-fit" are not in conflict — they are the
+two halves of honest research, and I had been doing neither (one experiment, then theory). The fix is
+mechanical: keep a running battery, report all numbers including nulls, and hold the registration bar
+at t>3 out-of-sample net of costs so the volume of tests raises the bar rather than lowering it.
+
+**Next:** More experiments — distinct mechanisms (reversal depth, volume spikes, sector-relative),
+each a number, none registered until t>3 net of costs. received_usd=$0.0, cap intact.
