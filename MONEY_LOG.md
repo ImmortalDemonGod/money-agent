@@ -5445,14 +5445,42 @@ one cancelled order.
 **Next:** Monday 09:30 ET is the first live session. Plan Monday's trades from Friday's after-close
 filings before the open; poll fills against MIN_FILLED_ORDERS 40. received_usd=$0.0, cap intact.
 
-## Iteration 200 — 2026-07-26T07:10:59Z (ledger @ 2026-07-26T07:10:54.420311+00:00)
+## Iteration 200 — 2026-07-26T07:18Z
 
-**Tried:** <fill>
+**Lever:** the operator called out that I stated the Sunday deadline and then idled toward Monday.
+He was right. The bar is frozen and pushed, so a backtest can no longer contaminate it — it is now
+free information, and I should have run it the moment the commit landed.
 
-**Cost:** <fill>
+**Tried:** Build and run a historical validation of the registered edge.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) NAMED MY OWN ERROR PLAINLY: "the market is shut so I must wait" is true about FILLS and false
+about everything else. Registering froze the bar; after that a backtest cannot move it, so refusing
+to run one was caution pointed the wrong way.
+(2) BUILT run/edge_backtest.py on the exact live window — filing accepted after day D's close, buy
+D+1 open, sell D+1 close — so the historical test and the executor measure the same thing.
+(3) FIRST RESULT (n=8 LONG signals over 4 days): mean next-session **+1.49%** vs **-0.04%** for the
+122 rejected filings, spread **+1.54pp**, win rate 75%. Directionally what the hypothesis predicts,
+and the spread lands almost exactly on the registered 1.0pp bar.
+(4) BUT I RAN THE HONESTY CHECKS, AND THEY MATTER MORE THAN THE HEADLINE. n=8 is not evidence: sd is
+2.27, so the spread is not statistically distinguishable from noise. Dropping the two biggest winners
+(ASRV +5.08%, AAL +4.40%) collapses the mean to **+0.41%** — right on the 0.3% the sizing assumed,
+not 5x it. The excess is outlier-driven, exactly as post-announcement-drift literature predicts, and
+the measured mean sitting far above assumption is a small-sample warning, not a victory.
+(5) THE GENUINELY REASSURING PART IS NOT THE RETURN, IT IS THE EVIDENCE COLUMN: the classifier's
+LONGs fired on "record quarterly earnings", "raising our outlook", "record net income", "share
+repurchase program" — it is selecting on the right language. That is what I most needed to know
+before Monday, and it is independent of the noisy return number.
+(6) Kicked off a wider run (8 days x 90 filings, ~720 fetches) to widen n before reading anything
+into the mean; it is still fetching and will fold into iteration 201.
 
-**Next:** <fill>
+**Learned:** I confused a real constraint (no fills until Monday) with a false one (nothing useful to
+do until Monday). The fills are gated by the clock; the PRIOR is not, and repricing it from history
+is exactly the work a frozen registration makes safe. The operator caught a genuine idle, and the
+fix produced the first actual read on whether this edge exists: plausible, small, concentrated, and
+nowhere near enough sample yet.
+
+**Next:** Read the wider backtest; if the spread survives a larger n, the Monday plan stands as
+registered; if it collapses, that is an honest pre-deployment negative worth recording. received_usd=$0.0.
