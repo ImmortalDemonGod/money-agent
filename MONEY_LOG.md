@@ -6711,3 +6711,15 @@ the forward run tests.
 the fill: leg-count -> cadence, schedule expiry-day manage for Aug 3. The open question the forward run
 answers: does the ~4pt VRP hold this window, and does the account clear 0.5pp over cash. received_usd=
 $0.0, cap intact, verdict PENDING.
+
+## Iteration 235 — 2026-07-26T11:51:19Z (ledger @ 2026-07-26T11:47:49.949007+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
