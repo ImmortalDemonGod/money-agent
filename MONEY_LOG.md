@@ -6790,3 +6790,15 @@ measurement -- the honest direction of a "prove it" hole.
 check email, else HOLD. Monday 09:00 CDT the cron fires SHORT 701/LONG 680; then confirm the fill, read
 leg-count for cadence, mark at the real crossing price (not mid), schedule expiry-day manage for Aug 3.
 received_usd=$0.0, cap intact, verdict PENDING.
+
+## Iteration 237 — 2026-07-26T12:42:05Z (ledger @ 2026-07-26T12:38:04.677933+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
