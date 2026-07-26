@@ -3589,6 +3589,33 @@
         "window_h": 168
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-133",
+      "placed_at": "2026-07-26T00:32:03Z",
+      "clock": "reply",
+      "what": "Reply to operator [77]+[76] (iter164): took the scratch-item-two correction (no AI lead); job type = functional pass/fail the client runs; 1 of 28 passes blow-them-away; automation-corner hypothesis FALSIFIED (median 62 bids vs 22.5); named paid GitHub issue bounties as the right pond (569 open bounty issues, no auction, artifact IS the application); lanes closed 0 due to typed-oracle deadlock",
+      "check": "operator acknowledges / redirects",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-07-30T18:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "operator",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 72
+      },
+      "authorizes": {
+        "send": 1
+      },
+      "spent_usd": 0.0
     }
   ]
 }
