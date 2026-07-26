@@ -121,8 +121,14 @@ def _sha256_file(p: Path) -> str:
 
 def _benchmark_price(symbol: str, headers: dict, at: str) -> tuple[float, object]:
     """Latest daily close at or before `at`; unavailable/stale data is an adjudication failure."""
+    # Alpaca's /bars returns an EMPTY set for end+limit=1 with no start; give it a lookback
+    # window (10 calendar days covers weekends/holidays) and take the most recent bar <= `at`
+    # (bars come oldest-first, so bars[-1] is the latest at/before `at`).
+    _at = dt.datetime.fromisoformat(at.replace("Z", "+00:00"))
+    start = (_at - dt.timedelta(days=10)).isoformat()
     url = (f"{ALPACA_DATA_BASE}/v2/stocks/{urllib.parse.quote(symbol, safe='')}/bars"
-           f"?timeframe=1Day&end={urllib.parse.quote(at)}&limit=1&feed=iex")
+           f"?timeframe=1Day&start={urllib.parse.quote(start)}&end={urllib.parse.quote(at)}"
+           f"&limit=1000&feed=iex")
     payload = _get(url, headers)
     bars = payload.get("bars", []) if isinstance(payload, dict) else []
     if not bars:
