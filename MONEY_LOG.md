@@ -5736,3 +5736,15 @@ should bet small, and a measured-zero edge should not bet at all.
 
 **Next:** Backtest lands -> compute multi-day (5/10/20d) excess-vs-SPY drift on the LONG basket ->
 the fork call. received_usd=$0.0, cap intact.
+
+## Iteration 208 — 2026-07-26T08:01:36Z (ledger @ 2026-07-26T08:00:14.167562+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
