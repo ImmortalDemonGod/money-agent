@@ -5229,14 +5229,53 @@ fitted to a number I have already seen.
 draft the hypothesis and bar from reasoning, register, and trade forward from Monday's open.
 received_usd=$0.0, cap intact.
 
-## Iteration 195 — 2026-07-26T06:35:16Z (ledger @ 2026-07-26T06:35:01.551687+00:00)
+## Iteration 195 — 2026-07-26T06:40Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator is provisioning the paper rail. Build the starting strategy and the machinery so
+nothing begins cold.
 
-**Cost:** <fill>
+**Tried:** Design the hypothesis, prove the data pipeline end to end, and write the bar reasoning
+BEFORE any return is computed.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) WROTE THE HYPOTHESIS AROUND THE ONE CLAIM THAT SURVIVES EMH: the advantage is COVERAGE, not
+speed. A hundred analysts parse an Apple 8-K in seconds — no latency edge is available to me there at
+any price. But ~258 8-Ks are filed market-wide daily, ~116 after the close, and the tradeable names
+are overwhelmingly small and micro-cap (ACNB Corp, AmeriServ Financial, Allurion, Altisource). Nobody
+is reading the AmeriServ 8-K at 20:30 UTC. Attention is the scarce input and attention is exactly what
+a machine reading all 116 supplies. This also runs WITH the literature rather than against it —
+post-announcement drift is strongest in small caps with low analyst coverage, which is the same place
+the coverage advantage lives. The claim is not "I found something nobody knows"; it is "the known
+effect concentrates where nobody is looking, and I can look everywhere at once."
+(2) MADE LONG-ONLY A DESIGN DECISION, NOT A PREFERENCE. Shorting the adverse filings is the intuitive
+other half and is excluded deliberately: micro-cap borrow is unreliable, so fills would be biased
+toward the names easiest to short — a selection effect masquerading as a result — and short fills are
+the least faithful part of any paper simulator. It costs half the signal and buys a sample that means
+what it says.
+(3) PROVED THE PIPELINE END TO END rather than assuming any of it: daily index parses (324 of 375
+8-Ks map to a listed ticker, 86%), filing URLs fetch 3/3, item codes parse from the header, body text
+extracts. Found the format trap by reading it instead of guessing — form.idx is FIXED-WIDTH with a
+YYYYMMDD date, so my hyphenated-date regex matched exactly zero rows and reported a clean "0 events"
+that looked like data rather than a bug.
+(4) WROTE THE ANTI-THEATER COMMITMENT DOWN BEFORE IT COULD BE CONVENIENT (run/EDGE_STRATEGY.md §4):
+the bar comes from what is economically meaningful, never from what a backtest returned; a backtest,
+if run, verifies PLUMBING only; MIN_FILLED_ORDERS is fixed from the measured event rate before the
+first fill. Reasoned band, stated in advance: per-event drift here runs tenths of a percent to ~1%,
+so with 20-40 one-session positions the honest portfolio-level excess is **1-2 percentage points**.
+A bar below that is not a test; a bar far above it guarantees FALSIFIED so the attempt merely looks
+rigorous. Both are refused.
+(5) LISTED THE FOUR OPEN QUESTIONS THAT MUST PRECEDE REGISTRATION rather than guessing past them:
+account equity, fractional-share availability (without it, low equity silently truncates the universe
+to cheap stocks — a selection effect), shortability, and how many sessions actually exist before
+RESOLVE_BY.
 
-**Next:** <fill>
+**Learned:** Doing the design while the rail is dark is the only safe time to do it, because
+registration is a one-way freeze — and the day's two real errors (a watchlist universe that could
+never resolve, a regex that silently returned zero) would both have been permanent had they been
+discovered after the freeze instead of before it.
+
+**Next:** Operator provisions Alpaca paper keys and runs the verifier to create ledger/edge.json.
+Then answer the four open questions from the live account, finalise the numbers, register, and trade
+forward from Monday's 13:30 UTC open. received_usd=$0.0, cap intact.
