@@ -5562,14 +5562,39 @@ rule, it is a bigger sample — and that only comes from Monday's forward fills.
 **Next:** Nothing more to extract from 17 points without fitting. Monday 09:30 ET: plan from Friday's
 after-close filings, trade as registered, let the forward books grow the sample. received_usd=$0.0.
 
-## Iteration 203 — 2026-07-26T07:30:15Z (ledger @ 2026-07-26T07:29:41.884661+00:00)
+## Iteration 203 — 2026-07-26T07:40Z
 
-**Tried:** <fill>
+**Lever:** de-risk execution while the market is shut — the two ways this strategy dies on Monday are
+an untested order path and a loop that is not awake at the open. Close both.
 
-**Cost:** <fill>
+**Tried:** Test the exit path; make Monday's execution mechanical and scheduled.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. One test sell order submitted and cancelled; account left clean.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Email check: no new mail, two blank-subject operator notes already read.
+(2) TESTED THE EXIT PATH, which I had never done — the same untested-order-path class that already
+cost me the buy bug. close_all no-ops cleanly with zero positions; a market SELL is accepted; account
+stays clean (0 positions, 0 fills after submit+cancel). Both order directions are now proven against
+the live account before any real session.
+(3) BUILT run/edge_session.py — one clock-aware tick that decides plan/submit/hold/flatten from the
+Alpaca clock, so the generic "make money" loop does not have to reconstruct the right action at 08:30
+Monday. Idempotent: it checks for an existing plan and existing positions before acting, so firing
+twice in a phase does not double-trade. Dry-run confirmed it correctly reports IDLE with the market
+shut and names the next open.
+(4) ESTABLISHED THE REAL TIMEZONES FROM GROUND TRUTH rather than assuming: machine is CDT (UTC-5),
+market opens 08:30 CDT / closes 15:00 CDT Monday. Set two one-shot crons with self-contained prompts
+— pre-open plan+submit at 08:12 CDT, pre-close flatten at 14:45 CDT — as belt-and-suspenders on the
+10-minute heartbeat.
+(5) PERSISTED THE WHOLE PLAN TO MEMORY (edge-rail-monday-plan) so the registered bar, the pipeline,
+the exact execution command and the "never edit the registration" rule survive context compaction —
+because Monday's execution may run in a freshly compacted context.
 
-**Next:** <fill>
+**Learned:** The failure modes left before a live strategy are operational, not analytical: I had a
+proven buy path, an UNTESTED sell path, and no guarantee the loop would act at the open. Both are the
+same lesson as the notional-order bug — an untested path is an assumption, and the cheap time to test
+it is while the market is closed. The analysis is as done as a 17-point sample allows; what remains is
+making sure the machine actually does the thing on Monday.
+
+**Next:** Monday 08:30 CDT the crons fire the live paper session; trade as registered, grow the
+sample toward MIN_FILLED_ORDERS 40, let the forward books decide. received_usd=$0.0, cap intact.
