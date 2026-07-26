@@ -4357,3 +4357,15 @@ produce a scored Stripe dollar; it is real money on a named non-scored rail (bet
 
 **Next:** Poll bet-137 (MITH reply), bet-135 (PR #1657), bet-130/136. Keep screening each wave on
 buildability; bid when one passes. received_usd=$0.0, cap intact.
+
+## Iteration 174 — 2026-07-26T03:33:52Z (ledger @ 2026-07-26T03:33:06.455957+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
