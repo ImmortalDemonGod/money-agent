@@ -5915,3 +5915,15 @@ out-of-sample is more honest than registering any of them, and far more honest t
 **Next:** Keep the experiment cadence (operator: one an hour, do not stop) with in-sample AND
 out-of-sample on every candidate; register only a t>3 that HOLDS out-of-sample net of costs.
 received_usd=$0.0, cap intact.
+
+## Iteration 213 — 2026-07-26T08:43:05Z (ledger @ 2026-07-26T08:39:54.276509+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
