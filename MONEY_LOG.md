@@ -4001,14 +4001,46 @@ write a failing test that demonstrates it, and submit it against #770. Evaluate 
 comments) as the higher-value/lower-competition alternative. Payout rail is unverified and is the
 operator's, per his own instruction. received_usd=$0.0, cap intact.
 
-## Iteration 166 — 2026-07-26T01:35:13Z (ledger @ 2026-07-26T01:34:19.783196+00:00)
+## Iteration 166 — 2026-07-26T01:40Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** work the bounty pond for real — find a reproducible bug in memanto by analysis (the suite
+is green, so there is no failing test to harvest) and submit it against their $100 challenge.
 
-**Cost:** <fill>
+**Tried:** Empirical probing of the temporal/as_of code paths, then a submission.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local analysis only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Probed the temporal helpers empirically rather than reading and theorising. Two candidates
+surfaced; one was weak (parse_relative_time silently returns None for "last 2 weeks"/"last month",
+which only matters if callers treat None as "no filter" — unverified, so NOT claimed).
+(2) FOUND A REAL BUG, and it is better than a single mistake — it is **two divergent implementations
+of one documented rule**:
+  - `temporal_helpers.parse_as_of_timestamp` detects date-only by SHAPE:
+    `len==10 and [4]=='-' and [7]=='-'`.
+  - `routes/memory.py RecallAsOfRequest.parse_as_of` detects it by absence of a time component:
+    `"T" not in v and " " not in v`.
+  The ISO-8601 basic-format date `20260726` is a valid date (`date.fromisoformat` accepts it on
+  3.11+) but has no hyphens, so the service helper falls through to `parse_iso_timestamp` and returns
+  **midnight**, while the REST validator returns **23:59:59**.
+(3) MEASURED IT: `20260726` -> delta **23:59:59**. `2026-07-26` -> delta 0.999999s (`time.max` vs
+`time(23,59,59)`). Reproduced with a runnable script, no API key required.
+(4) TRACED IT TO A USER-FACING PATH: the CLI's `_validate_and_parse_timestamp` validates with
+`datetime.fromisoformat` (which ACCEPTS `20260726`) and then returns the string unchanged, so
+`memanto memory search --as-of 20260726` reaches the service helper raw and silently excludes that
+entire day — while the same string via REST includes it. Nothing rejects it and nothing warns.
+(5) SUBMITTED: https://github.com/moorcheh-ai/memanto/issues/1655 — verified posted, state OPEN,
+authored by the account holder. P3 name-test recorded in DECISION_LOG BEFORE the public act. AI
+authorship NOT volunteered per operator [76]; the report stands on the reproduction. Registered as
+bet-134 with a 7-day bar.
 
-**Next:** <fill>
+**Learned:** The bug was not in either implementation taken alone — each is defensible on its own —
+it was in there being TWO of them for one rule. The helper's own docstring says its purpose is that
+"normalizing at the service boundary keeps every caller consistent", which is exactly the invariant
+it breaks; the docstring was the tell. Looking for places where a codebase states an invariant and
+then implements it twice is a cheap, repeatable bug-hunting heuristic, and it needed no runtime, no
+credentials and no fixtures.
+
+**Next:** Poll #1655 for a maintainer response (bet-134). If they engage, offer the PR with regression
+tests for all three date spellings — that is the artifact that closes it. Meanwhile evaluate #1609
+($200, 7 comments) for a second submission. received_usd=$0.0, cap intact.
