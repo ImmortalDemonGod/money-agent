@@ -6627,12 +6627,41 @@ verdict PENDING.
 
 ## Iteration 233 — 2026-07-26T11:31:06Z (ledger @ 2026-07-26T11:28:59.399814+00:00)
 
-**Tried:** <fill>
+**Tried:** No new email. Pre-flight the FILL side (queue item 4 against LIVE quotes, not the
+backtest): pull the real bid/ask on the exact legs Monday will sell and check the executor's limit is
+fillable and the economics are real.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) CAUGHT A SECOND, DEEPER BUG. Real quotes on SPY260803 690P/670P: short 0.42/0.43, long 0.17/0.22,
+net credit mid=$0.23 / cross=$0.20. The executor's limit was width*0.15 = $3.00 — ~13x the market,
+UNFILLABLE. Monday would have sat unfilled -> 0 fills -> no verdict ever. Root cause: the $3.00 came
+from the MONTHLY backtest (15%-of-width credit is realistic at ~30 DTE) but the executor trades WEEKLY
+(5-10 DTE) where the SAME strikes collect ~1% of width. The backtest and the executor were validating
+DIFFERENT INSTRUMENTS (monthly vs weekly). Trap recorded.
+(2) FIXED IT. limit now derives from live option_quotes at net-mid (a cent under), with a refuse-if-no-
+quote guard; and the sell prints the true economics every fire: credit vs maxloss vs breakeven. Re-run:
+credit $21 vs maxloss $1,979, breakeven SPY 689.79 (-6.6%), LIMIT 0.21 — fillable.
+(3) RECONCILED THE EDGE AT REAL PRICES (the fork check, queue item 6). Numeric EV on the EXACT live
+spread: +$14.85/cycle at IMPLIED 18.6% (fair-value floor, +0.75% on risk), +$20/cycle at VRP-adjusted
+realized 14.6% (+1.0%), collapsing to +$1.5 (+0.08%) only in a 22%-realized spike week. So the edge
+SURVIVES the reconciliation — it is genuinely positive-EV at real fills; only the credit ASSUMPTION was
+wrong, not the edge. DID NOT void.
+(4) NAMED THE HONEST TENSION: it is positive-EV per cycle but SMALL in ACCOUNT terms — ~16 cycles x
+~$17 ~= +$270 ~= +0.27% on $100k, thin against the 0.5pp-over-cash bar. Clears in a calm window, an
+honest miss in a turbulent one — exactly what the frozen registration already discloses. I will NOT
+juice size to force a pass (that is optimizing to the bar); defined-risk sizing stays, and the verdict
+stays honest.
 
-**Learned:** <fill>
+**Learned:** The scariest-looking number ("risk $1,979 to make $21") was not the real story — the ~99%
+win rate makes the expectation solidly positive, and only a live-quote EV integration showed that.
+Price limits from live quotes, never a fraction-of-width constant, and never let a backtest validate a
+different tenor than the executor fires. The edge is real; the account-level bar is the honest,
+regime-contingent question the forward run answers.
 
-**Next:** <fill>
+**Next:** The one-button open is now fill-verified end to end: right tenor, right strikes, FILLABLE
+limit, visible economics, gates + guard + manage tested. Monday 09:00 CDT fires a spread that can
+actually fill. After the fill: leg-count -> cadence, schedule expiry-day manage for Aug 3. Consider
+whether ~2 concurrent cycles/week is enough account-level EV to clear 0.5pp, or accept the honest miss.
+received_usd=$0.0, cap intact, verdict PENDING.
