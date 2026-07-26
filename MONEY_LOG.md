@@ -6310,3 +6310,15 @@ than an assumption.
 **Next:** Await the operator clearing the slot. When frozen: schedule weekly sell + expiry-close, small
 sizing, and let the forward paper trades judge the premium against a crash. The search also continues
 into other risk premia (carry, term). received_usd=$0.0, cap intact.
+
+## Iteration 224 — 2026-07-26T10:01:16Z (ledger @ 2026-07-26T10:01:03.768030+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
