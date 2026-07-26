@@ -7156,12 +7156,33 @@ registration stands, card untouched.
 
 ## Iteration 247 — 2026-07-26T15:41:25Z (ledger @ 2026-07-26T15:40:16.599987+00:00)
 
-**Tried:** <fill>
+**Tried:** Before leaning on "exhausted," test the ONE market I had dismissed without a backtest:
+crypto (Alpaca spot), the one documented-less-efficient market. Time-series momentum on BTC/ETH,
+cost-aware, with lookback + sub-period robustness.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** A signal that then FAILS robustness.
+  - Headline: BTC momo Sharpe 0.69 vs 0.50 buy-hold; ETH 0.86 vs 0.47. Looks like a real crypto trend
+    edge.
+  - But ROBUSTNESS kills the clean-edge read: (1) LOOKBACK-UNSTABLE -- BTC Sharpe 0.36/0.50/0.69/0.53/
+    0.19 at lb=10/20/30/50/100; the 30d I first showed is a cherry-picked PEAK (curve-fit signature).
+    (2) SUB-PERIODS -- BTC momo UNDERPERFORMED buy-hold in 2 of 3 (2023-24: 1.78 vs 2.01; 2025-26: -0.56
+    vs -0.32); it only helped in the 2022 bear (stayed flat). ETH similar-mixed.
+  - HONEST VERDICT: crypto trend-following is a regime-dependent DRAWDOWN FILTER on directional crypto
+    BETA -- it cuts downtrend losses but whipsaws/underperforms in bulls, and the specific parameter was
+    curve-fit. Not a clean, robust ALPHA. Beating cash with it = crypto beta + a filter = risk-premium
+    exposure, not an edge. Does not clear a fundable-edge bar.
 
-**Learned:** <fill>
+**Learned:** The operator's anti-premature-exhaustion instinct was RIGHT -- I nearly concluded without
+testing crypto, and crypto DID show the most signal of anything (it is genuinely less efficient). But
+tested rigorously it is directional beta with a regime-dependent trend filter, not alpha -- the same
+"no clean fundable edge" answer, now with the one untested market honestly checked and the
+lookback-peak curve-fit trap avoided. Five markets/classes now tested; the wall holds, but the search
+was NOT prematurely closed.
 
-**Next:** <fill>
+**Next:** Crypto trend-following is the LEAST-dead lever (real drawdown effect) but is beta-not-alpha and
+curve-fit as tested -- I will name it to the operator as "a risk-managed crypto-beta sleeve, not an
+edge," not oversell it. The one live NOVEL path remains bet-143 (LLM-completion forward test, weekly).
+No clean fundable edge across equities/options/merger-arb/crypto. received_usd=$0.0, no registration
+stands.
