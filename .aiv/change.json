@@ -13806,6 +13806,236 @@
       ],
       "evidence": [],
       "timestamp": "2026-07-26T09:43:13.349144+00:00"
+    },
+    {
+      "sha": "ce1ecef6329282b7bae4b7503f3948378d22efa5",
+      "message": "iter 221: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:43:34.555922+00:00"
+    },
+    {
+      "sha": "f9f0f6c1187858a9cb701255ebb4b59c0ef72795",
+      "message": "iter 222: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_222.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_222.md"
+      ],
+      "timestamp": "2026-07-26T09:44:46.731890+00:00"
+    },
+    {
+      "sha": "7db0a3a3c2691a5884ad5f3cf0e864f67ff52dc1",
+      "message": "edge: register short-vol-vrp-v1 — fresh id, VRP defined-risk (prior slot VOID, operator to clear)",
+      "files": [
+        ".aiv/change.json",
+        "DISCLOSURE_EV_LOG.md",
+        "EDGE_REGISTRATION.md",
+        "run/EDGE_SEARCH.md",
+        "run/edge_experiments.py"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:45:54.263771+00:00"
+    },
+    {
+      "sha": "4e1c432df5e2c371ab6130c9f0b112cf76c23640",
+      "message": "outcome: registered short-vol-vrp-v1 — the genuinely-different real edge | REGISTERED short-vol-vrp-v1, the one survivor of t",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:46:38.224270+00:00"
+    },
+    {
+      "sha": "7dd4fa71250e5296ae15212db8d3a6f1a9ba7e34",
+      "message": "iter 222: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:47:00.909937+00:00"
+    },
+    {
+      "sha": "d42bbc723656d3cc6a5716189bf6dc323fcbf57e",
+      "message": "iter 223: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_223.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_223.md"
+      ],
+      "timestamp": "2026-07-26T09:50:58.546704+00:00"
+    },
+    {
+      "sha": "24e075998ea92e924421ca2b4a16eacf1e6b2dc1",
+      "message": "outcome: VRP execution machinery (item 7) | ITEM 7 DONE: options execution built + verified ag",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:53:32.387459+00:00"
+    },
+    {
+      "sha": "d1600b0255085838e4852d2c17776df3171eb35b",
+      "message": "iter 223: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T09:53:56.318167+00:00"
+    },
+    {
+      "sha": "9f2f9893a1ea15d066a7199483ffd57cfa4c143d",
+      "message": "iter 224: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_224.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_224.md"
+      ],
+      "timestamp": "2026-07-26T10:01:17.635068+00:00"
+    },
+    {
+      "sha": "895aacbb81c370f3b3e93633df6b049c72f7521e",
+      "message": "outcome: VIX-timing improves the VRP + operator round-48 answers | VIX-TIMING IS A REAL, MECHANISM-GROUNDED IMPROVEME",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:05:34.670556+00:00"
+    },
+    {
+      "sha": "485e6838e2092ff7bee863e4e2ee212f8f45279e",
+      "message": "iter 224: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:05:57.732113+00:00"
+    },
+    {
+      "sha": "592d89388a0c828d094333b92bc93e5b5fb75d23",
+      "message": "iter 225: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_225.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_225.md"
+      ],
+      "timestamp": "2026-07-26T10:11:21.211167+00:00"
+    },
+    {
+      "sha": "14163aab59b08be9eccb7c877c6e2a61537536a5",
+      "message": "outcome: VRP execution refinement — fixed the solver, found the best strike | FIXED THE BUG AND IT PRODUCED A REAL IMPROVEMENT T",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:13:05.050974+00:00"
+    },
+    {
+      "sha": "09b91f1daa807f21acc0cf7c9e461be8a95b5c76",
+      "message": "iter 225: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:13:26.242441+00:00"
+    },
+    {
+      "sha": "dc4dd892025ad33abb9a81c1b701f6e8205fc46f",
+      "message": "iter 226: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_226.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_226.md"
+      ],
+      "timestamp": "2026-07-26T10:21:24.446773+00:00"
+    },
+    {
+      "sha": "f5747b12c0b39817a5631a466c857bb5aeedf6a4",
+      "message": "outcome: term premium tested — negative; VRP confirmed as champion | TERM PREMIUM IS NEGATIVE IN-REGIME; THE VRP STANDS",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:22:19.689519+00:00"
+    },
+    {
+      "sha": "5741aa4f3df7c95d82c7eff4c4d56779f70f06fb",
+      "message": "iter 226: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:22:43.862489+00:00"
+    },
+    {
+      "sha": "d3679ec7ac657b621a2e49c07124099957cb9b32",
+      "message": "iter 227: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_227.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_227.md"
+      ],
+      "timestamp": "2026-07-26T10:31:29.832366+00:00"
+    },
+    {
+      "sha": "f936bd0b1dbe1e0bdedf27b268e2ef63aa9e9ebc",
+      "message": "outcome: VRP execution scheduled — the open finds me firing | SCHEDULED: weekly Monday 09:00 CDT cron (9f32cd9c)",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:32:32.422373+00:00"
+    },
+    {
+      "sha": "257b58ca435883a27b7f55c17209c3e9c480d256",
+      "message": "iter 227: close (gate PASS)",
+      "files": [
+        "MONEY_LOG.md"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:32:56.191467+00:00"
+    },
+    {
+      "sha": "55d3b1177949e0f2acb5031db272e3a897afc908",
+      "message": "iter 228: open (scaffolded)",
+      "files": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_228.md",
+        "MONEY_LOG.md",
+        "iterations/COUNTER"
+      ],
+      "evidence": [
+        ".github/aiv-packets/VERIFICATION_PACKET_ITER_228.md"
+      ],
+      "timestamp": "2026-07-26T10:41:19.838677+00:00"
+    },
+    {
+      "sha": "13bd0a4a57ee0b53afe69d6d7c5af2d2cb4b7905",
+      "message": "outcome: VRP crash stress-test — survives 2018+2020, VIX-gate validated | SURVIVES THE WORST CRASHES BY CONSTRUCTION, AND TH",
+      "files": [
+        "knowledge/outcomes.jsonl"
+      ],
+      "evidence": [],
+      "timestamp": "2026-07-26T10:42:44.950974+00:00"
     }
   ],
   "files_changed": [
@@ -14216,7 +14446,16 @@
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_218.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_219.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_220.md",
-    ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md"
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_222.md",
+    "run/EDGE_SEARCH.md",
+    "run/edge_experiments.py",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_223.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_224.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_225.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_226.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_227.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_228.md"
   ],
   "evidence_files": [
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_001.md",
@@ -14439,6 +14678,13 @@
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_218.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_219.md",
     ".github/aiv-packets/VERIFICATION_PACKET_ITER_220.md",
-    ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md"
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_221.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_222.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_223.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_224.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_225.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_226.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_227.md",
+    ".github/aiv-packets/VERIFICATION_PACKET_ITER_228.md"
   ]
 }
