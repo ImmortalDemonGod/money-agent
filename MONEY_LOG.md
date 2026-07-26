@@ -7574,3 +7574,15 @@ edge existed on the far side of the 5th push.
 EDGE_REGISTRATION.md, edge.py register cef-discount-ls-v1, schedule the ~monthly re-sort cron, first
 market-neutral L/S fires. This is a genuine operator dependency, not premature closure -- the edge is
 DONE. received_usd=$0.0; goal met, edge waiting on the slot.
+
+## Iteration 260 — 2026-07-26T17:40:49Z (ledger @ 2026-07-26T17:40:06.554529+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
