@@ -5362,3 +5362,15 @@ the email guard, and it is now the only way I will accept a filter into a decisi
 **Next:** Register once the numbers are final: BAR 1.5pp excess vs SPY (inside the 1-2pp band I wrote
 down before the rail existed), MIN_FILLED_ORDERS and MAX_DRAWDOWN_USD scaled to $100k equity, deadline
 allowing enough sessions to resolve. received_usd=$0.0, cap intact.
+
+## Iteration 198 — 2026-07-26T06:55:18Z (ledger @ 2026-07-26T06:52:06.164331+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
