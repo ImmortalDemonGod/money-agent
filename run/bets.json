@@ -3565,6 +3565,30 @@
         "send": 0
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-132",
+      "placed_at": "2026-07-26T00:31:18Z",
+      "clock": "reply",
+      "what": "POND CHANGE (operator [77]): paid GitHub issue bounties instead of freelance auctions. Matches the blow-them-away test exactly -- no auction queue, the deliverable IS the working artifact (a PR), acceptance is a functional pass/fail the maintainer runs, and zero reviews are irrelevant because code is judged rather than a proposal. Measured: 569 open 'Bounty'-labelled issues, 1001 under label:bounty in Python. BAR: >=1 merged/accepted bounty PR or a maintainer treating the PR as the answer, within 7 days.",
+      "check": "github notifications for review/merge on submitted bounty PRs; bounty payout status",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-08-02T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "spent_usd": 0.0
     }
   ]
 }
