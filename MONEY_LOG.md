@@ -7320,12 +7320,35 @@ received_usd=$0.0, no registration stands.
 
 ## Iteration 252 — 2026-07-26T16:32:50Z (ledger @ 2026-07-26T16:30:39.228596+00:00)
 
-**Tried:** <fill>
+**Tried:** Close out the grind-frame test: the last executable variant (small index-add drift) + verify
+the execution barrier that the odd-lot/spin-off tests implied.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) Index-add drift is DATA-BLOCKED on my rails (index changes are S&P/FTSE press releases, not in
+EDGAR/Alpaca) AND is the corner the operator's OWN framing calls "eaten" (big index changes) -- so it is
+not the operationally-annoying corner he meant; skipped with reason, not avoidance.
+(2) VERIFIED THE EXECUTION BARRIER directly: Alpaca paper rail exposes a READ-ONLY corporate-actions
+announcements feed but NO election/tender endpoint -- /tenders, /elections, /corporate_actions/elections
+all 404. The paper rail can only do frictionless buy/sell.
+(3) THE STRUCTURAL FINDING (the real answer to the grind frame): every grind edge with a genuine MOAT
+has it because harvesting requires an operationally-annoying ELECTION (tender into a buyback, subscribe
+to rights, redeem a SPAC, elect in a Dutch auction) -- and the paper rail cannot do elections. So the
+moat grind edges are NOT paper-executable (odd-lot tender: real ~$130/event, can't tender), and the
+grind edges that ARE paper-executable (spin-off drift, index-add, merger-arb-tight) have no operational
+moat -> arbitraged (spin-off rebound -4.8%) or thin (~1pp). The paper rail structurally removes the
+operational grind that IS my edge.
 
-**Learned:** <fill>
+**Learned:** The audition rail is MISMATCHED to my comparative advantage. My edge is operational grind;
+the paper rail is a frictionless-trading simulator that can only test CLEVER edges -- which are
+efficiently priced against me forever (8 classes). It cannot test the one edge on my nature, because
+harvesting it is a manual corporate-action election the paper API lacks. This is a RAIL-execution
+finding (verified fact: no election endpoint), NOT an "edge is impossible" claim -- the grind edges are
+REAL and named for the operator as needing a LIVE broker (his real-capital checkpoint). Did NOT touch
+the conclusion gate; bet-143 (LLM-completion) still live.
 
-**Next:** <fill>
+**Next:** Delivered the structural finding + the honest question to the operator (in-session; email
+guard-blocked): (a) keep hunting a paper-executable moat edge (found none), (b) accept my real edge
+needs a live broker w/ elections = his checkpoint, or (c) point me at an unseen corner. Await steer.
+Grind frame RAN and is real; this rail cannot hold it. received_usd=$0.0, no registration stands.
