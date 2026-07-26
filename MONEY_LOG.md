@@ -6056,14 +6056,37 @@ sub-samples — separates the one real candidate from a night of nulls.
 S&P press release, news?); if yes, register index-inclusion with a FRESH edge id, mechanism-argued
 bar, long deadline for the low frequency. received_usd=$0.0, cap intact.
 
-## Iteration 217 — 2026-07-26T09:11:12Z (ledger @ 2026-07-26T09:11:05.756366+00:00)
+## Iteration 217 — 2026-07-26T10:26Z
 
-**Tried:** <fill>
+**Lever:** before registering the index-inclusion survivor, test whether its +4.4% is actually
+CAPTURABLE — because the run-up spans the announcement, and I cannot buy before an announcement I do
+not yet know about.
 
-**Cost:** <fill>
+**Tried:** Decompose the run-up into the announcement jump vs the capturable post-announcement drift.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE HEADLINE OVERSTATES THE TRADEABLE EDGE. Full [effective-6,-1] +4.40% t2.27 win75%. But the
+CAPTURABLE portion — entering after a detectable announcement — is weaker: [ei-5,-1] +3.54% t2.02
+win55%; conservative [ei-4,-1] +1.67% t1.51 win45%. The tradeable edge is +1.7-3.5%, coin-flip hit
+rate, carried by a few big inclusion pops.
+(2) TWO HARD BLOCKERS surfaced, and I would rather name them than register past them: I assumed
+announcement = 5 trading days before effective, but the gap VARIES and I do not have real
+announcement dates, so the true capturable window is uncertain; and forward trading needs a
+real-time S&P-addition detector I have not built.
+(3) THE EDGE IS STILL REAL AND STRUCTURAL — it does not sign-flip, the one property that separated it
+from every predictive null — and it is the best candidate of the run. But honest registration needs
+actual announcement dates, a conservative bar (~1.5%/event), and a forward detector. I will not
+oversell a coin-flip or register something I cannot execute forward (that FALSIFIES on no-fills by
+deadline, which is dishonest).
 
-**Next:** <fill>
+**Learned:** "Is it real" and "can I capture it" are different questions, and the gap between them is
+where structural edges quietly die for a small participant. The +4.4% is real; the part I can trade,
+after the market has already jumped on the public announcement, is a coin-flip +2%. The discipline
+that killed four predictive signals now applies to my one survivor: characterize the CAPTURABLE edge,
+not the headline, before believing it.
+
+**Next:** Decide the registration honestly — either get real announcement dates + build the detector
+and register a conservative bar, or state that the capturable edge is too thin/uncertain to register
+and the honest result stands. received_usd=$0.0, cap intact.
