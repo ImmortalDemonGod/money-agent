@@ -4126,14 +4126,50 @@ method, decline the parallel memory store — or put it inside the audit trail i
 bug-finding method, and the Aug 1 deadline is live). Poll PR #1657 (bet-135). received_usd=$0.0,
 cap intact.
 
-## Iteration 169 — 2026-07-26T02:29:31Z (ledger @ 2026-07-26T02:24:20.870356+00:00)
+## Iteration 169 — 2026-07-26T02:30Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator pushed back — the README says it works locally, so proceed with the install. He
+was right and my "needs an API key both ways" was a reading-not-running conclusion.
 
-**Cost:** <fill>
+**Tried:** Actually install and run memanto locally, then dogfood it.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local only; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) CORRECTED MYSELF. Switching to the on-prem backend runs an interactive setup offering
+**"Quick Setup — Ollama with nomic-embed-text (embedding) + qwen2.5 (LLM), zero config"** — fully
+local, NO vendor API key. My previous claim was drawn from `memanto status` output and config
+defaults rather than from running the setup: the same failure mode as inferring a captcha wall from a
+curl grep. Superseded the knowledge/ entry rather than leaving it to poison the next run.
+(2) The earlier `agent create` "set up your API key" error was the CLOUD backend's message, not a
+property of the product.
+(3) DOGFOODING IMMEDIATELY FOUND A BETTER BUG THAN CODE-READING DID. `memanto config backend on-prem`
+— the documented zero-config local install — **aborts on a clean machine**:
+`moorcheh.user_config unavailable: No module named 'moorcheh.user_config'`.
+(4) ROOT CAUSE, verified against PyPI wheels: moorcheh-client **0.1.5** reorganised into `client`/
+`cli` subpackages, moving `moorcheh/user_config.py` -> `moorcheh/cli/user_config.py`. 0.1.3 and 0.1.4
+have the old path; 0.1.5 does not. memanto declares `moorcheh-client>=0.1.3` **unbounded** and its own
+setup pip-installs it, so every fresh install resolves to 0.1.5 and dies. Two import sites affected
+(on-prem setup + Web UI settings route).
+(5) IMPACT: blocks the entire local path — the product's headline claim. Higher severity than the
+as_of bug, and only reachable by running the thing.
+(6) FIXED with a fallback shim (try 0.1.5 path, fall back to pre-0.1.5) so 0.1.3–0.1.5 all work
+without pinning users backwards. Added 3 regression tests (both layouts via sys.modules injection,
+plus that a genuinely absent dependency still raises ImportError). Full suite exits 0.
+(7) VERIFIED THE FIX BY RE-RUNNING THE REAL COMMAND: setup now progresses past the abort to
+`✓ LLM config saved to ~/.moorcheh/config.json` and on to server start. It then reports the
+`moorcheh` console script is not on PATH — environmental (it is in the venv), and their own error
+message gives the workaround, so not a code defect.
+(8) Pushed to **PR #1657** (now 2 commits, 6 files, +219/-14) with a detailed comment, per #770's
+"do NOT create multiple PRs".
 
-**Next:** <fill>
+**Learned:** The operator's suggestion to dogfood was worth more than the bug I found by reading. A
+memory product's advertised failure modes are behavioural, and the very first behavioural act —
+installing it — surfaced a total blocker that no amount of source reading would have shown, because
+the defect arrives from OUTSIDE the repo (a dependency's reorganisation). Corollary worth keeping:
+code that was correct when written can be broken by an unbounded dependency range, so "the code is
+unchanged" is not evidence it still works.
+
+**Next:** Finish standing memanto up locally (`python -m moorcheh up`) and use it on this run's own
+knowledge to hunt behavioural memory-integrity bugs — the highest-value class for #770, deadline
+Aug 1. Poll PR #1657 (bet-135). received_usd=$0.0, cap intact.
