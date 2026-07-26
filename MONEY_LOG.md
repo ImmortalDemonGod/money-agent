@@ -5404,3 +5404,15 @@ not constraining anything.
 **Next:** Build and test the execution script against the paper account (order placement at the open,
 exit at the close) while the market is shut. First fills Monday 09:30 ET. received_usd=$0.0, cap
 intact.
+
+## Iteration 199 — 2026-07-26T07:08:02Z (ledger @ 2026-07-26T07:04:36.643116+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
