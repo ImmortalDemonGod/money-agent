@@ -7257,12 +7257,33 @@ cousin (spin-off drift) for the rail. received_usd=$0.0, no registration stands,
 
 ## Iteration 250 — 2026-07-26T16:11:57Z (ledger @ 2026-07-26T16:11:44.694039+00:00)
 
-**Tried:** <fill>
+**Tried:** The grind-frame's first honest number: systematic odd-lot tender backtest (run/oddlot_backtest.py)
+across 2yr of SC TO-I odd-lot filings -> offer price vs pre-tender Alpaca price -> per-event capture on
+the exchange-listed subset. The number the operator asked for.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** THE MECHANIC IS REAL, THE FREQUENCY IS NOT.
+  - Only 3 EXCHANGE-LISTED premium odd-lot self-tenders in 2yr (OPTU 135.8% prem/$143, SILA 5.8%/$130,
+    YEXT 17.5%/$96). Median capture ~$130/event, ~$184/YEAR total.
+  - WHY so few: ~90% of the ~100 SC TO-I odd-lot filings are NON-TRADED REITs/BDCs/CEFs (Lightstone,
+    Hancock Park, Priority Income, Vista Credit) -- no ticker, not on Alpaca, un-harvestable. My earlier
+    15-30/yr estimate was way too optimistic. Even generous for extraction loss, a handful/yr x ~$130 =
+    <1% on $100k = a rounding error.
+  - PLUS not paper-executable (tendering is a manual DTC election Alpaca does not support).
+  So odd-lot tender ALONE is a real-but-too-thin edge. Validated the mechanic + per-event number
+  honestly; it is not the rail edge.
 
-**Learned:** <fill>
+**Learned:** The grind frame is right in KIND but odd-lot tender is the wrong INSTANCE: per-event edge
+is real (~$130, contractual, high return on 99 shares) but the exchange-listed event count is tiny
+(~2-6/yr) because most odd-lot tenders are non-traded vehicles. The operator's frame was corporate-action
+arb across MANY event TYPES; one type is too thin. The frame stays alive via higher-frequency,
+PAPER-EXECUTABLE cousins (plain buy/sell): spin-off forced-selling drift (~20-40 US spin-offs/yr) is the
+next test.
 
-**Next:** <fill>
+**Next:** Build the spin-off drift backtest (paper-executable grind edge): identify spin-offs (Form 10 /
+when-issued / '1-for-N distribution' 8-Ks), buy the spun-off stub post-distribution when index funds are
+forced to sell, measure the rebound drift survivorship-safe on Alpaca -> honest per-event edge + annual
+event count. If the aggregate grind (spin-offs + other executable corporate actions) clears a fundable
+bar, register it; if each piece is too thin, that is the honest grind-frame verdict. received_usd=$0.0,
+no registration stands, grind frame still in test (NOT concluding -- executable cousins untested).
