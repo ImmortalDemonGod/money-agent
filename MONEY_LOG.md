@@ -6344,3 +6344,15 @@ naked short-vol never would be.
 **Next:** When VIX>=~18 and market open, fire the first weekly spread via vrp_execute.py --live (small,
 capped), mark at a spread-crossing haircut not the fill; keep testing other premia (carry, term).
 received_usd=$0.0, cap intact.
+
+## Iteration 225 — 2026-07-26T10:11:20Z (ledger @ 2026-07-26T10:07:21.166169+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
