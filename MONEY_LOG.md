@@ -5950,3 +5950,15 @@ is a finding; a null result with an unchecked method is just a shrug.
 **Next:** Keep the cadence to 11am. Any further candidate gets in-sample + OOS + a placebo-aware bar
 (t>3, holds OOS, survives cost); absent that, the honest answer stands and strengthens with each
 falsified hypothesis. received_usd=$0.0, cap intact.
+
+## Iteration 214 — 2026-07-26T08:52:21Z (ledger @ 2026-07-26T08:46:07.757665+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
