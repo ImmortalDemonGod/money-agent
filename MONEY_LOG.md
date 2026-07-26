@@ -5705,3 +5705,15 @@ Item 5 (read the literature) exists precisely to stop a premature void.
 
 **Next:** When the historical backtest lands, compute 5/10/20-day excess-vs-SPY drift on the LONG
 basket. That number is the real fork input. received_usd=$0.0, cap intact.
+
+## Iteration 207 — 2026-07-26T07:51:53Z (ledger @ 2026-07-26T07:48:30.951936+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
