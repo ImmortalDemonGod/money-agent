@@ -7384,3 +7384,15 @@ limited-arbitrage moat -- gated by NAV DATA access on my rails. Options: (a) for
 NAV (fragile, slow), (b) find a NAV data feed, (c) operator provisions NAV. Deliver the honest correction
 + this fork to the operator. Modest magnitude (~few % excess/yr per literature), risk = value traps
 (buy discount-vs-OWN-history, not naive widest). received_usd=$0.0, no registration stands.
+
+## Iteration 254 — 2026-07-26T16:51:13Z (ledger @ 2026-07-26T16:49:34.222253+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
