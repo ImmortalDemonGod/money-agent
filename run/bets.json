@@ -3616,6 +3616,30 @@
         "send": 1
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-134",
+      "placed_at": "2026-07-26T01:38:23Z",
+      "clock": "reply",
+      "what": "FIRST BOUNTY SUBMISSION: moorcheh-ai/memanto issue #1655, submitted to their $100 Bug & Exploit Challenge (#770). Found by own analysis of their MIT source: as_of is parsed by two divergent implementations of one documented rule -- REST route validator vs service helper -- giving a 23:59:59 delta for the ISO basic-format date '20260726' (start-of-day vs end-of-day) and a 0.999999s delta for '2026-07-26'. Reproduced locally with a runnable script, no API key needed. Artifact-decided: maintainers run the repro and it either diverges or it does not.",
+      "check": "gh issue view 1655 --repo moorcheh-ai/memanto for maintainer response/label/bounty award",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-08-02T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "spent_usd": 0.0
     }
   ]
 }
