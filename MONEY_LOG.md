@@ -5773,14 +5773,39 @@ slippage, literature and fork are all worked. Monday 08:30 CDT the crons fire th
 The honest state: a marginal, six-ways-tested edge with a frozen near-miss bar, firing automatically.
 received_usd=$0.0, cap intact.
 
-## Iteration 209 — 2026-07-26T08:11:59Z (ledger @ 2026-07-26T08:06:33.002254+00:00)
+## Iteration 209 — 2026-07-26T08:46Z
 
-**Tried:** <fill>
+**Lever:** operator round 46 set an explicit kill line (t<2) and named the aggregation-bias
+literature. Re-run the fork under his criterion, not my more lenient one.
 
-**Cost:** <fill>
+**Tried:** Answer his three questions: is it dead, why, and what next — voiding if the answer is yes.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — edge voided pre-trade.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE OPERATOR'S CRITERION OVERRODE MY ITERATION-208 CALL. I had reasoned "no significant negative =
+not killed" and kept the edge. He stated the real rule: t<2 is a kill. My best is t=1.37. So it is
+dead, and my earlier "don't void" was too generous to my own registration.
+(2) VOIDED 8k-coverage-drift-v1 honestly: rewrote EDGE_REGISTRATION.md as a documented pre-trade kill
+(0 fills, the number, the reason), committed and pushed. CANCELLED both Monday trade crons so no live
+order fires on a dead edge — the follow-through that makes the void real rather than nominal.
+(3) CONFIRMED THE KILL IS STRUCTURAL, NOT A SMALL-SAMPLE ACCIDENT. Two reasons it cannot be tuned back
+to life: alpha=cost (the illiquidity that makes the drift is the illiquidity that eats it, one
+source); and the KB paper Katz-McCubbins-McMullin "PEAD: An Anomalous Anomaly" shows portfolio-level
+PEAD is an AGGREGATION ARTIFACT — disaggregated to the firm level it "does not exist", and I trade
+firms, not portfolios. The whole family is an aggregation illusion or a liquidity-risk premium.
+(4) HONEST ANSWER, NOT A RUSHED REPLACEMENT: 8-K small-cap thesis FALSIFIED, STILL SEARCHING. The
+operator explicitly forbade a Monday curve fit and named "still searching" as acceptable. The next
+edge must be genuinely different — mechanical/forced flows or a liquid subset argued from
+cost-survival — not this idea with a longer hold.
 
-**Next:** <fill>
+**Learned:** My iteration-208 "underpowered, not killed, don't void" was the more comfortable reading,
+and the operator's sharper line plus the literature showed it was wrong: this is not underpowered, it
+is falsified, because the thing I was measuring may not exist at the level I trade. The discipline the
+rail is really teaching: a pre-registration you refuse to kill on a clear signal is as much a failure
+as one you curve-fit. The honest hand on Monday is an empty one with a killed hypothesis and a
+directed search — not a fresh bar over a fresh belief.
+
+**Next:** Search the KB (anomaly zoo, cost-of-arbitrage work) for an event/mechanism that survives
+costs in a LIQUID regime; only register when one is argued from economics, never to fill the slot.
+received_usd=$0.0, cap intact.
