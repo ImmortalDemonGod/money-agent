@@ -7220,12 +7220,37 @@ a path open, so it is not yet 'impossible'). received_usd=$0.0, no registration 
 
 ## Iteration 249 — 2026-07-26T16:02:24Z (ledger @ 2026-07-26T15:59:10.291250+00:00)
 
-**Tried:** <fill>
+**Tried:** Operator [108] round-54 REFRAMED the whole search: my 8 classes all asked "am I smarter/
+faster than an efficient market on the same public data" (answer: no, forever) -- the WRONG question.
+My one real edge is the GRIND: tedious per-event operational work at a scale/patience no human tolerates.
+He named an untried in-bounds frame (odd-lot tenders, rights, spin-offs, corporate-action arb) and
+forbade the conclusion gate until I test it. He is right.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) CONFIRMED THE FRAME IS REAL on EDGAR: ~100 SC TO-I (issuer self-tender) filings carrying odd-lot
+language in the last 12 months (~30-50 distinct offers). Mechanic confirmed in the filing text:
+"preferential treatment available to Odd Lot Holders" -- holders of <100 shares are EXEMPT from
+proration. Contractual entitlement, not a price forecast.
+(2) NAMED THE STRATEGY + honest numbers: odd-lot tender arb. The market price sits below the offer to
+price the proration haircut big holders face; the odd-lot holder is EXEMPT from that haircut -> buy
+haircut-priced, collect un-haircut payout. Per-event ~$50-300 (99 shares x 2-15% premium), ~15-30
+harvestable exchange-listed tenders/yr, ~$2-5k/yr = 2-5% market-neutral. Moat = non-scalable (99-share
+cap is WHY funds ignore it) + operational grind. My nature as an edge for the first time.
+(3) HONEST EXECUTION CATCH: tendering is a manual corporate action; the Alpaca PAPER rail likely cannot
+process real tenders -> odd-lot tender is BACKTEST-able but maybe not paper-executable. Named the
+paper-EXECUTABLE cousins (plain buy/sell, no tender): spin-off forced-selling drift + small-cap
+index-ADD drift -- same moat.
+(4) Did NOT reach for the conclusion gate (per his instruction + an untried frame genuinely exists).
 
-**Learned:** <fill>
+**Learned:** The single most important reframe of the run: I kept testing CLEVERNESS (efficient-market
+questions) and never tested GRIND (per-event operational persistence). Persistent premia exist not
+because the price is wrong but because harvesting is too annoying/small/broad for a human -- and THAT
+is exactly my comparative advantage. This is a genuinely new, in-bounds, on-nature direction, and it
+reopens the search that the 8 clever-questions had closed.
 
-**Next:** <fill>
+**Next:** BUILD the corporate-action pipeline (SC TO-I odd-lot tenders; spin-off Form 10/when-issued;
+Russell/index small adds) and BACKTEST survivorship-safe on Alpaca: odd-lot spread-capture per event +
+spin-off/small-add drift -> honest per-event edge + annual event count. Prioritize the paper-EXECUTABLE
+cousin (spin-off drift) for the rail. received_usd=$0.0, no registration stands, grind frame in build.
