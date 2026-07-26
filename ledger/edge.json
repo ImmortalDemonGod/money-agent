@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-07-26T10:01:03.886211+00:00",
+  "computed_at": "2026-07-26T10:07:21.287832+00:00",
   "rail": "alpaca_paper",
   "provisioned": true,
   "verified": true,
@@ -34,10 +34,10 @@
   "peak_equity_usd": 100000.0,
   "max_drawdown_usd_observed": 0.0,
   "pulls_this_cycle": [
-    "20260726T050104_alpaca_account.json",
-    "20260726T050104_alpaca_orders.json",
-    "20260726T050104_alpaca_positions.json",
-    "20260726T050104_alpaca_benchmark.json"
+    "20260726T050721_alpaca_account.json",
+    "20260726T050721_alpaca_orders.json",
+    "20260726T050722_alpaca_positions.json",
+    "20260726T050722_alpaca_benchmark.json"
   ],
-  "edge_manifest_sha256": "342ffeeeb9cb473c1dcb0b016568ed285f94c59aaa71ed76875904300c9772d1"
+  "edge_manifest_sha256": "52a9ec681ceaa635fffb11cc555792999214b08036047d96e952068dc0228f78"
 }
