@@ -5880,3 +5880,15 @@ at t>3 out-of-sample net of costs so the volume of tests raises the bar rather t
 
 **Next:** More experiments — distinct mechanisms (reversal depth, volume spikes, sector-relative),
 each a number, none registered until t>3 net of costs. received_usd=$0.0, cap intact.
+
+## Iteration 212 — 2026-07-26T08:37:42Z (ledger @ 2026-07-26T08:33:39.344754+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
