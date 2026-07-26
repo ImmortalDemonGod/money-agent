@@ -7450,12 +7450,34 @@ diversification -- but CEF alone clears the fundable bar. received_usd=$0.0, thi
 
 ## Iteration 256 — 2026-07-26T17:08:38Z (ledger @ 2026-07-26T17:08:30.234155+00:00)
 
-**Tried:** <fill>
+**Tried:** Build + paper-test execution for cef-discount-ls-v1 (queue item 7, the real edge) and prepare
+the registration.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) BUILT run/cef_execute.py (scan / trade / status / close): each rebalance pulls price+NAV (Yahoo),
+computes discount z-scores vs 60d, LONGS z<-1 (widest discounts) and SHORTS z>1 (narrow/premium),
+equal-weight ~$30k/side = market-neutral $60k gross. Live scan works: LONG 9 (DSL z-2.3/-7%, ASG
+z-1.7/-13%, PCQ, ETY...), SHORT 3 (HTD, UTG, EOI).
+(2) PAPER-TESTED THE ORDER PATH and caught a real constraint: long BUY (DSL) accepted, but short SELL
+(HTD) 422'd -- 5 of 40 CEFs are NOT shortable (PCQ/CII/HTD/RNP/RFI). Fixed: filter the SHORT leg to
+shortable names only (longs unaffected). Re-tested: SHORT UTG (shortable) accepted + cancelled clean, 0
+positions left. Execution now works both legs.
+(3) DRAFTED the registration (EDGE_REGISTRATION_cef_draft.md): cef-discount-ls-v1, METRIC
+excess_return_pct, BAR 2.0 (beat cash by 2pp), MIN_FILLED 20, MAX_DRAWDOWN $10k (the discount-widening
+tail), RESOLVE_BY 2026-11-30, BENCHMARK BIL. Ready to move into EDGE_REGISTRATION.md + edge.py register.
+(4) REGISTRATION BLOCKED on the operator: the VRP slot (short-vol-vrp-v1) still reads PENDING /
+registration_intact=True verifier-side -- my void was only REQUESTED. I cannot register cef until the
+operator CLEARS the VRP slot (same as 8k-coverage -> VRP before).
 
-**Learned:** <fill>
+**Learned:** The real edge is now end-to-end ready: validated (robust, monotone, market-neutral,
+executable), execution built + paper-tested (both legs, non-shortable filter), registration drafted.
+Paper-testing the order path caught the shortability constraint BEFORE it mattered -- exactly what queue
+item 7 is for. The only thing between here and a live registered grind edge is the operator clearing the
+old VRP slot.
 
-**Next:** <fill>
+**Next:** OPERATOR ACTION NEEDED: clear the short-vol-vrp-v1 slot (verdict->VOID) so cef-discount-ls-v1
+can be registered. Then: move draft -> EDGE_REGISTRATION.md, edge.py register, schedule the monthly
+re-sort cron, first trade fires the market-neutral L/S. Meanwhile continue the basket (SPAC floors,
+post-deletion) for diversification. received_usd=$0.0; the fundable edge is built and waiting on the slot.
