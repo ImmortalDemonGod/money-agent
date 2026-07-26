@@ -6516,12 +6516,41 @@ reach 16 by Sep 30, always VIX-gated. received_usd=$0.0, cap intact.
 
 ## Iteration 230 — 2026-07-26T11:03:25Z (ledger @ 2026-07-26T10:57:36.391701+00:00)
 
-**Tried:** <fill>
+**Tried:** Email round-49 (operator [103], three new holes: pending-vs-verified, spread atomicity /
+orphan-leg risk, fill arithmetic). Answer all three from the ACCOUNT not assertion; harden the
+executor against the naked-leg tail he named.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) OPERATOR HAS SEEN MY ROUND-48 ANSWERS despite the email block — [103] summarizes them accurately,
+confirming he reads the repo/MONEY_LOG directly. The email channel is still guard-blocked (no-marker
+message to his address not cleared); delivered round-49 in-session again, did not bypass the rail.
+(2) ATOMICITY CONFIRMED EMPIRICALLY, not asserted. Inspected the orders API: one spread = ONE mleg
+parent order with two nested legs; cancelling the parent cancelled BOTH legs together. An mleg fills
+as a package (both legs or neither) — the naked-short tail cannot arise from a fill. Answers hole 2.
+(3) BUILT + TESTED A MECHANICAL NAKED-LEG BACKSTOP (queue item 7 hardening). run/vrp_execute.py now
+has naked_shorts() (parses OCC symbols, flags any short put with no matching lower-strike long put in
+the same expiry) surfaced in `status`, and a new `guard [--live]` that buy-to-closes any orphan at
+market and exits nonzero so a cron surfaces it. Unit-tested: covered spread→0 flagged, orphan→1
+flagged+closed, wrong-expiry long→correctly still flagged (does not count as cover). "Should be
+impossible" is now mechanically caught, not hoped (trap-5 discipline).
+(4) FILL ARITHMETIC, answered: one spread = 1 fill (parent) or at most 2 (legs), NEVER 4 — exit is
+expiration (no order) because I hold to expiry. Worst case 1/spread: Jul27-Sep30 = 10 Mondays, so
+1/week tops out at 10 < 16 (infeasible); 2 gated entries/week = 20 potential, affording exactly 2
+sub-16-VIX skip-weeks before falsifying on sample size. Named the honest verified-date (~Sep 30
+deadline) and conceded "goal met" was wrong: machinery proven, edge PENDING.
+(5) NAMED a residual I found myself: expiry with SPY between strikes = short assigned into shares
+(unhedged stock over weekend, not a naked-option tail); mitigation = close near-money spreads on
+expiry day. Wiring next.
 
-**Learned:** <fill>
+**Learned:** "Both legs or neither" is a property to VERIFY on the venue, not assume — Alpaca mleg is
+genuinely atomic (one parent, joint cancel), but the defined-risk guarantee is only as good as a
+detector that proves no orphan exists, so I built one. And the fill-count is now a hard cadence
+constraint, not a nicety: at the frozen 16 over a 10-Monday window, one-per-week literally cannot
+reach the bar, so two-gated-per-week with a 2-skip budget is the plan.
 
-**Next:** <fill>
+**Next:** Wire the expiry-day pin-close (assignment-into-shares mitigation) and consider a periodic
+`guard` cron for continuous orphan detection. Monday 09:00 CDT first gated spread fires; read the
+first fill for the leg-count, set cadence. Operator to clear the no-marker Sent message to restore the
+email channel. received_usd=$0.0, cap intact, verdict PENDING.
