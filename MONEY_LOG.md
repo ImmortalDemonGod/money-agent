@@ -6207,14 +6207,39 @@ is the SAME in both halves, and a mechanism that says WHY someone pays it.
 backtest its actual P&L net of option costs, size a tail-aware drawdown cap, then register with a
 FRESH edge id. received_usd=$0.0, cap intact.
 
-## Iteration 221 — 2026-07-26T09:41:19Z (ledger @ 2026-07-26T09:36:02.349670+00:00)
+## Iteration 221 — 2026-07-26T11:22Z
 
-**Tried:** <fill>
+**Lever:** the VRP premium is real (t24) — but does it survive as a TRADEABLE strategy net of option
+costs and the crash tail? Backtest the actual defined-risk P&L.
 
-**Cost:** <fill>
+**Tried:** 59 monthly SPY put-credit-spreads (5-8% OTM), Black-Scholes-priced with VIX, marked to
+expiry on the real SPY path, net 2% option cost.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE PREMIUM IS REAL BUT THE STRATEGY IS TAIL-DOMINATED. Mean +3.51%/mo return-on-risk (~42%/yr),
+win 92% — but t=1.48, NOT significant, because a few catastrophic months (-91%, -57%, -40%) dominate
+the variance. Max drawdown -131%.
+(2) REGIME-DEPENDENT, and the split-sample is the tell: 2021-23 +0.02%/mo (a wash — 2022's drawdown
+ate the whole premium), 2024-26 +6.89%/mo (calm). A single backtest window looks great or terrible
+depending only on whether it contains a crash.
+(3) THE HONEST SYNTHESIS: the VRP is genuinely real as a PREMIUM (t24, stable, buyers overpay for
+insurance) but it is a RISK PREMIUM, not alpha. The negative skew IS the risk you are paid for — you
+collect +4 vol pts 85-92% of the time precisely BECAUSE you occasionally lose 90% in a crash. The
+t=24 was the premium; the t=1.48 is what you actually keep after bearing the tail.
+(4) It remains categorically different from every predictive null (the edge is truly there, the
+mechanism says why), and it is registrable per the operator's "plausible mechanism, forward-judged"
+framing — but ONLY with a tail-aware drawdown cap, small sizing, and the explicit truth that it is a
+bet on the coming weeks being calm. A crash during the forward test breaches the cap and FALSIFIES —
+which is the honest property, not a flaw to hide.
 
-**Next:** <fill>
+**Learned:** "The premium is real" and "the strategy makes money reliably" are different claims,
+separated by skew. My whole search taught me to distrust a big backtest number that flips out of
+sample; this one does not flip, but it teaches the complementary lesson — a big number with a fat
+left tail is not reliable profit, it is rent you collect for holding a grenade. The honest edge is
+not +42%/yr; it is "a real premium, harvested with capped risk, that a crash can and will FALSIFY."
+
+**Next:** Decide registration — a SMALL defined-risk short-vol registration with a tail-sized
+drawdown cap and an honest modest bar, forward-judged; or report it as real-but-too-tail-heavy to
+register with confidence. received_usd=$0.0, cap intact.
