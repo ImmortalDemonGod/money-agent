@@ -4313,14 +4313,47 @@ filter would have discarded unread.
 **Next:** Poll bet-137 (MITH reply), bet-135 (PR #1657), bet-130/136 (earlier bids). 3 bids remain.
 Keep screening on buildability. received_usd=$0.0, cap intact.
 
-## Iteration 173 — 2026-07-26T03:23:41Z (ledger @ 2026-07-26T03:20:38.119112+00:00)
+## Iteration 173 — 2026-07-26T03:20Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [79] — keep spending bids on jobs that pass the buildability test; check the
+three live bids; decide whether the booking engine built in 172 is worth generalizing.
 
-**Cost:** <fill>
+**Tried:** Poll live bids, pull a fresh 495-project wave, screen, and test one build hypothesis.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (API pulls only; no bid spent, no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Fixed the loop cadence. The operator pointed out the loop was firing every 30 minutes when the
+instruction said 10m — the `10m` had never been turned into a recurring cron at all; what existed was
+a single one-shot wakeup I kept re-arming. Now a recurring `*/10 * * * *` job (ebfecb5f).
+(2) No client replies on any of the three live bids (freelancer inbox empty). Expected — hours old.
+(3) Pulled 495 unique active fixed-price projects, screened on buildability: 26 candidates. Read the
+plausible ones and NONE qualified. The EUR 250-750 / 14-bid job that looked best is commission-only
+cold-CALLING (and the poster pasted their own Claude session into the description by accident); one
+needs Meta ad-account access and their ad spend; one needs a remote desktop session into their
+Windows box; the rest were $7-18 budgets, a licensed tax filing, a sales role, and WordPress site
+"cloaning". NO BID SPENT — 3 of 6 remain.
+(4) Flagged but did not bid on 40603939 "USA Portal Appointment Scheduler" (INR 35000-70000): it asks
+for an "extension" that "plugs into a leading U.S. web portal" the client does not own, to "reserve
+time slots" for authenticated users, with the portal never named. That is the shape of a
+slot-grabbing bot on a government appointment portal — the same class as the IRCTC job refused in
+171 — but unlike IRCTC it is genuinely AMBIGUOUS, not stated. I am not refusing it on suspicion and
+not bidding blind on a scarce bid; it needs the portal named first.
+(5) KILLED MY OWN PLANNED BUILD WITH A MEASUREMENT. I was about to generalize the MITH booking engine
+into a re-skinnable widget, justified by "booking jobs recur". My loose regex said 15.6% of arrivals
+(77/495). It was matching "availability" and "schedule" inside unrelated posts — Polly The Purple
+Pig, an Abstract 3D Dance Icon redesign, a LATAM crypto community manager. Strict filter: 2.0%
+(10/495), and of those ten none are buildable booking jobs (an appointment SETTER is a sales role, a
+"post scheduler" is social publishing). MITH was genuinely the one, not the first of a stream. Build
+cancelled.
 
-**Next:** <fill>
+**Learned:** The 8x inflation is a REPEAT of an error already in this log, so I stopped treating it
+as a lesson and made it mechanical: never quote a keyword-derived rate without computing the strict
+version too and reporting both — if they diverge, the loose number is wrong and the gap IS the
+finding. Worth naming plainly: this iteration's product is two things I did NOT do — a bid not spent
+on a mediocre fit, and a build not started on an inflated number. Also worth restating for the
+operator: freelancer.com pays via escrow to a platform balance, so even WINNING these bids cannot
+produce a scored Stripe dollar; it is real money on a named non-scored rail (bet-083).
+
+**Next:** Poll bet-137 (MITH reply), bet-135 (PR #1657), bet-130/136. Keep screening each wave on
+buildability; bid when one passes. received_usd=$0.0, cap intact.
