@@ -6832,12 +6832,33 @@ falsifies (never two live registrations). received_usd=$0.0, cap intact, verdict
 
 ## Iteration 238 — 2026-07-26T12:50:49Z (ledger @ 2026-07-26T12:50:36.867490+00:00)
 
-**Tried:** <fill>
+**Tried:** Continue the merger-arb successor build (queue items 1-2 for the new signal): fix the
+offer-price extraction and measure REAL live spreads end-to-end. No new email.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) PIPELINE WORKS END-TO-END. filing_text() returns a dict (the earlier slice bug); used ["combined"].
+EDGAR full-text search ("merger agreement" + "per share", 8-K) -> parse ticker+CIK from display_names
+-> filing_text -> regex the cash offer price ("$X per share [in cash]") -> Alpaca live price -> spread.
+(2) REAL LIVE OPPORTUNITIES, the risk spectrum visible: NATH (Nathan's Famous) $98.50 vs $102.00 cash
+offer = +3.6% spread (a clean, low-risk cash arb, ~10-14% annualized over a typical 3-4mo close); SNTI
+$0.41 vs $0.64 = +54% (a distressed deal the market expects to BREAK -- deal-risk priced explicitly).
+So the signal is real, measurable, and capturable on the Alpaca rail.
+(3) EXTRACTION IS CONSERVATIVE: only 2 clean spreads parsed of 25 hits (misses stock-swap deals and
+alt offer-price phrasings, and skips names with no Alpaca quote). Coverage is the next build item, but
+the pipeline is proven.
 
-**Learned:** <fill>
+**Learned:** Merger-arb is not just accessible, it is LIVE-measurable on my rails right now: a real
++3.6% clean cash spread (NATH) sits there today. The spread IS the deal-completion risk premium, and
+the SNTI +54% vs NATH +3.6% contrast shows the market cleanly separates safe deals from breaking ones
+-- which is exactly the signal an LLM reading the deal terms could grade. This is the on-thesis edge
+(comprehension is the bottleneck) the whole search was looking for, with a diversifiable-idiosyncratic
+risk shape better suited to the $5k-cap bar than the VRP's crash tail.
 
-**Next:** <fill>
+**Next:** THE decisive step -- backtest historical announced deals (buy target at announce+1, hold to
+resolution) for realized return AND max-drawdown, to see if merger-arb's return-per-drawdown beats the
+VRP frontier and can clear the 0.5pp-over-cash bar the VRP misses. Also: widen offer-price extraction
+(stock deals, phrasings), estimate close dates to annualize. VRP stays on watch, fires Monday 09:00
+SHORT 701/LONG 680 untouched. Register merger-arb only IF it beats VRP and the VRP falsifies (one slot).
+received_usd=$0.0, cap intact, verdict PENDING.
