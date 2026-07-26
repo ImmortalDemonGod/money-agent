@@ -4947,14 +4947,42 @@ strongest claim in the FIRST TWO LINES, above the fold of the truncation.
 **Next:** Spend the final bid only on a sub-20-proposal buildable job, front-loaded. Poll bet-141,
 140, 137, 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
 
-## Iteration 188 — 2026-07-26T05:35:01Z (ledger @ 2026-07-26T05:32:35.099509+00:00)
+## Iteration 188 — 2026-07-26T05:45Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** apply iteration 187's ranking finding — spend the last bid only where rank stays visible.
 
-**Cost:** <fill>
+**Tried:** Find a visible-rank buildable job, build for it, bid.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No bid spent — 1 of 6 still held.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) READ ALL 87 SUB-20-PROPOSAL JOBS, and not one was a web build I could deliver: local and physical
+services (photographer, emcee, poker dealer, builder, address verification, structural assessment),
+regional-language work, licensed professions, sales roles. They have few proposals BECAUSE they need
+physical presence, a language, or a licence — the things I cannot supply remotely.
+(2) BUT I HAD JUMPED FROM <20 STRAIGHT TO 100+, so I checked the middle before concluding anything.
+The band is not empty: 16 web-build jobs at 20-59 proposals, where rank stays visible. That matters —
+"the pools do not intersect" would have been a false conclusion drawn from a binary split.
+(3) Of those 16, exactly one was a genuine web build: 40605167, concierge physical therapy, $250-750,
+49 proposals, client stating he would review PORTFOLIOS (which I now have) and decide within 24 hours.
+The best-fitting job found across 594 projects.
+(4) BUILT IT: https://meridian-pt-six.vercel.app — two-step enquiry capture that refuses to submit
+without a way to reply, echoes the answers back on confirmation, published pricing, mobile-clean.
+host_check PASS, P3 recorded (333a839c4c). Carried the sticky-header scroll-margin fix forward from
+the MITH build instead of re-discovering it, then verified all three anchors clear the header.
+(5) THEN COULD NOT BID AT ALL. The form never rendered through ten scroll-and-wait cycles. Cause found
+in the API rather than guessed: the project carries upgrades = NDA true. It requires accepting a
+non-disclosure agreement before bidding. The projects I bid successfully show no upgrades.
+(6) REFUSED TO SIGN IT (REFUSALS.md). Placing a bid under the account holder's name is authorised;
+entering him into a legal agreement is not. An NDA creates enforceable obligations for a specific
+human being, and "the agent clicked accept" is not a defence he would want to make. The operator can
+accept it himself in seconds if he wants the job — the artifact is already built and live.
 
-**Next:** <fill>
+**Learned:** Two things. I built and deployed an entire site before checking whether I was eligible to
+bid on the job, when one API field would have told me first — eligibility check belongs BEFORE the
+build, not after. And the addressable pool is much smaller than the listing count implies: it is
+projects with no NDA upgrade AND under roughly 60 proposals AND genuinely web-buildable. That
+intersection, across 594 live projects today, was one job — and it was gated.
+
+**Next:** Last bid still held. Add the Meridian build as a fourth portfolio item so the work is not
+wasted. Poll bet-141, 140, 137, 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
