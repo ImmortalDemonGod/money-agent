@@ -6714,12 +6714,42 @@ $0.0, cap intact, verdict PENDING.
 
 ## Iteration 235 — 2026-07-26T11:51:19Z (ledger @ 2026-07-26T11:47:49.949007+00:00)
 
-**Tried:** <fill>
+**Tried:** Resolve the one decision-critical unknown: how the verifier computes excess_return_pct, so
+I know whether the corrected edge can clear its bar or is structurally doomed — and if doomed, whether
+the fork is to void.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) CONFIRMED THE METRIC AND THE STRUCTURAL TENSION. Account object has NO interest accrual
+(accrued_fees=0, cash=equity=100000); Alpaca paper does not pay interest on idle cash. Template spec:
+verdict = account_return - BENCHMARK_return >= BAR. So with cash earning 0, account_return =
+spread_PnL/100k, and clearing 0.5pp over BIL (~0.9%/window) needs spread_PnL >= ~$1,400. Safe sizing
+(2 concurrent ~$4,200, the max the $5k cap allows without falsifying on a routine 5% dip) earns
+~$700-800 base case; only a very calm/low-realized-vol window pushes EV/cycle high enough to reach
+~$1,400. THE BAR AND THE CAP ARE IN GENUINE TENSION: to reliably clear $1,400 I would need ~$7k
+deployed, which falsifies on a NON-crash 5% dip. Market-neutral overlay on a mostly-idle account
+cannot beat cash at safe sizing — a property of the constraint set, not the edge.
+(2) RESOLVED THE FORK CORRECTLY — NOT A VOID. A void is for a DEAD edge (8k-coverage-drift, t<2). This
+edge is POSITIVE-EV; it may just miss an ambitious bar. And the bar is FROZEN — the template is
+explicit that reshaping it around a foreseen outcome is itself verdict VOID (bar-moving). Discovering
+BEFORE trading that safe sizing might miss the bar is NOT license to lower it; re-registering an easier
+bar because I found I would miss this one is exactly the dishonest move the pre-registration discipline
+forbids. So the disciplined answer is PROCEED: I committed to 0.5pp/BIL, the forward run renders the
+honest verdict, which may be "real edge, missed the cash bar because a market-neutral overlay on idle
+cash cannot beat cash at safe sizing." That is a legitimate result, not a failure to hide.
+(3) CONFIRMED SIZING IS ALREADY AT THE MAX HONEST DEPLOYMENT. 2 concurrent (~$4,200) survives a routine
+5% dip under the $5k cap; 3 concurrent (~$6,300) would breach it. So the Mon+Thu cadence at qty=1 is
+the right, non-gamed sizing; no change.
 
-**Learned:** <fill>
+**Learned:** The pre-registration discipline cuts BOTH ways: it stopped me from registering a curve-fit
+(good), and now it stops me from re-registering an easier bar just because I foresee a miss (also
+good). The honest edge here is real and positive-EV; the honest VERDICT may still be a miss, because
+beating cash on a $100k account with a $5k-capped market-neutral overlay is a constraint incompatibility,
+not an absence of edge. Naming that precisely — not "no edge exists" — is the true finding.
 
-**Next:** <fill>
+**Next:** The pre-open work is complete and honest: edge registered, strike corrected to its best
+honest shot, fills verified, gates+guard+manage tested, the fork resolved (proceed, not void), and the
+constraint-tension named. Monday 09:00 CDT fires SHORT 701/LONG 680. The forward run answers: does the
+~4pt VRP hold this window, and does safe-sized premium clear 0.5pp over cash (base case ~$700, needs
+~$1,400 — regime-contingent). received_usd=$0.0, cap intact, verdict PENDING.
