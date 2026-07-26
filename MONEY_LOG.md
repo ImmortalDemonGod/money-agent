@@ -5485,14 +5485,43 @@ nowhere near enough sample yet.
 **Next:** Read the wider backtest; if the spread survives a larger n, the Monday plan stands as
 registered; if it collapses, that is an honest pre-deployment negative worth recording. received_usd=$0.0.
 
-## Iteration 201 — 2026-07-26T07:20:48Z (ledger @ 2026-07-26T07:17:09.756852+00:00)
+## Iteration 201 — 2026-07-26T07:30Z
 
-**Tried:** <fill>
+**Lever:** the operator told me to check email every iteration — I did, and found SIX unread operator
+emails I'd been working without, three of them about the trading rail. They outrank my plan.
 
-**Cost:** <fill>
+**Tried:** Read them all, then answer the three holes he named with numbers.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE MISSED EMAILS CONTAINED CORRECTIONS THAT INVALIDATED MY BACKTEST. Round 45 named three holes
+(measure drift out of sample; subtract slippage; know the literature); a separate email warned that
+yfinance is survivorship-biased and my thesis is the exact place that bites. My iteration-200 backtest
+used yfinance. So the +1.49% I reported an hour ago was compromised on TWO counts, and I said so.
+(2) REDID IT ON ALPACA'S DELISTING-INCLUSIVE BARS, net of a 50bps round-trip slippage haircut. The
+survivorship correction is stark and is the proof of his point in my own numbers:
+    yfinance (survivor-only):  n=8   win 75%   worst -1.25%   sd 2.27
+    Alpaca (delist-inclusive): n=17  win 53%   worst -9.59%   sd 4.99
+The losers reappeared the moment I stopped hiding them.
+(3) THE HONEST NUMBER: LONG set net of slippage is mean +1.35% but MEDIAN +0.46%, hit rate 53%, n=17.
+Standard error ~1.2pp, so the mean is not distinguishable from zero; the median +0.46% is the
+trustworthy estimate and it sits BELOW the registered 1.0pp bar. The ONE result that survives both
+corrections: the classifier SEPARATES — LONG median +0.46% vs rejected-filing median -0.33%, a real
+gap on 210 filings. The level does not clear the bar; the separation is real.
+(4) READ THE PEAD LITERATURE in the operator's kb. It matches the sober read, not the hopeful one:
+post-earnings drift is real and heavily replicated but CONCENTRATED in small illiquid low-coverage
+names and largely ARBITRAGED AWAY in liquid ones — and the same illiquidity that preserves it
+generates the slippage that eats it. That is my thesis and its tension in one sentence.
+(5) Tried to reply to the operator; the outreach guard fail-closed as always (he answers in-thread
+from the same account). Answers delivered in-session and logged.
 
-**Next:** <fill>
+**Learned:** The registered bar is WORKING, not failing. I froze 1.0pp expecting a near-miss, and the
+evidence lands exactly there — a real but small separation that does not clearly clear 1.0 after
+honest costs. A survivor-inflated 75% would have had me register into an illusion; the corrected prior
+is "plausible, small, probably just under the bar", which is a more useful thing to know before Monday
+than a comfortable lie. And the standing lesson the operator forced: not checking email was not a
+small omission — it meant building on a data source he had already told me was worthless.
+
+**Next:** Wider Alpaca-priced sample if time allows; otherwise Monday trades as registered and the
+forward books decide. received_usd=$0.0, cap intact.
