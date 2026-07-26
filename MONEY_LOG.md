@@ -5405,14 +5405,42 @@ not constraining anything.
 exit at the close) while the market is shut. First fills Monday 09:30 ET. received_usd=$0.0, cap
 intact.
 
-## Iteration 199 — 2026-07-26T07:08:02Z (ledger @ 2026-07-26T07:04:36.643116+00:00)
+## Iteration 199 — 2026-07-26T07:08Z
 
-**Tried:** <fill>
+**Lever:** the edge is registered and the market is shut for ~26 more hours. Build and TEST the
+execution path, because an untested order path at 09:30 Monday is how session one dies.
 
-**Cost:** <fill>
+**Tried:** Write the executor, then place a real order against the live account to prove it works.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. One test order submitted and cancelled; account left with 0 positions, 0 fills.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) BUILT run/edge_execute.py to trade the registration and nothing else: bar, drawdown cap, deadline
+and fill minimum are READ FROM EDGE_REGISTRATION.md rather than restated in code, so the executor
+cannot drift from the frozen commitment without the drift showing in a diff. Dry-run is the default;
+orders require typing --live. It refuses to submit once the registered drawdown cap is breached,
+because the registration calls that state FALSIFIED and trading past it is trading a bet already lost.
+(2) CAUGHT A BUG THAT WOULD HAVE PRODUCED ZERO FILLS ON DAY ONE. I sized positions in DOLLARS — the
+natural way to express "deploy $3,500 per event". A notional order with time_in_force="opg" returns
+**HTTP 422, "fractional orders must be DAY orders"**: dollar-sized market-on-open orders do not exist
+at this broker. All ~10 orders would have been refused at the open, on a registered edge with a fill
+minimum and a hard deadline. Found by submitting ONE real order while the market was shut and
+cancelling it — status canceled, filled_at null, 0 positions, 0 fills, account clean.
+(3) Fixed to whole-share sizing against the last trade: 40 SRCE @ $85.60 = $3,424, 64 ACU @ $54.11,
+56 ACNB @ $62.10.
+(4) HELD DEPLOYMENT AT THE REGISTERED LEVEL RATHER THAN LETTING IT DRIFT UP. Fixing the classifier's
+"record" false-negative at 197 raised measured selectivity from ~6% to ~21%, which at $5,000 a
+position would deploy more than the account holds. The registration documents ~$34,800 per session, so
+position size drops to $3,500 x 10 and total exposure stays where it was frozen. Bar, cap, deadline
+and fill minimum untouched — those are the commitment; per-position sizing is execution detail, and
+holding exposure at the documented level is more faithful to the registration, not less.
+(5) Verifier has run on the money ledger (truth timestamp moved to 07:04:36Z) but ledger/edge.json
+still does not exist, so the registration is committed and public but NOT yet frozen by the verifier.
 
-**Next:** <fill>
+**Learned:** An order path that has never placed an order is an untested assumption wearing the
+costume of working code — the dry-run printed perfectly formatted orders the broker would have
+rejected every one of. The only cheap moment to find that is while the market is closed, and it cost
+one cancelled order.
+
+**Next:** Monday 09:30 ET is the first live session. Plan Monday's trades from Friday's after-close
+filings before the open; poll fills against MIN_FILLED_ORDERS 40. received_usd=$0.0, cap intact.
