@@ -5280,14 +5280,40 @@ discovered after the freeze instead of before it.
 Then answer the four open questions from the live account, finalise the numbers, register, and trade
 forward from Monday's 13:30 UTC open. received_usd=$0.0, cap intact.
 
-## Iteration 196 — 2026-07-26T06:38:45Z (ledger @ 2026-07-26T06:35:01.551687+00:00)
+## Iteration 196 — 2026-07-26T06:48Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** rail still dark (no ledger/edge.json, no Alpaca creds). Keep building the part that is the
+actual product — the classifier's input.
 
-**Cost:** <fill>
+**Tried:** Extract what a model would read to judge an 8-K, and check the assumption behind it.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Confirmed the rail is still idle: no ledger/edge.json on the ledger branch or locally, zero
+Alpaca variables in the environment, `edge.py status` reports the rail idle. Nothing to register
+against yet.
+(2) CAUGHT A DESIGN ERROR IN MY OWN PIPELINE BEFORE IT COULD MATTER. I had built the extractor to
+take the 8-K primary document, on the obvious-sounding assumption that the filing body contains the
+disclosure. It does not. A full submission is ~920KB because every exhibit is inline as its own
+<DOCUMENT> block; the 8-K body is 3.2KB and, for an item 2.02 earnings filing, says only that a press
+release "was furnished" — boilerplate, registrant address, a checkbox list. **The information that
+moves the stock is in the EX-99.1 exhibit**: 37KB opening "Reports Record Second Quarter Results,
+Increased Cash Dividend Declared", net income +27.40% year over year, EPS +29.14%, dividend raised.
+A classifier fed the body alone would have been scoring cover pages with great precision.
+(3) FIXED IT PROPERLY: `filing_text()` now returns the 8-K body AND the EX-99 exhibits, drops schema,
+label and graphic blocks, and caps the combined text. 922,979 raw characters become 21,182 of actual
+signal — a 44x reduction that keeps the substance rather than the formatting.
+(4) That is the third time in two days that reading the actual bytes, rather than reasoning about
+what they should contain, changed the design: the fixed-width form.idx, the exhibit-borne news, and
+before those the mega-cap universe that could never resolve.
 
-**Next:** <fill>
+**Learned:** The seductive thing about a body-only extractor is that it WORKS — it returns clean,
+plausible text with no error, and every downstream number would have looked fine. That is the same
+shape as the silent regex returning zero rows and the pre-hydration zero reading as a real count: the
+failure mode that matters is not a crash, it is a confident wrong answer. On a rail where the
+registration freezes, that class of error is the one that becomes permanent.
+
+**Next:** Awaiting Alpaca paper keys and the verifier run that publishes ledger/edge.json. Remaining
+build: the materiality classifier itself, then answer the four account questions and register.
+received_usd=$0.0, cap intact.
