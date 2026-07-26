@@ -3664,6 +3664,30 @@
         "window_h": 168
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-136",
+      "placed_at": "2026-07-26T02:36:45Z",
+      "clock": "reply",
+      "what": "BID 2/6 (operator [79]: do not let the quota rot): freelancer project 40604983 'Zerodha Daily Trade Limit Automation', Rs.9,000 / 4 days, 17 bids. First job that passes the blow-them-away test -- an automation with a functional pass/fail the client runs himself. Bid opens with a runnable gist (6 tests, one per rule in the brief) executable in a second with no Kite account, including the one that matters: the kill switch survives a process restart.",
+      "check": "freelancer notifications/inbox for client contact on project 40604983",
+      "oracle": "instrumented",
+      "poll_after_h": 20.0,
+      "resolve_by": "2026-08-02T12:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "spent_usd": 0.0
     }
   ]
 }
