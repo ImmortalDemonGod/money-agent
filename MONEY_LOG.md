@@ -4493,14 +4493,51 @@ corpus, which would have quietly invalidated my own test.
 --file`, then run the six answer-key questions — any case returning the SUPERSEDED belief is the
 60-point memory-integrity bug. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
 
-## Iteration 177 — 2026-07-26T03:54:48Z (ledger @ 2026-07-26T03:52:16.400800+00:00)
+## Iteration 177 — 2026-07-26T04:20Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** build the #1609 submission — write the adapter, migrate the lived-in corpus with its
+timestamps intact, and run the falsification answer key to hunt the 60-point memory-integrity bug.
 
-**Cost:** <fill>
+**Tried:** Write map_agent_oplog, migrate 196 records, run the six answer-key questions.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local stack; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) WROTE AND REGISTERED THE ADAPTER. `map_agent_oplog` follows the documented extension point
+(map_<provider> -> MAPPERS). Its contribution is not format translation, which is what the six
+competing ChatGPT adapters do — it preserves the CORRECTION STRUCTURE. Records are grouped by channel
+and ordered by time; every record but the newest in its channel is typed `error`, tagged
+`oplog-superseded`, confidence dropped to 0.6, and given a footer pointing at the finding that
+replaced it. Verified on the real corpus: 196 mapped, 22 superseded / 174 current, created_at
+preserved on all 196. The Vercel 404 record now literally carries "SUPERSEDED ... WORKING now:
+returns 200".
+(2) MIGRATED FOR REAL: 196/196 imported, 0 failed, in two batches.
+(3) RAN THE ANSWER KEY, AND THE HONEST RESULT IS NOT THE ONE I WANTED. Five of six questions returned
+the CURRENT belief as top-1, not the stale one — including the two hardest timeline cases (Vercel
+404->200 and Tally deferred->succeeded). On this corpus memanto's contradiction and timeline handling
+looks good. I am not going to manufacture a 60-point bug that the evidence does not support.
+(4) CAUGHT MY OWN SCORER BEFORE IT LIED TO ME. My first pass scored term-overlap against both the
+current and superseded answers and showed "4/4 superseded terms hit" on a case memanto got RIGHT —
+because each memory contains both the abandoned attempt AND the correction, so the stale wording sits
+inside the correct memory's own text. Term overlap cannot score this; top-1 identity can. Had I
+reported the first numbers I would have filed a fabricated bug.
+(5) ONE GENUINE FINDING, STATED WITH ITS CAVEAT. Retrieval keys on the channel/action phrasing rather
+than the finding. "sizing a market with a keyword filter" retrieves the memory; "what fraction of
+arrivals are booking jobs" does not — and a query containing the literal strings "15.6% versus 2.0%"
+fails to retrieve the single memory containing both numbers. That is a real retrieval-accuracy
+weakness, but it may belong to the local nomic-embed-text embedding model (numerics embed poorly)
+rather than to memanto. Distinguishing those is the next test, and the fix if it is memanto's is a
+lexical/hybrid fallback alongside vector search.
+(6) Small gap found for the PR: `source_count` has no branch for a new provider, so the migration
+summary reported source=0 / skipped=0 against 196 mapped rows.
 
-**Next:** <fill>
+**Learned:** The scorer error is the lesson worth keeping — I built a measuring instrument whose
+output would have confirmed the story I wanted, and it took reading the actual top-1 rows to see it
+was wrong. That is the third measurement-trust failure this run and the second one I caught only by
+inspecting raw output rather than the summary statistic. Also: an honest "the tool handled it
+correctly" is a legitimate bounty finding; a fabricated severity is worth less than nothing under a
+real name.
+
+**Next:** Isolate the numeric-retrieval miss (embedding model vs memanto retrieval) to decide whether
+it is reportable; add the source_count branch and a CLI subcommand; package #1609 with the
+before/after recall-parity demo. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
