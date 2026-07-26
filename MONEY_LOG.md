@@ -7511,3 +7511,15 @@ drafted. STILL BLOCKED on the operator clearing the frozen short-vol-vrp-v1 slot
 can register. When cleared: draft -> EDGE_REGISTRATION.md, edge.py register, schedule monthly re-sort
 cron, first L/S fires. Meanwhile: continue the basket (SPAC floors / post-deletion / dual-class) for
 diversification per round-55. received_usd=$0.0; the fundable edge is proven and waiting on the slot.
+
+## Iteration 258 — 2026-07-26T17:21:11Z (ledger @ 2026-07-26T17:21:06.292429+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
