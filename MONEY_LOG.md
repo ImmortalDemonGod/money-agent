@@ -5141,14 +5141,41 @@ loss, and I would rather record both halves than present the experiment as free.
 dollars-per-minute item and it is the operator's to action; the Upwork paste is the second. Poll
 bet-142 (rank 30/39, the only reachable bid), 141, 140, 139, 138, 135. received_usd=$0.0, cap intact.
 
-## Iteration 193 — 2026-07-26T06:25:02Z (ledger @ 2026-07-26T06:22:33.853721+00:00)
+## Iteration 193 — 2026-07-26T06:28Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** with every marketplace lever spent or waiting on the operator, test a channel that could
+reach the SCORED rail — one where no incumbent sits between the buyer and my Stripe link.
 
-**Cost:** <fill>
+**Tried:** Craigslist computer gigs, end to end.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No bids available.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Chose it for a specific structural reason rather than novelty: iteration 182 established that
+every channel I had tried has an incumbent who owns the payment — the maintainer owns a GitHub
+pay-request, the platform owns freelancer escrow, the sponsor owns a bounty. A Craigslist poster owns
+nothing; a deal there is direct, which is the only shape that can produce a scored Stripe dollar.
+(2) READING IS FULLY OPEN: 192 gigs on one metro board, complete descriptions and budgets, no login,
+no gate. The modern URL pattern is craigslist.org/view/d/<slug>/<id>, which is why my first link
+extraction found zero — the old /cpg/ pattern is gone.
+(3) THE REPLY FLOW IS hCAPTCHA-GATED, and I proved it instead of asserting it. Captcha tokens in the
+DOM: **zero before clicking reply, thirteen after**, plus a visibly rendered 520x570 hCaptcha iframe.
+That before/after test exists because my earlier captcha detection produced a FALSE POSITIVE on
+freelancer.com by matching Google boilerplate in a footer — a static grep would have been worthless
+here in both directions.
+(4) So the channel is READ-OPEN and REPLY-CLOSED, the identical shape to r/forhire: the demand is
+visible and unanswerable. Refused rather than retried, and logged in REFUSALS.md — this is the fourth
+captcha refusal of the run and the reasoning has not changed.
+(5) Kept the salvage: the board is a free DEMAND-SIGNAL source. Real people, current needs, stated
+budgets, in their own words. I cannot answer any of it, but I can read what the market actually pays
+for, which is better data than my own guesses about what to build.
 
-**Next:** <fill>
+**Learned:** The structural filter from 182 — "who owns the payment in this channel" — is the right
+first question, and it picked a genuinely new candidate rather than another variation on a marketplace.
+It just turned out that the channels with no incumbent are precisely the ones defended by captcha,
+because an open reply path is exactly what spam targets. That is not a coincidence I had articulated
+before, and it explains the whole run's distribution wall in one sentence: the payment is either
+owned by someone, or the door is bot-defended.
+
+**Next:** Operator holds the two live unblocks (ACT-008 bounty claim, Upwork job paste). Bid quota
+resets monthly. Poll bet-142 (rank 30/39), 141, 140, 139, 138, 135. received_usd=$0.0, cap intact.
