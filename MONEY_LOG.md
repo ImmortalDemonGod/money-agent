@@ -6668,12 +6668,46 @@ received_usd=$0.0, cap intact, verdict PENDING.
 
 ## Iteration 234 — 2026-07-26T11:44:46Z (ledger @ 2026-07-26T11:41:32.739003+00:00)
 
-**Tried:** <fill>
+**Tried:** The fork (queue item 6), driven by iter-233's finding that the edge is positive-EV per
+cycle but thin at the ACCOUNT level vs the 0.5pp-over-cash bar. Question: is there a strike/delta that
+clears 0.5pp under the $5k drawdown cap, or is the edge structurally too small? Answer it with REAL
+prices, not a model.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) FLAT BS MISPRICES THE CHAIN — do not backtest deltas with it. BS(VIX 18.6%) prices the 690P at
+$0.05; the market has it at $0.42. That 8x gap is the volatility SKEW (OTM-put IV ~30%+, not VIX).
+A flat-BS historical delta sweep would repeat the iter-233 "backtest != reality" error, so I used
+TODAY'S real Aug-3 chain (skew baked in) instead.
+(2) THE EDGE IS ENTIRELY VRP. EV/spread computed on real credits vs a realized-vol payoff: at realized
+15% (implied minus the ~3.6 historical VRP) EV is +$40-50 across ~3-5% OTM strikes; at realized =
+implied 18.6% it is ~ZERO-to-NEGATIVE at EVERY strike; at 22% badly negative everywhere. There is no
+free lunch at any delta — the whole edge is implied-overstates-realized. (Confirms the registration's
+own thesis; disproves any hope of a strike that wins regardless of regime.)
+(3) THE EXECUTOR HAD DRIFTED OFF ITS OWN REGISTRATION. Registration says "sell ~5% OTM, buy ~8% OTM";
+the executor used 6.5%/9.5% (iter-225 monthly-Sharpe tuning). On the real weekly chain, 6.5% OTM
+collects only ~$20/cycle EV — too small to give the account bar any shot. The registered ~5% OTM
+(~13-15 delta) collects ~$40/cycle — 2x. So I CORRECTED the strike back to the registered 5%/8%
+(SHORT_OTM 0.935->0.95, LONG_OTM 0.905->0.92). This realigns execution with the frozen bet AND doubles
+per-cycle EV. NOT a bar/cap/benchmark change, NOT a mechanism change — the registered strike. Did NOT
+void.
+(4) POST-FIX PRE-FLIGHT: SHORT 701P (5.0% OTM) / LONG 680P (7.9% OTM), credit $35, breakeven -5.1%,
+risk $2,100, qty 1 (2 concurrent $4,200 < $5k cap). ~$40/cycle x 16-20 cycles ~= +0.64-0.8% account —
+a real shot at 0.5pp (still hinges on realized<implied AND whether idle cash earns ~BIL, which I can't
+resolve from visible verifier code).
+(5) HONEST COST DISCLOSED: closer-to-money => higher loss frequency and larger (but still width-bounded
+~$2.1k/spread, cap-tested) drawdown than 10-delta. The return-vs-drawdown tension is intrinsic to
+short-vol; there is no strike that escapes it.
 
-**Learned:** <fill>
+**Learned:** "Improve the edge" here was not a new edge — it was catching that the executor had drifted
+FURTHER OTM than I registered, into the low-premium tail where the account bar is unreachable, and
+correcting it back to the registered strike (which the real chain shows is ~2x better EV). And the
+sharpest truth: at realized = implied the strategy is zero-EV at every strike, so the entire bet is
+that the historical ~4-point VRP persists in this window. That is the honest, regime-contingent thing
+the forward run tests.
 
-**Next:** <fill>
+**Next:** Pre-flight is clean at the corrected strikes. Monday 09:00 CDT fires SHORT 701/LONG 680. After
+the fill: leg-count -> cadence, schedule expiry-day manage for Aug 3. The open question the forward run
+answers: does the ~4pt VRP hold this window, and does the account clear 0.5pp over cash. received_usd=
+$0.0, cap intact, verdict PENDING.
