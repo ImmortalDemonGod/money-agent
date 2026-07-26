@@ -3961,14 +3961,42 @@ both times this run that I tested my own excuse instead of acting on it, the exc
 measure against bet-132's bar. The lane deadlock and the outreach-guard block are operator-side.
 received_usd=$0.0, cap intact.
 
-## Iteration 165 — 2026-07-26T01:01:13Z (ledger @ 2026-07-26T00:56:54.917216+00:00)
+## Iteration 165 — 2026-07-26T00:55Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** work the pond named last iteration — paid open-source bounties, where the artifact IS the
+application and acceptance is a maintainer running it (operator [77]'s blow-them-away test).
 
-**Cost:** <fill>
+**Tried:** Find a bounty that is real money on a real repo, and get to the point where I can act.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (clone + local venv; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) FILTERED THE POND HONESTLY. 69 bounty-labelled candidates -> only 34 sat on repos with >=50
+stars, and most of those were one repo's pull requests, not open issues. The GitHub "bounty" label is
+largely occupied by AI-agent BENCHMARK/TEST repos (agent-playground, oss-hunter-livefire,
+SecureBananaLabs/bug-bounty) whose "bounties" are sandbox exercises, not money. Naming that now so
+the next run does not mistake 569 label hits for 569 paying opportunities.
+(2) FOUND ONE REAL PROGRAM: **moorcheh-ai/memanto** — 1,686 stars, MIT, Python, pushed 2026-07-24
+(active), 151 open issues, and FIVE live bounty issues: $100 #770 "Bug & Exploit Challenge"
+(263 comments — crowded), **$200 #1609 "The Great Memory Migration"** (only 7 comments, opened
+2026-07-22), plus #1438, #541, #1418.
+(3) VERIFIED FEASIBILITY BEFORE COMMITTING (the lesson from the last three iterations): the README
+claims "runs entirely on your machine - no API keys, no vector database, no backend". Tested it:
+cloned, built a venv, `pip install -e .` succeeded, `import memanto` works. So I can actually run and
+probe this thing rather than theorise about it.
+(4) RAN THEIR TEST SUITE: **zero failures**, 24 e2e tests skipped (they need MOORCHEH_API_KEY). So
+there is no harvestable failing test — a bug has to be found by analysis and reproduced, which is the
+honest version of the work rather than the lucky version.
+(5) Started reading the temporal/`as_of` code paths, since two of the repo's own open bounty issues
+(#1418 conflict-resolution, #1438 rate-limiter fail-open) are in that class of logic bug.
 
-**Next:** <fill>
+**Learned:** The bounty pond has the same shape of trap as the freelance feed: a large headline number
+(569 labelled issues) that mostly is not the thing it looks like. The filter that worked was
+mechanical and cheap — repo stars, issue-vs-PR, and whether a dollar figure actually appears — and it
+cut 569 to essentially one program worth working. Same lesson as bidCount and the regex opportunity
+count: the headline number is never the measurement.
+
+**Next:** Hunt a reproducible bug in memanto (temporal/as_of and conflict-resolution paths first),
+write a failing test that demonstrates it, and submit it against #770. Evaluate #1609 ($200, 7
+comments) as the higher-value/lower-competition alternative. Payout rail is unverified and is the
+operator's, per his own instruction. received_usd=$0.0, cap intact.
