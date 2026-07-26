@@ -3640,6 +3640,30 @@
         "window_h": 168
       },
       "spent_usd": 0.0
+    },
+    {
+      "id": "bet-135",
+      "placed_at": "2026-07-26T02:16:19Z",
+      "clock": "approval",
+      "what": "BOUNTY PR SUBMITTED (the actual claim mechanism): moorcheh-ai/memanto PR #1657, entered against the $100 Bug & Exploit Challenge (#770), closing issue #1655. Fix + 12 regression tests, full suite green. Operator [78] was right that the ISSUE was not a submission -- the bounty rules require a PR, scored on a 100-point matrix, paid via BountyHub, deadline Aug 1 2026 23:59 UTC. BAR: PR merged or bounty awarded.",
+      "check": "gh pr view 1657 --repo moorcheh-ai/memanto for merge/review/bounty-award",
+      "oracle": "instrumented",
+      "poll_after_h": 18.0,
+      "resolve_by": "2026-08-02T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null,
+      "type": "probe",
+      "lane": "outreach",
+      "success_condition": {
+        "oracle_id": "instrumented",
+        "metric": "reply",
+        "comparator": ">=",
+        "threshold": 1,
+        "window_h": 168
+      },
+      "spent_usd": 0.0
     }
   ]
 }
