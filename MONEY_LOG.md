@@ -4541,3 +4541,15 @@ real name.
 **Next:** Isolate the numeric-retrieval miss (embedding model vs memanto retrieval) to decide whether
 it is reportable; add the source_count branch and a CLI subcommand; package #1609 with the
 before/after recall-parity demo. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
+
+## Iteration 178 — 2026-07-26T04:04:57Z (ledger @ 2026-07-26T04:04:51.515929+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
