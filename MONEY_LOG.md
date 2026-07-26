@@ -7254,3 +7254,15 @@ reopens the search that the 8 clever-questions had closed.
 Russell/index small adds) and BACKTEST survivorship-safe on Alpaca: odd-lot spread-capture per event +
 spin-off/small-add drift -> honest per-event edge + annual event count. Prioritize the paper-EXECUTABLE
 cousin (spin-off drift) for the rail. received_usd=$0.0, no registration stands, grind frame in build.
+
+## Iteration 250 — 2026-07-26T16:11:57Z (ledger @ 2026-07-26T16:11:44.694039+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
