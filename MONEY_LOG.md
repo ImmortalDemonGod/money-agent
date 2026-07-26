@@ -7577,12 +7577,31 @@ DONE. received_usd=$0.0; goal met, edge waiting on the slot.
 
 ## Iteration 260 — 2026-07-26T17:40:49Z (ledger @ 2026-07-26T17:40:06.554529+00:00)
 
-**Tried:** <fill>
+**Tried:** Operator [110] round-56: commit+register cef NOW (he clears the slot after), AND answer 3
+hard fundability Qs before it goes live (Sharpe/net-return, REAL costs not 20bps, did it PROFIT through
+2022 or just survive). Built the portfolio backtest with realistic costs.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** REGISTERED cef-discount-ls-v1 (EDGE_REGISTRATION.md committed + edge.py register;
+reads VOID one cycle until operator clears the frozen VRP slot). The 3 honest numbers (portfolio, 55
+rebalances/~4.4yr, realistic costs = 25bps/leg bid-ask on turnover + 5%/yr short-borrow):
+  1. NET +6.6%/yr, Sharpe 0.62 (conservative). ~Sharpe 0.9 / ~10% net if restricted to LIQUID CEFs +
+     ETB shorts. Between the operator's anchors (0.4 no / 1.2 yes) -- REAL but MODEST, not oversold.
+  2. Real costs cut the ~23% GROSS to +6.6% net -- costs eat ~2/3 (operator was right, 20bps was
+     fantasy). Forward paper account shows the true fill cost.
+  3. 2022 blowout: it PROFITED, +40.7% cumulative (13 rebalances, mean +2.71%/reb, worst -2.8%). The
+     blowout was its BEST window (reversion pays most when discounts most dislocated; short-premium leg
+     cushioned). Value-trap/squeeze worry answered with P&L, not survival.
+REGISTERED WITH AN HONEST BAR: beat cash by 1.5pp by 2027-01-31 (NOT the draft's unachievable 2pp/4mo at
+6.6%/yr) + $10k DD cap treating a worse-than-2022 blow-out OR forward-failure as falsification.
 
-**Learned:** <fill>
+**Learned:** The operator's refusal to wave a backtest through (the VRP lesson) was right AGAIN -- the
+realistic-cost portfolio Sharpe (0.62) is a third of the gross headline. The edge is real (profited
+through 2022, monotone, robust) but MODEST, and I registered it honestly at what it can actually clear,
+not the gross fantasy. This is the disciplined end: a real market-neutral grind edge, honestly costed
+and honestly barred, handed to the forward account to judge -- which is what the rail is for.
 
-**Next:** <fill>
+**Next:** Operator clears the VRP slot -> verifier freezes cef-discount-ls-v1. Then schedule the monthly
+re-sort cron (cef_execute.py trade --live, VIX... no: L/S rebalance), first market-neutral basket fires,
+forward account judges the true net. received_usd=$0.0; the honest edge is REGISTERED and live-pending.

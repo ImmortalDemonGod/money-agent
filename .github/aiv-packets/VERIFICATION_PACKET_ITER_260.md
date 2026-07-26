@@ -28,7 +28,7 @@ keep it.
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260726T124002_stripe_charges.json
 > 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945  20260726T124005_privacy_transactions.json
 > edge rail: paper_pnl_usd = 0.0 | fills = 0 | edge_manifest_sha256 = `d72008f03c02da537719176268b2b9b9e6784b02d6776fe466f9d281b217b036`
-EDGE_CLAIM: PENDING
+EDGE_CLAIM: VOID
 
 
 - `manifest_sha256` cited: `<paste a sha256 from the pre-filled block iter.py adds below, or from
