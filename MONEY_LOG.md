@@ -5066,3 +5066,15 @@ and anything that can be an exact API fact must never be approximated by a proxy
 
 **Next:** All 6 bids spent, one of them finally visible. Poll bet-142 (rank 30/39, the only bid a
 client can actually reach), 141, 140, 137, 139 (ACT-008), 138, 135. received_usd=$0.0, cap intact.
+
+## Iteration 191 — 2026-07-26T06:00:58Z (ledger @ 2026-07-26T05:57:34.206785+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
