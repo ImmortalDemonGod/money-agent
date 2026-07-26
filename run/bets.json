@@ -3721,6 +3721,20 @@
         }
       ],
       "resolution": null
+    },
+    {
+      "id": "bet-139",
+      "placed_at": "2026-07-26T04:27:28Z",
+      "clock": "approval",
+      "what": "actuation ACT-008 (deploy-account): BountyHub account+claim is required for payout eligibility and a demo video published to X/YouTube/LinkedIn is mandatory. Both need account access and screen-record+upload capability the agent does not hold; channel_map records X/LinkedIn signup as captcha/identity-walled from this sandbox and BountyHub was never provisioned.",
+      "check": "bin/actuate.py list  # is ACT-008 fulfilled?",
+      "oracle": "judgment",
+      "poll_after_h": 24.0,
+      "resolve_by": "2026-08-02T04:27:28Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
