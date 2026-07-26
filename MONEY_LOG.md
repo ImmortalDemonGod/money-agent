@@ -6311,14 +6311,36 @@ than an assumption.
 sizing, and let the forward paper trades judge the premium against a crash. The search also continues
 into other risk premia (carry, term). received_usd=$0.0, cap intact.
 
-## Iteration 224 — 2026-07-26T10:01:16Z (ledger @ 2026-07-26T10:01:03.768030+00:00)
+## Iteration 224 — 2026-07-26T12:04Z
 
-**Tried:** <fill>
+**Lever:** loop mandate "improve the overall edge" + operator round 48 (slot cleared, three holes).
+Test a mechanism-grounded refinement of the registered VRP, and answer the holes.
 
-**Cost:** <fill>
+**Tried:** VIX-conditioning on short-vol entry; worst-day/cap check; realistic-fill check; mechanical
+plan.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. One test spread submitted+cancelled earlier; account clean.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) SLOT IS FROZEN: operator cleared it, short-vol-vrp-v1 live at $100k, verdict pending.
+(2) VIX-TIMING IS A REAL IMPROVEMENT, mechanism-confirmed: VIX>=20 +8.86%/mo Sharpe 1.66; unconditional
++3.51% Sharpe 0.67; VIX<16 -0.70% (LOSES). Selling vol in a calm window is negative — the edge is
+selling when vol is expensive. Applied as EXECUTION TIMING (only sell VIX>=~18), which does not touch
+the frozen bar/cap/benchmark.
+(3) ANSWERED THE THREE HOLES: worst day CAPPED at ~$2,100/spread by defined-risk regardless of crash
+(long put), <=2 concurrent so the $5k cap holds — a volmageddon cannot exceed it; the backtest already
+nets a conservative 2%-of-width cost (not mid), clears +0.5pp; mechanical plan = weekly ~5/8% OTM SPY
+put spread, ~7 DTE, qty1, VIX>=~18 filter, close at expiry/50%, ~9 windows -> 16+ fills by Sep 30.
+(4) CAUGHT MY OWN BUG rather than reporting it: a delta-strike re-optimization returned exactly -5.33%
+(the cost) with 0% win, because the strike solver landed ATM. I did NOT trust it; the validated
+numbers are the working 5%-OTM version.
 
-**Next:** <fill>
+**Learned:** The operator's "calm window is not the edge" is the same lesson the whole search taught,
+one level up: a pass is not proof if the risk you are paid for did not show up in the window. The VRP's
+honesty is not "does it make money in the next 8 weeks" but "does the cap hold when a spike comes" —
+and the defined-risk structure answers that by construction, which is why it is registrable where a
+naked short-vol never would be.
+
+**Next:** When VIX>=~18 and market open, fire the first weekly spread via vrp_execute.py --live (small,
+capped), mark at a spread-crossing haircut not the fill; keep testing other premia (carry, term).
+received_usd=$0.0, cap intact.
