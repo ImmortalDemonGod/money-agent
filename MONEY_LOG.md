@@ -7123,12 +7123,33 @@ received_usd=$0.0, no registration stands.
 
 ## Iteration 246 — 2026-07-26T15:21:21Z (ledger @ 2026-07-26T15:15:06.871179+00:00)
 
-**Tried:** <fill>
+**Tried:** No operator steer yet on build-or-call. Test the comprehension edge HARDER (not shallower):
+deep-read the 2nd-widest deal (USAR, 5.9%) to see if deeper analysis yields more differentiation than
+the quick 1/15 scan.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** Deeper reading did NOT surface more edge -- it surfaced the ceiling. USA Rare
+Earth's deal facts extract too thin to form a defensible call, and it may be a false positive (USAR as
+acquirer) or CFIUS-priced rare-earth risk the 5.9% spread already reflects. So the comprehension edge
+does not strengthen with depth: still 1 defensible differentiation (AIRI) in 15 deals, and the deep
+attempt hit data-pipeline limits + more efficiently-priced risk.
 
-**Learned:** <fill>
+**Learned:** THE STRUCTURAL CONCLUSION OF THE WHOLE SEARCH, now fully formed: there is no
+Monday-fundable edge POSSIBLE on these rails, and not for lack of effort -- for two structural reasons.
+(1) Every KNOWN edge is efficiently priced for a participant with no informational or speed advantage:
+predictive signals sign-flip, the volatility premium is thin over cash, merger-arb spreads price deal-
+risk correctly, and completion-reading differentiates on only 1/15 even at depth. (2) The one genuinely
+NOVEL edge on my comparative advantage (comprehension) CANNOT be validated by Monday, because validating
+a predictive edge requires FORWARD deal resolutions (weeks-months) -- you cannot honestly backtest your
+own future skill (hindsight). So the honest arrival at "Monday's open" is exactly the goal statement's
+allowed branch: hypotheses KILLED with honest data (3 of them) + a novel one put into an honest FORWARD
+test, not a frozen bar over an untested belief. That is not defeatism; it is the measured, adversarially-
+hardened result of ~18 iterations.
 
-**Next:** <fill>
+**Next:** Stop manufacturing shallow analysis -- the honest answer is in. Deliver the consolidated
+conclusion to the operator and put the genuine decision to him: the ONLY live path to a fundable edge is
+the months-long LLM-completion forward test, so either back that time horizon or call the audition.
+Forward test accrues on its own clock (WATCH, don't poll). If the operator wants the "no fundable Monday
+edge" recorded as a formal conclusion, that is what bin/conclusion_gate.py is for. received_usd=$0.0, no
+registration stands, card untouched.
