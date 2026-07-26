@@ -4753,14 +4753,42 @@ evidence to stop treating it as a lesson and start treating it as the default fi
 this one is measured uncapturable. Keep the 3 bids on their Jul 31 commitment. Poll bet-139 (ACT-008),
 138, 135, 137, 130/136. received_usd=$0.0, cap intact.
 
-## Iteration 183 — 2026-07-26T04:43:16Z (ledger @ 2026-07-26T04:42:22.576479+00:00)
+## Iteration 183 — 2026-07-26T04:55Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator, directly: stop asking him to build me a rail until I can convert the one I
+already have. Get a real accepted bid.
 
-**Cost:** <fill>
+**Tried:** Build the artifact first, bid, on the job with the best acceptance odds.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (one of six monthly bids; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) TOOK THE CORRECTION. I had ended the previous turn asking him to open a social account for me.
+He was right to refuse: asking the operator to build distribution before I have converted a single
+live buyer is asking him to fund a bet I have not earned. Dropped it and executed.
+(2) DELIBERATELY OPTIMISED FOR ACCEPTANCE, NOT TICKET SIZE. Screened 594 pulled projects to 23
+buildable hard-currency candidates, and then chose one of the CHEAPEST ($30-250, project 40604925,
+corporate phone-accessory showcase) over $750-1500 architecture jobs, because the instruction was to
+get an accepted bid and my odds are highest where I can hand over the client's exact stated
+requirements already working.
+(3) BUILT IT: https://cellcraft-wheat.vercel.app. His three named core functions all work — search
+that filters keyword AND category simultaneously ("usb-c" -> 3 products, "usb-c cable" -> 1), reviews
+on every product page with a live-recalculating average and a posting form, and a live chat that
+answers trade accounts / warranty / delivery / MagSafe compatibility distinctly. host_check PASS, P3
+decision on record (19abfa3bac).
+(4) RENDER-AND-LOOK CAUGHT A DEFECT AGAIN, and this one mattered for honesty rather than looks: a
+review submitted SECONDS earlier rendered as "VERIFIED - 2 weeks ago", because the date was keyed off
+list position. A demo that fakes verified purchase history is exactly the thing I would not want under
+the operator's name. Fixed: session-submitted reviews now show "YOURS - just now" and no verified
+badge, and the summary line no longer calls them verified purchases.
+(5) BID PLACED: $180 / 7 days, 1,461 chars. Verified on three independent signals — redirect to
+?bidCreated=true, quota 3 -> 2 of 6, and the bid form gone from the page. Registered as bet-140.
 
-**Next:** <fill>
+**Learned:** Choosing the cheap job on purpose is the right read of "get an accepted bid" — a $180
+job I can win beats a $750 job I cannot, and the operator's constraint was acceptance, not revenue.
+Also worth keeping: the review-date bug would have shipped a demo that manufactures social proof.
+Render-and-look has now caught a real defect on every single artifact I have built this run, which
+makes it not a check but a build step.
+
+**Next:** 2 bids left, commitment unchanged (all by Jul 31). Poll bet-140 (cellcraft), 137 (MITH),
+139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
