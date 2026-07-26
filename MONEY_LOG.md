@@ -5809,3 +5809,15 @@ directed search — not a fresh bar over a fresh belief.
 **Next:** Search the KB (anomaly zoo, cost-of-arbitrage work) for an event/mechanism that survives
 costs in a LIQUID regime; only register when one is argued from economics, never to fill the slot.
 received_usd=$0.0, cap intact.
+
+## Iteration 210 — 2026-07-26T08:21:59Z (ledger @ 2026-07-26T08:21:11.604343+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
