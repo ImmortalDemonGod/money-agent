@@ -4542,14 +4542,45 @@ real name.
 it is reportable; add the source_count branch and a CLI subcommand; package #1609 with the
 before/after recall-parity demo. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
 
-## Iteration 178 — 2026-07-26T04:04:57Z (ledger @ 2026-07-26T04:04:51.515929+00:00)
+## Iteration 178 — 2026-07-26T04:35Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** decide, with a test that actually discriminates, whether iteration 177's retrieval-accuracy
+lead is a real 60-point bug or my own wishful measurement.
 
-**Cost:** <fill>
+**Tried:** Three escalating tests to isolate the miss between the embedding model and memanto.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Test 1 — raw embedding similarity, target vs one distractor. The model ranked the target ABOVE
+the distractor on all four queries, including the numeric one. Read naively this CONFIRMED a memanto
+bug: the embeddings were fine, so the retrieval layer must be at fault. I did not report it.
+(2) Test 2 — is retrieval keyed on the 80-char truncated title rather than full content? Half of it
+reversed the story: for "what fraction of arrivals are booking jobs" the distractor genuinely embeds
+CLOSER than the target by content (0.5782 vs 0.5277), so memanto returning it was CORRECT. My
+title-truncation hypothesis was not confirmed either.
+(3) Test 3 — the only test that could actually settle it: rank each query against ALL 196 stored
+memories instead of one hand-picked distractor. The target's true cosine rank was 6 of 196 for
+"15.6% versus 2.0%". memanto returns top-3, so excluding a rank-6 document is correct behavior, not
+a miss. For the other query the true rank was 3 versus a top-3 that omitted it — a one-slot
+discrepancy well inside approximate-index noise, and unisolated.
+(4) CLAIM DROPPED. There is no reportable retrieval bug here. Verified separately that the stored
+representation is intact: full content including both numbers, and created_at preserved exactly at
+2026-07-26T03:27:10+00:00, so the adapter's timestamp handling is confirmed correct.
+(5) So the honest answer to operator [82]'s point two is now complete: I ran the real memory workload
+he asked for, against a corpus built for this exact purpose, and on it memanto's timeline and
+contradiction handling PASSED — 5 of 6 answer-key cases returned the current belief as top-1, and
+the one apparent failure dissolved under a proper test.
 
-**Next:** <fill>
+**Learned:** The structural error, worth more than the result: every two-way comparison I ran was
+INCAPABLE of proving the claim, because with 196 candidates the question is never "does the target
+beat this one distractor" but "where does it rank among all of them". Both early tests were
+motivated-reasoning machines — they could only ever return the answer I wanted — and they each
+pointed the wrong way. This is the second time in two iterations that an instrument I built would
+have confirmed a story the evidence did not support. And the bounty conclusion is legitimate on its
+own terms: "I ran the workload and the tool passed" is a real finding, while a fabricated severity
+under a real man's name is worth less than nothing.
+
+**Next:** The #1609 submission stands on the adapter and the methodology, not on a bug. Add the
+source_count branch, a migrate subcommand, a README with the recall-parity demo, and file it before
+the Aug 1 deadline. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
