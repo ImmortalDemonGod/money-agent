@@ -1,0 +1,18 @@
+I built the state machine first. Runs in a second, no Kite account:
+
+https://gist.github.com/ImmortalDemonGod/08deb1ebd8484a77f1d5cd7a556c7aef
+
+    pip install pytest && python -m pytest test_kite_guard.py -v
+Six tests, one per rule you wrote: one position per day; squares off at exactly -1000 and not -999; at exactly +2000 and not +1999; every further F&O order blocked after square-off; counters reset next trading day; and the kill switch survives a process restart.
+
+That last one is worth checking. The kill switch is persisted to disk, so restarting the script does not silently re-arm trading. An in-memory flag passes every other test and fails that one, and you would find out on a bad day.
+
+guard_order() is also a choke point your discretionary orders pass through. A kill switch that only blocks the bot's own entries is not one.
+
+It runs without your account because the logic talks to a four-method interface (place_order, square_off, pnl, now). The demo supplies a simulator; the live adapter wraps KiteConnect with those same four calls, so the demo exercises the state machine that runs live. Sketched in the README.
+
+Not done yet, plainly: the live adapter against a real session token, and IST (aliased to UTC so the demo runs anywhere) - the first hour with your API key.
+
+You get commented source, a read-me covering keys, setup and the daily reset (no cron - it checks the broker clock on every action), and the demo above plus a screen-share on your account.
+
+Miguel Ingram
