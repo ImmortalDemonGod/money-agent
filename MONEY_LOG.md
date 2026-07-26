@@ -5982,3 +5982,15 @@ robust effect is the cost itself.
 **Next:** Continue the cadence to the deadline, but any remaining candidate must be a genuinely
 different KIND (not another daily-directional price signal, which is now definitively dead) — else the
 honest capstone stands. received_usd=$0.0, cap intact.
+
+## Iteration 215 — 2026-07-26T09:00:35Z (ledger @ 2026-07-26T08:58:37.168863+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
