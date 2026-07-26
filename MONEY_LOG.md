@@ -6753,3 +6753,15 @@ honest shot, fills verified, gates+guard+manage tested, the fork resolved (proce
 constraint-tension named. Monday 09:00 CDT fires SHORT 701/LONG 680. The forward run answers: does the
 ~4pt VRP hold this window, and does safe-sized premium clear 0.5pp over cash (base case ~$700, needs
 ~$1,400 — regime-contingent). received_usd=$0.0, cap intact, verdict PENDING.
+
+## Iteration 236 — 2026-07-26T12:01:45Z (ledger @ 2026-07-26T12:00:23.297648+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
