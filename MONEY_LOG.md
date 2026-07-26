@@ -5279,3 +5279,15 @@ discovered after the freeze instead of before it.
 **Next:** Operator provisions Alpaca paper keys and runs the verifier to create ledger/edge.json.
 Then answer the four open questions from the live account, finalise the numbers, register, and trade
 forward from Monday's 13:30 UTC open. received_usd=$0.0, cap intact.
+
+## Iteration 196 — 2026-07-26T06:38:45Z (ledger @ 2026-07-26T06:35:01.551687+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
