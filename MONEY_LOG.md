@@ -5737,14 +5737,38 @@ should bet small, and a measured-zero edge should not bet at all.
 **Next:** Backtest lands -> compute multi-day (5/10/20d) excess-vs-SPY drift on the LONG basket ->
 the fork call. received_usd=$0.0, cap intact.
 
-## Iteration 208 — 2026-07-26T08:01:36Z (ledger @ 2026-07-26T08:00:14.167562+00:00)
+## Iteration 208 — 2026-07-26T08:34Z
 
-**Tried:** <fill>
+**Lever:** the fork (item 6). Multi-horizon out-of-sample drift on the June window is the decision
+input. Make the void-or-freeze call honestly.
 
-**Cost:** <fill>
+**Tried:** Compute 1/3/5/10/20-day excess-vs-SPY drift on 18 delist-inclusive LONG events, net 50bps.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Drift by horizon (excess vs SPY, net slippage): 1d +1.16% (t0.95), 3d -0.51%, 5d +0.27%,
+10d +2.02% (t1.00), 20d +5.06% (t1.37, win 50%).
+(2) THE FORK CALL: DO NOT VOID. The operator's void trigger is "if the backtest KILLS it". It did
+not: every horizon's point estimate is positive or ~zero, there is NO significant negative signal,
+and the 1-day registered edge is marginal-positive exactly as I characterized it at registration.
+(3) I RESISTED THE OBVIOUS TRAP. The 20-day +5.06% invites "re-register a 20-day edge". But t=1.37
+with a 50% win rate is outlier-driven, not systematic — and choosing the horizon that happened to
+look best IS horizon-fishing, swapping one unproven hypothesis for another. The longer-horizon point
+estimates being larger is consistent with PEAD (drift over weeks), so a multi-week SUE-sorted edge is
+the researched v2 — but it cannot resolve by the Aug-7 deadline and restructures the whole bet, so it
+is NAMED for the operator, not thrashed in on a weekend.
+(4) So the disciplined outcome: the backtest is UNDERPOWERED (n=18), which is the normal state of any
+real edge before forward data. Underpowered is not killed. The frozen edge stands; the forward paper
+rail is the real test — exactly the design.
 
-**Next:** <fill>
+**Learned:** The hardest discipline at the fork was NOT the willingness to kill — it was the
+restraint not to. Two failure modes sit on either side: defending a dead edge, and thrashing a live
+registration to chase whichever horizon the noise favoured this weekend. "Let bad edges die" does not
+mean "replace the edge every time a bigger number appears at a different lag." The backtest's job was
+to KILL if it could; it could not, so the edge survives to be tested forward.
+
+**Next:** Item 7 is done (paths tested, Kelly sizer built). The pipeline, backtest, IC-style test,
+slippage, literature and fork are all worked. Monday 08:30 CDT the crons fire the live paper session.
+The honest state: a marginal, six-ways-tested edge with a frozen near-miss bar, firing automatically.
+received_usd=$0.0, cap intact.
