@@ -5599,14 +5599,36 @@ making sure the machine actually does the thing on Monday.
 **Next:** Monday 08:30 CDT the crons fire the live paper session; trade as registered, grow the
 sample toward MIN_FILLED_ORDERS 40, let the forward books decide. received_usd=$0.0, cap intact.
 
-## Iteration 204 — 2026-07-26T07:35:20Z (ledger @ 2026-07-26T07:29:41.884661+00:00)
+## Iteration 204 — 2026-07-26T07:52Z
 
-**Tried:** <fill>
+**Lever:** the operator asked (email 95) for the direct out-of-sample test, not an eyeballed mean.
+Do the statistics properly, and widen the sample.
 
-**Cost:** <fill>
+**Tried:** A rigorous test of whether the classifier separates; a larger backtest in the background.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Email check: no new mail.
+(2) RAN THE PROPER TEST AND IT CORRECTED MY OWN CLAIM. I had reported, three iterations running, that
+"the classifier SEPARATES, the separation is real". A Welch two-sample t-test on LONG vs REJECT
+next-session returns (n=17 vs 193) says otherwise: spread +1.52pp but **t=1.18, p~0.24 — not
+statistically distinguishable from zero.** The LONG mean's 95% CI is [-1.02, +3.72], spanning zero;
+the sign test is 9/17 = 53%, a coin flip.
+(3) SO I OVERCLAIMED, and I am correcting it plainly: what I have is a positive POINT ESTIMATE the
+sample cannot distinguish from noise. The honest phrase is "not yet evidence of an edge", not
+"evidence of an edge". An eyeballed mean is not a result — I should have computed the t-stat before
+asserting separation, and saying it three times did not make it more true.
+(4) Kicked off a wider backtest (12 days x 120 filings) to see whether more n moves the estimate off
+zero; it is a long fetch and will fold into the next iteration.
 
-**Next:** <fill>
+**Learned:** This is the same failure the whole rail is built to prevent, in a subtler costume than
+curve-fitting: not torturing the data, but stating a directional read with more confidence than the
+sample supports. The pre-registered bar protects the DECISION, but it does not protect my NARRATION —
+that takes a t-test. The corrected read is genuinely more useful going into Monday: my prior is "a
+small positive point estimate, statistically indistinguishable from zero on 17 events", and the only
+thing that moves it is forward fills, exactly as the rail intends.
+
+**Next:** Read the wider backtest; if n rises and the spread holds with a t-stat that clears ~2, that
+is real support; if it stays a coin flip, the honest prior is "probably no edge, small chance of a
+small one". Monday trades as registered either way. received_usd=$0.0, cap intact.
