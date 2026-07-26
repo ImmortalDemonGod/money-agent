@@ -6345,14 +6345,34 @@ naked short-vol never would be.
 capped), mark at a spread-crossing haircut not the fill; keep testing other premia (carry, term).
 received_usd=$0.0, cap intact.
 
-## Iteration 225 — 2026-07-26T10:11:20Z (ledger @ 2026-07-26T10:07:21.166169+00:00)
+## Iteration 225 — 2026-07-26T12:18Z
 
-**Tried:** <fill>
+**Lever:** loop mandate "improve the overall edge" — fix the strike-solver bug I caught last iteration
+and find the best strike for the live VRP, rather than leave a broken tool and a suboptimal strike.
 
-**Cost:** <fill>
+**Tried:** Replace the delta solver with bisection; compare strikes; wire the winners into execution.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) FIXED THE BUG cleanly: the iter-224 solver used a bad Newton step and returned ATM strikes;
+bisection now hits the target (10-delta -> 6.5% OTM, actual delta 0.100 verified). Fixing my own
+broken tool rather than reporting its numbers was the right call at 224, and now it pays off.
+(2) FOUND A REAL IMPROVEMENT. Net 3% cost, VIX>=18: 10-delta short = Sharpe 0.95, worst -47%, win 97%;
+vs 15-delta 0.74/-87%, 20-delta 0.50/-88%, 30-delta 0.24/-80%. The 10-delta is best on BOTH Sharpe
+AND worst-case — not a single-metric cherry-pick — and the mechanism backs it: for a capped-risk
+negative-skew strategy, giving up a little premium to HALVE the tail is the right trade, because the
+tail is what breaches the cap.
+(3) WIRED BOTH REFINEMENTS INTO run/vrp_execute.py: ~10-delta strikes (6.5%/9.5% OTM) and a VIX gate
+(skip if VIX<16, backtested negative; sell only when vol is expensive). Dry-run confirms both. These
+are execution detail within the frozen mechanism — bar/cap/benchmark untouched — so the plan I gave
+the operator is now enforced in code, not merely intended.
 
-**Next:** <fill>
+**Learned:** Catching my own bug at 224 (not trusting the ATM result) was worth more than a clean run
+would have been — it left a real improvement to find once fixed. And the strike result restates the
+whole edge's character: the money is not in collecting the most premium, it is in surviving the tail,
+so the best strike is the one with the smallest worst-case that still clears the bar, not the biggest
+mean.
+
+**Next:** Market-open Monday, VIX in range -> fire the first 10-delta capped spread via vrp_execute.py
+--live; mark at a spread-crossing haircut. Keep probing other premia. received_usd=$0.0, cap intact.
