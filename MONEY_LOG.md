@@ -3911,14 +3911,52 @@ the brief was fun and paid most, and I reverse-justified it.
 Poll bet-130 (bid #1) for client contact. Poll ACT-006 (Upwork job texts). received_usd=$0.0, cap
 intact.
 
-## Iteration 164 — 2026-07-26T00:17:12Z (ledger @ 2026-07-26T00:13:14.703183+00:00)
+## Iteration 164 — 2026-07-26T00:20Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator [77] "blow them away" test (a job where handing over the finished working thing
+ENDS the decision, vs merely buildable), plus [76] scratch-item-two: do NOT lead with the AI build.
 
-**Cost:** <fill>
+**Tried:** Apply the test to real data, test my own excuse for the low pass rate, close dead lanes.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (fetches, browser verification, 1 blocked send; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) TOOK THE CORRECTION: [76] reverses [77]'s Q2. No AI lead, and no false claim of being a seasoned
+human either. Do not volunteer how it was built in either direction; answer honestly if asked. The
+operator also sent the same instruction from the agent's own account: "Don't say an AI built it they
+don't care the only thing that matters is the proof."
+(2) APPLIED THE TEST to the 28 verified listings: exactly **1 passes** — "Zerodha Daily Trade Limit
+Automation" (9 bids), an automation with a functional pass/fail the client runs himself. The three
+web-design jobs FAIL by the operator's own reasoning: a page is judged on taste and stands in a line
+next to 22 others; a script is judged on whether it works and stands in no line.
+(3) TESTED MY OWN EXCUSE AND IT FAILED. I assumed I had sampled the wrong corner — that Python/
+automation categories would be thinner. Pulled 187 listings from python/web-scraping/automation/
+data-processing/excel and verified 30 in-browser: **median 62 bids** vs 22.5 in the general feed, and
+only 2 of 30 under 12 bids. The jobs that pass the test are exactly the jobs everyone else wants.
+Hypothesis dead; a paid account buys more shots at the same bad odds.
+(4) NAMED THE RIGHT POND, verified before naming it (not repeating the untested-wall mistake): paid
+open-source issue bounties. **569 open issues under the Bounty label, 1001 under label:bounty in
+Python**, GitHub fully reachable. Structure IS the operator's test: no auction queue, the deliverable
+is the artifact (a PR), acceptance is a maintainer running it, and zero reviews are irrelevant because
+code is judged rather than a profile. Registered as bet-132 with a 7-day bar. Flagged honestly: I
+have NOT verified the payout rail (Algora/Polar), and the operator owns that.
+(5) LANE DEADLOCK — closed **0**, and not by dodging. All 18 dead-lane bets (gatekeeper, journalist,
+fediverse, game) are TYPED bets whose `check` is prose, not a runnable command. `resolve lost` and
+`resolve expired` both fail ("the declared oracle could not EXECUTE"), and the documented escape hatch
+refuses: "typed bets cannot downgrade to judgment; their declared condition is the resolution oracle."
+I did not edit my own bets to make them resolvable — that is self-certification. Consequence: the
+operator's cap raise (3->12) is already consumed at 12/12, so the dedicated lane could not be opened.
+Name reserved: "artifact-decided paid work — the buyer tests a working thing himself instead of
+choosing between proposals" (names the strategy, not the platform, because the platform just changed).
+(6) The reply to [77] was BLOCKED by the outreach guard: the operator has replied inside that thread
+from the agent's own account, and the guard refuses to let the agent step on a human in a live thread
+(the run-2 Fabio failure). I did not override it — the answers went to him in session instead.
 
-**Next:** <fill>
+**Learned:** I tried to rescue a failing rail with a plausible excuse ("wrong corner of the site")
+and the measurement killed it in one pass — the automation corner is nearly 3x more crowded, not
+less. The excuse was comfortable precisely because it preserved the existing plan. Worth noting that
+both times this run that I tested my own excuse instead of acting on it, the excuse was wrong.
+
+**Next:** Work the bounty pond: pick bounty-labelled issues where the fix is verifiable, submit PRs,
+measure against bet-132's bar. The lane deadlock and the outreach-guard block are operator-side.
+received_usd=$0.0, cap intact.
