@@ -6408,14 +6408,34 @@ mechanism families, and one of them is a real, registered, market-neutral edge t
 clear champion; further work is execution and forward evidence, not more backtests. received_usd=$0.0,
 cap intact.
 
-## Iteration 227 — 2026-07-26T10:31:25Z (ledger @ 2026-07-26T10:26:09.531867+00:00)
+## Iteration 227 — 2026-07-26T12:46Z
 
-**Tried:** <fill>
+**Lever:** the last real gap in "the open finds you firing, not deciding" — the edge was registered,
+refined and execution-built, but NOTHING scheduled it to actually trade.
 
-**Cost:** <fill>
+**Tried:** Schedule the weekly VRP sell so the forward paper test runs itself.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) SCHEDULED the weekly VRP sell: cron 9f32cd9c, Monday 09:00 CDT (~30 min after the 08:30 open so
+option spreads have tightened). The prompt is self-contained — source env, status, sell --live, verify
+fill, log — so a compacted-context fire still executes correctly. It is not a blind auto-trader: the
+cron prompts the agent to run the TESTED, VIX+drawdown-gated executor, which SKIPS if VIX<16 or the cap
+is breached.
+(2) This was the genuine missing piece. Without it, the registered edge would have sat idle and
+FALSIFIED on no-fills — the machinery existed but nothing pulled the trigger. Now the defined-risk
+~10-delta spread fires weekly when conditions are met; ~9 Monday cycles reach MIN_FILLED_ORDERS 16 by
+Sep 30.
+(3) Cron state is coherent: 10m edge queue (19deac05), 30m email (16256623), weekly VRP sell
+(9f32cd9c). Updated the Monday-plan memory with the schedule so it survives compaction. Session-only
+crons expire in 7 days -> renew weekly.
 
-**Next:** <fill>
+**Learned:** "Execution machinery, one button" is not done when the button exists — it is done when
+something presses it on schedule. I had built and tested the button (submit path, gates, strikes) but
+the honest completion of item 7 was the trigger, not the tool. A tested executor no one runs is the
+same nothing as an untested one.
+
+**Next:** Monday 09:00 CDT the first live paper spread fires (if VIX>=16). The run's goal is fully met;
+remaining work is forward evidence, weekly renewal of the sell cron, and honest marking of fills at a
+spread haircut. received_usd=$0.0, cap intact.
