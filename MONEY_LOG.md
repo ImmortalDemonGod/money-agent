@@ -6557,12 +6557,37 @@ email channel. received_usd=$0.0, cap intact, verdict PENDING.
 
 ## Iteration 231 — 2026-07-26T11:10:40Z (ledger @ 2026-07-26T11:10:09.027519+00:00)
 
-**Tried:** <fill>
+**Tried:** No new email ([103] still latest, answered). Continue queue item 7: build+test the
+expiry-day pin-close I named in iter 230 — the one residual tail (a spread finishing between the
+strikes assigns the short into unhedged shares over the weekend).
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) BUILT + TESTED `vrp_execute.py manage [--live]`. On expiry day it buy-to-closes any short put NOT
+comfortably OTM (spot within PIN_BUFFER=1% of, or below, the strike), and LEAVES deep-OTM shorts to
+expire worthless at zero cost — so the "winners never cross the exit" benefit is preserved for the
+85-92% that finish safely OTM; only the minority actually at pin risk pay an exit. Unit-tested:
+expiry-today ITM short (spot595/K600) flagged; a short 0.85% OTM (spot595/K590) correctly flagged too
+(inside the 1% buffer = genuinely pin-risky); an ITM short with a FUTURE expiry correctly ignored.
+Live dry-run on the (empty) account: "SPY 738.29, no expiry-day short at pin risk — safe to let
+expire." Compiles, all three subcommands (guard/manage/status) coexist.
+(2) RE-CHECKED THE CAP ARITHMETIC AT THE REAL SPOT. SPY printed 738.29 (not my ~630 estimate). Width
+= 738.29*(0.935-0.905) = 22.1 pts = $2,210 gross / ~$1,880 net per spread after ~$330 credit; qty
+stays 1 (RISK_PER_SPREAD 3000 / 2210 -> 1). Two concurrent net ~$3,760, gross ~$4,420 — still inside
+the $5k cap. My round-48/49 numbers (~$1,900 net, 2 concurrent ~$3,800) HOLD at the true spot.
+(3) DID NOT prematurely schedule a manage cron. The actual expiry date is unknown until Monday's
+first fill (5-10 DTE target), so scheduling a fixed Friday cron now could miss it. Tool built+tested;
+schedule the expiry-day manage --live once the fill establishes the date. Avoids cron sprawl.
 
-**Learned:** <fill>
+**Learned:** The pin-close is the honest completion of the defined-risk story: "hold to expiry" is
+free ONLY for shorts that finish clearly OTM; the ones that finish near-the-money must be actively
+closed or they assign into an unhedged stock position, so the mitigation has to be selective (close
+the risky minority, let the safe majority expire) to keep both the safety AND the low-cost claim
+true. And re-derive sizing at the LIVE spot, not a remembered one — the conclusion held here, but only
+because I checked.
 
-**Next:** <fill>
+**Next:** After Monday's first fill: (a) read the leg-count to set cadence, (b) note the spread's
+expiry date and schedule a manage --live cron for that day near close, (c) optionally a daily guard.
+Monday 09:00 CDT the first gated spread fires. Operator to clear the no-marker Sent message to restore
+the email channel. received_usd=$0.0, cap intact, verdict PENDING.
