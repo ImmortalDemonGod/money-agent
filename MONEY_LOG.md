@@ -6829,3 +6829,15 @@ diversifiable idiosyncratic risk, which is exactly what a tight-drawdown-cap man
 fix the 8-K offer-price extraction, pull current pending cash deals + spreads, backtest historical deal
 outcomes for return-per-drawdown, compare to the VRP frontier; register it IF it beats VRP and the VRP
 falsifies (never two live registrations). received_usd=$0.0, cap intact, verdict PENDING.
+
+## Iteration 238 — 2026-07-26T12:50:49Z (ledger @ 2026-07-26T12:50:36.867490+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
