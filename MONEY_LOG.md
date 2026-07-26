@@ -4453,14 +4453,42 @@ change MY port, never to kill the operator's process.
 it returns the superseded belief is the 60-point memory-integrity bug. Then package as the #1609
 Path A submission. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
 
-## Iteration 176 — 2026-07-26T03:49:11Z (ledger @ 2026-07-26T03:45:52.112086+00:00)
+## Iteration 176 — 2026-07-26T04:05Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** finish what operator [82] asked — stop at the install no longer. Get memanto actually
+storing and retrieving, then find the extension point for the #1609 submission.
 
-**Cost:** <fill>
+**Tried:** Bring the on-prem stack up, store and recall for real, and locate the adapter seam.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (local Docker + host Ollama; no card spend).
 
-**Learned:** <fill>
+**Actually happened:**
+(1) SERVER IS UP AND I VERIFIED IT RATHER THAN TRUSTING EXIT 0. All three background tasks reported
+exit code 0; one of them had actually FAILED ("moorcheh up failed ... non-zero exit status 1"). The
+container `moorcheh-onprem-server` is genuinely running on 8077 against the host Ollama.
+(2) Pointed memanto at it. Its own `config backend on-prem` flow could not finish because it tries to
+bind port 8000, which is held by an unrelated pre-existing service of the operator's ("Cultivation OS
+Kernel", PID 9293). I did not kill his process — I set the on-prem URL to 8077 via ConfigManager and
+switched the backend.
+(3) STORED AND RECALLED A REAL MEMORY. Agent `oplog` created, namespace `memanto_agent_oplog` live.
+Store: 0.27s. Recall of "how should I read the number of bids on a freelancer project": returned the
+right memory, score 0.458, 0.23s. Operator [82] question two now has a fact behind it instead of a
+plan — I had answered "I stopped at the install", and that is no longer true.
+(4) FOUND THE REAL SEAM FOR THE SUBMISSION, and it changed the plan for the better. `memanto remember`
+has NO timestamp option, so bulk-loading history through it would stamp all 196 records with today —
+destroying the very temporal structure the timeline-amnesia test depends on. The migrate path does
+preserve `created_at`, and mappers.py documents the extension point explicitly: "write a
+map_<provider> function returning list[dict], register it in MAPPERS". So the adapter emits a
+provider-style export with original timestamps, and `memanto migrate --file` carries them.
+(5) Corpus (196 dated records) and the six-case falsification answer key are written and staged in
+examples/migrations/agent-oplog/.
 
-**Next:** <fill>
+**Learned:** Two things worth keeping. Exit code 0 is not success — a background task reported 0 while
+printing its own failure, which is the second time this run that a zero exit hid a real error, so
+verifying the CONTAINER rather than the exit status is what actually established the server was up.
+And the timestamp gap turned a shortcut into the right design: I was going to bulk-`remember` the
+corpus, which would have quietly invalidated my own test.
+
+**Next:** Write `map_agent_oplog`, emit the export with created_at preserved, run `memanto migrate
+--file`, then run the six answer-key questions — any case returning the SUPERSEDED belief is the
+60-point memory-integrity bug. Poll bet-137/135/138/130/136. received_usd=$0.0, cap intact.
