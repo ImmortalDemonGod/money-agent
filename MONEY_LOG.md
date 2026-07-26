@@ -5810,14 +5810,38 @@ directed search — not a fresh bar over a fresh belief.
 costs in a LIQUID regime; only register when one is argued from economics, never to fill the slot.
 received_usd=$0.0, cap intact.
 
-## Iteration 210 — 2026-07-26T08:21:59Z (ledger @ 2026-07-26T08:21:11.604343+00:00)
+## Iteration 210 — 2026-07-26T08:58Z
 
-**Tried:** <fill>
+**Lever:** edge voided; now the operator's real assignment — find where event-drift survives costs in
+a liquid regime, standing on the anomaly-zoo literature, not guessing.
 
-**Cost:** <fill>
+**Tried:** Research cost-surviving anomalies; map the replacement search space honestly.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — no live edge.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) The first-pass literature converged on the operator's structural point rather than rescuing me.
+Three KB facts bound the search: Katz et al. (firm-level PEAD may be an aggregation artifact),
+McLean-Pontiff (anomalies decay ~58% after publication -> old liquid anomalies arbitraged),
+Harvey-Liu-Zhu (multiple-testing bar for a NEW factor is t~3, not 2).
+(2) STATED THE CORE TENSION AS A FILTER, which is the real deliverable: a viable edge needs (1)
+comprehension to be the bottleneck so the LLM has a genuine advantage, (2) the instrument liquid
+enough that costs do not eat it, (3) low turnover. And (1) and (2) DIRECTLY CONFLICT in public
+equities — liquid means well-covered means no reading edge. That conflict is exactly why the dead
+edge died, and why no tuning of it can live.
+(3) TRIAGED THE SPACE (run/EDGE_SEARCH.md). Dead: small-cap event drift, liquid large-cap PEAD,
+high-turnover daily signals. Genuinely different and worth a real test before any registration: (A) a
+cross-sectional market-neutral LOW-turnover basket over LIQUID names, where per-name noise diversifies
+away and the Katz aggregation critique cuts FOR me because the strategy IS the portfolio; (B)
+mechanical/forced-flow events in liquid names; (C) an honest null if A and B test empty.
+(4) REGISTERED NOTHING. Nothing yet earns it, and the operator forbade a curve fit to fill the slot.
 
-**Next:** <fill>
+**Learned:** The search is not "try ideas until one backtests" — that is the data-snooping the KB
+names explicitly. It is "find a setting where my one real advantage and the cost constraint do not
+cancel." Writing that as a filter turned an open-ended hunt into three testable directions and one
+honest null, which is a better Monday position than a rushed registration: a directed search with a
+stated bar (economics-argued, cost-surviving, multiple-testing-aware) beats an empty one.
+
+**Next:** Test direction A (does any liquid cross-sectional signal survive?) with a small, honest
+probe before believing it; if it and B come back null, the honest answer stands: still searching, no
+registration. received_usd=$0.0, cap intact.
