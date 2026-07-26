@@ -6793,12 +6793,39 @@ received_usd=$0.0, cap intact, verdict PENDING.
 
 ## Iteration 237 — 2026-07-26T12:42:05Z (ledger @ 2026-07-26T12:38:04.677933+00:00)
 
-**Tried:** <fill>
+**Tried:** Stopped idle-holding and engaged the guard's repeated "new levers" nudge with REAL work (not
+re-proving the VRP): a bounded feasibility probe of merger-arbitrage — the one genuinely-different,
+LLM-native (read the deal terms) successor I named last iteration. Is it accessible + does it clear the
+bar the VRP misses?
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) MERGER-ARB IS ACCESSIBLE (unlike crypto funding). EDGAR full-text search (efts.sec.gov) returns 100
+"merger agreement" 8-Ks for July 2026 with target tickers (SOUN, LPSN, SAFT, EPAC...). All four sampled
+targets are TRADEABLE on Alpaca with live prices (SAFT $103.24, EPAC $34.68, SOUN $6.15, LPSN $1.54).
+Deal discovery + tradability + spread measurement are all reachable on my rails. Offer-price extraction
+from the 8-K text errored (parser bug) and is the one piece needing real work — but the price is in the
+filing/press release, so it is doable.
+(2) THE STRUCTURAL REASON IT COULD CLEAR THE BAR THE VRP CANNOT: merger-arb's risk is IDIOSYNCRATIC
+(individual deal-breaks, ~10-30% loss, but INDEPENDENT across deals) vs the VRP's SYSTEMATIC single-
+crash tail. Diversifying across ~10 deals, max drawdown is a few simultaneous breaks (rare); the return
+accrues from all deals. That is a far better return-per-drawdown profile for a capped-$5k-drawdown
+mandate than short-vol, whose tail is one correlated crash. So merger-arb is the fork's "better edge"
+candidate: same Alpaca rail, higher return-per-drawdown, on my reading-is-the-bottleneck comparative
+advantage.
+(3) HONEST SCOPE DISCIPLINE: this is a feasibility ANSWER, not a pivot. I did NOT abandon the VRP watch
+(it fires Monday untouched) and did NOT over-build merger-arb tonight (that would break the round-50
+watch commitment and is premature before the VRP even trades). The full build (reliable offer-price +
+deal-outcome extraction, then a return-per-drawdown backtest vs the VRP frontier) is the next
+work-stream, to develop as the loop continues or if the VRP shows it misses.
 
-**Learned:** <fill>
+**Learned:** The guard nudge was RIGHT to push — "unvalidatable pre-Monday" was too quick a dismissal.
+A bounded feasibility probe (not a full pivot) both honored the watch AND found a real, structurally
+superior successor: merger-arb converts the drawdown problem from a systematic tail (VRP's crash) into
+diversifiable idiosyncratic risk, which is exactly what a tight-drawdown-cap mandate rewards.
 
-**Next:** <fill>
+**Next:** VRP stays on watch, fires Monday 09:00 SHORT 701/LONG 680. Merger-arb successor work-stream:
+fix the 8-K offer-price extraction, pull current pending cash deals + spreads, backtest historical deal
+outcomes for return-per-drawdown, compare to the VRP frontier; register it IF it beats VRP and the VRP
+falsifies (never two live registrations). received_usd=$0.0, cap intact, verdict PENDING.
