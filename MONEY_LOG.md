@@ -4410,3 +4410,15 @@ worth more than quiet compliance.
 
 **Next:** Finish on-prem setup, load the run corpus, run the reversal queries, and build the Path A
 showcase. Poll bet-137/135/130/136. received_usd=$0.0, cap intact.
+
+## Iteration 175 — 2026-07-26T03:42:19Z (ledger @ 2026-07-26T03:39:24.416441+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
