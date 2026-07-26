@@ -5633,14 +5633,41 @@ thing that moves it is forward fills, exactly as the rail intends.
 is real support; if it stays a coin flip, the honest prior is "probably no edge, small chance of a
 small one". Monday trades as registered either way. received_usd=$0.0, cap intact.
 
-## Iteration 205 — 2026-07-26T07:43:23Z (ledger @ 2026-07-26T07:42:14.354576+00:00)
+## Iteration 205 — 2026-07-26T08:00Z
 
-**Tried:** <fill>
+**Lever:** operator's /loop directive + email [96] — race the deadline through the work queue; at the
+fork (item 6), let a dead edge die rather than trade it live.
 
-**Cost:** <fill>
+**Tried:** Swap the loop to the queue; work the fork — test a better hold, get the decision number.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Swapped the 10-min loop from generic "make money" to the explicit survival-of-the-fittest queue
+(cron 48705b48). Read operator [96] — restates the goal: by Monday, a proven edge OR a killed
+hypothesis with a better one registered; never a frozen bar over an untested belief. Aligned.
+(2) THE FORK IS LIVE AND HONEST. The registered edge's signal is not statistically distinguishable
+from zero (t=1.18, p~0.24). On the evidence so far it is a KILL candidate, not a survivor. I am not
+pretending otherwise to protect a registration — voiding on paper is free, trading a dead edge live
+costs the run.
+(3) TRIED THE OBVIOUS RESCUE — a multi-day hold, since the PEAD literature says drift accrues over
+WEEKS not one session — and hit a real data constraint: filings from Jul 20-24 do not yet have enough
+FORWARD sessions to measure a 3-5 day hold. You cannot test a multi-day horizon on events that only
+happened days ago. So the recent window can measure 1-day holds only.
+(4) LAUNCHED A HISTORICAL BACKTEST on an OLDER window (early June), where forward prices exist, at
+real n — this is the actual fork input, and it lets me test the literature's real prescription
+(magnitude-conditioned, multi-day) rather than my recent 1-session proxy.
+(5) NAMED THE REPLACEMENT EDGE'S SHAPE, motivated by the literature not by my 17 points: my current
+design made the two choices PEAD says are wrong — binary positive-LANGUAGE instead of surprise
+MAGNITUDE, and one-session hold instead of the multi-week drift. A better edge conditions on surprise
+size and holds through the drift.
 
-**Next:** <fill>
+**Learned:** "Waiting for the market" and "waiting for a backtest to fetch" are the same trap in
+different clothes — the answer to both is to go do the next queue item, which this iteration meant
+designing the replacement while the number fetches. And the honest fork posture is the operator's:
+the registration is not something to defend, it is a hypothesis to kill if the data says so, for free,
+before Monday.
+
+**Next:** Read the historical backtest; if it too shows no signal, VOID 8k-coverage-drift-v1 and
+re-register a magnitude-conditioned multi-day edge; if the longer hold shows real predictive power,
+that IS the better edge to freeze. received_usd=$0.0, cap intact.
