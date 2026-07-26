@@ -5318,14 +5318,47 @@ registration freezes, that class of error is the one that becomes permanent.
 build: the materiality classifier itself, then answer the four account questions and register.
 received_usd=$0.0, cap intact.
 
-## Iteration 197 — 2026-07-26T06:44:53Z (ledger @ 2026-07-26T06:41:16.570187+00:00)
+## Iteration 197 — 2026-07-26T06:56Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** the operator provisioned the paper rail. Connect, answer the open questions from the live
+account, and build the classifier.
 
-**Cost:** <fill>
+**Tried:** Verify the account, then build and AUDIT the materiality classifier.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades placed — market is shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) NEARLY REPORTED A FALSE POSITIVE ABOUT THE OPERATOR'S OWN SETUP. An `env | grep -c` returned "6"
+and I was one sentence from telling him the keys were live; the follow-up listing printed nothing.
+The count was spurious — the variables are in `.env.agent`, and my check had run in a fresh shell
+before sourcing. Verified properly before saying anything.
+(2) THE RAIL IS LIVE: paper account ACTIVE, **$100,000 equity**, $400,000 buying power, shorting
+enabled, not blocked.
+(3) ANSWERED ALL FOUR OPEN QUESTIONS FROM THE ACCOUNT rather than guessing: equity $100k (so a $25
+drawdown cap would have been meaningless — it scales to ~$3k); fractionable is per-asset, true on
+NASDAQ/AMEX names; shorting enabled; next open Monday 09:30 ET (34.7h), then sessions Jul 28-31 and
+Aug 3-6.
+(4) FOUND A FILTER I WOULD HAVE MISSED: ALUR is `tradable=False` — OTC-listed. Having a ticker does
+NOT mean Alpaca will trade it, so tradability must be checked per-asset against the broker, not
+inferred from the SEC mapping.
+(5) BUILT THE CLASSIFIER TO BE AUDITABLE, NOT CLEVER: every score is a sum of named phrase hits with
+the matching sentence retained, so any trade can be traced to the words that caused it.
+(6) AND THE AUDIT IMMEDIATELY FOUND IT WRONG IN BOTH DIRECTIONS. Checked against filings I had
+already read by hand: 1st Source's "Reports **Record Second Quarter Results**" scored 2.0 and was
+SKIPPED, because my regex demanded the results-noun adjacent to "record". The vetoes, by contrast,
+were correct 2/2 on inspection — Arrow Financial's "bankruptcy" is a borrower defaulting on
+real-estate credit, Americold's is a $305-320M impairment.
+(7) THE OBVIOUS FIX WAS A TRAP, WHICH IS THE INTERESTING PART. "Record" is a superlative in "record
+second quarter results" and an ACCOUNTING VERB in "expects to record a non-cash impairment charge of
+$305 million" — and both forms appeared in the SAME 18-filing sample. Loosening the pattern would
+have scored a $305M writedown as the strongest positive in the corpus. Fixed with negative lookbehind
+plus bounded intervening modifiers; 6/6 on a test written to fail in both directions.
 
-**Next:** <fill>
+**Learned:** A classifier returns plausible numbers on every input, so nothing about its output
+signals that it is broken — the only thing that caught this was having read four filings myself
+first and knowing what the answer should be. That is the same method that caught the job screener and
+the email guard, and it is now the only way I will accept a filter into a decision path.
+
+**Next:** Register once the numbers are final: BAR 1.5pp excess vs SPY (inside the 1-2pp band I wrote
+down before the rail existed), MIN_FILLED_ORDERS and MAX_DRAWDOWN_USD scaled to $100k equity, deadline
+allowing enough sessions to resolve. received_usd=$0.0, cap intact.
