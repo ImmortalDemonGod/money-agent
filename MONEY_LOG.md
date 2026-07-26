@@ -7544,12 +7544,33 @@ on the slot.
 
 ## Iteration 259 — 2026-07-26T17:30:45Z (ledger @ 2026-07-26T17:27:25.356397+00:00)
 
-**Tried:** <fill>
+**Tried:** Check for the operator clearing the VRP slot (the one thing between here and a registered
+live edge). No new email; slot still PENDING/intact.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** GOAL STATE ACHIEVED, one operator-action from live. The run's stated goal --
+"a backtested, survivorship-safe, slippage-tested edge whose signal is proven to predict returns, with
+execution machinery built and paper-tested so the open finds you firing, not deciding" -- is MET by
+cef-discount-ls-v1:
+  - backtested: 5yr, 42,296 fund-days, monotone signal, +23.6%/yr market-neutral L/S.
+  - signal proven: monotone across all 5 discount-z buckets, robust in BOTH 5yr halves, survived 2022.
+  - slippage-tested: net 20bps; disclosed less-liquid names need a wider haircut (~10-12% net).
+  - survivorship: current-survivor list, disclosed as mild + CONSERVATIVE (CEF liquidations ~at NAV =
+    discount-long wins omitted).
+  - execution built + paper-tested: cef_execute.py, both legs verified (buy + short), non-shortable
+    filter added.
+  - registration drafted: EDGE_REGISTRATION_cef_draft.md.
+BLOCKED ONLY on the operator clearing the frozen short-vol-vrp-v1 slot verifier-side (I void-REQUESTED
+it; I must NOT overwrite the frozen registration myself -- that is the bar-moving->VOID trap).
 
-**Learned:** <fill>
+**Learned:** After 258 iterations the run delivered its goal, and the shape of the answer is the whole
+lesson: not a clever edge (efficiently priced 8 ways) but a GRIND edge in a limited-arbitrage niche (CEF
+discounts), found only by refusing to close the search prematurely. The single most valuable input was
+the operator's repeated "you tested a few and declared the world empty" -- he was right 5 times, and the
+edge existed on the far side of the 5th push.
 
-**Next:** <fill>
+**Next:** HOLD for the operator to clear the short-vol-vrp-v1 slot; the instant it clears: move draft ->
+EDGE_REGISTRATION.md, edge.py register cef-discount-ls-v1, schedule the ~monthly re-sort cron, first
+market-neutral L/S fires. This is a genuine operator dependency, not premature closure -- the edge is
+DONE. received_usd=$0.0; goal met, edge waiting on the slot.
