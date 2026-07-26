@@ -5632,3 +5632,15 @@ thing that moves it is forward fills, exactly as the rail intends.
 **Next:** Read the wider backtest; if n rises and the spread holds with a t-stat that clears ~2, that
 is real support; if it stays a coin flip, the honest prior is "probably no edge, small chance of a
 small one". Monday trades as registered either way. received_usd=$0.0, cap intact.
+
+## Iteration 205 — 2026-07-26T07:43:23Z (ledger @ 2026-07-26T07:42:14.354576+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
