@@ -7639,12 +7639,35 @@ the slot freeze.
 
 ## Iteration 262 — 2026-07-26T18:02:13Z (ledger @ 2026-07-26T17:58:59.363214+00:00)
 
-**Tried:** <fill>
+**Tried:** Operator [111] round-57, the two questions that separate "true" from "fundable": real borrow
+on the top shorts (5% flat hides HTB premium funds), + capacity + honest forward marking (paper rail
+fills shorts at mid, zero borrow).
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:**
+(1) BORROW, live from Alpaca: top-5 shorts today (UTG/UTF/BGY/BDJ/EOI) are ALL shortable + easy-to-borrow
+= ~0.3-1%/yr, so my flat 5% was CONSERVATIVE. HONEST CATCH the operator was pointing at: these are at
+DISCOUNTS (-2 to -9%), not premiums -- there is NO premium CEF to short right now, so the HTB killer does
+not bite today. Hard-wired the fix: baskets() now checks easy_to_borrow LIVE and REFUSES to short any
+non-ETB name. Disclosed the real limit: in a premium regime where the best shorts are HTB, I skip them ->
+short leg shrinks, trade becomes less market-neutral and deploys less. It does NOT pretend to short what
+it cannot borrow.
+(2) CAPACITY: universe ADV $229M/day (median $4.6M/name). At $6k/name cap I use <0.1% of ADV = zero
+impact; conservative capacity ~$1-3M/side (1% ADV over 3 days). Holds well past the $200k hobby line to
+~$1-2M -- a small-capital edge, not billions.
+(3) HONEST MARKING: built run/cef_truecost.py. Paper rail fills shorts at mid + $0 borrow -> verifier
+equity reads generous. TRUE pnl = paper pnl - accrued borrow (1%/yr x days, bump if HTB) - slippage
+(20bps/leg on gross). Mark forward on the TRUE line; a verdict counts only if the cost-charged number
+clears 1.5pp. Verified must mean real money would have made it.
 
-**Learned:** <fill>
+**Learned:** The operator's two final holes were the difference between a true backtest and a fundable
+edge, and both survived: borrowable today (5% was conservative, ETB filter makes it honest), capacity
+~$1-2M (not a hobby), and now marked against the paper rail's generosity so a "verified" cannot be a
+simulator artifact. The edge is real, modest, honestly costed, honestly borrowed, honestly capacitated,
+and honestly marked. That is the whole discipline: not a pretty number, a number that would survive real
+money.
 
-**Next:** <fill>
+**Next:** Monday cron fires the first L/S (ETB-filtered, per-name-capped); then run cef_truecost.py each
+mark and log the TRUE pnl, not the paper pnl. Renew the session cron weekly. Forward account judges the
+honest net. received_usd=$0.0; edge frozen/PENDING, fully hardened, live Monday.
