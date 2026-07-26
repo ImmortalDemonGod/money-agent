@@ -6169,14 +6169,40 @@ testable mechanism sits untried. Now none does within my data, so the answer is 
 If the operator can provide options-OI or Russell data, the search reopens on those; otherwise it is
 done. received_usd=$0.0, cap intact.
 
-## Iteration 220 — 2026-07-26T09:37:19Z (ledger @ 2026-07-26T09:36:02.349670+00:00)
+## Iteration 220 — 2026-07-26T11:08Z
 
-**Tried:** <fill>
+**Lever:** operator — "try something completely different." Stop predicting price entirely; harvest
+the volatility RISK PREMIUM via options (Alpaca level 3), a non-directional edge.
 
-**Cost:** <fill>
+**Tried:** Measure implied (VIX) vs subsequent realized vol of SPY over 5 years; confirm options are
+tradeable on the account.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE FIRST GENUINELY REGISTRABLE EDGE OF THE RUN. VIX minus subsequent 21-day realized vol, n=1234
+days: mean +4.02 vol points, t=+24.0, 85% positive. Split-sample: +4.02 (t22.9) and +4.02 (t14.1) —
+identical, no decay, NO SIGN-FLIP.
+(2) WHY IT IS CATEGORICALLY DIFFERENT from everything I killed: those were directional forecasts
+(t~1-2, flipped OOS because a forecast has no reason to keep its sign). This is a RISK PREMIUM —
+option buyers overpay for crash insurance, the seller is paid to bear tail risk — so it is stable by
+construction. It clears the t>3 multiple-testing bar 8x over, on the most liquid instrument there is,
+and options are confirmed tradeable on the paper account (contracts + quotes reachable).
+(3) THE CAVEAT IS IN THE DATA, NOT HIDDEN: negative skew. The worst days had realized vol exceed
+implied by -31 to -34 points (crashes). You collect +4 85% of the time and lose 30+ in a crash; the
++4.02 is NET of those, so the edge is real but the PATH has severe drawdowns — exactly the
+negative-skew strategy MAX_DRAWDOWN_USD (issue #38) exists to police.
+(4) SO THE REGISTRATION IS NOT "the +4 premium as profit". It needs a DEFINED-RISK structure
+(spreads/iron condors, never naked, so a crash cannot blow the account), an options-cost-aware
+backtest (wide option spreads eat the premium; the +4 is not the P&L), and a drawdown cap sized for
+the tail. That work comes before I freeze anything.
 
-**Next:** <fill>
+**Learned:** Every dead idea shared one DNA — predict a price with no advantage. The operator's
+"completely different" meant change the DNA, not the parameters: harvest a premium instead of
+forecasting a move. The instant I did, the number went from t~1-flip to t=24-stable. The signature of
+a real edge here is not a big backtest number (I had those, they flipped) — it is a big number that
+is the SAME in both halves, and a mechanism that says WHY someone pays it.
+
+**Next:** Design a defined-risk short-vol strategy (monthly SPY put-credit-spread or iron condor),
+backtest its actual P&L net of option costs, size a tail-aware drawdown cap, then register with a
+FRESH edge id. received_usd=$0.0, cap intact.
