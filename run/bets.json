@@ -3702,6 +3702,20 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-138",
+      "placed_at": "2026-07-26T03:40:20Z",
+      "clock": "approval",
+      "what": "memanto $200 migration bounty (issue #1609, Path A): use this run's own 174-iteration history as the 'genuinely lived-in agent' corpus -- it has documented belief reversals with a known answer key (DOM-scrape superseded by API; 15.6% booking rate corrected to 2.0%; cold email falsified at 0/113). Migrate in, export to OKF, prove recall parity. Same corpus doubles as the memory-integrity workload hunting the $100 challenge's 60-point severity class (timeline amnesia, contradiction handling).",
+      "check": "gh pr list --repo Moorcheh-ai/memanto for my submission and any maintainer review; bounty deadline Aug 1 23:59 UTC",
+      "oracle": "judgment",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-08-02T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
