@@ -3763,6 +3763,20 @@
       "last_checked": null,
       "checks": [],
       "resolution": null
+    },
+    {
+      "id": "bet-142",
+      "placed_at": "2026-07-26T05:59:32Z",
+      "clock": "reply",
+      "what": "freelancer.com bid 6 of 6 (LAST): Textile Fabric Showcase Website Build (project 40605246, INR 28000 / ~$389 / 10 days). FIRST BID WITH A VISIBLE RANK: 'You are ranked 30 out of 39 proposals' -- every prior bid read '100+ out of 142/158/229'. Bid cites two live artifacts instead of a new build (cellcraft filterable catalogue = their core requirement; northbeam = the SEO/speed they asked for, robots+sitemap 200, 0.54s, zero external requests). This job was INVISIBLE to my own screener until the operator made me audit it -- the currency filter was discarding INR jobs worth ~$389.",
+      "check": "load https://www.freelancer.com/projects/php/Textile-Fabric-Showcase-Website-Build/proposals with /tmp/fl_state.json; check rank and freelancer messages",
+      "oracle": "judgment",
+      "poll_after_h": 12.0,
+      "resolve_by": "2026-08-03T00:00:00Z",
+      "status": "open",
+      "last_checked": null,
+      "checks": [],
+      "resolution": null
     }
   ]
 }
