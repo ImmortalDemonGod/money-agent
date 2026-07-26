@@ -6897,3 +6897,15 @@ posture he asked for. The successor is FOUND and de-risked; that is enough until
 verdict change, or a drawdown event. On a fill: confirm it, read leg-count for cadence, mark at the real
 crossing price, schedule expiry-day manage for Aug 3. Merger-arb successor is parked (feasible +
 survivorship-safe-backtestable) pending a VRP falsification. received_usd=$0.0, cap intact, verdict PENDING.
+
+## Iteration 240 — 2026-07-26T14:02:16Z (ledger @ 2026-07-26T13:59:42.663140+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
