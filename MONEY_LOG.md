@@ -7447,3 +7447,15 @@ a ~15%/yr edge clears with real deployment, MAX_DRAWDOWN for the discount-wideni
 realistic-cost haircut. Build execution (long wide-z / short narrow-z CEF baskets, buy/sell+short on
 Alpaca, monthly re-sort). Then continue the basket (SPAC floors, post-deletion drift, dual-class) for
 diversification -- but CEF alone clears the fundable bar. received_usd=$0.0, this is the edge.
+
+## Iteration 256 — 2026-07-26T17:08:38Z (ledger @ 2026-07-26T17:08:30.234155+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
