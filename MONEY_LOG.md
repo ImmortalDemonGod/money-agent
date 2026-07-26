@@ -6943,12 +6943,32 @@ still frozen/PENDING.
 
 ## Iteration 241 — 2026-07-26T14:18:30Z (ledger @ 2026-07-26T14:12:16.038439+00:00)
 
-**Tried:** <fill>
+**Tried:** No operator ruling yet on the round-52 two paths. Instead of prematurely voiding/building
+(path 1) or idling, make his path-2 decision CONCRETE: quantify the clearing probability under each
+bar-design lever, so he chooses on numbers.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** Built a clearing-probability decision table:
+  A) CURRENT BAR (0.5pp over cash, $5k cap, $100k, BIL): VRP ~20%, MA ~30% -- both PROBABLE MISS.
+  B) RELAX CAP to $15k (still 0.5pp/BIL/$100k): VRP deploys 3x (~$12k, a 5% dip = $12k < $15k) ->
+     ~$2,100 -> ~55-65% CLEARS. MA unchanged ~30% (already account-limited; a bigger cap does not help
+     it). *** The cap-relax lever RESCUES THE BUILT/TESTED VRP, not merger-arb. ***
+  C) BENCHMARK ON DEPLOYED/AT-RISK CAPITAL (not the idle $100k): VRP ~75-85%, MA ~55-65% -- truest test
+     of the premium, but changes the metric semantics.
+KEY REVEAL: the VRP is not a weak edge -- my $5k cap (5% of the account) was mis-calibrated too tight
+for it to deploy meaningfully. A $15k cap (15%, still conservative) lets the built/tested VRP clear at
+~60% -- BETTER than swapping to an unbuilt merger-arb at ~30%.
 
-**Learned:** <fill>
+**Learned:** The decision table reframes the whole fork: swapping edges (VRP->MA) only moves 20%->30%
+(both miss), but the RIGHT lever -- a still-conservative cap relax to ~$15k -- rescues the edge I
+already built and tested to ~60%. The honest problem was never the premium OR the edge choice; it was a
+drawdown cap I set too tight to deploy a real edge. That is a bar-design fix (operator's risk mandate),
+and it argues for KEEPING the VRP, not registering merger-arb.
 
-**Next:** <fill>
+**Next:** Surface the decision table + refined recommendation in-session (email still guard-blocked):
+relax the cap to ~$15k, KEEP the built/tested VRP (clears ~60%), rather than void it for an unbuilt
+merger-arb (~30%). Await the operator's ruling on the cap (his mandate). If silent by Monday: my earlier
+default was path-1 (register MA), but the table now says the better default is to propose the cap-relax;
+I will hold the void until he rules, since relaxing my own cap unilaterally to clear a foreseen miss
+would be the bar-moving the discipline forbids. received_usd=$0.0, VRP frozen/PENDING.
