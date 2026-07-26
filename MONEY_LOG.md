@@ -6278,14 +6278,35 @@ with its risk stated beats both an empty hand and a curve fit.
 **Next:** Build item 7 — multi-leg options execution (sell SPY put-credit-spread, defined risk) tested
 against the paper account, so a cleared slot finds me firing, not deciding. received_usd=$0.0, cap intact.
 
-## Iteration 223 — 2026-07-26T09:50:57Z (ledger @ 2026-07-26T09:48:32.693147+00:00)
+## Iteration 223 — 2026-07-26T11:48Z
 
-**Tried:** <fill>
+**Lever:** item 7 — build the execution machinery for the registered VRP edge so a cleared slot finds
+me firing, not deciding.
 
-**Cost:** <fill>
+**Tried:** Verify the multi-leg options order path against paper, then build run/vrp_execute.py.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. One test order submitted + cancelled; account left clean.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) VERIFIED THE MLEG PATH the same way I tested the equity paths pre-Monday: a SPY put-credit-spread
+(sell 5% OTM put, buy 8% OTM put) submits HTTP 200 (order accepted, both legs correct) and cancels
+204; account left with 0 positions. Options are genuinely tradeable on the paper account.
+(2) BUILT run/vrp_execute.py — status / sell / close. sell constructs the real spread from live data
+(SPY 738, SHORT 701P / LONG 680P, width 21, defined risk ~$2,100 at qty 1), reads MAX_DRAWDOWN_USD
+from the registration and REFUSES new risk once the cap is breached (FALSIFIED). Dry-run default;
+--live to fire; close flattens option legs.
+(3) So short-vol-vrp-v1 now has ALL THREE pieces: a backtest (premium t24; tradeable +3.5%/mo with the
+tail disclosed), an honest registration (cash benchmark, tail-sized cap), and tested one-button
+execution. Updated the Monday-plan memory to the VRP so it survives compaction.
+(4) PENDING and stated plainly: the operator must clear the frozen VOID slot so the verifier freezes
+short-vol-vrp-v1 (edge.py status still reads VOID). No live trade fires until the slot is frozen —
+registering-then-trading-an-unfrozen-edge would be trading outside the verified bet.
 
-**Next:** <fill>
+**Learned:** The same execution discipline that caught the notional-order bug pre-Monday applied
+cleanly to options: verify the exact order path against the live account before it matters, while the
+market is shut. A multi-leg order is a new path, so it got the same submit-and-cancel proof rather
+than an assumption.
+
+**Next:** Await the operator clearing the slot. When frozen: schedule weekly sell + expiry-close, small
+sizing, and let the forward paper trades judge the premium against a crash. The search also continues
+into other risk premia (carry, term). received_usd=$0.0, cap intact.
