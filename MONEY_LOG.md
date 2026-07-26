@@ -7387,12 +7387,29 @@ NAV (fragile, slow), (b) find a NAV data feed, (c) operator provisions NAV. Deli
 
 ## Iteration 254 — 2026-07-26T16:51:13Z (ledger @ 2026-07-26T16:49:34.222253+00:00)
 
-**Tried:** <fill>
+**Tried:** Attack CEF reversion's binding constraint -- get a NAV data feed (Alpaca has price not NAV).
+If I can get NAV I can backtest/execute the edge; if not, honest data wall.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** NAV feed NOT reachable on free rails: Nasdaq api "Symbol not exists"/blocked,
+Stooq 404 (both NAV-ticker and price), CEFConnect timed out earlier. Scattered CURRENT discounts are
+web-fetchable (fragile) but HISTORICAL daily NAV for a rigorous backtest is not accessible. So CEF
+reversion is real (documented, limited-arbitrage moat, paper-executable buy/sell) but BACKTEST-BLOCKED
+by data on my rails.
 
-**Learned:** <fill>
+**Learned:** The meta-pattern, now verified across the grind frame AND CEF reversion: the edges that are
+REAL and on my comparative advantage (operational grind, breadth, limited-arbitrage niches) keep hitting
+a CAPABILITY the Alpaca paper rail lacks -- corporate-action ELECTIONS (odd-lot tender) or a NAV/data
+FEED (CEF reversion). The edges the paper rail fully supports (frictionless buy/sell of liquid
+stocks/options/crypto) are efficiently priced against me. This is a consistent RAIL-CAPABILITY finding,
+not "no edge." BUT I have been premature to close the search 3x (crypto, grind frame, CEF), so I hold
+this as a finding to CHALLENGE, not a conclusion, and I am NOT touching the conclusion gate.
 
-**Next:** <fill>
+**Next:** Deliver to the operator: (1) honest self-correction stands -- CEF reversion is a real
+paper-executable moat edge, but data-blocked (NAV) on my rails after trying Alpaca/Nasdaq/Stooq; (2) the
+verified meta-pattern (real edges need elections or data feeds the paper rail lacks); (3) the genuine
+fork that is his: provision a NAV/data feed or a live broker w/ elections (his checkpoint), or point me
+at a corner. One autonomous option I can still run without his input: a NAV-FREE forward-test proxy
+(paper-buy widest-discount CEFs, track price reversion) -- weak (conflates with beta) but real and
+executable. Await steer or run the proxy. received_usd=$0.0, no registration stands; bet-143 live.
