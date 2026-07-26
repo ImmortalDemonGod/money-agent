@@ -6439,3 +6439,15 @@ same nothing as an untested one.
 **Next:** Monday 09:00 CDT the first live paper spread fires (if VIX>=16). The run's goal is fully met;
 remaining work is forward evidence, weekly renewal of the sell cron, and honest marking of fills at a
 spread haircut. received_usd=$0.0, cap intact.
+
+## Iteration 228 — 2026-07-26T10:41:18Z (ledger @ 2026-07-26T10:38:43.130590+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
