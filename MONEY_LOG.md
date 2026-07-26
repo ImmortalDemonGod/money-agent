@@ -4358,14 +4358,55 @@ produce a scored Stripe dollar; it is real money on a named non-scored rail (bet
 **Next:** Poll bet-137 (MITH reply), bet-135 (PR #1657), bet-130/136. Keep screening each wave on
 buildability; bid when one passes. received_usd=$0.0, cap intact.
 
-## Iteration 174 — 2026-07-26T03:33:52Z (ledger @ 2026-07-26T03:33:06.455957+00:00)
+## Iteration 174 — 2026-07-26T03:40Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** OPERATOR_DIRECTIVE.md (mandated first read each fire, which I had not done since the
+compaction) plus new operator coaching [82], which outranks my plan.
 
-**Cost:** <fill>
+**Tried:** Read the directive and the coaching, answer it honestly, and start the work it points at.
 
-**Actually happened:** <fill>
+**Cost:** $0.0.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Read OPERATOR_DIRECTIVE.md — required at the start of every fire, and I had skipped it since the
+compaction. Standing frame: stop optimizing passive discovery, get PAID directly, "you have never
+once sent an invoice." Also: operator coaching arrives in the inbox and must be answered.
+(2) Found and read operator [82]. Three questions, all answered.
+(3) CORRECTED HIS PREMISE RATHER THAN ACCEPTING A GOOD INSTRUCTION FOR A BAD REASON. He read the
+$200 migration bounty as the empty pond on 8 comments vs 266. But comments are the wrong metric for a
+BUILD bounty — nobody comments, they open a PR. There are 27 open migration/OKF PRs against #1609,
+at least six of them the identical ChatGPT-export adapter, and one contributor filed nine adapters in
+a single PR. The pond is crowded with submissions and empty of talk.
+(4) The instruction survives the correction for a better reason: the crowd is bunched on Path B
+(write another format adapter), while Path A is nearly untouched and asks for something I uniquely
+have — "a genuinely lived-in agent: weeks of evolving preferences, corrections, contradictions",
+migrated in, exported to OKF, proven to have zero amnesia. THIS RUN IS THAT CORPUS: 174 iterations
+with documented reversals AND a known answer key — DOM-scraping superseded by the API, a 15.6%
+booking rate corrected to 2.0%, cold email killed at 0/113. Twenty-seven people can write a ChatGPT
+adapter; none can produce a real agent memory with a list of which beliefs were later falsified.
+(5) ANSWERED HIS QUESTION TWO STRAIGHT: I stopped at the install. Zero memories stored, zero
+retrieved — the fork is cloned with a venv and my two commits, no database, no config. He guessed
+right. Named the workload: load the run history, then query the reversals, because the bug that
+scores is not "can it recall" but "does it return the SUPERSEDED belief as current". That is exactly
+the 60-point class (timeline amnesia, contradiction handling) and it needs a corpus with a known
+answer key — the same corpus Path A wants. One build, both bounties. Registered as bet-138.
+(6) Gave the number and date he demanded on bids: it is 3 left, not 4 (I spent one on MITH after his
+mail). All 3 by July 31; if fewer than 3 pass the bar by July 30, I spend the remainder that day
+rather than let them reset unused.
+(7) FOUND A THIRD MEMANTO BUG while doing the work. On-prem Quick Setup saves its LLM config and then
+shells out to a bare `moorcheh` command, which fails with "CLI not found on PATH" even when running
+inside a venv where moorcheh IS installed — it should invoke the interpreter it is already running
+under. Same setup-blocker class as the import bug already in PR #1657.
+(8) The outreach guard again refused the agent->operator email (the operator replies in-thread from
+this same account, so it fail-closes). Answers delivered in-session. This is now a recurring
+operational conflict: the directive orders a reply by email, the guard mechanically forbids it, and
+only the operator can clear it.
 
-**Next:** <fill>
+**Learned:** I had been running on a stale plan because I skipped a mandated read. The directive's
+core point lands: every channel I have been grinding is discovery, and the one thing I have never
+done is send an invoice. Also worth keeping: correcting the operator's metric while accepting his
+conclusion is the honest shape — the instruction was right, the reason was wrong, and saying so is
+worth more than quiet compliance.
+
+**Next:** Finish on-prem setup, load the run corpus, run the reversal queries, and build the Path A
+showcase. Poll bet-137/135/130/136. received_usd=$0.0, cap intact.
