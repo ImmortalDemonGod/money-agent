@@ -6090,3 +6090,15 @@ not the headline, before believing it.
 **Next:** Decide the registration honestly — either get real announcement dates + build the detector
 and register a conservative bar, or state that the capturable edge is too thin/uncertain to register
 and the honest result stands. received_usd=$0.0, cap intact.
+
+## Iteration 218 — 2026-07-26T09:21:39Z (ledger @ 2026-07-26T09:17:20.144306+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
