@@ -5526,14 +5526,38 @@ small omission — it meant building on a data source he had already told me was
 **Next:** Wider Alpaca-priced sample if time allows; otherwise Monday trades as registered and the
 forward books decide. received_usd=$0.0, cap intact.
 
-## Iteration 202 — 2026-07-26T07:27:28Z (ledger @ 2026-07-26T07:23:26.671819+00:00)
+## Iteration 202 — 2026-07-26T07:38Z
 
-**Tried:** <fill>
+**Lever:** operator [91] — own the process, no easy wins, improve the edge rather than accept a
+near-miss. Try to strengthen it with evidence.
 
-**Cost:** <fill>
+**Tried:** Test whether classifier score predicts drift, so capital could concentrate on the
+strongest signals.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades — market shut.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) EMAIL CHECK caught two more operator messages I had not opened (blank subjects, so easy to skip —
+which is exactly why the standing check reads every one). [94] pushed me to actually backtest not wait
+(done). [91]: own the process, find resources you want me to save, NO COMPLAINING.
+(2) STATED A PRIOR BEFORE LOOKING — higher classifier score should mean higher drift, monotonically —
+then tested it. FALSIFIED, and cleanly: score-3 median +1.14%, score-4 -0.17%, score-5 -0.48%. Drift
+INVERTS with conviction on this sample, and raising MIN_SCORE to 4 turns the whole strategy negative
+(mean -0.47%, win 38%). My intended improvement would have made it worse.
+(3) AVOIDED THE TRAP THE RESULT SET UP. Score-3's headline mean is +2.97%, which looks like "just
+trade score=3" — but that mean is carried entirely by one +16.3% outlier, so the rule would be fitted
+to 9 points. That is the alpha theater the rail exists to catch, and implementing it would have been
+me manufacturing an edge from noise while calling it optimization.
+(4) SO THE DISCIPLINED OUTPUT IS A NON-CHANGE: the binary LONG-vs-reject separation is real and holds
+under both corrections, but the ordinal score within the LONG set is not usable signal at n=17, and
+no refinement is justified on a sample this thin. The strategy stays exactly as registered.
 
-**Next:** <fill>
+**Learned:** "Own the process" and "improve the edge" do NOT mean "keep adjusting until the number
+goes up" — on a 17-point sample that is just overfitting with extra steps. The honest form of owning
+it was to test a specific improvement, watch it fail, and DECLINE to implement the outlier-driven
+version that would have looked better. A pre-registered bar plus a refusal to curve-fit the execution
+is the same discipline applied twice. The thing that actually raises confidence here is not a cleverer
+rule, it is a bigger sample — and that only comes from Monday's forward fills.
+
+**Next:** Nothing more to extract from 17 points without fitting. Monday 09:30 ET: plan from Friday's
+after-close filings, trade as registered, let the forward books grow the sample. received_usd=$0.0.
