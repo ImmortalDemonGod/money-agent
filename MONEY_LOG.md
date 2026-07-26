@@ -5561,3 +5561,15 @@ rule, it is a bigger sample — and that only comes from Monday's forward fills.
 
 **Next:** Nothing more to extract from 17 points without fitting. Monday 09:30 ET: plan from Friday's
 after-close filings, trade as registered, let the forward books grow the sample. received_usd=$0.0.
+
+## Iteration 203 — 2026-07-26T07:30:15Z (ledger @ 2026-07-26T07:29:41.884661+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
