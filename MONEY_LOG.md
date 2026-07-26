@@ -7048,12 +7048,38 @@ to clear the frozen slot), no new registration until merger-arb is validated.
 
 ## Iteration 244 — 2026-07-26T15:00:58Z (ledger @ 2026-07-26T14:56:15.211915+00:00)
 
-**Tried:** <fill>
+**Tried:** The trustworthy merger-arb backtest the operator demanded before I freeze the registration:
+rebuilt the outcome classifier (delisting + price-convergence-to-offer) to separate real completed cash
+targets from acquirers/MOEs/breaks, survivorship-safe on Alpaca. 2021-2023 resolved deals.
 
-**Cost:** <fill>
+**Cost:** $0.0.
 
-**Actually happened:** <fill>
+**Actually happened:** THE BACKTEST KILLS THE NAIVE MERGER-ARB EDGE.
+  - 19 resolved cash-target deals: completion 42% (8 completed / 11 broke), mean -31.7%/deal, ~ -21%/yr.
+    Completed +5.3% mean; broke -58.6% mean, worst -96.9%.
+  - 42% completion vs the ~90% literature = my raw-EDGAR sample is UNREPRESENTATIVE (full-text "merger
+    agreement" over-selects contested/amended deals that file repeatedly) + residual false positives
+    (PTEN is the ACQUIRER, its +23% is stock appreciation not arb). So I do NOT trust the number as a
+    return estimate -- same discipline as refusing the buggy VRP run.
+  - THE REAL, TRUSTWORTHY FINDING: SPREAD AT ANNOUNCEMENT PREDICTS COMPLETION. Tight spreads (<3%:
+    HGV/DCGO/BCML/INOV/CNTM) all COMPLETED at +0.3..+1.7%. Wide spreads (>10%: STI/DDD/HWH/CIVB/MX) all
+    BROKE at -30..-97%. The market prices deal-risk EFFICIENTLY.
+  - CONSEQUENCE (the fork, item 6): merger-arb is NOT a free premium for me. The tight deals that
+    reliably complete are THIN (~1-2% = the same thin-edge problem that killed the VRP); the wide deals
+    that would be "fundable" are exactly the ones that break (-50..-97%). Net is fairly-priced risk.
+    UNLESS I have a demonstrated edge in ASSESSING which wide deals complete (LLM reading deal
+    terms/regulatory/financing) -- which I have NOT validated -- merger-arb does not clear. NOT
+    REGISTERING it. Hypothesis killed with honest data, exactly as the goal statement allows.
 
-**Learned:** <fill>
+**Learned:** The deepest recurring truth of this whole search, now shown a third way: efficient markets
+price risk, and without an informational or speed advantage there is no free premium. VRP = crash risk
+priced (thin over cash). Predictive signals = no forecast edge (sign-flip). Merger-arb = deal risk
+priced (tight-safe-thin / wide-fat-breaks). "Would you fund this?" is NO for every edge I can access,
+because I have no demonstrated edge over the market's own pricing. That is not defeatism; it is the
+measured result three independent times.
 
-**Next:** <fill>
+**Next:** Report the merger-arb kill + the spread-predicts-completion finding to the operator honestly.
+The one genuinely-unexplored edge is LLM deal-completion assessment (predict which wide-spread deals
+complete better than the spread implies) -- a real research project, NOT a Monday-registerable edge, and
+I will name it as such, not oversell it. No registration stands (VRP void-requested, merger-arb killed).
+received_usd=$0.0.
