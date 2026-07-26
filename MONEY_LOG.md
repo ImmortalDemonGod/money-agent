@@ -7003,3 +7003,15 @@ execution-ready successor for a future fork.
 (a) affirms a bar -> fire that edge; (b) silent -> void VRP, register + fire merger-arb (now built) per
 his round-52 rule; (c) cap-relax -> void VRP, re-register VRP-v2 at the new cap. All three are now
 execution-ready. received_usd=$0.0, VRP frozen/PENDING.
+
+## Iteration 243 — 2026-07-26T14:51:03Z (ledger @ 2026-07-26T14:49:58.456854+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
