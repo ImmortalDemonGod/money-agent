@@ -5983,14 +5983,40 @@ robust effect is the cost itself.
 different KIND (not another daily-directional price signal, which is now definitively dead) — else the
 honest capstone stands. received_usd=$0.0, cap intact.
 
-## Iteration 215 — 2026-07-26T09:00:35Z (ledger @ 2026-07-26T08:58:37.168863+00:00)
+## Iteration 215 — 2026-07-26T09:58Z
 
-**Tried:** <fill>
+**Lever:** operator round 47 — every edge I killed was the same PREDICTIVE kind; test the one class I
+named at 209 and never tried: mechanical FORCED FLOWS.
 
-**Cost:** <fill>
+**Tried:** The forced-flow mechanisms reachable with price+date data, in/out of sample on 5yr.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) CONCEDED THE REAL CORRECTION: my "hundreds of experiments" were one experiment (price prediction)
+a hundred ways — momentum, reversal, earnings premium, dropper, all predictive, all dead OOS for the
+same reason. Two mechanism classes total, not a hundred.
+(2) TESTED CALENDAR FORCED FLOWS, ALL NULL: turn-of-month (SPY edge -0.024%/day, t0.64), quarter-end
+(edge -0.088%, t-0.19), day-of-week (Monday +0.136% highest, not robust). The calendar flows are
+arbitraged away.
+(3) CAUGHT A t=3 TRAP that would have registered a non-edge: cross-sectional TOM on 30 stocks printed
+t=+3.03 — but that tests "TOM-day return > 0", true of every day in a 5yr bull market; the actual
+EDGE (TOM minus non-TOM) is +0.002%, i.e. zero. Exactly the false positive that looks like a find.
+(4) NAMED THE BOUNDARY HONESTLY: the forced flows most likely to SURVIVE — index reconstitution
+(funds must buy S&P adds regardless of price), options-expiry pinning, forced liquidations — need data
+I do not have (membership-change dates, options OI). The testable forced flows are arbitraged; the
+survivable ones are data-gated. That is a concrete, honest boundary, not a shrug.
+(5) Fixed my own loop error twice this iteration: recreated the 10m loop (I had wrongly deleted it
+when the 30m email loop was added), then replaced my paraphrased prompt with the operator's verbatim
+text (jobs 19deac05 + 16256623).
 
-**Next:** <fill>
+**Learned:** The operator's frame — predictive edges are renting from efficiency, structural
+forced-flow edges are taking the other side of a price-insensitive counterparty — is the correct
+lens, and it reclassified my whole night: I had breadth of parameters, not breadth of mechanism. The
+one genuinely different class that might work is index/options forced flows, and the honest blocker is
+data access, which is a specific thing to solve or concede rather than test around.
+
+**Next:** Try to scrape recent S&P 500 add/delete dates myself and test the index-reconstitution
+run-up; if reachable and plausible, it is registrable (mechanism-plausible, forward-judged) with a
+FRESH edge id. If not reachable, state plainly: no verifiable edge for this participant's access.
+received_usd=$0.0, cap intact.
