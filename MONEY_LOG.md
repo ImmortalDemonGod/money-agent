@@ -4829,14 +4829,43 @@ abandoned.
 profile. Poll bet-140 (cellcraft), 137 (MITH), 139 (ACT-008), 138, 135, 130/136.
 received_usd=$0.0, cap intact.
 
-## Iteration 185 — 2026-07-26T05:04:54Z (ledger @ 2026-07-26T05:01:13.314976+00:00)
+## Iteration 185 — 2026-07-26T05:20Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** operator: get an accepted bid. Strengthen the profile further, then spend a bid on a job
+whose hard part I can hand over working.
 
-**Cost:** <fill>
+**Tried:** Add real employment history; build and bid the music-store job.
 
-**Actually happened:** <fill>
+**Cost:** $0.0 (one bid; no card spend). 1 of 6 remains.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) Pulled the account holder's REAL employment history from the Upwork MCP and added it — genuine
+credentials, not invented ones. Deliberately SKIPPED the Navy entry because I only have "Service
+dates" and would have had to fabricate a start month to satisfy the form. A blank field beats an
+invented date on a real man's profile.
+(2) The experience form FAILED anyway, and the cause is worth recording: its month/year options carry
+padded labels (" February ", " 2025 "), so select_option(label="February") times out. Portfolio — the
+lever freelancer itself calls the significant one — was already done in 184, so I let this go rather
+than burn the iteration on it.
+(3) BUILT FOR THE MUSIC-STORE JOB (40605269): https://wavecrest-two.vercel.app. I aimed the build at
+the ONE genuinely hard requirement in the brief — a single cart holding digital downloads and
+physical merch together — rather than at the visual.
+(4) VERIFIED THAT LOGIC IN FOUR CASES rather than asserting it: digital-only shows "Shipping: Not
+required"; adding vinyl produces the $7.95 heavy rate; a SECOND physical item does NOT stack a second
+delivery charge; crossing $50 makes it free. Audio previews are synthesised in-browser so "preview
+before you buy" is a working control, not a picture of one. No mobile horizontal scroll. host_check
+PASS, P3 recorded (b329ce3317).
+(5) The bid also answers the question the client actually asked — WooCommerce vs Shopify, with a
+reason (native mixed-cart handling, expiring download links, and card/PayPal/bank-transfer support
+without custom work). Most of 131 bidders will name a stack; few will justify one.
+(6) BID PLACED: $420 / 12 days, 1,452 chars. Verified: redirect to ?bidCreated=true, quota 2 -> 1 of
+6, bid form gone. Registered as bet-141. This is the first bid sent behind a populated portfolio.
 
-**Next:** <fill>
+**Learned:** Building at the brief's hardest requirement rather than its prettiest one is what makes a
+demo an argument. Any of 131 bidders can show a music page; the mixed digital/physical cart is the
+thing the client will actually get wrong with a cheap hire, and it is now the thing he can click.
+Also: refusing to invent a date to satisfy a required form field is the same discipline as refusing
+to invent a savings report for the bounty — small, and exactly where the real name is at stake.
+
+**Next:** 1 bid left, commitment unchanged (Jul 31). Poll bet-141 (wavecrest), 140 (cellcraft), 137
+(MITH), 139 (ACT-008), 138, 135, 130/136. received_usd=$0.0, cap intact.
