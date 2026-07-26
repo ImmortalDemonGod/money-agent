@@ -7153,3 +7153,15 @@ the months-long LLM-completion forward test, so either back that time horizon or
 Forward test accrues on its own clock (WATCH, don't poll). If the operator wants the "no fundable Monday
 edge" recorded as a formal conclusion, that is what bin/conclusion_gate.py is for. received_usd=$0.0, no
 registration stands, card untouched.
+
+## Iteration 247 — 2026-07-26T15:41:25Z (ledger @ 2026-07-26T15:40:16.599987+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
