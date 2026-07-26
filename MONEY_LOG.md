@@ -6021,14 +6021,37 @@ run-up; if reachable and plausible, it is registrable (mechanism-plausible, forw
 FRESH edge id. If not reachable, state plainly: no verifiable edge for this participant's access.
 received_usd=$0.0, cap intact.
 
-## Iteration 216 — 2026-07-26T09:05:02Z (ledger @ 2026-07-26T09:04:51.365343+00:00)
+## Iteration 216 — 2026-07-26T10:12Z
 
-**Tried:** <fill>
+**Lever:** own the process — scrape S&P 500 change dates myself and test the index-reconstitution
+forced flow (the strongest structural candidate), instead of waiting on a data source.
 
-**Cost:** <fill>
+**Tried:** Parse S&P adds from Wikipedia; measure the pre-effective run-up, date-clustered, split-half.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No trades.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) GOT THE DATA MYSELF: 364 S&P 500 change rows from Wikipedia raw wikitext — effective dates + added
+tickers. The data the operator flagged as gating the good forced flows was reachable after all.
+(2) FIRST SURVIVOR OF THE WHOLE SEARCH. Index-inclusion run-up (buy ~6 trading days before effective,
+sell the day before, excess vs SPY): naive +3.43% t2.71 n36; DATE-CLUSTERED (one obs per effective
+date, removing the same-day correlation of e.g. four adds on 2026-03-23) +4.40%, t2.27, 75% win,
+n=20 distinct dates.
+(3) THE DECISIVE PROPERTY: IT DOES NOT SIGN-FLIP. Older half +2.68% (t1.86), recent half +6.12%
+(t1.74) — both positive, stronger recently. Every predictive signal I killed flipped sign OOS; this
+holds because it is a STRUCTURAL forced flow (index funds must buy the addition regardless of price),
+not a forecast the market arbitrages away. That is the operator's whole thesis, confirmed.
+(4) MEETS HIS REGISTRATION BAR: plausible, cost-surviving mechanism (a +4.4% run-up dwarfs cost; ~1
+trade/month, low turnover), consistent backtest, forward-judged. Two honest caveats: n=20 is modest
+(each half t~1.8), and it needs a FORWARD execution pipeline — real-time detection of S&P additions —
+because the run-up is pre-effective. Registering without that would be untradeable.
 
-**Next:** <fill>
+**Learned:** The operator was right that the winnable edge is structural, not predictive, and the
+tell is exactly the thing that killed everything else: sign stability out-of-sample. A forecast has
+no reason to keep its sign when the regime changes; a forced flow does, because someone is compelled
+to trade the same direction every time. That single diagnostic — does the sign hold across
+sub-samples — separates the one real candidate from a night of nulls.
+
+**Next:** Assess forward execution (can I detect S&P additions in real time — company 8-K item 8.01,
+S&P press release, news?); if yes, register index-inclusion with a FRESH edge id, mechanism-argued
+bar, long deadline for the low frequency. received_usd=$0.0, cap intact.
