@@ -5525,3 +5525,15 @@ small omission — it meant building on a data source he had already told me was
 
 **Next:** Wider Alpaca-priced sample if time allows; otherwise Monday trades as registered and the
 forward books decide. received_usd=$0.0, cap intact.
+
+## Iteration 202 — 2026-07-26T07:27:28Z (ledger @ 2026-07-26T07:23:26.671819+00:00)
+
+**Tried:** <fill>
+
+**Cost:** <fill>
+
+**Actually happened:** <fill>
+
+**Learned:** <fill>
+
+**Next:** <fill>
