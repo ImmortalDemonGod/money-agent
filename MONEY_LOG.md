@@ -5363,14 +5363,44 @@ the email guard, and it is now the only way I will accept a filter into a decisi
 down before the rail existed), MIN_FILLED_ORDERS and MAX_DRAWDOWN_USD scaled to $100k equity, deadline
 allowing enough sessions to resolve. received_usd=$0.0, cap intact.
 
-## Iteration 198 — 2026-07-26T06:55:18Z (ledger @ 2026-07-26T06:52:06.164331+00:00)
+## Iteration 198 — 2026-07-26T07:00Z (ledger @ 2026-07-25T16:31:26Z)
 
-**Tried:** <fill>
+**Lever:** the rail is live and the market is shut — the one window where a bar provably cannot be
+fitted to a result. Register.
 
-**Cost:** <fill>
+**Tried:** Work the sizing arithmetic, set the bar honestly, freeze it.
 
-**Actually happened:** <fill>
+**Cost:** $0.0. No orders — market closed.
 
-**Learned:** <fill>
+**Actually happened:**
+(1) THE ARITHMETIC KILLED MY OWN PROPOSED BAR, and I would rather report that than quietly adjust it.
+Worked before choosing a number: ~116 after-close 8-Ks/session x 6% measured selectivity = ~7 LONG
+candidates/session; at $5,000 each that is ~$34,800 deployed (35% of equity); 9 sessions before the
+deadline gives ~63 positions. At a conservative 0.3% per-event drift that returns **0.94 percentage
+points** — BELOW the 1.5pp bar I intended to set. A 1.5 bar would likely return FALSIFIED even if the
+hypothesis is true, which is exactly the "rigour theatre" I refused in writing at iteration 195.
+(2) SET BAR = 1.0: the bottom of the 1-2pp band committed in run/EDGE_STRATEGY.md §4 BEFORE the
+account existed, and deliberately just ABOVE my own central estimate of 0.94. I expect to miss it if
+drift is 0.3% and to clear it if drift is 0.32% or better. Erring toward a bar I expect to miss is the
+honest direction; setting 0.9 would have been fitting the bar to my own forecast so it clears.
+(3) REGISTERED AND PUSHED AT 06:56 UTC SUNDAY — 34 hours before Monday's 09:30 ET open, with zero
+orders ever placed on the account. The git commit timestamp is now permanent public proof that the
+bar predates any possible fill. That property expires the moment trading starts, which is precisely
+why this was filed now rather than after a day of "calibration".
+(4) MIN_FILLED_ORDERS 40 against ~125 projected fills, so the sample still resolves if selectivity
+halves. MAX_DRAWDOWN_USD 4000 = about 2.3 consecutive 5%-adverse sessions on the deployed book — a
+real constraint, not a formality, because a raw P&L bar with no risk cap admits a negative-skew
+strategy that looks healthy right up to the tail event that ends it.
+(5) Hit the separation-of-duties hook on the commit: pre-existing modifications to bin/guard.py,
+bin/iter.py, bin/mail.py and spine.yml were sitting staged in the index. Those are not mine to commit
+— I did not touch them, I unstaged everything and committed EDGE_REGISTRATION.md alone.
 
-**Next:** <fill>
+**Learned:** The most valuable moment to pre-register is the one where you cannot cheat even if you
+wanted to, and it is short. Everything about the bar's credibility rests on a timestamp that stops
+being available in 34 hours. Also worth stating: the arithmetic making my preferred number
+indefensible is the system working — a pre-registration that never forces you to lower an ambition is
+not constraining anything.
+
+**Next:** Build and test the execution script against the paper account (order placement at the open,
+exit at the close) while the market is shut. First fills Monday 09:30 ET. received_usd=$0.0, cap
+intact.
