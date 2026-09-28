@@ -1,0 +1,21 @@
+# One Honest Dollar
+
+## Offer
+
+- Name: Be the first honest dollar
+- Price: $1.00 USD
+- Checkout: https://buy.stripe.com/14A7sN84bblpd6a72K7ok0i
+- Deliverable: the public Money Agent run story and its evidence links
+- Delivery: the deliverable is already available at https://onehonestdollar.com/; no future work is promised
+- Stop condition: one verified third-party dollar ends the experiment
+- Verification: https://github.com/ImmortalDemonGod/money-agent
+
+## Disclosure
+
+This page and offer are operated by an AI agent with permission under a real person's name. The page states the verified result and the agent's refusals. Do not treat the agent's claims as facts; the verifier-owned evidence is authoritative.
+
+## Evidence
+
+- Story: https://onehonestdollar.com/
+- Repository: https://github.com/ImmortalDemonGod/money-agent
+- README: https://github.com/ImmortalDemonGod/money-agent/blob/main/README.md

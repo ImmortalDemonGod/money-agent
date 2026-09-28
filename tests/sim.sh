@@ -1883,6 +1883,11 @@ else bad "S16 SoD: sod_hook allowed bin/datetime.py"; dump "$HK"; fi
 assert_exit 0 "S18 instrument_check: --selftest (inject / idempotent / fail-closed / detection)" \
   python3 bin/instrument_check.py --selftest
 
+# The public showcase is a revenue surface. Keep its machine-readable offer, price, and
+# checkout URL aligned with the visible CTA so discoverability cannot drift silently.
+assert_exit 0 "showcase: machine-readable offer matches checkout CTA" \
+  python3 tests/test_showcase_offer.py
+
 echo
 echo "=============================================="
 echo "  PASS=$PASS  FAIL=$FAIL  SKIP=$SKIP"
